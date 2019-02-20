@@ -1,0 +1,9 @@
+bin/
+httpdocs/
+node_modules/
+yarn-error.log
+.temp/
+.tmp.drivedownload/
+.haxelib/
+webpack.local.js
+.vscode/

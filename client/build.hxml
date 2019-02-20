@@ -1,0 +1,25 @@
+-lib haxe-loader
+-lib history
+-lib hxbit
+-lib react-next
+-lib react-router-4
+-lib redux
+-lib redux-connect
+-lib react-redux-form
+-lib CommentString
+-lib reselect
+-lib event-types
+-lib js-object
+-lib tink_hxx
+
+-cp ..\..\lib
+-cp lib
+-js ..\httpdocs\app.js
+-dce full
+#--no-traces
+-main Go
+
+#-D debug
+-D react_hot
+-D modular_nomaps
+-D webpack

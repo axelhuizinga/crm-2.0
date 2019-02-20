@@ -1,0 +1,103 @@
+<div class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Tabellenfelder Eigenschaften</p><button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body header">
+            <div class="col" style="width:165px">
+                <div class="form-table-cell">
+                    <div class="header" data-name="table_name">Tabelle</div>
+                </div>
+            </div>
+            <div class="col" style="width:164px">
+                <div class="form-table-cell">
+                    <div class="header" data-name="field_name">Feldname</div>
+                </div>
+            </div>
+            <div class="col" style="width:87px">
+                <div class="form-table-cell">
+                    <div class="header" data-name="element">Eingabefeld</div>
+                </div>
+            </div>
+            <div class="col" style="width:70px">
+                <div class="form-table-cell">
+                    <div class="header" data-name="readonly">Readonly</div>
+                </div>
+            </div>
+            <div class="col" style="width:68px">
+                <div class="form-table-cell">
+                    <div class="header" data-name="required">Required</div>
+                </div>
+            </div>
+            <div class="col" style="width:45px">
+                <div class="form-table-cell">
+                    <div class="header" data-name="use_as_index">Index</div>
+                </div>
+            </div>
+        </section>
+        <form class="modal-card-body">
+            <div class="col" data-name="table_name">
+                <div class="form-table-cell" style="min-height: 0px; height: 0px; overflow: hidden; padding: 0px 0.3rem;">
+                    <div class="header" data-name="table_name">Tabelle</div>
+                </div>
+                <div class="form-table-cell"><input name="table_name" readonly="" value="accounts"></div>
+                <div class="form-table-cell"><input name="table_name" readonly="" value="accounts"></div>
+            </div>
+            <div class="col" data-name="field_name">
+                <div class="form-table-cell" style="min-height: 0px; height: 0px; overflow: hidden; padding: 0px 0.3rem;">
+                    <div class="header" data-name="field_name">Feldname</div>
+                </div>
+                <div class="form-table-cell"><input name="field_name" readonly="" value="blz"></div>
+                <div class="form-table-cell"><input name="field_name" readonly="" value="contact"></div>
+            </div>
+            <div class="col" data-name="element">
+                <div class="form-table-cell" style="min-height: 0px; height: 0px; overflow: hidden; padding: 0px 0.3rem;">
+                    <div class="header" data-name="element">Eingabefeld</div>
+                </div>
+                <div class="form-table-cell"><select name="element">
+                        <option>Button</option>
+                        <option>Hidden</option>
+                        <option selected="">Input</option>
+                        <option>Input</option>
+                        <option>Checkbox</option>
+                        <option>Radio</option>
+                        <option>Select</option>
+                        <option>TextArea</option>
+                    </select></div>
+                <div class="form-table-cell"><select name="element">
+                        <option>Button</option>
+                        <option>Hidden</option>
+                        <option selected="">Input</option>
+                        <option>Input</option>
+                        <option>Checkbox</option>
+                        <option>Radio</option>
+                        <option>Select</option>
+                        <option>TextArea</option>
+                    </select></div>
+            </div>
+            <div class="col" data-name="readonly">
+                <div class="form-table-cell" style="min-height: 0px; height: 0px; overflow: hidden; padding: 0px 0.3rem;">
+                    <div class="header" data-name="readonly">Readonly</div>
+                </div>
+                <div class="form-table-cell"><input name="readonly" type="checkbox" value="on"></div>
+                <div class="form-table-cell"><input name="readonly" type="checkbox" value="on"></div>
+            </div>
+            <div class="col" data-name="required">
+                <div class="form-table-cell" style="min-height: 0px; height: 0px; overflow: hidden; padding: 0px 0.3rem;">
+                    <div class="header" data-name="required">Required</div>
+                </div>
+                <div class="form-table-cell"><input name="required" type="checkbox" value="on"></div>
+                <div class="form-table-cell"><input name="required" type="checkbox" value="on"></div>
+            </div>
+            <div class="col" data-name="use_as_index">
+                <div class="form-table-cell" style="min-height: 0px; height: 0px; overflow: hidden; padding: 0px 0.3rem;">
+                    <div class="header" data-name="use_as_index">Index</div>
+                </div>
+                <div class="form-table-cell"><input name="use_as_index" type="checkbox" value="on"></div>
+                <div class="form-table-cell"><input name="use_as_index" type="checkbox" value="on"></div>
+            </div>
+        </form>
+        <footer class="modal-card-foot"><button class="button is-success"> Speichern</button><button class="button">Schließen</button></footer>
+    </div>
+</div>

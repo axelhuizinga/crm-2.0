@@ -1,9 +1,7 @@
-bin/
+client/npm-debug.log
 httpdocs/
 node_modules/
 yarn-error.log
 .temp/
-.tmp.drivedownload/
-.haxelib/
-webpack.local.js
-.vscode/
+client/.haxelib/
+client/webpack.local.js

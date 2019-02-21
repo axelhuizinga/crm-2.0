@@ -5,6 +5,7 @@
 -lib react-router-4
 -lib redux
 -lib redux-connect
+-lib redux-thunk
 -lib react-redux-form
 -lib CommentString
 -lib reselect
@@ -12,14 +13,14 @@
 -lib js-object
 -lib tink_hxx
 
--cp ..\..\lib
+-cp ../../lib
 -cp lib
--js ..\httpdocs\app.js
+-js ../httpdocs/app.js
 -dce full
 #--no-traces
 -main Go
 
-#-D debug
+-D debug
 -D react_hot
--D modular_nomaps
--D webpack
+-D modular_noma
+#-D react_check_jsxstatic_type

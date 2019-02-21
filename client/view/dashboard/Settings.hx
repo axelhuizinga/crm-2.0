@@ -121,7 +121,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 	override public function render() {
 		trace(Reflect.fields(state));
 		return null;
-		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} render=${renderContent}/>');
+		//return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} render=${renderContent}/>');
 	}
 
 	public function renderContent(cState:FormState) {

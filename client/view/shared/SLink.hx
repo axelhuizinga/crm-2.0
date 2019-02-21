@@ -4,6 +4,7 @@ import haxe.Constraints.Function;
 import action.LocationAction;
 import model.AppState;
 import react.ReactComponent.ReactComponentOfProps;
+import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
 import react.ReactMouseEvent;
 import react.ReactPropTypes;
@@ -19,7 +20,7 @@ typedef SLinkProps =
 	>NavLinkProps,
 	action:action.LocationAction,
 	onClick:Dynamic->Void,
-	children: Dynamic,
+	children: ReactFragment,
 	dispatch:Dispatch
 }
 

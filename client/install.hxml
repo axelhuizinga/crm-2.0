@@ -1,13 +1,20 @@
 # Using fork of haxe-loader to watch dependencies
--lib haxe-loader:git:git@github.com:kLabz/webpack-haxe-loader.git#fork
+#-lib haxe-loader:git:https@github.com:kLabz/webpack-haxe-loader.git#fork
 
 # Using "next" version of haxe-react, with strict typing and new features
--lib react:git:https://github.com/kLabz/haxe-react.git#next
+#-lib react:git:https://github.com/kLabz/haxe-react.git#next
 
 # From haxelib
+-lib CommentString
+-lib event-types
+-lib haxe-loader
+-lib history
+-lib hxbit
+-lib react-next
+-lib react-redux-form
 -lib react-router-4
 -lib redux
+-lib redux-thunk
 -lib redux-connect
-
--lib tink_macro:0.16.5
-
+-lib reselect
+-lib tink_macro

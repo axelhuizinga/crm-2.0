@@ -155,7 +155,7 @@ h1 {
 }
 .grid.head
 {
-	grid-rows: $tableHeaderHeight;
+	grid-row: $tableHeaderHeight;
 	padding-right:17px;
 	padding-bottom:2px;
 }
@@ -285,7 +285,7 @@ h1 {
 }
 
 .formField label,
-.formField input,
+.formField input
 {
   border-radius: $tableHeader-radius;
   border:1px solid #ccc;
@@ -605,7 +605,7 @@ label.panel-heading {
 #sMenuPanel-2:checked ~ .panel > .body-2,
 #sMenuPanel-3:checked ~ .panel > .body-3,
 #sMenuPanel-4:checked ~ .panel > .body-4,
-#sMenuPanel-5:checked ~ .panel > .body-5,
+#sMenuPanel-5:checked ~ .panel > .body-5
 {
 	display: flex;
 	flex-grow: 0;

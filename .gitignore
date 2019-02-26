@@ -1,7 +1,6 @@
 client/npm-debug.log
 httpdocs/
 node_modules/
-yarn-error.log
 .temp/
-client/.haxelib/
+.haxelib/
 client/webpack.local.js

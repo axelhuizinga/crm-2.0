@@ -148,7 +148,8 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 		}
 		
 		//if(props.user.user_name == null || props.user.user_name == '' || props.user.jwt == null || props.user.jwt == '')
-		if(props.user.jwt == null || props.user.jwt == '' || !props.user.loggedIn)
+		trace('${props.user.jwt} ${props.user.loggedIn}');
+		if(props.user.jwt == null || props.user.jwt == '' )//|| !props.user.loggedIn
 		{
 			// WE NEED TO LOGIN FIRST
 			return jsx('<LoginForm {...props.user}/>');

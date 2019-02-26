@@ -25,7 +25,7 @@ import react.ReactMacro.jsx;
 import shared.Utils;
 
 import view.shared.FormState;
-import view.shared.io.FormContainer;
+import view.shared.io.FormFunctions;
 import view.shared.OneOf;
 using Lambda;
 
@@ -107,9 +107,8 @@ typedef TableProps =
 	data:Array<Map<String,Dynamic>>,
 	dataState:DataState,
 	?disableHeader:Bool,
-	?formContainer:FormContainer,
 	?oddClassName: String,
-    ?evenClassName:String,	
+  	?evenClassName:String,	
 	?defaultSort:Dynamic,
 	?defaultSortDescending:Bool,
 	?filterable:Dynamic,

@@ -39,6 +39,8 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 	public function new(?props:DataFormProps) 
 	{
 		super(props);
+		new FormFunctions(this, props);
+		new FormFunctions(this, props);
 		//dataDisplay = RolesFormModel.dataDisplay;		
 		state = {
 			clean:true,
@@ -114,7 +116,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 	public function importExternalUsers(ev:ReactEvent):Void
 	{
 		trace(ev.currentTarget);
-		props.formContainer.requests.push(AjaxLoader.load(
+		props.formFunctions.requests.push(AjaxLoader.load(
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -145,7 +147,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 		
 		trace(state.loading);
 		
-		//props.formContainer.requests.push(
+		//props.formFunctions.requests.push(
 			BinaryLoader.create(
 			'${App.config.api}', 
 			{
@@ -226,7 +228,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 	
 }
 
-/**formContainer=${cState.formContainer}
+/**formFunctions=${cState.formFunctions}
  * 							autoSize = {true} 
 							headerClassName = "table tablesorter is-striped is-fullwidth is-hoverable"
 							headerColumns=${displayUsers}

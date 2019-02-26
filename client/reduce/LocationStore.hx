@@ -41,7 +41,7 @@ class LocationStore implements IReducer<LocationAction, LocationState>
 	
 	public function reduce(state:LocationState, action:LocationAction):LocationState
 	{
-		//trace(state);
+		trace(action);
 		return switch(action)
 		{
 			case InitHistory(history):

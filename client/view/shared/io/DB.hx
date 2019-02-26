@@ -24,7 +24,7 @@ import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.SMItem;
 import view.shared.io.DataAccess;
-import view.shared.io.FormContainer;
+import view.shared.io.FormFunctions;
 import view.shared.io.Loader;
 import view.table.Table;
 import view.table.Table.DataState;
@@ -60,7 +60,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	public function createFieldList(ev:ReactEvent):Void
 	{
 		trace('hi :)');
-		props.formContainer.requests.push(Loader.load(	
+		props.formFunctions.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -88,11 +88,11 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	public function editTableFields(ev:ReactEvent):Void
 	{
 		trace(state.selectedRows.length);
-		var data = props.formContainer.selectedRowsMap();
+		var data = props.formFunctions.selectedRowsMap(state);
 		var view:Map<String,FormField> = dataAccess['editTableFields'].view.copy();
 		trace(dataAccess['editTableFields'].view['table_name']);
 		trace(data[0]['id']+'<');
-		props.formContainer.renderModalForm({
+		props.formFunctions.renderModalForm({
 			data:new Map(),
 			dataTable:data,
 			handleSubmit: saveTableFields,
@@ -102,7 +102,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			model:'tableFields',
 			//viewClassPath:'shared.io.DB.editTableFields',			
 			fields:view,
-			valuesArray:props.formContainer.createStateValuesArray(data, dataAccess['editTableFields'].view), 
+			valuesArray:props.formFunctions.createStateValuesArray(data, dataAccess['editTableFields'].view), 
 			loading:false,
 			title:'Tabellenfelder Eigenschaften'
 		});	
@@ -161,8 +161,8 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function showFieldList(_):Void
 	{
-		props.formContainer.selectAllRows(true);
-		props.formContainer.requests.push( BinaryLoader.create(
+		props.formFunctions.selectAllRows(state);
+		props.formFunctions.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -229,7 +229,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	/*override public function componentWillUnmount()
 	{
 		mounted=false;
-		props.formContainer.removeRequest(this)
+		props.formFunctions.removeRequest(this)
 	}*/
 	
 	function renderResults():ReactFragment
@@ -242,7 +242,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 				//trace(state.dataTable[29]['id']+'<<<');
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["fieldsList"]} formContainer=${props.formContainer}
+					${...props} dataState = ${dataDisplay["fieldsList"]}
 					className = "is-striped is-hoverable" fullWidth=${true}/>				
 				');	
 			case 'editTableFields':

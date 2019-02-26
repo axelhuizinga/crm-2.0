@@ -127,24 +127,15 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 	override public function render() {
-		if(state.sideMenu != {})
-		{
-			//trace(state.sideMenu);
-			if(state.sideMenu.menuBlocks!=null)
-			{
-				trace(state.sideMenu.menuBlocks.keys().next +':' + state.sideMenu.section);
-			}
-		}	
-		
-		return FormFunctions.render(this);
+		return props.formFunctions.render(this);
 	}
 
 	public function renderContent():ReactFragment
 	{
 		//var match:RouterMatch = getRouterMatch();
-		//trace(state.formContainer);
-		//trace(cState.formContainer.props.match.url);
-		//if(state.formContainer!=null)
+		//trace(state.?formFunctions:FormFunctions);
+		//trace(cState.?formFunctions:FormFunctions.props.match.url);
+		//if(state.?formFunctions:FormFunctions!=null)
 		trace(props.match.params.section);
 		return switch(props.match.params.section)
 		{
@@ -158,30 +149,6 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 				');				
 			default:
 				null;					
-		}
-	}
-
-	public function switchContent( reactEventSource:Dynamic)
-	{
-		//trace(props.history.location);
-		trace(this.state);
-		//trace(props.match.params);
-		//trace(props.history == App.store.getState().appWare.history);
-		//var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
-		var section:String = reactEventSource.target.getAttribute('data-section');
-		trace(section);
-		//trace( 'state.section:${props.match.params.section} section:$section');
-		//if (state.viewClassPath != viewClassPath)
-		if (section != props.match.params.section)
-		{
-			var basePath:String = props.match.path.split('/:')[0];
-			props.history.push('$basePath/$section');
-			trace(props.history.location.pathname);
-			var sM:SMenuProps = state.sideMenu;
-			sM.section = section;
-			setState({sideMenu:sM});
-			trace('setting state.sideMenu.section to:$section');
-			//props.history.push(props.match.url + '/' + viewClassPath);
 		}
 	}
 	

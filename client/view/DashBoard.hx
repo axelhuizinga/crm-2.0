@@ -19,7 +19,7 @@ import react.router.Redirect;
 //import react.router.Route.RouteRenderProps;
 //import react.router.Switch;
 import react.router.NavLink;
-import view.shared.io.FormContainer;
+import view.shared.io.FormFunctions;
 import view.shared.RouteTabProps;
 import view.shared.CompState;
 import view.LoginForm;
@@ -79,7 +79,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 	
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
     {
-		//trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
+		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
         return {
 			setThemeColor: function() dispatch(AppAction.SetTheme('violet'))//,
 			//initChildren: function() dispatch()

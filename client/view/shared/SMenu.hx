@@ -1,5 +1,7 @@
 package view.shared;
 
+import model.AppState;
+import action.LocationAction;
 import js.html.ButtonElement;
 import js.html.Event;
 import haxe.CallStack;
@@ -20,6 +22,8 @@ import react.ReactType;
 import react.ReactMacro.jsx;
 import bulma_components.Button;
 import react.ReactRef;
+import redux.Redux.Dispatch;
+import redux.react.ReactRedux;
 import view.shared.SMItem;
 import view.shared.SMenuBlock;
 import view.shared.SMenuProps;
@@ -35,11 +39,32 @@ using Lambda;
  typedef Filter = ReactType;
 
 @:connect
+//@:wrap(react.router.ReactRouter.withRouter)
+//@:wrap(ReactRedux.connect(null,mapDispatchToProps))
 class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 
 {
 	var menuRef:ReactRef<DivElement>;
 	var aW:Int;
+
+	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
+    {
+		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
+      return {
+				switchSection: function(url:String) {
+					trace(url);
+					dispatch(LocationAction.Push(url));
+					//App.store.dispatch(LocationAction.Push(url));
+				}
+					//,
+				//initChildren: function() dispatch()
+			};
+    }
+	
+	static function mapStateToProps(state:AppState) {
+		return {};
+	}
+
 	public function new(props:SMenuProps) 
 	{
 		super(props);
@@ -68,7 +93,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 			//trace(props.section + '::' + block.section + ':' +check);//data-classpath=${block.viewClassPath}
 			header.push( jsx('
 			<input type="radio" key=${i} id=${"sMenuPanel-"+(i++)} name="accordion-select" checked=${check}  
-				onChange=${block.onActivate} data-section=${block.section} />
+				onChange=${switchContent} data-section=${block.section} />
 			'));
 		});
 		return header;
@@ -155,6 +180,25 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 			</aside>
 		</div>	
 		');
+	}
+
+	public function switchContent(reactEventSource:Dynamic)
+	{
+		//var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
+		var section:String = reactEventSource.target.getAttribute('data-section');
+		//trace( 'state.viewClassPath:${state.viewClassPath} viewClassPath:$viewClassPath');
+		trace( 'state.section:${state.section} section:$section');
+		//if (state.viewClassPath != viewClassPath)
+		if (section != props.section)
+		{
+			//var menuBlocks:
+			var basePath:String = props.match.path.split('/:')[0];
+			trace(props.location.pathname);
+			props.history.push('$basePath/$section');
+			//props.switchSection('$basePath/$section');
+			trace(props.history.location.pathname);
+			//props.history.push(props.match.url + '/' + viewClassPath);
+		}
 	}
 
 	function layout()

@@ -60,48 +60,47 @@ using Lambda;
 
 class FormFunctions
 {
-	public static var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;	
-	static var dataAccess:DataAccess;
-	static var dbData:DbData;
-	static var dbMetaData:DBMetaData;
-	static var formColElements:Map<String,Array<FormField>>;
-	//static var dataDisplay:Map<String,DataState>;
-	static var _menuItems:Array<SMItem>;
-	static var fState:FormState;
-	static var _fstate:FormState;
-	static var modalFormTableHeader:ReactRef<DivElement>;
-	static var modalFormTableBody:ReactRef<DivElement>;
-	static var autoFocus:ReactRef<InputElement>;
-	static var initialState:Dynamic;
-	static var section:String;
-	//static var state:FormState;
+	public var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;	
+	public var dataAccess:DataAccess;
+	public var dbData:DbData;
+	public var dbMetaData:DBMetaData;
+	public var formColElements:Map<String,Array<FormField>>;
+	//public var dataDisplay:Map<String,DataState>;
+	public var _menuItems:Array<SMItem>;
+	public var fState:FormState;
+	public var _fstate:FormState;
+	public var modalFormTableHeader:ReactRef<DivElement>;
+	public var modalFormTableBody:ReactRef<DivElement>;
+	public var autoFocus:ReactRef<InputElement>;
+	public var initialState:Dynamic;
+	public var section:String;
+	//public var state:FormState;
 	
-	public static function init(_this:ReactComponent,?props:DataFormProps):DbData
+	public function new(comp:ReactComponent,?props:DataFormProps)
 	{
 		requests = [];
 		if(props != null)
-		trace(props.match);
-		//trace(props.match.params.section);
-		//props.sideMenu.itemHandler = itemHandler;
-		//trace(props.sideMenu.itemHandler);
+		{
+			props.formFunctions = this;
+			trace(props.match);
+		}
 
 		dbData = new DbData();
 		//trace('>>>${props.match.params.action}<<<');
 		if(true && props.match.params.action != null)
 		{
-            trace('going 2 call ${Type.getClassName(Type.getClass(_this))} ${props.match.params.action}');
-			callMethod(_this, props.match.params.action);
+            trace('going 2 call ${Type.getClassName(Type.getClass(comp))} ${props.match.params.action}');
+			callMethod(comp, props.match.params.action);
 		}
         trace(dbData);
-        return dbData;
 	}	
 
-	public static function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,Dynamic>>
+	public function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,Dynamic>>
 	{
 		return [ for (r in data) createStateValues(r, view) ];
 	}
 	
-	public static function createStateValues(data:Map<String,Dynamic>, view:DataView):Map<String,Dynamic>
+	public function createStateValues(data:Map<String,Dynamic>, view:DataView):Map<String,Dynamic>
 	{
 		var vState:Map<String,String> = new Map();
 		trace(data.keys());
@@ -117,12 +116,12 @@ class FormFunctions
 		return vState;
 	}
 		
-	public static function selectedRowsMap(state:FormState):Array<Map<String,String>>
+	public function selectedRowsMap(state:FormState):Array<Map<String,String>>
 	{
 		return [for (r in state.selectedRows) selectedRowMap(r)];
 	}
 	
-	static function selectedRowMap(row:TableRowElement):Map<String,String>
+	public function selectedRowMap(row:TableRowElement):Map<String,String>
 	{
 		var rM:Map<String,String> = [
 			for (c in row.cells)
@@ -132,14 +131,14 @@ class FormFunctions
 		return rM;
 	}
 	
-	public static function setStateFromChild(newState:FormState)
+	public function setStateFromChild(newState:FormState)
 	{
 		newState = ReactUtil.copy(newState, {sideMenu:updateMenu(newState)});
 		//setState(newState);
 		//trace(newState);
 	}
 	
-	static function itemHandler(e:Event)
+	public function itemHandler(e:Event)
 	{
 		trace(cast(e.target, ButtonElement).getAttribute('data-action'));
 		var but:ButtonElement = cast(e.target, ButtonElement);
@@ -150,22 +149,22 @@ class FormFunctions
 		//trace(props.menuBlocks.toString());
 	}
 
-	public static function callMethod(_this:ReactComponent, method:String):Bool
+	public function callMethod(comp:ReactComponent, method:String):Bool
 	{
-		var fun:Function = Reflect.field(_this,method);
+		var fun:Function = Reflect.field(comp,method);
 		if(Reflect.isFunction(fun))
 		{
-			Reflect.callMethod(_this,fun,null);
+			Reflect.callMethod(comp,fun,null);
 			return true;
 		}
 		return false;
 	}
 
-	public static function handleChange(e:InputEvent)
+	public function handleChange(e:InputEvent)
 	{
 		var t:InputElement = cast e.target;
 		trace('${t.name} ${t.value}');
-		/*static var vs = state.values;
+		/*public var vs = state.values;
 		//trace(vs.toString());
 		vs[t.name] = t.value;
 		trace(vs.toString());
@@ -178,7 +177,7 @@ class FormFunctions
 		//trace(this.state);*/
 	}
 	
-	public static function selectAllRows(state:FormState,unselect:Bool = false)
+	public function selectAllRows(state:FormState,unselect:Bool = false)
 	{
 		for (r in state.selectedRows)
 		{
@@ -189,7 +188,7 @@ class FormFunctions
 		}
 	}
 
-	public static function updateMenu(state:FormState,?viewClassPath:String):SMenuProps
+	public function updateMenu(state:FormState,?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;
 		if(viewClassPath==null)
@@ -226,7 +225,7 @@ class FormFunctions
 	}	
 
 	
-	public static function render(comp:Dynamic)
+	public function render(comp:Dynamic)
 	{
 		var sM:SMenuProps = comp.state.sideMenu;
 		if(sM.menuBlocks != null)
@@ -234,12 +233,12 @@ class FormFunctions
 		return jsx('
 			<div className="columns">
 				${comp.renderContent()}
-				<$SMenu className="menu" {...sM} />
+				<$SMenu className="menu" {...sM} ${...comp.props}/>
 			</div>			
 		');
 	}
 	
-	static function renderField(name:String, k:Int, state:FormState):ReactFragment
+	public function renderField(name:String, k:Int, state:FormState):ReactFragment
 	{
 		var formField:FormField = state.fields[name];
 		if(k==0)
@@ -256,7 +255,7 @@ class FormFunctions
 		return formField.type == Hidden? field:[jsx('<label key=${Utils.genKey(k++)}>${formField.label}</label>'), field];
 	}
 	
-	public static function renderElements(cState:FormState):ReactFragment
+	public function renderElements(cState:FormState):ReactFragment
 	{
 		if(cState.data.empty())
 			return null;
@@ -271,7 +270,7 @@ class FormFunctions
 		return elements;
 	}
 	
-	public static function createElementsArray():ReactFragment
+	public function createElementsArray():ReactFragment
 	{
 		if(_fstate.dataTable.empty())
 			return null;
@@ -294,7 +293,7 @@ class FormFunctions
 			//trace('>>>${dR['id']}<<<');
 			for (name in fields)			
 			{
-				//static var primaryId:String = '';
+				//public var primaryId:String = '';
 				if(_fstate.fields[name].type == FormElement.Hidden)
 				{
 					continue;
@@ -324,7 +323,7 @@ class FormFunctions
 		return renderColumns();
 	}
 	
-	static function addFormColumns():Void
+	public function addFormColumns():Void
 	{
 		var fields:Iterator<String> = _fstate.fields.keys();
 		for(name in fields)
@@ -335,7 +334,7 @@ class FormFunctions
 		}
 	}
 	
-	static function renderColumns():ReactFragment
+	public function renderColumns():ReactFragment
 	{
 		var fields:Iterator<String> = formColElements.keys();
 		var cols:Array<ReactFragment> = [];
@@ -348,7 +347,7 @@ class FormFunctions
 		return cols;
 	}
 	
-	static function renderColumnHeaders():ReactFragment
+	public function renderColumnHeaders():ReactFragment
 	{
 		var fields:Iterator<String> = _fstate.fields.keys();
 		var cols:Array<ReactFragment> = [];
@@ -369,7 +368,7 @@ class FormFunctions
 		return cols;
 	}
 	
-	static function renderRowCell(fF:FormField,k:Int):ReactFragment
+	public function renderRowCell(fF:FormField,k:Int):ReactFragment
 	{
 		//trace(fF.value);
 		var model:String = '.${fF.primaryId}.${fF.name}';
@@ -393,7 +392,7 @@ class FormFunctions
 		}		
 	}
 //style=${{visibility:"collapse"}} 
-	static function renderRows(name:String):ReactFragment
+	public function renderRows(name:String):ReactFragment
 	{		
 		var elements:Array<ReactFragment> = [];
 		var k:Int = 0;
@@ -428,7 +427,7 @@ class FormFunctions
 		return rOpts;
 	}
 	
-	static function renderModalFormBodyHeader():ReactFragment
+	public function renderModalFormBodyHeader():ReactFragment
 	{
 		modalFormTableHeader = React.createRef();
 		if (_fstate.dataTable == null || _fstate.dataTable.length == 0)
@@ -442,7 +441,7 @@ class FormFunctions
 	}
 	
 
-	public static function renderModalForm(fState:FormState):ReactFragment
+	public function renderModalForm(fState:FormState):ReactFragment
 	{
 		_fstate = fState;
 		trace(_fstate); 
@@ -483,7 +482,7 @@ class FormFunctions
 		'), App.modalBox.current, adjustModalFormColumns);
 	}
 
-	static function renderModalScreen(content:ReactFragment):ReactFragment
+	public function renderModalScreen(content:ReactFragment):ReactFragment
 	{
 		trace(App.modalBox);
 		modalFormTableBody = React.createRef();
@@ -510,7 +509,7 @@ class FormFunctions
 	}
 	
 
-	static function adjustModalFormColumns()
+	public function adjustModalFormColumns()
 	{
 		trace(modalFormTableHeader.current);
 		//return;
@@ -533,17 +532,9 @@ class FormFunctions
 	public static function initSideMenu(comp:Dynamic, sMa:Array<SMenuBlock>, sM:SMenuProps):SMenuProps
 	{
 		var sma:SMenuBlock = {};
-		for (smi in 0...sMa.length)
-		{
-			sMa[smi].onActivate = function(reactEventSource:Dynamic){
-                comp.switchContent(reactEventSource);
-            };
-			//trace(sMa[smi].label);
-		}
-
 		sM.menuBlocks = [
 			for (sma in sMa)
-			sma.section => sma
+				sma.section => sma
 		];
 		return sM;
 	}
@@ -582,5 +573,5 @@ class FormFunctions
 		return r;
 	}
 
-	static var ky:Dynamic->haxe.PosInfos->String = Utils.genKey;
+	public var ky:Dynamic->haxe.PosInfos->String = Utils.genKey;
 }

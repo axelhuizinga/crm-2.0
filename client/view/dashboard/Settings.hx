@@ -17,7 +17,7 @@ import react.ReactUtil;
 //import view.dashboard.model.SettingsFormModel;
 import view.shared.io.DataFormProps;
 import view.shared.io.Design;
-import view.shared.io.FormContainer;
+import view.shared.io.FormFunctions;
 import view.shared.FormState;
 import view.shared.OneOf;
 import view.shared.SMenu;
@@ -52,7 +52,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 			hasError:false,
 			mounted:false,
 			loading:true,
-			sideMenu:{}/*initSideMenu(
+			sideMenu:FormFunctions.initSideMenu( this,
 				[
 					{
 						dataClassPath:'auth.User',
@@ -74,7 +74,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 					},										
 				],
 				{section: 'bookmarks',	sameWidth: true}
-			)*/
+			)
 		};
 		if(props.match.params.section!=null)
 		{
@@ -87,9 +87,9 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 		trace(Reflect.fields(props));
 	}
 
-	function registerFormContainer(fc:FormContainer)//
+	function registerFormContainer(fc:FormFunctions)//
 	{
-		setState({formContainer:fc});
+		setState({?formFunctions:FormFunctions:fc});
 		trace(fc.props.match.params.section);
 	}
 	
@@ -100,7 +100,6 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.loading);	
 		trace(Reflect.fields(props));
 		trace(props.match.params.section);				
-		trace(props.formContainer);				
 		//setState{sideMenu:}
 	}
 	
@@ -119,23 +118,22 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 	}	*/
 	
 	override public function render() {
-		trace(Reflect.fields(state));
-		return null;
-		//return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} render=${renderContent}/>');
+		return props.formFunctions.render(this);
 	}
 
-	public function renderContent(cState:FormState) {
+	public function renderContent():ReactFragment
+	{
 		trace(props.match.params);
 		return switch(props.match.params.section)
 		{
 			case "User":
 				jsx('
-					<User ${...props} sideMenu=${state.sideMenu}  formContainer=${cState.formContainer}
+					<User ${...props} sideMenu=${state.sideMenu}
 					 fullWidth={true}/>
 				');	
 			case "Bookmarks"|null:
 				jsx('
-					<Bookmarks ${...props} sideMenu=${state.sideMenu}  formContainer=${cState.formContainer}
+					<Bookmarks ${...props} sideMenu=${state.sideMenu}
 					 fullWidth={true}/>
 				');
 			default:		

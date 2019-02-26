@@ -23,7 +23,7 @@ import shared.DbData;
 import view.shared.FormState;
 import view.shared.OneOf;
 import view.shared.SMenu;
-import view.shared.io.FormContainer;
+import view.shared.io.FormFunctions;
 import view.shared.io.DataAccess;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess.DataSource;
@@ -62,6 +62,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 	public function new(?props:DataFormProps)
 	{
 		super(props);
+		new FormFunctions(this, props);
 		dataAccess = [
 			'changePassword' =>
 			{
@@ -90,7 +91,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 					'first_name'=>{label:'Vorname'},
 					'last_name'=>{label:'Name'},
 					'email' => {label:'Email'},
-					'last_login'=>{label:'Letze Anmeldung',readonly:true, displayFormat:FormContainer.localDate}
+					'last_login'=>{label:'Letze Anmeldung',readonly:true, displayFormat:FormFunctions.localDate}
 				]
 			},
 			'save' => {
@@ -106,7 +107,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 
 		
 			
-		props.formContainer.requests.push(BinaryLoader.create(
+		props.formFunctions.requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
 				user_name:props.user.user_name,
@@ -126,7 +127,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				{
 					setState({data:data.dataRows[0], action:'changePassword',
 					fields:dataAccess['changePassword'].view,
-					values:props.formContainer.createStateValues(data.dataRows[0], 
+					values:props.formFunctions.createStateValues(data.dataRows[0], 
 					dataAccess['changePassword'].view), loading:false});	
 					App.store.dispatch(AppAction.User({
 						first_name:data.dataRows[0]['first_name'],
@@ -144,7 +145,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				else{
 					setState({data:data.dataRows[0], action:'edit',
 					fields:dataAccess['edit'].view,
-					values:props.formContainer.createStateValues(data.dataRows[0], 
+					values:props.formFunctions.createStateValues(data.dataRows[0], 
 					dataAccess['edit'].view), loading:false});	
 					trace(Date.fromString(data.dataRows[0]['last_login']));
 					App.store.dispatch(AppAction.User({
@@ -193,7 +194,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		if (state.values['new_pass'] == state.values['pass'] && state.values['new_pass']!='' && state.values['new_pass']!=null)
 			return setState({errors:['changePassword'=>'Das Passwort muss geändert werden!']});
 		trace(App.store.getState().appWare.user);
-		props.formContainer.requests.push(BinaryLoader.create(
+		props.formFunctions.requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
 				user_name:props.user.user_name, 
@@ -218,7 +219,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 					setState({
 						//viewClassPath:'edit',
 						fields:dataAccess['edit'].view,
-						values:props.formContainer.createStateValues(App.store.getState().appWare.user.dynaMap(), dataAccess['edit'].view),
+						values:props.formFunctions.createStateValues(App.store.getState().appWare.user.dynaMap(), dataAccess['edit'].view),
 					 	loading:false});
 				}
 				else trace(data.dataErrors);				
@@ -229,7 +230,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 	public function edit(ev:ReactEvent):Void
 	{
 		trace('hi :)');
-		props.formContainer.requests.push(Loader.loadData(	
+		props.formFunctions.requests.push(Loader.loadData(	
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -254,7 +255,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				setState({
 					//data:data[0],
 					fields:dataAccess['edit'].view,
-					values:props.formContainer.createStateValues(data[0], 
+					values:props.formFunctions.createStateValues(data[0], 
 					dataAccess['edit'].view), loading:false});					
 			}
 		));
@@ -267,11 +268,11 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.values);
 		var skeys:Array<String> = untyped dataAccess['edit'].view.keys().arr;
 		skeys = skeys.filter(function(k) return !dataAccess['edit'].view[k].readonly);
-		trace(props.formContainer.filterMap(state.values, skeys));
+		trace(FormFunctions.filterMap(state.values, skeys));
 		trace(skeys.toString());
 		trace(dataAccess['edit'].source);
 		//return;,
-		props.formContainer.requests.push(Loader.load(	
+		props.formFunctions.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -317,7 +318,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{
 			case "edit":		
-				props.formContainer.renderElements(state);
+				props.formFunctions.renderElements(state);
 			case "changePassword":
 				jsx('
 				<>

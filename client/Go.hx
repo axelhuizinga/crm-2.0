@@ -41,8 +41,7 @@ class Go
 
 		var app = ReactDOM.render(jsx('
 					<App/>
-		'), root);
-		
+		'), root);	
 		//trace(app);
 		trace('GO');
 		

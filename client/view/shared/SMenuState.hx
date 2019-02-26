@@ -11,5 +11,6 @@ typedef SMenuState =
 	?hidden:Bool,
 	?disabled:Bool,
 	?sameWidth:Int,
+	?section:String,
 	?interactionStates:Map<String,InteractionState>
 }

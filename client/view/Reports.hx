@@ -25,8 +25,8 @@ class Reports extends ReactComponentOfProps<RouteTabProps>
 	public function new(?props:Dynamic, context:Dynamic)
 	{
 		trace(context);
-		//this.state = App.store.getState().appWare;
 		super(props);
+		//this.state = App.store.getState().appWare;
 		//trace(this.state);
 	}
 	

@@ -103,7 +103,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		//trace('user_name:$user_name jwt:$jwt ' + (!(App.user_name == '' || App.jwt == '')?'Y':'N' ));
 		store = model.ApplicationStore.create();
 		state = store.getState();
-		CState.init(store);		
+		//CState.init(store);		
 		if (!(state.appWare.user.user_name == '' || state.appWare.user.jwt == ''))
 		{			
 			trace('clientVerify');

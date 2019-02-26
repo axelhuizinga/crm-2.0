@@ -69,7 +69,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace('hi :)');
 		return;
-		props.formContainer.requests.push(Loader.load(	
+		props.formFunctions.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -131,7 +131,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		var s:hxbit.Serializer = new hxbit.Serializer();
 		
 		return;
-		props.formContainer.requests.push( BinaryLoader.create(
+		props.formFunctions.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -219,7 +219,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			case 'showUserList':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["userList"]} formContainer=${props.formContainer} 
+					${...props} dataState = ${dataDisplay["userList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'showFieldList2':
@@ -227,7 +227,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				trace(state.dataTable[29]['id']+'<<<');
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["fieldsList"]} formContainer=${props.formContainer}  
+					${...props} dataState = ${dataDisplay["fieldsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>				
 				');	
 			case 'shared.io.DB.editTableFields':

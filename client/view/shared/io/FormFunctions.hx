@@ -74,10 +74,11 @@ class FormFunctions
 	public var autoFocus:ReactRef<InputElement>;
 	public var initialState:Dynamic;
 	public var section:String;
-	//public var state:FormState;
+	var comp:ReactComponent;
 	
-	public function new(comp:ReactComponent,?props:DataFormProps)
+	public function new(rc:ReactComponent,?props:DataFormProps)
 	{
+		comp = rc;
 		requests = [];
 		if(comp.props != null)
 		{
@@ -89,7 +90,7 @@ class FormFunctions
 		if(true && comp.props.match != null && comp.props.match.params.action != null)
 		{
             trace('going 2 call ${Type.getClassName(Type.getClass(comp))} ${comp.props.match.params.action}');
-			callMethod(comp, comp.props.match.params.action);
+			callMethod(comp.props.match.params.action);
 		}
         trace(dbData);
 	}	
@@ -139,16 +140,12 @@ class FormFunctions
 	
 	public function itemHandler(e:Event)
 	{
-		trace(cast(e.target, ButtonElement).getAttribute('data-action'));
-		var but:ButtonElement = cast(e.target, ButtonElement);
-		trace('${section}/${but.getAttribute("data-action")}');
-		//trace(props.history.location.pathname +':' + props.match.params.section);
-		//var basePath:String = props.match.path.split('/:')[0];
-		//props.history.push('$basePath/$section/${but.getAttribute("data-action")}');
-		//trace(props.menuBlocks.toString());
+		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
+		trace('${comp.props.match.params.section}/${action}');
+		callMethod(action);
 	}
 
-	public function callMethod(comp:ReactComponent, method:String):Bool
+	public function callMethod(method:String):Bool
 	{
 		var fun:Function = Reflect.field(comp,method);
 		if(Reflect.isFunction(fun))
@@ -229,10 +226,16 @@ class FormFunctions
 		var sM:SMenuProps = comp.state.sideMenu;
 		if(sM.menuBlocks != null)
 			trace(sM.menuBlocks.keys().next() + ':' + comp.props.match.params.section);
+		if(sM.section != null)//TODO: MONITOR PERFORMANCE
+		{
+			trace(sM.section +':'+ comp.props.match.params.section);
+			if(sM.section != comp.props.match.params.section)
+			 sM.section = comp.props.match.params.section;
+		}
 		return jsx('
 			<div className="columns">
 				${comp.renderContent()}
-				<$SMenu className="menu" {...sM} ${...comp.props}/>
+				<$SMenu className="menu" {...sM} ${...comp.props} itemHandler=${itemHandler} />
 			</div>			
 		');
 	}

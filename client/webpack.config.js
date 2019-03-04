@@ -1,6 +1,6 @@
 const localConf = require('./webpack.local');
 const devHost = localConf.ip;
-
+const fs = require('fs');
 const path = require('path');
 
 const buildMode = process.env.NODE_ENV || 'development';
@@ -64,11 +64,15 @@ module.exports = {
         public:'https://'+devHost+':9000',
         compress: true,
         host:  devHost,
-	    https: true,
+       // https: true,
+        https:{
+            key: fs.readFileSync(path.resolve(__dirname, '../../mkcert/192.168.178.49-key.pem')),
+            cert: fs.readFileSync(path.resolve(__dirname, '../../mkcert/192.168.178.49.pem')),
+        },
         port: 9000,
         overlay: false,
         lazy: false,
-        hot: true,  
+        hot:true,
         disableHostCheck: true,
         inline: false,
         stats: 'verbose',

@@ -81,13 +81,16 @@ class FormFunctions
 		requests = [];
 		if(props != null)
 		{
-			props.formFunctions = this;
+			//props.formFunctions = this;
 			trace(props.match);
 		}
 
+		props = comp.props;
+
 		dbData = new DbData();
 		//trace('>>>${props.match.params.action}<<<');
-		if(true && props.match.params.action != null)
+		trace(Reflect.fields(props));
+		if(false && props.match.params.action != null)
 		{
             trace('going 2 call ${Type.getClassName(Type.getClass(comp))} ${props.match.params.action}');
 			callMethod(comp, props.match.params.action);

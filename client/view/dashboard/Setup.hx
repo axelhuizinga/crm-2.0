@@ -34,6 +34,7 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 
+//@:wrap(react.router.ReactRouter.withRouter)
 class Setup extends ReactComponentOf<DataFormProps,FormState>
 {
 	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
@@ -45,6 +46,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 		//trace(getRouterMatch().params);
 		state = {
 			clean:true,
+			formFunctions: new FormFunctions(this),
 			hasError:false,
 			mounted:false,
 			loading:true,
@@ -127,7 +129,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 	override public function render() {
-		return props.formFunctions.render(this);
+		return state.formFunctions.render(this);
 	}
 
 	public function renderContent():ReactFragment

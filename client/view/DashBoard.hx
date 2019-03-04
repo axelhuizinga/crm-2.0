@@ -133,8 +133,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
             <div className="tabContent2" >
 				<Route path="/DashBoard/Roles/:section?/:action?/:id?"  component={Roles}/>
 				<Route path="/DashBoard/Settings/:section?/:action?/:id?"  ${...props}  component={Settings}/>
-				<Route path="/DashBoard/Setup/:section?/:action?"  
-					render=${function(p:RouteRenderProps){return renderComponent(Setup,p,props.user);}}/>					
+				<Route path="/DashBoard/Setup/:section?/:action?"   ${...props}  component={Setup}/>					
             </div>
 			<StatusBar ${...props}/>
 		</>

@@ -1,6 +1,9 @@
 client/npm-debug.log
-httpdocs/
-node_modules/
-.temp/
-.haxelib/
+client/.haxelib
+client/.vscode
 client/webpack.local.js
+httpdocs
+node_modules
+.temp
+server/.haxelib
+server/.vscode

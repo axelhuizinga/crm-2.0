@@ -15,12 +15,12 @@
 
 -cp ../../lib
 -cp lib
--js httpdocs/app.js
--dce full
+-js ../httpdocs/app.js
+-dce std
 #--no-traces
 -main Go
 
 -D debug
 -D react_hot
--D modular_nomaps
+-D modular_noma
 #-D react_check_jsxstatic_type

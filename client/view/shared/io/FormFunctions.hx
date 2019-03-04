@@ -79,21 +79,17 @@ class FormFunctions
 	public function new(comp:ReactComponent,?props:DataFormProps)
 	{
 		requests = [];
-		if(props != null)
+		if(comp.props != null)
 		{
-			//props.formFunctions = this;
-			trace(props.match);
+			trace(comp.props.match);
 		}
-
-		props = comp.props;
-
 		dbData = new DbData();
 		//trace('>>>${props.match.params.action}<<<');
 		trace(Reflect.fields(props));
-		if(false && props.match.params.action != null)
+		if(true && comp.props.match != null && comp.props.match.params.action != null)
 		{
-            trace('going 2 call ${Type.getClassName(Type.getClass(comp))} ${props.match.params.action}');
-			callMethod(comp, props.match.params.action);
+            trace('going 2 call ${Type.getClassName(Type.getClass(comp))} ${comp.props.match.params.action}');
+			callMethod(comp, comp.props.match.params.action);
 		}
         trace(dbData);
 	}	

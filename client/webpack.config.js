@@ -1,5 +1,6 @@
 const localConf = require('./webpack.local');
 const devHost = localConf.ip;
+const devServerHttps = localConf.devServerHttps;
 const fs = require('fs');
 const path = require('path');
 
@@ -25,7 +26,8 @@ const useFriendly = true;
 const debugMode = buildMode !== 'production';
 const dir = __dirname;
 //const dist = __dirname + debugMode? "/bin" : "/../httpdocs/";
-const dist = __dirname + "/httpdocs/";
+//const dist = __dirname + "/httpdocs/";
+const dist = path.join(__dirname, "httpdocs");
 console.log(dist);
 // Sourcemaps: https://webpack.js.org/configuration/devtool/
 // - 'eval-source-map': fast, but JS bundle is somewhat obfuscated
@@ -44,6 +46,7 @@ module.exports = {
     entry: {
         app: './build.hxml'
     },
+  // "info-verbosity":'verbose',
     mode: buildMode,
     // Generation options (destination, naming pattern,...)
     output: {
@@ -65,10 +68,7 @@ module.exports = {
         compress: true,
         host:  devHost,
        // https: true,
-        https:{
-            key: fs.readFileSync(path.resolve(__dirname, '../../mkcert/192.168.178.49-key.pem')),
-            cert: fs.readFileSync(path.resolve(__dirname, '../../mkcert/192.168.178.49.pem')),
-        },
+        https:devServerHttps,
         port: 9000,
         overlay: false,
         lazy: false,
@@ -91,8 +91,9 @@ module.exports = {
     },
     watch: true,    
 	watchOptions:{
-		aggregateTimeout:1500,
-		//poll: 1500
+        aggregateTimeout:800,
+        ignored: /node_modules/,
+		poll: 1000
 	},    
     
     // List all the processors

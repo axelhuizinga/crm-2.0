@@ -147,7 +147,10 @@ class FormFunctions
 
 	public function callMethod(method:String):Bool
 	{
+		trace(comp);
 		var fun:Function = Reflect.field(comp,method);
+		trace(fun);
+		trace(Reflect.isFunction(fun));
 		if(Reflect.isFunction(fun))
 		{
 			Reflect.callMethod(comp,fun,null);

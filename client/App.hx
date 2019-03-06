@@ -77,7 +77,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static var onResizeComponents:List<Dynamic> = new List();
 	//public static var firstLoad:Bool;
 
-    public function new(?props:AppProps) 
+  public function new(?props:AppProps) 
 	{
 		super(props);
 		//trace(rt);
@@ -152,20 +152,20 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		
 		//state.appWare.history.listen(CState.historyChange);
 		trace(Reflect.fields(state));
-    }
+  }
 
-    override function componentDidMount()
+	override function componentDidMount()
 	{
 		//trace(state.appWare.history);
 		trace('yeah');
-    }
+	}
 
 	override function   componentDidCatch(error, info) {
 		// Display fallback UI
 		//this.setState(function(_) return {appWare:{ hasError: true }});
 		// You can also log the error to an error reporting service
 		trace(error);
-	  }
+	}
 	
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)
 	{
@@ -175,7 +175,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	// Use trace from props
 	public static function edump(el:Dynamic){Out.dumpObject(el); return 'OK'; };
 
-    override function render() {
+  override function render() {
 		//trace(state.appWare.history.location.pathname);	store={store}		
 		//trace('OK');
         return jsx('
@@ -183,7 +183,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 			<Provider store={store}><IntlProvider locale="de"><UiView/></IntlProvider></Provider>
 		</>			
         ');		//nn<div className="modal" ref=${App.modalBox}/>
-    }
+  }
 
 	public static function 	await(delay:Int, check:Function, cb:Function):Timer
 	{
@@ -202,14 +202,14 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		return  ti;
 	}
 
-	public static function initEState(?e:Dynamic)
+	public static function initEState(comp:ReactComponent, ?e:Dynamic)
 	{
 		var fS:FormState =
 		{
 			clean: true,
-			hasError: false,
-			mounted: false,
-			sideMenu: {}
+			formFunctions: new view.shared.io.FormFunctions(comp),
+			hasError:false, 
+			sideMenu:{}
 		};
 		if(e != null)
 		{

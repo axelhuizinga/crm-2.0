@@ -46,7 +46,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = DBFormsModel.dataDisplay;
 		//var sideMenu = updateMenu('DB'); //state.sideMenu;
 		//state = {hasError:false, sideMenu:updateMenu('DB')};		
-		state = {hasError:false, sideMenu:{}};		
+		state = App.initEState(this);
 	}
 	
 	public static var menuItems:Array<SMItem> = [
@@ -161,8 +161,9 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function showFieldList(_):Void
 	{
-		props.formFunctions.selectAllRows(state);
-		props.formFunctions.requests.push( BinaryLoader.create(
+		//trace(state);
+		state.formFunctions.selectAllRows(state);
+		state.formFunctions.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -260,10 +261,12 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.section);
 		//return null;<form className="form60"></form>	
 		return jsx('
+		<>
 			<form className="tabComponentForm"  >
 				${renderResults()}
 			</form>
-		');		
+			<$SMenu className="menu" ${...props.sideMenu} itemHandler=${state.formFunctions.itemHandler} />
+		</>');		
 	}
 	
 	function updateMenu(?viewClassPath:String):SMenuProps

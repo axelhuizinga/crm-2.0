@@ -38,15 +38,19 @@ typedef StatusBarProps =
 	userList:Array<UserProps>
 }
 
+typedef StatusBarState = 
+{
+	?date:Date
+}
 //@:expose('default')
 @:connect
-class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
+class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	
 {
 	var mounted:Bool = false;
 	var timer:Timer;
 	
-	public function new(?props:StatusBarProps,? context:Dynamic)
+	public function new(?props:StatusBarProps,?context:Dynamic)
 	{
 		state = {date:Date.now()};
 		//trace(props);

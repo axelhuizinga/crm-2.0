@@ -118,7 +118,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 	}	*/
 	
 	override public function render() {
-		return props.formFunctions.render(this);
+		return props.formFunctions.render();
 	}
 
 	public function renderContent():ReactFragment

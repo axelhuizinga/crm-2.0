@@ -47,7 +47,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	var menuRef:ReactRef<DivElement>;
 	var aW:Int;
 
-	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
+	static function mapDispatchToProps(dispatch:Dispatch):SMenuProps
     {
 		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
       return {

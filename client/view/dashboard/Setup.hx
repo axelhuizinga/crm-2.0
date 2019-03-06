@@ -1,8 +1,7 @@
 package view.dashboard;
 
+import react.ReactRef;
 import react.router.RouterMatch;
-//import react.router.Route.RouteMatchProps;
-//import react.router.RouteRenderProps;
 import react.router.ReactRouter;
 import comments.StringTransform;
 import haxe.Serializer;
@@ -43,7 +42,6 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.user);
 		super(props);	
 		trace(props.match.params.section);
-		//trace(getRouterMatch().params);
 		state = {
 			clean:true,
 			formFunctions: new FormFunctions(this),
@@ -129,25 +127,21 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 	override public function render() {
-		return state.formFunctions.render(this);
+		return state.formFunctions.render();
 	}
 
-	public function renderContent():ReactFragment
+	public function  renderContent():ReactFragment
 	{
-		//var match:RouterMatch = getRouterMatch();
-		//trace(state.?formFunctions:FormFunctions);
-		//trace(cState.?formFunctions:FormFunctions.props.match.url);
-		//if(state.?formFunctions:FormFunctions!=null)
 		trace(props.match.params.section);
 		return switch(props.match.params.section)
 		{
 			case "DBSync":
 				jsx('
-					<$DBSync ${...props} fullWidth={true}/>
+					<$DBSync sideMenu=${state.sideMenu} ${...props} fullWidth={true} />
 				');					
 			case "DB":
 				jsx('
-					<$DB ${...props} fullWidth={true}/>
+					<$DB sideMenu=${state.sideMenu} ${...props} fullWidth={true} />
 				');				
 			default:
 				null;					

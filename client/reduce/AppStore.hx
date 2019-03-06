@@ -58,9 +58,6 @@ class AppStore
 	public function new() 
 	{
 		//trace('OK');
-		//initState.config = Reflect.field(appCconf, 'default');		
-		//initState.config = appCconf;		
-		//trace(initState.config);
 	}
 	
 	public function reduce(state:GlobalAppState, action:AppAction):GlobalAppState

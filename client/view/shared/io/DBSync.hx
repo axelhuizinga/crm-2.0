@@ -56,7 +56,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = DBSyncModel.dataDisplay;
 		_instance = this;
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState();		
+		state =  App.initEState(this);		
 		trace(state);
 		//var sideMenu =  updateMenu('DBSync');//state.sideMenu;
 		//trace(sideMenu.section);
@@ -244,10 +244,12 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.section);		
 		//return null;<form className="form60"></form>	
 		return jsx('
+		<>
 			<form className="tabComponentForm"  >
 				${renderResults()}
 			</form>
-		');		
+			<$SMenu className="menu" ${...props} itemHandler=${state.formFunctions.itemHandler} />
+		</>');		
 	}
 	
 	function updateMenu(?viewClassPath:String):SMenuProps

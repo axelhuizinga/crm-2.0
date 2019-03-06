@@ -46,13 +46,13 @@ import model.ApplicationStore;
  * @author axel@cunity.me
  */
 
-typedef  NavLinks =
+/*typedef  NavLinks =
 {
 	id:Int,
 	component:ReactComponent,
 	label:String,
 	url:String
-}
+}*/
 
 typedef UIProps =
 {
@@ -60,16 +60,20 @@ typedef UIProps =
 	?user:UserProps
 }
 
+typedef UIState =
+{
+	?hasError:Bool
+}
 
 @:connect
-class UiView extends ReactComponentOf<UIProps, Dynamic>
+class UiView extends ReactComponentOf<UIProps, UIState>
 {
 	var browserHistory:History;
 	var dispatchInitial:Dispatch;
 	var mounted:Bool;
 	//static var _me:UiView;
 
-	static function mapStateToProps(aState:AppState) 
+	static function mapStateToProps(aState:AppState):UIProps
 	{
 		trace(aState.appWare.user);
 		return {

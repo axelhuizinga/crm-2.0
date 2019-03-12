@@ -81,7 +81,7 @@ class FormApi
 	{
 		comp = rc;
 		this.sM = sM==null?rc.props.sideMenu:sM;
-		trace(comp);
+		trace(comp.props.sideMenu);
 		trace(sM);
 		requests = [];
 		if(comp.props != null)
@@ -139,8 +139,8 @@ class FormApi
 	{
 		newState = ReactUtil.copy(newState, {sideMenu:updateMenu(newState)});
 		//setState(newState);
-		//trace(newState);
-	}
+		trace(newState);
+	} 
 	
 	public function itemHandler(e:Event)
 	{

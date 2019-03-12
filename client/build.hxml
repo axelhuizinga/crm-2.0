@@ -15,7 +15,6 @@
 
 -cp ../../lib
 -cp lib
--cp client
 -js ../httpdocs/app.js
 -dce std
 #--no-traces

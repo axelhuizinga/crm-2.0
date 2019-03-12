@@ -74,7 +74,7 @@ class FormFunctions
 	public var autoFocus:ReactRef<InputElement>;
 	public var initialState:Dynamic;
 	public var section:String;
-	var comp:ReactComponent;
+	var comp:Dynamic;
 	
 	public function new(rc:ReactComponent,?props:DataFormProps)
 	{
@@ -147,7 +147,7 @@ class FormFunctions
 
 	public function callMethod(method:String):Bool
 	{
-		trace(comp);
+		//trace(comp.state.formFunctions);
 		var fun:Function = Reflect.field(comp,method);
 		trace(fun);
 		trace(Reflect.isFunction(fun));
@@ -178,6 +178,9 @@ class FormFunctions
 	
 	public function selectAllRows(state:FormState,unselect:Bool = false)
 	{
+		trace(state.selectedRows);
+		if(state.selectedRows == null )
+			return;
 		for (r in state.selectedRows)
 		{
 			if (unselect)
@@ -214,17 +217,9 @@ class FormFunctions
 	{
 		e.preventDefault();
 		//trace(props.dispatch); //return;
-		//this.setState({submitted:true});
-		//props.dispatch(AppAction.Login("{user_name:state.user_name,pass:state.pass}"));
-		//trace(props.dispatch);
-		//props.submit({user_name:state.user_name, pass:state.pass,api:props.api});
-		//trace(_dispatch == App.store.dispatch);
-		//trace(App.store.dispatch(UserAction.loginReq(state)));
-		//trace(props.dispatch(AppAction.LoginReq(state)));
 	}	
-
 	
-	public function render(comp:Dynamic)
+	public function render()
 	{
 		var sM:SMenuProps = comp.state.sideMenu;
 		if(sM.menuBlocks != null)
@@ -237,11 +232,15 @@ class FormFunctions
 		}
 		return jsx('
 			<div className="columns">
-				${comp.renderContent()}
-				<$SMenu className="menu" {...sM} ${...comp.props} itemHandler=${itemHandler} />
+				${comp.renderContent()}				
 			</div>			
 		');
-	}
+	}//<$SMenu className="menu" {...sM} ${...comp.props} itemHandler=${itemHandler} />
+
+	/*public function renderSection():ReactFragment
+	{
+
+	}*/
 	
 	public function renderField(name:String, k:Int, state:FormState):ReactFragment
 	{

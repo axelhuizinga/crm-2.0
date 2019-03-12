@@ -104,7 +104,6 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			props.history.push('$basePath/DB');
 			trace(props.history.location.pathname);
 			trace('setting section to:DB');
-			//props.history.push(props.match.url + '/' + viewClassPath);
 		}		
 		trace('${}');
 		//TODO: AUTOMATE CREATE HISTORY TRIGGER IF DB TABLES CHANGED
@@ -130,6 +129,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 	override public function render() 
 	{
 		trace(props.match.params.section);
+		//trace(state.sideMenu); 
 		return switch(props.match.params.section)
 		{
 			case "DBSync":

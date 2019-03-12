@@ -213,7 +213,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 			formApi:new FormApi(comp),
 			hasError: false,
 			mounted: false,
-			sideMenu: comp==null? {}:comp.sideMenu
+			sideMenu: comp==null? {}:comp.props.sideMenu
 		};
 		if(e != null)
 		{

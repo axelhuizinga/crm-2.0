@@ -91,7 +91,8 @@ module.exports = {
                     // Additional compiler options added to all builds
                     extra: '-D build_mode=' + buildMode,
                     debug: debugMode,
-                    logCommand: true
+                    logCommand: true,
+                    watch: ['.']
                 }
             },
             // Static assets loader

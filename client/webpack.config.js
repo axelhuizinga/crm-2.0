@@ -14,23 +14,12 @@ const sourcemapsMode = isProd ? undefined :'cheap-module-source-map' ;
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const useFriendly = true;
-//const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-//const haxeFormatter = require('haxe-loader/errorFormatter');
-//const haxeTransformer = require('haxe-loader/errorTransformer');
-
-//const  = new ExtractTextPlugin('app.css');
-//const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // Options
 const debugMode = buildMode !== 'production';
 const dir = __dirname;
-//const dist = __dirname + debugMode? "/bin" : "/../httpdocs/";
+
 const dist = __dirname + "/httpdocs/";
 console.log(dist);
-// Sourcemaps: https://webpack.js.org/configuration/devtool/
-// - 'eval-source-map': fast, but JS bundle is somewhat obfuscated
-// - 'source-map': slow, but JS bundle is readable
-// - undefined: no map, and JS bundle is readable
 console.log('projectDirectory:${dir} isProd:' + isProd + ' debugMode:${debugMode}');
 //
 // Configuration:
@@ -60,14 +49,12 @@ module.exports = {
     devtool: sourcemapsMode,
     // Live development server (serves from memory)
     devServer: {
-       // contentBase: dist,
         public:'https://'+devHost+':9000',
         compress: true,
         host:  devHost,
-       // https: true,
         https:{
-            key: fs.readFileSync(path.resolve(__dirname, '../../mkcert/192.168.178.49-key.pem')),
-            cert: fs.readFileSync(path.resolve(__dirname, '../../mkcert/192.168.178.49.pem')),
+            key: fs.readFileSync(path.resolve(__dirname, localConf.key)),
+            cert: fs.readFileSync(path.resolve(__dirname, localConf.cert)),
         },
         port: 9000,
         overlay: false,
@@ -75,7 +62,6 @@ module.exports = {
         hot:true,
         disableHostCheck: true,
         inline: false,
-        stats: 'verbose',
         useLocalIp: true,
         headers: {
             "Access-Control-Allow-Origin": "https://pitverwaltung.de",
@@ -91,10 +77,8 @@ module.exports = {
     },
     watch: true,    
 	watchOptions:{
-		aggregateTimeout:1500,
-		//poll: 1500
+		aggregateTimeout:1500
 	},    
-    
     // List all the processors
     module: {
         rules: [
@@ -136,27 +120,10 @@ module.exports = {
                 'sass-loader'
                 ]
             }
-            // CSS processor/loader
-            // - this is where you can add sass/less processing,
-            // - also consider adding postcss-loader for autoprefixing
-            /*{
-                test: /\.(sa|sc|c)ss$/,
-                use: [
-                !isProd ? 'style-loader' : MiniCssExtractPlugin.loader,
-                'css-loader',
-                'sass-loader',
-                ]
-            }*/
         ]
     },
     // Plugins can hook to the compiler lifecycle and handle extra tasks
     plugins: [
-        /*new MiniCssExtractPlugin({
-            // Options similar to the same options in webpackOptions.output
-            // both options are optional
-            filename: !isProd ? '[name].css' : '[name].[hash].css',
-            chunkFilename: !isProd ? '[id].css' : '[id].[hash].css',
-        }),*/
         // HMR: enable globally
         new webpack.HotModuleReplacementPlugin(),
         // HMR: prints more readable module names in the browser console on updates
@@ -170,21 +137,5 @@ module.exports = {
             template: isProd ? 'crm.php' : 'crm.html',
             title: 'Xpress CRM 2.0'
         })
-        // You may want to also:
-        // - minify/uglify the output using UglifyJSPlugin,
-        // - extract the small CSS chunks into a single file using ExtractTextPlugin
-        // - avoid modules duplication using CommonsChunkPlugin
-        // - inspect your JS output weight using BundleAnalyzerPlugin
-    ]/*.concat(useFriendly ? [
-		new FriendlyErrorsWebpackPlugin({
-			compilationSuccessInfo: {
-				messages: [
-					`Your application is running here: https://${devHost}:${9000}`
-				]
-			},
-			//additionalTransformers: [haxeTransformer],
-			//additionalFormatters: [haxeFormatter]
-		})
-	] : [])*/
-	//.concat(isProd ? [extractCSS] : []),
+    ]
 };

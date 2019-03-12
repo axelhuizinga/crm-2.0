@@ -19,7 +19,7 @@ import react.router.Redirect;
 //import react.router.Route.RouteRenderProps;
 //import react.router.Switch;
 import react.router.NavLink;
-import view.shared.io.FormFunctions;
+import view.shared.io.FormApi;
 import view.shared.RouteTabProps;
 import view.shared.CompState;
 import view.LoginForm;
@@ -131,7 +131,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 				</Tabs>
 			</div>
             <div className="tabContent2" >
-				<Route path="/DashBoard/Roles/:section?/:action?/:id?"  component={Roles}/>
+				<Route path="/DashBoard/Roles/:section?/:action?/:id?"  ${...props}   component={Roles}/>
 				<Route path="/DashBoard/Settings/:section?/:action?/:id?"  ${...props}  component={Settings}/>
 				<Route path="/DashBoard/Setup/:section?/:action?"   ${...props}  component={Setup}/>					
             </div>
@@ -142,7 +142,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 
 	/***
 	 render=${function(p:RouteRenderProps){return renderComponent(Setup,p,props.user);}}
-	**/
+	
 
 	function renderComponent(Comp:Dynamic,props:Dynamic, user:UserState):ReactFragment
 	{
@@ -159,7 +159,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 				null;
 		}
 	}
-	
+	**/
 	function internalRedirect(path:String = '/DashBoard/Settings')
 	{
 		props.history.push(path);

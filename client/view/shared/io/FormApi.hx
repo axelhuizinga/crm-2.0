@@ -29,7 +29,7 @@ import react.ReactDOM;
 
 import view.shared.FormElement;
 import view.shared.FormField;
-import view.shared.Formprops;
+import view.shared.FormState;
 import view.shared.OneOf;
 import view.shared.SMenuProps;
 import view.shared.SMItem;
@@ -61,77 +61,71 @@ using Lambda;
 class FormApi
 {
 	public var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;	
-	var dataAccess:DataAccess;
-	var dbData:DbData;
-	var dbMetaData:DBMetaData;
-	var formColElements:Map<String,Array<FormField>>;
-	//var dataDisplay:Map<String,Dataprops>;
-	var _menuItems:Array<SMItem>;
-	var _fprops:FormState;
-	var modalFormTableHeader:ReactRef<DivElement>;
-	var modalFormTableBody:ReactRef<DivElement>;
-	var autoFocus:ReactRef<InputElement>;
-	var initialprops:Dynamic;
-	var props:DataFormProps;
-	var section:String;
+	public var dataAccess:DataAccess;
+	public var dbData:DbData;
+	public var dbMetaData:DBMetaData;
+	public var formColElements:Map<String,Array<FormField>>;
+	//public var dataDisplay:Map<String,DataState>;
+	public var _menuItems:Array<SMItem>;
+	public var fState:FormState;
+	public var _fstate:FormState;
+	public var modalFormTableHeader:ReactRef<DivElement>;
+	public var modalFormTableBody:ReactRef<DivElement>;
+	public var autoFocus:ReactRef<InputElement>;
+	public var initialState:Dynamic;
+	public var section:String;
+	var comp:Dynamic;
+	var sM:SMenuProps;
 	
-	public function new(?_props:DataFormProps) 
+	public function new(rc:Dynamic,?sM:SMenuProps)
 	{
+		comp = rc;
+		this.sM = sM==null?rc.props.sideMenu:sM;
+		trace(comp);
+		trace(sM);
 		requests = [];
-		//trace(props.match.params.section);
-
-		props.sideMenu.itemHandler = itemHandler;
-		//trace(props.sideMenu.itemHandler);
-		 = {
-			action:props.match.params.action,
-			section:props.match.params.section,
-			data:new StringMap(),
-			clean:true,
-			errors:new StringMap(),
-			formFunctions:this,
-			hasError:false,
-			//handleChange:setChangeHandler(),
-			//handleSubmit:setSubmitHandler(),
-			mounted:false,
-			sideMenu: props.sideMenu,
-			selectedRows:new Array()
-		};
+		if(comp.props != null)
+		{
+			trace(comp.props.match);
+		}
 		dbData = new DbData();
 		//trace('>>>${props.match.params.action}<<<');
-		if(false && props.match.params.action != null)
+		trace(Reflect.fields(sM));
+		if(true && comp.props.match != null && comp.props.match.params.action != null)
 		{
-			Reflect.callMethod(this, Reflect.field(this, props.match.params.action),null);
+            trace('going 2 call ${Type.getClassName(Type.getClass(comp))} ${comp.props.match.params.action}');
+			callMethod(comp.props.match.params.action);
 		}
+        trace(dbData);
 	}	
 
-	public function createpropsValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,Dynamic>>
+	public function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,Dynamic>>
 	{
-		return [ for (r in data) createpropsValues(r, view) ];
+		return [ for (r in data) createStateValues(r, view) ];
 	}
 	
-	public function createpropsValues(data:Map<String,Dynamic>, view:DataView):Map<String,Dynamic>
+	public function createStateValues(data:Map<String,Dynamic>, view:DataView):Map<String,Dynamic>
 	{
-		var vprops:Map<String,String> = new Map();
+		var vState:Map<String,String> = new Map();
 		trace(data.keys());
 		trace(view.keys());
 		for (k in data.keys())
 		{
 			if(view.exists(k))
 			{
-				vprops[k] = (view[k].displayFormat == null?data[k]:view[k].displayFormat(data[k]));
+				vState[k] = (view[k].displayFormat == null?data[k]:view[k].displayFormat(data[k]));
 			}
 		}
-		trace(vprops);
-		return vprops;
+		trace(vState);
+		return vState;
 	}
 		
-	public function selectedRowsMap():Array<Map<String,String>>
+	public function selectedRowsMap(state:FormState):Array<Map<String,String>>
 	{
-		//return [for (r in props.selectedRows) selectedRowMap(r)];
-		return null;
+		return [for (r in state.selectedRows) selectedRowMap(r)];
 	}
 	
-	function selectedRowMap(row:TableRowElement):Map<String,String>
+	public function selectedRowMap(row:TableRowElement):Map<String,String>
 	{
 		var rM:Map<String,String> = [
 			for (c in row.cells)
@@ -140,44 +134,37 @@ class FormApi
 		rM['id'] = row.dataset.id;
 		return rM;
 	}
-
 	
-	function itemHandler(e:Event)
+	public function setStateFromChild(newState:FormState)
 	{
-		trace(cast(e.target, ButtonElement).getAttribute('data-action'));
-		var but:ButtonElement = cast(e.target, ButtonElement);
-		trace('${section}/${but.getAttribute("data-action")}');
-		trace(props.history.location.pathname +':' + props.match.params.section);
-		var basePath:String = props.match.path.split('/:')[0];
-		props.history.push('$basePath/$section/${but.getAttribute("data-action")}');
-		//trace(props.menuBlocks.toString());
+		newState = ReactUtil.copy(newState, {sideMenu:updateMenu(newState)});
+		//setState(newState);
+		//trace(newState);
+	}
+	
+	public function itemHandler(e:Event)
+	{
+		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
+		trace('${comp.props.match.params.section}/${action}');
+		callMethod(action);
 	}
 
-	function callMethod(method:String):Bool
+	public function callMethod(method:String):Bool
 	{
-		var fun:Function = Reflect.field(this,method);
+		var fun:Function = Reflect.field(comp,method);
 		if(Reflect.isFunction(fun))
 		{
-			Reflect.callMethod(this,fun,null);
+			Reflect.callMethod(comp,fun,null);
 			return true;
 		}
 		return false;
-	}
-
-	
-
-	
-	function getRouterMatch():RouterMatch
-	{
-		var rmp:RouteMatchProps = cast props.match;
-		return ReactRouter.matchPath(props.history.location.pathname, rmp);		
 	}
 
 	public function handleChange(e:InputEvent)
 	{
 		var t:InputElement = cast e.target;
 		trace('${t.name} ${t.value}');
-		/*var vs = props.values;
+		/*public var vs = state.values;
 		//trace(vs.toString());
 		vs[t.name] = t.value;
 		trace(vs.toString());
@@ -185,195 +172,79 @@ class FormApi
 		//Reflect.setField(s, t.name, t.value);
 		//trace(props.dispatch == App.store.dispatch);
 		//App.store.dispatch(AppAction.LoginChange(s));validate
-		setprops({clean:false, sideMenu:updateMenu(),values:vs});
-		//props.setpropsFromChild({clean:false});
-		//trace(this.props);*/
+		setState({clean:false, sideMenu:updateMenu(),values:vs});
+		//props.setStateFromChild({clean:false});
+		//trace(this.state);*/
 	}
 	
-	public function handleSubmit(e:InputEvent)
+	public function selectAllRows(state:FormState,unselect:Bool = false)
+	{
+		for (r in state.selectedRows)
+		{
+			if (unselect)
+				r.classList.remove('is-selected');
+			else
+				r.classList.add('is-selected');
+		}
+	}
+
+	public function updateMenu(state:FormState,?viewClassPath:String):SMenuProps
+	{
+		var sideMenu = state.sideMenu;
+		if(viewClassPath==null)
+			return sideMenu;
+		sideMenu.menuBlocks['bookmarks'].isActive = true;
+		sideMenu.menuBlocks['bookmarks'].label='Lesezeichen';
+		for(mI in sideMenu.menuBlocks['bookmarks'].items)
+		{
+			switch(mI.action)
+			{		
+				case 'edit':
+					mI.disabled = state.selectedRows.length==0;
+				case 'save':
+					mI.disabled = state.clean;
+				default:
+
+			}			
+		}		
+		//trace(sideMenu.menuBlocks['user'].items);	
+		return sideMenu;
+	}	
+	
+	public static function handleSubmit(e:InputEvent)
 	{
 		e.preventDefault();
 		//trace(props.dispatch); //return;
-		//this.setprops({submitted:true});
-		//props.dispatch(AppAction.Login("{user_name:props.user_name,pass:props.pass}"));
+		//this.setState({submitted:true});
+		//props.dispatch(AppAction.Login("{user_name:state.user_name,pass:state.pass}"));
 		//trace(props.dispatch);
-		//props.submit({user_name:props.user_name, pass:props.pass,api:props.api});
+		//props.submit({user_name:state.user_name, pass:state.pass,api:props.api});
 		//trace(_dispatch == App.store.dispatch);
-		//trace(App.store.dispatch(UserAction.loginReq(props)));
-		//trace(props.dispatch(AppAction.LoginReq(props)));
+		//trace(App.store.dispatch(UserAction.loginReq(state)));
+		//trace(props.dispatch(AppAction.LoginReq(state)));
 	}	
-	
-	public function createElementsArray():ReactFragment
-	{
-		if(_fprops.dataTable.empty())
-			return null;
-		formColElements = new StringMap();
-		addFormColumns();
-		var fields:Iterator<String> = _fprops.fields.keys();
-		var pID:String='';//PRIMARY ID
-		for (name in fields)			
-		{
-			if(_fprops.fields[name].type == FormElement.Hidden && _fprops.fields[name].primary)
-			{
-				pID = name;
-				break;		
-			}
-		}
 
-		for (dR in _fprops.dataTable)
+	
+	public function render(content:ReactFragment)
+	{
+		//var sM:SMenuProps = comp.state.sideMenu;
+		if(sM.menuBlocks != null)
+			trace(sM.menuBlocks.keys().next() + ':' + comp.props.match.params.section);
+		if(sM.section != null)//TODO: MONITOR PERFORMANCE
 		{
-			fields = _fprops.fields.keys();
-			//trace('>>>${dR['id']}<<<');
-			for (name in fields)			
-			{
-				//var primaryId:String = '';
-				if(_fprops.fields[name].type == FormElement.Hidden)
-				{
-					continue;
-				}
-					
-				var fF:FormField = _fprops.fields[name];
-				//trace(name + '=>' + Std.string(fF));
-				formColElements[name].push({
-					className:fF.className,
-					name:name,
-					primaryId:pID==''?'':dR[pID],
-					//?label:String,
-					value:fF.displayFormat == null?dR[name]: fF.displayFormat(dR[name]),
-					//?dataBase:String, 
-					//?dataTable:String,
-					//?dataField:String,
-					displayFormat:fF.displayFormat,
-					type:fF.type,
-					readonly:fF.readonly,
-					required:fF.required,
-					handleChange:fF.handleChange,
-					placeholder:fF.placeholder,
-					validate:fF.validate
-				});
-			}
+			trace(sM.section +':'+ comp.props.match.params.section);
+			if(sM.section != comp.props.match.params.section)
+			 sM.section = comp.props.match.params.section;
 		}
-		return renderColumns();
-	}
-	
-	function addFormColumns():Void
-	{
-		var fields:Iterator<String> = _fprops.fields.keys();
-		for(name in fields)
-		{
-			if (_fprops.fields[name].type == FormElement.Hidden)
-				continue;
-			formColElements[name] = new Array();
-		}
-	}
-	
-	function renderColumns():ReactFragment
-	{
-		var fields:Iterator<String> = formColElements.keys();
-		var cols:Array<ReactFragment> = [];
-		var col:Int = 0;
-		for(name in fields)
-		{
-			cols.push( jsx('
-			<div key=${Utils.genKey(name +'_' + col++)} className="col" data-name=${name}>${renderRows(name)}</div>'));
-		}
-		return cols;
-	}
-	
-	function renderColumnHeaders():ReactFragment
-	{
-		var fields:Iterator<String> = _fprops.fields.keys();
-		var cols:Array<ReactFragment> = [];
-		var c:Int = 0;
-		for(name in fields)
-		{
-			if (_fprops.fields[name].type == FormElement.Hidden)
-				continue;			
-			var formField:FormField = _fprops.fields[name];		
-			cols.push( jsx('
-			<div key=${Utils.genKey(c++)} className="col">
-			<div className="form-table-cell">
-			<div className="header" data-name=${name}>${formField.label}</div>
-			</div>
-			</div>
-			'));
-		}
-		return cols;
-	}
-	
-	function renderRowCell(fF:FormField,k:Int):ReactFragment
-	{
-		//trace(fF.value);
-		var model:String = '.${fF.primaryId}.${fF.name}';
-		return switch(fF.type)
-		{
-			case Checkbox:
-			trace(fF.value);
-				jsx('<$ControlCheckbox key=${Utils.genKey(k++)} model=${model}  controlProps=${{readOnly:fF.readonly}}/>');
-			case Hidden:
-				fF.primary ? null:
-				jsx('<$Control key=${Utils.genKey(k++)} model=${model}  controlProps=${{readOnly:fF.readonly,type:"hidden"}}/>');
-			case FormElement.Select:
-				jsx('
-				<$ControlSelect model=${model}  >
-				${renderSelectOptions(fF.value)}
-				</$ControlSelect>
-				');
-			default:
-				jsx('<$Control key=${Utils.genKey(k++)} model=${model} controlProps=${{readOnly:fF.readonly,type:"hidden",onChange:fF.readonly?null:fF.handleChange}}/>');
-			
-		}		
-	}
-//style=${{visibility:"collapse"}} 
-	function renderRows(name:String):ReactFragment
-	{		
-		var elements:Array<ReactFragment> = [];
-		var k:Int = 0;
-		//trace(name);
-		elements.push( jsx('
-		<div  key=${Utils.genKey(k++)} className="form-table-cell" style=${{minHeight:"0px",height:"0px",overflow:"hidden",padding:"0px 0.3rem"}}>
-		<div className = "header" data-name= ${name}>${_fprops.fields[name].label}</div>
-		</div>'));		
-		for (fF in formColElements[name])
-		{
-			//trace(_fprops.valuesArray[k]);
-			//trace(fF);
-			elements.push(
-			jsx('
-			<div key=${Utils.genKey(k++)} className="form-table-cell">${renderRowCell(fF, k++)}</div>
-			'));		
-		}		
-		return elements;
-	}
-	
-	public function renderSelectOptions(fel:FormElement):ReactFragment
-	{
-		var sel:String = cast fel;
-		var opts:Array<String> = AbstractEnumTools.getValues(FormElement).map(function(fE:FormElement) return cast fE);
-		//trace(sel);		trace(opts);selected=${opt==sel}
-		var rOpts:Array<ReactFragment> = [];
-		var k:Int=0;
-		for (opt in opts)
-			rOpts.push(jsx('
-			<option key=${Utils.genKey(k++)}>$opt</option>
-			'));
-		return rOpts;
-	}
-	
-	function renderModalFormBodyHeader():ReactFragment
-	{
-		modalFormTableHeader = React.createRef();
-		if (_fprops.dataTable == null || _fprops.dataTable.length == 0)
-			return null;
 		return jsx('
-		<section className="modal-card-body header" ref=${modalFormTableHeader}>
-			<!-- Content Header ... -->
-			${renderColumnHeaders()}
-		</section>
+			<div className="columns">
+				${content}
+				<$SMenu className="menu" {...sM} ${...comp.props} itemHandler=${itemHandler} />
+			</div>			
 		');
 	}
-
-	function renderField(name:String, k:Int, state:FormState):ReactFragment
+	
+	public function renderField(name:String, k:Int, state:FormState):ReactFragment
 	{
 		var formField:FormField = state.fields[name];
 		if(k==0)
@@ -403,21 +274,192 @@ class FormApi
 				jsx('<div key=${Utils.genKey(k++)} className=${cState.fields[field].type==Hidden?null:"formField"} >${renderField(field, k, cState)}</div>'));
 		}
 		return elements;
-	}	
-
-	public function renderModalForm(fprops:FormState):ReactFragment
+	}
+	
+	public function createElementsArray():ReactFragment
 	{
-		_fprops = fprops;
-		trace(_fprops); 
+		if(_fstate.dataTable.empty())
+			return null;
+		formColElements = new StringMap();
+		addFormColumns();
+		var fields:Iterator<String> = _fstate.fields.keys();
+		var pID:String='';//PRIMARY ID
+		for (name in fields)			
+		{
+			if(_fstate.fields[name].type == FormElement.Hidden && _fstate.fields[name].primary)
+			{
+				pID = name;
+				break;		
+			}
+		}
+
+		for (dR in _fstate.dataTable)
+		{
+			fields = _fstate.fields.keys();
+			//trace('>>>${dR['id']}<<<');
+			for (name in fields)			
+			{
+				//public var primaryId:String = '';
+				if(_fstate.fields[name].type == FormElement.Hidden)
+				{
+					continue;
+				}
+					
+				var fF:FormField = _fstate.fields[name];
+				//trace(name + '=>' + Std.string(fF));
+				formColElements[name].push({
+					className:fF.className,
+					name:name,
+					primaryId:pID==''?'':dR[pID],
+					//?label:String,
+					value:fF.displayFormat == null?dR[name]: fF.displayFormat(dR[name]),
+					//?dataBase:String, 
+					//?dataTable:String,
+					//?dataField:String,
+					displayFormat:fF.displayFormat,
+					type:fF.type,
+					readonly:fF.readonly,
+					required:fF.required,
+					handleChange:fF.handleChange,
+					placeholder:fF.placeholder,
+					validate:fF.validate
+				});
+			}
+		}
+		return renderColumns();
+	}
+	
+	public function addFormColumns():Void
+	{
+		var fields:Iterator<String> = _fstate.fields.keys();
+		for(name in fields)
+		{
+			if (_fstate.fields[name].type == FormElement.Hidden)
+				continue;
+			formColElements[name] = new Array();
+		}
+	}
+	
+	public function renderColumns():ReactFragment
+	{
+		var fields:Iterator<String> = formColElements.keys();
+		var cols:Array<ReactFragment> = [];
+		var col:Int = 0;
+		for(name in fields)
+		{
+			cols.push( jsx('
+			<div key=${Utils.genKey(name +'_' + col++)} className="col" data-name=${name}>${renderRows(name)}</div>'));
+		}
+		return cols;
+	}
+	
+	public function renderColumnHeaders():ReactFragment
+	{
+		var fields:Iterator<String> = _fstate.fields.keys();
+		var cols:Array<ReactFragment> = [];
+		var c:Int = 0;
+		for(name in fields)
+		{
+			if (_fstate.fields[name].type == FormElement.Hidden)
+				continue;			
+			var formField:FormField = _fstate.fields[name];		
+			cols.push( jsx('
+			<div key=${Utils.genKey(c++)} className="col">
+			<div className="form-table-cell">
+			<div className="header" data-name=${name}>${formField.label}</div>
+			</div>
+			</div>
+			'));
+		}
+		return cols;
+	}
+	
+	public function renderRowCell(fF:FormField,k:Int):ReactFragment
+	{
+		//trace(fF.value);
+		var model:String = '.${fF.primaryId}.${fF.name}';
+		return switch(fF.type)
+		{
+			case Checkbox:
+			trace(fF.value);
+				jsx('<$ControlCheckbox key=${Utils.genKey(k++)} model=${model}  controlProps=${{readOnly:fF.readonly}}/>');
+			case Hidden:
+				fF.primary ? null:
+				jsx('<$Control key=${Utils.genKey(k++)} model=${model}  controlProps=${{readOnly:fF.readonly,type:"hidden"}}/>');
+			case FormElement.Select:
+				jsx('
+				<$ControlSelect model=${model}  >
+				${renderSelectOptions(fF.value)}
+				</$ControlSelect>
+				');
+			default:
+				jsx('<$Control key=${Utils.genKey(k++)} model=${model} controlProps=${{readOnly:fF.readonly,type:"hidden",onChange:fF.readonly?null:fF.handleChange}}/>');
+			
+		}		
+	}
+//style=${{visibility:"collapse"}} 
+	public function renderRows(name:String):ReactFragment
+	{		
+		var elements:Array<ReactFragment> = [];
+		var k:Int = 0;
+		//trace(name);
+		elements.push( jsx('
+		<div  key=${Utils.genKey(k++)} className="form-table-cell" style=${{minHeight:"0px",height:"0px",overflow:"hidden",padding:"0px 0.3rem"}}>
+		<div className = "header" data-name= ${name}>${_fstate.fields[name].label}</div>
+		</div>'));		
+		for (fF in formColElements[name])
+		{
+			//trace(_fstate.valuesArray[k]);
+			//trace(fF);
+			elements.push(
+			jsx('
+			<div key=${Utils.genKey(k++)} className="form-table-cell">${renderRowCell(fF, k++)}</div>
+			'));		
+		}		
+		return elements;
+	}
+	
+	public static function renderSelectOptions(fel:FormElement):ReactFragment
+	{
+		var sel:String = cast fel;
+		var opts:Array<String> = AbstractEnumTools.getValues(FormElement).map(function(fE:FormElement) return cast fE);
+		//trace(sel);		trace(opts);selected=${opt==sel}
+		var rOpts:Array<ReactFragment> = [];
+		var k:Int=0;
+		for (opt in opts)
+			rOpts.push(jsx('
+			<option key=${Utils.genKey(k++)}>$opt</option>
+			'));
+		return rOpts;
+	}
+	
+	public function renderModalFormBodyHeader():ReactFragment
+	{
+		modalFormTableHeader = React.createRef();
+		if (_fstate.dataTable == null || _fstate.dataTable.length == 0)
+			return null;
+		return jsx('
+		<section className="modal-card-body header" ref=${modalFormTableHeader}>
+			<!-- Content Header ... -->
+			${renderColumnHeaders()}
+		</section>
+		');
+	}
+	
+
+	public function renderModalForm(fState:FormState):ReactFragment
+	{
+		_fstate = fState;
+		trace(_fstate); 
 		trace(App.modalBox);
 		modalFormTableBody = React.createRef();
 		App.modalBox.current.classList.toggle('is-active');
 		var click:Function = function(_)App.modalBox.current.classList.toggle("is-active");
 		var submit:Dynamic->Event->Void = function(tfd, ev){
 			trace(tfd);
-			if (_fprops.handleSubmit != null)
+			if (_fstate.handleSubmit != null)
 			{
-				_fprops.handleSubmit(tfd);
+				_fstate.handleSubmit(tfd);
 			}
 		};
 
@@ -426,19 +468,19 @@ class FormApi
 		<>
 		  	<div className="modal-background" onClick=${click}></div>
 		   	<div className="modal-card">
-			   	<LocalForm onSubmit=${submit} model=${fprops.model} initialState=${fprops.initialState} >
+			   	<LocalForm onSubmit=${submit} model=${fState.model} initialState=${fState.initialState} >
 					<header className="modal-card-head">
-					<p className="modal-card-title">${_fprops.title}</p>
+					<p className="modal-card-title">${_fstate.title}</p>
 					<button className="delete" aria-label="close" onClick=${click} ></button>
 					</header>
 					${renderModalFormBodyHeader()}
 					<div className="modal-card-body"  ref=${modalFormTableBody}>					
 					<!-- Content ... -->
-						${_fprops.data.empty()? createElementsArray():renderElements(_fprops)}
+						${_fstate.data.empty()? createElementsArray():renderElements(_fstate)}
 					</div>
 					<footer className="modal-card-foot">
-					<ControlButton controlProps=${{className:"button is-success", type:"submit"}} model=${fprops.model} >Speichern</ControlButton>
-					<ControlReset controlProps=${{className:"button"}} model=${fprops.model}>Reset</ControlReset>
+					<ControlButton controlProps=${{className:"button is-success", type:"submit"}} model=${fState.model} >Speichern</ControlButton>
+					<ControlReset controlProps=${{className:"button"}} model=${fState.model}>Reset</ControlReset>
 					</footer>
 				</LocalForm>
 			</div>
@@ -446,7 +488,7 @@ class FormApi
 		'), App.modalBox.current, adjustModalFormColumns);
 	}
 
-	function renderModalScreen(content:ReactFragment):ReactFragment
+	public function renderModalScreen(content:ReactFragment):ReactFragment
 	{
 		trace(App.modalBox);
 		modalFormTableBody = React.createRef();
@@ -473,7 +515,7 @@ class FormApi
 	}
 	
 
-	function adjustModalFormColumns()
+	public function adjustModalFormColumns()
 	{
 		trace(modalFormTableHeader.current);
 		//return;
@@ -492,7 +534,16 @@ class FormApi
 			//trace('${"set child" + i + "to:" + child.offsetWidth + "=>"}'+ headerCols[i-1].offsetWidth);
 		}
 	}
-
+	
+	public static function initSideMenu(comp:Dynamic, sMa:Array<SMenuBlock>, sM:SMenuProps):SMenuProps
+	{
+		var sma:SMenuBlock = {};
+		sM.menuBlocks = [
+			for (sma in sMa)
+				sma.section => sma
+		];
+		return sM;
+	}
 	
 	public static function localDate(?d:String):String
 	{
@@ -506,7 +557,7 @@ class FormApi
 		return DateTools.format(Date.fromString(d), "%d.%m.%Y %H:%M");
 	}
 	
-	public function obj2map(obj:Dynamic, ?fields:Array<String>):Map<String,Dynamic>
+	public static function obj2map(obj:Dynamic, ?fields:Array<String>):Map<String,Dynamic>
 	{
 		var m:Map<String,Dynamic> = new Map();
 		if (fields == null)
@@ -518,7 +569,7 @@ class FormApi
 		return m;
 	}
 	
-	public function filterMap(m:Map<String,Dynamic>, keys:Array<String>):Map<String,Dynamic>
+	public static function filterMap(m:Map<String,Dynamic>, keys:Array<String>):Map<String,Dynamic>
 	{
 		var r:Map<String,Dynamic> = new Map();
 		for (k in keys)
@@ -528,5 +579,5 @@ class FormApi
 		return r;
 	}
 
-	static var ky:Dynamic->haxe.PosInfos->String = Utils.genKey;
+	public var ky:Dynamic->haxe.PosInfos->String = Utils.genKey;
 }

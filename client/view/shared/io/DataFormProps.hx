@@ -1,6 +1,6 @@
 package view.shared.io;
 import react.ReactComponent.ReactFragment;
-import view.shared.io.FormFunctions;
+import view.shared.io.FormApi;
 import view.shared.FormState;
 import react.router.Route;
 import model.UserState;
@@ -8,7 +8,7 @@ import model.UserState;
 typedef DataFormProps =
 {
 	>ChildrenRouteProps,
-    ?formFunctions:FormFunctions,
+    ?formApi:FormApi,
 	?fullWidth:Bool,
 	?setStateFromChild:FormState->Void,
 	?sideMenu:SMenuProps,

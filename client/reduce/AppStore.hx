@@ -30,14 +30,13 @@ class AppStore
 	implements IReducer<AppAction, GlobalAppState>
 	implements IMiddleware<AppAction, AppState>
 {
-
 	public var initState:GlobalAppState = {
 		config:App.config,
 		firstLoad:true,
 		history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}),
 		themeColor: 'green',
 		locale: 'de',
-		redirectAfterLogin: Browser.location.pathname, 
+		redirectAfterLogin: (Browser.location.pathname=='/'?'DashBoard':Browser.location.pathname), 
 		routeHistory: new Array(),
 		userList:[],
 		user:{
@@ -58,6 +57,7 @@ class AppStore
 	public function new() 
 	{
 		//trace('OK');
+		trace('redirectAfterLogin: ${initState.redirectAfterLogin}');
 		//initState.config = Reflect.field(appCconf, 'default');		
 		//initState.config = appCconf;		
 		//trace(initState.config);

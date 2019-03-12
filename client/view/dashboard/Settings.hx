@@ -17,7 +17,7 @@ import react.ReactUtil;
 //import view.dashboard.model.SettingsFormModel;
 import view.shared.io.DataFormProps;
 import view.shared.io.Design;
-import view.shared.io.FormFunctions;
+import view.shared.io.FormApi;
 import view.shared.FormState;
 import view.shared.OneOf;
 import view.shared.SMenu;
@@ -52,7 +52,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 			hasError:false,
 			mounted:false,
 			loading:true,
-			sideMenu:FormFunctions.initSideMenu( this,
+			sideMenu:FormApi.initSideMenu( this,
 				[
 					{
 						dataClassPath:'auth.User',
@@ -87,9 +87,9 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 		trace(Reflect.fields(props));
 	}
 
-	/*function registerFormContainer(fc:FormFunctions)//
+	/*function registerFormContainer(fc:FormApi)//
 	{
-		setState({?formFunctions:FormFunctions:fc});
+		setState({?FormApi:FormApi:fc});
 		trace(fc.props.match.params.section);
 	}*/
 	
@@ -118,12 +118,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 	}	*/
 	
 	override public function render() {
-		return props.formFunctions.render(this);
-	}
-
-	public function renderContent():ReactFragment
-	{
-		trace(props.match.params);
+		
 		return switch(props.match.params.section)
 		{
 			case "User":
@@ -138,7 +133,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 				');
 			default:		
 				null;		
-		}				
+		};			
   }	
 	
 }

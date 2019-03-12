@@ -9,12 +9,13 @@
 -lib react-redux-form
 -lib CommentString
 -lib reselect
--lib event-types
+-lib event-types 
 -lib js-object
 -lib tink_hxx
 
 -cp ../../lib
 -cp lib
+-cp client
 -js ../httpdocs/app.js
 -dce std
 #--no-traces
@@ -22,5 +23,6 @@
 
 -D debug
 -D react_hot
--D modular_noma
+# -D modular_noma
 #-D react_check_jsxstatic_type
+#--interp

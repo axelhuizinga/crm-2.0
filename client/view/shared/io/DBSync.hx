@@ -22,7 +22,7 @@ import view.dashboard.model.DBSyncModel;
 import view.shared.FormField;
 import view.shared.SMenu;
 import view.shared.SMItem;
-import view.shared.io.FormFunctions;
+import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import view.shared.io.Loader;
@@ -50,13 +50,13 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
-	public function new(?props) 
+	public function new(props) 
 	{
 		super(props);
 		dataDisplay = DBSyncModel.dataDisplay;
 		_instance = this;
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState();		
+		state =  App.initEState(null,this);		
 		trace(state);
 		//var sideMenu =  updateMenu('DBSync');//state.sideMenu;
 		//trace(sideMenu.section);
@@ -69,7 +69,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace('hi :)');
 		return;
-		props.formFunctions.requests.push(Loader.load(	
+		props.formApi.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -131,7 +131,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		var s:hxbit.Serializer = new hxbit.Serializer();
 		
 		return;
-		props.formFunctions.requests.push( BinaryLoader.create(
+		props.formApi.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -151,7 +151,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function showUserList(_):Void
 	{
-		//FormFunctions.requests.push( 
+		//FormApi.requests.push( 
 		BinaryLoader.create(
 			'${App.config.api}', 
 			{
@@ -197,7 +197,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		//
 		if(props.user != null)
 		trace('yeah: ${props.user.first_name}');
-		//dbData = FormFunctions.init(this, props);
+		//dbData = FormApi.init(this, props);
 		if(props.match.params.action != null)
 		{
 			var fun:Function = Reflect.field(this,props.match.params.action);

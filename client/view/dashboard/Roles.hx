@@ -22,7 +22,7 @@ import react.ReactType;
 import redux.Redux.Dispatch;
 import view.dashboard.model.RolesFormModel;
 import view.shared.io.DataFormProps;
-import view.shared.io.FormFunctions;
+import view.shared.io.FormApi;
 import view.shared.FormState;
 import view.shared.SMenu;
 import view.shared.SMenuProps;
@@ -39,15 +39,13 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 	public function new(?props:DataFormProps) 
 	{
 		super(props);
-		new FormFunctions(this, props);
-		new FormFunctions(this, props);
 		//dataDisplay = RolesFormModel.dataDisplay;		
 		state = {
 			clean:true,
 			hasError:false,
 			mounted:false,
 			loading:true,
-			sideMenu:FormFunctions.initSideMenu( this,
+			sideMenu:FormApi.initSideMenu( this,
 				[
 					{
 						dataClassPath:'roles.User',
@@ -71,6 +69,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 				{section: 'Users',	sameWidth: true}
 			)
 		};
+		new FormApi(this, state.sideMenu);
 		trace(Reflect.fields(props));
 	}
 	
@@ -116,7 +115,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 	public function importExternalUsers(ev:ReactEvent):Void
 	{
 		trace(ev.currentTarget);
-		props.formFunctions.requests.push(AjaxLoader.load(
+		props.formApi.requests.push(AjaxLoader.load(
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -147,7 +146,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 		
 		trace(state.loading);
 		
-		//props.formFunctions.requests.push(
+		//props.formApi.requests.push(
 			BinaryLoader.create(
 			'${App.config.api}', 
 			{
@@ -228,7 +227,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 	
 }
 
-/**formFunctions=${cState.formFunctions}
+/**formApi=${cState.formApi}
  * 							autoSize = {true} 
 							headerClassName = "table tablesorter is-striped is-fullwidth is-hoverable"
 							headerColumns=${displayUsers}

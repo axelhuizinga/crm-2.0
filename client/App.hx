@@ -50,6 +50,7 @@ import react.intl.ReactIntl;
 import react.intl.comp.IntlProvider;
 import model.AppState;
 import view.shared.io.BinaryLoader;
+import view.shared.io.FormApi;
 import action.AppAction;
 
 import view.UiView;
@@ -62,7 +63,7 @@ typedef AppProps =
 
 class App  extends react.ReactComponentOf<AppProps, AppState>
 {
-	static var _app:App;
+	public static var _app:App;
 	static var fa = require('./node_modules/font-awesome/css/font-awesome.min.css');
 
   static var STYLES = require('App.scss');
@@ -77,7 +78,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static var onResizeComponents:List<Dynamic> = new List();
 	//public static var firstLoad:Bool;
 
-    public function new(?props:AppProps) 
+  public function new(?props:AppProps) 
 	{
 		super(props);
 		//trace(rt);
@@ -103,6 +104,8 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		//trace('user_name:$user_name jwt:$jwt ' + (!(App.user_name == '' || App.jwt == '')?'Y':'N' ));
 		store = model.ApplicationStore.create();
 		state = store.getState();
+		//trace(store);
+		trace(state.appWare.redirectAfterLogin);
 		//CState.init(store);		
 		if (!(state.appWare.user.user_name == '' || state.appWare.user.jwt == ''))
 		{			
@@ -200,16 +203,17 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		},delay);
 		trace(max);
 		return  ti;
-	}
+	} 
 
-	public static function initEState(?e:Dynamic)
+	public static function initEState(?e:Dynamic, ?comp:Dynamic)
 	{
 		var fS:FormState =
 		{
 			clean: true,
+			formApi:new FormApi(comp),
 			hasError: false,
 			mounted: false,
-			sideMenu: {}
+			sideMenu: comp==null? {}:comp.sideMenu
 		};
 		if(e != null)
 		{

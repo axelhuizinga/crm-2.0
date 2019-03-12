@@ -20,7 +20,7 @@ import react.ReactType;
 import model.AjaxLoader;
 
 import view.shared.io.DataFormProps;
-import view.shared.io.FormFunctions;
+import view.shared.io.FormApi;
 import view.shared.FormState;
 import view.shared.OneOf;
 import view.shared.SMenu;
@@ -42,15 +42,16 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(props.user);
 		super(props);	
+		trace(Reflect.fields(props));
 		trace(props.match.params.section);
 		//trace(getRouterMatch().params);
 		state = {
 			clean:true,
-			formFunctions: new FormFunctions(this),
+			//formApi: new FormApi(this),
 			hasError:false,
 			mounted:false,
 			loading:true,
-			sideMenu:FormFunctions.initSideMenu( this,
+			sideMenu:FormApi.initSideMenu( this,
 				[
 					{
 						dataClassPath:'model.tools.DB',
@@ -128,26 +129,18 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			*/		
 	}
 	
-	override public function render() {
-		return state.formFunctions.render(this);
-	}
-
-	public function renderContent():ReactFragment
+	override public function render() 
 	{
-		//var match:RouterMatch = getRouterMatch();
-		//trace(state.?formFunctions:FormFunctions);
-		//trace(cState.?formFunctions:FormFunctions.props.match.url);
-		//if(state.?formFunctions:FormFunctions!=null)
 		trace(props.match.params.section);
 		return switch(props.match.params.section)
 		{
 			case "DBSync":
 				jsx('
-					<$DBSync ${...props} fullWidth={true}/>
-				');					
-			case "DB":
+					<$DBSync ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					');					
+				case "DB":
 				jsx('
-					<$DB ${...props} fullWidth={true}/>
+					<$DB ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 				');				
 			default:
 				null;					

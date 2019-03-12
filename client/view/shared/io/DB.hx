@@ -24,7 +24,7 @@ import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.SMItem;
 import view.shared.io.DataAccess;
-import view.shared.io.FormFunctions;
+import view.shared.io.FormApi;
 import view.shared.io.Loader;
 import view.table.Table;
 import view.table.Table.DataState;
@@ -39,14 +39,14 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 {
 	var dataDisplay:Map<String,DataState>;
 	var dataAccess:DataAccess;
-	public function new(?props) 
+	public function new(props) 
 	{
 		super(props);
 
 		dataDisplay = DBFormsModel.dataDisplay;
 		//var sideMenu = updateMenu('DB'); //state.sideMenu;
 		//state = {hasError:false, sideMenu:updateMenu('DB')};		
-		state = {hasError:false, sideMenu:{}};		
+		state = {formApi:new FormApi(this), hasError:false, sideMenu:props.sideMenu};		
 	}
 	
 	public static var menuItems:Array<SMItem> = [
@@ -60,7 +60,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	public function createFieldList(ev:ReactEvent):Void
 	{
 		trace('hi :)');
-		props.formFunctions.requests.push(Loader.load(	
+		state.formApi.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -88,11 +88,11 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	public function editTableFields(ev:ReactEvent):Void
 	{
 		trace(state.selectedRows.length);
-		var data = props.formFunctions.selectedRowsMap(state);
+		var data = state.formApi.selectedRowsMap(state);
 		var view:Map<String,FormField> = dataAccess['editTableFields'].view.copy();
 		trace(dataAccess['editTableFields'].view['table_name']);
 		trace(data[0]['id']+'<');
-		props.formFunctions.renderModalForm({
+		state.formApi.renderModalForm({
 			data:new Map(),
 			dataTable:data,
 			handleSubmit: saveTableFields,
@@ -102,7 +102,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			model:'tableFields',
 			//viewClassPath:'shared.io.DB.editTableFields',			
 			fields:view,
-			valuesArray:props.formFunctions.createStateValuesArray(data, dataAccess['editTableFields'].view), 
+			valuesArray:state.formApi.createStateValuesArray(data, dataAccess['editTableFields'].view), 
 			loading:false,
 			title:'Tabellenfelder Eigenschaften'
 		});	
@@ -161,8 +161,8 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function showFieldList(_):Void
 	{
-		props.formFunctions.selectAllRows(state);
-		props.formFunctions.requests.push( BinaryLoader.create(
+		state.formApi.selectAllRows(state);
+		state.formApi.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -229,7 +229,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	/*override public function componentWillUnmount()
 	{
 		mounted=false;
-		props.formFunctions.removeRequest(this)
+		state.formApi.removeRequest(this)
 	}*/
 	
 	function renderResults():ReactFragment
@@ -259,11 +259,12 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			trace(state.values);
 		trace(props.match.params.section);
 		//return null;<form className="form60"></form>	
-		return jsx('
-			<form className="tabComponentForm"  >
+		
+		return state.formApi.render(jsx('
+			<form className="tabComponentForm" >
 				${renderResults()}
 			</form>
-		');		
+		'));		
 	}
 	
 	function updateMenu(?viewClassPath:String):SMenuProps

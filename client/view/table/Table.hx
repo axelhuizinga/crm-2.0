@@ -25,7 +25,7 @@ import react.ReactMacro.jsx;
 import shared.Utils;
 
 import view.shared.FormState;
-import view.shared.io.FormFunctions;
+import view.shared.io.FormApi;
 import view.shared.OneOf;
 using Lambda;
 

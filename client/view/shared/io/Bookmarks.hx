@@ -55,7 +55,7 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 	public function edit(ev:Event):Void
 	{
 		trace('hi :)');
-		props.formFunctions.requests.push(AjaxLoader.load(	
+		props.formApi.requests.push(AjaxLoader.load(	
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,

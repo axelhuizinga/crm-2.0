@@ -36,6 +36,7 @@ import bulma_components.Tabs;
 
 import action.AppAction;
 import model.ApplicationStore;
+import App;
 //import view.ContactsBox;
 //import view.DashBoardBox;
 //import view.AccountingBox;
@@ -169,7 +170,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 					<$Route path="/reports" {...props} component=${NavTabs}/>
 				</div>
 				<div className="tabComponent">
-					<$Route path="/"  component={RedirectBox} exact={true}/>				
+					<$Route path="/"  render={renderRedirect} exact={true}/>				
 					
 					<$Route path="/DashBoard*" component=${DashBoard}/>
 					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
@@ -187,7 +188,9 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 	
 	function renderRedirect(p:Dynamic)
 	{
-		return jsx('<RedirectBox {...p}/>');
+		//trace(App.store.initState.redirectAfterLogin);
+		//return null;
+		return jsx('<RedirectBox {...p} to=${App.store.getState().appWare.redirectAfterLogin}/>');
 	}
 	
 }

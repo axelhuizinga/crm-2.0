@@ -31,7 +31,7 @@ class Design extends ReactComponentOf<DataFormProps,FormState>
 	public function edit(ev:ReactEvent):Void
 	{
 		trace('hi :)');
-		props.formFunctions.requests.push(AjaxLoader.load(	
+		props.formApi.requests.push(AjaxLoader.load(	
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -57,8 +57,7 @@ class Design extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function new(props:DataFormProps)
 	{
-		super(props);
-		new FormFunctions(this,props);
+		super(props);		
 		//menuItems = [{handler:edit, label:'Bearbeiten', section:'edit'}];
 		//sideMenu.menuBlocks['bookmarks'].items = function() return _menuItems;
 		//trace(sideMenu.menuBlocks['bookmarks'].items());

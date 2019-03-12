@@ -6,7 +6,7 @@ import js.html.TableRowElement;
 import react.ReactType;
 import react.ReactComponent;
 import view.shared.SMenuProps;
-import view.shared.io.FormFunctions;
+import view.shared.io.FormApi;
 
 typedef FormState =
 {
@@ -14,7 +14,7 @@ typedef FormState =
 	?dataClassPath:String,
 	?data:Map<String,Dynamic>,
 	?dataTable:Array<Map<String,Dynamic>>,
-	?formFunctions:FormFunctions,
+	?formApi:FormApi,
 	?clean:Bool,
 	?selectedRows:Array<TableRowElement>,
 	?handleChange:InputEvent->Void,

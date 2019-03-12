@@ -1,5 +1,6 @@
 const localConf = require('./webpack.local');
 const devHost = localConf.ip;
+const devServerHttps = localConf.devServerHttps;
 const fs = require('fs');
 const path = require('path');
 
@@ -17,8 +18,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // Options
 const debugMode = buildMode !== 'production';
 const dir = __dirname;
-
-const dist = __dirname + "/httpdocs/";
+const dist = path.join(__dirname, "httpdocs");
 console.log(dist);
 console.log('projectDirectory:${dir} isProd:' + isProd + ' debugMode:${debugMode}');
 //
@@ -33,6 +33,7 @@ module.exports = {
     entry: {
         app: './build.hxml'
     },
+  // "info-verbosity":'verbose',
     mode: buildMode,
     // Generation options (destination, naming pattern,...)
     output: {

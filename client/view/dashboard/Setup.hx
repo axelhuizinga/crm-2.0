@@ -1,8 +1,7 @@
 package view.dashboard;
 
+import react.ReactRef;
 import react.router.RouterMatch;
-//import react.router.Route.RouteMatchProps;
-//import react.router.RouteRenderProps;
 import react.router.ReactRouter;
 import comments.StringTransform;
 import haxe.Serializer;
@@ -44,7 +43,6 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 		super(props);	
 		trace(Reflect.fields(props));
 		trace(props.match.params.section);
-		//trace(getRouterMatch().params);
 		state = {
 			clean:true,
 			//formApi: new FormApi(this),

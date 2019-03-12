@@ -244,10 +244,12 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.section);		
 		//return null;<form className="form60"></form>	
 		return jsx('
+		<>
 			<form className="tabComponentForm"  >
 				${renderResults()}
 			</form>
-		');		
+			<$SMenu className="menu" ${...props} itemHandler=${state.formApi.itemHandler} />
+		</>');		
 	}
 	
 	function updateMenu(?viewClassPath:String):SMenuProps

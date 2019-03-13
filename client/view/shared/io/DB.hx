@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import model.AppState;
 import js.html.AreaElement;
 import haxe.Json;
 import haxe.Unserializer;
@@ -34,7 +35,7 @@ import view.table.Table.DataState;
  * ...
  * @author axel@cunity.me
  */
-
+@:connect
 class DB extends ReactComponentOf<DataFormProps,FormState> 
 {
 	var dataDisplay:Map<String,DataState>;
@@ -57,6 +58,13 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Löschen',action:'delete'}
 	];
 	
+	static function mapStateToProps(aState:AppState) 
+	{
+		return {
+			user:aState.appWare.user
+		};
+	}	
+
 	public function createFieldList(ev:ReactEvent):Void
 	{
 		trace('hi :)');
@@ -161,7 +169,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function showFieldList(_):Void
 	{
-		state.formApi.selectAllRows(state);
+		//state.formApi.selectAllRows(state);
 		state.formApi.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
@@ -234,12 +242,12 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		if (state.data != null)
+		if (state.dataTable != null)
 		return switch(props.match.params.action)
 		{
 			case 'showFieldList':
 				//trace(dataDisplay["fieldsList"]);
-				//trace(state.dataTable[29]['id']+'<<<');
+				trace(state.dataTable[29]['id']+'<<<');
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["fieldsList"]}

@@ -133,7 +133,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
             <div className="tabContent2" >
 				<Route path="/DashBoard/Roles/:section?/:action?/:id?"  ${...props}   component={Roles}/>
 				<Route path="/DashBoard/Settings/:section?/:action?/:id?"  ${...props}  component={Settings}/>
-				<Route path="/DashBoard/Setup/:section?/:action?"   ${...props}  component={Setup}/>					
+				<Route path="/DashBoard/Setup/:section?/:action?"   ${...props} component={Setup}/>					
             </div>
 			<StatusBar ${...props}/>
 		</>
@@ -142,7 +142,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 
 	/***
 	 render=${function(p:RouteRenderProps){return renderComponent(Setup,p,props.user);}}
-	
+	**/
 
 	function renderComponent(Comp:Dynamic,props:Dynamic, user:UserState):ReactFragment
 	{
@@ -153,13 +153,15 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 		{	
 			case Roles:
 				jsx('<$Roles  user=${this.props.user} ${...props}/>');			
+			case Settings:
+				jsx('<$Settings  user=${this.props.user} ${...props}/>');			
 			case Setup:
 				jsx('<$Setup  user=${this.props.user} ${...props}/>');
 			default:
 				null;
 		}
 	}
-	**/
+	
 	function internalRedirect(path:String = '/DashBoard/Settings')
 	{
 		props.history.push(path);

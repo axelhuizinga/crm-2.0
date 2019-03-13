@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import model.AppState;
 import haxe.Constraints.Function;
 import js.html.AreaElement;
 import haxe.Json;
@@ -63,7 +64,12 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 
 	}
 	
-	//override public function save(ev:ReactEvent):Void{}
+	static function mapStateToProps(aState:AppState) 
+	{
+		return {
+			user:aState.appWare.user
+		};
+	}
 	
 	public function createFieldList(ev:ReactEvent):Void
 	{

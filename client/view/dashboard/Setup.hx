@@ -33,7 +33,6 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 
-//@:wrap(react.router.ReactRouter.withRouter)
 class Setup extends ReactComponentOf<DataFormProps,FormState>
 {
 	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;

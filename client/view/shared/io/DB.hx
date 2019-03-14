@@ -207,8 +207,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 	override public function componentDidMount():Void 
-	{
-		
+	{		
 		trace('Ok');
 		dataAccess = [
 			'editTableFields' =>{
@@ -231,7 +230,8 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 				source:null,
 				view:null
 			}
-		];			
+		];		
+		state.formApi.doAction();	
 	}
 
 	/*override public function componentWillUnmount()

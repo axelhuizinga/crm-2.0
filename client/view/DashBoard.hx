@@ -45,7 +45,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 	public function new(?props:Dynamic)
 	{
 		state = {hasError:false,mounted:false};
-		trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} user:${props.user}');
+		//trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} user:${props.user}');
 		super(props);
 		if (props.match.url == '/DashBoard')
 		{
@@ -110,11 +110,9 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 	
     override function render() 
 	{	
-		//var s:ApplicationState = untyped App.store.getState().appWare;
 		//trace(this.state);
-		
 		//trace(props.history.location.pathname);
-		trace(props.user);
+		//trace(props.user);
 		if (state.hasError)
 			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');
 		trace(Reflect.fields(props));

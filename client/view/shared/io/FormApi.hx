@@ -80,24 +80,30 @@ class FormApi
 	public function new(rc:Dynamic,?sM:SMenuProps)
 	{
 		comp = rc;
-		this.sM = sM==null?rc.props.sideMenu:sM;
-		trace(comp.props.sideMenu);
-		trace(sM);
+
+		//trace(sM);
 		requests = [];
-		if(comp.props != null)
+		if(rc.props != null)
 		{
-			trace(comp.props.match);
+			trace(rc.props.match);
+			this.sM = sM==null?rc.props.sideMenu:sM;
+			//trace(rc.props.history);			
 		}
 		dbData = new DbData();
 		//trace('>>>${props.match.params.action}<<<');
 		trace(Reflect.fields(sM));
-		if(true && comp.props.match != null && comp.props.match.params.action != null)
+
+        trace(dbData);
+	}	
+
+	public function doAction():Void
+	{
+		if(comp.props.match != null && comp.props.match.params.action != null)
 		{
             trace('going 2 call ${Type.getClassName(Type.getClass(comp))} ${comp.props.match.params.action}');
 			callMethod(comp.props.match.params.action);
 		}
-        trace(dbData);
-	}	
+	}
 
 	public function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,Dynamic>>
 	{
@@ -145,7 +151,15 @@ class FormApi
 	public function itemHandler(e:Event)
 	{
 		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
+		trace(comp.props.history.location.pathname);
+		//trace(comp.props.history);
+		trace(comp.props.match.params.action);
+		trace(comp.props.match.params.section);
+		trace(comp.props.match);
 		trace('${comp.props.match.params.section}/${action}');
+		var path:String = Std.string(comp.props.match.path).split(':')[0];
+		trace(path);
+		comp.props.history.push('${path}${comp.props.match.params.section}/${action}');
 		callMethod(action);
 	}
 
@@ -228,9 +242,9 @@ class FormApi
 	public function render(content:ReactFragment)
 	{
 		//var sM:SMenuProps = comp.state.sideMenu;
-		if(sM.menuBlocks != null)
-			trace(sM.menuBlocks.keys().next() + ':' + comp.props.match.params.section);
-		if(sM.section != null)//TODO: MONITOR PERFORMANCE
+		//if(sM.menuBlocks != null)
+			//trace(sM.menuBlocks.keys().next() + ':' + comp.props.match.params.section);
+		if(sM.section != null)//TODO: MONITOR PERFORMANCE + INTEGRITY
 		{
 			trace(sM.section +':'+ comp.props.match.params.section);
 			if(sM.section != comp.props.match.params.section)

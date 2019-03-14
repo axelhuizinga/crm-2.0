@@ -163,10 +163,8 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		trace('yeah');
 	}
 
-	override function   componentDidCatch(error, info) {
-		// Display fallback UI
-		//this.setState(function(_) return {appWare:{ hasError: true }});
-		// You can also log the error to an error reporting service
+	override function   componentDidCatch(error, info) 
+	{
 		trace(error);
 	}
 	
@@ -180,12 +178,11 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
   override function render() {
 		//trace(state.appWare.history.location.pathname);	store={store}		
-		//trace('OK');
         return jsx('
 		<>
 			<Provider store={store}><IntlProvider locale="de"><UiView/></IntlProvider></Provider>
 		</>			
-        ');		//nn<div className="modal" ref=${App.modalBox}/>
+        ');
   }
 
 	public static function 	await(delay:Int, check:Function, cb:Function):Timer

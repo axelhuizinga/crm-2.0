@@ -393,7 +393,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		//var tableHeight:Float = tableRef.current.clientHeight;
 		var scrollBarWidth:Float = App.config.getScrollbarWidth();
 		var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - scrollBarWidth;
-		tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
+		//tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
 		trace(tableRef.current.offsetHeight);
 		tHeadRef.current.style.visibility = "collapse";						
 		trace(tableRef.current.offsetHeight);

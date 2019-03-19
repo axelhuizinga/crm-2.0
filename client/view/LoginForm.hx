@@ -141,7 +141,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 			  <div className="hero-body">
 			  <div className="loader"  style=${{width:'7rem', height:'7rem', margin:'auto', borderWidth:'0.58rem'}}/>
 			  </div>
-			</section>
+			</section> 
 			');		
 		}
 		

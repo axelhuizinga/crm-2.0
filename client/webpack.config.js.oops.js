@@ -50,8 +50,8 @@ module.exports = {
     devtool: sourcemapsMode,
     // Live development server (serves from memory)
     devServer: {
-        //public:'https://'+devHost+':9000',
-        contentBase:path.resolve(__dirname,'../httpdocs'),
+        public:'https://'+devHost+':9000',
+        //contentBase:path.resolve(__dirname,'../httpdocs'),
         compress: true,
         host:  devHost,
         https:{
@@ -64,7 +64,7 @@ module.exports = {
         hot:true,
         disableHostCheck: true,
         //inline: false,
-        useLocalIp: true,
+        //useLocalIp: true,
         headers: {
             "Access-Control-Allow-Origin": "https://pitverwaltung.de",
             "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",

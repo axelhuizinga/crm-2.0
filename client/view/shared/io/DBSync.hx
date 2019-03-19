@@ -34,7 +34,7 @@ import view.table.Table;
  * ...
  * @author axel@cunity.me
  */
-
+@:connect
 class DBSync extends ReactComponentOf<DataFormProps,FormState>
 {
 

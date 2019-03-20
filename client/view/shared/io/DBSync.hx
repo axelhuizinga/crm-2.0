@@ -43,6 +43,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	public static var menuItems:Array<SMItem> = [
 		{label:'Create Fields Table',action:'createFieldList'},
 		{label:'BenutzerDaten Abgleich',action:'showUserList'},
+		{label:'SpenderDaten Abgleich',action:'showClientList'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -155,6 +156,28 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		));
 	}
 	
+	public function showClientList(_):Void
+	{
+		//FormApi.requests.push( 
+		BinaryLoader.create(
+			'${App.config.api}', 
+			{
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
+				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
+				className:'admin.SyncExternalClients',
+				action:'syncClientDetails',
+				devIP:App.devIP
+			},
+			function(data:DbData)
+			{
+				trace(data);
+				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
+				setState({dataTable:data.dataRows});
+			}
+		);
+	}
+
 	public function showUserList(_):Void
 	{
 		//FormApi.requests.push( 
@@ -228,6 +251,12 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 					${...props} dataState = ${dataDisplay["userList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
+			case 'showClientList':
+				jsx('
+					<Table id="fieldsList" data=${state.dataTable}
+					${...props} dataState = ${dataDisplay["clientList"]} 
+					className="is-striped is-hoverable" fullWidth=${true}/>
+				');			
 			case 'showFieldList2':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');

@@ -19,6 +19,7 @@ import model.contacts.Contact;
 import model.admin.CreateHistoryTrigger;
 import model.admin.CreateUsers;
 import model.admin.SyncExternal;
+import model.admin.SyncExternalClients;
 import model.roles.Users;
 import model.tools.DB;
 import Model.MData;

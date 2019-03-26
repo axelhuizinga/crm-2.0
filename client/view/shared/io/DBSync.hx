@@ -166,7 +166,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				jwt:props.user.jwt,
 				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
 				className:'admin.SyncExternalClients',
-				action:'syncClientDetails',
+				action:'importClientDetails',
 				devIP:App.devIP
 			},
 			function(data:DbData)
@@ -181,19 +181,23 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	public function showUserList(_):Void
 	{
 		//FormApi.requests.push( 
+			trace(App.config.api);
 		BinaryLoader.create(
 			'${App.config.api}', 
+			//'https://pitverwaltung.de/sync/proxy.php', 
 			{
 				user_name:props.user.user_name,
 				jwt:props.user.jwt,
 				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
 				className:'admin.SyncExternal',
 				action:'syncUserDetails',
+				TARGET: 'syncUsers.php',
 				devIP:App.devIP
 			},
 			function(data:DbData)
 			{
-				trace(data.dataRows[data.dataRows.length-2]['phone_data']);
+				trace(data);
+				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				setState({dataTable:data.dataRows});
 			}
 		);

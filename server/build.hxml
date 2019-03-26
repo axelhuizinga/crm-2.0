@@ -8,5 +8,7 @@
 -cp lib
 -cp src
 -php ../httpdocs
--main S
+-D analyzer-optimize
 -dce std
+-main S
+#--interp

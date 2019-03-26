@@ -107,13 +107,14 @@ class S
 			
 		dbh = new PDO('pgsql:host=$dbHost;dbname=$db',dbUser,dbPass,Syntax.array(['client_encoding','UTF8']));
 		//dbh.set_charset("utf8");
-		//trace(dbh.);
+		//trace(dbh.errorInfo());
 		var jwt:String = params.get('jwt');
 		var user_name:String = params.get('user_name');
 		trace(jwt +':' + (jwt != null));
 		if (jwt.length > 0)
 		{
-			if(true || User.verify(jwt, user_name,params))
+			//if(true || User.verify(jwt, user_name,params))
+			if(User.verify(jwt, user_name,params))
 				Model.dispatch(params);			
 		}
 	
@@ -182,7 +183,7 @@ class S
 		}
 
 		//trace(dbData.dataRows[0]);
-		trace(dbData.dataRows[dbData.dataRows.length-2]);
+		//trace(dbData.dataRows[dbData.dataRows.length-2]);
 		/*var b:Bytes = s.serialize(dbData);
 		var v:DbData = s.unserialize(b, DbData);
 		trace(v);*/
@@ -222,7 +223,7 @@ class S
 		/*var s:Serializer = new Serializer();
 		var v:DbData = s.unserialize(b, DbData);
 		trace(v);*/
-		trace('OK');
+		trace('OK ${b.length}');
 		//Web.setHeader('Content-Type', 'application/octet-stream');
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 		Web.setHeader("Access-Control-Allow-Credentials", "true");

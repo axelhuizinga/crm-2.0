@@ -40,13 +40,18 @@ typedef CustomField =
 	
 	
 	
-	public static function create(param:StringMap<String>):Void
+	public static function create(param:StringMap<String>):Contact
 	{
 		var self:Contact = new Contact(param);	
 		//self.table = 'vicidial_list';
 		//self.param = param;
+		if(param.get('action')==null)
+		{
+			return self;
+		}
 		//trace(param);
 		Reflect.callMethod(self, Reflect.field(self,param.get('action')), [param]);
+		return self;
 	}
 	
 	

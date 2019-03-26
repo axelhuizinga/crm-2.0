@@ -1,5 +1,7 @@
 package model.admin;
 
+import sys.FileSystem;
+import sys.io.FileOutput;
 import shared.DbData;
 import haxe.macro.Type.Ref;
 import haxe.ds.Map;
@@ -35,51 +37,63 @@ class SyncExternalClients extends Model
 		Reflect.callMethod(self, Reflect.field(self,param.get('action')), [param]);
 	}	
 
-    public function syncClientDetails(?user:Dynamic):Void
+    public function importClientDetails(?user:Dynamic):Void
     {
         var info:Map<String,Dynamic>  = getViciDialData();
         trace(info);
-        return;
+        var data:String = Syntax.code("exec({0})", 
+            'curl -d "user=${info['admin']}&pass=${info['pass']}" ${info['syncApi']+"/exportClients.php"}');
+        /*return;
         var req:Http = new Http(info['syncApi']);
         trace(info['syncApi']);
         req.addParameter('pass', info['pass']);
         req.addParameter('user', info['admin']);
-        req.addParameter('action', info['syncUserDetails']);
+        req.addParameter('action', info['exportClients']);
         req.onData = function(data:String)
-        {
+        {*/
             //S.saveLog(data);
-            var dRows:Array<Dynamic> = Json.parse(data);
+        trace(data.substr(0,80));
+        var out:FileOutput = sys.io.File.write('../.crm/sync.csv');
+        trace(out);
+        dbData.dataInfo = ['sync.csv'=>FileSystem.stat('../.crm/sync.csv').size];
+        S.sendData(dbData, null);
+        trace('nono');
+        return;
+            //var dRows:Array<Map<String, Dynamic>> = cast Json.parse(data).contacts;
+            var dRows:Array<Array<Dynamic>> = cast Json.parse(data).contacts;
+            //var dRows:Array<Map<String, Dynamic>> = [['test'=>"hallo welt"]];
             trace(dRows.length);
-            //trace(dRows[dRows.length-2]);
-            trace(data.indexOf('phone_data'));
-            //dbData.dataRows = [['length'=>dRows.length]];
+            trace(dRows[0].length);
             dbData.dataRows = [];
-            var fNames:Array<String> = Reflect.fields(dRows[0]);
-            if(!fNames.has('phone_data'))
-                fNames.push('phone_data');
-            trace(fNames.has('phone_data'));
+            var fNames:Array<String> = cast dRows.shift();
+            trace(fNames);
+            var i:Int = 100;
             for(r in dRows)
             {
                 dbData.dataRows.push(
                     [
                         for(n in fNames)
-                        n => Reflect.field(r,n)
+                        n => r.shift()
                     ]
                 );
+                if(i--<0)
+                {
+                    break;
+                }
             }
-            S.sendData(saveUserDetails(), null);
-        };
+            S.sendData(dbData, null);
+        /*};
         req.onError = function (msg:String)
         {
             trace(msg);
         }
         req.onStatus = function (s:Int)
         { trace(s);}
-        req.request(true);
+        req.request(true);*/
         trace('done');
     }
 
-    function saveUserDetails():DbData
+    function saveClientDetails():DbData
     {
         var updated:Int = 0;
         //dbData = new DbData();
@@ -87,21 +101,6 @@ class SyncExternalClients extends Model
         trace(dbData.dataRows[dbData.dataRows.length-2]);
         for(dR in dbData.dataRows)
         {
-           /* var sql:String = 'SELECT external FROM users WHERE user_name = \'${dR['user']}\'';
-            var q:EitherType<PDOStatement,Bool> = S.dbh.query(sql);
-            if(!q)
-            {
-                dbData.dataErrors = ['${param.get('action')}' => S.dbh.errorInfo()];
-                return dbData;
-            }
-            var eStmt:PDOStatement = cast(q, PDOStatement);
-
-            var external:NativeArray = eStmt.fetch();
-            trace(sql);
-            //trace(Type.typeof(external));
-
-            if(1 == updated++)
-            trace(external);*/
             var external_text = row2jsonb(Lib.objectOfAssociativeArray(Lib.associativeArrayOfHash(dR)));
             var sql = comment(unindent, format) /*
             UPDATE crm.users SET active='${dR['active']}',edited_by=101, external = jsonb_object('{$external_text}')::jsonb WHERE user_name='${dR['user']}'
@@ -114,7 +113,7 @@ class SyncExternalClients extends Model
                return dbData;
             } 
         }        
-        dbData.dataInfo = ['saveUserDetails' => 'OK', 'updatedRows' => updated];
+        dbData.dataInfo = ['saveClientDetails' => 'OK', 'updatedRows' => updated];
         trace(dbData.dataInfo);
 		return dbData; 
     }
@@ -131,7 +130,6 @@ class SyncExternalClients extends Model
         ];
         //S.saveLog(info);
         return info;
-		S.sendInfo(dbData, info);
 	}
 
 }

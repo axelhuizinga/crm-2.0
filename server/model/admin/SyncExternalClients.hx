@@ -1,5 +1,6 @@
 package model.admin;
 
+import sys.io.File;
 import sys.FileSystem;
 import sys.io.FileOutput;
 import shared.DbData;
@@ -40,9 +41,9 @@ class SyncExternalClients extends Model
     public function importClientDetails(?user:Dynamic):Void
     {
         var info:Map<String,Dynamic>  = getViciDialData();
-        trace(info);
+        //trace(info);
         var data:String = Syntax.code("exec({0})", 
-            'curl -d "user=${info['admin']}&pass=${info['pass']}" ${info['syncApi']+"/exportClients.php"}');
+            'curl -X POST -o "../.crm/sync.csv" -d "user=${info['admin']}&pass=${info['pass']}" ${info['syncApi']+"/exportClients.php"}');
         /*return;
         var req:Http = new Http(info['syncApi']);
         trace(info['syncApi']);
@@ -52,10 +53,23 @@ class SyncExternalClients extends Model
         req.onData = function(data:String)
         {*/
             //S.saveLog(data);
-        trace(data.substr(0,80));
-        var out:FileOutput = sys.io.File.write('../.crm/sync.csv');
-        trace(out);
-        dbData.dataInfo = ['sync.csv'=>FileSystem.stat('../.crm/sync.csv').size];
+        //trace(data.substr(0,80));
+        //var out:FileOutput = sys.io.File.write('../.crm/sync.csv');
+       // File.saveContent('../.crm/sync.csv',data);
+       // trace(out);
+       //Syntax.code("file_put_contents({0},{1})", '../.crm/sync.csv',);
+        dbData.dataInfo = ['sync.csv.size'=>FileSystem.stat('../.crm/sync.csv').size];
+        if(data.indexOf('Error') == 0)
+        {
+            dbData.dataErrors['importClientDetails.import'] = data;
+        }
+        else 
+        {
+            if(processImport('../.crm/sync.csv'))
+            {
+                dbData.dataInfo['sync.csv.complete'] = true;
+            };
+        }
         S.sendData(dbData, null);
         trace('nono');
         return;
@@ -65,8 +79,65 @@ class SyncExternalClients extends Model
             trace(dRows.length);
             trace(dRows[0].length);
             dbData.dataRows = [];
-            var fNames:Array<String> = cast dRows.shift();
-            trace(fNames);
+            
+            S.sendData(dbData, null);
+        /*};
+        req.onError = function (msg:String)
+        {
+            trace(msg);
+        }
+        req.onStatus = function (s:Int)
+        { trace(s);}
+        req.request(true);*/
+        trace('done');
+    }
+	
+    public function processImport(path:String):Bool
+	{
+		var fh:Dynamic = Syntax.code("fopen({0}, 'r')",path);
+        var fInfo:String = Syntax.code("exec({0})", 'wc -L ${path}');
+        var len:Int = Std.parseInt(fInfo.split(' ')[0]);
+        if(!fh)
+        {
+            dbData.dataErrors['processImport.fopen'] = 'Datei ${path} konnte nicht geöffnet werden';
+            return false;
+        }
+        var data:Dynamic = null;
+        var chunk:Int = 1000;
+        var fNames:Array<String> = null;
+        while(data = Syntax.code("fgetcsv({0},{1},';')", fh, len))
+        {
+            trace(Type.typeof(data));
+            if(fNames==null)
+            {
+                fNames = data;
+                trace(Std.string(fNames));
+                continue;
+            }
+            if(!processImportRow(fNames,data))
+            {
+                break;
+            }
+            if(--chunk==0)
+            {
+                break;
+            }
+        }
+        return true;
+		//setState({dataTable:data.dataRows});
+	}    
+
+    function processImportRow(fNames:Array<String>,row:Array<Dynamic>):Bool
+    {
+        //trace(fNames);
+        trace(fNames + ':' + row);
+        trace(fNames.length + ':' + row.length);
+        if(fNames.length != row.length)
+        {
+            //TODO: ADD ERROR INFO
+            return false;
+        }
+        /*
             var i:Int = 100;
             for(r in dRows)
             {
@@ -80,17 +151,9 @@ class SyncExternalClients extends Model
                 {
                     break;
                 }
-            }
-            S.sendData(dbData, null);
-        /*};
-        req.onError = function (msg:String)
-        {
-            trace(msg);
-        }
-        req.onStatus = function (s:Int)
-        { trace(s);}
-        req.request(true);*/
-        trace('done');
+            }  
+            */      
+        return true;
     }
 
     function saveClientDetails():DbData

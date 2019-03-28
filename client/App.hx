@@ -185,20 +185,22 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
         ');
   }
 
-	public static function 	await(delay:Int, check:Function, cb:Function):Timer
+	public static function 	await(delay:Int, check:Void->Dynamic, cb:Function):Timer
 	{
-		var max:Int = 15;  
-		var ti:Timer = Timer.delay(function ()
+		
+		var ti:Timer = null;
+		ti = Timer.delay(function ()
 		{			
-			trace(max);
-			if(max--<0)
-				return;
-			if(check())
-				cb();		
-			else
-				await(delay, check, cb);
+			switch (check()){
+				case -1:
+					ti.stop;
+				case true:
+					cb();		
+				default: 
+					await(delay, check, cb);
+			}
 		},delay);
-		trace(max);
+
 		return  ti;
 	} 
 

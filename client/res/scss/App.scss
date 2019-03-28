@@ -706,3 +706,26 @@ label.panel-heading {
 	height:0px;
 	position:relative;
 }
+.loader-screen
+{
+	flex: 1 0 100%;
+	/*border:1px solid green;*/
+	flex-direction:column;
+	justify-content: center;
+	align-items: stretch;
+	display: flex;
+}
+.loader-box{
+	align-items: center;
+
+	/*flex: 1 0 100%;
+	flex-direction:row;
+	border:1px solid grey;*/
+}
+.loader-content
+{
+	margin: auto;
+	padding: 2rem;
+	height: 6rem;
+	text-align: center;
+}

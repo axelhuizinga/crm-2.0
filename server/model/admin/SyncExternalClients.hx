@@ -44,20 +44,7 @@ class SyncExternalClients extends Model
         //trace(info);
         var data:String = Syntax.code("exec({0})", 
             'curl -X POST -o "../.crm/sync.csv" -d "user=${info['admin']}&pass=${info['pass']}" ${info['syncApi']+"/exportClients.php"}');
-        /*return;
-        var req:Http = new Http(info['syncApi']);
-        trace(info['syncApi']);
-        req.addParameter('pass', info['pass']);
-        req.addParameter('user', info['admin']);
-        req.addParameter('action', info['exportClients']);
-        req.onData = function(data:String)
-        {*/
-            //S.saveLog(data);
-        //trace(data.substr(0,80));
-        //var out:FileOutput = sys.io.File.write('../.crm/sync.csv');
-       // File.saveContent('../.crm/sync.csv',data);
-       // trace(out);
-       //Syntax.code("file_put_contents({0},{1})", '../.crm/sync.csv',);
+        
         dbData.dataInfo = ['sync.csv.size'=>FileSystem.stat('../.crm/sync.csv').size];
         if(data.indexOf('Error') == 0)
         {
@@ -103,10 +90,12 @@ class SyncExternalClients extends Model
             return false;
         }
         var data:Dynamic = null;
-        var chunk:Int = 1000;
+        var row:NativeArray = null;
+        var index:Int = 1;
         var fNames:Array<String> = null;
-        while(data = Syntax.code("fgetcsv({0},{1},';')", fh, len))
+        while((row = Syntax.code("fgetcsv({0},{1},';')", fh, len)) != null)
         {
+            data = Lib.toHaxeArray(row);
             trace(Type.typeof(data));
             if(fNames==null)
             {
@@ -116,12 +105,10 @@ class SyncExternalClients extends Model
             }
             if(!processImportRow(fNames,data))
             {
+                dbData.dataErrors['processImportRow.zeile'] = S.errorInfo(Std.string(index));
                 break;
             }
-            if(--chunk==0)
-            {
-                break;
-            }
+            index++;
         }
         return true;
 		//setState({dataTable:data.dataRows});
@@ -129,32 +116,39 @@ class SyncExternalClients extends Model
 
     function processImportRow(fNames:Array<String>,row:Array<Dynamic>):Bool
     {
-        //trace(fNames);
-        trace(fNames + ':' + row);
-        trace(fNames.length + ':' + row.length);
+        //trace(fNames.length + ':' + row.length);
         if(fNames.length != row.length)
         {
-            //TODO: ADD ERROR INFO
+            dbData.dataErrors['processImportRow.fieldCount'] = S.errorInfo('Zeile hat '+ row.length + ' Werte:${Std.string(row)}');
             return false;
         }
-        /*
-            var i:Int = 100;
-            for(r in dRows)
-            {
-                dbData.dataRows.push(
-                    [
-                        for(n in fNames)
-                        n => r.shift()
-                    ]
-                );
-                if(i--<0)
-                {
-                    break;
-                }
-            }  
-            */      
+        var dMap:StringMap<Dynamic> = [
+            for(n in fNames)
+            n => row.shift()
+        ];
+
         return true;
     }
+
+    function updateClient(cData:StringMap<Dynamic>):Bool
+    {
+        var cNames:String<Dynamic> = 'id,creation_date,state,use_email,
+                phone_code,phone_number,first_name,last_name,edited_by'.split(',');
+        var sql:String = comment(unindent, format) /*
+			WITH new_contact AS (
+				INSERT INTO crm.contacts (id,mandator,creation_date,state,use_email,
+                phone_code,phone_number,first_name,last_name,edited_by)
+				VALUES (1, '${contact.phone_number}', '${name[0]}', '${name[1]}', 100)
+				ON CONFLICT (id) DO UPDATE
+SET
+				returning id)
+				select id from new_contact;
+			*/;
+		trace(sql);
+        return true;
+    }/**
+    client_id,lead_id,creation_date,state,use_email,register_on,register_off,register_off_to,teilnahme_beginn,title,anrede,namenszusatz,co_field,storno_grund,birth_date,old_active
+    **/
 
     function saveClientDetails():DbData
     {
@@ -172,7 +166,7 @@ class SyncExternalClients extends Model
             var q:EitherType<PDOStatement,Bool> = S.dbh.query(sql);
             if(!q)
             {
-               dbData.dataErrors = ['${param.get('action')}' => S.dbh.errorInfo()];
+               dbData.dataErrors['${param.get('action')}'] = S.dbh.errorInfo();
                return dbData;
             } 
         }        

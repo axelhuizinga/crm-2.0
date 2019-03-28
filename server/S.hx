@@ -300,6 +300,12 @@ class S
 		return d;
 	}
 
+	public static function errorInfo(m:String,?pos:PosInfos):String
+	{
+		if(pos==null)
+			return m;
+		return '${pos.fileName}::${pos.lineNumber}::$m';
+	}
 
 	public static function saveLog(what:Dynamic,?pos:PosInfos):Void
 	{

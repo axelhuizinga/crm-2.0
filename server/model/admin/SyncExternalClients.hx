@@ -1,5 +1,6 @@
 package model.admin;
 
+import haxe.macro.Expr.Catch;
 import sys.io.File;
 import sys.FileSystem;
 import sys.io.FileOutput;
@@ -93,9 +94,22 @@ class SyncExternalClients extends Model
         var row:NativeArray = null;
         var index:Int = 1;
         var fNames:Array<String> = null;
-        while((row = Syntax.code("fgetcsv({0},{1},';')", fh, len)) != null)
+        var foo:Dynamic = null;
+        while(/*{
+            foo = (row = Syntax.code("fgetcsv({0},{1},';')", fh, len));
+            foo != null && foo != false;
+        }*/
+        testValue(row = Syntax.code("fgetcsv({0},{1},';')", fh, len)))
         {
-            data = Lib.toHaxeArray(row);
+            try {
+                data = Lib.toHaxeArray(row);
+            }
+            catch(ex:Dynamic)
+            {
+                trace(Type.typeof(foo));
+                trace(row == null?'true':'false');
+                //trace(ex);
+            }
             trace(Type.typeof(data));
             if(fNames==null)
             {
@@ -122,23 +136,30 @@ class SyncExternalClients extends Model
             dbData.dataErrors['processImportRow.fieldCount'] = S.errorInfo('Zeile hat '+ row.length + ' Werte:${Std.string(row)}');
             return false;
         }
-        var dMap:StringMap<Dynamic> = [
+        var dMap:Map<String,Dynamic> = [
             for(n in fNames)
             n => row.shift()
         ];
 
-        return true;
+        return updateClient(dMap);
     }
+    
+    inline function testValue(v:Dynamic):Bool return cast v;
+    //inline function testValue(v:Dynamic):Bool return cast v != null && v != false;
 
-    function updateClient(cData:StringMap<Dynamic>):Bool
+    function updateClient(cD:Map<String,Dynamic>):Bool
     {
-        var cNames:String<Dynamic> = 'id,creation_date,state,use_email,
-                phone_code,phone_number,first_name,last_name,edited_by'.split(',');
+        var cNames:Array<String> = S.tableFields('contacts');
+        trace(cNames.join(','));
         var sql:String = comment(unindent, format) /*
 			WITH new_contact AS (
 				INSERT INTO crm.contacts (id,mandator,creation_date,state,use_email,
                 phone_code,phone_number,first_name,last_name,edited_by)
-				VALUES (1, '${contact.phone_number}', '${name[0]}', '${name[1]}', 100)
+				VALUES ('${cD["client_id"]}',1,'${cD["creation_date"]}', ,'${cD["state"]}'
+                ,'${cD["use_email"]}','${cD["phone_code"]}','${cD["phone_number"]}'
+                ,'${cD["creation_date"]}','${cD["creation_date"]}','${cD["creation_date"]}'
+                ,'${cD["creation_date"]}','${cD["creation_date"]}','${cD["creation_date"]}'
+                )
 				ON CONFLICT (id) DO UPDATE
 SET
 				returning id)
@@ -147,7 +168,7 @@ SET
 		trace(sql);
         return true;
     }/**
-    client_id,lead_id,creation_date,state,use_email,register_on,register_off,register_off_to,teilnahme_beginn,title,anrede,namenszusatz,co_field,storno_grund,birth_date,old_active
+    client_id,creation_date,state,use_email,register_on,register_off,register_off_to,teilnahme_beginn,title,anrede,namenszusatz,co_field,storno_grund,birth_date,old_active
     **/
 
     function saveClientDetails():DbData

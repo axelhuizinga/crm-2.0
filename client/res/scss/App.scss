@@ -18,7 +18,7 @@ $cell-border: 1px solid grey;
 $cellPadding: 0px 0.75rem;
 $headPadding: 0.35rem 0.75rem;
 $darkBlue: rgb(10,20,60);
-$logoBlue: hsl(202,75%,40%);
+$logoBlue: #3292ca;
 $paleBlue: rgb(140,190,240);
 $darkGreen: rgb(60,80,0);
 $highLightGreen: rgb(80,220,20);
@@ -28,8 +28,8 @@ $darkRed: rgb(128, 17, 17);
 $lightRed: rgb(251, 220, 220);
 $primary: #601111;
 $darkSun: #fabf32;
-$lightSun: hsl(49, 95%, 99%);
-$modal-background-background-color: hsl(270, 10%, 80%);
+$lightSun: #fefdfa;
+$modal-background-background-color: #ccc6d1;
 $modal-content-width: auto;
 $sun: rgb(251, 220, 80);
 $borderHeadCol:$borderSmallWidth solid $lightGreen;
@@ -273,16 +273,17 @@ h1 {
   position: absolute;
   width: 1px;
 }
-.formField label:before {
-	font: 1.55rem fontawesome;
+.formField svg{
+	font-size: 1.55rem;
 	color: $logoBlue;
 }
-.userIcon:before {
+/*.userIcon:before {
 	content: '\f007';
 }
 .lockIcon:before {
+	font: 1.55rem "Font Awesome 5 Brands";
 	content: '\f023';
-}
+}*/
 
 .formField label,
 .formField input

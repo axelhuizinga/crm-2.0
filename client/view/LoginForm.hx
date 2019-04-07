@@ -158,15 +158,17 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 				<div className="form2">
 				  <form name="form" onSubmit={handleSubmit}  >
 					<div className="formField">
-						<label className="userIcon" forhtml="login_user_name">
-							<span className="hidden">User ID</span></label>
+						<svg>
+							<use href="webfonts/fa-solid-900.svg#user"></use>
+						</svg>
 						<input id = "login_user_name"  name = "user_name" 
 							className=${errorStyle("user_name") + "form-input"}  
 							placeholder="User ID" value={state.user_name} onChange={handleChange} />
 					</div>
 					<div className="formField">
-						<label className="lockIcon" forhtml="login_pass">
-							<span className="hidden">Password</span></label>
+						<svg>
+							<use href="webfonts/fa-brands-400.svg#lock"></use>
+						</svg>
 						<input id="login_pass" className=${errorStyle("pass") + "form-input"}  
 							name="pass" type="password" placeholder="Password"  value={state.pass} onChange={handleChange} />					
 					</div>

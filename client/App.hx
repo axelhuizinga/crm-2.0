@@ -64,7 +64,7 @@ typedef AppProps =
 class App  extends react.ReactComponentOf<AppProps, AppState>
 {
 	public static var _app:App;
-	static var fa = require('./node_modules/font-awesome/css/font-awesome.min.css');
+	//static var fa = require('./node_modules/font-awesome/css/font-awesome.min.css');
 
   static var STYLES = require('App.scss');
  

@@ -267,7 +267,6 @@ class S
 			*/;
 		trace(sql);
 		var stmt:PDOStatement = S.dbh.query(
-			//'SELECT string_agg(TABLE_NAME,\',\') FROM information_schema.tables WHERE table_schema = "$db";'
 			sql
 		);
 		/*if (stmt == false)
@@ -329,11 +328,7 @@ class S
 		var sql:String = comment(unindent, format) /*
 			SELECT string_agg(COLUMN_NAME,',') FROM information_schema.columns WHERE table_schema = '$db' AND table_name = '$table'
 			*/;
-		var stmt:PDOStatement = S.dbh.query(
-			comment(unindent, format) /*
-			SELECT string_agg(COLUMN_NAME,',') FROM information_schema.columns WHERE table_schema = '$db' AND table_name = '$table'
-			*/			
-		);
+		var stmt:PDOStatement = S.dbh.query(sql);
 		if (S.dbh.errorCode() != '00000')
 		{
 			trace(S.dbh.errorCode());

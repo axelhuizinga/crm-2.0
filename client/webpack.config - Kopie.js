@@ -14,14 +14,13 @@ const sourcemapsMode = isProd ? undefined :'cheap-module-source-map' ;
 // Plugins
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-//const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 // Options
 const debugMode = buildMode !== 'production';
 const dir = __dirname;
-const dist = path.join(__dirname, "/../httpdocs");
-//const dist = path.resolve(__dirname, "./httpdocs");
-console.log('Output Directory:' + dist);
-console.log(`projectDirectory:${dir} isProd:`+ isProd +  ` debugMode:${debugMode}`);
+const dist = path.join(__dirname, "httpdocs");
+console.log(dist);
+console.log('projectDirectory:${dir} isProd:' + isProd + ' debugMode:${debugMode}');
 //
 // Configuration:
 // This configuration is still relatively minimalistic;
@@ -40,13 +39,11 @@ module.exports = {
     output: {
         path: dist,
         filename: 'app.js',
-	//publicPath: dist
-	publicPath: '/'
-	//publicPath: 'https://192.168.178.20:9000/'
+	    //publicPath: '../httpdocs'
     },
     // Module resolution options (alias, default paths,...)
     resolve: {
-	modules: [path.resolve(dir, 'res/scss'), 'node_modules'],
+	    modules: [path.resolve(dir, 'res/scss'), 'node_modules'],
         extensions: ['.js', '.json']
     },
     // Sourcemaps option for development
@@ -54,8 +51,7 @@ module.exports = {
     // Live development server (serves from memory)
     devServer: {
         //public:'https://'+devHost+':9000',
-         //contentBase: './httpdocs/', //gives me directory listing in the browser
-       contentBase: dist,
+        contentBase:path.resolve(__dirname,'../httpdocs'),
         compress: true,
         host:  devHost,
         https:{
@@ -76,25 +72,16 @@ module.exports = {
             "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
             "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
 		},	       
-	    //historyApiFallback: {
-	    // 
-            //rewrites:[
-           //{from: '/', to: '/crm.html'}
-           // ]
-        //},
-	index: 'crm.html',
-	staticOptions:{
-		index:false
-	},
-	//publicPath: __dirname + '../httpdocs/'
-	publicPath: '/',
-		// Accepted values: none, errors-only, minimal, normal, detailed, verbose
-		// Any other falsy value will behave as 'none', truthy values as 'normal'	
-	stats: {}
+	    historyApiFallback: {
+	      index: 'crm.html',
+            rewrites:[
+            {from: '/', to: '/crm.html'}
+            ]
+        }
     },
     watch: true,    
 	watchOptions:{
-		//aggregateTimeout:1500,
+		aggregateTimeout:1500,
 		ignored: ['httpdocs']
 	},    
     // List all the processors
@@ -117,24 +104,27 @@ module.exports = {
             // - you may use 'url-loader' instead which can replace
             //   small assets with data-urls
             {
+                test: /\.(gif|png|jpg|svg)$/,
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[hash:7].[ext]'
+                }
+            },
+            {
+                test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
+                loader: 'file-loader'
+            },
+            {
+                test:  /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
+                loader: "url-loader?limit=10000&mimetype=application/font-woff" 
+            },	    
+            {
                 test: /\.(sa|sc|c)ss$/,
                 use: [                
                 'style-loader',
                 'css-loader',
                 'sass-loader'
                 ]
-            },
-            {
-                test: /\.(woff|woff2)$/,
-                use: [{
-                    loader: 'url-loader',
-                    options: {
-                        name: 'webfonts/[name].[ext]',
-                        mimetype: 'application/font-woff',
-			    limit:10000
-                       // publicPath: url => `../webfonts/${url}`
-                    }
-                }]
             }
         ]
     },
@@ -146,10 +136,11 @@ module.exports = {
         new webpack.NamedModulesPlugin(),
         // HMR: do not emit compiled assets that include errors
         new webpack.NoEmitOnErrorsPlugin(),
-        // Like generating the HTML page with links the generated JS files  template: resolve(__dirname, 'src/public', 'index.html'),
+
+        // Like generating the HTML page with links the generated JS files
         new HtmlWebpackPlugin({
-            filename: (isProd ? 'crm.php' : 'crm.html'),
-            template: path.resolve(__dirname, 'res/'+(isProd ? 'crm.php' : 'crm.html')),
+            filename: isProd ? 'crm.php' : 'crm.html',
+            template: isProd ? 'crm.php' : 'crm.html',
             title: 'Xpress CRM 2.0'
         })
     ]

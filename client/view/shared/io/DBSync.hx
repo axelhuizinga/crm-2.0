@@ -175,9 +175,10 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			{
 				trace(data);
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
-				if(data.dataErrors == {})
+				trace(data.dataErrors.keys().hasNext());
+				if(!data.dataErrors.keys().hasNext())
 				{
-					setState({values: ['loadResult'=>'Verarbeite Importdaten...extern ','closeAfter'=>8000]});
+					setState({values: ['loadResult'=>'Verarbeite Importdaten...','closeAfter'=>8000]});
 				}
 				else 
 					setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});

@@ -154,27 +154,28 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 				  <h2 className="overlaySubTitle">				  
 				  crm 2.0
 				  </h2>
-				</div> 
+				</div>
 				<div className="form2">
-				  	<form name="form" onSubmit={handleSubmit} >
-						<div className="formField">
-								<label className="fa userIcon" forhtml="login_user_name">
-										<span className="hidden">User ID</span>
-								</label>
-								<input id="login_user_name" name="user_name" 
-								className=${errorStyle("user_name") + "form-input"}  
-								placeholder="User ID" value={state.user_name} onChange={handleChange} />
-						</div>
-						<div className="formField">
-								<label className="fa lockIcon" forhtml="pw">
-										<span className="hidden">Password</span>
-								</label>
-								<input id="pw" className=${errorStyle("pass") + "form-input"} name="pass" type="password" placeholder="Password" value={state.pass} onChange={handleChange} />
-						</div>
-						<div className="formField">
-								<input type="submit" value="Login" />
-						</div>
-				  	</form>
+				  <form name="form" onSubmit={handleSubmit}  >
+					<div className="formField">
+						<svg>
+							<use href="webfonts/fa-solid-900.svg#user"></use>
+						</svg>
+						<input id = "login_user_name"  name = "user_name" 
+							className=${errorStyle("user_name") + "form-input"}  
+							placeholder="User ID" value={state.user_name} onChange={handleChange} />
+					</div>
+					<div className="formField">
+						<svg>
+							<use href="webfonts/fa-brands-400.svg#lock"></use>
+						</svg>
+						<input id="login_pass" className=${errorStyle("pass") + "form-input"}  
+							name="pass" type="password" placeholder="Password"  value={state.pass} onChange={handleChange} />					
+					</div>
+					<div className="formField">
+						<input type="submit" value="Login"/>
+					</div>
+				  </form>
 				</div>
 			</div>
 		  </div>

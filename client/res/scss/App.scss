@@ -273,17 +273,14 @@ h1 {
   position: absolute;
   width: 1px;
 }
-.formField svg{
-	font-size: 1.55rem;
-	color: $logoBlue;
-}
-/*.userIcon:before {
+
+.userIcon:before {
 	content: '\f007';
 }
 .lockIcon:before {
-	font: 1.55rem "Font Awesome 5 Brands";
+	font: 1.55rem "Font Awesome 5 Free";
 	content: '\f023';
-}*/
+}
 
 .formField label,
 .formField input
@@ -308,7 +305,9 @@ h1 {
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   border-right-style:none;
-  padding: 1.15rem 1.25rem 0rem 1.25rem ;
+	padding: 1.15rem 1.25rem 0rem 1.25rem ;
+	font-size: 1.55rem;
+	color: $logoBlue;	
 }
 .formField input:focus, .formField input:hover {
   background-color: #fff;
@@ -324,17 +323,6 @@ h1 {
 	border-color:transparent;
 }
 
-/*.user:before {
-  content: '\f007';
-  font: 0.8rem fontawesome;
-	color: #5b5b5b;
-}
-
-.lock:before {
-  content: '\f023';
-  font: 0.8rem fontawesome;
-	color: #5b5b5b;
-}*/
 .overlaySubTitle
 {
 	font-size:1.22rem;

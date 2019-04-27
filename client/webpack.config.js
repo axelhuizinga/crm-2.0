@@ -55,7 +55,7 @@ module.exports = {
     devServer: {
         //public:'https://'+devHost+':9000',
          //contentBase: './httpdocs/', //gives me directory listing in the browser
-       contentBase: dist,
+        contentBase: dist,
         compress: true,
         host:  devHost,
         https:{
@@ -76,12 +76,9 @@ module.exports = {
             "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
             "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
 		},	       
-	    //historyApiFallback: {
-	    // 
-            //rewrites:[
-           //{from: '/', to: '/crm.html'}
-           // ]
-        //},
+	    historyApiFallback: {
+            index: '/'
+        },
 	index: 'crm.html',
 	staticOptions:{
 		index:false
@@ -125,17 +122,15 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(woff|woff2)$/,
+                test: /\.(ttf|eot|svg|png|woff(2)?)(\?[a-z0-9]+)?$/,
                 use: [{
-                    loader: 'url-loader',
-                    options: {
-                        name: 'webfonts/[name].[ext]',
-                        mimetype: 'application/font-woff',
-			    limit:10000
-                       // publicPath: url => `../webfonts/${url}`
-                    }
+                  loader: 'file-loader', options: {name: '.../webfont/[name].[ext]'}
                 }]
-            }
+              }
+           // {
+            //    test: /\.svg$/,
+	///	loader: 'svg-inline-loader'
+           // }
         ]
     },
     // Plugins can hook to the compiler lifecycle and handle extra tasks

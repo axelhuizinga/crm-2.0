@@ -3,7 +3,7 @@
 set /p  Version=<version
 set /p  Build_ID=<build
 set /p CMessage=<.cmessage
-echo %CMessage% > .cmessage.bak
+echo %CMessage% > .clast
 echo %Build_ID%
 set /A  Build_ID=Build_ID+1
 echo %Build_ID% >build

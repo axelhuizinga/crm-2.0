@@ -1,9 +1,5 @@
 @echo off
-set n="$(cat <<-EOF
 
-EOF
-)"
-rem exit /b 0
 set /p  Version=<version
 set /p  Build_ID=<build
 set /p CMessage=<.cmessage

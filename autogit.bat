@@ -1,5 +1,8 @@
 @echo off
-set n=^&echo=
+set n="$(cat <<-EOF
+
+EOF
+)"
 rem exit /b 0
 set /p  Version=<version
 set /p  Build_ID=<build
@@ -11,7 +14,7 @@ echo %Build_ID% >build
 echo %Version%.%Build_ID%
 
 git add -A
-git commit -am "AutoCommit Build: %Version%+%Build_ID% %n%CMessage%"
+git commit -am "AutoCommit Build: %Version%+%Build_ID% $nCMessage%"
 git push
 break>.cmessage
 

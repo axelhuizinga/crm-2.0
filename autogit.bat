@@ -14,7 +14,7 @@ echo %Build_ID% >build
 echo %Version%.%Build_ID%
 
 git add -A
-git commit -am "AutoCommit Build: %Version%+%Build_ID% $nCMessage%"
+git commit -am "AutoCommit Build: %Version%+%Build_ID% %CMessage%"
 git push
 break>.cmessage
 

@@ -6,6 +6,6 @@ httpdocs
 node_modules
 .temp
 cmessage.txt
-.clast
+clast.txt
 server/.haxelib
 server/.vscode

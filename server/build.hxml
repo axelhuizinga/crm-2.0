@@ -9,6 +9,6 @@
 -cp src
 -php ../httpdocs
 -D analyzer-optimize
--main S
 -dce std
---interp
+-main S
+#--interp

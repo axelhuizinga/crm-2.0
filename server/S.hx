@@ -19,6 +19,7 @@ import model.contacts.Contact;
 import model.admin.CreateHistoryTrigger;
 import model.admin.CreateUsers;
 import model.admin.SyncExternal;
+import model.admin.SyncExternalClients;
 import model.roles.Users;
 import model.tools.DB;
 import Model.MData;
@@ -106,13 +107,14 @@ class S
 			
 		dbh = new PDO('pgsql:host=$dbHost;dbname=$db',dbUser,dbPass,Syntax.array(['client_encoding','UTF8']));
 		//dbh.set_charset("utf8");
-		//trace(dbh.);
+		//trace(dbh.errorInfo());
 		var jwt:String = params.get('jwt');
 		var user_name:String = params.get('user_name');
 		trace(jwt +':' + (jwt != null));
 		if (jwt.length > 0)
 		{
-			if(true || User.verify(jwt, user_name,params))
+			//if(true || User.verify(jwt, user_name,params))
+			if(User.verify(jwt, user_name,params))
 				Model.dispatch(params);			
 		}
 	
@@ -181,7 +183,7 @@ class S
 		}
 
 		//trace(dbData.dataRows[0]);
-		trace(dbData.dataRows[dbData.dataRows.length-2]);
+		//trace(dbData.dataRows[dbData.dataRows.length-2]);
 		/*var b:Bytes = s.serialize(dbData);
 		var v:DbData = s.unserialize(b, DbData);
 		trace(v);*/
@@ -221,7 +223,7 @@ class S
 		/*var s:Serializer = new Serializer();
 		var v:DbData = s.unserialize(b, DbData);
 		trace(v);*/
-		trace('OK');
+		trace('OK ${b.length}');
 		//Web.setHeader('Content-Type', 'application/octet-stream');
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 		Web.setHeader("Access-Control-Allow-Credentials", "true");
@@ -265,7 +267,6 @@ class S
 			*/;
 		trace(sql);
 		var stmt:PDOStatement = S.dbh.query(
-			//'SELECT string_agg(TABLE_NAME,\',\') FROM information_schema.tables WHERE table_schema = "$db";'
 			sql
 		);
 		/*if (stmt == false)
@@ -298,6 +299,12 @@ class S
 		return d;
 	}
 
+	public static function errorInfo(m:String,?pos:PosInfos):String
+	{
+		if(pos==null)
+			return m;
+		return '${pos.fileName}::${pos.lineNumber}::$m';
+	}
 
 	public static function saveLog(what:Dynamic,?pos:PosInfos):Void
 	{
@@ -321,11 +328,7 @@ class S
 		var sql:String = comment(unindent, format) /*
 			SELECT string_agg(COLUMN_NAME,',') FROM information_schema.columns WHERE table_schema = '$db' AND table_name = '$table'
 			*/;
-		var stmt:PDOStatement = S.dbh.query(
-			comment(unindent, format) /*
-			SELECT string_agg(COLUMN_NAME,',') FROM information_schema.columns WHERE table_schema = '$db' AND table_name = '$table'
-			*/			
-		);
+		var stmt:PDOStatement = S.dbh.query(sql);
 		if (S.dbh.errorCode() != '00000')
 		{
 			trace(S.dbh.errorCode());

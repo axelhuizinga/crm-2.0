@@ -1,4 +1,5 @@
 package view.shared;
+import haxe.Constraints.Function;
 import history.History;
 import history.Location;
 import js.html.InputEvent;
@@ -7,6 +8,13 @@ import react.ReactType;
 import react.ReactComponent;
 import view.shared.SMenuProps;
 import view.shared.io.FormApi;
+
+enum Loading
+{
+	Component;
+	Data(action:Function);
+	State;
+}
 
 typedef FormState =
 {

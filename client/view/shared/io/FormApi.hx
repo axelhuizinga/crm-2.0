@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import haxe.Timer;
 import model.AppState;
 import redux.Redux.Dispatch;
 import react.ReactEvent;
@@ -548,7 +549,42 @@ class FormApi
 			//trace('${"set child" + i + "to:" + child.offsetWidth + "=>"}'+ headerCols[i-1].offsetWidth);
 		}
 	}
-	
+
+	function closeWait():Void
+	{
+		comp.setState({loading:false});
+	}
+
+	public function renderWait()
+	{
+			trace(Type.getClass(comp.state.values));
+			trace(comp.state.values != null && comp.state.values.get('loadResult' !=null));
+			if(comp.state.values.get('loadResult') !=null)
+			{
+				if(comp.state.values.get('closeAfter')!=-1)
+				var t:Timer = Timer.delay(closeWait,
+					(comp.state.values.get('closeAfter')!=null?comp.state.values.get('closeAfter'):8000));
+				return jsx('
+			<div className="loader-screen">
+				<div className="loader-box">
+					<div className="loader-content" >
+						${comp.state.values.get('loadResult')}
+					</div>
+				</div>
+			</div>
+			');
+			}
+			else return	jsx('
+			<div className="loader-screen" >
+				<div className="loader-box">
+			  		<div className="loader loader-content"  
+					  style=${{width:'6rem', height:'6rem', margin:'auto', borderWidth:'0.64rem'}}/>
+			  	</div>
+			</div>
+			');			
+	}	
+
+	//<div className="loader-box"></div>
 	public static function initSideMenu(comp:Dynamic, sMa:Array<SMenuBlock>, sM:SMenuProps):SMenuProps
 	{
 		var sma:SMenuBlock = {};

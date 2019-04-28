@@ -18,7 +18,7 @@ $cell-border: 1px solid grey;
 $cellPadding: 0px 0.75rem;
 $headPadding: 0.35rem 0.75rem;
 $darkBlue: rgb(10,20,60);
-$logoBlue: hsl(202,75%,40%);
+$logoBlue: #3292ca;
 $paleBlue: rgb(140,190,240);
 $darkGreen: rgb(60,80,0);
 $highLightGreen: rgb(80,220,20);
@@ -28,8 +28,8 @@ $darkRed: rgb(128, 17, 17);
 $lightRed: rgb(251, 220, 220);
 $primary: #601111;
 $darkSun: #fabf32;
-$lightSun: hsl(49, 95%, 99%);
-$modal-background-background-color: hsl(270, 10%, 80%);
+$lightSun: #fefdfa;
+$modal-background-background-color: #ccc6d1;
 $modal-content-width: auto;
 $sun: rgb(251, 220, 80);
 $borderHeadCol:$borderSmallWidth solid $lightGreen;
@@ -273,14 +273,12 @@ h1 {
   position: absolute;
   width: 1px;
 }
-.formField label:before {
-	font: 1.55rem fontawesome;
-	color: $logoBlue;
-}
+
 .userIcon:before {
 	content: '\f007';
 }
 .lockIcon:before {
+	font: 1.55rem "Font Awesome 5 Free";
 	content: '\f023';
 }
 
@@ -307,7 +305,9 @@ h1 {
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   border-right-style:none;
-  padding: 1.15rem 1.25rem 0rem 1.25rem ;
+	padding: 1.15rem 1.25rem 0rem 1.25rem ;
+	font-size: 1.55rem;
+	color: $logoBlue;	
 }
 .formField input:focus, .formField input:hover {
   background-color: #fff;
@@ -323,17 +323,6 @@ h1 {
 	border-color:transparent;
 }
 
-/*.user:before {
-  content: '\f007';
-  font: 0.8rem fontawesome;
-	color: #5b5b5b;
-}
-
-.lock:before {
-  content: '\f023';
-  font: 0.8rem fontawesome;
-	color: #5b5b5b;
-}*/
 .overlaySubTitle
 {
 	font-size:1.22rem;
@@ -705,4 +694,27 @@ label.panel-heading {
 {
 	height:0px;
 	position:relative;
+}
+.loader-screen
+{
+	flex: 1 0 100%;
+	/*border:1px solid green;*/
+	flex-direction:column;
+	justify-content: center;
+	align-items: stretch;
+	display: flex;
+}
+.loader-box{
+	align-items: center;
+
+	/*flex: 1 0 100%;
+	flex-direction:row;
+	border:1px solid grey;*/
+}
+.loader-content
+{
+	margin: auto;
+	padding: 2rem;
+	height: 6rem;
+	text-align: center;
 }

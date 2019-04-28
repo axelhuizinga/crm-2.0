@@ -5,5 +5,7 @@ client/webpack.local.js
 httpdocs
 node_modules
 .temp
+cmessage.txt
+clast.txt
 server/.haxelib
 server/.vscode

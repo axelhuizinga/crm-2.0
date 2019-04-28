@@ -64,7 +64,7 @@ typedef AppProps =
 class App  extends react.ReactComponentOf<AppProps, AppState>
 {
 	public static var _app:App;
-	static var fa = require('./node_modules/font-awesome/css/font-awesome.min.css');
+	//static var fa = require('./node_modules/font-awesome/css/font-awesome.min.css');
 
   static var STYLES = require('App.scss');
  
@@ -185,20 +185,22 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
         ');
   }
 
-	public static function 	await(delay:Int, check:Function, cb:Function):Timer
+	public static function 	await(delay:Int, check:Void->Dynamic, cb:Function):Timer
 	{
-		var max:Int = 15;  
-		var ti:Timer = Timer.delay(function ()
+		
+		var ti:Timer = null;
+		ti = Timer.delay(function ()
 		{			
-			trace(max);
-			if(max--<0)
-				return;
-			if(check())
-				cb();		
-			else
-				await(delay, check, cb);
+			switch (check()){
+				case -1:
+					ti.stop;
+				case true:
+					cb();		
+				default: 
+					await(delay, check, cb);
+			}
 		},delay);
-		trace(max);
+
 		return  ti;
 	} 
 

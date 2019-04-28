@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import haxe.DynamicAccess;
 import model.AppState;
 import haxe.Constraints.Function;
 import js.html.AreaElement;
@@ -21,7 +22,7 @@ import shared.DbData;
 import shared.DBMetaData;
 import view.dashboard.model.DBSyncModel;
 import view.shared.FormField;
-import view.shared.SMenu;
+import view.shared.FormState;
 import view.shared.SMItem;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
@@ -34,7 +35,7 @@ import view.table.Table;
  * ...
  * @author axel@cunity.me
  */
-
+@:connect
 class DBSync extends ReactComponentOf<DataFormProps,FormState>
 {
 
@@ -43,6 +44,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	public static var menuItems:Array<SMItem> = [
 		{label:'Create Fields Table',action:'createFieldList'},
 		{label:'BenutzerDaten Abgleich',action:'showUserList'},
+		{label:'Stammdaten Import ',action:'importClientList'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -56,9 +58,10 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		dataDisplay = DBSyncModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState(null,this);		
-		trace(props.sideMenu);
-		trace(state.sideMenu);
+		state =  App.initEState({loading:true,values:new Map<String,Dynamic>()},this);
+		trace(state.loading);
+		//trace(props.sideMenu);
+		//trace(state.sideMenu);
 		//var sideMenu =  updateMenu('DBSync');//state.sideMenu;
 		//trace(sideMenu.section);
 
@@ -155,7 +158,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		));
 	}
 	
-	public function showUserList(_):Void
+	public function importClientList(_):Void
 	{
 		//FormApi.requests.push( 
 		BinaryLoader.create(
@@ -164,13 +167,49 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				user_name:props.user.user_name,
 				jwt:props.user.jwt,
 				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
-				className:'admin.SyncExternal',
-				action:'syncUserDetails',
+				className:'admin.SyncExternalClients',
+				action:'importClientDetails',
 				devIP:App.devIP
 			},
 			function(data:DbData)
 			{
-				trace(data.dataRows[data.dataRows.length-2]['phone_data']);
+				trace(data);
+				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
+				trace(data.dataErrors.keys().hasNext());
+				if(!data.dataErrors.keys().hasNext())
+				{
+					setState({values: ['loadResult'=>'Verarbeite Importdaten...','closeAfter'=>8000]});
+				}
+				else 
+					setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});
+			}
+		);
+		trace('setState loading true => ${state.loading}');
+		setState({loading: true});
+	}
+
+	public function showUserList(_):Void
+	{
+		//FormApi.requests.push( 
+		trace(App.config.api);
+		BinaryLoader.create(
+			'${App.config.api}', 
+			//'https://pitverwaltung.de/sync/proxy.php', 
+			{
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
+				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
+				className:'admin.SyncExternal',
+				action:'syncUserDetails',
+				TARGET: 'syncUsers.php',
+				devIP:App.devIP
+			},
+			function(data:DbData)
+			{
+				trace(data);
+				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
+				trace(data.dataRows.length);
+				if(data.dataRows.length>0)
 				setState({dataTable:data.dataRows});
 			}
 		);
@@ -212,14 +251,18 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				Reflect.callMethod(this,fun,null);
 			}
 		}
-		
+		else 
+			setState({loading: false});
 	}
 	
 	function renderResults():ReactFragment
 	{
 		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
-		if (state.dataTable != null)
+		trace(state.loading);
+		if(state.loading)
+			return state.formApi.renderWait();
+		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
 			case 'showUserList':
@@ -228,6 +271,12 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 					${...props} dataState = ${dataDisplay["userList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
+			case 'importClientList':
+				jsx('
+					<Table id="fieldsList" data=${state.dataTable}
+					${...props} dataState = ${dataDisplay["clientList"]} 
+					className="is-striped is-hoverable" fullWidth=${true}/>
+				');			
 			case 'showFieldList2':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');

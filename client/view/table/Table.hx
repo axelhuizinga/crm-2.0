@@ -133,6 +133,7 @@ typedef TableState =
 	?selectedRows:Array<TableRowElement>,
 	?_rowCells:Array<Element>,
 	?_selectedCells:Array<Element>,
+	?loading:Bool,
 	?_isSelected:Bool
 }
 
@@ -168,13 +169,13 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		trace(props.className);
 		if (props.data == null || props.data.length == 0)
 		{
-			return jsx('
+			return state.loading ? jsx('
 			<section className="hero is-alt" style={{flexGrow:1}}>
-	<div className="hero-body" style={{flexGrow:0}}>
-			  <div className="loader"  style=${{width:'6rem', height:'6rem', margin:'auto', borderWidth:'0.64rem', alignSelf:'center'}}/>
+	<div className="loader-box">
+			  <div className="loader"  style=${{width:'6rem', height:'6rem', margin:'auto', borderWidth:'0.64rem'}}/>
 			  </div>
 			</section>
-			');					
+			'): null;					
 		}		
 		//trace(props.data);
 		tableRef = React.createRef();
@@ -385,7 +386,14 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			trace('$tHeadRef: ${tHeadRef != null && tHeadRef.current != null}');
 			if(_timer != null)
 				return;
-			_timer = App.await(250,function() return tHeadRef != null && tHeadRef.current != null, layOut);
+			var _max = 3;
+			_timer = App.await(250,function():Dynamic
+			{
+				if(_max--<0)
+					return -1;
+				trace(_max);
+				return tHeadRef != null && tHeadRef.current != null;
+			}, layOut);
 			return;
 		}
 			

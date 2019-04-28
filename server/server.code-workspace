@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"haxe.displayConfigurations": [
+			[
+				"build.hxml"
+			]
+		]
+	}
+}

@@ -38,13 +38,22 @@ class SyncExternal extends Model
     public function syncUserDetails(?user:Dynamic):Void
     {
         var info:Map<String,Dynamic>  = getViciDialData();
-        var req:Http = new Http(info['syncApi']);
+        //var req:Http = new Http(info['syncApi']);
+        //var req:Http = new Http('https://pitverwaltung.de/test/php/test.php');
         trace(info['syncApi']);
+        //trace(info);
+        var user:String = info['admin'];
+        var pass:String = info['pass'];
+        var url:String = info['syncApi']+'/syncUsers.php';
+        var data:String = Syntax.code("exec({0})", 'curl -d "user=${user}&pass=${pass}" ${url}');
+        //var data:String = untyped __call__('exec','curl -d "user=${user}&pass=${pass}" ${url}');
+        trace(data);
+        /*return;
         req.addParameter('pass', info['pass']);
         req.addParameter('user', info['admin']);
         req.addParameter('action', info['syncUserDetails']);
         req.onData = function(data:String)
-        {
+        {*/
             //S.saveLog(data);
             var dRows:Array<Dynamic> = Json.parse(data);
             trace(dRows.length);
@@ -66,14 +75,14 @@ class SyncExternal extends Model
                 );
             }
             S.sendData(saveUserDetails(), null);
-        };
+        /*};
         req.onError = function (msg:String)
         {
             trace(msg);
         }
         req.onStatus = function (s:Int)
         { trace(s);}
-        req.request(true);
+        req.request(true);*/
         trace('done');
     }
 

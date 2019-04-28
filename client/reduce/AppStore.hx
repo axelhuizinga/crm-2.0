@@ -151,6 +151,7 @@ class AppStore
 				n;*/
 			case LoginComplete(state):
 				//App.firstLoad = false;	
+				trace(state);
 				next();		
 			case LoginError(err):
 				trace(err);

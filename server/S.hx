@@ -173,7 +173,7 @@ class S
 	public static function sendData(dbData:DbData, data:RData):Bool
 	{
 		var s:Serializer = new Serializer();
-		trace(data);
+		//trace(data);
 		if(data != null){
 			dbData.dataInfo = data.info;
 			Syntax.foreach(data.rows, function(k:Int, v:Dynamic)

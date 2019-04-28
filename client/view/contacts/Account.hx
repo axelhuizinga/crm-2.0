@@ -1,4 +1,4 @@
-package view.dashboard;
+package view.contacts;
 
 import react.ReactRef;
 import react.router.RouterMatch;
@@ -24,8 +24,9 @@ import view.shared.FormState;
 import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.SMenuProps;
-import view.shared.io.DB;
-import view.shared.io.DBSync;
+import view.shared.io.DealData;
+import view.shared.io.ContactData;
+import view.shared.io.AccountData;
 import view.table.Table;
 
 /**
@@ -33,7 +34,7 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 
-class Setup extends ReactComponentOf<DataFormProps,FormState>
+class Account extends ReactComponentOf<DataFormProps,FormState>
 {
 	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
 	public function new(?props:DataFormProps) 
@@ -51,8 +52,8 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:FormApi.initSideMenu( this,
 				[
 					{
-						dataClassPath:'tools.DB',
-						label:'DB Design',
+						dataClassPath:'contacts.Contact',
+						label:'Konto',
 						section: 'DB',
 						items: DB.menuItems
 					},
@@ -131,13 +132,13 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 		//trace(state.sideMenu); 
 		return switch(props.match.params.section)
 		{
-			case "DBSync":
+			case "ContactsData":
 				jsx('
-					<$DBSync ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$ContactsData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 					');					
-				case "DB":
+				case "DealData":
 				jsx('
-					<$DB ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$DealData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 				');				
 			default:
 				null;					

@@ -1,4 +1,4 @@
-package view.dashboard.model;
+package view.contacts.model;
 import haxe.ds.StringMap;
 import view.table.Table.DataColumn;
 import view.table.Table.DataState;

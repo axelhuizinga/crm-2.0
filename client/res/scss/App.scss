@@ -273,7 +273,9 @@ h1 {
   position: absolute;
   width: 1px;
 }
-
+.fa-sign-out::before {
+	content: "\f2f5";
+}
 .userIcon:before {
 	content: '\f007';
 }
@@ -386,12 +388,12 @@ h1 {
 {
 	flex:1;
 }
-.tabNav2
+/*.tabNav2
 {
-	/*width:100%;
+	width:100%;
 	display:flex;
-	flex-direction:column;	*/
-}
+	flex-direction:column;
+}	*/
 .tabNav2 ul
 {
 	display:flex;

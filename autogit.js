@@ -31,6 +31,9 @@ async function main()
     log.log(added);
     var written = await index.write();
     log.log(written);
+    var tree = await  index.writeTree();
+    log.log(tree);
+    
     
 }
 /*

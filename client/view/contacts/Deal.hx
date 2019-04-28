@@ -1,4 +1,4 @@
-package view.dashboard;
+package view.contacts;
 
 import react.ReactRef;
 import react.router.RouterMatch;
@@ -24,8 +24,9 @@ import view.shared.FormState;
 import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.SMenuProps;
-import view.shared.io.DB;
-import view.shared.io.DBSync;
+import view.shared.io.DealData;
+import view.shared.io.ContactData;
+import view.shared.io.AccountData;
 import view.table.Table;
 
 /**
@@ -33,7 +34,7 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 
-class Setup extends ReactComponentOf<DataFormProps,FormState>
+class Deal extends ReactComponentOf<DataFormProps,FormState>
 {
 	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
 	public function new(?props:DataFormProps) 
@@ -51,10 +52,10 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:FormApi.initSideMenu( this,
 				[
 					{
-						dataClassPath:'tools.DB',
-						label:'DB Design',
-						section: 'DB',
-						items: DB.menuItems
+						dataClassPath:'contacts.Contact',
+						label:'StammDaten',
+						section: 'ContactData',
+						items: ContactData.menuItems
 					},
 					{
 						dataClassPath:'admin.SyncExternal',

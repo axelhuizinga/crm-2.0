@@ -83,6 +83,7 @@ class User extends Model
 			dbData.dataInfo['loggedIn'] = true;
 			trace(res);
 			//if (res == 'TRUE' || res == '1')
+			trace(res['change_pass_required']==1 || res['change_pass_required']==true?'Y':'N');
 			if (res['change_pass_required']==1 || res['change_pass_required']==true)
 				return UserAuth.PassChangeRequired;
 			// USER AUTHORIZED
@@ -116,7 +117,7 @@ class User extends Model
 				if (uath == UserAuth.PassChangeRequired)
 				me.dbData.dataInfo['change_pass_required'] = true;
 				me.dbData.dataInfo['user_data'].jwt = jwt;
-				trace(me.dbData);
+				//trace(me.dbData);
 				S.sendInfo(me.dbData);
 				return true;
 			default:

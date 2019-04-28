@@ -178,8 +178,8 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 					
 					<$Route path="/DashBoard*" component=${DashBoard}/>
 					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
-					<$Route path="/contacts/edit/:id" component=${Bundle.load(Contacts)}/>
-					<$Route path="/contacts" component=${Bundle.load(Contacts)}/>
+					<$Route path="/Contacts/Edit/:id" component=${Bundle.load(Contacts)}/>
+					<$Route path="/Contacts" component=${Bundle.load(Contacts)}/>
 					<$Route path="/qc" component=${Bundle.load(QC)}/>
 					<$Route path="/reports" component=${Bundle.load(Reports)}/>
 				</div>

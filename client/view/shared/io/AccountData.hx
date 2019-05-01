@@ -152,7 +152,8 @@ class AccountData extends ReactComponentOf<DataFormProps,FormState>
 				devIP:App.devIP
 			},
 			function(data:DbData)
-			{				
+			{		
+				App.jwtCheck(data);		
 				trace(data);
 			}
 		));
@@ -173,6 +174,7 @@ class AccountData extends ReactComponentOf<DataFormProps,FormState>
 			},
 			function(data:DbData)
 			{
+				App.jwtCheck(data);
 				trace(data);
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				trace(data.dataErrors.keys().hasNext());
@@ -201,11 +203,12 @@ class AccountData extends ReactComponentOf<DataFormProps,FormState>
 				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
 				className:'admin.SyncExternal',
 				action:'syncUserDetails',
-				TARGET: 'syncUsers.php',
+				target: 'syncUsers.php',
 				devIP:App.devIP
 			},
 			function(data:DbData)
 			{
+				App.jwtCheck(data);
 				trace(data);
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				trace(data.dataRows.length);

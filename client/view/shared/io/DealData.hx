@@ -152,7 +152,8 @@ class DealData extends ReactComponentOf<DataFormProps,FormState>
 				devIP:App.devIP
 			},
 			function(data:DbData)
-			{				
+			{			
+				App.jwtCheck(data);	
 				trace(data);
 			}
 		));
@@ -173,7 +174,8 @@ class DealData extends ReactComponentOf<DataFormProps,FormState>
 			},
 			function(data:DbData)
 			{
-				trace(data);
+				App.jwtCheck(data);
+				//trace(data);
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				trace(data.dataErrors.keys().hasNext());
 				if(!data.dataErrors.keys().hasNext())
@@ -201,12 +203,12 @@ class DealData extends ReactComponentOf<DataFormProps,FormState>
 				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
 				className:'admin.SyncExternal',
 				action:'syncUserDetails',
-				TARGET: 'syncUsers.php',
+				targe: 'syncUsers.php',
 				devIP:App.devIP
 			},
 			function(data:DbData)
 			{
-				trace(data);
+				App.jwtCheck(data);
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				trace(data.dataRows.length);
 				if(data.dataRows.length>0)

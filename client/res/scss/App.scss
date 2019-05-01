@@ -330,6 +330,7 @@ h1 {
 	font-size:1.22rem;
 	margin-top:-1.9rem;
 	text-align:right;
+	color: $logoBlue;
 }
 .statusbar
  {
@@ -454,7 +455,7 @@ h1 {
 .modal-card-foot {
 	justify-content:center;
 }
-.modal-card-title
+.modal-card-title .tCenter
 {
 	text-align:center;
 }

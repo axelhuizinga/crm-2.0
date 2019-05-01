@@ -46,7 +46,7 @@ typedef DataColumn =
 {
 	@:optional var dbFormat:Function;
 	@:optional var cellFormat:Function;
-	@:optional var className:String;
+	@:optional var className:Dynamic;
 	@:optional var editable:Bool;
 	@:optional var flexGrow:Int;
 	@:optional var headerClassName:String;
@@ -68,7 +68,7 @@ typedef DataCellPos =
 typedef DataCell =
 {
 	@:optional var cellFormat:Function;
-	@:optional var className:String;
+	@:optional var className:Dynamic;
 	@:optional var data:Dynamic;// CELL CONTENT VALUE
 	@:optional var dataDisplay:Dynamic;// CELL CONTENT DISPLAY VALUE
 	@:optional var dataType:Dynamic;// CELL CONTENT VALUE TYPE
@@ -251,10 +251,16 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			if (hC.show == false)
 				continue;
 			visibleColumns++;	
+			var sortClass:String = switch (hC.search)
+			{
+				case ASC:	'fa-sort-up';
+				case DESC:	'fa-sort-down';
+				default: 	'fa-sort';
+			}
 			headerRow.push(jsx('	
 			<th key={field}>
 			<div  className={"th-box " + (hC.headerClassName != null? hC.headerClassName :hC.className)}>
-			{hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
+			{hC.label != null? hC.label : hC.name}<span className="sort-box fa $sortClass"></span>
 			</div>
 			</th>
 			'));
@@ -267,10 +273,19 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		//trace(rdMap);
 		//trace(rdMap.remove('primary'));
 		//trace(rdMap['use_as_index']);
+		if(row==3)
+		{
+			trace(props.dataState.columns);
+			trace(rdMap);
+		}
 		var column:Int = 0;
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
 			var columnDataState:DataColumn = props.dataState.columns.get(fN);
 			//trace(columnDataState.cellFormat != null ? fN:'');
+			if(fN=='state')
+			{
+				trace(columnDataState.className);
+			}
 			var cD:DataCell = {
 				cellFormat:columnDataState.cellFormat,
 				className:columnDataState.className,
@@ -386,7 +401,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			trace('$tHeadRef: ${tHeadRef != null && tHeadRef.current != null}');
 			if(_timer != null)
 				return;
-			var _max = 3;
+			var _max = 13;
 			_timer = App.await(250,function():Dynamic
 			{
 				if(_max--<0)

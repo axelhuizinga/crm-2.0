@@ -25,7 +25,7 @@ import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.SMenuProps;
 import view.shared.io.DealData;
-import view.shared.io.ContactData;
+import view.shared.io.MasterData;
 import view.shared.io.AccountData;
 import view.table.Table;
 
@@ -34,12 +34,12 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 
-class Data extends ReactComponentOf<DataFormProps,FormState>
+class Contact extends ReactComponentOf<DataFormProps,FormState>
 {
 	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
 	public function new(?props:DataFormProps) 
 	{
-		trace(props.user);
+		//trace(props.user);
 		super(props);	
 		trace(Reflect.fields(props));
 		trace(props.match.params.section);
@@ -54,18 +54,24 @@ class Data extends ReactComponentOf<DataFormProps,FormState>
 					{
 						dataClassPath:'contacts.Contact',
 						label:'StammDaten',
-						section: 'ContactData',
-						items: ContactData.menuItems
+						section: 'MasterData',
+						items: MasterData.menuItems
 					},
 					{
-						dataClassPath:'admin.SyncExternal',
-						label:'DB Abgleich',
-						section: 'DBSync',
-						items: DBSync.menuItems
+						dataClassPath:'contact.Deal',
+						label:'Abschluss',
+						section: 'DealData',
+						items: DealData.menuItems
+					},
+					{
+						dataClassPath:'contact.Account',
+						label:'Konto',
+						section: 'AccountData',
+						items: AccountData.menuItems
 					}
 				]
 				,{	
-					section: props.match.params.section==null? 'DBSync':props.match.params.section, 
+					section: props.match.params.section==null? 'MasterData':props.match.params.section, 
 					sameWidth: true}					
 			)
 		};
@@ -101,11 +107,11 @@ class Data extends ReactComponentOf<DataFormProps,FormState>
 		if (props.match.params.section == null)
 		{
 			var basePath:String = props.match.url;
-			props.history.push('$basePath/DB');
+			props.history.push('$basePath/MasterData');
 			trace(props.history.location.pathname);
-			trace('setting section to:DB');
+			trace('setting section to:MasterData');
 		}		
-		trace('${}');
+		//trace('${state.sideMenu}');
 		//TODO: AUTOMATE CREATE HISTORY TRIGGER IF DB TABLES CHANGED
 		/*AjaxLoader.loadData('${App.config.api}', 
 			{
@@ -132,13 +138,17 @@ class Data extends ReactComponentOf<DataFormProps,FormState>
 		//trace(state.sideMenu); 
 		return switch(props.match.params.section)
 		{
-			case "DBSync":
+			case "MasterData":
 				jsx('
-					<$DBSync ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$MasterData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 					');					
-				case "DB":
+				case "DealData":
 				jsx('
-					<$DB ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$DealData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+				');		
+				case "AccountData":
+				jsx('
+					<$AccountData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 				');				
 			default:
 				null;					

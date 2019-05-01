@@ -20,7 +20,7 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import shared.DbData;
 import shared.DBMetaData;
-import view.dashboard.model.DBSyncModel;
+import view.model.ContactORM;
 import view.shared.FormField;
 import view.shared.FormState;
 import view.shared.SMItem;
@@ -36,7 +36,7 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 @:connect
-class ContactData extends ReactComponentOf<DataFormProps,FormState>
+class MasterData extends ReactComponentOf<DataFormProps,FormState>
 {
 
 	static var _instance:DBSync;
@@ -56,9 +56,26 @@ class ContactData extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		dataDisplay = DBSyncModel.dataDisplay;
+		dataDisplay = ContactORM.dataDisplay;
+		/*dataDisplay = [
+			'contactList' => {columns:[
+				'first_name'=>{label:'Vorname', flexGrow:0},
+				'last_name'=>{label:'Name', flexGrow:0},
+				'email'=>{label:'Email'},
+				'phone_number'=>{label:'Telefon', flexGrow:1},		
+				'state' => {label:'Aktiv', className:'cRight', 
+					cellFormat:function(v:String) return (v=='active'?'J':'N')},
+				'id' => {show:false}
+			]},
+			'dealList' => {columns: [
+				'user_group' => {label:'UserGroup', flexGrow:0},
+				'group_name'=>{label:'Beschreibung', flexGrow:1},
+				'allowed_campaigns'=>{label:'Kampagnen',flexGrow:1}
+			]}
+		];*/
+		//dataDisplay = ContactModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState({loading:true,values:new Map<String,Dynamic>()},this);
+		state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
 		trace(state.loading);
 		//trace(props.sideMenu);
 		//trace(state.sideMenu);
@@ -77,8 +94,34 @@ class ContactData extends ReactComponentOf<DataFormProps,FormState>
 	public function find(ev:ReactEvent):Void
 	{
 		trace('hi :)');
-		return;
-		props.formApi.requests.push(Loader.load(	
+		//return;
+		//dbMetaData = new  DBMetaData();
+		//dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
+		//trace(dbMetaData.dataFields.get(111));
+		var s:hxbit.Serializer = new hxbit.Serializer();
+		
+		//return;
+		state.formApi.requests.push( BinaryLoader.create(
+			'${App.config.api}', 
+			{
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
+				//fields:'readonly:readonly,element=:element,required=:required,use_as_index=:use_as_index',
+				className:'contacts.Contact',
+				action:'find',
+				//dataSource:Serializer.run(dataAccess['find'].source),
+				devIP:App.devIP
+			},
+			function(data:DbData)
+			{			
+				App.jwtCheck(data);
+				trace(data.dataInfo);
+				if(data.dataRows.length>0)
+				setState({dataTable:data.dataRows});
+			}
+		));
+		/*
+		state.formApi.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -99,7 +142,7 @@ class ContactData extends ReactComponentOf<DataFormProps,FormState>
 		}));
 		trace(props.history);
 		trace(props.match);
-		//setState({viewClassPath:viewClassPath});
+		//setState({viewClassPath:viewClassPath});*/
 	}
 	
 	public function edit(ev:ReactEvent):Void
@@ -117,7 +160,7 @@ class ContactData extends ReactComponentOf<DataFormProps,FormState>
 			for(k in dR.keys())
 			{
 				trace(k);
-				if(dataDisplay['fieldsList'].columns[k].cellFormat == DBSyncModel.formatBool)
+				if(dataDisplay['fieldsList'].columns[k].cellFormat == view.shared.Format.formatBool)
 				{
 					Reflect.setField(rS,k, dR[k] == 'Y');
 				}
@@ -152,7 +195,8 @@ class ContactData extends ReactComponentOf<DataFormProps,FormState>
 				devIP:App.devIP
 			},
 			function(data:DbData)
-			{				
+			{	
+				App.jwtCheck(data);			
 				trace(data);
 			}
 		));
@@ -174,6 +218,7 @@ class ContactData extends ReactComponentOf<DataFormProps,FormState>
 			function(data:DbData)
 			{
 				trace(data);
+				App.jwtCheck(data);
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				trace(data.dataErrors.keys().hasNext());
 				if(!data.dataErrors.keys().hasNext())
@@ -201,11 +246,12 @@ class ContactData extends ReactComponentOf<DataFormProps,FormState>
 				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
 				className:'admin.SyncExternal',
 				action:'syncUserDetails',
-				TARGET: 'syncUsers.php',
+				target: 'syncUsers.php',
 				devIP:App.devIP
 			},
 			function(data:DbData)
 			{
+				App.jwtCheck(data);
 				trace(data);
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				trace(data.dataRows.length);
@@ -218,26 +264,12 @@ class ContactData extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{	
 		dataAccess = [
-			'editTableFields' =>{
+			'find' =>{
 				source:[
-					"selectedRows" => null//selectedRowsMap()
+					"contacts" => []
 				],
-				view:[
-					'table_name'=>{label:'Tabelle',readonly:true},
-					'field_name'=>{label:'Feldname',readonly:true},
-					'field_type'=>{label:'Datentyp',type:Select},
-					'element'=>{label:'Eingabefeld', type:Select},
-					'readonly' => {label:'Readonly', type:Checkbox},
-					'required' => {label:'Required', type:Checkbox},
-					'use_as_index' => {label:'Index', type:Checkbox},
-					'any' => {label:'Eigenschaften', readonly:true, type:Hidden},
-					'id' =>{primary:true, type:Hidden}
-				]
+				view:[]
 			},
-			'saveTableFields' => {
-				source:null,
-				view:null
-			}
 		];			
 		//
 		if(props.user != null)
@@ -265,19 +297,19 @@ class ContactData extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
-			case 'showUserList':
+			case 'find':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["userList"]} 
+					${...props} dataState = ${dataDisplay["contactList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
-			case 'importClientList':
+			case 'edit':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["clientList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');			
-			case 'showFieldList2':
+			case 'add':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
 				jsx('
@@ -285,7 +317,7 @@ class ContactData extends ReactComponentOf<DataFormProps,FormState>
 					${...props} dataState = ${dataDisplay["fieldsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>				
 				');	
-			case 'shared.io.DB.editTableFields':
+			case 'delete':
 				null;
 			default:
 				null;

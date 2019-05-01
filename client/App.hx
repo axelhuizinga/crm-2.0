@@ -229,6 +229,16 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		Out.dumpObject(el);
 		return 'OK';
 	}
+
+	public static function jwtCheck(data:DbData) 
+	{
+		if (data.dataErrors.keys().hasNext())
+		{
+			trace(data.dataErrors);
+			store.dispatch(AppAction.LoginError(
+				{user_name:_app.state.appWare.user.user_name, loginError:data.dataErrors.iterator().next()}));
+		}		
+	}
 	
 	public static function logOut()
 	{

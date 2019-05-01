@@ -25,7 +25,7 @@ import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.SMenuProps;
 import view.shared.io.DealData;
-import view.shared.io.ContactData;
+import view.shared.io.MasterData;
 import view.shared.io.AccountData;
 import view.table.Table;
 
@@ -53,15 +53,21 @@ class Account extends ReactComponentOf<DataFormProps,FormState>
 				[
 					{
 						dataClassPath:'contacts.Contact',
-						label:'Konto',
-						section: 'DB',
-						items: DB.menuItems
+						label:'StammDaten',
+						section: 'MasterData',
+						items: MasterData.menuItems
 					},
 					{
-						dataClassPath:'admin.SyncExternal',
-						label:'DB Abgleich',
-						section: 'DBSync',
-						items: DBSync.menuItems
+						dataClassPath:'contact.Deal',
+						label:'Abschluss',
+						section: 'DealData',
+						items: DealData.menuItems
+					},
+					{
+						dataClassPath:'contact.Account',
+						label:'Konto',
+						section: 'AccountData',
+						items: AccountData.menuItems
 					}
 				]
 				,{	
@@ -132,9 +138,9 @@ class Account extends ReactComponentOf<DataFormProps,FormState>
 		//trace(state.sideMenu); 
 		return switch(props.match.params.section)
 		{
-			case "ContactsData":
+			case "MasterData":
 				jsx('
-					<$ContactsData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$MasterData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 					');					
 				case "DealData":
 				jsx('

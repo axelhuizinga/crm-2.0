@@ -42,8 +42,14 @@ typedef CustomField =
 	
 	public static function create(param:StringMap<String>):Contact
 	{
+		trace(!param.exists('table')?'Y':'N');
+		if(!(param.exists('table')&&param.get('table').any2bool()))
+		{
+			param.set('table', 'contacts');
+		}
+		trace(param);
 		var self:Contact = new Contact(param);	
-		//self.table = 'vicidial_list';
+		//self.table = 'contacts';
 		//self.param = param;
 		if(param.get('action')==null)
 		{

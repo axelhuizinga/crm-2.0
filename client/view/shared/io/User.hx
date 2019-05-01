@@ -102,10 +102,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 	
 	override public function componentDidMount():Void 
 	{
-			
-
-		
-			
+		trace(props);
 		props.formApi.requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
@@ -121,6 +118,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 			{
 				trace(Reflect.fields(data));
 				//trace(data);
+				App.jwtCheck(data);
 				trace(Reflect.fields(data.dataRows[0]));
 				if (data.dataRows[0]['change_pass_required'] == '1')
 				{
@@ -206,6 +204,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 			},
 			function(data:DbData)
 			{
+				App.jwtCheck(data);
 				trace(Reflect.fields(data));
 				trace(data);
 				if (data.dataErrors.keys().hasNext())

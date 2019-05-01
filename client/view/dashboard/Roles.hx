@@ -171,6 +171,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 			},
 			function(data:DbData)
 			{
+				App.jwtCheck(data);
 				trace(Reflect.fields(data));
 				//trace(data);
 				trace(data.dataRows[0]);

@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const buildMode = process.env.NODE_ENV || 'development';
-const buildTarget = process.env.TARGET || 'web';
+const buildTarget = process.env.target || 'web';
 
 const isProd = buildMode === 'production';
 

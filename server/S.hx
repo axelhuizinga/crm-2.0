@@ -115,7 +115,8 @@ class S
 		{
 			//if(true || User.verify(jwt, user_name,params))
 			if(User.verify(jwt, user_name,params))
-				Model.dispatch(params);			
+				Model.dispatch(params);		
+			trace('SHOULD NEVER HAPPEN');
 		}
 	
 		User.login(params, secret);		

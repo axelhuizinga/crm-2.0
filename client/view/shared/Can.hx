@@ -11,7 +11,7 @@ import react.ReactComponent;
 extern class Can extends ReactComponent 
 {
 
-	public static function new(?props:TProps, ?context:Dynamic) 
+	public function new(?props:TProps, ?context:Dynamic) 
 	{
 		super(props, context);
 		

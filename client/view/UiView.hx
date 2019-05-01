@@ -169,7 +169,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 				<div className="topNav">
 					<$Route path="/DashBoard" {...props} component=${NavTabs}/>
 					<$Route path="/accounting" {...props} component=${NavTabs}/>
-					<$Route path="/contacts" {...props} component=${NavTabs}/>
+					<$Route path="/Contacts" {...props} component=${NavTabs}/>
 					<$Route path="/qc" {...props} component=${NavTabs}/>
 					<$Route path="/reports" {...props} component=${NavTabs}/>
 				</div>
@@ -192,7 +192,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	
 	function renderRedirect(p:Dynamic)
 	{
-		//trace(App.store.initState.redirectAfterLogin);
+		trace(App.store.getState().appWare.redirectAfterLogin);
 		//return null;
 		return jsx('<RedirectBox {...p} to=${App.store.getState().appWare.redirectAfterLogin}/>');
 	}

@@ -161,7 +161,8 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 				devIP:App.devIP
 			},
 			function(data:DbData)
-			{				
+			{			
+				App.jwtCheck(data);	
 				trace(data);
 			}
 		));*/
@@ -182,6 +183,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			},
 			function(data:DbData)
 			{
+				App.jwtCheck(data);
 				if (data.dataRows.length==0)
 				{
 					var error:Map<String,Dynamic> = data.dataErrors;

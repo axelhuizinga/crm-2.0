@@ -61,10 +61,10 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 		<>
 			<ul>
 				<TabLink to="/DashBoard" ${...props}>DashBoard</TabLink> 
-				<TabLink to="/contacts" ${...props}>Kontakte</TabLink>
-				<TabLink to="/qc" ${...props}>QC</TabLink>
-				<TabLink to="/accounting" ${...props}>Buchhaltung</TabLink>
-				<TabLink to="/reports" ${...props}>Berichte</TabLink>
+				<TabLink to="/Contacts" ${...props}>Kontakte</TabLink>
+				<TabLink to="/Qc" ${...props}>QC</TabLink>
+				<TabLink to="/Accounting" ${...props}>Buchhaltung</TabLink>
+				<TabLink to="/Reports" ${...props}>Berichte</TabLink>
 			</ul>		
 			 <i className = "icon is-pulled-right fa fa-sign-out"  title = "Abmelden"  onClick=${App.logOut}
 			 style={{margin:".8rem .5rem",fontSize:"1.7rem", cursor:"pointer", color:"#801111"}}></i>

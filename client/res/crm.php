@@ -13,6 +13,5 @@
 		<title><%= htmlWebpackPlugin.options.title %></title>
 	</head>
 	<body>
-		<script src="app.js"></script>
 	</body>
 </html>

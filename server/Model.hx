@@ -1,4 +1,5 @@
 package;
+import me.cunity.debug.Out;
 import haxe.Unserializer;
 import haxe.ds.StringMap;
 import haxe.extern.EitherType;
@@ -144,19 +145,27 @@ class Model
 		var sqlBf:StringBuf = new StringBuf();
 		sqlBf.add('SELECT COUNT(*) AS count FROM ');
 
+		if (tableNames.length==0)
+		{
+			dbData.dataErrors['tableNames'] = tableNames.toString();
+			S.sendErrors(dbData);
+		}
 		if (tableNames.length>1)
 		{
 			sqlBf.add(buildJoin());
 		}		
 		else
 		{
-			sqlBf.add('$tableNames[0] ');
+			trace(tableNames);
+			trace('${tableNames[0]} ');
+			sqlBf.add('${tableNames[0]} ');
 		}
 		if (filterSql != null)
 		{
 			sqlBf.add(filterSql);
 		}
-	
+		var res:NativeArray = execute(sqlBf.toString());
+		return Lib.hashOfAssociativeArray(res[0]).get('count');
 		return Lib.hashOfAssociativeArray(execute(sqlBf.toString())[0]).get('count');
 	}
 	
@@ -203,7 +212,7 @@ class Model
 		}		
 		else
 		{
-			sqlBf.add('$tableNames[0] ');
+			sqlBf.add('${tableNames[0]} ');
 		}
 		if (filterSql != null)
 		{
@@ -279,7 +288,7 @@ class Model
 		//trace(filterValues);
 		var data:NativeArray = null;
 		var success: Bool;
-		if(filterValues.length > 0)
+		if(filterValues.any2bool())
 		{
 			var i:Int = 0;
 			for (fV in filterValues)
@@ -304,6 +313,7 @@ class Model
 			{
 				data = stmt.fetchAll(PDO.FETCH_ASSOC);
 			}			
+			trace(data);		
 			return(data);		
 		}
 		else {
@@ -311,7 +321,12 @@ class Model
 			if (!success)
 			{
 				trace(stmt.errorInfo());
-				return Syntax.assocDecl({'error': stmt.errorInfo()});
+				dbData.dataErrors = [
+					'error' => stmt.errorInfo(),
+					'sql'	=> sql
+				];
+				S.sendErrors(dbData);
+				//return Syntax.assocDecl({'error': stmt.errorInfo()});
 			}
 			//var result:EitherType<MySQLi_Result,Bool> = stmt.get_result();
 			num_rows = stmt.rowCount();
@@ -319,7 +334,7 @@ class Model
 			{
 				data = stmt.fetchAll(PDO.FETCH_ASSOC);				
 			}			
-			//trace(data);
+			trace(data);
 			return(data);	
 		}
 		return Syntax.assocDecl({'error': stmt.errorInfo()});
@@ -534,10 +549,15 @@ class Model
 			trace('fullReload');
 			globals = {users: query("SELECT first_name, last_name, user_name, active, user_group FROM vicidial_users") };
 		}
-		
+		table = param.get('table');
 		if(table != null)
-		fieldNames = S.tableFields(table);
-		tableNames = [];
+		{
+			fieldNames = S.tableFields(table);
+			tableNames = [table];
+		}
+		else
+			tableNames = [];
+		trace(tableNames.toString());
 		var fields:Array<String> = [];
 		//trace('>'+param.get('dataSource')+'<');
 		if(param.get('dataSource') != null)
@@ -558,7 +578,11 @@ class Model
 		queryFields = fields.length > 0?fields.join(','):'*';		
 		trace(queryFields);
 		//trace(param.get('values'));
-		joinSql = buildJoin();
+		if (tableNames.length>1)
+		{
+			joinSql = buildJoin();
+		}
+			
 		//trace(joinSql);
 		filterSql = buildCond();
 	}

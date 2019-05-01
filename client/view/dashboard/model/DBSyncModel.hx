@@ -1,17 +1,10 @@
 package view.dashboard.model;
 
-import haxe.ds.Map;
-import view.shared.FormState;
-import shared.DBMetaData;
 /**
  * ...
  * @author axel@cunity.me
  */
 
-
-import haxe.ds.StringMap;
-import view.shared.FormElement;
-//import view.shared.io.DataAccessForm;
 import view.table.Table.DataColumn;
 import view.table.Table.DataState;
 
@@ -38,9 +31,9 @@ class DBSyncModel
 	
 	//public static function dataDisplay(?parentForm:DataAccessForm):StringMap<DataState> 
 	public static var dataDisplay:Map<String,DataState> =
-		[
-			'userList' => {altGroupPos:0,columns:userListColumns},
-			'clientList' => {altGroupPos:0,columns:clientListColumns}
-		];
+	[
+		'userList' => {altGroupPos:0,columns:userListColumns},
+		'clientList' => {altGroupPos:0,columns:clientListColumns}
+	];
 	
 }

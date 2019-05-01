@@ -25,7 +25,7 @@ import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.SMenuProps;
 import view.shared.io.DealData;
-import view.shared.io.ContactData;
+import view.shared.io.MasterData;
 import view.shared.io.AccountData;
 import view.table.Table;
 
@@ -54,14 +54,20 @@ class Deal extends ReactComponentOf<DataFormProps,FormState>
 					{
 						dataClassPath:'contacts.Contact',
 						label:'StammDaten',
-						section: 'ContactData',
-						items: ContactData.menuItems
+						section: 'MasterData',
+						items: MasterData.menuItems
 					},
 					{
-						dataClassPath:'admin.SyncExternal',
-						label:'DB Abgleich',
-						section: 'DBSync',
-						items: DBSync.menuItems
+						dataClassPath:'contact.Deal',
+						label:'Abschluss',
+						section: 'DealData',
+						items: DealData.menuItems
+					},
+					{
+						dataClassPath:'contact.Account',
+						label:'Konto',
+						section: 'AccountData',
+						items: AccountData.menuItems
 					}
 				]
 				,{	
@@ -132,14 +138,18 @@ class Deal extends ReactComponentOf<DataFormProps,FormState>
 		//trace(state.sideMenu); 
 		return switch(props.match.params.section)
 		{
-			case "DBSync":
+			case "MasterData":
 				jsx('
-					<$DBSync ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$MasterData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 					');					
-				case "DB":
+				case "DealData":
 				jsx('
-					<$DB ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
-				');				
+					<$DealData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+				');			
+				case "AccountData":
+				jsx('
+					<$AccountData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+				');						
 			default:
 				null;					
 		}

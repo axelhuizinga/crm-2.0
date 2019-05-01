@@ -29,7 +29,7 @@ import redux.Redux;
 
 //import Webpack.*;
 import model.AppState;
-import view.contacts.Data;
+import view.contacts.Contact;
 import view.contacts.Deal;
 import view.contacts.Account;
 
@@ -47,10 +47,10 @@ class Contacts extends ReactComponentOf<RouteTabProps,CompState>
 		state = {hasError:false,mounted:false};
 		//trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} user:${props.user}');
 		super(props);
-		if (props.match.url == '/Contacts')
+		if (props.match.url == '/Contacts' && props.match.isExact)
 		{
-			props.history.push('/Contacts/Deal');
-			trace('pushed2: /Contacts/Deal');
+			props.history.push('/Contacts/Contact');
+			trace('pushed2: /Contacts/Contact');
 		}
 	}
 	
@@ -112,7 +112,7 @@ class Contacts extends ReactComponentOf<RouteTabProps,CompState>
 	{	
 		//trace(this.state);
 		//trace(props.history.location.pathname);
-		trace(props.user);
+		//trace(props.user);
 		if (state.hasError)
 			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');
 		trace(Reflect.fields(props));
@@ -122,14 +122,14 @@ class Contacts extends ReactComponentOf<RouteTabProps,CompState>
 			<div className="tabNav2" >
 				<Tabs  boxed={true} >
 					<ul>
-						<TabLink to="/Contacts/Data" ${...props}>Stammdaten</TabLink>
+						<TabLink to="/Contacts/Contact" ${...props}>Stammdaten</TabLink>
 						<TabLink to="/Contacts/Deal" ${...props}>Abschluss</TabLink>
 						<TabLink to="/Contacts/Account" ${...props}>Konto</TabLink>
 					</ul>
 				</Tabs>
 			</div>
             <div className="tabContent2" >
-				<Route path="/Contacts/Data/:section?/:action?/:id?"  ${...props} component={Data}/>
+				<Route path="/Contacts/Contact/:section?/:action?/:id?"  ${...props} component={Contact}/>
 				<Route path="/Contacts/Deal/:section?/:action?/:id?"  ${...props} component={Deal}/>
 				<Route path="/Contacts/Account/:section?/:action?"   ${...props} component={Account}/>	
             </div>
@@ -149,8 +149,8 @@ class Contacts extends ReactComponentOf<RouteTabProps,CompState>
 		//return React.createElement(Comp,props);
 		return switch(comp)
 		{	
-			case Data:
-				jsx('<$Data  user=${this.props.user} ${...props}/>');			
+			case Contact:
+				jsx('<$Contact  user=${this.props.user} ${...props}/>');			
 			case Deal:
 				jsx('<$Deal  user=${this.props.user} ${...props}/>');			
 			case Account:
@@ -160,7 +160,7 @@ class Contacts extends ReactComponentOf<RouteTabProps,CompState>
 		}
 	}
 	
-	function internalRedirect(path:String = '/Contacts/Deal')
+	function internalRedirect(path:String = '/Contacts/Contact')
 	{
 		props.history.push(path);
 		return null;

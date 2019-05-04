@@ -91,6 +91,12 @@ class MasterData extends ReactComponentOf<DataFormProps,FormState>
 		};
 	}
 	
+	public function delete(ev:ReactEvent):Void
+	{
+		trace(state.selectedRows.length);
+		var data = state.formApi.selectedRowsMap(state);
+	}
+
 	public function find(ev:ReactEvent):Void
 	{
 		trace('hi :)');

@@ -80,6 +80,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			function(data:Map<String,String>)
 			{
 				trace(data);
+				//App.jwtCheck()
 				if (data.exists('error'))
 				{
 					trace(data['error']);
@@ -92,6 +93,13 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match);
 		//setState({viewClassPath:viewClassPath});
 	}
+
+	public function delete(ev:ReactEvent):Void
+	{
+		trace(state.selectedRows.length);
+		var data = state.formApi.selectedRowsMap(state);
+	}
+
 	
 	public function editTableFields(ev:ReactEvent):Void
 	{

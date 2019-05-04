@@ -282,10 +282,6 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
 			var columnDataState:DataColumn = props.dataState.columns.get(fN);
 			//trace(columnDataState.cellFormat != null ? fN:'');
-			if(fN=='state')
-			{
-				trace(columnDataState.className);
-			}
 			var cD:DataCell = {
 				cellFormat:columnDataState.cellFormat,
 				className:columnDataState.className,

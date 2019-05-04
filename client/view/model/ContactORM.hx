@@ -1,11 +1,14 @@
 package view.model;
 
+import react.ReactMacro.jsx;
+
+import view.table.Table.DataColumn;
+import view.table.Table.DataState;
+
 /**
  * @author axel@cunity.me
  */
 
-import view.table.Table.DataColumn;
-import view.table.Table.DataState;
 
 class ContactORM
 {
@@ -14,12 +17,12 @@ class ContactORM
 		'last_name'=>{label:'Name', flexGrow:0},
 		'email'=>{label:'Email'},
 		'phone_number'=>{label:'Telefon', flexGrow:1},		
-		'state' => {label:'Aktiv',
+		'state' => {label:'Aktiv', className: 'tCenter',
 			cellFormat:function(v:String) 
 			{
 				var uState = (v=='active'?'user':'user-slash');
-				trace(uState);
-				return '<span class="tCenter fa fa-$uState"></span>';
+				//trace(uState);
+				return jsx('<span className="fa fa-$uState"></span>');
 			}},
 		'id' => {show:false}
 	];

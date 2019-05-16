@@ -26,22 +26,7 @@ class ContactORM
 			}},
 		'id' => {show:false}
 	];
-	/*dataDisplay = [
-			'contactList' => {columns:[
-				'first_name'=>{label:'Vorname', flexGrow:0},
-				'last_name'=>{label:'Name', flexGrow:0},
-				'email'=>{label:'Email'},
-				'phone_number'=>{label:'Telefon', flexGrow:1},		
-				'state' => {label:'Aktiv', className:'cRight', 
-					cellFormat:function(v:String) return (v=='active'?'J':'N')},
-				'id' => {show:false}
-			]},
-			'dealList' => {columns: [
-				'user_group' => {label:'UserGroup', flexGrow:0},
-				'group_name'=>{label:'Beschreibung', flexGrow:1},
-				'allowed_campaigns'=>{label:'Kampagnen',flexGrow:1}
-			]}
-		];*/
+
 	public static var dataDisplay:Map<String,DataState> = [
 		'contactList' => {columns:contactListColumns},
 		'dealList' => {columns: [

@@ -57,31 +57,9 @@ class MasterData extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		dataDisplay = ContactORM.dataDisplay;
-		/*dataDisplay = [
-			'contactList' => {columns:[
-				'first_name'=>{label:'Vorname', flexGrow:0},
-				'last_name'=>{label:'Name', flexGrow:0},
-				'email'=>{label:'Email'},
-				'phone_number'=>{label:'Telefon', flexGrow:1},		
-				'state' => {label:'Aktiv', className:'cRight', 
-					cellFormat:function(v:String) return (v=='active'?'J':'N')},
-				'id' => {show:false}
-			]},
-			'dealList' => {columns: [
-				'user_group' => {label:'UserGroup', flexGrow:0},
-				'group_name'=>{label:'Beschreibung', flexGrow:1},
-				'allowed_campaigns'=>{label:'Kampagnen',flexGrow:1}
-			]}
-		];*/
-		//dataDisplay = ContactModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
 		trace(state.loading);
-		//trace(props.sideMenu);
-		//trace(state.sideMenu);
-		//var sideMenu =  updateMenu('DBSync');//state.sideMenu;
-		//trace(sideMenu.section);
-
 	}
 	
 	static function mapStateToProps(aState:AppState) 

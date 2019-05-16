@@ -177,11 +177,11 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 					<$Route path="/"  render={renderRedirect} exact={true}/>				
 					
 					<$Route path="/DashBoard*" component=${DashBoard}/>
-					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
-					<$Route path="/Contacts/Edit/:id" component=${Bundle.load(Contacts)}/>
-					<$Route path="/Contacts" component=${Bundle.load(Contacts)}/>
-					<$Route path="/qc" component=${Bundle.load(QC)}/>
-					<$Route path="/reports" component=${Bundle.load(Reports)}/>
+					<$Route path="/accounting" component=${Accounting}/>
+					<$Route path="/Contacts/Edit/:id" component=${Contacts}/>
+					<$Route path="/Contacts" component=${Contacts}/>
+					<$Route path="/qc" component=${QC}/>
+					<$Route path="/reports" component=${Reports}/>
 				</div>
 			</>
 			</$Router>
@@ -197,4 +197,11 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		return jsx('<RedirectBox {...p} to=${App.store.getState().appWare.redirectAfterLogin}/>');
 	}
 	
+/**
+ * 					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
+					<$Route path="/Contacts/Edit/:id" component=${Bundle.load(Contacts)}/>
+					<$Route path="/Contacts" component=${Bundle.load(Contacts)}/>
+					<$Route path="/qc" component=${Bundle.load(QC)}/>
+					<$Route path="/reports" component=${Bundle.load(Reports)}/>
+ */
 }

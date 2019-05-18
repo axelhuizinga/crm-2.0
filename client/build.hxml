@@ -6,7 +6,7 @@
 -lib redux
 -lib redux-connect
 -lib redux-thunk
--lib react-redux-form
+-lib react-redux-form:git:https://github.com/axelhuizinga/haxe-react-redux-form.git
 -lib CommentString
 -lib reselect
 -lib event-types 

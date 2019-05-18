@@ -1,4 +1,4 @@
-package view.contacts;
+package view.data;
 
 import react.ReactRef;
 import react.router.RouterMatch;
@@ -17,16 +17,14 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import react.ReactType;
 import model.AjaxLoader;
-
+import view.data.accounts.Edit;
+import view.data.accounts.List;
 import view.shared.io.DataFormProps;
 import view.shared.io.FormApi;
 import view.shared.FormState;
 import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.SMenuProps;
-import view.shared.io.DealData;
-import view.shared.io.MasterData;
-import view.shared.io.AccountData;
 import view.table.Table;
 
 /**
@@ -34,7 +32,7 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 
-class Account extends ReactComponentOf<DataFormProps,FormState>
+class Accounts extends ReactComponentOf<DataFormProps,FormState>
 {
 	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
 	public function new(?props:DataFormProps) 
@@ -52,22 +50,16 @@ class Account extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:FormApi.initSideMenu( this,
 				[
 					{
-						dataClassPath:'contacts.Contact',
-						label:'StammDaten',
-						section: 'MasterData',
-						items: MasterData.menuItems
+						dataClassPath:'data.Contacts',
+						label:'Konten',
+						section: 'List',
+						items: List.menuItems
 					},
 					{
-						dataClassPath:'contact.Deal',
-						label:'Abschluss',
-						section: 'DealData',
-						items: DealData.menuItems
-					},
-					{
-						dataClassPath:'contact.Account',
-						label:'Konto',
-						section: 'AccountData',
-						items: AccountData.menuItems
+						dataClassPath:'contact.Deals',
+						label:'Aufträge',
+						section: 'Edit',
+						items: Edit.menuItems
 					}
 				]
 				,{	
@@ -138,16 +130,16 @@ class Account extends ReactComponentOf<DataFormProps,FormState>
 		//trace(state.sideMenu); 
 		return switch(props.match.params.section)
 		{
-			case "MasterData":
+			case "Edit":
 				jsx('
-					<$MasterData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
-					');					
-				case "DealData":
+					<$Edit ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+				');					
+			case "List":
 				jsx('
-					<$DealData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
-				');				
+					<$List ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+				');						
 			default:
-				null;					
+				null;				
 		}
 	}
 	

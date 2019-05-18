@@ -98,3 +98,11 @@ class FormBuilder {
 		');
     }
 }
+/**
+ * 
+ * <Form model="user" onSubmit={(val) => this.handleSubmit(val)}>
+        <label>Your name?</label>
+        <Control.text model=".name" />
+        <button>Submit!</button>
+      </Form>
+ */

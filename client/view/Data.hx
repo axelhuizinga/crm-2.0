@@ -29,14 +29,14 @@ import redux.Redux;
 
 //import Webpack.*;
 import model.AppState;
-import view.contacts.Contact;
-import view.contacts.Deal;
-import view.contacts.Account;
+import view.data.Contacts;
+import view.data.Deals;
+import view.data.Accounts;
 
 using model.CState;
 
 @:connect
-class Contacts extends ReactComponentOf<RouteTabProps,CompState>
+class Data extends ReactComponentOf<RouteTabProps,CompState>
 {
 	//static var user = {first_name:'dummy'};
 	var mounted:Bool = false;
@@ -47,10 +47,10 @@ class Contacts extends ReactComponentOf<RouteTabProps,CompState>
 		state = {hasError:false,mounted:false};
 		//trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} user:${props.user}');
 		super(props);
-		if (props.match.url == '/Contacts' && props.match.isExact)
+		if (props.match.url == '/Data' && props.match.isExact)
 		{
-			props.history.push('/Contacts/Contact');
-			trace('pushed2: /Contacts/Contact');
+			props.history.push('/Data/Contacts');
+			trace('pushed2: /Data/Contacts');
 		}
 	}
 	
@@ -122,16 +122,16 @@ class Contacts extends ReactComponentOf<RouteTabProps,CompState>
 			<div className="tabNav2" >
 				<Tabs  boxed={true} >
 					<ul>
-						<TabLink to="/Contacts/Contact" ${...props}>Stammdaten</TabLink>
-						<TabLink to="/Contacts/Deal" ${...props}>Abschluss</TabLink>
-						<TabLink to="/Contacts/Account" ${...props}>Konto</TabLink>
+						<TabLink to="/Data/Contacts" ${...props}>Kontakte</TabLink>
+						<TabLink to="/Data/Deals" ${...props}>Aufträge</TabLink>
+						<TabLink to="/Data/Accounts" ${...props}>Konten</TabLink>
 					</ul>
 				</Tabs>
 			</div>
             <div className="tabContent2" >
-				<Route path="/Contacts/Contact/:section?/:action?/:id?"  ${...props} component={Contact}/>
-				<Route path="/Contacts/Deal/:section?/:action?/:id?"  ${...props} component={Deal}/>
-				<Route path="/Contacts/Account/:section?/:action?"   ${...props} component={Account}/>	
+				<Route path="/Data/Contacts/:section?/:action?/:id?"  ${...props} component={Contacts}/>
+				<Route path="/Data/Deals/:section?/:action?/:id?"  ${...props} component={Deals}/>
+				<Route path="/Data/Accounts/:section?/:action?"   ${...props} component={Accounts}/>	
             </div>
 			<StatusBar ${...props}/>
 		</>
@@ -139,7 +139,7 @@ class Contacts extends ReactComponentOf<RouteTabProps,CompState>
     }
 
 	/***
-	 render=${function(p:RouteRenderProps){return renderComponent(Account,p,props.user);}}
+	 render=${function(p:RouteRenderProps){return renderComponent(Accounts,p,props.user);}}
 	**/
 
 	function renderComponent(comp:Dynamic,props:Dynamic, user:UserState):ReactFragment
@@ -149,18 +149,18 @@ class Contacts extends ReactComponentOf<RouteTabProps,CompState>
 		//return React.createElement(Comp,props);
 		return switch(comp)
 		{	
-			case Contact:
-				jsx('<$Contact  user=${this.props.user} ${...props}/>');			
-			case Deal:
-				jsx('<$Deal  user=${this.props.user} ${...props}/>');			
-			case Account:
-				jsx('<$Account  user=${this.props.user} ${...props}/>');
+			case Contacts:
+				jsx('<$Contacts  user=${this.props.user} ${...props}/>');			
+			case Deals:
+				jsx('<$Deals  user=${this.props.user} ${...props}/>');			
+			case Accounts:
+				jsx('<$Accounts  user=${this.props.user} ${...props}/>');
 			default:
 				null;
 		}
 	}
 	
-	function internalRedirect(path:String = '/Contacts/Contact')
+	function internalRedirect(path:String = '/Data/Contacts')
 	{
 		props.history.push(path);
 		return null;

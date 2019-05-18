@@ -1,4 +1,4 @@
-package view.model;
+package view.data.deals.model;
 
 import react.ReactMacro.jsx;
 
@@ -9,10 +9,9 @@ import view.table.Table.DataState;
  * @author axel@cunity.me
  */
 
-
-class ContactORM
+class Deals
 {
-	public static var contactListColumns:Map<String,DataColumn> = [
+	public static var listColumns:Map<String,DataColumn> = [
 		'first_name'=>{label:'Vorname', flexGrow:0},
 		'last_name'=>{label:'Name', flexGrow:0},
 		'email'=>{label:'Email'},
@@ -28,11 +27,6 @@ class ContactORM
 	];
 
 	public static var dataDisplay:Map<String,DataState> = [
-		'contactList' => {columns:contactListColumns},
-		'dealList' => {columns: [
-			'user_group' => {label:'UserGroup', flexGrow:0},
-			'group_name'=>{label:'Beschreibung', flexGrow:1},
-			'allowed_campaigns'=>{label:'Kampagnen',flexGrow:1}
-		]}
+		'find' => {columns:listColumns}
 	];	
 }

@@ -37,7 +37,7 @@ import bulma_components.Tabs;
 import action.AppAction;
 import model.ApplicationStore;
 import App;
-//import view.ContactsBox;
+//import view.relationsBox;
 //import view.DashBoardBox;
 //import view.AccountingBox;
 //import view.ReportsBox;
@@ -118,7 +118,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 
 	var tabList:Array<Dynamic> = [];
 	/*	{ 'key': 1, 'component': DashBoard, 'label': 'DashBoard', 'url': '/DashBoard' },
-		{ 'key': 2, 'component': Contacts, 'label': 'Contacts', 'url': '/contacts' },
+		{ 'key': 2, 'component': Data, 'label': 'Data', 'url': '/Data' },
 		{ 'key': 3, 'component': QC, 'label': 'QC', 'url': '/qc' },
 		{ 'key': 4, 'component': Accounting, 'label': 'Buchhaltung', 'url': '/accounting' },
 		{ 'key': 5, 'component': Reports, 'label': 'Berichte', 'url': '/reports' },
@@ -169,7 +169,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 				<div className="topNav">
 					<$Route path="/DashBoard" {...props} component=${NavTabs}/>
 					<$Route path="/accounting" {...props} component=${NavTabs}/>
-					<$Route path="/Contacts" {...props} component=${NavTabs}/>
+					<$Route path="/Data" {...props} component=${NavTabs}/>
 					<$Route path="/qc" {...props} component=${NavTabs}/>
 					<$Route path="/reports" {...props} component=${NavTabs}/>
 				</div>
@@ -178,8 +178,8 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 					
 					<$Route path="/DashBoard*" component=${DashBoard}/>
 					<$Route path="/accounting" component=${Accounting}/>
-					<$Route path="/Contacts/Edit/:id" component=${Contacts}/>
-					<$Route path="/Contacts" component=${Contacts}/>
+					<$Route path="/Data/Edit/:id" component=${Data}/>
+					<$Route path="/Data" component=${Data}/>
 					<$Route path="/qc" component=${QC}/>
 					<$Route path="/reports" component=${Reports}/>
 				</div>
@@ -199,8 +199,8 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	
 /**
  * 					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
-					<$Route path="/Contacts/Edit/:id" component=${Bundle.load(Contacts)}/>
-					<$Route path="/Contacts" component=${Bundle.load(Contacts)}/>
+					<$Route path="/Data/Edit/:id" component=${Bundle.load(Data)}/>
+					<$Route path="/Data" component=${Bundle.load(Data)}/>
 					<$Route path="/qc" component=${Bundle.load(QC)}/>
 					<$Route path="/reports" component=${Bundle.load(Reports)}/>
  */

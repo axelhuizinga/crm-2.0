@@ -4,7 +4,7 @@ typedef UserState =
 {
 	?change_pass_required:Bool,
 	?contact:Int,
-	?externalData:Dynamic,
+	?external:Dynamic,
 	?first_name:String,
 	?last_name:String,
 	?email:String,
@@ -19,5 +19,6 @@ typedef UserState =
 	?new_pass:String,
 	?new_pass_confirm:String,
 	user_name:String,
+	?id:Int,
 	?waiting:Bool    
 }

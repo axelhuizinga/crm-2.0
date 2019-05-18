@@ -1,4 +1,4 @@
-package view.contacts;
+package view.data;
 
 import react.ReactRef;
 import react.router.RouterMatch;
@@ -17,16 +17,15 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import react.ReactType;
 import model.AjaxLoader;
-
+import view.data.contacts.Edit;
+import view.data.contacts.List;
+import view.data.contacts.model.Contacts;
 import view.shared.io.DataFormProps;
 import view.shared.io.FormApi;
 import view.shared.FormState;
 import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.SMenuProps;
-import view.shared.io.DealData;
-import view.shared.io.MasterData;
-import view.shared.io.AccountData;
 import view.table.Table;
 
 /**
@@ -34,12 +33,12 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 
-class Deal extends ReactComponentOf<DataFormProps,FormState>
+class Contacts extends ReactComponentOf<DataFormProps,FormState>
 {
 	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
 	public function new(?props:DataFormProps) 
 	{
-		trace(props.user);
+		//trace(props.user);
 		super(props);	
 		trace(Reflect.fields(props));
 		trace(props.match.params.section);
@@ -52,26 +51,20 @@ class Deal extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:FormApi.initSideMenu( this,
 				[
 					{
-						dataClassPath:'contacts.Contact',
-						label:'StammDaten',
-						section: 'MasterData',
-						items: MasterData.menuItems
+						dataClassPath:'data.Contacts',
+						label:'Kontakte',
+						section: 'List',
+						items: List.menuItems
 					},
 					{
-						dataClassPath:'contact.Deal',
-						label:'Abschluss',
-						section: 'DealData',
-						items: DealData.menuItems
-					},
-					{
-						dataClassPath:'contact.Account',
-						label:'Konto',
-						section: 'AccountData',
-						items: AccountData.menuItems
+						dataClassPath:'contact.Contacts',
+						label:'Edit',
+						section: 'Edit',
+						items: Edit.menuItems
 					}
 				]
 				,{	
-					section: props.match.params.section==null? 'DBSync':props.match.params.section, 
+					section: props.match.params.section==null? 'Contacts':props.match.params.section, 
 					sameWidth: true}					
 			)
 		};
@@ -107,11 +100,11 @@ class Deal extends ReactComponentOf<DataFormProps,FormState>
 		if (props.match.params.section == null)
 		{
 			var basePath:String = props.match.url;
-			props.history.push('$basePath/DB');
+			props.history.push('$basePath/List');
 			trace(props.history.location.pathname);
-			trace('setting section to:DB');
+			trace('setting section to:List');
 		}		
-		trace('${}');
+		//trace('${state.sideMenu}');
 		//TODO: AUTOMATE CREATE HISTORY TRIGGER IF DB TABLES CHANGED
 		/*AjaxLoader.loadData('${App.config.api}', 
 			{
@@ -137,21 +130,15 @@ class Deal extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.section);
 		//trace(state.sideMenu); 
 		return switch(props.match.params.section)
-		{
-			case "MasterData":
+		{			
+				case "Edit":
 				jsx('
-					<$MasterData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
-					');					
-				case "DealData":
-				jsx('
-					<$DealData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
-				');			
-				case "AccountData":
-				jsx('
-					<$AccountData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
-				');						
+					<$Edit ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+				');					
 			default:
-				null;					
+				jsx('
+					<$List ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+				');					
 		}
 	}
 	

@@ -1,4 +1,7 @@
-package view.contacts;
+package view.data;
+
+import view.data.deals.Edit;
+import view.data.deals.List;
 
 import react.ReactRef;
 import react.router.RouterMatch;
@@ -24,9 +27,9 @@ import view.shared.FormState;
 import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.SMenuProps;
-import view.shared.io.DealData;
-import view.shared.io.MasterData;
-import view.shared.io.AccountData;
+//import view.shared.io.Deals;
+//import view.shared.io.Contact;
+//import view.shared.io.Accounts;
 import view.table.Table;
 
 /**
@@ -34,12 +37,12 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 
-class Contact extends ReactComponentOf<DataFormProps,FormState>
+class Deals extends ReactComponentOf<DataFormProps,FormState>
 {
 	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
 	public function new(?props:DataFormProps) 
 	{
-		//trace(props.user);
+		trace(props.user);
 		super(props);	
 		trace(Reflect.fields(props));
 		trace(props.match.params.section);
@@ -52,26 +55,20 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:FormApi.initSideMenu( this,
 				[
 					{
-						dataClassPath:'contacts.Contact',
-						label:'StammDaten',
-						section: 'MasterData',
-						items: MasterData.menuItems
+						dataClassPath:'data.deals.List',
+						label:'Aufträge',
+						section: 'List',
+						items: List.menuItems
 					},
 					{
-						dataClassPath:'contact.Deal',
-						label:'Abschluss',
-						section: 'DealData',
-						items: DealData.menuItems
-					},
-					{
-						dataClassPath:'contact.Account',
-						label:'Konto',
-						section: 'AccountData',
-						items: AccountData.menuItems
+						dataClassPath:'data.deals.Edit',
+						label:'Aufträge',
+						section: 'Edit',
+						items: Edit.menuItems
 					}
 				]
 				,{	
-					section: props.match.params.section==null? 'MasterData':props.match.params.section, 
+					section: props.match.params.section==null? 'List':props.match.params.section, 
 					sameWidth: true}					
 			)
 		};
@@ -107,11 +104,11 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		if (props.match.params.section == null)
 		{
 			var basePath:String = props.match.url;
-			props.history.push('$basePath/MasterData');
+			props.history.push('$basePath/DB');
 			trace(props.history.location.pathname);
-			trace('setting section to:MasterData');
+			trace('setting section to:DB');
 		}		
-		//trace('${state.sideMenu}');
+		trace('${}');
 		//TODO: AUTOMATE CREATE HISTORY TRIGGER IF DB TABLES CHANGED
 		/*AjaxLoader.loadData('${App.config.api}', 
 			{
@@ -138,18 +135,14 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		//trace(state.sideMenu); 
 		return switch(props.match.params.section)
 		{
-			case "MasterData":
+			case "Edit":
 				jsx('
-					<$MasterData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
-					');					
-				case "DealData":
+					<$Edit ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+				');					
+			case "List":
 				jsx('
-					<$DealData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
-				');		
-				case "AccountData":
-				jsx('
-					<$AccountData ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
-				');				
+					<$List ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+				');						
 			default:
 				null;					
 		}

@@ -36,7 +36,7 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 @:connect
-class DealData extends ReactComponentOf<DataFormProps,FormState>
+class Accounts extends ReactComponentOf<DataFormProps,FormState>
 {
 
 	static var _instance:DBSync;
@@ -83,7 +83,7 @@ class DealData extends ReactComponentOf<DataFormProps,FormState>
 			{
 				user_name:props.user.user_name,
 				jwt:props.user.jwt,
-				className:'contacts.Contact',
+				className:'data.Contacts',
 				action:'find',
 				update:'1'
 			},
@@ -152,8 +152,8 @@ class DealData extends ReactComponentOf<DataFormProps,FormState>
 				devIP:App.devIP
 			},
 			function(data:DbData)
-			{			
-				App.jwtCheck(data);	
+			{		
+				App.jwtCheck(data);		
 				trace(data);
 			}
 		));
@@ -175,7 +175,7 @@ class DealData extends ReactComponentOf<DataFormProps,FormState>
 			function(data:DbData)
 			{
 				App.jwtCheck(data);
-				//trace(data);
+				trace(data);
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				trace(data.dataErrors.keys().hasNext());
 				if(!data.dataErrors.keys().hasNext())
@@ -203,12 +203,13 @@ class DealData extends ReactComponentOf<DataFormProps,FormState>
 				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
 				className:'admin.SyncExternal',
 				action:'syncUserDetails',
-				targe: 'syncUsers.php',
+				target: 'syncUsers.php',
 				devIP:App.devIP
 			},
 			function(data:DbData)
 			{
 				App.jwtCheck(data);
+				trace(data);
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				trace(data.dataRows.length);
 				if(data.dataRows.length>0)

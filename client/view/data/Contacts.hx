@@ -50,14 +50,14 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			loading:true,
 			sideMenu:FormApi.initSideMenu( this,
 				[
-					{
+					/*{
 						dataClassPath:'data.Contacts',
 						label:'Kontakte',
 						section: 'List',
 						items: List.menuItems
-					},
+					},*/
 					{
-						dataClassPath:'contact.Contacts',
+						dataClassPath:'data.Contacts',
 						label:'Edit',
 						section: 'Edit',
 						items: Edit.menuItems
@@ -70,21 +70,6 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		};
 		trace(Reflect.fields(props));		
 	}
-	
-	/*static function mapStateToProps() {
-
-		return function(aState:model.AppState) 
-		{
-			var uState = aState.appWare.user;
-			//trace(uState);		
-			return {
-				//appConfig:aState.appWare.config,
-				user_name:uState.user_name,
-				jwt:uState.jwt,
-				first_name:uState.first_name
-			};
-		};
-	}	*/
 	
 	override function componentDidCatch(error, info) {
 		// Display fallback UI
@@ -100,29 +85,11 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		if (props.match.params.section == null)
 		{
 			var basePath:String = props.match.url;
-			props.history.push('$basePath/List');
+			props.history.push('$basePath/Edit');
 			trace(props.history.location.pathname);
-			trace('setting section to:List');
+			trace('setting section to:Edit');
 		}		
-		//trace('${state.sideMenu}');
-		//TODO: AUTOMATE CREATE HISTORY TRIGGER IF DB TABLES CHANGED
-		/*AjaxLoader.loadData('${App.config.api}', 
-			{
-				user_name:props.user.user_name,
-				jwt:props.user.jwt,
-				className:'admin.CreateHistoryTrigger',
-				action:'run'				
-			}, 
-			function(data:String){
-				trace(data); 
-				if (data != null && data.length > 0)
-				{
-					var sData:StringMap<Dynamic> = state.data;
-					sData.set('historyTrigger', Json.parse(data).data.rows);
-					setState(ReactUtil.copy(state, {data:sData}));				
-				}
-			});	
-			*/		
+	
 	}
 	
 	override public function render() 
@@ -137,7 +104,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				');					
 			default:
 				jsx('
-					<$List ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$Edit ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 				');					
 		}
 	}

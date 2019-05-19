@@ -39,6 +39,7 @@ import view.table.Table;
  * 
  */
 
+@:connect
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
@@ -53,12 +54,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
+	
 	public function new(props) 
 	{
 		super(props);
 		dataDisplay = Contacts.dataDisplay;
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
+		state =  App.initEState({loading:true,values:new Map<String,Dynamic>()},this);
 		trace(state.loading);
 	}
 	
@@ -155,8 +157,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				Reflect.callMethod(this,fun,null);
 			}
 		}
-		else 
-			setState({loading: false});
+		//else 
+			//setState({loading: false});
 	}
 	
 	function renderResults():ReactFragment
@@ -192,7 +194,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			case 'delete':
 				null;
 			default:
-				null;
+				jsx('
+					<Table id="fieldsList" data=${state.dataTable}
+					${...props} dataState = ${dataDisplay["contactList"]} 
+					className="is-striped is-hoverable" fullWidth=${true}/>
+				');
 		}
 		return null;
 	}

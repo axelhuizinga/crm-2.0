@@ -1,4 +1,4 @@
-package model.contacts;
+package model.data;
 import comments.CommentString.*;
 import haxe.ds.StringMap;
 import haxe.extern.EitherType;
@@ -27,7 +27,7 @@ typedef CustomField =
  * @author axel@cunity.me
  */
 @:keep
- class Contact extends Model
+class Contacts extends Model
 {
 	private static var vicdial_list_fields = 'lead_id,entry_date,modify_date,status,user,vendor_lead_code,source_id,list_id,gmt_offset_now,called_since_last_reset,phone_code,phone_number,title,first_name,middle_initial,last_name,address1,address2,address3,city,state,province,postal_code,country_code,gender,date_of_birth,alt_phone,email,security_phrase,comments,called_count,last_local_call_time,rank,owner,entry_list_id'.split(',');		
 	private static var contact_fields = 'client_id,lead_id,creation_date,state,use_email,register_on,register_off,register_off_to,teilnahme_beginn,title,anrede,namenszusatz,co_field,storno_grund,birth_date,old_active'.split(',');	
@@ -40,7 +40,7 @@ typedef CustomField =
 	
 	
 	
-	public static function create(param:StringMap<String>):Contact
+	public static function create(param:StringMap<String>):Contacts
 	{
 		trace(!param.exists('table')?'Y':'N');
 		if(!(param.exists('table')&&param.get('table').any2bool()))
@@ -48,9 +48,8 @@ typedef CustomField =
 			param.set('table', 'contacts');
 		}
 		trace(param);
-		var self:Contact = new Contact(param);	
-		//self.table = 'contacts';
-		//self.param = param;
+		var self:Contacts = new Contacts(param);	
+
 		if(param.get('action')==null)
 		{
 			return self;

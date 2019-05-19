@@ -15,7 +15,7 @@ import shared.DbData;
 //import model.AgcApi;
 //import model.App;
 //import model.Campaigns;
-import model.contacts.Contact;
+import model.data.Contacts;
 import model.admin.CreateHistoryTrigger;
 import model.admin.CreateUsers;
 import model.admin.SyncExternal;

@@ -4,8 +4,8 @@
 			"path": "."
 		},
 		{
-			"name": "SSH FS - pitverwaltung",
-			"uri": "ssh://pitverwaltung/"
+			"name": "SSH FS - pitverwaltung.de",
+			"uri": "ssh://pitverwaltung.de/"
 		}
 	],
 	"settings": {

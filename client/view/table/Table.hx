@@ -153,6 +153,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		super(props);		
 		headerUpdated = false;
 		fieldNames = [];
+		if(props.dataState!=null)
 		for (k in props.dataState.columns.keys())
 		{
 			//trace(k);
@@ -177,7 +178,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			</section>
 			'): null;					
 		}		
-		//trace(props.data);
+		trace(props.data);
 		tableRef = React.createRef();
 		fixedHeader = React.createRef();
 		tHeadRef = React.createRef();
@@ -273,6 +274,11 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		//trace(rdMap);
 		//trace(rdMap.remove('primary'));
 		//trace(rdMap['use_as_index']);
+		if(props.dataState==null)
+		{
+			trace('oops...');
+			return null;
+		}
 		if(row==3)
 		{
 			trace(props.dataState.columns);

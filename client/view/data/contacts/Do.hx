@@ -4,9 +4,11 @@ import haxe.Constraints.Function;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
+import react.redux.form.LocalForm;
 import view.data.contacts.model.Contacts;
 import shared.DbData;
 import shared.DBMetaData;
+import view.model.Contact;
 import view.shared.FormField;
 import view.shared.FormState;
 import view.shared.SMItem;
@@ -40,7 +42,7 @@ import view.table.Table;
  */
 
 @:connect
-class Edit extends ReactComponentOf<DataFormProps,FormState>
+class Do extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
 		{label:'Anzeigen',action:'find'},
@@ -55,12 +57,19 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
 	
+	public static var initModel:Contact =
+	{
+		id:0,
+		edited_by: 0,
+		mandator: 0
+	};
+
 	public function new(props) 
 	{
 		super(props);
 		dataDisplay = Contacts.dataDisplay;
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState({loading:true,values:new Map<String,Dynamic>()},this);
+		state =  App.initEState({loading:true,selectedRows:[], values:new Map<String,Dynamic>()},this);
 		trace(state.loading);
 	}
 	
@@ -102,18 +111,33 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			{			
 				App.jwtCheck(data);
 				trace(data.dataInfo);
-				if(data.dataRows.length>0)
-				setState({dataTable:data.dataRows});
+				trace(data.dataRows.length);
+				if(data.dataRows.length>0) 
+				{
+				if(!data.dataErrors.keys().hasNext())
+				{
+					setState({dataTable:data.dataRows, values: ['loadResult'=>'','closeAfter'=>100]});
+				}
+				else 
+					setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});					
+				}
+				//setState({dataTable:data.dataRows, loading: false});
 			}
 		));
 	}
 	
 	public function edit(ev:ReactEvent):Void
 	{
+		trace(state.selectedRows);
+		if(state.selectedRows.length==0)
+		{
+			setState({loading: false});
+		}
+		return;
 		trace(state.selectedRows.length);				
 	}
 
-	function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
+	/*function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
 	{
 		var iS:Dynamic = {};
 		for(dR in dt)
@@ -133,7 +157,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 		trace(iS);
 		return iS;
-	}
+	}*/
 		
 	override public function componentDidMount():Void 
 	{	
@@ -146,24 +170,28 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			},
 		];			
 		//
-		if(props.user != null)
-		trace('yeah: ${props.user.first_name}');
+		if(props.match.params != null)
+		trace('yeah action: ${props.match.params.action}');
 		//dbData = FormApi.init(this, props);
 		if(props.match.params.action != null)
 		{
-			var fun:Function = Reflect.field(this,props.match.params.action);
-			if(Reflect.isFunction(fun))
-			{
-				Reflect.callMethod(this,fun,null);
-			}
+			state.formApi.doAction();	
 		}
-		//else 
-			//setState({loading: false});
+		else 
+		{
+			//invoke default action if any
+			state.formApi.doAction('find');	
+		}
 	}
+
+
+	function handleSubmit(contact, _) {
+		trace(contact);
+	}	
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
+		trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
 		trace(state.loading);
 		if(state.loading)
@@ -178,11 +206,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'edit':
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["clientList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');			
+				null;	
 			case 'add':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
@@ -207,12 +231,23 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);		
-		return state.formApi.render(jsx('
-		<>
-			<form className="tabComponentForm"  >
-				${renderResults()}
-			</form>
-		</>'));		
+		return switch(props.match.params.action)
+		{	
+			case 'edit':
+				state.formApi.render(jsx('
+				<>
+					<$LocalForm model="contact" onSubmit=${handleSubmit} className="tabComponentForm" >
+						${renderResults()}
+					</$LocalForm>					
+				</>'));				
+			default:
+				state.formApi.render(jsx('
+				<>
+					<form className="tabComponentForm"  >
+						${renderResults()}
+					</form>
+				</>'));		
+		}
 	}
 	
 	function updateMenu(?viewClassPath:String):SMenuProps

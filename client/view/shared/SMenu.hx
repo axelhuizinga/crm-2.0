@@ -50,7 +50,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	static function mapDispatchToProps(dispatch:Dispatch):SMenuProps
     {
 		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
-      return {
+      	return {
 				switchSection: function(url:String) {
 					trace(url);
 					dispatch(LocationAction.Push(url));

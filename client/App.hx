@@ -1,3 +1,4 @@
+import view.shared.FormBuilder;
 import view.shared.FormState;
 import view.shared.SMenuProps;
 import react.intl.DateTimeFormatOptions.NumericFormat;
@@ -210,6 +211,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		{
 			clean: true,
 			formApi:new FormApi(comp),
+			formBuilder:new FormBuilder(comp),
 			hasError: false,
 			mounted: false,
 			sideMenu: comp==null? {}:comp.props.sideMenu

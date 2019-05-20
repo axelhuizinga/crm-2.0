@@ -49,8 +49,6 @@ class LocationStore implements IReducer<LocationAction, LocationState>
 				
 			case LocationChange(location):
 				trace(location.pathname);
-				//var sloc:Location = st
-				//state;
 				copy(state, location);
 			default:
 				state;

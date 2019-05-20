@@ -17,7 +17,7 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import react.ReactType;
 import model.AjaxLoader;
-import view.data.contacts.Edit;
+import view.data.contacts.Do;
 import view.data.contacts.List;
 import view.data.contacts.model.Contacts;
 import view.shared.io.DataFormProps;
@@ -27,6 +27,7 @@ import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.SMenuProps;
 import view.table.Table;
+using  StringTools;
 
 /**
  * ...
@@ -58,9 +59,9 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 					},*/
 					{
 						dataClassPath:'data.Contacts',
-						label:'Edit',
-						section: 'Edit',
-						items: Edit.menuItems
+						label:'Kontakte',
+						section: 'Do',
+						items: Do.menuItems
 					}
 				]
 				,{	
@@ -84,10 +85,10 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		setState({mounted:true});
 		if (props.match.params.section == null)
 		{
-			var basePath:String = props.match.url;
-			props.history.push('$basePath/Edit');
+			var basePath:String = (props.match.url.endsWith('/')? ~/\/$/.replace(props.match.url,''):props.match.url);
+			props.history.push('$basePath/Do');
 			trace(props.history.location.pathname);
-			trace('setting section to:Edit');
+			trace('setting section to:Do');
 		}		
 	
 	}
@@ -98,13 +99,13 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		//trace(state.sideMenu); 
 		return switch(props.match.params.section)
 		{			
-				case "Edit":
+				case "Do":
 				jsx('
-					<$Edit ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$Do ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 				');					
 			default:
 				jsx('
-					<$Edit ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$Do ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 				');					
 		}
 	}

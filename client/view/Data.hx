@@ -138,10 +138,6 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 			');			
     }
 
-	/***
-	 render=${function(p:RouteRenderProps){return renderComponent(Accounts,p,props.user);}}
-	**/
-
 	function renderComponent(comp:Dynamic,props:Dynamic, user:UserState):ReactFragment
 	{
 		trace(user.first_name);

@@ -97,12 +97,13 @@ class FormApi
         trace(dbData);
 	}	
 
-	public function doAction():Void
+	public function doAction(?defaultAction:String):Void
 	{
-		if(comp.props.match != null && comp.props.match.params.action != null)
+		if(comp.props.match != null && (comp.props.match.params.action != null || defaultAction != null))
 		{
-            trace('going 2 call ${Type.getClassName(Type.getClass(comp))} ${comp.props.match.params.action}');
-			callMethod(comp.props.match.params.action);
+			var action = (comp.props.match.params.action != null?comp.props.match.params.action:defaultAction);
+            trace('going 2 call ${Type.getClassName(Type.getClass(comp))} ${action}');
+			callMethod(action);
 		}
 	}
 

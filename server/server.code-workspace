@@ -2,10 +2,6 @@
 	"folders": [
 		{
 			"path": "."
-		},
-		{
-			"name": "SSH FS - pitverwaltung.de",
-			"uri": "ssh://pitverwaltung.de/"
 		}
 	],
 	"settings": {

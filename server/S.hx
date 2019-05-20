@@ -66,7 +66,7 @@ class S
 	public static var last_request_time:Date;
 	public static var host:String;
 	public static var request_scheme:String;
-	public static var user_name:String;
+	public static var user_id:Int;
 	public static var devIP:String;
 	public static var db:String;
 	public static var dbHost:String;

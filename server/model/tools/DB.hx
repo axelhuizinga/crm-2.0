@@ -49,7 +49,7 @@ class DB extends Model
 		var filter:String = (true?'':"WHERE table_name NOT LIKE '\\_%'");	
 		
 		var sql =  comment(unindent, format) /*
-				SELECT id,table_name,field_name,readonly,element,"any",required,use_as_index FROM _table_fields 
+				SELECT id,table_name,field_name,readonly,element,"any",required,use_as_index FROM table_fields 
 				$filter 
 				ORDER BY table_name,field_name
 				*/;
@@ -82,13 +82,13 @@ class DB extends Model
 			});			
 			var fieldsSql = sqlFields.join(",");
 			var sql = comment(unindent, format) /*
-			INSERT INTO crm._table_fields VALUES (DEFAULT, '$tableName','{$fieldNames}', jsonb_build_object($fieldsSql), 1)
+			INSERT INTO crm.table_fields VALUES (DEFAULT, '$tableName','{$fieldNames}', jsonb_build_object($fieldsSql), 1)
 			ON CONFLICT (table_name) DO UPDATE SET field_names='{$fieldNames}', field_hints=jsonb_build_object($fieldsSql)
 			*/;
 			for (field in fields)
 			{
 				sql = comment(unindent, format) /*
-				INSERT INTO crm._table_fields VALUES (DEFAULT, '$tableName','$field', jsonb_build_object($fieldsSql), 1)
+				INSERT INTO crm.table_fields VALUES (DEFAULT, '$tableName','$field', jsonb_build_object($fieldsSql), 1)
 				ON CONFLICT (table_name) DO UPDATE SET field_names='{$fieldNames}', field_hints=jsonb_build_object($fieldsSql)
 				*/;				
 				trace(sql);

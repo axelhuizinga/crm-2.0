@@ -9,3 +9,5 @@ cmessage.txt
 clast.txt
 server/.haxelib
 server/.vscode
+server/server.code-workspace
+package-lock.json

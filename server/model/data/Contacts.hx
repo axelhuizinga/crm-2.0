@@ -36,9 +36,7 @@ class Contacts extends Model
 		'title'=>'anrede',
 		//'co_field'=>'addresszusatz',
 		'geburts_datum'=>'birth_date',
-	];
-	
-	
+	];	
 	
 	public static function create(param:StringMap<String>):Contacts
 	{
@@ -61,8 +59,7 @@ class Contacts extends Model
 	
 	
 	public function edit(param:StringMap<Dynamic>):Void
-	{
-		
+	{		
 		 json_encode();		
 	}
 	

@@ -599,7 +599,8 @@ class Model
 	
 	public function json_encode():Void
 	{	
-		data.user_name = S.user_name;
+		//data.user_name = S.user_name;
+		data.user_id = S.user_id;
 		data.globals = globals;
 		S.add2Response({data:data});
 	}

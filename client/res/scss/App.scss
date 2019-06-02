@@ -389,7 +389,10 @@ h1 {
 	margin:0.8rem 0 0 0.8rem;	
 	min-height: 0;
 }
-.tabComponentForm 
+.tabComponentForm table,
+.tabComponentForm caption
+{border-radius: $tableHeader-radius $tableHeader-radius 0 0;}
+/*.tabComponentForm */
 .tabComponentForm .hero
 {
 	flex:1;
@@ -572,7 +575,6 @@ form{
 .is-right .menu
 {
 	margin: 0.8rem 0.5rem 0.5rem 0.8rem!important;
-	min-width:15rem;
 }
 .menu .button
 {
@@ -653,6 +655,9 @@ label.panel-heading {
 	color:#fff;
 	
 }
+form table{
+	border: 1px solid #777;
+}
 /*.table tr{
 	display:flex;
 }*/
@@ -686,6 +691,12 @@ label.panel-heading {
 .odd
 {
 	background-color:#ddd;
+}
+
+form td, form caption
+{
+	padding: 0.32rem;
+	vertical-align: middle;
 }
 
 /* OVERFLOW */

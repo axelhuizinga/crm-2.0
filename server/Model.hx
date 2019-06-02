@@ -47,6 +47,7 @@ typedef MData =
 	@:optional var tableNames:Array<String>;
 	@:optional var typeMap:NativeArray;
 	@:optional var userMap:Array<UserInfo>;
+	@:optional var user_id:Int;
 	@:optional var user_name:String;
 };
 

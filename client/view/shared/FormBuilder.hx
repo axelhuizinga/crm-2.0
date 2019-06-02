@@ -5,6 +5,7 @@ import js.html.InputEvent;
 import haxe.Constraints.Function;
 import js.html.ButtonElement;
 import js.html.Event;
+import macrotools.Macro.model;
 import shared.DBMetaData;
 import shared.DbData;
 import js.html.XMLHttpRequest;
@@ -62,17 +63,22 @@ class FormBuilder {
 		return jsx('
 			<LocalForm model="user" onSubmit=${comp.handleSubmit}>
 				<label>Your name?</label>
-				<$ControlText model=".name" />
+				<$ControlText model="model" />
 				<button>Submit!</button>
 			</LocalForm>		
 		');
     }
+
+	public function  hidden(cm:String) 
+	{
+		return jsx('<$Control type="hidden" model=${cm} />');
+	}
 }
 /**
  * 
  * <LocalForm model="user" onSubmit={(val) => this.handleSubmit(val)}>
         <label>Your name?</label>
-        <Control.text model=".name" />
+        <Control.text model="name" />
         <button>Submit!</button>
     </LocalForm>
  */

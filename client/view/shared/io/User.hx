@@ -264,8 +264,16 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		evt.preventDefault();
 		trace(state.data);
 		trace(state.values);
-		var skeys:Array<String> = untyped dataAccess['edit'].view.keys().arr;
-		skeys = skeys.filter(function(k) return !dataAccess['edit'].view[k].readonly);
+		var skeys:Array<String> =  [];
+		for(k in dataAccess['edit'].view.keys())
+		{
+			if(!dataAccess['edit'].view[k].readonly)
+			{
+				skeys.push(k);
+			}
+		};
+		//var skeys:Array<String> =  dataAccess['edit'].view.keys().array();
+		//skeys = skeys.filter(function(k) return !dataAccess['edit'].view[k].readonly);
 		trace(FormApi.filterMap(state.values, skeys));
 		trace(skeys.toString());
 		trace(dataAccess['edit'].source);

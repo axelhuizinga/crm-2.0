@@ -1,10 +1,16 @@
 package view.data.contacts;
 import model.AppState;
 import haxe.Constraints.Function;
+import macrotools.Macro.model;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.redux.form.LocalForm;
+import react.redux.form.Control;
+import react.redux.form.Control.*;
+import react.redux.form.Errors;
+import react.redux.form.Field;
+import react.redux.form.Fieldset;
 import view.data.contacts.model.Contacts;
 import shared.DbData;
 import shared.DBMetaData;
@@ -57,7 +63,7 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
 	
-	public static var initModel:Contact =
+	public static var initialState:Contact =
 	{
 		id:0,
 		edited_by: 0,
@@ -101,10 +107,8 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 			{
 				user_name:props.user.user_name,
 				jwt:props.user.jwt,
-				//fields:'readonly:readonly,element=:element,required=:required,use_as_index=:use_as_index',
 				className:'data.Contacts',
 				action:'find',
-				//dataSource:Serializer.run(dataAccess['find'].source),
 				devIP:App.devIP
 			},
 			function(data:DbData)
@@ -136,28 +140,6 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 		return;
 		trace(state.selectedRows.length);				
 	}
-
-	/*function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
-	{
-		var iS:Dynamic = {};
-		for(dR in dt)
-		{
-			var rS:Dynamic = {};
-			for(k in dR.keys())
-			{
-				trace(k);
-				if(dataDisplay['fieldsList'].columns[k].cellFormat == view.shared.Format.formatBool)
-				{
-					Reflect.setField(rS,k, dR[k] == 'Y');
-				}
-				else
-					Reflect.setField(rS,k, dR[k]);
-			}
-			Reflect.setField(iS, dR['id'], rS);			
-		}
-		trace(iS);
-		return iS;
-	}*/
 		
 	override public function componentDidMount():Void 
 	{	
@@ -184,7 +166,6 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
-
 	function handleSubmit(contact, _) {
 		trace(contact);
 	}	
@@ -206,7 +187,14 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'edit':
-				null;	
+			jsx('
+			<tr>
+				<td>Vorname</td>
+				<td><$ControlText className="test" model=${model(initialState, contact, first_name)}>
+				</$ControlText></td>
+			</tr>	
+			');
+				//null;	
 			case 'add':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
@@ -231,13 +219,18 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);		
+		var hidden:ReactFragment = state.formBuilder.hidden(model(initialState,contact,id));
 		return switch(props.match.params.action)
 		{	
 			case 'edit':
 				state.formApi.render(jsx('
 				<>
-					<$LocalForm model="contact" onSubmit=${handleSubmit} className="tabComponentForm" >
-						${renderResults()}
+					<$LocalForm model="contact" onSubmit=${handleSubmit} className="tabComponentForm" initialState=$initialState >
+						${hidden}
+						<table>
+							<caption className="trHeader">Kontakt</caption>
+							${renderResults()}
+						</table>
 					</$LocalForm>					
 				</>'));				
 			default:

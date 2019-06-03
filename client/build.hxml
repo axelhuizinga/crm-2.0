@@ -21,8 +21,8 @@
 #--no-traces
 -main Go
 
--D debug
--D react_hot
+#-D debug
+#-D react_hot
 # -D modular_noma
 #-D react_check_jsxstatic_type
 #--interp

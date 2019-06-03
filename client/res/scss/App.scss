@@ -678,6 +678,12 @@ form table{
 	white-space:nowrap;
 }
 
+.table thead th:first
+{
+	border-top-left-radius: 0.3rem;
+	border-color: transparent;
+}
+
 .table tr.is-selected
 {
 	background-color: $sun;

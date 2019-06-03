@@ -174,14 +174,13 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 					<$Route path="/reports" {...props} component=${NavTabs}/>
 				</div>
 				<div className="tabComponent">
-					<$Route path="/"  render={renderRedirect} exact={true}/>				
-					
-					<$Route path="/DashBoard*" component=${DashBoard}/>
-					<$Route path="/accounting" component=${Accounting}/>
-					<$Route path="/Data/Edit/:id" component=${Data}/>
-					<$Route path="/Data" component=${Data}/>
-					<$Route path="/qc" component=${QC}/>
-					<$Route path="/reports" component=${Reports}/>
+					<$Route path="/"  render={renderRedirect} exact={true}/>									
+					<$Route path="/DashBoard*" component=${Bundle.load(DashBoard)}/>
+					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
+					<$Route path="/Data/Edit/:id" component=${Bundle.load(Data)}/>
+					<$Route path="/Data" component=${Bundle.load(Data)}/>
+					<$Route path="/qc" component=${Bundle.load(QC)}/>
+					<$Route path="/reports" component=${Bundle.load(Reports)}/>
 				</div>
 			</>
 			</$Router>

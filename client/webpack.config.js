@@ -101,12 +101,12 @@ module.exports = {
             {
                 test: /\.hxml$/,
                 loader: 'haxe-loader',
-                options: {
-                    // Additional compiler options added to all builds
-                    extra: '-D build_mode=' + buildMode,
+                options: {					
                     debug: debugMode,
                     logCommand: true,
-                    watch: ['.']
+					watch: ['.'],
+                    // Additional compiler options added to all builds                    
+					extra: (isProd ? '-D build_mode=' + buildMode : '-D build_mode=' + buildMode + ' -D react_hot'),
                 }
             },
             // Static assets loader
@@ -114,29 +114,48 @@ module.exports = {
             // - you may use 'url-loader' instead which can replace
             //   small assets with data-urls
             {
-                test: /\.(sa|sc|c)ss$/,
+                test: /\.scss$/,
                 use: [                
-                'style-loader',
-                'css-loader',
-                'sass-loader'
-                ]
+					{
+						loader: 'file-loader',
+						options: {
+							name: '[name].css',
+							outputPath: 'css/'
+						}
+					},
+					{
+						loader: 'extract-loader'
+					},
+					{
+						loader: 'css-loader'
+					},
+					{
+						loader: 'sass-loader'
+					}
+				],
+				test: /\.css$/,
+				use:[
+					{
+						loader: 'file-loader',
+						options: {
+							name: '[name].css',
+							outputPath: 'css/'
+						}
+					},
+				]
             },
             {
                 test: /\.(ttf|eot|svg|png|woff(2)?)(\?[a-z0-9]+)?$/,
                 use: [{
                   loader: 'file-loader', options: {name: '.../webfont/[name].[ext]'}
                 }]
-              }
-           // {
-            //    test: /\.svg$/,
-	///	loader: 'svg-inline-loader'
-           // }
+            }
         ]
     },
     // Plugins can hook to the compiler lifecycle and handle extra tasks
     plugins: [
-        // HMR: enable globally
-        new webpack.HotModuleReplacementPlugin(),
+		// HMR: enable globally
+		new webpack.HotModuleReplacementPlugin(),
         // HMR: prints more readable module names in the browser console on updates
         new webpack.NamedModulesPlugin(),
         // HMR: do not emit compiled assets that include errors

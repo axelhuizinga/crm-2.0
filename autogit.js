@@ -5,12 +5,15 @@ var cMessage = fs.readFileSync("cmessage.txt", 'utf8');
 var eSync = require('child_process').execSync;
 var gPath = eSync('npm config get prefix', {stdio:[1]}).toString().replace(/\n|\r/, '') + '/node_modules/';
 console.log(cMessage);
-//console.log(gPath + '<');
+console.log(gPath + '<');
+
 var log = require(gPath + 'tracer').console(
     {
         format : "{{timestamp}} <{{title}}> {{message}} (in {{file}}:{{line}})",
         dateformat : "HH:MM:ss"
-    });
+	});
+//console.log(log);
+//process.exit();
 var Git = require(gPath + "nodegit");
 var aRepo, index;
 var getMostRecentCommit = function(repository) {

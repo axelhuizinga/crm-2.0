@@ -87,7 +87,8 @@ class S
 		var viciDial = Lib.hashOfAssociativeArray(vD);
 		trace(viciDial['url']);
 		trace(viciDial['admin']);
-		trace(Syntax.code("$_SERVER['VERIFIED']"));
+		if(Syntax.code("isset($_SERVER['VERIFIED'])"))
+		{trace(Syntax.code("$_SERVER['VERIFIED']"));}
 		//var pd:Dynamic = Web.getPostData();
 		last_request_time = Date.now();
 		var now:String = DateTools.format(last_request_time, "%d.%m.%y %H:%M:%S");

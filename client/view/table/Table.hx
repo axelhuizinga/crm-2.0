@@ -20,7 +20,7 @@ import react.React;
 import react.ReactRef;
 import react.ReactComponent.ReactFragment;
 import react.ReactComponent;
-import react.ReactComponent.*;
+import react.PureComponent;
 import react.ReactMacro.jsx;
 import shared.Utils;
 
@@ -130,6 +130,7 @@ typedef TableState =
 {
 	?enteredRow:Int,
 	?selectedRow:Int,
+	?selectedTrs:Array<Tr>,
 	?selectedRows:Array<TableRowElement>,
 	?_rowCells:Array<Element>,
 	?_selectedCells:Array<Element>,
@@ -137,22 +138,24 @@ typedef TableState =
 	?_isSelected:Bool
 }
 
-class Table extends ReactComponentOf<TableProps, TableState>
+class Table extends PureComponentOf<TableProps, TableState>
 {
 	var fieldNames:Array<String>;
 	var tableRef:ReactRef<TableElement>;
 	var fixedHeader:ReactRef<DivElement>;
-	var rowRef:ReactRef<TableRowElement>;
+	var firstRowRef:ReactRef<TableRowElement>;
 	var tHeadRef:ReactRef<TableRowElement>;
 	var visibleColumns:Int;
 	var headerUpdated:Bool;
 	var _timer:Timer;
+	var trs:Array<Tr>;
 	
 	public function new(?props:TableProps)
 	{
 		super(props);		
 		headerUpdated = false;
 		fieldNames = [];
+		trs = [];
 		if(props.dataState!=null)
 		for (k in props.dataState.columns.keys())
 		{
@@ -182,7 +185,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		tableRef = React.createRef();
 		fixedHeader = React.createRef();
 		tHeadRef = React.createRef();
-		rowRef = React.createRef();
+		firstRowRef = React.createRef();
 		return jsx('		
 			<div className="fixed-grid-container" >
 				<div className="header-background" >
@@ -313,7 +316,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		return rCs;
 	}
 	
-	function renderRows(?dRows:Array<Map<String,Dynamic>>):ReactFragment
+	function renderRowsOrg(?dRows:Array<Map<String,Dynamic>>):ReactFragment
 	{
 		if (dRows == null)
 			dRows = props.data;
@@ -330,15 +333,84 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			}
 				
 			dRs.push(
-			jsx('<tr data-id=${id} title=${id} key=${"r"+row} ref=${row==0?rowRef:null} onClick={select}>
+			jsx('<tr data-id=${id} title=${id} key=${"r"+row} ref=${row==0?firstRowRef:null} onClick={select}>
 				${renderCells(dR, row++)}				
 			</tr>'));
 		}//
 		trace(dRs.length);
 		return dRs;
 	}
+
+	function renderRows(?dRows:Array<Map<String,Dynamic>>):ReactFragment
+	{
+		if (dRows == null)
+			dRows = props.data;
+		var dRs:Array<ReactFragment> = [];
+		var row:Int = 0;
+		var primary:String = (props.primary!=null && props.primary.length > 0?props.primary:'id');
+		for (dR in dRows)
+		{			
+			var id:String = (dR.exists(primary)? '${dR.get(primary)}':'');
+			var fRRef:ReactRef<TableRowElement> = (row==0?firstRowRef:null);
+			dRs.push(
+			jsx('<$Tr columns=${props.dataState.columns} data=${dR} fieldNames=${fieldNames} firstTableRow=${fRRef} row=${row++} />')
+			);
+		}//
+		trace(dRs.length);
+		return dRs;
+	}
+
+	function renderRows3(?dRows:Array<Map<String,Dynamic>>):ReactFragment
+	{
+		if (dRows == null)
+			dRows = props.data;
+		var dRs:Array<ReactFragment> = [];
+		var row:Int = 0;
+		var primary:String = (props.primary!=null && props.primary.length > 0?props.primary:'id');
+		if(trs.length == 0)
+		{	//CREATE Tr Components
+			for (dR in dRows)
+			{			
+				var id:String = (dR.exists(primary)? '${dR.get(primary)}':'');
+				var fRRef:ReactRef<TableRowElement> = (row==0?firstRowRef:null);
+				var tr:view.table.Tr = new Tr({columns:props.dataState.columns,data:dR,
+					firstTableRow:fRRef,row:row++});
+				trs.push(tr);
+			}	
+		}
+
+		trace(trs.length);
+		return trs.map(function (tr:Tr)return tr.me);
+	}	
 	
-	public function select(mEv:MouseEvent)
+	public function select(mEv:MouseEvent, tr:Tr)
+	{
+		trace(mEv.altKey);
+		trace(mEv.currentTarget);
+		var htRow:TableRowElement = cast(mEv.currentTarget, TableRowElement);
+		var rows:HTMLCollection = htRow.parentElement.children;
+		if (mEv.altKey)
+		{
+			selectAltGroup(props.dataState.altGroupPos, htRow);
+		}
+		else if (mEv.ctrlKey)
+		{			
+			for (r in rows)
+				r.classList.toggle('is-selected');
+		}
+		else 
+			htRow.classList.toggle('is-selected');
+		var selRows:Array<TableRowElement> = new Array();
+		for (r in rows)
+		{
+			if (r.classList.contains('is-selected'))
+				selRows.push(cast r);
+		}
+		setState({selectedRows:selRows});
+		//props.parentForm.setStateFromChild({selectedRows:selRows});
+	}
+
+	public function select2(mEv:MouseEvent)
 	{
 		trace(mEv.altKey);
 		trace(mEv.currentTarget);
@@ -366,6 +438,20 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	}
 	
 	function selectAltGroup(altGroupPos:Int, cRow:TableRowElement):Void
+	{
+		var groupName:String = cRow.cells.item(altGroupPos).textContent;
+		var tEl:TableElement = cast cRow.parentElement;
+		for (i in 0...tEl.children.length)
+		{
+			var row:TableRowElement = cast tEl.children.item(i);
+			trace(row.cells.item(altGroupPos).nodeValue + '==' + groupName);
+			if(row.cells.item(altGroupPos).textContent==groupName)
+				row.classList.toggle('is-selected');
+		}
+		
+	}
+
+	function selectAltGroup2(altGroupPos:Int, cRow:TableRowElement):Void
 	{
 		var groupName:String = cRow.cells.item(altGroupPos).textContent;
 		var tEl:TableElement = cast cRow.parentElement;
@@ -427,7 +513,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		var grow:Array<Int> = [];
 		if (props.fullWidth)
 		{
-			for (cell in rowRef.current.children)
+			for (cell in firstRowRef.current.children)
 			{
 				var cGrow = cell.getAttribute('data-grow');
 				if (cGrow != null)
@@ -448,10 +534,10 @@ class Table extends ReactComponentOf<TableProps, TableState>
 				{
 					if (grow[i] != null && grow[i] !=0)
 					{
-						//trace(grow[i] * growUnit + rowRef.current.children.item(i).offsetWidth);
-						trace('$i ${grow[i]} * $growUnit + ${rowRef.current.children.item(i).offsetWidth}');
-						rowRef.current.children.item(i).setAttribute(
-							'width', Std.string(grow[i] * growUnit + rowRef.current.children.item(i).offsetWidth) + 'px'
+						//trace(grow[i] * growUnit + firstRowRef.current.children.item(i).offsetWidth);
+						trace('$i ${grow[i]} * $growUnit + ${firstRowRef.current.children.item(i).offsetWidth}');
+						firstRowRef.current.children.item(i).setAttribute(
+							'width', Std.string(grow[i] * growUnit + firstRowRef.current.children.item(i).offsetWidth) + 'px'
 						);
 					}
 				}					

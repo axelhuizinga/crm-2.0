@@ -1,4 +1,4 @@
--lib haxe-loader
+-lib haxe-loader:git:https://github.com/axelhuizinga/webpack-haxe-loader.git
 -lib history
 -lib hxbit
 -lib react-next

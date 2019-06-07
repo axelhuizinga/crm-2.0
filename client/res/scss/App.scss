@@ -671,17 +671,21 @@ form table{
 	white-space: nowrap;
 }
 
-.table thead th{
+.table.head th{
 	color: $lightSun;
 	padding:0px;
 	border-left:$borderHeadCol;
 	white-space:nowrap;
 }
 
-.table thead th:first
+.table th:first-child{
+	border: none!important;
+}
+
+.table.head th:first-child
 {
-	border-top-left-radius: 0.3rem;
-	border-color: transparent;
+	border-left-width:0px!important;
+	border-top-left-radius: $tableHeader-radius;
 }
 
 .table tr.is-selected

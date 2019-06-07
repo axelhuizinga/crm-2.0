@@ -67,7 +67,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static var _app:App;
 	//static var fa = require('./node_modules/font-awesome/css/font-awesome.min.css');
 
-  static var STYLES = require('App.scss');
+  	static var STYLES = require('App.scss');
  
 	public static var store:Store<AppState>;
 	public static var devIP = Webpack.require('./webpack.local.js').ip;

@@ -187,12 +187,15 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'edit':
+			trace(initialState);
 			jsx('
+			<tbody>
 			<tr>
 				<td>Vorname</td>
 				<td><$ControlText className="test" model=${model(initialState, contact, first_name)}>
 				</$ControlText></td>
 			</tr>	
+			</tbody>
 			');
 				//null;	
 			case 'add':

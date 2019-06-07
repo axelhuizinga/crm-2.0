@@ -14,7 +14,7 @@ const sourcemapsMode = isProd ? undefined :'cheap-module-source-map' ;
 // Plugins
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-//const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // Options
 const debugMode = buildMode !== 'production';
 const dir = __dirname;
@@ -34,14 +34,15 @@ module.exports = {
     entry: {
         app: './build.hxml'
     },
-  // "info-verbosity":'verbose',
+   //"info-verbosity":'verbose',
     mode: buildMode,
     // Generation options (destination, naming pattern,...)
     output: {
         path: dist,
-        filename: 'app.js',
+        filename: 'js/[name].js',
+        //filename: ([name] == 'app'? 'app.js':'[name].app.js'),
 	//publicPath: dist
-	publicPath: '/'
+		publicPath: '/'
 	//publicPath: 'https://192.168.178.20:9000/'
     },
     // Module resolution options (alias, default paths,...)
@@ -79,17 +80,35 @@ module.exports = {
 	    historyApiFallback: {
             index: '/'
         },
-	index: 'crm.html',
-	staticOptions:{
-		index:false
+		index: 'crm.html',
+		staticOptions:{
+			index:false
+		},
+		//publicPath: __dirname + '../httpdocs/'
+		publicPath: '/',
+			// Accepted values: none, errors-only, minimal, normal, detailed, verbose
+			// Any other falsy value will behave as 'none', truthy values as 'normal'	
+		stats: {
+			children: true,
+
+			// Add chunk information (setting this to `false` allows for a less verbose output)
+			chunks: true,
+		
+			// Add namedChunkGroups information
+			chunkGroups: true,
+		
+			// Add built modules information to chunk information
+			chunkModules: true,
+		
+			// Add the origins of chunks and chunk merging info
+			chunkOrigins: true,
+			errorDetails: true,
+			entrypoints: true,
+			providedExports: true
+		}
 	},
-	//publicPath: __dirname + '../httpdocs/'
-	publicPath: '/',
-		// Accepted values: none, errors-only, minimal, normal, detailed, verbose
-		// Any other falsy value will behave as 'none', truthy values as 'normal'	
-	stats: {}
-    },
-    watch: true,    
+
+    watch: (isProd ? false: true),
 	watchOptions:{
 		//aggregateTimeout:1500,
 		ignored: ['httpdocs']
@@ -103,7 +122,8 @@ module.exports = {
                 loader: 'haxe-loader',
                 options: {					
                     debug: debugMode,
-                    logCommand: true,
+					logCommand: true,
+					outputPath: 'js/',
 					watch: ['.'],
                     // Additional compiler options added to all builds                    
 					extra: (isProd ? '-D build_mode=' + buildMode : '-D build_mode=' + buildMode + ' -D react_hot'),
@@ -114,36 +134,44 @@ module.exports = {
             // - you may use 'url-loader' instead which can replace
             //   small assets with data-urls
             {
-                test: /\.scss$/,
-                use: [                
+				test: /\.(s*)css$/,
+				//test: /css$/,
+				use: [
+					//"style-loader",
 					{
-						loader: 'file-loader',
+						loader: MiniCssExtractPlugin.loader,
 						options: {
-							name: '[name].css',
-							outputPath: 'css/'
+							publicPath: (resourcePath, context) => {
+							  // publicPath is the relative path of the resource to the context
+							  // e.g. for ./css/admin/main.css the publicPath will be ../../
+							  // while for ./css/main.css the publicPath will be ../
+							  console.log('resourcePath:' + resourcePath);
+							  console.log('context:' + context);
+							  console.log('publicPath:' + path.relative(path.dirname(resourcePath), context) + '/');
+							  return path.relative(path.dirname(resourcePath), context) + '/';
+							},
 						}
 					},
-					{
-						loader: 'extract-loader'
-					},
-					{
-						loader: 'css-loader'
-					},
-					{
-						loader: 'sass-loader'
-					}
-				],
-				test: /\.css$/,
-				use:[
-					{
-						loader: 'file-loader',
+					//isProd ? MiniCssExtractPlugin.loader: 'style-loader',
+					"css-loader",
+					'sass-loader'
+					/*{
+						loader: 'sass-loader',
 						options: {
 							name: '[name].css',
-							outputPath: 'css/'
+							outputPath: 'css/',
+							sourceMap: true
 						}
-					},
+					}*/
 				]
-            },
+			},
+           /* {
+                test: /\.css$/,
+                use: [
+                    'style-loader',                    
+                    'css-loader'
+                ]
+			},*/
             {
                 test: /\.(ttf|eot|svg|png|woff(2)?)(\?[a-z0-9]+)?$/,
                 use: [{
@@ -151,9 +179,27 @@ module.exports = {
                 }]
             }
         ]
-    },
+	},
+	optimization: {
+		splitChunks: {
+		cacheGroups: {
+			styles: {
+			name: 'styles',
+			test: /\.css$/,
+			chunks: 'all',
+			enforce: true,
+			},
+		},
+		},
+	},
     // Plugins can hook to the compiler lifecycle and handle extra tasks
     plugins: [
+		new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: "css/[name].css",
+            chunkFilename: "[id].css"
+        }),
 		// HMR: enable globally
 		new webpack.HotModuleReplacementPlugin(),
         // HMR: prints more readable module names in the browser console on updates
@@ -162,7 +208,7 @@ module.exports = {
         new webpack.NoEmitOnErrorsPlugin(),
         // Like generating the HTML page with links the generated JS files  template: resolve(__dirname, 'src/public', 'index.html'),
         new HtmlWebpackPlugin({
-            filename: (isProd ? 'crm.php' : 'crm.html'),
+            filename: (isProd ? 'index.php' : 'crm.html'),
             template: path.resolve(__dirname, 'res/'+(isProd ? 'crm.php' : 'crm.html')),
             title: 'Xpress CRM 2.0'
         })

@@ -32,13 +32,14 @@ import react.router.Router;
 //import react.router.Route.RouteComponentProps;
 import react.router.Route.RouteRenderProps;
 import react.router.bundle.Bundle;
+
 import bulma_components.Tabs;
 
 import action.AppAction;
 import model.ApplicationStore;
 import App;
 //import view.relationsBox;
-//import view.DashBoardBox;
+import view.DashBoard;
 //import view.AccountingBox;
 //import view.ReportsBox;
 

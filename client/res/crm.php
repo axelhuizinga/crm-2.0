@@ -13,8 +13,8 @@
 		<link href="css/Calendar.css" rel="stylesheet"></link>		
 		<link href="css/Clock.css" rel="stylesheet"></link>		
 		<link href="css/DateTimePicker.css" rel="stylesheet"></link>		
-		<link href="css/bulma.css" rel="stylesheet"></link>-->		
-		<link href="css/app.css" rel="stylesheet"></link>		
+		<link href="css/bulma.css" rel="stylesheet"></link>		
+		<link href="css/app.css" rel="stylesheet"></link>-->		
 		<meta charset="UTF-8">
 		<title><%= htmlWebpackPlugin.options.title %></title>
 	</head>

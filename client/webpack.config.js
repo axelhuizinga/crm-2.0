@@ -137,7 +137,7 @@ module.exports = {
 				test: /\.(s*)css$/,
 				//test: /css$/,
 				use: [
-					//"style-loader",
+					isProd ? 
 					{
 						loader: MiniCssExtractPlugin.loader,
 						options: {
@@ -151,7 +151,7 @@ module.exports = {
 							  return path.relative(path.dirname(resourcePath), context) + '/';
 							},
 						}
-					},
+					}: 'style-loader',
 					//isProd ? MiniCssExtractPlugin.loader: 'style-loader',
 					"css-loader",
 					'sass-loader'
@@ -198,7 +198,7 @@ module.exports = {
             // Options similar to the same options in webpackOptions.output
             // both options are optional
             filename: "css/[name].css",
-            chunkFilename: "[id].css"
+            //chunkFilename: "[id].css"
         }),
 		// HMR: enable globally
 		new webpack.HotModuleReplacementPlugin(),

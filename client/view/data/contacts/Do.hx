@@ -143,14 +143,14 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 		
 	override public function componentDidMount():Void 
 	{	
-		dataAccess = [
+		dataAccess = Contacts.dataAccess;/*[
 			'find' =>{
 				source:[
 					"contacts" => []
 				],
 				view:[]
 			},
-		];			
+		];*/
 		//
 		if(props.match.params != null)
 		trace('yeah action: ${props.match.params.action}');
@@ -188,6 +188,7 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 				');
 			case 'edit':
 			trace(initialState);
+			trace(model(initialState, contact, first_name));
 			jsx('
 			<tbody>
 			<tr>

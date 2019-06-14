@@ -3,7 +3,7 @@ import action.AppAction;
 import haxe.Http;
 import haxe.Json;
 import js.Browser;
-import js.Promise;
+import js.lib.Promise;
 import view.shared.io.User;
 import react.ReactUtil.copy;
 import redux.IMiddleware;

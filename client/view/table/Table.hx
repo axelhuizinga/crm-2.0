@@ -504,8 +504,10 @@ class Table extends PureComponentOf<TableProps, TableState>
 		//var tableHeight:Float = tableRef.current.clientHeight;
 		var scrollBarWidth:Float = App.config.getScrollbarWidth();
 		var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - scrollBarWidth;
-		//tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
+		trace('table.offsetWidth: ${tableRef.current.offsetWidth} parentElement.offsetWidth: ${tableRef.current.parentElement.offsetWidth} ');
+		trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
 		trace(tableRef.current.offsetHeight);
+		//tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
 		tHeadRef.current.style.visibility = "collapse";						
 		trace(tableRef.current.offsetHeight);
 		//trace(tHeadRef.current.nodeName + ':' + tHeadRef.current.style.visibility);						
@@ -541,7 +543,7 @@ class Table extends PureComponentOf<TableProps, TableState>
 						);
 					}
 				}					
-			}			
+			}	
 		}
 		i = 0;
 		for (cell in tHeadRef.current.children)
@@ -552,6 +554,7 @@ class Table extends PureComponentOf<TableProps, TableState>
 			fixedHeaderCell.setAttribute('style', 'width:${w}px');
 			i++;
 		}
+		trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');		
 	}
 	
 	override function componentDidMount()//,snapshot:Dynamic

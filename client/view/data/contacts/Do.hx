@@ -132,12 +132,14 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function edit(ev:ReactEvent):Void
 	{
+		//trace(ev);
 		trace(state.selectedRows);
 		if(state.selectedRows.length==0)
 		{
 			setState({loading: false});
+			return;
 		}
-		return;
+		setState({loading: true});
 		trace(state.selectedRows.length);				
 	}
 		
@@ -231,7 +233,7 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 				<>
 					<$LocalForm model="contact" onSubmit=${handleSubmit} className="tabComponentForm" initialState=$initialState >
 						${hidden}
-						<table>
+						<table className="center">
 							<caption className="trHeader">Kontakt</caption>
 							${renderResults()}
 						</table>

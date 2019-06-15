@@ -60,6 +60,7 @@ class Contacts extends Model
 	
 	public function edit(param:StringMap<Dynamic>):Void
 	{		
+		trace(param);
 		 json_encode();		
 	}
 	

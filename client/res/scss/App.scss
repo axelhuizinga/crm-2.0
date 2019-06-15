@@ -73,6 +73,9 @@ h1 {
 {
 	overflow:auto;
 }
+.center{
+	margin: auto;
+}
 .cCenter
 {
 	align-self:center;
@@ -657,7 +660,7 @@ label.panel-heading {
 }
 form table{
 	border: 1px solid #777;
-	margin: auto;
+	/*margin: auto;*/
 }
 /*.table tr{
 	display:flex;

@@ -502,14 +502,15 @@ class Table extends PureComponentOf<TableProps, TableState>
 			
 		headerUpdated = true;			
 		//var tableHeight:Float = tableRef.current.clientHeight;
+		//var leftMargin:Int = 
 		var scrollBarWidth:Float = App.config.getScrollbarWidth();
 		var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - scrollBarWidth;
-		trace('table.offsetWidth: ${tableRef.current.offsetWidth} parentElement.offsetWidth: ${tableRef.current.parentElement.offsetWidth} ');
-		trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
-		trace(tableRef.current.offsetHeight);
+		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} parentElement.offsetWidth: ${tableRef.current.parentElement.offsetWidth} ');
+		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
+		//trace(tableRef.current.offsetHeight);
 		//tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
 		tHeadRef.current.style.visibility = "collapse";						
-		trace(tableRef.current.offsetHeight);
+		//trace(tableRef.current.offsetHeight);
 		//trace(tHeadRef.current.nodeName + ':' + tHeadRef.current.style.visibility);						
 		var i:Int = 0;
 		var grow:Array<Int> = [];
@@ -527,7 +528,7 @@ class Table extends PureComponentOf<TableProps, TableState>
 			}		
 			var growSum:Int = 0;
 			grow.iter(function(el) growSum += (el==null?0:el));
-			trace (grow +':' + growSum );
+			//trace (grow +':' + growSum );
 			if (growSum > 0)
 			{
 				var growUnit:Float = freeWidth / growSum;
@@ -537,7 +538,7 @@ class Table extends PureComponentOf<TableProps, TableState>
 					if (grow[i] != null && grow[i] !=0)
 					{
 						//trace(grow[i] * growUnit + firstRowRef.current.children.item(i).offsetWidth);
-						trace('$i ${grow[i]} * $growUnit + ${firstRowRef.current.children.item(i).offsetWidth}');
+						//trace('$i ${grow[i]} * $growUnit + ${firstRowRef.current.children.item(i).offsetWidth}');
 						firstRowRef.current.children.item(i).setAttribute(
 							'width', Std.string(grow[i] * growUnit + firstRowRef.current.children.item(i).offsetWidth) + 'px'
 						);
@@ -549,12 +550,12 @@ class Table extends PureComponentOf<TableProps, TableState>
 		for (cell in tHeadRef.current.children)
 		{
 			var w:Int = cell.offsetWidth;
-			trace(w +':' + cell.clientWidth);
+			//trace(w +':' + cell.clientWidth);
 			var fixedHeaderCell = cast(fixedHeader.current.childNodes[i],Element);
 			fixedHeaderCell.setAttribute('style', 'width:${w}px');
 			i++;
 		}
-		trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');		
+		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');		
 	}
 	
 	override function componentDidMount()//,snapshot:Dynamic

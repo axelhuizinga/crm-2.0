@@ -22,7 +22,15 @@ class DataAccessAction
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(getState());
 			if (!props.user.loggedIn)
-				return dispatch(AppAction.LoginError(props.user, loginError:{requestError:'Du musst dich neu anmelden!'}));
+			{
+				return dispatch(AppAction.LoginError(
+				{
+					user_name:props.user.user_name,
+					loginError:'Du musst dich neu anmelden!',
+					id:props.user.id
+				}));
+			}
+				
 			
 			//*****/
 			var spin:Dynamic = dispatch(AppAction.LoginWait);

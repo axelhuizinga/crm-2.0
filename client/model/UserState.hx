@@ -12,6 +12,7 @@ typedef UserState =
 	?loggedIn:Bool,
 	?last_login:Date,
 	?loginError:Dynamic,
+	?mandator:Int,
 	?jwt:String,
 	?pass:String,
 	?phone:String,

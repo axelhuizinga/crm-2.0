@@ -155,6 +155,7 @@ class FormApi
 		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
 		trace(comp.props.history.location.pathname);
 		//trace(comp.props.history);
+		trace('action:$action');
 		trace(comp.props.match.params.action);
 		trace(comp.props.match.params.section);
 		trace(comp.props.match);
@@ -162,15 +163,15 @@ class FormApi
 		var path:String = Std.string(comp.props.match.path).split(':')[0];
 		trace(path);
 		comp.props.history.push('${path}${comp.props.match.params.section}/${action}');
-		callMethod(action);
+		callMethod(action, e);
 	}
 
-	public function callMethod(method:String):Bool
+	public function callMethod(method:String, ?e:Event):Bool
 	{
 		var fun:Function = Reflect.field(comp,method);
 		if(Reflect.isFunction(fun))
 		{
-			Reflect.callMethod(comp,fun,null);
+			Reflect.callMethod(comp,fun,[e]);
 			return true;
 		}
 		return false;

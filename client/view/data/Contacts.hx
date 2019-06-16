@@ -17,7 +17,7 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import react.ReactType;
 import model.AjaxLoader;
-import view.data.contacts.Do;
+import view.data.contacts.Contact;
 import view.data.contacts.List;
 import view.data.contacts.model.Contacts;
 import view.shared.io.DataFormProps;
@@ -51,21 +51,15 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			loading:true,
 			sideMenu:FormApi.initSideMenu( this,
 				[
-					/*{
-						dataClassPath:'data.Contacts',
-						label:'Kontakte',
-						section: 'List',
-						items: List.menuItems
-					},*/
 					{
 						dataClassPath:'data.Contacts',
 						label:'Kontakte',
-						section: 'Do',
-						items: Do.menuItems
+						section: 'Contact',
+						items: Contact.menuItems
 					}
 				]
 				,{	
-					section: props.match.params.section==null? 'Contacts':props.match.params.section, 
+					section: props.match.params.section==null? 'Contact':props.match.params.section, 
 					sameWidth: true}					
 			)
 		};
@@ -86,9 +80,9 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		if (props.match.params.section == null)
 		{
 			var basePath:String = (props.match.url.endsWith('/')? ~/\/$/.replace(props.match.url,''):props.match.url);
-			props.history.push('$basePath/Do');
+			props.history.push('$basePath/Contact');
 			trace(props.history.location.pathname);
-			trace('setting section to:Do');
+			trace('setting section to:Contact');
 		}		
 	
 	}
@@ -99,13 +93,13 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		//trace(state.sideMenu); 
 		return switch(props.match.params.section)
 		{			
-				case "Do":
+				case "Contact":
 				jsx('
-					<$Do ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$Contact ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 				');					
 			default:
 				jsx('
-					<$Do ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$Contact ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 				');					
 		}
 	}

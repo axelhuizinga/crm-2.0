@@ -10,6 +10,8 @@ import react.ReactComponent;
 import react.PureComponent;
 import react.ReactMacro.jsx;
 import react.ReactRef;
+import react.ReactUtil.copy;
+import view.shared.FormState;
 import view.table.Table.DataCell;
 import view.table.Table.DataCellPos;
 import view.table.Table.DataColumn;
@@ -28,6 +30,7 @@ typedef TrProps =
 	var fieldNames:Array<String>;
 	@:optional var firstTableRow:ReactRef<TableRowElement>;
 	@:optional var data:Map<String,Dynamic>;
+	@:optional var parentComponent:Dynamic;
 };
 
 typedef  TrState = 
@@ -39,18 +42,20 @@ typedef  TrState =
 class Tr extends PureComponentOf<TrProps,TrState>
 {
 	public var me:ReactFragment;
+	var selected:Bool;
 
 	public function new(?props:Dynamic)
 	{
 		super(props);	
 		state = {cells:[], selected:false};	
+		selected = false;
 	}
 
 	override function componentDidMount()//,snapshot:Dynamic
 	{
 		if(props.row<3)
 		{
-			trace(props.data);
+			//trace(props.data);
 		}
 	}
 
@@ -63,7 +68,7 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		}
 		if(props.row==3)
 		{
-			trace(props.columns);
+			//trace(props.columns);
 			trace(rdMap);
 		}
 		var column:Int = 0;
@@ -105,7 +110,7 @@ class Tr extends PureComponentOf<TrProps,TrState>
 	{
 		if(props.row==0)
 		{
-			trace(props.data);
+			//trace(props.data);setFormState
 		}
 		if(props.data==null)
 		{
@@ -114,7 +119,7 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		var cl:String = '';
 		if(state !=null)
 		{
-			cl = state.selected ? 'is-selected' : '';
+			cl = selected ? 'is-selected' : '';
 		}
 		trace('class:$cl');
 		me = jsx('
@@ -129,7 +134,27 @@ class Tr extends PureComponentOf<TrProps,TrState>
 	public function select(mEv:MouseEvent)
 	{
 		trace(props.row +':' + props.data.toString());
-		setState({selected:!state.selected});
-		trace(state.selected);
+		//setFormState
+		//setState({selected:!state.selected});
+		selected = !selected;
+		if(props.parentComponent != null)
+		{
+			var fS:FormState = props.parentComponent.state;
+			var sData = fS.selectedData;
+			trace(fS.selectedData);
+			trace('selected:${selected}');
+			if(selected)
+			{
+				sData.set(props.data["id"], props.data);
+			   	props.parentComponent.props.storeFormState(copy(fS,{selectedData:sData}));
+			}
+			else 
+			{
+				fS.selectedData.remove(props.data["id"]);
+			}
+			//props.parentComponent.setState(fS);
+		}
+		trace(selected);
+		setState({selected: selected});
 	}
 }

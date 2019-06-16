@@ -3,6 +3,7 @@ import react.ReactComponent.ReactFragment;
 import view.shared.io.FormApi;
 import view.shared.FormState;
 import react.router.Route;
+import redux.Redux.Dispatch;
 import model.UserState;
 
 typedef DataFormProps =
@@ -11,6 +12,7 @@ typedef DataFormProps =
     ?formApi:FormApi,
 	?fullWidth:Bool,
 	?setStateFromChild:FormState->Void,
+	?setFormState:FormState->Void,
 	?sideMenu:SMenuProps,
 	?render:FormState->ReactFragment,
 	user:UserState,

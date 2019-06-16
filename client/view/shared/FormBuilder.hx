@@ -41,7 +41,7 @@ class FormBuilder {
 		requests = [];
 		if(rc.props != null)
 		{
-			trace(rc.props.match);
+			//trace(rc.props.match);
 			this.sM = sM==null?rc.props.sideMenu:sM;
 			//trace(rc.props.history);			
 		}
@@ -49,7 +49,7 @@ class FormBuilder {
 		//trace('>>>${props.match.params.action}<<<');
 		trace(Reflect.fields(sM));
 
-        trace(dbData);
+        //trace(dbData);
 	}   
 
     public function render():ReactFragment

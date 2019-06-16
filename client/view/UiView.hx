@@ -169,19 +169,19 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 				<div className="modal" ref=${App.modalBox}/>
 				<div className="topNav">
 					<$Route path="/DashBoard" {...props} component=${NavTabs}/>
-					<$Route path="/accounting" {...props} component=${NavTabs}/>
+					<$Route path="/Accounting" {...props} component=${NavTabs}/>
 					<$Route path="/Data" {...props} component=${NavTabs}/>
-					<$Route path="/qc" {...props} component=${NavTabs}/>
-					<$Route path="/reports" {...props} component=${NavTabs}/>
+					<$Route path="/Qc" {...props} component=${NavTabs}/>
+					<$Route path="/Reports" {...props} component=${NavTabs}/>
 				</div>
 				<div className="tabComponent">
 					<$Route path="/"  render={renderRedirect} exact={true}/>									
 					<$Route path="/DashBoard*" component=${Bundle.load(DashBoard)}/>
-					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
-					<$Route path="/Data/Edit/:id" component=${Bundle.load(Data)}/>
+					<$Route path="/Accounting" component=${Bundle.load(Accounting)}/>
+					
 					<$Route path="/Data" component=${Bundle.load(Data)}/>
-					<$Route path="/qc" component=${Bundle.load(QC)}/>
-					<$Route path="/reports" component=${Bundle.load(Reports)}/>
+					<$Route path="/Qc" component=${Bundle.load(QC)}/>
+					<$Route path="/Reports" component=${Bundle.load(Reports)}/>
 				</div>
 			</>
 			</$Router>
@@ -198,6 +198,8 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	}
 	
 /**
+ * 
+ * <$Route path="/Data/Contacts/Contact/:id" component=${Bundle.load(Data)}/>
  * 					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
 					<$Route path="/Data/Edit/:id" component=${Bundle.load(Data)}/>
 					<$Route path="/Data" component=${Bundle.load(Data)}/>

@@ -86,7 +86,7 @@ class FormApi
 		requests = [];
 		if(rc.props != null)
 		{
-			trace(rc.props.match);
+			//trace(rc.props.match);
 			this.sM = sM==null?rc.props.sideMenu:sM;
 			//trace(rc.props.history);			
 		}
@@ -94,7 +94,7 @@ class FormApi
 		//trace('>>>${props.match.params.action}<<<');
 		trace(Reflect.fields(sM));
 
-        trace(dbData);
+        //trace(dbData);
 	}	
 
 	public function doAction(?defaultAction:String):Void
@@ -155,7 +155,7 @@ class FormApi
 		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
 		trace(comp.props.history.location.pathname);
 		//trace(comp.props.history);
-		trace('action:$action');
+		trace('new action:$action');
 		trace(comp.props.match.params.action);
 		trace(comp.props.match.params.section);
 		trace(comp.props.match);
@@ -210,8 +210,9 @@ class FormApi
 		var sideMenu = state.sideMenu;
 		if(viewClassPath==null)
 			return sideMenu;
-		sideMenu.menuBlocks['bookmarks'].isActive = true;
-		sideMenu.menuBlocks['bookmarks'].label='Lesezeichen';
+		trace(sideMenu.menuBlocks);
+		/*sideMenu.menuBlocks['bookmarks'].isActive = true;
+		sideMenu.menuBlocks['bookmarks'].label='Lesezeichen';*/
 		for(mI in sideMenu.menuBlocks['bookmarks'].items)
 		{
 			switch(mI.action)
@@ -231,23 +232,16 @@ class FormApi
 	public static function handleSubmit(e:InputEvent)
 	{
 		e.preventDefault();
-		//trace(props.dispatch); //return;
-		//this.setState({submitted:true});
-		//props.dispatch(AppAction.Login("{user_name:state.user_name,pass:state.pass}"));
-		//trace(props.dispatch);
-		//props.submit({user_name:state.user_name, pass:state.pass,api:props.api});
-		//trace(_dispatch == App.store.dispatch);
-		//trace(App.store.dispatch(UserAction.loginReq(state)));
-		//trace(props.dispatch(AppAction.LoginReq(state)));
 	}	
 
 	
 	public function render(content:ReactFragment)
 	{
 		//var sM:SMenuProps = comp.state.sideMenu;
+		//trace(content.props.children);
 		//if(sM.menuBlocks != null)
 			//trace(sM.menuBlocks.keys().next() + ':' + comp.props.match.params.section);
-		if(sM.section != null)//TODO: MONITOR PERFORMANCE + INTEGRITY
+		if(sM.section != null)//TODO: MONITOR PERFORMANCE + INTEGRITY SETTING SUBMENU SECTION HERE
 		{
 			trace(sM.section +':'+ comp.props.match.params.section);
 			if(sM.section != comp.props.match.params.section)
@@ -560,7 +554,8 @@ class FormApi
 	public function renderWait()
 	{
 			trace(Type.getClass(comp.state.values));
-			trace(comp.state.values != null && comp.state.values.get('loadResult' !=null));
+			//trace(comp.state.values != null && comp.state.values.get('loadResult' !=null));
+			trace(comp.state.values.get('loadResult'));
 			if(comp.state.values.get('loadResult') !=null)
 			{
 				if(comp.state.values.get('closeAfter')!=-1)

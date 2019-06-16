@@ -1,5 +1,7 @@
 package view.shared;
+import redux.Redux.Dispatch;
 import haxe.Constraints.Function;
+import haxe.ds.IntMap;
 import history.History;
 import history.Location;
 import js.html.InputEvent;
@@ -26,6 +28,7 @@ typedef FormState =
 	?formApi:FormApi,
 	?formBuilder:FormBuilder,
 	?clean:Bool,
+	?selectedData:IntMap<Map<String,Dynamic>>,
 	?selectedRows:Array<TableRowElement>,
 	?handleChange:InputEvent->Void,
 	?handleSubmit:Dynamic->Void,	

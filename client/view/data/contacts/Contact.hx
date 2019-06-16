@@ -1,16 +1,20 @@
 package view.data.contacts;
+import action.AppAction;
+import haxe.ds.IntMap;
 import model.AppState;
 import haxe.Constraints.Function;
 import macrotools.Macro.model;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
+import redux.Redux.Dispatch;
 import react.redux.form.LocalForm;
 import react.redux.form.Control;
 import react.redux.form.Control.*;
 import react.redux.form.Errors;
 import react.redux.form.Field;
 import react.redux.form.Fieldset;
+import react.ReactUtil.copy;
 import view.data.contacts.model.Contacts;
 import shared.DbData;
 import shared.DBMetaData;
@@ -48,7 +52,7 @@ import view.table.Table;
  */
 
 @:connect
-class Do extends ReactComponentOf<DataFormProps,FormState>
+class Contact extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
 		{label:'Anzeigen',action:'find'},
@@ -63,7 +67,7 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
 	
-	public static var initialState:Contact =
+	public static var initialState:view.model.Contact =
 	{
 		id:0,
 		edited_by: 0,
@@ -75,9 +79,24 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		dataDisplay = Contacts.dataDisplay;
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState({loading:true,selectedRows:[], values:new Map<String,Dynamic>()},this);
+		state =  App.initEState({loading:true,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>()},this);
+		trace(state.selectedData);
 		trace(state.loading);
 	}
+
+	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
+    {
+		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
+        return {
+			storeFormState: function(cState:FormState) 
+			{
+				dispatch(AppAction.FormChange(
+					'view.data.contacts.Contact',
+					cState
+				));
+			}
+		};
+    }
 	
 	static function mapStateToProps(aState:AppState) 
 	{
@@ -133,10 +152,20 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 	public function edit(ev:ReactEvent):Void
 	{
 		//trace(ev);
-		trace(state.selectedRows);
+		trace(state.selectedData);
 		if(state.selectedRows.length==0)
 		{
 			setState({loading: false});
+		var baseUrl:String = props.match.path.split(':section')[0];
+		//trace(props.match);
+		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
+		{
+			//~/ 
+			trace('redirect 2 ${baseUrl}${props.match.params.section}');
+			props.history.push('${baseUrl}${props.match.params.section}');
+			find(ev);
+			//state.formApi.doAction('find');	
+		}			
 			return;
 		}
 		setState({loading: true});
@@ -145,6 +174,15 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 		
 	override public function componentDidMount():Void 
 	{	
+		trace(props.location);
+		var baseUrl:String = props.match.path.split(':section')[0];
+		trace(props.match);
+		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
+		{
+			//~/ 
+			trace('redirect 2 ${baseUrl}${props.match.params.section}');
+			//props.history.push('${baseUrl}${props.match.params.section}');
+		}
 		dataAccess = Contacts.dataAccess;/*[
 			'find' =>{
 				source:[
@@ -176,15 +214,15 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
-		trace(state.loading);
+		/*trace(state.loading);
 		if(state.loading)
-			return state.formApi.renderWait();
+			return state.formApi.renderWait();*/
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
 			case 'find':
 				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
+					<Table id="fieldsList" data=${state.dataTable} parentComponent=${this} 
 					${...props} dataState = ${dataDisplay["contactList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
@@ -213,7 +251,7 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 				null;
 			default:
 				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
+					<Table id="fieldsList" data=${state.dataTable} parentComponent=${this}
 					${...props} dataState = ${dataDisplay["contactList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
@@ -225,10 +263,13 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);		
+		trace(props.match.params.action);		
+		trace('state.loading: ${state.loading}');		
 		var hidden:ReactFragment = state.formBuilder.hidden(model(initialState,contact,id));
 		return switch(props.match.params.action)
 		{	
 			case 'edit':
+			return (state.loading ? state.formApi.renderWait():
 				state.formApi.render(jsx('
 				<>
 					<$LocalForm model="contact" onSubmit=${handleSubmit} className="tabComponentForm" initialState=$initialState >
@@ -238,7 +279,7 @@ class Do extends ReactComponentOf<DataFormProps,FormState>
 							${renderResults()}
 						</table>
 					</$LocalForm>					
-				</>'));				
+				</>')));				
 			default:
 				state.formApi.render(jsx('
 				<>

@@ -1,5 +1,6 @@
 package action;
 
+import view.shared.FormState;
 import view.shared.io.User;
 
 import model.UserState;
@@ -12,6 +13,8 @@ enum AppAction
 {
 	// COMPONENTS
 	//AddComponent(path:String, cState:CompState);
+	FormChange(cp:String, state:FormState);
+
 	Load;
 	// LOGIN TODO: MOVE TO USERACTIONS
 	//LoginReq(state:UserState);

@@ -121,6 +121,7 @@ typedef TableProps =
 	?onSort:Int->Void,
 	?pageButtonLimit:Int,
 	//?parentForm:DataAccessForm,
+	?parentComponent:Dynamic,
 	?primary:String,//defaults to 'id'
 	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>,
 	//?setStateFromChild:FormState->Void,
@@ -138,7 +139,8 @@ typedef TableState =
 	?_isSelected:Bool
 }
 
-class Table extends PureComponentOf<TableProps, TableState>
+//class Table extends PureComponentOf<TableProps, TableState>
+class Table extends ReactComponentOf<TableProps, TableState>
 {
 	var fieldNames:Array<String>;
 	var tableRef:ReactRef<TableElement>;
@@ -181,7 +183,7 @@ class Table extends PureComponentOf<TableProps, TableState>
 			</section>
 			'): null;					
 		}		
-		trace(props.data);
+		//trace(props.data);
 		tableRef = React.createRef();
 		fixedHeader = React.createRef();
 		tHeadRef = React.createRef();
@@ -353,7 +355,7 @@ class Table extends PureComponentOf<TableProps, TableState>
 			var id:String = (dR.exists(primary)? '${dR.get(primary)}':'');
 			var fRRef:ReactRef<TableRowElement> = (row==0?firstRowRef:null);
 			dRs.push(
-			jsx('<$Tr columns=${props.dataState.columns} data=${dR} fieldNames=${fieldNames} firstTableRow=${fRRef} row=${row++} />')
+			jsx('<$Tr key=${dR.get("id")} columns=${props.dataState.columns} data=${dR} fieldNames=${fieldNames} firstTableRow=${fRRef} row=${row++} parentComponent=${props.parentComponent}/>')
 			);
 		}//
 		trace(dRs.length);
@@ -588,6 +590,13 @@ class Table extends PureComponentOf<TableProps, TableState>
 		if(_timer != null)
 			_timer.stop();
 		App.onResizeComponents.remove(this);
+	}
+
+	override function shouldComponentUpdate(nextProps, nextState):Bool
+	{
+    	//trace(nextProps);
+    	//trace(nextState);
+		return true;
 	}
 	
 	function showDims(ref:Dynamic)

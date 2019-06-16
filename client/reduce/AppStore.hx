@@ -33,6 +33,7 @@ class AppStore
 	public var initState:GlobalAppState = {
 		config:App.config,
 		firstLoad:true,
+		formStates: new Map(),
 		history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}),
 		themeColor: 'green',
 		locale: 'de',
@@ -69,11 +70,23 @@ class AppStore
 		//trace(state.compState.get('dashboard'));
 		return switch(action)
 		{
+			case FormChange(cp, fState):
+				var formStates = state.formStates;
+				if(formStates.exists(cp))
+				{
+					formStates.set(cp, copy(formStates.get(cp),fState));
+				}
+				else
+				{
+					formStates.set(cp,fState);
+				}
+				copy(state,{
+					formStates:formStates
+				});
 			case Load:
 				copy(state, {
 					loading:true
-				});
-			
+				});			
 			case LoginChange(uState):
 				copy(state, {
 					user:{user_name:uState.user_name, pass:uState.pass}
@@ -82,18 +95,13 @@ class AppStore
 				trace(uState);
 				copy(state, {
 					user:uState
-				});
-				
+				});				
 			case LoginError(err):
 				trace(err);
 				//if(err.user_name==state.user.user_name)
 				copy(state, {user:{loginError:err.loginError, waiting:false}});
-				//else
-					///state;
-					
 			case LoginWait:
-				copy(state, {waiting:true});
-				
+				copy(state, {waiting:true});				
 			case LoginComplete(uState):
 				trace(uState.user_name + ':' + uState.loggedIn);
 				uState.loginError = null;
@@ -101,12 +109,10 @@ class AppStore
 				copy(state, //uState.change_pass_required?:
 				{
 					user:copy(state.user,uState)
-				});		
-				
+				});						
 			case LogOut(uState):
 				trace(uState);
-				copy(state, {user:uState});
-				
+				copy(state, {user:uState});				
 			case SetLocale(locale):
 				if (locale != state.locale)
 				{
@@ -114,8 +120,7 @@ class AppStore
 						locale:locale
 					});
 				}
-				else state;
-				
+				else state;				
 			case SetTheme(color):
 				if (color != state.themeColor)
 				{
@@ -124,7 +129,6 @@ class AppStore
 					});
 				}
 				else state;
-
 			case User(uState):
 			trace(state.user);
 				copy(state, {

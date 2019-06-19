@@ -1,5 +1,6 @@
 package view.shared;
 
+import haxe.ds.Map;
 import js.html.InputElement;
 import js.html.InputEvent;
 import haxe.Constraints.Function;
@@ -19,6 +20,9 @@ import react.redux.form.Control.*;
 import react.redux.form.Errors;
 import react.redux.form.Field;
 import react.redux.form.Fieldset;
+import react.DateTimePicker;
+
+using Lambda;
 
 class FormBuilder {
     public var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
@@ -34,42 +38,58 @@ class FormBuilder {
 	var comp:Dynamic;
 	var sM:SMenuProps;
 	
-	public function new(rc:Dynamic,?sM:SMenuProps)
+	public function new(rc:Dynamic)
 	{
 		comp = rc;
 		//trace(sM);
 		requests = [];
 		if(rc.props != null)
 		{
-			//trace(rc.props.match);
-			this.sM = sM==null?rc.props.sideMenu:sM;
-			//trace(rc.props.history);			
+			
 		}
-		dbData = new DbData();
+		//dbData = new DbData();
 		//trace('>>>${props.match.params.action}<<<');
-		trace(Reflect.fields(sM));
+	}  
 
-        //trace(dbData);
-	}   
+	function renderElements(fields:Map<String, FormField>):ReactFragment
+	{
+		var ki:Int = 0;
+		return fields.array().map(function(field:FormField){
+			return switch (field.type)
+			{
+				case FormElement.Hidden:
+					null;
+				default:
+					jsx('
+					<div key=${ki++} className="flex-table row" role="rowgroup">
+						<div className="flex-row first" role="cell">${field.label}</div>
+						<div className="flex-row first" role="cell"><input value=${field.name} /></div>
+					</div>
+					');
+			}
+		});
+		trace(fields.array());
+		return null;
+	}	 
 
-    public function render():ReactFragment
+	function renderElement():ReactFragment
+	{
+
+		return null;
+	}
+
+    public function render(fState:FormState, initialState:Dynamic):ReactFragment
     {
-		if(sM.section != null)//TODO: MONITOR PERFORMANCE + INTEGRITY
-		{
-			trace(sM.section +':'+ comp.props.match.params.section);
-			if(sM.section != comp.props.match.params.section)
-			 sM.section = comp.props.match.params.section;
-		}
 		return jsx('
-			<LocalForm model="user" onSubmit=${comp.handleSubmit}>
-				<label>Your name?</label>
-				<$ControlText model="model" />
-				<button>Submit!</button>
-			</LocalForm>		
+			<$LocalForm model=${fState.model} onSubmit=${comp.handleSubmit} className="tabComponentForm" >
+				<div className="table-container" role="table" aria-label="Destinations">
+				${renderElements(fState.fields)}
+				</div>
+			</$LocalForm>		
 		');
     }
 
-	public function  hidden(cm:String) 
+	public function  hidden(cm:String):ReactFragment
 	{
 		return jsx('<$Control type="hidden" model=${cm} />');
 	}
@@ -81,4 +101,13 @@ class FormBuilder {
         <Control.text model="name" />
         <button>Submit!</button>
     </LocalForm>
+				jsx('
+			<tbody>
+			<tr>
+				<td>Vorname</td>
+				<td><$ControlText className="test" model=${model(initialState, contact, first_name)}>
+				</$ControlText></td>
+			</tr>	
+			</tbody>
+			');
  */

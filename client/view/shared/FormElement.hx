@@ -4,6 +4,7 @@ package view.shared;
 abstract FormElement(String)
 {
 	var Button = 'Button';
+	var DatePicker = 'DatePicker';
 	var Hidden = 'Hidden';
 	var Input = 'Input';
 	var Password = 'Password';

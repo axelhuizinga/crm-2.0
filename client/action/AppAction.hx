@@ -13,7 +13,12 @@ enum AppAction
 {
 	// COMPONENTS
 	//AddComponent(path:String, cState:CompState);
-	FormChange(cp:String, state:FormState);
+	/**
+	 * Action FormChange
+	 * @param cfp:String class.function path
+	 * @param state:FormState 
+	 */
+	FormChange(cfp:String, state:FormState);
 
 	Load;
 	// LOGIN TODO: MOVE TO USERACTIONS

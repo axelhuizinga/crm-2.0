@@ -77,9 +77,12 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
+		dataAccess = Contacts.dataAccess;
 		dataDisplay = Contacts.dataDisplay;
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState({loading:true,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>()},this);
+		state =  App.initEState({
+			action:'find',loading:true,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>()
+		},this);
 		trace(state.selectedData);
 		trace(state.loading);
 	}
@@ -88,7 +91,7 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
     {
 		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
         return {
-			storeFormState: function(cState:FormState) 
+			storeFormChange: function(cState:FormState) 
 			{
 				dispatch(AppAction.FormChange(
 					'view.data.contacts.Contact',
@@ -229,16 +232,38 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 			case 'edit':
 			trace(initialState);
 			trace(model(initialState, contact, first_name));
-			jsx('
-			<tbody>
-			<tr>
-				<td>Vorname</td>
-				<td><$ControlText className="test" model=${model(initialState, contact, first_name)}>
-				</$ControlText></td>
-			</tr>	
-			</tbody>
-			');
-				//null;	
+			state.formBuilder.render({
+				fields:[
+					'first_name' => {
+						name:'first_name',
+						label: 'Vorname'
+					},
+					'last_name' => {
+						name:'last_name',
+						label: 'Name'						
+					}
+				]
+			},null);
+			/**
+			 * typedef FormField =
+{
+	?className:String,
+	?name:String,
+	?label:String,
+	?value:Dynamic,
+	?dataBase:String, 
+	?dataTable:String,
+	?dataField:String,
+	?displayFormat:Function,
+	?type:FormElement,
+	?primary:Bool,
+	?readonly:Bool,
+	?required:Bool,
+	?handleChange:InputEvent->Void,
+	?placeholder:String,
+	?validate:String->Bool
+}
+			 */
 			case 'add':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
@@ -269,8 +294,11 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{	
 			case 'edit':
-			return (state.loading ? state.formApi.renderWait():
-				state.formApi.render(jsx('
+			 (state.loading ? state.formApi.renderWait():
+				state.formApi.render(
+					${renderResults()}
+				))////596;				
+				/*state.formApi.render(jsx('
 				<>
 					<$LocalForm model="contact" onSubmit=${handleSubmit} className="tabComponentForm" initialState=$initialState >
 						${hidden}
@@ -279,7 +307,7 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 							${renderResults()}
 						</table>
 					</$LocalForm>					
-				</>')));				
+				</>')));	*/			
 			default:
 				state.formApi.render(jsx('
 				<>

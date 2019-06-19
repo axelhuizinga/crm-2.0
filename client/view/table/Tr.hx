@@ -146,7 +146,7 @@ class Tr extends PureComponentOf<TrProps,TrState>
 			if(selected)
 			{
 				sData.set(props.data["id"], props.data);
-			   	props.parentComponent.props.storeFormState(copy(fS,{selectedData:sData}));
+			   	props.parentComponent.props.storeFormChange(copy(fS,{selectedData:sData}));
 			}
 			else 
 			{

@@ -6,7 +6,6 @@ import view.shared.FormElement;
 typedef FormField =
 {
 	?className:String,
-	?primaryId:String,
 	?name:String,
 	?label:String,
 	?value:Dynamic,

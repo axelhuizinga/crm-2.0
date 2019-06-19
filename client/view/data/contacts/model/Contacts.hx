@@ -4,6 +4,7 @@ import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
 import view.table.Table.DataColumn;
 import view.table.Table.DataState;
+import view.shared.FormElement;
 
 /**
  * @author axel@cunity.me

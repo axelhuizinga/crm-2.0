@@ -66,19 +66,17 @@ class AppStore
 	
 	public function reduce(state:GlobalAppState, action:AppAction):GlobalAppState
 	{
-		//trace(action);
-		//trace(state.compState.get('dashboard'));
 		return switch(action)
 		{
-			case FormChange(cp, fState):
+			case FormChange(cfp, fState):
 				var formStates = state.formStates;
-				if(formStates.exists(cp))
+				if(formStates.exists(cfp))
 				{
-					formStates.set(cp, copy(formStates.get(cp),fState));
+					formStates.set(cfp, copy(formStates.get(cfp),fState));
 				}
 				else
 				{
-					formStates.set(cp,fState);
+					formStates.set(cfp,fState);
 				}
 				copy(state,{
 					formStates:formStates

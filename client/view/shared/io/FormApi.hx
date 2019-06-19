@@ -321,12 +321,11 @@ class FormApi
 				formColElements[name].push({
 					className:fF.className,
 					name:name,
-					primaryId:pID==''?'':dR[pID],
 					//?label:String,
 					value:fF.displayFormat == null?dR[name]: fF.displayFormat(dR[name]),
 					//?dataBase:String, 
 					//?dataTable:String,
-					//?dataField:String,
+					//?dataField:String,c
 					displayFormat:fF.displayFormat,
 					type:fF.type,
 					readonly:fF.readonly,
@@ -387,8 +386,9 @@ class FormApi
 	
 	public function renderRowCell(fF:FormField,k:Int):ReactFragment
 	{
-		//trace(fF.value);
-		var model:String = '.${fF.primaryId}.${fF.name}';
+		//var model:String = '.${fF.primaryId}.${fF.name}';
+		var model:String = fF.name;
+		
 		return switch(fF.type)
 		{
 			case Checkbox:

@@ -752,3 +752,23 @@ form td, form caption
 	height: 6rem;
 	text-align: center;
 }
+/*	GRID TABLES	*/
+
+.grid_box
+{
+	display: grid;
+	margin: 1rem auto;
+	border-radius: $tableHeader-radius $tableHeader-radius 0 0;
+	grid-template-columns: 1fr 1fr;
+}
+
+.g_caption
+{
+	grid-column: grid-column-start / grid-column-end;
+}
+
+.g_row_2
+{
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}

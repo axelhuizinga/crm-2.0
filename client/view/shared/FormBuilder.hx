@@ -61,9 +61,11 @@ class FormBuilder {
 					null;
 				default:
 					jsx('
-					<div key=${ki++} className="flex-table row" role="rowgroup">
-						<div className="flex-row first" role="cell">${field.label}</div>
-						<div className="flex-row first" role="cell"><input value=${field.name} /></div>
+					<div key=${ki++} className=".g_row_2" role="rowgroup">
+						<div className="" role="cell">${field.label}</div>
+						<div className="" role="cell">
+						<$Control model=${field.name} value=${field.name} />
+						</div>
 					</div>
 					');
 			}
@@ -82,7 +84,8 @@ class FormBuilder {
     {
 		return jsx('
 			<$LocalForm model=${fState.model} onSubmit=${comp.handleSubmit} className="tabComponentForm" >
-				<div className="table-container" role="table" aria-label="Destinations">
+				<div className="grid_bpx" role="table" aria-label="Destinations">
+				<div className="g_caption" >${fState.title}</div>
 				${renderElements(fState.fields)}
 				</div>
 			</$LocalForm>		

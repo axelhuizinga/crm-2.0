@@ -8,13 +8,7 @@ import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import redux.Redux.Dispatch;
-import react.redux.form.LocalForm;
-import react.redux.form.Control;
-import react.redux.form.Control.*;
-import react.redux.form.Errors;
-import react.redux.form.Field;
-import react.redux.form.Fieldset;
-import react.ReactUtil.copy;
+
 import view.data.contacts.model.Contacts;
 import shared.DbData;
 import shared.DBMetaData;
@@ -209,6 +203,10 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
+	function handleChange(contact, _) {
+		trace(contact);
+	}		
+
 	function handleSubmit(contact, _) {
 		trace(contact);
 	}	
@@ -297,17 +295,7 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 			 (state.loading ? state.formApi.renderWait():
 				state.formApi.render(
 					${renderResults()}
-				))////596;				
-				/*state.formApi.render(jsx('
-				<>
-					<$LocalForm model="contact" onSubmit=${handleSubmit} className="tabComponentForm" initialState=$initialState >
-						${hidden}
-						<table className="center">
-							<caption className="trHeader">Kontakt</caption>
-							${renderResults()}
-						</table>
-					</$LocalForm>					
-				</>')));	*/			
+				));	
 			default:
 				state.formApi.render(jsx('
 				<>

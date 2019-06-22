@@ -24,6 +24,9 @@ class Contacts
 				'email'=>{label:'Email'},
 				'phone_number'=>{label:'Telefon'},		
 				'company_name'=>{label: 'Firmenname'},				
+				'creation_date'=>{label: 'Hinzugefügt', type:DatePicker, readonly: true, 
+					displayFormat: function () return {format:"dd.MM.yyyy h:mm", readonly:true}},
+				'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: function () return {format:"dd.MM.yyyy"}},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden}
 			]

@@ -22,6 +22,8 @@ import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import view.shared.io.BinaryLoader;
 import view.table.Table;
+
+using Lambda;
 /*
  * GNU Affero General Public License
  *
@@ -149,24 +151,35 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 	public function edit(ev:ReactEvent):Void
 	{
 		//trace(ev);
-		trace(state.selectedData);
-		if(state.selectedRows.length==0)
+		trace(state.selectedData.keys());
+		if(!state.selectedData.keys().hasNext())
 		{
 			setState({loading: false});
-		var baseUrl:String = props.match.path.split(':section')[0];
-		//trace(props.match);
-		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
-		{
-			//~/ 
-			trace('redirect 2 ${baseUrl}${props.match.params.section}');
-			props.history.push('${baseUrl}${props.match.params.section}');
-			find(ev);
-			//state.formApi.doAction('find');	
-		}			
+			var baseUrl:String = props.match.path.split(':section')[0];
+			//trace(props.match);
+			if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
+			{
+				//~/ 
+				trace('redirect 2 ${baseUrl}${props.match.params.section}');
+				props.history.push('${baseUrl}${props.match.params.section}');
+				find(ev);
+				//state.formApi.doAction('find');	
+			}			
 			return;
 		}
-		setState({loading: true});
-		trace(state.selectedRows.length);				
+
+		//setState({loading: true});
+		var it:Iterator<Map<String,Dynamic>> = state.selectedData.iterator();
+		var sData:Map<String,Dynamic> = it.next();
+		trace(sData);
+		//sData = state.selectedData.get(state.selectedData.keys().next());
+		//trace(sData);
+		for(k in dataAccess['edit'].view.keys())
+		{
+			trace('$k => ' + sData[k]);
+			Reflect.setField(initialState, k, sData[k]);
+		}
+		trace(it.hasNext());				
 	}
 		
 	override public function componentDidMount():Void 
@@ -230,18 +243,17 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 			case 'edit':
 			trace(initialState);
 			trace(model(initialState, contact, first_name));
+			var fields:Map<String,FormField> = [
+				for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
+			];
+			trace(fields);
 			state.formBuilder.render({
 				fields:[
-					'first_name' => {
-						name:'first_name',
-						label: 'Vorname'
-					},
-					'last_name' => {
-						name:'last_name',
-						label: 'Name'						
-					}
-				]
-			},null);
+					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
+				],
+				model:'contact',
+				title: 'Kontakt - Bearbeite Stammdaten'
+			},initialState);
 			/**
 			 * typedef FormField =
 {

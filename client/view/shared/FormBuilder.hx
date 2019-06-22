@@ -51,26 +51,29 @@ class FormBuilder {
 		//trace('>>>${props.match.params.action}<<<');
 	}  
 
-	function renderElements(fields:Map<String, FormField>):ReactFragment
+	function renderElements(fields:Map<String, FormField>, model:String):ReactFragment
 	{
 		var ki:Int = 0;
-		return fields.array().map(function(field:FormField){
-			return switch (field.type)
+		//return fields.array().map(function(field:FormField){
+		return [for(name => field in fields){
+			switch (field.type)
 			{
 				case FormElement.Hidden:
 					null;
+				case FormElement.DatePicker:
+					null;
 				default:
 					jsx('
-					<div key=${ki++} className=".g_row_2" role="rowgroup">
-						<div className="" role="cell">${field.label}</div>
-						<div className="" role="cell">
-						<$Control model=${field.name} value=${field.name} />
+					<div key=${ki++} className="g_row_2" role="rowgroup">
+						<div className="g_cell" role="cell">${field.label}</div>
+						<div className="g_cell_r" role="cell">
+						<$Control model="${model}.${name}" disabled=${field.readonly}/>
 						</div>
 					</div>
 					');
 			}
-		});
-		trace(fields.array());
+		}].array();
+		//trace(fields.array());
 		return null;
 	}	 
 
@@ -83,10 +86,10 @@ class FormBuilder {
     public function render(fState:FormState, initialState:Dynamic):ReactFragment
     {
 		return jsx('
-			<$LocalForm model=${fState.model} onSubmit=${comp.handleSubmit} className="tabComponentForm" >
-				<div className="grid_bpx" role="table" aria-label="Destinations">
+			<$LocalForm model=${fState.model} onSubmit=${comp.handleSubmit} className="tabComponentForm"  initialState=${initialState}>
+				<div className="grid_box" role="table" aria-label="Destinations">
 				<div className="g_caption" >${fState.title}</div>
-				${renderElements(fState.fields)}
+				${renderElements(fState.fields, fState.model)}
 				</div>
 			</$LocalForm>		
 		');

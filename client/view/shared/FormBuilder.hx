@@ -20,7 +20,7 @@ import react.redux.form.Control.*;
 import react.redux.form.Errors;
 import react.redux.form.Field;
 import react.redux.form.Fieldset;
-import react.DateTimePicker;
+import react.DateTimeControl;
 
 using Lambda;
 
@@ -48,8 +48,21 @@ class FormBuilder {
 			
 		}
 		//dbData = new DbData();
-		//trace('>>>${props.match.params.action}<<<');
+		//trace('>>>${props.match.params.acton}<<<');
 	}  
+
+	function renderDatePicker(p:Dynamic):ReactFragment
+	{
+		trace(p);
+		trace(p.controlProps.format());
+		return null;
+		return jsx('
+		<$DateTimeControl onChange=${null} dateFormat=${p.controlProps.format()} 
+		 	input=${p.controlProps.disabled==null?true:!p.controlProps.disabled} 
+			timeFormat=${p.controlProps.showTime==null?false:p.controlProps.showTime} 
+			value=${p.value==null ? null : Date.fromString(p.value)} />
+		');
+	}
 
 	function renderElements(fields:Map<String, FormField>, model:String):ReactFragment
 	{
@@ -60,14 +73,38 @@ class FormBuilder {
 			{
 				case FormElement.Hidden:
 					null;
-				case FormElement.DatePicker:
-					null;
+				case FormElement.Date:
+				    jsx('
+					<div key=${ki++} className="g_row_2" role="rowgroup">
+						<div className="g_cell" role="cell">${field.label}</div>
+						<div className="g_cell_r" role="cell">
+							<$Control controlProps=${{
+								format:field.displayFormat,showTime:false, disabled:field.readonly,
+								onChange:comp.handleChange}} 
+								model="${model}.${name}"
+								mapProps=${{dateFormat:field.displayFormat}}
+								component=${DateTimeControl} />
+						</div>
+					</div>');
+				case FormElement.Input:
+					jsx('
+					<div key=${ki++} className="g_row_2" role="rowgroup">
+						<div className="g_cell" role="cell">${field.label}</div>
+						<div className="g_cell_r" role="cell">
+							<$Control controlProps=${{
+								format:field.displayFormat,showTime:false, disabled:field.readonly, type:'date',
+								onChange:comp.handleChange}} 
+								model="${model}.${name}"
+								mapProps=${{dateFormat:field.displayFormat}}
+								 />
+						</div>
+					</div>');
 				default:
 					jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
-						<$Control model="${model}.${name}" disabled=${field.readonly}/>
+						<$Control model="${model}.${name}" disabled=${field.readonly} changeAction=${comp.handleChange}/>
 						</div>
 					</div>
 					');
@@ -86,7 +123,7 @@ class FormBuilder {
     public function render(fState:FormState, initialState:Dynamic):ReactFragment
     {
 		return jsx('
-			<$LocalForm model=${fState.model} onSubmit=${comp.handleSubmit} className="tabComponentForm"  initialState=${initialState}>
+			<$LocalForm model=${fState.model} onSubmit=${comp.handleSubmit} className="tabComponentForm formField"  initialState=${initialState}>
 				<div className="grid_box" role="table" aria-label="Destinations">
 				<div className="g_caption" >${fState.title}</div>
 				${renderElements(fState.fields, fState.model)}

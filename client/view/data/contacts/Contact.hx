@@ -151,7 +151,7 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 	public function edit(ev:ReactEvent):Void
 	{
 		//trace(ev);
-		trace(state.selectedData.keys());
+		//trace(state.selectedData.keys());
 		if(!state.selectedData.keys().hasNext())
 		{
 			setState({loading: false});
@@ -171,15 +171,15 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		//setState({loading: true});
 		var it:Iterator<Map<String,Dynamic>> = state.selectedData.iterator();
 		var sData:Map<String,Dynamic> = it.next();
-		trace(sData);
+		//trace(sData);
 		//sData = state.selectedData.get(state.selectedData.keys().next());
 		//trace(sData);
 		for(k in dataAccess['edit'].view.keys())
 		{
-			trace('$k => ' + sData[k]);
+			//trace('$k => ' + sData[k]);
 			Reflect.setField(initialState, k, sData[k]);
 		}
-		trace(it.hasNext());				
+		//trace(it.hasNext());				
 	}
 		
 	override public function componentDidMount():Void 
@@ -216,8 +216,9 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
-	function handleChange(contact, _) {
+	function handleChange(contact, value) {
 		trace(contact);
+		trace(value);
 	}		
 
 	function handleSubmit(contact, _) {
@@ -246,7 +247,7 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 			var fields:Map<String,FormField> = [
 				for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
 			];
-			trace(fields);
+			//trace(fields);
 			state.formBuilder.render({
 				fields:[
 					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]

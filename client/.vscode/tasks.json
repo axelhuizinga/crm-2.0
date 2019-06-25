@@ -3,29 +3,29 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-        {
-            "type": "hxml",
-            "file": "build.hxml",
-            "problemMatcher": [
-                "$haxe-absolute",
-                "$haxe",
-                "$haxe-error",
-                "$haxe-trace"
-            ],
-            "group": "build"
-        },
-        {
-            "type": "npm",
-            "script": "build",
-            "group": "build"
-        },
-        {
-            "type": "npm",
-            "script": "start",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        }
-    ]
+		{
+			"type": "hxml",
+			"file": "build.hxml",
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
+			"group": "build"
+		},
+		{
+			"type": "npm",
+			"script": "build",
+			"group": "build"
+		},
+		{
+			"type": "npm",
+			"script": "start",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
 }

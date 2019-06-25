@@ -4,8 +4,10 @@ package view.shared;
 abstract FormElement(String)
 {
 	var Button = 'Button';
-	var DatePicker = 'DatePicker';
 	var Hidden = 'Hidden';
+	var Date = 'date';
+	var DatePicker = 'DatePicker';
+	var DateTime = 'datetime-local';
 	var Input = 'Input';
 	var Password = 'Password';
 	var Checkbox = 'Checkbox';

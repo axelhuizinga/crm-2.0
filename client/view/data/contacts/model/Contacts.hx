@@ -24,11 +24,11 @@ class Contacts
 				'email'=>{label:'Email'},
 				'phone_number'=>{label:'Telefon'},		
 				'company_name'=>{label: 'Firmenname'},				
-				'creation_date'=>{label: 'Hinzugefügt', type:DateTime, readonly: true, 
+				'creation_date'=>{label: 'Hinzugefügt', type:DateTimeInput, readonly: true, 
 					//displayFormat: function () return {format:"dd.MM.yyyy H:MM", readonly:true}},
-					displayFormat: function() return "DD.MM.YYYY H:MM"}, 
+					displayFormat: function() return "dd.MM.yyyy H:MM"}, 
 				//'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: function () return {format:"DD.MM.YYYY"}},
-				'date_of_birth'=>{label: 'Geburtsdatum', type:Date, displayFormat:  function() return "DD.MM.YYYY"},
+				'date_of_birth'=>{label: 'Geburtsdatum', type:DateInput, displayFormat:  function() return "DD.MM.YYYY"},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden}
 			]

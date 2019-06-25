@@ -5,7 +5,8 @@ package react;
  * @author axel@cunity.me
  */
  
-@:jsRequire('react-date-picker', 'default')
-@:native('DatePicker') 
+
+@:jsRequire('react-datepicker', 'default')
+//@:native('DatePicker') 
 extern class DatePicker extends ReactComponent 
 {}

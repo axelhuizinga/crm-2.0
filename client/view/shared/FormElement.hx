@@ -5,9 +5,9 @@ abstract FormElement(String)
 {
 	var Button = 'Button';
 	var Hidden = 'Hidden';
-	var Date = 'date';
+	var DateInput = 'date';
 	var DatePicker = 'DatePicker';
-	var DateTime = 'datetime-local';
+	var DateTimeInput = 'datetime-local';
 	var Input = 'Input';
 	var Password = 'Password';
 	var Checkbox = 'Checkbox';

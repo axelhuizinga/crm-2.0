@@ -73,29 +73,29 @@ class FormBuilder {
 			{
 				case FormElement.Hidden:
 					null;
-				case FormElement.Date:
+				case FormElement.DateTimeInput:
 				    jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
 							<$Control controlProps=${{
-								format:field.displayFormat,showTime:false, disabled:field.readonly,
+								format:field.displayFormat, disabled:field.readonly,
 								onChange:comp.handleChange}} 
 								model="${model}.${name}"
-								mapProps=${{dateFormat:field.displayFormat}}
+								mapProps=${{dateFormat:field.displayFormat, type:"datetime-local"}}
 								component=${DateTimeControl} />
 						</div>
 					</div>');
-				case FormElement.Input:
+				case FormElement.DateInput:
 					jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
 							<$Control controlProps=${{
-								format:field.displayFormat,showTime:false, disabled:field.readonly, type:'date',
+								format:field.displayFormat(),showTime:false, disabled:field.readonly, type:'date',
 								onChange:comp.handleChange}} 
 								model="${model}.${name}"
-								mapProps=${{dateFormat:field.displayFormat}}
+								mapProps=${{dateFormat:field.displayFormat()}}
 								 />
 						</div>
 					</div>');

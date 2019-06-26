@@ -17,7 +17,7 @@ typedef FormField =
 	?primary:Bool,
 	?readonly:Bool,
 	?required:Bool,
-	?handleChange:InputEvent->Void,
+	?handleChange:Function,
 	?placeholder:String,
 	?validate:String->Bool
 }

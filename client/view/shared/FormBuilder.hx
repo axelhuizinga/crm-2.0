@@ -20,6 +20,7 @@ import react.redux.form.Control.*;
 import react.redux.form.Errors;
 import react.redux.form.Field;
 import react.redux.form.Fieldset;
+import react.DateControl;
 import react.DateTimeControl;
 
 using Lambda;
@@ -57,9 +58,7 @@ class FormBuilder {
 		trace(p.controlProps.format());
 		return null;
 		return jsx('
-		<$DateTimeControl onChange=${null} dateFormat=${p.controlProps.format()} 
-		 	input=${p.controlProps.disabled==null?true:!p.controlProps.disabled} 
-			timeFormat=${p.controlProps.showTime==null?false:p.controlProps.showTime} 
+		<$DateTimeControl onChange=${null} options=${{dateFormat:p.controlProps.format()}}  
 			value=${p.value==null ? null : Date.fromString(p.value)} />
 		');
 	}
@@ -73,30 +72,38 @@ class FormBuilder {
 			{
 				case FormElement.Hidden:
 					null;
-				case FormElement.DateTimeInput:
+				case FormElement.DateTimePicker:
 				    jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
 							<$Control controlProps=${{
-								format:field.displayFormat, disabled:field.readonly,
-								onChange:comp.handleChange}} 
-								model="${model}.${name}"
-								mapProps=${{dateFormat:field.displayFormat, type:"datetime-local"}}
+								options:{
+									dateFormat:field.displayFormat(), _inline:field.readonly,
+									onChange:field.handleChange, time_24hr:true
+								}
+							}}
+								model="${model}.${name}" 
+								mapProps=${{name:model}}
 								component=${DateTimeControl} />
 						</div>
 					</div>');
-				case FormElement.DateInput:
+				case FormElement.DatePicker:
 					jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
 							<$Control controlProps=${{
-								format:field.displayFormat(),showTime:false, disabled:field.readonly, type:'date',
-								onChange:comp.handleChange}} 
+									
+								onChange:field.handleChange}} 
 								model="${model}.${name}"
-								mapProps=${{dateFormat:field.displayFormat()}}
-								 />
+								mapProps=${{
+									options:{
+										dateFormat:field.displayFormat(),
+										_inline:field.readonly
+									}
+								}}
+								component=${DateControl} />
 						</div>
 					</div>');
 				default:
@@ -123,7 +130,8 @@ class FormBuilder {
     public function render(fState:FormState, initialState:Dynamic):ReactFragment
     {
 		return jsx('
-			<$LocalForm model=${fState.model} onSubmit=${comp.handleSubmit} className="tabComponentForm formField"  initialState=${initialState}>
+			<$LocalForm model=${fState.model} onSubmit=${comp.handleSubmit} className="tabComponentForm formField" 
+				 initialState=${initialState}>
 				<div className="grid_box" role="table" aria-label="Destinations">
 				<div className="g_caption" >${fState.title}</div>
 				${renderElements(fState.fields, fState.model)}
@@ -134,23 +142,8 @@ class FormBuilder {
 
 	public function  hidden(cm:String):ReactFragment
 	{
+		//return null;
 		return jsx('<$Control type="hidden" model=${cm} />');
 	}
 }
-/**
- * 
- * <LocalForm model="user" onSubmit={(val) => this.handleSubmit(val)}>
-        <label>Your name?</label>
-        <Control.text model="name" />
-        <button>Submit!</button>
-    </LocalForm>
-				jsx('
-			<tbody>
-			<tr>
-				<td>Vorname</td>
-				<td><$ControlText className="test" model=${model(initialState, contact, first_name)}>
-				</$ControlText></td>
-			</tr>	
-			</tbody>
-			');
- */
+

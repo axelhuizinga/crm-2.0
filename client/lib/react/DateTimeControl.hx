@@ -1,27 +1,28 @@
 package react;
 
+import react.ReactComponent.ReactFragment;
+import haxe.Constraints.Function;
+import haxe.ds.Either;
 import haxe.Timer;
 import js.Lib;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;
-import react.DatePicker;
+import react.DateTimePicker;
+import react.DateControlTypes;
+import react.Flatpickr;
 
 /**
  * ...
  * @author axel@cunity.me
  */
 
-typedef DateTimeProps2 =
-{
-	?className:String,
-	?locale:String,
-	?input:Bool,
-	value:Any
-}
-
-class DateTimeControl extends ReactComponentOfProps<Dynamic>
+class DateTimeControl extends ReactComponentOfProps<DateTimeProps>
 {
 	static var css = js.Lib.require('react-datepicker/dist/react-datepicker.css');
+	static var flat = js.Lib.require('flatpickr/dist/themes/light.css');
+
+
+
 	public function new(props) 
 	{
 		//trace( props.value );
@@ -29,32 +30,41 @@ class DateTimeControl extends ReactComponentOfProps<Dynamic>
 		trace(props);
 	}
 	
-	override public function render()
+	override public function render():ReactFragment
 	{
 		//trace( props.value );
-		var val:String = props.value;
-		val = val.split('+')[0];
+		//var val:String = props.value;
+		//val = val.split('+')[0];
 		return switch(props.type)
 		{
-			case 'datetime-local':
+			case 'DateTimePicker':
 				jsx('
-				<$DatePicker     
-					selected=${Date.fromString(props.value.split('+')[0])}
+				<$DateTimePicker     
+					options=${{
+						clickOpens:false,
+						dateFormat:props.dateFormat,
+						//'inline': props.options != null && props.options._inline != null && props.options._inline,
+						time_24hr:true,
+						minuteIncrement:5
+					}}
+					
+					
+					 onChange=${props.onChange}/>
+				');
+			/**
+			 * 					selected=${Date.fromString(props.value.split('+')[0])}
 					showTimeSelect
 					timeFormat="HH:mm"
 					timeIntervals={15}
 					dateFormat=${props.dateFormat}
 					timeCaption="time" onChange=${props.onChange}/>
-				');
+			 */
 			default:
 				jsx('
-				<$DatePicker     
-					selected=${Date.fromString(props.value)}
-					showTimeSelect
-					timeFormat="HH:mm"
-					timeIntervals={15}
+				<$DateTimePicker     
+
 					dateFormat=${props.dateFormat}
-					timeCaption="time" onChange=${props.onChange}/>
+					onChange=${props.onChange}/>
 				');
 		}
 		/*return jsx('

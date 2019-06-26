@@ -28,7 +28,7 @@ class Contacts
 					//displayFormat: function () return {format:"dd.MM.yyyy H:MM", readonly:true}},
 					displayFormat: function() return "dd.MM.yyyy H:MM"}, 
 				//'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: function () return {format:"DD.MM.YYYY"}},
-				'date_of_birth'=>{label: 'Geburtsdatum', type:DateInput, displayFormat:  function() return "DD.MM.YYYY"},
+				'date_of_birth'=>{label: 'Geburtsdatum', type:DateInput, displayFormat:  function() return "dd.MM.yyyy"},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden}
 			]

@@ -11,7 +11,7 @@ import react.DateTimePicker;
  * @author axel@cunity.me
  */
 
-typedef DateTimeProps =
+typedef DateTimeProps2 =
 {
 	?className:String,
 	?locale:String,
@@ -19,7 +19,7 @@ typedef DateTimeProps =
 	value:Any
 }
 
-class ReactDateTimeClock extends ReactComponentOfProps<DateTimeProps>
+class ReactDateTimeClock extends ReactComponentOfProps<DateTimeProps2>
 {
 	
 	public function new(props) 

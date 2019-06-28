@@ -33,6 +33,7 @@ typedef Locale = {
 typedef DateTimeProps =
 {
     ?defaultValue: String,
+	?disabled:Bool,
     options: FlatpickrProps,
     ?onChange: Function,
     ?onOpen: Function,
@@ -43,7 +44,8 @@ typedef DateTimeProps =
     ?onValueUpdate: Function,
     ?onDayCreate: Function,
     ?onCreate: Function,
-    ?onDestroy: Function
+    ?onDestroy: Function,
+	?value:Dynamic
 }
 
 typedef DateOption = Dynamic;//Either<Date, Either<String, Int>>;

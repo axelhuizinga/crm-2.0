@@ -32,43 +32,19 @@ class DateTimeControl extends ReactComponentOfProps<DateTimeProps>
 	
 	override public function render():ReactFragment
 	{
-		//trace( props.value );
-		//var val:String = props.value;
-		//val = val.split('+')[0];
-		return switch(props.type)
-		{
-			case 'DateTimePicker':
-				jsx('
-				<$DateTimePicker     
-					options=${{
-						clickOpens:false,
-						dateFormat:props.dateFormat,
-						//'inline': props.options != null && props.options._inline != null && props.options._inline,
-						time_24hr:true,
-						minuteIncrement:5
-					}}
-					
-					
-					 onChange=${props.onChange}/>
-				');
-			/**
-			 * 					selected=${Date.fromString(props.value.split('+')[0])}
-					showTimeSelect
-					timeFormat="HH:mm"
-					timeIntervals={15}
-					dateFormat=${props.dateFormat}
-					timeCaption="time" onChange=${props.onChange}/>
-			 */
-			default:
-				jsx('
-				<$DateTimePicker     
-
-					dateFormat=${props.dateFormat}
-					onChange=${props.onChange}/>
-				');
-		}
-		/*return jsx('
-			<$DateInput type=${props.type} lang="de" date-format=${props.dateFormat} value=${props.value} onChange=${props.onChange}/>
-		');*/
+		return jsx('
+			<$Flatpickr     
+				options=${{
+					clickOpens:false,
+					dateFormat:props.options.dateFormat,
+					//defaultDate:props.modelValue,
+					//'inline': props.options != null && props.options._inline != null && props.options._inline,
+					time_24hr:true,
+					minuteIncrement:5
+				}}
+				value=${props.value}		
+				disabled=${props.disabled}		
+				onChange=${props.onChange}/>
+		');
 	}
 }

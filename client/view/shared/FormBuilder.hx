@@ -14,6 +14,7 @@ import haxe.http.HttpJs;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
+import react.redux.form.Form;
 import react.redux.form.LocalForm;
 import react.redux.form.Control;
 import react.redux.form.Control.*;
@@ -52,17 +53,6 @@ class FormBuilder {
 		//trace('>>>${props.match.params.acton}<<<');
 	}  
 
-	function renderDatePicker(p:Dynamic):ReactFragment
-	{
-		trace(p);
-		trace(p.controlProps.format());
-		return null;
-		return jsx('
-		<$DateTimeControl onChange=${null} options=${{dateFormat:p.controlProps.format()}}  
-			value=${p.value==null ? null : Date.fromString(p.value)} />
-		');
-	}
-
 	function renderElements(fields:Map<String, FormField>, model:String):ReactFragment
 	{
 		var ki:Int = 0;
@@ -79,12 +69,14 @@ class FormBuilder {
 						<div className="g_cell_r" role="cell">
 							<$Control controlProps=${{
 								options:{
-									dateFormat:field.displayFormat(), _inline:field.readonly,
+									dateFormat:field.displayFormat(), 
+									disabled:field.readonly,
 									onChange:field.handleChange, time_24hr:true
 								}
 							}}
+							disabled=${field.readonly} 
 								model="${model}.${name}" 
-								mapProps=${{name:model}}
+								mapProps=${{name:model+'.'+ name}}
 								component=${DateTimeControl} />
 						</div>
 					</div>');
@@ -127,7 +119,7 @@ class FormBuilder {
 		return null;
 	}
 
-    public function render(fState:FormState, initialState:Dynamic):ReactFragment
+    public function renderLocal(fState:FormState, initialState:Dynamic):ReactFragment
     {
 		return jsx('
 			<$LocalForm model=${fState.model} onSubmit=${comp.handleSubmit} className="tabComponentForm formField" 
@@ -140,10 +132,22 @@ class FormBuilder {
 		');
     }
 
+    public function render(fState:FormState, initialState:Dynamic):ReactFragment
+    {
+		return jsx('
+			<$Form model=${fState.model} onSubmit=${comp.handleSubmit} className="tabComponentForm formField">
+				<div className="grid_box" role="table" aria-label="Destinations">
+				<div className="g_caption" >${fState.title}</div>
+				${renderElements(fState.fields, fState.model)}
+				</div>
+			</$Form>		
+		');
+    }
+
 	public function  hidden(cm:String):ReactFragment
 	{
 		//return null;
-		return jsx('<$Control type="hidden" model=${cm} />');
+		return jsx('<$Control mapProps=${{type:"hidden"}} model=${cm} />');
 	}
 }
 

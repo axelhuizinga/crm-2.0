@@ -8,6 +8,6 @@ import haxe.Constraints.Function;
  */
 
 @:jsRequire('react-flatpickr', 'default')
-@:native('DateTimePicker') 
+@:native('Flatpickr') 
 extern class DateTimePicker extends ReactComponent
 {}

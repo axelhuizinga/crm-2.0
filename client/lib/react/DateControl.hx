@@ -8,7 +8,7 @@ import js.Lib;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;
 import react.DateControlTypes;
-//import react.Flatpickr;
+import react.Flatpickr;
 
 /**
  * ...
@@ -35,9 +35,12 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 		//var val:String = props.value;
 		//val = val.split('+')[0];
 		return 	jsx('
-		<$DateTimePicker     
-
-			dateFormat=${props.options.dateFormat}
+		<$Flatpickr     
+			options=${{
+				dateFormat:props.options.dateFormat,
+				defaultValue:props.value
+			}}
+			value=${props.value}
 			onChange=${props.onChange}/>
 		');
 	}

@@ -20,6 +20,8 @@ class DateTimeControl extends ReactComponentOfProps<DateTimeProps>
 {
 	static var css = js.Lib.require('react-datepicker/dist/react-datepicker.css');
 	static var flat = js.Lib.require('flatpickr/dist/themes/light.css');
+	static var flatpickr = js.Lib.require('flatpickr');
+	static var German = js.Lib.require('flatpickr/dist/l10n/de.js');
 
 
 
@@ -27,6 +29,7 @@ class DateTimeControl extends ReactComponentOfProps<DateTimeProps>
 	{
 		//trace( props.value );
 		super(props);
+		flatpickr.localize(German);
 		trace(props);
 	}
 	
@@ -35,14 +38,16 @@ class DateTimeControl extends ReactComponentOfProps<DateTimeProps>
 		return jsx('
 			<$Flatpickr     
 				options=${{
-					clickOpens:false,
+					clickOpens:(props.disabled==null?true:!props.disabled),
 					dateFormat:props.options.dateFormat,
+					enableTime: true,
 					//defaultDate:props.modelValue,
 					//'inline': props.options != null && props.options._inline != null && props.options._inline,
 					time_24hr:true,
-					minuteIncrement:5
+					minuteIncrement:5,
+					locale:'de'
 				}}
-				value=${props.value}		
+				value=${Date.fromString(props.value.split('+')[0])}
 				disabled=${props.disabled}		
 				onChange=${props.onChange}/>
 		');

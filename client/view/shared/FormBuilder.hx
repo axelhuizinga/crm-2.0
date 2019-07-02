@@ -71,7 +71,7 @@ class FormBuilder {
 								options:{
 									dateFormat:field.displayFormat(), 
 									disabled:field.readonly,
-									onChange:field.handleChange, time_24hr:true
+									onChange:comp.handleChange, time_24hr:true
 								}
 							}}
 							disabled=${field.readonly} 
@@ -87,7 +87,7 @@ class FormBuilder {
 						<div className="g_cell_r" role="cell">
 							<$Control controlProps=${{
 									
-								onChange:field.handleChange}} 
+								onChange:comp.handleChange}} 
 								model="${model}.${name}"
 								mapProps=${{
 									options:{

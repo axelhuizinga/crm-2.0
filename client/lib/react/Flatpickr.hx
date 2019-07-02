@@ -7,6 +7,6 @@ package react;
  
 
 @:jsRequire('react-flatpickr', 'default')
-//@:native('DatePicker') 
+@:native('DateTimePicker') 
 extern class Flatpickr extends ReactComponent 
 {}

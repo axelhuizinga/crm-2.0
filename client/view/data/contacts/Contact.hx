@@ -1,4 +1,6 @@
 package view.data.contacts;
+import haxe.CallStack;
+import me.cunity.debug.Out;
 import action.AppAction;
 import haxe.ds.IntMap;
 import model.AppState;
@@ -82,6 +84,14 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.selectedData);
 		trace(state.loading);
 	}
+	
+	override function componentDidCatch(error, info) {
+		// Display fallback UI
+		if(state.mounted)
+		this.setState({ hasError: true });
+		trace(error);
+		me.cunity.debug.Out.dumpStack(CallStack.callStack());
+	}	
 
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
     {
@@ -185,6 +195,7 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{	
 		trace(props.location);
+		setState({mounted:true});
 		var baseUrl:String = props.match.path.split(':section')[0];
 		trace(props.match);
 		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )

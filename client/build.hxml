@@ -19,6 +19,7 @@
 -js ../httpdocs/app.js
 -dce std
 #--no-traces
+#-D shallow-expose
 -main Go
 
 #-D debug

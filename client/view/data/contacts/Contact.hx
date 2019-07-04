@@ -229,6 +229,13 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 
 	function handleChange(contact, value) {
 		trace(contact);
+		
+		trace(Type.typeof(contact[0]));
+		Out.dumpObject(contact[0]);
+		trace(contact[0].fp_incr(1));
+		
+		trace(Type.getInstanceFields(Type.getClass(contact[0])));
+		
 		trace(value);
 	}		
 

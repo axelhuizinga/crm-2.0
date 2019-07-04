@@ -86,14 +86,16 @@ class FormBuilder {
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
 							<$Control controlProps=${{
-									
+								cComp:comp,
 								onChange:comp.handleChange}} 
 								model="${model}.${name}"
 								mapProps=${{
 									options:{
 										dateFormat:field.displayFormat(),
 										_inline:field.readonly
-									}
+									},
+									name:name
+									
 								}}
 								component=${DateControl} />
 						</div>

@@ -2,7 +2,7 @@ package react;
 
 import haxe.Constraints.Function;
 import haxe.ds.Either;
-import react.Flatpickr;
+import react.ReactComponent;
 
 /**
  * ...
@@ -32,8 +32,10 @@ typedef Locale = {
  
 typedef DateTimeProps =
 {
+	?cComp:ReactComponent,
     ?defaultValue: String,
 	?disabled:Bool,
+	?name:String,
     options: FlatpickrProps,
     ?onChange: Function,
     ?onOpen: Function,

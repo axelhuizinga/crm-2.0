@@ -1,5 +1,6 @@
 package react;
 
+import js.html.Document;
 import react.ReactComponent.ReactFragment;
 import haxe.Constraints.Function;
 import haxe.ds.Either;
@@ -32,7 +33,7 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 	
 	override public function render():ReactFragment
 	{
-		//trace( props.value );
+		trace( props.value );
 		//var val:String = props.value;
 		//val = val.split('+')[0];
 		return 	jsx('
@@ -41,15 +42,29 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 				allowInput:false,
 				altFormat:props.options.dateFormat,
 				//dateFormat:'U',// seconds since Unix Epoch
-				dateFormat:props.options.dateFormat,//'Y-m-d',
-				altInput:false,
+				dateFormat:'Y-m-d',
+				altInput:true,
 				defaultValue:props.value,
 				locale:'de',
-				onChange:props.onChange
+				onChange:onChange
 			}}
 			value=${Date.fromString(props.value)}
-			onChange=${props.onChange}
+			name=${props.name}
 			/>
 		');
+	}
+	/**${function (_,str,me){
+				trace(str);
+				trace(me);
+			}}
+	 * [Description]
+	 * @param sDates 
+	 * @param val 
+	 * @param me 
+	 */
+
+	function onChange(sDates:Array<Dynamic>,val:String,me:DateTimePicker) {
+		trace(val);
+		trace(props.name);
 	}
 }

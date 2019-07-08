@@ -9,7 +9,7 @@ import js.Lib;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;
 import react.DateControlTypes;
-import react.DateTimePicker;
+import react.Flatpickr;
 
 /**
  * ...
@@ -30,8 +30,32 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 		flatpickr.localize(German);
 		trace(props);
 	}
-	
+
 	override public function render():ReactFragment
+	{
+		trace( props.value );
+		//var val:String = props.value;
+		//val = val.split('+')[0];
+		return 	jsx('
+		<$Flatpickr     
+			options=${{
+				allowInput:false,
+				altFormat:props.options.dateFormat,
+				//dateFormat:'U',// seconds since Unix Epoch
+				dateFormat:'Y-m-d',
+				altInput:true,
+				defaultValue:props.value,
+				locale:'de',
+				onChange:onChange
+			}}
+			value=${Date.fromString(props.value)}
+			name=${props.name}
+			className="h100" 
+			/>
+		');
+	}	
+	
+	public function render2():ReactFragment
 	{
 		trace( props.value );
 		//var val:String = props.value;

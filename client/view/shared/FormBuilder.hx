@@ -70,13 +70,12 @@ class FormBuilder {
 							<$Control controlProps=${{
 								options:{
 									dateFormat:field.displayFormat(), 
-									disabled:field.readonly,
 									onChange:comp.handleChange, time_24hr:true
 								}
 							}}
 							disabled=${field.readonly} 
 								model="${model}.${name}" 
-								mapProps=${{name:model+'.'+ name}}
+								mapProps=${{name:model+'.'+ name, _inline:field.readonly}}
 								component=${DateTimeControl} />
 						</div>
 					</div>');

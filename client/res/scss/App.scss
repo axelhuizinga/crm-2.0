@@ -297,13 +297,13 @@ h1 {
 {
   border-radius: $tableHeader-radius;
   border:1px solid #ccc;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   color: #3A3F44;  
   
 }
 .formField input {
   width: 100%;
-  padding:1rem;
+  /*padding:1rem;*/
   background-color: #fafafa;
   border-left-style:none;
   border-bottom-left-radius: 0;
@@ -764,11 +764,13 @@ form td, form caption
 .grid_box
 {
 	display: grid;
-	margin: 1rem auto;
+	margin: 1px auto;
 	grid-auto-rows:  min-content;
 	grid-gap: 1rem;
 	grid-template-columns: 1fr 1fr;
 	font-size: 1.25rem;
+	overflow-y: auto;
+	padding-right: 1rem;
 }
 
 .g_caption
@@ -793,7 +795,7 @@ form td, form caption
 }
 .g_cell
 {
-	padding: 1rem;	
+	padding: 0.5rem 1rem;	
 }
 
 .g_cell, .g_cell_r

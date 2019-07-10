@@ -265,7 +265,7 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 			var fields:Map<String,FormField> = [
 				for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
 			];
-			//trace(fields);
+			trace(fields);
 			state.formBuilder.renderLocal({
 				fields:[
 					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]

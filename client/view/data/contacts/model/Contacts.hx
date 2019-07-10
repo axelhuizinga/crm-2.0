@@ -19,19 +19,33 @@ class Contacts
 					"fields" => 'user_name,change_pass_required,password']
 				],
 			view:[
+				'title'=>{label:'Anrede'},
+				'title_2'=>{label:'Titel'},
 				'first_name'=>{label:'Vorname'},
 				'last_name'=>{label:'Name'},
 				'email'=>{label:'Email'},
+				'phone_code'=>{label:'Landesvorwahl'},
 				'phone_number'=>{label:'Telefon'},		
-				'company_name'=>{label: 'Firmenname'},		
-				'co_field'=>{label: 'c/o'},
+				'mobile'=>{label:'Mobil'},
+				'fax'=>{label:'Fax'},
+				'company_name'=>{label:'Firmenname'},	
+				'address'=>{label:'Strasse'},
+				'address_2'=>{label:'Hausnummer'},
+				'plz'=>{label:'PLZ'},
+				'city'=>{label:'Ort'},
+				'state'=>{label:'Status'},
+				'country_code'=>{label:'Land'},
+				'c/o'=>{label: 'c/o'},
 				'creation_date'=>{label: 'Hinzugefügt', type:DateTimePicker, readonly: true, 
 					//displayFormat: function () return {format:"dd.MM.yyyy H:MM", readonly:true}},
 					displayFormat: function() return "d.m.Y H:i"}, 
-				//'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: function () return {format:"DD.MM.YYYY"}},
 				'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat:  function() return "d.m.Y"},
+				'gender'=>{label:'Geschlecht'},
+				'comment'=>{label:'Kommentar'},
+				'use_email'=>{label:'Post per Email'},
 				'id' => {type:Hidden},
-				'edited_by' => {type:Hidden}
+				'edited_by' => {type:Hidden},
+				//'mandator'=>{label:''}
 			]
 		}
 	];

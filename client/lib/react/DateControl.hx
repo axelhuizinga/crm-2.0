@@ -28,7 +28,7 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 		//trace( props.value );
 		super(props);
 		flatpickr.localize(German);
-		trace(props);
+		//trace(props);
 	}
 
 	override public function render():ReactFragment

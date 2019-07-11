@@ -141,8 +141,8 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		{
 			var fS:FormState = props.parentComponent.state;
 			var sData = fS.selectedData;
-			trace(fS.selectedData);
-			trace('selected:${selected}');
+			//trace(fS.selectedData);
+			//trace('selected:${selected}');
 			if(selected)
 			{
 				sData.set(props.data["id"], props.data);
@@ -154,7 +154,7 @@ class Tr extends PureComponentOf<TrProps,TrState>
 			}
 			//props.parentComponent.setState(fS);
 		}
-		trace(selected);
+		//trace(selected);
 		setState({selected: selected});
 	}
 }

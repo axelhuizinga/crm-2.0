@@ -227,20 +227,22 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
-	function handleChange(contact, value) {
+	function handleChange(contact, value, t) {
 		trace(contact);
+		trace(contact[0]);
+		trace(contact.length);
+		trace(t);
 		
-		trace(Type.typeof(contact[0]));
-		Out.dumpObject(contact[0]);
-		trace(contact[0].fp_incr(1));
-		
-		trace(Type.getInstanceFields(Type.getClass(contact[0])));
+		//trace(Type.typeof(contact));
+		//Out.dumpObject(contact);
+		//trace(contact[0].fp_incr(1));
 		
 		trace(value);
 	}		
 
 	function handleSubmit(contact, _) {
 		trace(contact);
+		return false;
 	}	
 	
 	function renderResults():ReactFragment
@@ -260,12 +262,12 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'edit':
-			trace(initialState);
-			trace(model(initialState, contact, first_name));
+			//trace(initialState);
+			//trace(model(initialState, contact, first_name));
 			var fields:Map<String,FormField> = [
 				for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
 			];
-			trace(fields);
+			//trace(fields);
 			state.formBuilder.renderLocal({
 				fields:[
 					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
@@ -273,26 +275,7 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 				model:'contact',
 				title: 'Kontakt - Bearbeite Stammdaten'
 			},initialState);
-			/**
-			 * typedef FormField =
-{
-	?className:String,
-	?name:String,
-	?label:String,
-	?value:Dynamic,
-	?dataBase:String, 
-	?dataTable:String,
-	?dataField:String,
-	?displayFormat:Function,
-	?type:FormElement,
-	?primary:Bool,
-	?readonly:Bool,
-	?required:Bool,
-	?handleChange:InputEvent->Void,
-	?placeholder:String,
-	?validate:String->Bool
-}
-			 */
+			
 			case 'add':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');

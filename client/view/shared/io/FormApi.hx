@@ -156,8 +156,8 @@ class FormApi
 		trace(comp.props.history.location.pathname);
 		//trace(comp.props.history);
 		trace('new action:$action');
-		trace(comp.props.match.params.action);
-		trace(comp.props.match.params.section);
+		//trace(comp.props.match.params.action);
+		//trace(comp.props.match.params.section);
 		trace(comp.props.match);
 		trace('${comp.props.match.params.section}/${action}');
 		var path:String = Std.string(comp.props.match.path).split(':')[0];

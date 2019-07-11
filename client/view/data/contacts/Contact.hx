@@ -240,8 +240,9 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		trace(value);
 	}		
 
-	function handleSubmit(contact, _) {
+	function handleSubmit(contact, t) {
 		trace(contact);
+		trace(t);
 		return false;
 	}	
 	

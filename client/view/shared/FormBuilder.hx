@@ -1,11 +1,7 @@
 package view.shared;
 
 import haxe.ds.Map;
-import js.html.InputElement;
-import js.html.InputEvent;
 import haxe.Constraints.Function;
-import js.html.ButtonElement;
-import js.html.Event;
 import macrotools.Macro.model;
 import shared.DBMetaData;
 import shared.DbData;
@@ -62,6 +58,10 @@ class FormBuilder {
 			{
 				case FormElement.Hidden:
 					null;
+				case FormElement.Button:
+					jsx('<button type="submit">
+						${field.value.value}
+					</button>');
 				case FormElement.DateTimePicker:
 				    jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">
@@ -128,6 +128,9 @@ class FormBuilder {
 				<div className="grid_box" role="table" aria-label="Destinations">
 				<div className="g_caption" >${fState.title}</div>
 				${renderElements(fState.fields, fState.model)}
+				<div ><button type="submit">
+						Speichern
+					</button></div>
 				</div>
 			</$LocalForm>		
 		');

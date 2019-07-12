@@ -322,8 +322,12 @@ h1 {
 }
 .formField input:focus, .formField input:hover {
   background-color: #fff;
-  outline: none;
+  outline-style: none !important;
+  outline: none !important;
 }
+input::-moz-focus-inner { 
+	border: 0; 
+  }
 
 .formField input[type="submit"]{
 	border-radius: $tableHeader-radius;

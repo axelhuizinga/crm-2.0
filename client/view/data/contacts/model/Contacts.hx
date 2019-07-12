@@ -45,7 +45,8 @@ class Contacts
 				'use_email'=>{label:'Post per Email'},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},
-				//'mandator'=>{label:''}
+				//'mandator'=>{label:''},
+				//'submit'=>{type:Button,value:{type:'submit',value: 'Speichern'}}
 			]
 		}
 	];

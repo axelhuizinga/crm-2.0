@@ -1,10 +1,12 @@
 package react;
 
+import js.html.FilePropertyBag;
+import js.html.Event;
+import js.html.InputElement;
+import js.html.KeyboardEvent;
 import js.html.Document;
 import react.ReactComponent.ReactFragment;
-import haxe.Constraints.Function;
-import haxe.ds.Either;
-import haxe.Timer;
+import react.ReactRef;
 import js.Lib;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;
@@ -23,12 +25,35 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 	static var flatpickr = js.Lib.require('flatpickr');
 	static var German = js.Lib.require('flatpickr/dist/l10n/de.js');	
 
+	var fpRef:ReactRef<InputElement>;
+	var fP:FlatpickrJS;
+
 	public function new(props) 
 	{
 		//trace( props.value );
 		super(props);
 		flatpickr.localize(German);
 		//trace(props);
+	}
+
+	override public function componentDidMount():Void 
+	{
+		//get flatpickr instance);
+		fP = Reflect.field(fpRef, 'flatpickr');
+		var altInput:InputElement = fP.altInput;
+		//trace(Reflect.fields(fP));
+		altInput.addEventListener('keyup', function(ev:KeyboardEvent){
+			//trace(ev.keyCode);
+			var val:String = altInput.value;
+			var pd:Date = fP.parseDate(val, fP.config.altFormat);
+			var fD:String = fP.formatDate(pd, fP.config.altFormat);
+			if(val==fD)
+			{
+				fP.setDate(val,true,fP.config.altFormat);
+			}
+		});
+		//trace(Reflect.fields(fpRef));
+
 	}
 
 	override public function render():ReactFragment
@@ -39,15 +64,15 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 		return 	jsx('
 		<$Flatpickr     
 			options=${{
-				allowInput:false,
+				allowInput:true,
 				altFormat:props.options.dateFormat,
-				//dateFormat:'U',// seconds since Unix Epoch
 				dateFormat:'Y-m-d',
 				altInput:true,
 				defaultValue:props.value,
 				locale:'de',
 				onChange:onChange
 			}}
+			ref=${function(fP)this.fpRef = fP}
 			value=${Date.fromString(props.value)}
 			name=${props.name}
 			className="h100" 
@@ -55,33 +80,7 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 		');
 	}	
 	
-	public function render2():ReactFragment
-	{
-		trace( props.value );
-		//var val:String = props.value;
-		//val = val.split('+')[0];
-		return 	jsx('
-		<$DateTimePicker     
-			options=${{
-				allowInput:false,
-				altFormat:props.options.dateFormat,
-				//dateFormat:'U',// seconds since Unix Epoch
-				dateFormat:'Y-m-d',
-				altInput:true,
-				defaultValue:props.value,
-				locale:'de',
-				onChange:onChange
-			}}
-			value=${Date.fromString(props.value)}
-			name=${props.name}
-			/>
-		');
-	}
-	/**${function (_,str,me){
-				trace(str);
-				trace(me);
-			}}
-	 * [Description]
+	 /* [Description]
 	 * @param sDates 
 	 * @param val 
 	 * @param me 
@@ -90,5 +89,6 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 	function onChange(sDates:Array<Dynamic>,val:String,me:DateTimePicker) {
 		trace(val);
 		trace(props.name);
+		fP.close();
 	}
 }

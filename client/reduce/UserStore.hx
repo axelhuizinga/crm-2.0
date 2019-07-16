@@ -14,7 +14,7 @@ import redux.StoreMethods;
 /*
 enum UserAction
 {
-	LoginWait;
+	AppWait;
 
 	LoginError(state:UserProps);
 	LogOut(state:UserProps);	
@@ -45,7 +45,7 @@ class UserStore implements IReducer<UserAction, UserProps>
 				else
 					state;
 					
-			case LoginWait:
+			case AppWait:
 				copy(state, {waiting:true});
 				
 			default:

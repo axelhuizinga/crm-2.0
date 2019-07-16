@@ -25,7 +25,7 @@ enum AppAction
 	//LoginReq(state:UserState);
 	LoginChange(state:UserState);
 	LoginComplete(state:UserState);
-	LoginWait;
+	AppWait;
 
 	LoginError(state:UserState);
 	LogOut(state:UserState);	

@@ -1,27 +1,22 @@
 package;
-import me.cunity.debug.Out;
+
 import haxe.Unserializer;
 import haxe.ds.StringMap;
-import haxe.extern.EitherType;
-import haxe.Json;
 import haxe.io.Bytes;
 import hxbit.Serializer;
 import php.Lib;
 import php.NativeArray;
 import model.VicidialUsers;
-import model.*;
-import me.cunity.php.db.*;
 import php.Syntax;
 import php.Web;
 import php.db.PDO;
 import php.db.PDOStatement;
 import shared.DbData;
-import sys.db.*;
 import sys.io.File;
 
 using Lambda;
 using Util;
-//import StringTools;
+
 
  /* ...
  * @author axel@cunity.me
@@ -486,6 +481,18 @@ class Model
 		}).join(','));
 		return true;
 	}
+
+	public function buildSet(param:StringMap<String>, sqlBf:StringBuf):Bool
+	{
+		for(key in fieldNames)
+		{
+			if(param.has(key))
+			{
+				trace('set $key => ${param.get($key)}');
+			}
+		}
+		return true;
+	}
 	
 	public function buildLimit(limitParam:String, sqlBf:StringBuf):Void
 	{
@@ -545,11 +552,11 @@ class Model
 			filterValues = new Array();
 		}
 
-		if (param != null && param.get('fullReload') == 'true')
+		/*if (param != null && param.get('fullReload') == 'true')
 		{
 			trace('fullReload');
 			globals = {users: query("SELECT first_name, last_name, user_name, active, user_group FROM vicidial_users") };
-		}
+		}*/
 		table = param.get('table');
 		if(table != null)
 		{

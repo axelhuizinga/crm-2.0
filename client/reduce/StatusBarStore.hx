@@ -27,17 +27,17 @@ typedef StatusBarState =
 class StatusBarStore implements IReducer<StatusAction, StatusBarState>
 //	implements IMiddleware<StatusAction, AppState>
 {
-	public var initState:StatusBarState = {
-		pathname: Browser.location.pathname,// '',
-		date:Date.now()
-	};
+	public var initState:StatusBarState;
 	public var store:StoreMethods<model.AppState>;
-
-	var ID = 0;
+	
 	var loadPending:Promise<Bool>;
 	
 	public function new() 
 	{ 
+		initState = {
+			pathname: Browser.location.pathname,// '',
+			date:Date.now()
+		};
 		trace('ok');
 	}
 	

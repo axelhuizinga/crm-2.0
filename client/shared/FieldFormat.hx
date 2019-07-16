@@ -22,6 +22,7 @@ class FieldFormat
         {
             case Date_:
                 DateTools.format(Date.fromString(v), dv.format_display);
+
             default:
                 null;
         }

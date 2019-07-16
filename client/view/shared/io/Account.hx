@@ -135,8 +135,8 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		trace(vA);
 		//Out.dumpObject(vA);
 		dbMetaData = new  DBMetaData();
-		dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
-		trace(dbMetaData.dataFields.get(111));
+		//dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
+		//trace(dbMetaData.dataFields.get(111));
 		var s:hxbit.Serializer = new hxbit.Serializer();
 		
 		return;

@@ -79,7 +79,7 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = Contacts.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
-			action:'find',loading:true,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>()
+			loading:false,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>()
 		},this);
 		trace(state.selectedData);
 		trace(state.loading);
@@ -169,7 +169,6 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 			//trace(props.match);
 			if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
 			{
-				//~/ 
 				trace('redirect 2 ${baseUrl}${props.match.params.section}');
 				props.history.push('${baseUrl}${props.match.params.section}');
 				find(ev);
@@ -245,6 +244,11 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		trace(t);
 		return false;
 	}	
+
+	function save()
+	{
+		
+	}
 	
 	function renderResults():ReactFragment
 	{

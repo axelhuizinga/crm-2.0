@@ -1,5 +1,6 @@
 package model;
 
+import view.shared.io.DataAccess.DataSource;
 import react.router.ReactRouter;
 import action.AppAction;
 import action.LocationAction;
@@ -8,6 +9,7 @@ import history.History;
 import history.Location;
 import history.TransitionManager;
 import reduce.AppStore;
+import reduce.DataStore;
 import reduce.LocationStore;
 import reduce.StatusBarStore;
 //import reduce.UserStore;
@@ -24,6 +26,7 @@ class ApplicationStore
 	{
 		// store model, implementing reducer and middleware logic
 		var appWare = new AppStore();
+		var dataStore = new DataSource();
 		var locationStore = new LocationStore();
 		var statusBarStore = new StatusBarStore();
 		//var userStore = new UserStore();

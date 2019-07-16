@@ -1,11 +1,6 @@
 package model;
-import model.UserState;
-import view.shared.io.User;
-import haxe.Json;
-import haxe.ds.StringMap;
-import history.History;
-import history.Location;
 import shared.DbData;
+import model.UserState;
 
 typedef DataSource =
 {
@@ -20,8 +15,7 @@ typedef DataSource =
 
 typedef DataAccessState = 
 {
-	//compState:StringMap<CompState>,
-	config:Dynamic,
+	dbData:DbData,
 	?hasError:Bool,
 	user:UserState,
     ?source:DataSource,

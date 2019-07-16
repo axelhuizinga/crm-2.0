@@ -23,13 +23,13 @@ typedef CustomField =
 class Contacts extends Model
 {
 	private static var vicdial_list_fields = 'lead_id,entry_date,modify_date,status,user,vendor_lead_code,source_id,list_id,gmt_offset_now,called_since_last_reset,phone_code,phone_number,title,first_name,middle_initial,last_name,address1,address2,address3,city,state,province,postal_code,country_code,gender,date_of_birth,alt_phone,email,security_phrase,comments,called_count,last_local_call_time,rank,owner,entry_list_id'.split(',');		
-	private static var contact_fields = 'client_id,lead_id,creation_date,state,use_email,register_on,register_off,register_off_to,teilnahme_beginn,title,anrede,namenszusatz,co_field,storno_grund,birth_date,old_active'.split(',');	
+	private static var contact_fields = S.tableFields('contacts');	
 	
-	private static var custom_fields_map:StringMap<String> = [
+	/*private static var custom_fields_map:StringMap<String> = [
 		'title'=>'anrede',
 		//'co_field'=>'addresszusatz',
 		'geburts_datum'=>'birth_date',
-	];	
+	];	*/
 	
 	public static function create(param:StringMap<String>):Contacts
 	{
@@ -39,7 +39,7 @@ class Contacts extends Model
 			param.set('table', 'contacts');
 		}
 		trace(param);
-		var self:Contacts = new Contacts(param);	
+		var self:Contacts = new Contacts(param);		
 
 		if(param.get('action')==null)
 		{
@@ -66,8 +66,8 @@ class Contacts extends Model
 	
 	function save(q:StringMap<Dynamic>):Bool
 	{
-		var clientID = q.get('client_id');
-		
+		var id = q.get('id');
+		self.fieldNames.remove('id');
 		return false;
 	}
 	

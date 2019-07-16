@@ -330,6 +330,7 @@ class S
 		var sql:String = comment(unindent, format) /*
 			SELECT string_agg(COLUMN_NAME,',') FROM information_schema.columns WHERE table_schema = '$db' AND table_name = '$table'
 			*/;
+
 		var stmt:PDOStatement = S.dbh.query(sql);
 		if (S.dbh.errorCode() != '00000')
 		{
@@ -343,7 +344,28 @@ class S
 		}
 		return null;
 	}
-	
+
+	public static function typedFields(table:String, db:String = 'crm'): Array<String>
+	{
+		var sql:String = comment(unindent,format) /*
+		select column_name,data_type 
+		from information_schema.columns 
+		where table_name = '$table';
+		*/;
+		var stmt:PDOStatement = S.dbh.query(sql);
+		if (S.dbh.errorCode() != '00000')
+		{
+			trace(S.dbh.errorCode());
+			trace(S.dbh.errorInfo());
+			Sys.exit(0);
+		}		
+		if (stmt.rowCount() == 1)
+		{
+			return stmt.fetchColumn().split(',');
+		}
+		return null;
+	}
+		
 	static function __init__() {
 		Syntax.code('require_once({0})', '../.crm/db.php');
 		Syntax.code('require_once({0})', '../.crm/functions.php');

@@ -196,14 +196,4 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		//return null;
 		return jsx('<RedirectBox {...p} to=${App.store.getState().appWare.redirectAfterLogin}/>');
 	}
-	
-/**
- * 
- * <$Route path="/Data/Contacts/Contact/:id" component=${Bundle.load(Data)}/>
- * 					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
-					<$Route path="/Data/Edit/:id" component=${Bundle.load(Data)}/>
-					<$Route path="/Data" component=${Bundle.load(Data)}/>
-					<$Route path="/qc" component=${Bundle.load(QC)}/>
-					<$Route path="/reports" component=${Bundle.load(Reports)}/>
- */
 }

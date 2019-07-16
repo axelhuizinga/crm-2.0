@@ -38,7 +38,7 @@ class UserAction
 			//trace(getState());
 			if (props.pass == '' || props.user_name == '') 
 				return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:'Passwort und user_name eintragen!'}));
-			var spin:Dynamic = dispatch(AppAction.LoginWait);
+			var spin:Dynamic = dispatch(AppAction.AppWait);
 			trace(spin);
 			var bL:XMLHttpRequest = BinaryLoader.create(
 			'${App.config.api}', 
@@ -110,7 +110,7 @@ class UserAction
 					return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:req.statusText}));
 				}
 			};
-			var spin:Dynamic = dispatch(AppAction.LoginWait);
+			var spin:Dynamic = dispatch(AppAction.AppWait);
 			req.send(fD);
 			trace(spin);
 			return spin;			

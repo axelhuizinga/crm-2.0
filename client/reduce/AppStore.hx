@@ -30,34 +30,36 @@ class AppStore
 	implements IReducer<AppAction, GlobalAppState>
 	implements IMiddleware<AppAction, AppState>
 {
-	public var initState:GlobalAppState = {
-		config:App.config,
-		firstLoad:true,
-		formStates: new Map(),
-		history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}),
-		themeColor: 'green',
-		locale: 'de',
-		redirectAfterLogin: (Browser.location.pathname=='/'?'DashBoard':Browser.location.pathname), 
-		routeHistory: new Array(),
-		userList:[],
-		user:{
-			first_name:'',
-			last_name:'',
-			user_name:(Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name')),
-			email:'',
-			pass:'',
-			loggedIn:false,
-			last_login:null,
-			jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
-			waiting: false
-		}
-	};
+	public var initState:GlobalAppState;
 		
 	public var store:StoreMethods<model.AppState>;
 	
 	public function new() 
 	{
 		//trace('OK');
+		initState = {
+			config:App.config,
+			firstLoad:true,
+			formStates: new Map(),
+			history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}),
+			themeColor: 'green',
+			locale: 'de',
+			redirectAfterLogin: (Browser.location.pathname=='/'?'DashBoard':Browser.location.pathname), 
+			routeHistory: new Array(),
+			userList:[],
+			user:{
+				first_name:'',
+				last_name:'',
+				user_name:(Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name')),
+				email:'',
+				pass:'',
+				loggedIn:false,
+				last_login:null,
+				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
+				waiting: false
+			}
+		};
+
 		trace('redirectAfterLogin: ${initState.redirectAfterLogin}');
 		//initState.config = Reflect.field(appCconf, 'default');		
 		//initState.config = appCconf;		
@@ -98,7 +100,7 @@ class AppStore
 				trace(err);
 				//if(err.user_name==state.user.user_name)
 				copy(state, {user:{loginError:err.loginError, waiting:false}});
-			case LoginWait:
+			case AppWait:
 				copy(state, {waiting:true});				
 			case LoginComplete(uState):
 				trace(uState.user_name + ':' + uState.loggedIn);
@@ -154,7 +156,9 @@ class AppStore
 			case LoginComplete(state):
 				//App.firstLoad = false;	
 				trace(state);
-				next();		
+				var n:Dynamic = next();		
+				trace(n);
+				n;
 			case LoginError(err):
 				trace(err);
 				store.dispatch(AppAction.LoginRequired(store.getState().appWare.user));

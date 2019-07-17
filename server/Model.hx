@@ -488,7 +488,7 @@ class Model
 		{
 			if(param.has(key))
 			{
-				trace('set $key => ${param.get($key)}');
+				trace('set $key => ${param.get(key)}');
 			}
 		}
 		return true;

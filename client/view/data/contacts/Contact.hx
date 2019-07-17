@@ -79,7 +79,7 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = Contacts.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
-			loading:false,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>()
+			dataTable:[],loading:false,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>()
 		},this);
 		trace(state.selectedData);
 		trace(state.loading);
@@ -228,7 +228,8 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 
 	function handleChange(contact, value, t) {
 		trace(contact);
-		trace(contact[0]);
+		var field:String = contact.split('.')[1];
+		trace(field);
 		trace(contact.length);
 		trace(t);
 		
@@ -237,11 +238,24 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		//trace(contact[0].fp_incr(1));
 		
 		trace(value);
+		Reflect.setField(initialState, field, value);
 	}		
 
 	function handleSubmit(contact, t) {
-		trace(contact);
-		trace(t);
+		trace(contact);//initialState
+		trace(t._targetInst);
+		
+		
+		var fProps:Dynamic = Reflect.field(t._targetInst,'return').stateNode.props;
+		trace(fProps.store.getState());
+		trace(Reflect.fields(fProps));
+		var form_ = Reflect.field(fProps.formValue,"$form");
+		//trace(fProps.formValue);
+		trace(Reflect.fields(form_));
+		trace(form_.value);
+		trace(form_.intents );
+		trace(form_.pristine );
+		
 		return false;
 	}	
 
@@ -261,6 +275,9 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{
 			case 'find':
+				trace('state.dataTable.length:'+state.dataTable.length);
+				if(state.dataTable.length==0)				
+					return null;
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable} parentComponent=${this} 
 					${...props} dataState = ${dataDisplay["contactList"]} 
@@ -292,6 +309,8 @@ class Contact extends ReactComponentOf<DataFormProps,FormState>
 			case 'delete':
 				null;
 			default:
+				if(state.dataTable.length==0)				
+					return null;
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable} parentComponent=${this}
 					${...props} dataState = ${dataDisplay["contactList"]} 

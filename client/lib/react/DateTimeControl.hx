@@ -47,7 +47,7 @@ class DateTimeControl extends ReactComponentOfProps<DateTimeProps>
 					minuteIncrement:5,
 					locale:'de'
 				}}
-				value=${Date.fromString(props.value.split('+')[0])}
+				value=${Date.fromString(props.value)}
 				disabled=${props.disabled}		
 				onChange=${props.onChange}/>
 		');

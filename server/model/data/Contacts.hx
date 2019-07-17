@@ -67,7 +67,7 @@ class Contacts extends Model
 	function save(q:StringMap<Dynamic>):Bool
 	{
 		var id = q.get('id');
-		self.fieldNames.remove('id');
+		fieldNames.remove('id');
 		return false;
 	}
 	

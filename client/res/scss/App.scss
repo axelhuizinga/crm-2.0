@@ -41,10 +41,12 @@ $tableHeaderHeight: 2rem;
 
 /**/
 $darkGradient1:linear-gradient($lightGreen,$darkGreen, $darkGreen);	 
-$darkGradient:linear-gradient($lightBlue 0%, $paleBlue 32%);	 
+$darkGradient:linear-gradient($lightBlue 0%, $paleBlue 42%);	 
 
-@import "../bulma/bulma.sass";
+//@import "../bulma/bulma.sass";
+@import "../../node_modules/react-bulma-components/node_modules/bulma/bulma.sass";
 @import "../../node_modules/bulma-extensions/bulma-accordion/dist/css/bulma-accordion.sass";
+@import "../../node_modules/bulma-extensions/bulma-tooltip/dist/css/bulma-tooltip.sass";
 
 *{
 	border-collapse:collapse;
@@ -328,7 +330,11 @@ h1 {
 input::-moz-focus-inner { 
 	border: 0; 
   }
-
+.abs-right
+{
+	position: absolute;
+	right:0px;
+}
 .formField input[type="submit"]{
 	border-radius: $tableHeader-radius;
 	color:$logoBlue;
@@ -390,7 +396,7 @@ input::-moz-focus-inner {
 	display:flex;
 	flex-direction:column;
 	flex: auto;
-	margin:0.3rem 0px 0px;
+	margin:0px;
 	min-height: 0;
 	background-image:linear-gradient(white, $bgto);
 }
@@ -441,7 +447,7 @@ input::-moz-focus-inner {
 	flex-direction:column;
 	flex: auto;
 	min-height: 0;	
-	padding:0px;/*.5rem 1.1rem;*/
+	padding: 0.5rem 1.1rem;
 }
 .tabContent2 .columns
 {
@@ -453,6 +459,7 @@ input::-moz-focus-inner {
 	flex: 1;
 	padding:0px;/*.5rem 1.1rem;*/
 	min-height: 0;
+	margin:0px;
 }
 
 .tabs a 
@@ -504,6 +511,10 @@ form.modal-card-body{
 	flex-grow:1;
 	padding:0px;
 }*/
+.tooltip.is-tooltip-active::before
+{
+	font-size: 1.1rem;
+}
 .form-table-cell{
 	padding:0.1rem 0.3rem;
 	min-height:1.8rem;
@@ -529,7 +540,7 @@ form.modal-card-body{
 }
 .tabNav2 .tabs ul
 {
-	background-color:white;
+	background-color:$bgto;
 }
 .tabContent2 .table thead th:hover {
 	color:$sun!important;
@@ -785,8 +796,9 @@ form td, form caption
 	text-align: center;
 	grid-column: 1 / 3;
 	background-color: $paleBlue;
+	background-image:$darkGradient;
 	border-radius: $tableHeader-radius $tableHeader-radius;
-	padding: 1rem 2rem;
+	padding: 0.7rem 2rem 0.64rem 2rem;
 	font-weight: bold;
 	font-size: 1.22rem;
 	color:#fff;

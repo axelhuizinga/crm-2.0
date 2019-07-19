@@ -7,7 +7,8 @@ import react.ReactComponent;
  * @author axel@cunity.me
  */
 
-//@:jsRequire('reactbulma', 'Icon')
-@:jsRequire('react-bulma-components', 'Icon')
+@:jsRequire('reactbulma', 'Icon')
+@:native('Icon')
+//@:keepSub
 extern class Icon extends ReactComponent
 {}

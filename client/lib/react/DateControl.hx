@@ -1,5 +1,6 @@
 package react;
 
+import js.html.Element;
 import js.html.FilePropertyBag;
 import js.html.Event;
 import js.html.InputElement;
@@ -12,6 +13,10 @@ import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;
 import react.DateControlTypes;
 import react.Flatpickr;
+import shared.DateFormat;
+import haxe.EnumTools.EnumValueTools;
+
+using haxe.EnumTools;
 
 /**
  * ...
@@ -41,12 +46,37 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 		//get flatpickr instance);
 		fP = Reflect.field(fpRef, 'flatpickr');
 		var altInput:InputElement = fP.altInput;
-		//trace(Reflect.fields(fP));
-		altInput.addEventListener('keyup', function(ev:KeyboardEvent){
-			//trace(ev.keyCode);
+		trace(Reflect.fields(fP));
+		trace(Reflect.fields(altInput));
+		altInput.addEventListener('keydown', function(ev:KeyboardEvent){
+			trace(ev.key);
+			if(ev.key=='Enter')
+			{
+				var dF:DateFormatted = DateFormat.parseDE(altInput.value);
+				//if(dF.result.getName() != DateFormatResult.OK)
+				switch (dF.result)//,DateFormatResult.OK))
+				{
+					case DateFormatResult.OK:
+						trace(dF);
+					default:
+					ev.preventDefault();
+					ev.stopImmediatePropagation();
+					var container:Element = altInput.parentElement;
+					container.classList.add('is-tooltip-danger');
+					container.classList.add('tooltip');
+					container.classList.add('is-tooltip-active');
+					container.dataset.tooltip = Std.string(dF.result);
+					trace(dF);					
+				}
+
+			}
+			trace(fP.input);
+			trace(fP.input.value);
 			var val:String = altInput.value;
 			var pd:Date = fP.parseDate(val, fP.config.altFormat);
+			trace('$val === ${pd.toString()}');
 			var fD:String = fP.formatDate(pd, fP.config.altFormat);
+			trace('$val==$fD');
 			if(val==fD)
 			{
 				fP.setDate(val,true,fP.config.altFormat);
@@ -68,6 +98,7 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 				altFormat:props.options.dateFormat,
 				dateFormat:'Y-m-d',
 				altInput:true,
+				altInputClass: "form-control input",
 				defaultValue:props.value,
 				locale:'de',
 				onChange:onChange

@@ -1,7 +1,6 @@
-package bulma_components;
+package rbx;
 
 import react.ReactComponent;
-import react.ReactPropTypes;
 
 /**
  * ...
@@ -9,7 +8,8 @@ import react.ReactPropTypes;
  */
 
 //@:jsRequire('reactbulma', 'Tabs')
-@:jsRequire('react-bulma-components', 'Tabs')
+@:jsRequire('rbx', 'Tab')
+@:native('Tab')
 extern class Tabs extends ReactComponentOfProps<TabsProps>
 {
 }

@@ -1,8 +1,7 @@
 package react;
 
 import haxe.Constraints.Function;
-import haxe.ds.Either;
-import react.ReactComponent;
+import react.ControlTypes.InputProps;
 
 /**
  * ...
@@ -32,12 +31,10 @@ typedef Locale = {
  
 typedef DateTimeProps =
 {
+	>InputProps,
 	?cComp:ReactComponent,
     ?defaultValue: String,
-	?disabled:Bool,
-	?name:String,
     options: FlatpickrProps,
-    ?onChange: Function,
     ?onOpen: Function,
     ?onClose: Function,
     ?onMonthChange: Function,
@@ -46,8 +43,7 @@ typedef DateTimeProps =
     ?onValueUpdate: Function,
     ?onDayCreate: Function,
     ?onCreate: Function,
-    ?onDestroy: Function,
-	?value:Dynamic
+    ?onDestroy: Function
 }
 
 typedef DateOption = Dynamic;//Either<Date, Either<String, Int>>;

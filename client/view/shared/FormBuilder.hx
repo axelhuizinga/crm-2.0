@@ -93,8 +93,7 @@ class FormBuilder {
 										dateFormat:field.displayFormat(),
 										_inline:field.readonly
 									},
-									name:name
-									
+									name:name									
 								}}
 								component=${DateControl} />
 						</div>

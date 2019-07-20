@@ -509,7 +509,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - scrollBarWidth;
 		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} parentElement.offsetWidth: ${tableRef.current.parentElement.offsetWidth} ');
 		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
-		//trace(tableRef.current.offsetHeight);
+		trace('firstRowRef.current.offsetWidth:' + firstRowRef.current.offsetWidth);
 		//tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
 		tHeadRef.current.style.visibility = "collapse";						
 		//trace(tableRef.current.offsetHeight);

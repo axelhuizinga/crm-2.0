@@ -1,6 +1,6 @@
 package shared;
 
-//import haxe.ds.Either;
+using DateTools;
 
 enum abstract DateFormatResult(String)
 {
@@ -24,31 +24,33 @@ class DateFormat {
 
 	public static function parseDE(dS:String):DateFormatted
 	{
-		var dP:Array<String> = dS.split('.');
+		var dP:Array<Int> = dS.split('.').map(function (p:String) return Std.parseInt(p));
 		
 		if(dP.length!=3)
 		{
 			//VERIFY PARTS COUNT
 			return {result:PartMisMatch};
 		}
-		if(dP[0].length !=2)
-		{
-			if(Std.parseInt(dP[0])==null)
-			return {result:DayFormatSize};
-		}
-		if(dP[1].length !=2)
+
+		if(dP[1] == null || dP[1] == 0 || dP[1] >12)
 		{
 			//VERIFY MONTH FORMAT MM
 			return {result:MonthFormatSize};
 		}
-		if(dP[2].length !=4)
+		if(dP[2] == null || dP[2] == 0 || dP[2] <1000)
 		{
 			//VERIFY YEAR FORMAT YYYY
 			return {result:YearFormatSize};
 		}		
-		var day:String = App.sprintf('%02d',Std.parseInt(dP[0]));
-		var month:String = App.sprintf('%02d',Std.parseInt(dP[1]));
-		var year:String = App.sprintf('%d',Std.parseInt(dP[2]));
+		var day:String = App.sprintf('%02d',dP[0]);
+		var month:String = App.sprintf('%02d', dP[1]);
+		var year:String = App.sprintf('%d', dP[2]);
+		var checkDayDate:Date = Date.fromString('01-$month-$year');
+		var lastDay:Int = checkDayDate.getMonthDays();
+		if(dP[0] == null  || dP[0] == 0 || dP[0]>lastDay)
+		{
+			return {result:DayFormatSize};
+		}
 		return {date:Date.fromString('$year-$month-$day'),result:OK};
 	}
 	

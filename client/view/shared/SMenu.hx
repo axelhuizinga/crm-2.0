@@ -104,9 +104,14 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		if (props.menuBlocks.empty())
 			return null;
 		var style:Dynamic = null;
+		style = {
+			minWidth:App.config.sidebarDims.minWidth,
+			maxWidth:App.config.sidebarDims.maxWidth
+		};
+		style = null;
 		//var className = ''; 'panel-block';
 		if(props.sameWidth && state.sameWidth>0) {
-			style = {width:'${state.sameWidth}px'};
+			//style = {width:'${state.sameWidth}px'};
 		}
 		var i:Int = 1;
 		//style = null;
@@ -131,7 +136,8 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	{
 		var i:Int = _i+1;
 		var style:Dynamic =(props.sameWidth && state.sameWidth>0 ? 
-			{width:'${state.sameWidth}px'} : null
+			//{width:'${state.sameWidth}px'} : null
+			{width:'100%'} : null
 		);
 		//trace(block.handlerInstance);
 		return jsx('	
@@ -172,9 +178,12 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 				visibility: 'hidden'
 			};
 		}
+		style = {
+			minWidth:App.config.sidebarDims.minWidth
+		}
 		return jsx('
-		<div className="sidebar is-right">
-			<aside style=${style} className="menu" ref=${menuRef}>
+		<div className="sidebar is-right"  style=${style} > 
+			<aside className="menu" ref=${menuRef}>
 				${renderHeader()}
 				${renderPanels()}
 			</aside>

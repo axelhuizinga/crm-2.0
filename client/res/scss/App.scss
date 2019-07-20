@@ -6,6 +6,13 @@
 	$br $br 0 0;
 }
 */
+	 
+
+//@import "../bulma/bulma.sass";
+@import "../../node_modules/react-bulma-components/node_modules/bulma/bulma.sass";
+@import "../../node_modules/bulma-extensions/bulma-accordion/dist/css/bulma-accordion.sass";
+@import "../../node_modules/bulma-extensions/bulma-tooltip/dist/css/bulma-tooltip.sass";
+
 $baseFont:16;
 $borderSmallWidth:0.35px;
 $statusLineHeight:1.5;
@@ -38,16 +45,11 @@ $borderHeadCol:$borderSmallWidth solid $lightGreen;
 $tabs-boxed-link-radius: 0.3rem;//@include tabsradius(5);
 $tableHeader-radius: 0.3rem;
 $tableHeaderHeight: 2rem;
+$danger:$darkRed;
 
 /**/
 $darkGradient1:linear-gradient($lightGreen,$darkGreen, $darkGreen);	 
-$darkGradient:linear-gradient($lightBlue 0%, $paleBlue 42%);	 
-
-//@import "../bulma/bulma.sass";
-@import "../../node_modules/react-bulma-components/node_modules/bulma/bulma.sass";
-@import "../../node_modules/bulma-extensions/bulma-accordion/dist/css/bulma-accordion.sass";
-@import "../../node_modules/bulma-extensions/bulma-tooltip/dist/css/bulma-tooltip.sass";
-
+$darkGradient:linear-gradient($lightBlue 0%, $paleBlue 32%);
 *{
 	border-collapse:collapse;
 	/*background-color:transparent!important;*/
@@ -172,6 +174,7 @@ h1 {
   display:flex;
   flex-direction:column;
   flex-grow:1;
+  background-color: white;
   /*margin: 0.8rem 0rem 0.5rem 0.8rem
    /* position: relative;could be absolute or relative */
 }
@@ -475,6 +478,17 @@ input::-moz-focus-inner {
 }
 
 /*bulma overrides*/
+
+.tooltip.is-tooltip-danger::before
+{
+	background-color: $danger;
+}
+.tooltip.is-tooltip-danger:not(.is-loading)::after {
+
+    border-color:$danger transparent transparent transparent;
+
+}
+
 .table{margin-bottom: 0em;}
 .is-fullheight
 {
@@ -801,7 +815,7 @@ form td, form caption
 	padding: 0.7rem 2rem 0.64rem 2rem;
 	font-weight: bold;
 	font-size: 1.22rem;
-	color:#fff;
+	color:white;
 }
 
 .g_row_2

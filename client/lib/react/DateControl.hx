@@ -14,6 +14,7 @@ import react.ReactMacro.jsx;
 import react.DateControlTypes;
 import react.Flatpickr;
 import shared.DateFormat;
+import view.shared.io.Tooltip;
 import haxe.EnumTools.EnumValueTools;
 
 using haxe.EnumTools;
@@ -48,8 +49,10 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 		var altInput:InputElement = fP.altInput;
 		trace(Reflect.fields(fP));
 		trace(Reflect.fields(altInput));
+		var tip:Tooltip = null;
 		altInput.addEventListener('keydown', function(ev:KeyboardEvent){
-			trace(ev.key);
+			//trace(ev.key);
+			fP.close();
 			if(ev.key=='Enter')
 			{
 				var dF:DateFormatted = DateFormat.parseDE(altInput.value);
@@ -57,24 +60,20 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 				switch (dF.result)//,DateFormatResult.OK))
 				{
 					case DateFormatResult.OK:
-						trace(dF);
+						if(tip != null)
+							tip.clear(altInput.parentElement);
 					default:
 					ev.preventDefault();
 					ev.stopImmediatePropagation();
-					var container:Element = altInput.parentElement;
-					container.classList.add('is-tooltip-danger');
-					container.classList.add('tooltip');
-					container.classList.add('is-tooltip-active');
-					container.dataset.tooltip = Std.string(dF.result);
-					trace(dF);					
+					tip = new Tooltip(altInput.parentElement, {data: Std.string(dF.result),classes:['danger','active']});			
 				}
 
 			}
-			trace(fP.input);
-			trace(fP.input.value);
+			//trace(fP.input);
+			//trace(fP.input.value);
 			var val:String = altInput.value;
 			var pd:Date = fP.parseDate(val, fP.config.altFormat);
-			trace('$val === ${pd.toString()}');
+			//trace('$val === ${pd.toString()}');
 			var fD:String = fP.formatDate(pd, fP.config.altFormat);
 			trace('$val==$fD');
 			if(val==fD)
@@ -82,7 +81,64 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 				fP.setDate(val,true,fP.config.altFormat);
 			}
 		});
-		//trace(Reflect.fields(fpRef));
+
+		altInput.addEventListener('blur', function(ev:KeyboardEvent){
+			//trace(ev.key);
+//			fP.close();	
+			var dF:DateFormatted = DateFormat.parseDE(altInput.value);
+			//if(dF.result.getName() != DateFormatResult.OK)
+			switch (dF.result)//,DateFormatResult.OK))
+			{
+				case DateFormatResult.OK:
+					if(tip != null)
+						tip.clear(altInput.parentElement);
+				default:
+				ev.preventDefault();
+				ev.stopImmediatePropagation();
+				tip = new Tooltip(altInput.parentElement, {data: Std.string(dF.result),classes:['danger','active']});			
+			}
+
+			//trace(fP.input);
+			//trace(fP.input.value);
+			var val:String = altInput.value;
+			var pd:Date = fP.parseDate(val, fP.config.altFormat);
+			//trace('$val === ${pd.toString()}');
+			var fD:String = fP.formatDate(pd, fP.config.altFormat);
+			trace('$val==$fD');
+			if(val==fD)
+			{
+				fP.setDate(val,true,fP.config.altFormat);
+			}
+		});
+
+		altInput.addEventListener('mouseout', function(ev:KeyboardEvent){
+			//trace(ev.key);
+			fP.close();	
+			var dF:DateFormatted = DateFormat.parseDE(altInput.value);
+			//if(dF.result.getName() != DateFormatResult.OK)
+			switch (dF.result)//,DateFormatResult.OK))
+			{
+				case DateFormatResult.OK:
+					if(tip != null)
+						tip.clear(altInput.parentElement);
+				default:
+				ev.preventDefault();
+				ev.stopImmediatePropagation();
+				tip = new Tooltip(altInput.parentElement, {data: Std.string(dF.result),classes:['danger','active']});			
+			}
+
+			//trace(fP.input);
+			//trace(fP.input.value);
+			var val:String = altInput.value;
+			var pd:Date = fP.parseDate(val, fP.config.altFormat);
+			//trace('$val === ${pd.toString()}');
+			var fD:String = fP.formatDate(pd, fP.config.altFormat);
+			trace('$val==$fD');
+			if(val==fD)
+			{
+				fP.setDate(val,true,fP.config.altFormat);
+			}
+		});
 
 	}
 

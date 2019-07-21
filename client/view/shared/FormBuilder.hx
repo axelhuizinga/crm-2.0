@@ -85,7 +85,7 @@ class FormBuilder {
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
 							<$Control controlProps=${{
-								cComp:comp,
+								//cComp:comp,
 								onChange:comp.handleChange}} 
 								model="${model}.${name}"
 								mapProps=${{

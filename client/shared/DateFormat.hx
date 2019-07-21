@@ -35,12 +35,12 @@ class DateFormat {
 		if(dP[1] == null || dP[1] == 0 || dP[1] >12)
 		{
 			//VERIFY MONTH FORMAT MM
-			return {result:MonthFormatSize};
+			return {result:MonthFormatRange};
 		}
 		if(dP[2] == null || dP[2] == 0 || dP[2] <1000)
 		{
 			//VERIFY YEAR FORMAT YYYY
-			return {result:YearFormatSize};
+			return {result:YearFormatRange};
 		}		
 		var day:String = App.sprintf('%02d',dP[0]);
 		var month:String = App.sprintf('%02d', dP[1]);
@@ -49,7 +49,7 @@ class DateFormat {
 		var lastDay:Int = checkDayDate.getMonthDays();
 		if(dP[0] == null  || dP[0] == 0 || dP[0]>lastDay)
 		{
-			return {result:DayFormatSize};
+			return {result:DayFormatRange};
 		}
 		return {date:Date.fromString('$year-$month-$day'),result:OK};
 	}

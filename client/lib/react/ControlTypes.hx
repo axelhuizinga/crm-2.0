@@ -8,5 +8,6 @@ typedef InputProps =
 	?name:String,
     ?onChange: Function,		
 	?responseClass:String,
+	?placeholder:String,
 	?value:Dynamic
 }

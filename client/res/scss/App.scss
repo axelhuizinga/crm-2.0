@@ -45,7 +45,6 @@ $borderHeadCol:$borderSmallWidth solid $lightGreen;
 $tabs-boxed-link-radius: 0.3rem;//@include tabsradius(5);
 $tableHeader-radius: 0.3rem;
 $tableHeaderHeight: 2rem;
-$danger:$darkRed;
 
 /**/
 $darkGradient1:linear-gradient($lightGreen,$darkGreen, $darkGreen);	 
@@ -54,6 +53,11 @@ $darkGradient:linear-gradient($lightBlue 0%, $paleBlue 32%);
 	border-collapse:collapse;
 	/*background-color:transparent!important;*/
 }
+
+/* bulma variables */
+$danger:$darkRed;
+$tooltip-background-opacity: 0.8;
+$tooltip-max-width: 24rem;
  
 html,body { 
     /*font-family:Arial;*/

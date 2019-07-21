@@ -32,7 +32,7 @@ typedef Locale = {
 typedef DateTimeProps =
 {
 	>InputProps,
-	?cComp:ReactComponent,
+	//?cComp:ReactComponent,
     ?defaultValue: String,
     options: FlatpickrProps,
     ?onOpen: Function,

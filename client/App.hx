@@ -205,22 +205,22 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		return  ti;
 	} 
 
-	public static function initEState(?e:Dynamic, ?comp:Dynamic)
+	public static function initEState(init:Dynamic, ?comp:Dynamic)
 	{
 		var fS:FormState =
 		{
 			clean: true,
-			formApi:new FormApi(comp),
+			formApi:new FormApi(comp, init.sideMenu),
 			formBuilder:new FormBuilder(comp),
 			hasError: false,
 			mounted: false,
-			sideMenu: comp==null? {}:comp.props.sideMenu
+			sideMenu: init==null? {}:init.sideMenu
 		};
-		if(e != null)
+		if(init != null)
 		{
-			for(f in Reflect.fields(e))
+			for(f in Reflect.fields(init))
 			{
-				Reflect.setField(fS, f, Reflect.field(e, f));
+				Reflect.setField(fS, f, Reflect.field(init, f));
 			}
 		}
 		return fS;

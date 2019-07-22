@@ -53,6 +53,7 @@ import react.redux.form.Field;
 import react.redux.form.Fieldset;
 
 using Lambda;
+using view.shared.io.Param;
 
 /**
  * ...
@@ -153,16 +154,13 @@ class FormApi
 	public function itemHandler(e:Event)
 	{
 		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
-		trace(comp.props.history.location.pathname);
+		/*trace(comp.props.history.location.pathname);
 		//trace(comp.props.history);
 		trace('new action:$action');
-		//trace(comp.props.match.params.action);
-		//trace(comp.props.match.params.section);
 		trace(comp.props.match);
-		trace('${comp.props.match.params.section}/${action}');
 		var path:String = Std.string(comp.props.match.path).split(':')[0];
 		trace(path);
-		comp.props.history.push('${path}${comp.props.match.params.section}/${action}');
+		//comp.props.history.push('${path}${action}');*/
 		callMethod(action, e);
 	}
 
@@ -237,14 +235,10 @@ class FormApi
 	
 	public function render(content:ReactFragment)
 	{
-		//var sM:SMenuProps = comp.state.sideMenu;
-		//trace(content.props.children);
-		//if(sM.menuBlocks != null)
-			//trace(sM.menuBlocks.keys().next() + ':' + comp.props.match.params.section);
 		if(sM.section != null)//TODO: MONITOR PERFORMANCE + INTEGRITY SETTING SUBMENU SECTION HERE
 		{
 			trace(sM.section +':'+ comp.props.match.params.section);
-			if(sM.section != comp.props.match.params.section)
+			if(sM.section != comp.props.match.params.section && comp.props.match.params.section != null)
 			 sM.section = comp.props.match.params.section;
 		}
 		return jsx('
@@ -581,7 +575,10 @@ class FormApi
 			');			
 	}	
 
-	//<div className="loader-box"></div>
+	public static function params(ids:Array<Int>):String {
+		return ids.pInts();
+	}
+
 	public static function initSideMenu(comp:Dynamic, sMa:Array<SMenuBlock>, sM:SMenuProps):SMenuProps
 	{
 		var sma:SMenuBlock = {};
@@ -627,4 +624,6 @@ class FormApi
 	}
 
 	public var ky:Dynamic->haxe.PosInfos->String = Utils.genKey;
+
+
 }

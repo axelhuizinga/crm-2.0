@@ -34,7 +34,7 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 	override public function render()
 	{
 		return jsx('
-			<Tabs centered=${true} boxed=${false}>				
+			<Tabs className="is-centered" >				
 				${buildNav()}
 			</Tabs>		
 		');

@@ -5,11 +5,23 @@ package shared;
  * @author axel@cunity.me
  */
 
+import haxe.ds.StringMap;
 import me.cunity.debug.Out;
+
 
 class Utils 
 {
 
+	public static function keysList(ki:Iterator<Int>):Array<Int>
+	{
+		var l:Array<Int> = [];
+		for(k in ki)
+		{
+			l.push(k);
+		}
+		return l;
+	}
+	
 	public static function extend(obj1: Dynamic, obj2: Dynamic): Dynamic {
 		
 		var keys = Reflect.fields(obj2);

@@ -10,7 +10,7 @@ import view.shared.FormElement;
  * @author axel@cunity.me
  */
 
-class Contacts
+class ContactsModel
 {
 	public static var dataAccess:DataAccess = [
 		'edit' => {

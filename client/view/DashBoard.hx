@@ -129,9 +129,9 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 				</Tabs>
 			</div>
             <div className="tabContent2" >
-				<Route path="/DashBoard/Roles/:section?/:action?/:id?"  ${...props}   component={Roles}/>
-				<Route path="/DashBoard/Settings/:section?/:action?/:id?"  ${...props}  component={Settings}/>
-				<Route path="/DashBoard/Setup/:section?/:action?"   ${...props} component={Setup}/>					
+				<Route path="/DashBoard/Roles/:action?/:id?"  ${...props}   component={Roles}/>
+				<Route path="/DashBoard/Settings/:action?/:id?"  ${...props}  component={Settings}/>
+				<Route path="/DashBoard/Setup/:action?"   ${...props} component={Setup}/>					
             </div>
 			<StatusBar ${...props}/>
 		</>

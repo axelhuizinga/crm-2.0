@@ -131,8 +131,9 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		return me;
 	}
 
-	public function select(mEv:MouseEvent)
+	public function select(mEvOrID:Dynamic)
 	{
+		trace(mEvOrID);
 		trace(props.row +':' + props.data.toString());
 		//setFormState
 		//setState({selected:!state.selected});

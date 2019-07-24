@@ -120,7 +120,7 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 		return jsx('
 		<>
 			<div className="tabNav2" >
-				<Tabs  className="is-boxed" >
+				<Tabs className="is-boxed" >
 					<TabLink to="/Data/Contacts" ${...props}>Kontakte</TabLink>
 					<TabLink to="/Data/Deals" ${...props}>Aufträge</TabLink>
 					<TabLink to="/Data/Accounts" ${...props}>Konten</TabLink>

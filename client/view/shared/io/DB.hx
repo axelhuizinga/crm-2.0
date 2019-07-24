@@ -241,7 +241,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 				view:null
 			}
 		];		
-		state.formApi.doAction();	
+		//state.formApi.doAction();	
 	}
 
 	/*override public function componentWillUnmount()
@@ -280,6 +280,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		
 		return state.formApi.render(jsx('
 			<form className="tabComponentForm" >
+				<div className="caption">DB</div>
 				${renderResults()}
 			</form>
 		'));		

@@ -120,12 +120,10 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 		return jsx('
 		<>
 			<div className="tabNav2" >
-				<Tabs  boxed={true} >
-					<ul>
+				<Tabs className="is-boxed" >
 						<TabLink to="/DashBoard/Roles" ${...props}>Benutzer</TabLink>
 						<TabLink to="/DashBoard/Settings" ${...props}>Meine Einstellungen</TabLink>
 						<TabLink to="/DashBoard/Setup" ${...props}>Setup</TabLink>
-					</ul>
 				</Tabs>
 			</div>
             <div className="tabContent2" >

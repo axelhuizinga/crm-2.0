@@ -36,5 +36,7 @@ typedef Deal =
 	//{"name":"repeat_date","type":"date","default":"","attnum":"17","required":false}
 	?repeat_date:String,
 	//{"name":"edited_by","type":"bigint","default":"","attnum":"18","required":true}
-	edited_by:Int
+	edited_by:Int,
+	//{"name":"mandator","type":"bigint","default":"","attnum":"2","required":true}
+	mandator:Int
 }

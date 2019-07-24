@@ -50,7 +50,5 @@ typedef Contact =
 	//{"name":"comment","type":"character varying(4096)","default":"''::character varying","attnum":"24","required":false}
 	?comment:String,
 	//{"name":"edited_by","type":"bigint","default":"","attnum":"25","required":true}
-	edited_by:Int,
-	//{"name":"add_on_name","type":"character varying(1024)","default":"''::character varying","attnum":"26","required":false}
-	?add_on_name:String
+	edited_by:Int
 }

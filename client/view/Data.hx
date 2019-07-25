@@ -127,9 +127,9 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 				</Tabs>
 			</div>
             <div className="tabContent2" >
-				<Route path="/Data/Contacts/:action?/:id?"  ${...props} component={Contacts}/>
-				<Route path="/Data/Deals/:action?/:id?"  ${...props} component={Deals}/>
-				<Route path="/Data/Accounts/:action?"   ${...props} component={Accounts}/>	
+				<Route path="/Data/Contacts/:section?/:action?/:id?"  ${...props} component={Contacts}/>
+				<Route path="/Data/Deals/:section?/:action?/:id?"  ${...props} component={Deals}/>
+				<Route path="/Data/Accounts/:section?/:action?"   ${...props} component={Accounts}/>	
             </div>
 			<StatusBar ${...props}/>
 		</>

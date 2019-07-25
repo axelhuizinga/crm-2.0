@@ -5,9 +5,9 @@ import haxe.Constraints.Function;
 typedef SMItem =
 {
 	?action:String,
-	?className:String,
-	?component:ReactType,
-	?dataClassPath:String,
+	//?className:String,
+	?component:String,
+	?section:String,
 	?disabled:Bool,	
 	?handler:Function,
 	?img:String,

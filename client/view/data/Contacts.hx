@@ -23,6 +23,7 @@ import react.ReactUtil;
 import react.ReactType;
 import redux.Redux.Dispatch;
 import model.AjaxLoader;
+import view.data.contacts.List;
 import view.data.contacts.model.ContactsModel;
 import shared.DbData;
 import shared.DBMetaData;
@@ -48,13 +49,6 @@ using  shared.Utils;
 @:connect
 class Contacts extends ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<SMItem> = [
-		{label:'Anzeigen',action:'find'},
-		{label:'Bearbeiten',action:'edit'},
-		//{label:'Finden',action:'find'},
-		{label:'Neu', action:'add'},
-		{label:'Löschen',action:'delete'}
-	];
 	
 	var dataDisplay:Map<String,DataState>;
 	var dataAccess:DataAccess;	
@@ -75,15 +69,21 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		trace(props.match.params);
+		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
+		{
+			//~/ 
+			//trace('reme');
+			//props.history.push(baseUrl);
+		}		
 		state =  App.initEState({
 			dataTable:[],loading:false,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
 			sideMenu:FormApi.initSideMenu( this,
 				[
 					{
 						dataClassPath:'data.Contacts',
-						label:'Kontakte',
-						section: 'Contacts',
-						items: menuItems
+						label:'Auswahl',
+						section: 'List',
+						items: List.menuItems
 					}
 				]
 				,{	
@@ -192,7 +192,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			}			*/
 			return;
 		}
-		var baseUrl:String = props.match.path.split(':action')[0];
+		var baseUrl:String = props.match.path.split(':section')[0];
 		//setState({loading: true});
 		var it:Iterator<Map<String,Dynamic>> = state.selectedData.iterator();
 		var sData:Map<String,Dynamic> = it.next();
@@ -213,7 +213,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	{	
 		trace(props.location);
 		setState({mounted:true});
-		var baseUrl:String = props.match.path.split(':action')[0];
+		var baseUrl:String = props.match.path.split(':section')[0];
 		trace(props.match);
 		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
 		{

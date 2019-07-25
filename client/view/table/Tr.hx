@@ -69,7 +69,7 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		if(props.row==3)
 		{
 			//trace(props.columns);
-			trace(rdMap);
+			//trace(rdMap);
 		}
 		var column:Int = 0;
 		var reported:Bool = false;
@@ -133,7 +133,7 @@ class Tr extends PureComponentOf<TrProps,TrState>
 
 	public function select(mEvOrID:Dynamic)
 	{
-		trace(mEvOrID);
+		trace(Type.typeof(mEvOrID));
 		trace(props.row +':' + props.data.toString());
 		//setFormState
 		//setState({selected:!state.selected});

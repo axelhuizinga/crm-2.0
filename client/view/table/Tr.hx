@@ -138,6 +138,7 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		//setFormState
 		//setState({selected:!state.selected});
 		selected = !selected;
+		//trace(props.parentComponent);
 		if(props.parentComponent != null)
 		{
 			var fS:FormState = props.parentComponent.state;

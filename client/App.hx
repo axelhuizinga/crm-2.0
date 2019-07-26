@@ -211,7 +211,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		{
 			clean: true,
 			formApi:new FormApi(comp, init.sideMenu),
-			formBuilder:new FormBuilder(comp),
+			//formBuilder:new FormBuilder(comp),
 			hasError: false,
 			mounted: false,
 			sideMenu: init==null? {}:init.sideMenu

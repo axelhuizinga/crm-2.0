@@ -1,14 +1,16 @@
 package view.data.contacts;
 import model.AppState;
 import haxe.Constraints.Function;
+import haxe.ds.IntMap;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import shared.DbData;
 import shared.DBMetaData;
+import view.shared.FormBuilder;
 import view.shared.FormField;
 import view.shared.FormState;
-import view.data.accounts.model.Accounts;
+import view.data.contacts.model.ContactsModel;
 import view.shared.SMItem;
 import view.shared.SMenuProps;
 import view.shared.io.FormApi;
@@ -34,9 +36,21 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		dataDisplay = Accounts.dataDisplay;
+		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
+		state =  App.initEState({
+			initialState:
+			{
+				id:0,
+				edited_by: 0,
+				formBuilder:new FormBuilder(this),
+				mandator: 0
+			},
+			loading:false,
+			selectedData:new IntMap(),			
+			selectedRows:[],
+			values:new Map<String,Dynamic>()
+		},this);
 		trace(state.loading);
 	}
 	
@@ -56,37 +70,40 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	public function find(ev:ReactEvent):Void
 	{
 		trace('hi :)');
-		//return;
-		//dbMetaData = new  DBMetaData();
-		//dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
-		//trace(dbMetaData.dataFields.get(111));
 		var s:hxbit.Serializer = new hxbit.Serializer();
 		
-		//return;
 		state.formApi.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
 				jwt:props.user.jwt,
-				//fields:'readonly:readonly,element=:element,required=:required,use_as_index=:use_as_index',
 				className:'data.Contacts',
 				action:'find',
-				//dataSource:Serializer.run(dataAccess['find'].source),
 				devIP:App.devIP
 			},
 			function(data:DbData)
 			{			
 				App.jwtCheck(data);
 				trace(data.dataInfo);
-				if(data.dataRows.length>0)
-				setState({dataTable:data.dataRows});
+				trace(data.dataRows.length);
+				if(data.dataRows.length>0) 
+				{
+				if(!data.dataErrors.keys().hasNext())
+				{
+					setState({dataTable:data.dataRows, values: ['loadResult'=>'','closeAfter'=>100]});
+				}
+				else 
+					setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});					
+				}
+				//setState({dataTable:data.dataRows, loading: false});
 			}
 		));
 	}
 	
 	public function edit(ev:ReactEvent):Void
 	{
-		trace(state.selectedRows.length);				
+		trace(state.selectedRows.length);	
+		trace(Reflect.fields(ev));
 	}
 
 	function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
@@ -149,7 +166,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'find':
 				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
+					<Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
 					${...props} dataState = ${dataDisplay["contactList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');

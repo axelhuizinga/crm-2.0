@@ -22,6 +22,7 @@ enum Loading
 typedef FormState =
 {
 	?action:String,
+	?actualState:Dynamic,
 	?dataClassPath:String,
 	?data:Map<String,Dynamic>,
 	?dataTable:Array<Map<String,Dynamic>>,
@@ -38,6 +39,7 @@ typedef FormState =
 	?loading:Bool,
 	?initialState:Dynamic,
 	?model:String,
+	?modelClass:Dynamic,
 	?fields:Map<String,FormField>,//VIEW FORMFIELDS
 	?valuesArray:Array<Map<String,Dynamic>>,//FORMATTED DISPLAY VALUES
 	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES

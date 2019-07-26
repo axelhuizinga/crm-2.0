@@ -159,7 +159,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 			{
 				//case Filter: jsx('<$Filter  key=${i++}/>');
 				default:jsx('<Button key=${i++} onClick=${props.itemHandler} data-action=${item.action}
-				disabled=${item.disabled}>${item.label}</Button>');
+				data-section=${item.section} disabled=${item.disabled}>${item.label}</Button>');
 			}
 		}).array();
 	}

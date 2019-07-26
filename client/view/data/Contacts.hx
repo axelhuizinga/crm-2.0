@@ -24,6 +24,8 @@ import react.ReactType;
 import redux.Redux.Dispatch;
 import model.AjaxLoader;
 import view.data.contacts.List;
+import view.data.contacts.Edit;
+
 import view.data.contacts.model.ContactsModel;
 import shared.DbData;
 import shared.DBMetaData;
@@ -69,12 +71,14 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		trace(props.match.params);
-		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
+		if(props.match.params.section==null)
 		{
-			//~/ 
+			//SET DEFAULT SECTION
 			//trace('reme');
-			//props.history.push(baseUrl);
+			var baseUrl:String = props.match.path.split(':section')[0];
+			props.history.push('${baseUrl}List');
 		}		
+		
 		state =  App.initEState({
 			dataTable:[],loading:false,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
 			sideMenu:FormApi.initSideMenu( this,
@@ -84,7 +88,13 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 						label:'Auswahl',
 						section: 'List',
 						items: List.menuItems
-					}
+					},
+					{
+						dataClassPath:'data.Contacts',
+						label:'Bearbeiten',
+						section: 'Edit',
+						items: Edit.menuItems
+					}					
 				]
 				,{	
 					section: props.match.params.section==null? 'Contact':props.match.params.section, 
@@ -93,6 +103,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		},this);
 		trace(state.selectedData);
 		trace(state.loading);
+		
 	}
 	
 	override function componentDidCatch(error, info) {
@@ -100,7 +111,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		if(state.mounted)
 		this.setState({ hasError: true });
 		trace(error);
-		me.cunity.debug.Out.dumpStack(CallStack.callStack());
+		Out.dumpStack(CallStack.callStack());
 	}	
 
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
@@ -200,7 +211,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		//sData = state.selectedData.get(state.selectedData.keys().next());
 		trace(state.selectedData.keys().keysList());
 		trace(FormApi.params(state.selectedData.keys().keysList()));
-		props.history.push('${baseUrl}edit/${FormApi.params(state.selectedData.keys().keysList())}');
+		props.history.push('${baseUrl}Edit/${FormApi.params(state.selectedData.keys().keysList())}');
 		for(k in dataAccess['edit'].view.keys())
 		{
 			//trace('$k => ' + sData[k]);
@@ -213,6 +224,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	{	
 		trace(props.location);
 		setState({mounted:true});
+		return;
 		var baseUrl:String = props.match.path.split(':section')[0];
 		trace(props.match);
 		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
@@ -230,8 +242,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		{
 			trace('select ID(s)');
 			
-		}
-		
+		}		
 
 		if(props.match.params.action != null)
 		{
@@ -282,13 +293,11 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		
 	}
 	
-	function renderResults():ReactFragment
+	/*function renderResults():ReactFragment
 	{
 		trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
-		/*trace(state.loading);
-		if(state.loading)
-			return state.formApi.renderWait();*/
+
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
@@ -315,7 +324,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				model:'contact',
 				title: 'Kontakt - Bearbeite Stammdaten'
 			},initialState);
-			
+				
 			case 'add':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
@@ -336,30 +345,26 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				');
 		}
 		return null;
-	}
+	}*/
 	
 	override function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);		
 		trace(props.match.params.action);		
-		trace('state.loading: ${state.loading}');		
-		var hidden:ReactFragment = state.formBuilder.hidden(model(initialState,contact,id));
-		return switch(props.match.params.action)
-		{	
-			case 'edit':
-			 (state.loading ? state.formApi.renderWait():
-				state.formApi.render(
-					${renderResults()}
-				));	
+		return switch(props.match.params.section)
+		{
+			case "List":
+				jsx('
+					<$List ${...props} formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
+					');					
+			case "Edit":
+				jsx('
+					<$Edit ${...props} formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
+				');				
 			default:
-				state.formApi.render(jsx('
-				<>
-					<form className="tabComponentForm"  >
-						${renderResults()}
-					</form>
-				</>'));		
-		}
+				null;					
+		}		
 	}
 	
 	function updateMenu(?viewClassPath:String):SMenuProps

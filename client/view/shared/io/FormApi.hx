@@ -75,7 +75,7 @@ class FormApi
 	public var modalFormTableBody:ReactRef<DivElement>;
 	public var autoFocus:ReactRef<InputElement>;
 	public var initialState:Dynamic;
-	public var section:String;
+	public var section:ReactComponent;
 	var comp:Dynamic;
 	var sM:SMenuProps;
 	
@@ -144,16 +144,22 @@ class FormApi
 		return rM;
 	}
 	
-	public function setStateFromChild(newState:FormState)
+	/*public function setStateFromChild(newState:FormState)
 	{
 		newState = ReactUtil.copy(newState, {sideMenu:updateMenu(newState)});
 		//setState(newState);
 		trace(newState);
-	} 
+	}*/
+
+	public function setSectionComponent(s:ReactComponent) {
+		section = s;
+	}
 	
 	public function itemHandler(e:Event)
 	{
 		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
+		var dataSet:DOMStringMap = cast(e.target, ButtonElement).dataset;
+		trace(dataSet);
 		/*trace(comp.props.history.location.pathname);
 		//trace(comp.props.history);
 		trace('new action:$action');
@@ -166,12 +172,25 @@ class FormApi
 
 	public function callMethod(method:String, ?e:Event):Bool
 	{
+		if(section !=null)
+		{
+			var fun:Function = Reflect.field(section,method);
+			if(Reflect.isFunction(fun))
+			{
+				Reflect.callMethod(section,fun,[e]);
+				return true;
+			}
+			else 
+				trace('$method not found in $section');			
+		}
 		var fun:Function = Reflect.field(comp,method);
 		if(Reflect.isFunction(fun))
 		{
 			Reflect.callMethod(comp,fun,[e]);
 			return true;
 		}
+		else 
+			trace('$method not found');
 		return false;
 	}
 
@@ -563,7 +582,7 @@ class FormApi
 					</div>
 				</div>
 			</div>
-			');
+				');
 			}
 			else return	jsx('
 			<div className="loader-screen" >

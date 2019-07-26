@@ -481,6 +481,8 @@ input::-moz-focus-inner {
 	content:" *";
 }
 
+button::-moz-focus-inner {padding:0; border:0}
+
 /*bulma overrides*/
 
 .tooltip.is-tooltip-danger::before

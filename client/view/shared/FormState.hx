@@ -31,6 +31,7 @@ typedef FormState =
 	?clean:Bool,
 	?selectedData:IntMap<Map<String,Dynamic>>,
 	?selectedRows:Array<TableRowElement>,
+	?selectedRowIDs:Array<Int>,
 	?handleChange:InputEvent->Void,
 	?handleSubmit:Dynamic->Void,	
 	?hasError:Bool,

@@ -274,7 +274,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		return headerRow;
 	}	
 
-	function renderCells(rdMap:Map<String,Dynamic>, row:Int):ReactFragment
+	/*function renderCells(rdMap:Map<String,Dynamic>, row:Int):ReactFragment
 	{
 		//trace(rdMap);
 		//trace(rdMap.remove('primary'));
@@ -316,9 +316,9 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			</td>'));
 		}
 		return rCs;
-	}
+	}*/
 	
-	function renderRowsOrg(?dRows:Array<Map<String,Dynamic>>):ReactFragment
+	/*function renderRowsOrg(?dRows:Array<Map<String,Dynamic>>):ReactFragment
 	{
 		if (dRows == null)
 			dRows = props.data;
@@ -341,7 +341,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		}//
 		trace(dRs.length);
 		return dRs;
-	}
+	}*/
 
 	function renderRows(?dRows:Array<Map<String,Dynamic>>):ReactFragment
 	{
@@ -357,7 +357,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			dRs.push(
 			jsx('<$Tr key=${dR.get("id")} columns=${props.dataState.columns} data=${dR} fieldNames=${fieldNames} firstTableRow=${fRRef} row=${row++} parentComponent=${props.parentComponent}/>')
 			);
-		}//
+		}
 		trace(dRs.length);
 		return dRs;
 	}

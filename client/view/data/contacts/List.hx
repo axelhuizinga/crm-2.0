@@ -23,7 +23,7 @@ import view.model.Contact;
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		{label:'Anzeigen',action:'find'},
+		//{label:'Anzeigen',action:'find'},
 		{label:'Bearbeiten',action:'edit',section: 'Edit'},
 		{label:'Neu', action:'add',section: 'Edit'},
 		{label:'Löschen',action:'delete'}
@@ -39,13 +39,14 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
-			initialState:
+			dataTable:[],
+			/*initialState:
 			{
 				id:0,
 				edited_by: 0,
 				formBuilder:new FormBuilder(this),
 				mandator: 0
-			},
+			},*/
 			loading:false,
 			selectedData:new IntMap(),			
 			selectedRows:[],
@@ -88,12 +89,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				trace(data.dataRows.length);
 				if(data.dataRows.length>0) 
 				{
-				if(!data.dataErrors.keys().hasNext())
-				{
-					setState({dataTable:data.dataRows, values: ['loadResult'=>'','closeAfter'=>100]});
-				}
-				else 
-					setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});					
+					if(!data.dataErrors.keys().hasNext())
+					{
+						setState({dataTable:data.dataRows, values: ['loadResult'=>'','closeAfter'=>100]});
+					}
+					else 
+						setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});					
 				}
 				//setState({dataTable:data.dataRows, loading: false});
 			}
@@ -196,9 +197,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);		
-		return state.formApi.render(jsx('
+		return state.dataTable.length==0?null:state.formApi.render(jsx('
 		<>
-			<form className="tabComponentForm"  >
+			<form className="tabComponentForm" >
 				${renderResults()}
 			</form>
 		</>'));		

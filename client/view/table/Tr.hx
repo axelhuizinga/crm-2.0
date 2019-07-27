@@ -1,5 +1,6 @@
 package view.table;
 
+import react.router.RouterMatch;
 import js.html.TableRowElement;
 import js.html.MouseEvent;
 import react.ReactMouseEvent;
@@ -16,6 +17,9 @@ import view.table.Table.DataCell;
 import view.table.Table.DataCellPos;
 import view.table.Table.DataColumn;
 import view.table.Table.SortDirection;
+
+using shared.Utils;
+using view.shared.io.FormApi;
 using Lambda;
 
 /**
@@ -47,8 +51,19 @@ class Tr extends PureComponentOf<TrProps,TrState>
 	public function new(?props:Dynamic)
 	{
 		super(props);	
-		state = {cells:[], selected:false};	
-		selected = false;
+		var match:RouterMatch = props.parentComponent.props.match;
+		var id:String = props.data != null ? props.data.get('id'): '';
+		//trace('$id ${match.params.id !=null && match.params.id.indexOf(id)>-1}');
+		state = {cells:[], selected:match.params.id !=null && match.params.id.indexOf(id)>-1?true:false};	
+		if(state.selected)
+		{
+			var fS:FormState = props.parentComponent.state;
+			var sData = fS.selectedData;
+			var baseUrl:String = match.path.split(':section')[0];
+			baseUrl = '${baseUrl}${match.params.section}/${match.params.action}';			
+			props.parentComponent.props.storeFormChange(baseUrl,copy(fS,{selectedData:sData}));
+		}
+		selected = state.selected;
 	}
 
 	override function componentDidMount()//,snapshot:Dynamic
@@ -121,7 +136,7 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		{
 			cl = selected ? 'is-selected' : '';
 		}
-		trace('class:$cl');
+		//trace('class:$cl');
 		me = jsx('
 		<tr className=${cl} data-id=${props.data["id"]} title=${props.data["id"]} ref=${props.firstTableRow} onClick=${select}>
 		${renderCells(props.data)}
@@ -143,18 +158,24 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		{
 			var fS:FormState = props.parentComponent.state;
 			var sData = fS.selectedData;
-			//trace(fS.selectedData);
-			//trace('selected:${selected}');
+			var match:RouterMatch = props.parentComponent.props.match;
+			var baseUrl:String = match.path.split(':section')[0];
+			baseUrl = '${baseUrl}${match.params.section}/${match.params.action}';
+
+			trace('selected:${selected}');
 			if(selected)
 			{
+				trace(props.parentComponent.props.match);
 				sData.set(props.data["id"], props.data);
-			   	props.parentComponent.props.storeFormChange(copy(fS,{selectedData:sData}));
+			   	
 			}
 			else 
 			{
-				fS.selectedData.remove(props.data["id"]);
+				sData.remove(props.data["id"]);
 			}
-			//props.parentComponent.setState(fS);
+			trace(FormApi.params(sData.keys().keysList()));
+			props.parentComponent.props.storeFormChange(baseUrl,copy(fS,{selectedData:sData}));
+			props.parentComponent.props.history.push('${baseUrl}/${FormApi.params(sData.keys().keysList())}');
 		}
 		//trace(selected);
 		setState({selected: selected});

@@ -1,5 +1,6 @@
 package view.data;
 
+import haxe.macro.Expr.Catch;
 import action.AppAction;
 import react.ReactRef;
 import react.router.RouterMatch;
@@ -108,8 +109,13 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function componentDidCatch(error, info) {
 		// Display fallback UI
-		if(state.mounted)
-		this.setState({ hasError: true });
+		//if(state.mounted)
+		try{
+			this.setState({ hasError: true });
+		}
+		catch(ex:Dynamic)
+		{trace(ex);}
+		
 		trace(error);
 		Out.dumpStack(CallStack.callStack());
 	}	
@@ -118,10 +124,12 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
     {
 		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
         return {
-			storeFormChange: function(cState:FormState) 
+			storeFormChange: function(url:String, cState:FormState) 
 			{
+				trace(Reflect.fields(cState));
+				trace(cState.selectedRows.length);
 				dispatch(AppAction.FormChange(
-					'view.data.contacts.Contact',
+					url,
 					cState
 				));
 			}
@@ -223,7 +231,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{	
 		trace(props.location);
-		setState({mounted:true});
+		//setState({mounted:true});
 		return;
 		var baseUrl:String = props.match.path.split(':section')[0];
 		trace(props.match);

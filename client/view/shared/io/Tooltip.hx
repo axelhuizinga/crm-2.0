@@ -12,9 +12,11 @@ typedef ToolTipProps =
 class Tooltip {
 
 	private var classes:Array<String>;
+	private var el:Element;
 
 	public function new(el:Element, ?tProps:ToolTipProps):Void
 	{
+		this.el = el;
 		if(tProps.classes != null)
 		{
 			if(!tProps.classes.has('tooltip'))
@@ -27,7 +29,7 @@ class Tooltip {
 		el.dataset.tooltip = tProps.data;		
 	}
 
-	public function clear(el:Element) {
+	public function clear() {
 		el.classList.remove('tooltip');
 		classes.map(function(cN:String) el.classList.remove('is-tooltip-$cN'));
 		el.removeAttribute('data-tooltip');

@@ -102,9 +102,8 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 					sameWidth: true}					
 			)			
 		},this);
-		trace(state.selectedData);
-		trace(state.loading);
-		
+		//trace(state.selectedData);
+		//trace(state.loading);		
 	}
 	
 	override function componentDidCatch(error, info) {
@@ -128,6 +127,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			{
 				trace(Reflect.fields(cState));
 				trace(cState.selectedRows.length);
+				return;
 				dispatch(AppAction.FormChange(
 					url,
 					cState

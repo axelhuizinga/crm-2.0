@@ -32,7 +32,7 @@ class AppStore
 {
 	public var initState:GlobalAppState;
 		
-	public var store:StoreMethods<model.AppState>;
+	public var store:StoreMethods<AppState>;
 	
 	public function new() 
 	{

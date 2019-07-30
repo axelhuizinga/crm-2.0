@@ -28,6 +28,7 @@ typedef FormState =
 	?dataTable:Array<Map<String,Dynamic>>,
 	?formApi:FormApi,
 	?formBuilder:FormBuilder,
+	?formStateKey:String,
 	?clean:Bool,
 	?selectedData:IntMap<Map<String,Dynamic>>,
 	?selectedRows:Array<TableRowElement>,

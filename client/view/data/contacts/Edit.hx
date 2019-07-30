@@ -1,9 +1,13 @@
 package view.data.contacts;
+import js.html.Element;
+import js.html.Event;
+import react.router.RouterMatch;
 import model.AppState;
 import haxe.Constraints.Function;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
+import react.ReactUtil.copy;
 import shared.DbData;
 import shared.DBMetaData;
 import view.shared.FormBuilder;
@@ -43,7 +47,7 @@ using  shared.Utils;
 /**
  * 
  */
-
+@:connect
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
@@ -57,23 +61,33 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
+	
+	public static var initialState:view.model.Contact =
+	{
+		id:0,
+		edited_by: 0,
+		mandator: 0
+	};	
+
 	public function new(props) 
 	{
 		super(props);
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
-			initialState:
+			dataTable:[],
+			formBuilder:new FormBuilder(this),
+			actualState:
 			{
 				id:0,
-				edited_by: 0,
-				formBuilder:new FormBuilder(this),
+				edited_by: 0,				
 				mandator: 0
 			},
 			loading:false,
 			selectedRows:[],
 			values:new Map<String,Dynamic>()
 		},this);
+		dataAccess = ContactsModel.dataAccess;
 		trace(state.loading);
 	}
 	
@@ -89,37 +103,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.selectedRows.length);
 		var data = state.formApi.selectedRowsMap(state);
 	}
-
-	/*public function find(ev:ReactEvent):Void
-	{
-		trace('hi :)');
-		//return;
-		//dbMetaData = new  DBMetaData();
-		//dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
-		//trace(dbMetaData.dataFields.get(111));
-		var s:hxbit.Serializer = new hxbit.Serializer();
-		
-		//return;
-		state.formApi.requests.push( BinaryLoader.create(
-			'${App.config.api}', 
-			{
-				user_name:props.user.user_name,
-				jwt:props.user.jwt,
-				//fields:'readonly:readonly,element=:element,required=:required,use_as_index=:use_as_index',
-				className:'data.Contacts',
-				action:'find',
-				//dataSource:Serializer.run(dataAccess['find'].source),
-				devIP:App.devIP
-			},
-			function(data:DbData)
-			{			
-				App.jwtCheck(data);
-				trace(data.dataInfo);
-				if(data.dataRows.length>0)
-				setState({dataTable:data.dataRows});
-			}
-		));
-	}*/
 	
 	public function edit(ev:ReactEvent):Void
 	{
@@ -171,7 +154,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{	
 		trace(props.location);
-		setState({mounted:true});
+		//setState({mounted:true});
 		var baseUrl:String = props.match.path.split(':section')[0];
 		trace(props.match);
 		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
@@ -180,8 +163,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//trace('reme');
 			//props.history.push(baseUrl);
 		}
-		dataAccess = ContactsModel.dataAccess;
 		
+		//trace(dataAccess);
 		if(props.match.params != null)
 		trace('yeah action: ${props.match.params.action}');
 		//dbData = FormApi.init(this, props);
@@ -194,47 +177,39 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 		if(props.match.params.action != null)
 		{
-			state.formApi.doAction();	
+			//state.formApi.doAction();	
 		}
 		else 
 		{
 			//invoke default action if any
-			state.formApi.doAction('find');	
+			//state.formApi.doAction('find');	
 		}
 	}
 
+	function getDispatch(dispatch) {
+		trace(dispatch);
+	}
+
 	function handleChange(contact, value, t) {
-		trace(contact);
-		var field:String = contact.split('.')[1];
-		trace(field);
-		trace(contact.length);
-		trace(t);
-		var initialState = state.initialState;
-		//trace(Type.typeof(contact));
-		//Out.dumpObject(contact);
-		//trace(contact[0].fp_incr(1));
-		
-		trace(value);
-		Reflect.setField(initialState, field, value);
-		setState({initialState: initialState});
+		//trace(contact);
+		//trace(contact.storeSubscription.store.getState());
+		//var field:String = contact.split('.')[1];
+		//trace(field);
+		//trace(contact.length);
+		//trace(t);
+		//state.formApi.storeFormState(field,value);
+		//trace(value);	
+		/*return function(u){
+			trace(u);
+		};*/
 	}		
 
-	function handleSubmit(contact, t) {
-		trace(contact);//initialState
-		trace(t._targetInst);
+	function handleSubmit(contact:Dynamic) {
+		trace(contact);
+		trace(Type.typeof(contact));
+		contact.preventDefault();
+		trace(contact.target);
 		
-		
-		var fProps:Dynamic = Reflect.field(t._targetInst,'return').stateNode.props;
-		trace(fProps.store.getState());
-		trace(Reflect.fields(fProps));
-		var form_ = Reflect.field(fProps.formValue,"$form");
-		//trace(fProps.formValue);
-		trace(Reflect.fields(form_));
-		trace(form_.value);
-		trace(form_.intents );
-		trace(form_.pristine );
-		
-		return false;
 	}	
 
 	function save()
@@ -242,54 +217,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		
 	}
 
-	/*function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
-	{
-		var iS:Dynamic = {};
-		for(dR in dt)
-		{
-			var rS:Dynamic = {};
-			for(k in dR.keys())
-			{
-				trace(k);
-				if(dataDisplay['fieldsList'].columns[k].cellFormat == view.shared.Format.formatBool)
-				{
-					Reflect.setField(rS,k, dR[k] == 'Y');
-				}
-				else
-					Reflect.setField(rS,k, dR[k]);
-			}
-			Reflect.setField(iS, dR['id'], rS);			
-		}
-		trace(iS);
-		return iS;
-	}
-		
-	override public function componentDidMount():Void 
-	{	
-		dataAccess = [
-			'find' =>{
-				source:[
-					"contacts" => []
-				],
-				view:[]
-			},
-		];			
-		//
-		if(props.user != null)
-		trace('yeah: ${props.user.first_name}');
-		//dbData = FormApi.init(this, props);
-		if(props.match.params.action != null)
-		{
-			var fun:Function = Reflect.field(this,props.match.params.action);
-			if(Reflect.isFunction(fun))
-			{
-				Reflect.callMethod(this,fun,null);
-			}
-		}
-		else 
-			setState({loading: false});
-	}*/
-	
 	function renderResults():ReactFragment
 	{
 		trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.dataTable != null));
@@ -300,29 +227,21 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
-			case 'find':
-				trace('state.dataTable.length:'+state.dataTable.length);
-				if(state.dataTable.length==0)				
-					return null;
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable} parentComponent=${this} 
-					${...props} dataState = ${dataDisplay["contactList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');
 			case 'edit':
-			//trace(initialState);
 			//trace(model(initialState, contact, first_name));
+			trace(state.initialState);
 			var fields:Map<String,FormField> = [
 				for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
 			];
 			//trace(fields);
-			state.formBuilder.renderLocal({
+			state.formBuilder.renderForm({
+				handleSubmit:handleSubmit,
 				fields:[
 					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
 				],
 				model:'contact',
-				title: 'Kontakt - Bearbeite Stammdaten'
-			},state.initialState);
+				title: 'Kontakt - Bearbeite Stammdaten' 
+			},initialState);
 			
 			case 'add':
 				trace(dataDisplay["fieldsList"]);
@@ -356,16 +275,22 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{	
 			case 'edit':
 			 (state.loading ? state.formApi.renderWait():
-				state.formApi.render(
-					${renderResults()}
-				));	
-			default:
+				state.formApi.render(jsx('
+						${renderResults()}
+				')));	
+			case 'add':
 				state.formApi.render(jsx('
 				<>
 					<form className="tabComponentForm"  >
 						${renderResults()}
 					</form>
 				</>'));		
+			default:
+				state.formApi.render(jsx('
+					<form className="tabComponentForm"  >
+						${renderResults()}
+					</form>
+				'));			
 		}
 	}
 	

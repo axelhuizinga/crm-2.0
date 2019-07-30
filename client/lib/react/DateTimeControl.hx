@@ -35,7 +35,7 @@ class DateTimeControl extends ReactComponentOfProps<DateTimeProps>
 	
 	override public function render():ReactFragment
 	{
-		return jsx('
+		return return 	props.value == null ? null : jsx('
 			<$Flatpickr     
 				options=${{
 					clickOpens:(props.disabled==null?true:!props.disabled),

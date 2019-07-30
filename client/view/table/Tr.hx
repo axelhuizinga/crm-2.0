@@ -134,7 +134,7 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		var cl:String = '';
 		if(state !=null)
 		{
-			cl = selected ? 'is-selected' : '';
+			cl = state.selected ? 'is-selected' : '';
 		}
 		//trace('class:$cl');
 		me = jsx('
@@ -152,7 +152,7 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		trace(props.row +':' + props.data.toString());
 		//setFormState
 		//setState({selected:!state.selected});
-		selected = !selected;
+		selected = !state.selected;
 		//trace(props.parentComponent);
 		if(props.parentComponent != null)
 		{
@@ -180,4 +180,5 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		//trace(selected);
 		setState({selected: selected});
 	}
+
 }

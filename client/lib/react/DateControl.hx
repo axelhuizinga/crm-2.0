@@ -1,5 +1,6 @@
 package react;
 
+import haxe.Timer;
 import js.html.Element;
 import js.html.FilePropertyBag;
 import js.html.Event;
@@ -33,23 +34,33 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 
 	var fpRef:ReactRef<InputElement>;
 	var fP:FlatpickrJS;
+	var tip:Tooltip;
 
 	public function new(props) 
 	{
 		//trace( props.value );
 		super(props);
 		flatpickr.localize(German);
-		//trace(props);
+		trace(props);
 	}
 
+	function onClose (sDates:Array<Dynamic>,val:String,me:DateTimePicker)
+		{
+			trace(sDates);
+			trace(val);
+			if(tip != null)
+				tip.clear();
+		}
 	override public function componentDidMount():Void 
 	{
 		//get flatpickr instance);
 		fP = Reflect.field(fpRef, 'flatpickr');
+		if(fP==null)
+			return;
 		var altInput:InputElement = fP.altInput;
 		trace(Reflect.fields(fP));
 		trace(Reflect.fields(altInput));
-		var tip:Tooltip = null;
+
 		altInput.addEventListener('keydown', function(ev:KeyboardEvent){
 			//trace(ev.key);
 			fP.close();
@@ -61,7 +72,7 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 				{
 					case DateFormatResult.OK:
 						if(tip != null)
-							tip.clear(altInput.parentElement);
+							tip.clear();
 					default:
 					ev.preventDefault();
 					ev.stopImmediatePropagation();
@@ -91,7 +102,7 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 			{
 				case DateFormatResult.OK:
 					if(tip != null)
-						tip.clear(altInput.parentElement);
+						tip.clear();
 				default:
 				ev.preventDefault();
 				ev.stopImmediatePropagation();
@@ -109,45 +120,16 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 			{
 				fP.setDate(val,true,fP.config.altFormat);
 			}
-		});
-
-		altInput.addEventListener('mouseout', function(ev:KeyboardEvent){
-			//trace(ev.key);
-			fP.close();	
-			var dF:DateFormatted = DateFormat.parseDE(altInput.value);
-			//if(dF.result.getName() != DateFormatResult.OK)
-			switch (dF.result)//,DateFormatResult.OK))
-			{
-				case DateFormatResult.OK:
-					if(tip != null)
-						tip.clear(altInput.parentElement);
-				default:
-				ev.preventDefault();
-				ev.stopImmediatePropagation();
-				tip = new Tooltip(altInput.parentElement, {data: Std.string(dF.result),classes:['danger','active']});			
-			}
-
-			//trace(fP.input);
-			//trace(fP.input.value);
-			var val:String = altInput.value;
-			var pd:Date = fP.parseDate(val, fP.config.altFormat);
-			//trace('$val === ${pd.toString()}');
-			var fD:String = fP.formatDate(pd, fP.config.altFormat);
-			trace('$val==$fD');
-			if(val==fD)
-			{
-				fP.setDate(val,true,fP.config.altFormat);
-			}
-		});
-
+		});		
 	}
 
 	override public function render():ReactFragment
 	{
 		trace( props.value );
+		var val = (props.value == null ?'0000.00.00':props.value);
 		//var val:String = props.value;
 		//val = val.split('+')[0];
-		return 	jsx('
+		return  jsx('
 		<$Flatpickr     
 			options=${{
 				allowInput:true,
@@ -155,12 +137,13 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 				dateFormat:'Y-m-d',
 				altInput:true,
 				altInputClass: "form-control input",
-				defaultValue:props.value,
+				defaultValue:val,
 				locale:'de',
-				onChange:onChange
+				onChange:onChange,
+				onClose:onClose
 			}}
 			ref=${function(fP)this.fpRef = fP}
-			value=${Date.fromString(props.value)}
+			value=${Date.fromString(val)}
 			name=${props.name}
 			className="h100" 
 			/>
@@ -176,6 +159,6 @@ class DateControl extends ReactComponentOfProps<DateTimeProps>
 	function onChange(sDates:Array<Dynamic>,val:String,me:DateTimePicker) {
 		trace(val);
 		trace(props.name);
-		fP.close();
+		//fP.close();
 	}
 }

@@ -1,5 +1,6 @@
 package view.shared;
 
+import react.ReactType;
 import haxe.ds.Map;
 import haxe.Constraints.Function;
 import macrotools.Macro.model;
@@ -10,13 +11,7 @@ import haxe.http.HttpJs;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
-import react.redux.form.Form;
-import react.redux.form.LocalForm;
-import react.redux.form.Control;
-import react.redux.form.Control.*;
-import react.redux.form.Errors;
-import react.redux.form.Field;
-import react.redux.form.Fieldset;
+
 import react.DateControl;
 import react.DateTimeControl;
 
@@ -49,7 +44,7 @@ class FormBuilder {
 		//trace('>>>${props.match.params.acton}<<<');
 	}  
 
-	function renderElements(fields:Map<String, FormField>, model:String):ReactFragment
+	/*function renderElements(fields:Map<String, FormField>, model:String):ReactFragment
 	{
 		var ki:Int = 0;
 		//return fields.array().map(function(field:FormField){
@@ -91,6 +86,7 @@ class FormBuilder {
 								mapProps=${{
 									options:{
 										dateFormat:field.displayFormat(),
+										defaultDate:Date.now(),
 										_inline:field.readonly
 									},
 									name:name									
@@ -103,7 +99,9 @@ class FormBuilder {
 					<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
-						<$Control model="${model}.${name}" disabled=${field.readonly} changeAction=${comp.handleChange}/>
+						<$Control model="${model}.${name}" disabled=${field.readonly} mapProps=${{
+							onUpdate:comp.handleChange
+							}}/>
 						</div>
 					</div>
 					');
@@ -111,7 +109,7 @@ class FormBuilder {
 		}].array();
 		//trace(fields.array());
 		return null;
-	}	 
+	}	 */
 
 	function renderElement():ReactFragment
 	{
@@ -119,7 +117,7 @@ class FormBuilder {
 		return null;
 	}
 
-    public function renderLocal(fState:FormState, initialState:Dynamic):ReactFragment
+   /* public function renderLocal(fState:FormState, initialState:Dynamic):ReactFragment
     {
 		return jsx('
 			<$LocalForm model=${fState.model} onSubmit=${comp.handleSubmit} className="tabComponentForm formField" 
@@ -127,7 +125,7 @@ class FormBuilder {
 				<div className="grid_box" role="table" aria-label="Destinations">
 				<div className="g_caption" >${fState.title}</div>
 				${renderElements(fState.fields, fState.model)}
-				<div ><button type="submit">
+				<div><button type="submit">
 						Speichern
 					</button></div>
 				</div>
@@ -145,12 +143,88 @@ class FormBuilder {
 				</div>
 			</$Form>		
 		');
-    }
+    }*/
+	
+	function renderFormElements(fields:Map<String, FormField>, model:String):ReactFragment
+	{
+		var ki:Int = 0;
+		//return fields.array().map(function(field:FormField){
+		return [for(name => field in fields){
+			switch (field.type)
+			{
+				case FormElement.Hidden:
+					null;
+				case FormElement.Button:
+					jsx('<button type="submit">
+						${field.value.value}
+					</button>');
+				case FormElement.DateTimePicker:
+				    jsx('
+					<div key=${ki++} className="g_row_2" role="rowgroup">
+						<div className="g_cell" role="cell">${field.label}</div>
+						<div className="g_cell_r" role="cell">
+							<$DateTimeControl options=${{
+									dateFormat:field.displayFormat(), 
+									onChange:comp.handleChange, time_24hr:true,
+									_inline:field.readonly
+								}}
+								disabled=${field.readonly} 
+								name="${model}.${name}" 								
+							 />
+						</div>
+					</div>');
+				case FormElement.DatePicker:
+					jsx('
+					<div key=${ki++} className="g_row_2" role="rowgroup">
+						<div className="g_cell" role="cell">${field.label}</div>
+						<div className="g_cell_r" role="cell">
+							<$DateControl 
+								//cComp:comp,
+								onChange=${comp.handleChange}
+								name="${model}.${name}"
+								options=${{
+										dateFormat:field.displayFormat(),
+										defaultDate:Date.now(),
+										_inline:field.readonly
+									}}
+							 />
+						</div>
+					</div>');
+				default:
+					jsx('
+					<div key=${ki++} className="g_row_2" role="rowgroup">
+						<div className="g_cell" role="cell">${field.label}</div>
+						<div className="g_cell_r" role="cell">
+						<input name=${name}  type="text" disabled=${field.readonly} required=${field.required}/>
+						</div>
+					</div>
+					');
+			}
+		}].array();
+		//trace(fields.array());
+		return null;
+	}	
+
+    public function renderForm(fState:FormState, initialState:Dynamic):ReactFragment
+    {
+		return jsx('
+			<form name=${fState.model} onSubmit=${fState.handleSubmit}  className="tabComponentForm formField">
+				<div className="grid_box" role="table" aria-label="Destinations">
+					<div className="g_caption" >${fState.title}</div>	
+					${renderFormElements(fState.fields, fState.model)}
+					<div><button type="submit">
+						Speichern
+					</button></div>
+				</div>	
+			</form>
+		');
+		
+    }	
 
 	public function  hidden(cm:String):ReactFragment
 	{
 		//return null;
-		return jsx('<$Control mapProps=${{type:"hidden"}} model=${cm} />');
+		return jsx('<input type="hidden" name=${cm} />');
 	}
 }
 

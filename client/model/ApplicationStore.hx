@@ -1,5 +1,6 @@
 package model;
 
+import action.FormAction;
 import view.shared.io.DataAccess.DataSource;
 import react.router.ReactRouter;
 import action.AppAction;
@@ -9,10 +10,11 @@ import history.History;
 import history.Location;
 import history.TransitionManager;
 import reduce.AppStore;
-import reduce.DataStore;
+import reduce.FormStore;
 import reduce.LocationStore;
 import reduce.StatusBarStore;
 //import reduce.UserStore;
+import redux.Form;
 import redux.Redux;
 import redux.Store;
 import redux.StoreBuilder.*;
@@ -26,7 +28,7 @@ class ApplicationStore
 	{
 		// store model, implementing reducer and middleware logic
 		var appWare = new AppStore();
-		var dataStore = new DataSource();
+		var formStore = new FormStore();
 		var locationStore = new LocationStore();
 		var statusBarStore = new StatusBarStore();
 		//var userStore = new UserStore();
@@ -37,7 +39,8 @@ class ApplicationStore
 			{
 				appWare: mapReducer(AppAction, appWare),
 				locationStore: mapReducer(LocationAction, locationStore),
-				statusBar: mapReducer(StatusAction, statusBarStore)
+				statusBar: mapReducer(StatusAction, statusBarStore),
+				formStore: mapReducer(FormAction, formStore)
 				//userStore: mapReducer(UserAction, userStore)
 			}
 		);

@@ -43,7 +43,7 @@ import react.ReactMacro.jsx;
 import react.React;
 import react.ReactRef;
 import react.ReactType;
-import react.ReactUtil;
+import react.ReactUtil.copy;
 import react.redux.form.LocalForm;
 import react.redux.form.Control;
 import react.redux.form.Control.*;
@@ -53,6 +53,7 @@ import react.redux.form.Field;
 import react.redux.form.Fieldset;
 
 using Lambda;
+using shared.Utils;
 using view.shared.io.Param;
 
 /**
@@ -76,10 +77,10 @@ class FormApi
 	public var autoFocus:ReactRef<InputElement>;
 	public var initialState:Dynamic;
 	public var section:ReactComponent;
-	var comp:Dynamic;
+	var comp:ReactComponentOf<DataFormProps,FormState>;
 	var sM:SMenuProps;
 	
-	public function new(rc:Dynamic,?sM:SMenuProps)
+	public function new(rc:ReactComponentOf<DataFormProps,FormState>,?sM:SMenuProps)
 	{
 		comp = rc;
 
@@ -172,6 +173,21 @@ class FormApi
 
 	public function callMethod(method:String, ?e:Event):Bool
 	{
+		//trace(Reflect.fields(e));
+		var targetSection = cast(e.target, Element).dataset.section;
+		trace(targetSection);
+		if(targetSection != comp.props.match.params.section)
+		{
+			var match:RouterMatch = comp.props.match;
+			var baseUrl:String = match.path.split(':section')[0];
+			var fS:FormState = comp.state;
+			var sData = fS.selectedData;			
+			baseUrl = '${baseUrl}${targetSection}/${method}';		
+			trace('${baseUrl}/${match.params.id}');	
+			//comp.setState(copy(comp.state,{formStateKey:baseUrl}));
+			comp.props.history.push('${baseUrl}/${match.params.id==null?"":match.params.id}');
+			//comp.setState(copy(comp.state,{formStateKey:baseUrl}));
+		}
 		if(section !=null)
 		{
 			var fun:Function = Reflect.field(section,method);
@@ -300,6 +316,15 @@ class FormApi
 		return elements;
 	}
 	
+	public function storeFormState(field:String, val:Dynamic) {
+		var match:RouterMatch = comp.props.match;
+		var baseUrl:String = match.path.split(':section')[0];
+		baseUrl = '${baseUrl}${match.params.section}/${match.params.action}';	
+		var actualState = App.store.getState().appWare.formStates.get(comp.state.formStateKey);
+		//Reflect.setField(actualState, field, val);
+		//comp.setState({actualState: actualState});
+		comp.props.parentComponent.props.storeFormChange(comp.state.formStateKey,copy(actualState,{field:val}));			
+	}
 	public function createElementsArray():ReactFragment
 	{
 		if(_fstate.dataTable.empty())

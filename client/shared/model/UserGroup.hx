@@ -1,4 +1,4 @@
-package view.model;
+package shared.model;
 typedef UserGroup = 
 {
 	//{"name":"id","type":"bigint","default":"nextval('user_groups_id_seq'::regclass)","attnum":"1","required":true}

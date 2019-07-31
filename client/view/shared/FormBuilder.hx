@@ -1,5 +1,6 @@
 package view.shared;
 
+import haxe.ds.StringMap;
 import react.ReactType;
 import haxe.ds.Map;
 import haxe.Constraints.Function;
@@ -22,6 +23,7 @@ class FormBuilder {
 	public var dataAccess:DataAccess;
 	public var dbData:DbData;
 	public var dbMetaData:DBMetaData;
+	public var dateControls:StringMap<DateControl>;
 	public var formColElements:Map<String,Array<FormField>>;
 	public var _menuItems:Array<SMItem>;
 	public var fState:FormState;
@@ -34,8 +36,9 @@ class FormBuilder {
 	public function new(rc:Dynamic)
 	{
 		comp = rc;
-		//trace(sM);
+		trace(comp.handleChange);
 		requests = [];
+		dateControls = new StringMap();
 		if(rc.props != null)
 		{
 			
@@ -44,108 +47,14 @@ class FormBuilder {
 		//trace('>>>${props.match.params.acton}<<<');
 	}  
 
-	/*function renderElements(fields:Map<String, FormField>, model:String):ReactFragment
-	{
-		var ki:Int = 0;
-		//return fields.array().map(function(field:FormField){
-		return [for(name => field in fields){
-			switch (field.type)
-			{
-				case FormElement.Hidden:
-					null;
-				case FormElement.Button:
-					jsx('<button type="submit">
-						${field.value.value}
-					</button>');
-				case FormElement.DateTimePicker:
-				    jsx('
-					<div key=${ki++} className="g_row_2" role="rowgroup">
-						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r" role="cell">
-							<$Control controlProps=${{
-								options:{
-									dateFormat:field.displayFormat(), 
-									onChange:comp.handleChange, time_24hr:true
-								}
-							}}
-							disabled=${field.readonly} 
-								model="${model}.${name}" 
-								mapProps=${{name:model+'.'+ name, _inline:field.readonly}}
-								component=${DateTimeControl} />
-						</div>
-					</div>');
-				case FormElement.DatePicker:
-					jsx('
-					<div key=${ki++} className="g_row_2" role="rowgroup">
-						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r" role="cell">
-							<$Control controlProps=${{
-								//cComp:comp,
-								onChange:comp.handleChange}} 
-								model="${model}.${name}"
-								mapProps=${{
-									options:{
-										dateFormat:field.displayFormat(),
-										defaultDate:Date.now(),
-										_inline:field.readonly
-									},
-									name:name									
-								}}
-								component=${DateControl} />
-						</div>
-					</div>');
-				default:
-					jsx('
-					<div key=${ki++} className="g_row_2" role="rowgroup">
-						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r" role="cell">
-						<$Control model="${model}.${name}" disabled=${field.readonly} mapProps=${{
-							onUpdate:comp.handleChange
-							}}/>
-						</div>
-					</div>
-					');
-			}
-		}].array();
-		//trace(fields.array());
-		return null;
-	}	 */
 
 	function renderElement():ReactFragment
 	{
 
 		return null;
 	}
-
-   /* public function renderLocal(fState:FormState, initialState:Dynamic):ReactFragment
-    {
-		return jsx('
-			<$LocalForm model=${fState.model} onSubmit=${comp.handleSubmit} className="tabComponentForm formField" 
-				 initialState=${initialState}>
-				<div className="grid_box" role="table" aria-label="Destinations">
-				<div className="g_caption" >${fState.title}</div>
-				${renderElements(fState.fields, fState.model)}
-				<div><button type="submit">
-						Speichern
-					</button></div>
-				</div>
-			</$LocalForm>		
-		');
-    }
-
-    public function render(fState:FormState, initialState:Dynamic):ReactFragment
-    {
-		return jsx('
-			<$Form model=${fState.model} onSubmit=${comp.handleSubmit} className="tabComponentForm formField">
-				<div className="grid_box" role="table" aria-label="Destinations">
-				<div className="g_caption" >${fState.title}</div>
-				${renderElements(fState.fields, fState.model)}
-				</div>
-			</$Form>		
-		');
-    }*/
 	
-	function renderFormElements(fields:Map<String, FormField>, model:String):ReactFragment
+	function renderFormElements(fields:Map<String, FormField>, model:String, ?compOnChange:Function):ReactFragment
 	{
 		var ki:Int = 0;
 		//return fields.array().map(function(field:FormField){
@@ -174,20 +83,22 @@ class FormBuilder {
 						</div>
 					</div>');
 				case FormElement.DatePicker:
+					var dC:DateControl = new DateControl({
+						comp:comp,
+						name:name,
+						onChange: comp.dcChange,
+						options:{
+							dateFormat:field.displayFormat(),
+							defaultDate:Date.now(),
+							_inline:field.readonly
+						}
+					});
+					dateControls.set('${model}.${name}',dC);
 					jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
-							<$DateControl 
-								//cComp:comp,
-								onChange=${comp.handleChange}
-								name="${model}.${name}"
-								options=${{
-										dateFormat:field.displayFormat(),
-										defaultDate:Date.now(),
-										_inline:field.readonly
-									}}
-							 />
+							${dC.render()}
 						</div>
 					</div>');
 				default:
@@ -205,17 +116,20 @@ class FormBuilder {
 		return null;
 	}	
 
-    public function renderForm(fState:FormState, initialState:Dynamic):ReactFragment
+    public function renderForm(props:FormState, initialState:Dynamic):ReactFragment
     {
+		trace('props');
+		//trace(props);
+		
 		return jsx('
-			<form name=${fState.model} onSubmit=${fState.handleSubmit}  className="tabComponentForm formField">
+			<form name=${props.model} onSubmit=${props.handleSubmit} ref=${props.ref}  className="tabComponentForm formField">
 				<div className="grid_box" role="table" aria-label="Destinations">
-					<div className="g_caption" >${fState.title}</div>	
-					${renderFormElements(fState.fields, fState.model)}
-					<div><button type="submit">
-						Speichern
-					</button></div>
-				</div>	
+					<div className="g_caption" >${props.title}</div>	
+					${renderFormElements(props.fields, props.model)}
+					<div className="g_fill_row">
+						<input type="submit" className="center" value="Speichern"/>
+					</div>					
+				</div>									
 			</form>
 		');
 		

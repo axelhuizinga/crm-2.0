@@ -1,4 +1,4 @@
-package view.model;
+package shared.model;
 typedef Deal = 
 {
 	//{"name":"id","type":"bigint","default":"nextval('deals_id_seq'::regclass)","attnum":"1","required":true}

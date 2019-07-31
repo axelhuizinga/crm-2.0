@@ -1,4 +1,4 @@
-package view.model;
+package shared.model;
 typedef Account = 
 {
 	//{"name":"id","type":"bigint","default":"nextval('accounts_id_seq'::regclass)","attnum":"1","required":true}

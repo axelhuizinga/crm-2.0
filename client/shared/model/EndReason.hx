@@ -1,4 +1,4 @@
-package view.model;
+package shared.model;
 typedef EndReason = 
 {
 	//{"name":"id","type":"bigint","default":"","attnum":"1","required":false}

@@ -1,4 +1,4 @@
-package view.model;
+package shared.model;
 typedef Statement = 
 {
 	//{"name":"a","type":"bigint","default":"","attnum":"1","required":true}

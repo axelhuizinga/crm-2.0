@@ -1,4 +1,4 @@
-package view.model;
+package shared.model;
 typedef User = 
 {
 	//{"name":"id","type":"bigint","default":"nextval('users_id_seq'::regclass)","attnum":"1","required":true}

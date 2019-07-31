@@ -16,7 +16,7 @@ import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import view.shared.io.BinaryLoader;
 import view.table.Table;
-import view.model.Account;
+import shared.model.Account;
 
 /*
  * GNU Affero General Public License

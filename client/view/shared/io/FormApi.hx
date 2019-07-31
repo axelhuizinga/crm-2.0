@@ -44,13 +44,6 @@ import react.React;
 import react.ReactRef;
 import react.ReactType;
 import react.ReactUtil.copy;
-import react.redux.form.LocalForm;
-import react.redux.form.Control;
-import react.redux.form.Control.*;
-//import react.redux.form.ControlReset;
-import react.redux.form.Errors;
-import react.redux.form.Field;
-import react.redux.form.Fieldset;
 
 using Lambda;
 using shared.Utils;
@@ -83,8 +76,7 @@ class FormApi
 	public function new(rc:ReactComponentOf<DataFormProps,FormState>,?sM:SMenuProps)
 	{
 		comp = rc;
-
-		//trace(sM);
+		//trace(Type.getClass(comp));
 		requests = [];
 		if(rc.props != null)
 		{
@@ -92,7 +84,7 @@ class FormApi
 			this.sM = sM==null?rc.props.sideMenu:sM;
 			//trace(rc.props.history);			
 		}
-		dbData = new DbData();
+		//dbData = new DbData();
 		//trace('>>>${props.match.params.action}<<<');
 		trace(Reflect.fields(sM));
 
@@ -161,13 +153,6 @@ class FormApi
 		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
 		var dataSet:DOMStringMap = cast(e.target, ButtonElement).dataset;
 		trace(dataSet);
-		/*trace(comp.props.history.location.pathname);
-		//trace(comp.props.history);
-		trace('new action:$action');
-		trace(comp.props.match);
-		var path:String = Std.string(comp.props.match.path).split(':')[0];
-		trace(path);
-		//comp.props.history.push('${path}${action}');*/
 		callMethod(action, e);
 	}
 
@@ -210,22 +195,11 @@ class FormApi
 		return false;
 	}
 
-	public function handleChange(e:InputEvent)
+	/*public function handleChange(e:InputEvent)
 	{
 		var t:InputElement = cast e.target;
 		trace('${t.name} ${t.value}');
-		/*public var vs = state.values;
-		//trace(vs.toString());
-		vs[t.name] = t.value;
-		trace(vs.toString());
-		//t.className = 'input';
-		//Reflect.setField(s, t.name, t.value);
-		//trace(props.dispatch == App.store.dispatch);
-		//App.store.dispatch(AppAction.LoginChange(s));validate
-		setState({clean:false, sideMenu:updateMenu(),values:vs});
-		//props.setStateFromChild({clean:false});
-		//trace(this.state);*/
-	}
+	}*/
 	
 	public function selectAllRows(state:FormState,unselect:Bool = false)
 	{
@@ -431,18 +405,18 @@ class FormApi
 		{
 			case Checkbox:
 			trace(fF.value);
-				jsx('<$ControlCheckbox key=${Utils.genKey(k++)} model=${model}  controlProps=${{readOnly:fF.readonly}}/>');
+				jsx('<input key=${Utils.genKey(k++)} name=${model}  disabled=${fF.readonly}/>');
 			case Hidden:
 				fF.primary ? null:
-				jsx('<$Control key=${Utils.genKey(k++)} model=${model}  controlProps=${{readOnly:fF.readonly,type:"hidden"}}/>');
+				jsx('<inputl key=${Utils.genKey(k++)} name=${model}  type="hidden"/>');
 			case FormElement.Select:
 				jsx('
-				<$ControlSelect model=${model}  >
+				<select name=${model}>
 				${renderSelectOptions(fF.value)}
-				</$ControlSelect>
+				</select>
 				');
 			default:
-				jsx('<$Control key=${Utils.genKey(k++)} model=${model} controlProps=${{readOnly:fF.readonly,type:"hidden",onChange:fF.readonly?null:fF.handleChange}}/>');
+				jsx('<input key=${Utils.genKey(k++)} name=${model} type="hidden"/>');
 			
 		}		
 	}
@@ -517,7 +491,7 @@ class FormApi
 		<>
 		  	<div className="modal-background" onClick=${click}></div>
 		   	<div className="modal-card">
-			   	<LocalForm onSubmit=${submit} model=${fState.model} initialState=${fState.initialState} >
+			   	<form onSubmit=${submit} model=${fState.model} initialState=${fState.initialState} >
 					<header className="modal-card-head">
 					<p className="modal-card-title">${_fstate.title}</p>
 					<button className="delete" aria-label="close" onClick=${click} ></button>
@@ -528,10 +502,10 @@ class FormApi
 						${_fstate.data.empty()? createElementsArray():renderElements(_fstate)}
 					</div>
 					<footer className="modal-card-foot">
-					<ControlButton controlProps=${{className:"button is-success", type:"submit"}} model=${fState.model} >Speichern</ControlButton>
-					<ControlReset controlProps=${{className:"button"}} model=${fState.model}>Reset</ControlReset>
+					<input className="button is-success" type="submit" value="Speichern"/>
+					<input className="button" type = "reset" value="Reset"/>
 					</footer>
-				</LocalForm>
+				</form>
 			</div>
 		</> 
 		'), App.modalBox.current, adjustModalFormColumns);

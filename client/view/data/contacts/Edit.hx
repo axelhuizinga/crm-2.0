@@ -1,11 +1,16 @@
 package view.data.contacts;
+import haxe.macro.Type.Ref;
+import js.html.InputElement;
+import react.React;
 import js.html.Element;
 import js.html.Event;
+import js.html.FormElement;
 import react.router.RouterMatch;
 import model.AppState;
 import haxe.Constraints.Function;
 import react.ReactComponent;
 import react.ReactEvent;
+import react.ReactRef;
 import react.ReactMacro.jsx;
 import react.ReactUtil.copy;
 import shared.DbData;
@@ -21,7 +26,7 @@ import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import view.shared.io.BinaryLoader;
 import view.table.Table;
-import view.model.Account;
+import shared.model.Contact;
 
 using  shared.Utils;
 
@@ -47,7 +52,7 @@ using  shared.Utils;
 /**
  * 
  */
-@:connect
+
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
@@ -61,8 +66,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
+
+	var formRef:ReactRef<FormElement>;
 	
-	public static var initialState:view.model.Contact =
+	public static var initialState:Contact =
 	{
 		id:0,
 		edited_by: 0,
@@ -74,6 +81,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
+		formRef = React.createRef();
+		//var formBuilder = new FormBuilder(this);
 		state =  App.initEState({
 			dataTable:[],
 			formBuilder:new FormBuilder(this),
@@ -83,6 +92,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				edited_by: 0,				
 				mandator: 0
 			},
+			initialState:initialState,
 			loading:false,
 			selectedRows:[],
 			values:new Map<String,Dynamic>()
@@ -116,16 +126,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			
 			//setState({loading: false});
 			
-			//trace(props.match);
-			/*if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
-			{
-				trace('redirect 2 ${baseUrl}');
-				//props.history.push('${baseUrl}${props.match.params.section}');
-				props.history.push('${baseUrl}');
-				
-				find(ev);
-				//state.formApi.doAction('find');	
-			}			*/
+			trace(props.match);
 			return;
 		}
 		var baseUrl:String = props.match.path.split(':section')[0];
@@ -137,7 +138,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.selectedData.keys().keysList());
 		trace(FormApi.params(state.selectedData.keys().keysList()));
 		props.history.push('${baseUrl}Edit/edit/${FormApi.params(state.selectedData.keys().keysList())}');
-		var initialState:view.model.Contact = {
+		var initialState:Contact = {
 			id:0,
 			edited_by: 0,
 			mandator: 0
@@ -164,52 +165,40 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//props.history.push(baseUrl);
 		}
 		
-		//trace(dataAccess);
 		if(props.match.params != null)
-		trace('yeah action: ${props.match.params.action}');
+		trace('yeah2action: ${props.match.params.action}');
 		//dbData = FormApi.init(this, props);
 		if(props.match.params.id!=null)
 		{
 			trace('select ID(s)');
 			
 		}
-		
+				
+		//trace(formRef.current != null);
+		if(formRef.current != null)
+		formRef.current.addEventListener('keyup', handleChange);
 
-		if(props.match.params.action != null)
-		{
-			//state.formApi.doAction();	
-		}
-		else 
-		{
-			//invoke default action if any
-			//state.formApi.doAction('find');	
-		}
+		for(dC in state.formBuilder.dateControls)
+			dC.componentDidMount();
+	}
+	
+	public function dcChange(name,value) {
+		trace('$name: $value');
+		Reflect.setField(state.actualState,name,value);
 	}
 
-	function getDispatch(dispatch) {
-		trace(dispatch);
-	}
-
-	function handleChange(contact, value, t) {
-		//trace(contact);
-		//trace(contact.storeSubscription.store.getState());
-		//var field:String = contact.split('.')[1];
-		//trace(field);
-		//trace(contact.length);
-		//trace(t);
-		//state.formApi.storeFormState(field,value);
-		//trace(value);	
-		/*return function(u){
-			trace(u);
-		};*/
+	public function handleChange(e:Event) {
+		var el:InputElement = cast(e.target,InputElement);
+		trace('${el.name}:${el.value}');
+		Reflect.setField(state.actualState,el.name,el.value);
+		trace(state.actualState);
 	}		
 
-	function handleSubmit(contact:Dynamic) {
-		trace(contact);
-		trace(Type.typeof(contact));
-		contact.preventDefault();
-		trace(contact.target);
-		
+	function handleSubmit(event:ReactEvent) {
+		trace(Reflect.fields(event));
+		trace(Type.typeof(event));
+		event.preventDefault();
+		trace(event.target);		
 	}	
 
 	function save()
@@ -220,29 +209,29 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	function renderResults():ReactFragment
 	{
 		trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.dataTable != null));
-		//trace(dataDisplay["userList"]);
-		/*trace(state.loading);
-		if(state.loading)
-			return state.formApi.renderWait();*/
 		trace('###########loading:' + state.loading);
+		trace('########### action:' + props.match.params.action);
+
 		return switch(props.match.params.action)
 		{
 			case 'edit':
 			//trace(model(initialState, contact, first_name));
-			trace(state.initialState);
-			var fields:Map<String,FormField> = [
-				for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
-			];
-			//trace(fields);
-			state.formBuilder.renderForm({
-				handleSubmit:handleSubmit,
-				fields:[
+				trace(state.initialState);
+				var fields:Map<String,FormField> = [
 					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
-				],
-				model:'contact',
-				title: 'Kontakt - Bearbeite Stammdaten' 
-			},initialState);
-			
+				];
+				//trace(fields);
+				
+				state.formBuilder.renderForm({
+					handleSubmit:handleSubmit,
+					fields:[
+						for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
+					],
+					model:'contact',
+					ref:formRef,
+					title: 'Kontakt - Bearbeite Stammdaten' 
+				},initialState);
+				//null;
 			case 'add':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');

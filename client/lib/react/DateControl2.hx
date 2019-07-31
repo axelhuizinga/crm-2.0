@@ -27,7 +27,7 @@ using shared.DateFormat;
  * @author axel@cunity.me
  */
 
-class DateControl
+class DateControl2 extends ReactComponentOfProps<DateTimeProps>
 {
 	static var css = js.Lib.require('react-datepicker/dist/react-datepicker.css');
 	static var flat = js.Lib.require('flatpickr/dist/themes/light.css');
@@ -37,25 +37,23 @@ class DateControl
 	var fpRef:ReactRef<InputElement>;
 	var fP:FlatpickrJS;
 	var tip:Tooltip;
-	var props:DateTimeProps;
 
-	public function new(props:DateTimeProps) 
+	public function new(props) 
 	{
 		//trace( props.value );
-		this.props = props;
+		super(props);
 		flatpickr.localize(German);
-		trace(Reflect.fields(props));
+		trace(props);
 	}
 
 	function onClose (sDates:Array<Dynamic>,val:String,me:DateTimePicker)
-	{
-		trace(sDates);
-		trace(val);
-		if(tip != null)
-			tip.clear();
-	}
-
-	public function componentDidMount():Void 
+		{
+			trace(sDates);
+			trace(val);
+			if(tip != null)
+				tip.clear();
+		}
+	override public function componentDidMount():Void 
 	{
 		//get flatpickr instance);
 		fP = Reflect.field(fpRef, 'flatpickr');
@@ -128,20 +126,14 @@ class DateControl
 		if(props.comp != null)
 		fP.input.addEventListener('change', function (evt:InputEvent)
 		{
-			trace(Reflect.fields(props));
-			props.onChange(props.name, cast(evt.target, InputElement).value);
+			trace(props.comp);
+			props.comp.onChange(evt);
 		});
 	}
 
-	public function render():ReactFragment
+	override public function render():ReactFragment
 	{
-		if(props == null)
-		{
-			trace(null);
-			return null;
-		}
-			
-		trace( props.name );		
+		trace( props.value );
 		var val = (props.value == null ?'0000.00.00':props.value);
 		//var val:String = props.value;
 		//val = val.split('+')[0];

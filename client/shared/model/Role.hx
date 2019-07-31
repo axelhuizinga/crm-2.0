@@ -1,4 +1,4 @@
-package view.model;
+package shared.model;
 typedef Role = 
 {
 	//{"name":"id","type":"bigint","default":"nextval('roles_id_seq'::regclass)","attnum":"1","required":true}

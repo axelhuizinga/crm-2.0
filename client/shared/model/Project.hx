@@ -1,4 +1,4 @@
-package view.model;
+package shared.model;
 typedef Project = 
 {
 	//{"name":"id","type":"bigint","default":"nextval('projects_id_seq'::regclass)","attnum":"1","required":true}

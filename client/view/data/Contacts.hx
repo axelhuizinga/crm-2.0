@@ -30,6 +30,7 @@ import view.data.contacts.Edit;
 import view.data.contacts.model.ContactsModel;
 import shared.DbData;
 import shared.DBMetaData;
+import shared.model.Contact;
 import view.shared.FormField;
 import view.shared.io.BinaryLoader;
 import view.shared.io.DataAccess;
@@ -58,7 +59,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
 	
-	public static var initialState:view.model.Contact =
+	public static var initialState:Contact=
 	{
 		id:0,
 		edited_by: 0,

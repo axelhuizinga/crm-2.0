@@ -16,7 +16,7 @@ import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import view.shared.io.BinaryLoader;
 import view.table.Table;
-import view.model.Account;
+import shared.model.Account;
 
 class List extends ReactComponentOf<DataFormProps,FormState>
 {

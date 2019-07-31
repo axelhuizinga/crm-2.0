@@ -156,7 +156,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 				  </h2>
 				</div> 
 				<div className="form2">
-				  	<form name="form" onSubmit={handleSubmit} >
+				  	<form name="form" onSubmit={handleSubmit} className="login" >
 						<div className="formField">
 								<label className="fa userIcon" forhtml="login_user_name">
 										<span className="hidden">User ID</span>
@@ -172,7 +172,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 								<input id="pw" className=${errorStyle("pass") + "form-input"} name="pass" type="password" placeholder="Password" value={state.pass} onChange={handleChange} />
 						</div>
 						<div className="formField">
-								<input type="submit" value="Login" />
+								<input type="submit" style=${{width:'100%'}} value="Login" />
 						</div>
 				  	</form>
 				</div>

@@ -16,7 +16,8 @@ class ContactsModel
 		'edit' => {
 			source:[
 				"contacts" => [
-					"fields" => 'user_name,change_pass_required,password']
+					"fields" => '*'
+					]
 				],
 			view:[
 				'title'=>{label:'Anrede'},

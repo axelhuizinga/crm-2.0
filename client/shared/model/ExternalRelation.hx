@@ -1,4 +1,4 @@
-package view.model;
+package shared.model;
 typedef ExternalRelation = 
 {
 	//{"name":"id","type":"bigint","default":"nextval('external_relation_id_seq'::regclass)","attnum":"1","required":true}

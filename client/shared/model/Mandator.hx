@@ -1,4 +1,4 @@
-package view.model;
+package shared.model;
 typedef Mandator = 
 {
 	//{"name":"id","type":"bigint","default":"nextval('mandators_id_seq'::regclass)","attnum":"1","required":true}

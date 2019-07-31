@@ -35,7 +35,8 @@ class DateTimeControl extends ReactComponentOfProps<DateTimeProps>
 	
 	override public function render():ReactFragment
 	{
-		return return 	props.value == null ? null : jsx('
+		var val = (props.value == null ?'0000.00.00':props.value);
+		return jsx('
 			<$Flatpickr     
 				options=${{
 					clickOpens:(props.disabled==null?true:!props.disabled),
@@ -47,7 +48,7 @@ class DateTimeControl extends ReactComponentOfProps<DateTimeProps>
 					minuteIncrement:5,
 					locale:'de'
 				}}
-				value=${Date.fromString(props.value)}
+				value=${Date.fromString(val)}
 				disabled=${props.disabled}		
 				onChange=${props.onChange}/>
 		');

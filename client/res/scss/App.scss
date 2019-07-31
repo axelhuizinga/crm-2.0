@@ -21,7 +21,7 @@ $bgto: #ddd;
 $border-light: #dbdbdb;
 $borderCol:$borderSmallWidth dotted #eee;
 $buttonSun:#ffdd57;
-$cell-border: 1px solid grey;
+$cell-border: 1px solid #ccc;
 $cellPadding: 0px 0.75rem;
 $headPadding: 0.35rem 0.75rem;
 $ePad:0.5rem 1rem;
@@ -288,9 +288,11 @@ h1 {
   width: 1px;
 }
 .fa-sign-out::before {
+	font: 1.55rem "Font Awesome 5 Free";
 	content: "\f2f5";
 }
 .userIcon:before {
+	font: 1.55rem "Font Awesome 5 Free";
 	content: '\f007';
 }
 .lockIcon:before {
@@ -311,7 +313,7 @@ h1 {
   color: #3A3F44;  
   
 }
-.formField input {
+.formField .g_cell input,.formField .g_cell_r input, .login input {
   width: 100%;
   /*padding:1rem;*/
   background-color: #fafafa;
@@ -326,7 +328,7 @@ h1 {
   border-top-right-radius: 0;
   border-right-style:none;
 	padding: $ePad;
-	font-size: 1.55rem;
+	font-size: 1.25rem;
 	color: $logoBlue;	
 }
 .formField input:focus, .formField input:hover {
@@ -345,11 +347,11 @@ input::-moz-focus-inner {
 .formField input[type="submit"]{
 	border-radius: $tableHeader-radius;
 	color:$logoBlue;
-	font-size:1.4rem;
+	font-size:1.25rem;
 	font-weight:bold;
 	padding:$ePad;
 	background-color:$buttonSun;
-	border-color:transparent;
+	border-color:$cell-border;
 }
 .h100
 {
@@ -604,6 +606,7 @@ form{
 	font-size:1.1rem;
 	margin:0.3rem auto;
 	border-radius: $tableHeader-radius;
+	border:$cell-border;
 }
 .formField label
 {
@@ -823,7 +826,16 @@ form td, form caption
 	font-size: 1.22rem;
 	color:white;
 }
-
+.g_fill_row
+{
+	grid-column:1/-1;
+}
+.g_fill_row input
+{
+	padding: 0.5rem 8rem!important;	
+	margin: auto;
+	display: block;
+}
 .g_row_2
 {
 	display: grid;

@@ -1,4 +1,4 @@
-package view.model;
+package shared.model;
 typedef Contact = 
 {
 	//{"name":"id","type":"bigint","default":"nextval('contacts_id_seq'::regclass)","attnum":"1","required":true}

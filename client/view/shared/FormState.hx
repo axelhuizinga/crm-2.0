@@ -4,8 +4,10 @@ import haxe.Constraints.Function;
 import haxe.ds.IntMap;
 import history.History;
 import history.Location;
+import js.html.FormElement;
 import js.html.InputEvent;
 import js.html.TableRowElement;
+import react.ReactRef;
 import react.ReactType;
 import react.ReactComponent;
 import view.shared.FormBuilder;
@@ -30,6 +32,7 @@ typedef FormState =
 	?formBuilder:FormBuilder,
 	?formStateKey:String,
 	?clean:Bool,
+	?ref:ReactRef<FormElement>,
 	?selectedData:IntMap<Map<String,Dynamic>>,
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,

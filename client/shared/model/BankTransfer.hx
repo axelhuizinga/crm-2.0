@@ -1,4 +1,4 @@
-package view.model;
+package shared.model;
 typedef BankTransfer = 
 {
 	//{"name":"ag_name","type":"character varying(64)","default":"","attnum":"1","required":true}

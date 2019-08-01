@@ -14,7 +14,7 @@ import js.Lib;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;
 import react.DateControlTypes;
-import react.Flatpickr;
+//import react.Flatpickr;
 import shared.DateFormat;
 import view.shared.io.Tooltip;
 import haxe.EnumTools.EnumValueTools;
@@ -29,36 +29,50 @@ using shared.DateFormat;
 
 class DateControl
 {
-	static var css = js.Lib.require('react-datepicker/dist/react-datepicker.css');
-	static var flat = js.Lib.require('flatpickr/dist/themes/light.css');
-	static var flatpickr = js.Lib.require('flatpickr');
-	static var German = js.Lib.require('flatpickr/dist/l10n/de.js');	
+	//static var css = js.Lib.require('react-datepicker/dist/react-datepicker.css');
+	//static var flat = js.Lib.require('flatpickr/dist/themes/light.css');
+
+		
 
 	var fpRef:ReactRef<InputElement>;
-	var fP:FlatpickrJS;
+	//var fP:FlatpickrJS;
 	var tip:Tooltip;
-	var props:DateTimeProps;
+	public var props:DateTimeProps;
 
 	public function new(props:DateTimeProps) 
 	{
 		//trace( props.value );
 		this.props = props;
-		flatpickr.localize(German);
+		
 		trace(Reflect.fields(props));
+		fpRef = React.createRef();
 	}
 
-	function onClose (sDates:Array<Dynamic>,val:String,me:DateTimePicker)
+	public function createFlatPicker():Void 
 	{
-		trace(sDates);
-		trace(val);
-		if(tip != null)
-			tip.clear();
-	}
-
-	public function componentDidMount():Void 
-	{
+		var fP = App.flatpickr;
+		trace(Type.typeof(fP));
+		trace(Reflect.isFunction(fP));
+		var val = (props.value == null ?'0000.00.00':props.value);
+		trace(untyped fP(fpRef.current,{
+				allowInput:true,
+				altFormat:props.options.dateFormat,
+				dateFormat:'Y-m-d',
+				altInput:true,
+				altInputClass: "form-control input",
+				defaultValue:val,
+				locale:'de',
+				//onChange:onChange,
+				onClose:onClose
+}));
 		//get flatpickr instance);
-		fP = Reflect.field(fpRef, 'flatpickr');
+	/*var fP:Dynamic = App.flatpickr(fpRef.current, {});
+		trace('flatpickr Instance: ${fP}');
+		if(fP==null)
+			return;		*/
+
+		var fP:Dynamic = Reflect.field(fpRef, 'flatpickr');
+		trace('flatpickr Instance: ${fP}');
 		if(fP==null)
 			return;
 		var altInput:InputElement = fP.altInput;
@@ -133,6 +147,18 @@ class DateControl
 		});
 	}
 
+	function onChange() {
+		
+	}
+
+	function onClose (sDates:Array<Dynamic>,val:String,me:DateTimePicker)
+	{
+		trace(sDates);
+		trace(val);
+		if(tip != null)
+			tip.clear();
+	}
+	
 	public function render():ReactFragment
 	{
 		if(props == null)
@@ -145,39 +171,6 @@ class DateControl
 		var val = (props.value == null ?'0000.00.00':props.value);
 		//var val:String = props.value;
 		//val = val.split('+')[0];
-		return  jsx('
-		<$Flatpickr     
-			options=${{
-				allowInput:true,
-				altFormat:props.options.dateFormat,
-				dateFormat:'Y-m-d',
-				altInput:true,
-				altInputClass: "form-control input",
-				defaultValue:val,
-				locale:'de',
-				onChange:onChange,
-				onClose:onClose
-			}}
-			ref=${function(fP)this.fpRef = fP}
-			value=${Date.fromString(val)}
-			name=${props.name}
-			
-			className="h100" 
-			/>
-		');
+		return  jsx('<input className="h100" name=${props.name} id=${props.name} ref=${fpRef} />');
 	}	
-	
-	 /* [Description]
-	 * @param sDates 
-	 * @param val 
-	 * @param me 
-	 */
-
-	function onChange(sDates:Array<Dynamic>,val:String,me:DateTimePicker) {
-		trace(val);
-		trace(props.name);
-		//fP.close();onChange=${props.onChange} 
-		trace(props.onChange);
-		//props.onChange({target:{name:props.name,value:val}});/****/
-	}
 }

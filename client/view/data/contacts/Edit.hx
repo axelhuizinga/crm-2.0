@@ -179,7 +179,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		formRef.current.addEventListener('keyup', handleChange);
 
 		for(dC in state.formBuilder.dateControls)
-			dC.componentDidMount();
+			dC.createFlatPicker();
 	}
 	
 	public function dcChange(name,value) {

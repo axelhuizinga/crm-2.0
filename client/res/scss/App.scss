@@ -353,6 +353,14 @@ input::-moz-focus-inner {
 	background-color:$buttonSun;
 	border-color:$cell-border;
 }
+.flatpickr-calendar
+{
+	font-size: 0.8rem!important;
+}
+.flatpickr-innerContainer
+{
+	font-size: 0.99rem!important;
+}
 .h100
 {
 	position: relative;

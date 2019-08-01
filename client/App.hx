@@ -1,3 +1,4 @@
+import js.html.Window;
 import view.shared.FormBuilder;
 import view.shared.FormState;
 import view.shared.SMenuProps;
@@ -72,7 +73,10 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static var store:Store<AppState>;
 	public static var devIP = Webpack.require('./webpack.local.js').ip;
 	public static var config:Dynamic = Webpack.require('../httpdocs/config.js').config;
+	public static var flatpickr:Function = Webpack.require('flatpickr');
+	static var German = js.Lib.require('flatpickr/dist/l10n/de.js');
 	public static var sprintf:Function = Webpack.require('sprintf-js').sprintf;
+	//public static var flatpickr = js.Lib.require('flatpickr');
 	//public static var user_name:String = Cookie.get('user.user_name');
 	//public static var jwt:String = Cookie.get('user.jwt');
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
@@ -82,7 +86,9 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
   public function new(?props:AppProps) 
 	{
 		super(props);
-		//trace(rt);
+		trace(flatpickr);
+		trace(German);
+		untyped flatpickr.localize(German);
 		ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
 		var ti:Timer = null;

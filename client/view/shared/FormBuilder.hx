@@ -86,7 +86,7 @@ class FormBuilder {
 					var dC:DateControl = new DateControl({
 						comp:comp,
 						name:name,
-						onChange: comp.dcChange,
+						onChange: comp.onChange,
 						options:{
 							dateFormat:field.displayFormat(),
 							defaultDate:Date.now(),

@@ -13,13 +13,13 @@ import haxe.Json;
 import js.html.XMLHttpRequest;
 import haxe.http.HttpJs;
 import me.cunity.debug.Out;
-import model.AppState;
+import state.AppState;
 import react.Fragment;
 import react.ReactComponent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
 import react.ReactType;
-import model.AjaxLoader;
+import loader.AjaxLoader;
 
 import view.shared.io.DataFormProps;
 import view.shared.io.FormApi;
@@ -77,7 +77,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	
 	/*static function mapStateToProps() {
 
-		return function(aState:model.AppState) 
+		return function(aState:state.AppState) 
 		{
 			var uState = aState.appWare.user;
 			//trace(uState);		

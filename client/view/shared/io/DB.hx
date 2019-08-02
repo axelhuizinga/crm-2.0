@@ -1,6 +1,6 @@
 package view.shared.io;
 
-import model.AppState;
+import state.AppState;
 import js.html.AreaElement;
 import haxe.Json;
 import haxe.Unserializer;
@@ -9,6 +9,7 @@ import haxe.io.Bytes;
 import haxe.http.HttpJs;
 import js.html.XMLHttpRequest;
 import hxbit.Serializer;
+import loader.BinaryLoader;
 import js.html.FormData;
 import js.html.FormDataIterator;
 import js.html.HTMLCollection;

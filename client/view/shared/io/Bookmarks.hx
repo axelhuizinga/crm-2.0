@@ -8,7 +8,7 @@ import js.html.Plugin;
 import js.Syntax;
 import haxe.Serializer;
 import haxe.ds.StringMap;
-import model.AjaxLoader;
+import loader.AjaxLoader;
 import react.ReactComponent;
 import react.ReactComponent.ReactFragment;
 import react.ReactEvent;

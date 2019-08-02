@@ -1,6 +1,6 @@
 package;
 
-import model.AppState;
+import state.AppState;
 import react.ReactComponent;
 import react.ReactMacro.jsx;
 import redux.Redux.Dispatch;
@@ -10,7 +10,7 @@ import AppStore;
 @:expose('default')
 @:connect
 class Test extends ReactComponent {
-	static function mapStateToProps(state:model.AppState) {
+	static function mapStateToProps(state:state.AppState) {
 		return {
 			counter: state.data.counter
 		};

@@ -1,7 +1,7 @@
 package view.dashboard.model;
 import haxe.ds.StringMap;
 import view.shared.FormProps;
-import view.shared.FormElement;
+import view.shared.FormInputElement;
 import view.shared.FormField;
 
 /**
@@ -24,8 +24,8 @@ class SettingsFormModel
 		'last_name'=>{label:'Name'},
 		'email'=>{label:'Email'},		
 		'name'=>{label:'UserGroup'},		
-		'active' => {label:'Aktiv', className:'', 'type':FormElement.Checkbox},
-		'user_id' => {'type':FormElement.Hidden}
+		'active' => {label:'Aktiv', className:'', 'type':FormInputElement.Checkbox},
+		'user_id' => {'type':FormInputElement.Hidden}
 	];
 	
 	public static var relations:StringMap<FormRelation> = [

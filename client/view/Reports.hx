@@ -1,7 +1,7 @@
 package view;
 
 import bulma_components.*;
-import model.AppState;
+import state.AppState;
 import react.ReactComponent;
 import react.ReactDateTimeClock;
 import react.ReactMacro.jsx;
@@ -47,7 +47,7 @@ class Reports extends ReactComponentOfProps<RouteTabProps>
 	
 	static function mapStateToProps() {
 
-		return function(aState:model.AppState) 
+		return function(aState:state.AppState) 
 		{
 			var uState = aState.appWare.user;
 

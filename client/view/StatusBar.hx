@@ -15,7 +15,7 @@ import redux.Redux;
 import react.router.Route.RouteComponentProps;
 import redux.StoreMethods;
 import action.AppAction;
-import model.AppState;
+import state.AppState;
 import view.shared.io.User.UserProps;
 import view.shared.DateTime;
 
@@ -97,7 +97,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	
 	static function mapStateToProps(state:AppState) {
 
-		//return function(state:model.AppState) {
+		//return function(state:state.AppState) {
 			trace(state.appWare.user.first_name);
 			return {
 				/*date:state.statusBar.date,*/

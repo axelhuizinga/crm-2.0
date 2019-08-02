@@ -26,6 +26,7 @@ class User extends Model
 	public static function create(param:StringMap<String>):Void
 	{
 		var self:User = new User(param);	
+		trace(param.get('action'));
 		Reflect.callMethod(self, Reflect.field(self, param.get('action')),[]);
 	}
 	
@@ -69,7 +70,7 @@ class User extends Model
 		{
 			//ACTIVE USER EXISTS
 			stmt = S.dbh.prepare(
-				'SELECT change_pass_required, last_login, user_name FROM ${S.db}.users WHERE user_name=:user_name AND password=crypt(:password,password)',Syntax.array(null));
+				'SELECT change_pass_required, last_login, user_name, mandator FROM ${S.db}.users WHERE user_name=:user_name AND password=crypt(:password,password)',Syntax.array(null));
 			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}',':password':'${param.get('pass')}'})))
 			{
 				S.sendErrors(dbData,['${param.get('action')}' => stmt.errorInfo()]);
@@ -78,7 +79,8 @@ class User extends Model
 			{
 				S.sendErrors(dbData,['${param.get('action')}'=>'pass']);
 			}
-			var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(stmt.fetch(PDO.FETCH_ASSOC));
+			var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(stmt.fetch(PDO.FETCH_ASSOC));			
+			dbData.dataInfo['mandator'] = res['mandator'];
 			dbData.dataInfo['last_login'] = res['last_login'];
 			dbData.dataInfo['loggedIn'] = true;
 			trace(res);
@@ -99,6 +101,7 @@ class User extends Model
 	public static function login(params:StringMap<String>, secret:String):Bool
 	{
 		var me:User = new User(params);
+		trace(me);
 		switch(me.userIsAuthorized())
 		{
 			case uath = UserAuth.AuthOK|UserAuth.PassChangeRequired:
@@ -134,7 +137,7 @@ class User extends Model
 		}
 		switch (userIsAuthorized())
 		{
-			default:
+			case UserAuth.AuthOK|UserAuth.PassChangeRequired:
 			trace('UPDATE ${S.db}.users SET password=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE user_name=:user_name AND password=CRYPT(:pass, password)');
 			var stmt:PDOStatement = S.dbh.prepare(
 				'UPDATE ${S.db}.users SET password=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE user_name=:user_name AND password=CRYPT(:pass, password)',Syntax.array(null));
@@ -147,6 +150,8 @@ class User extends Model
 			{
 				S.sendErrors(dbData,['changePassword'=>'Das Passwort ist nicht korrekt!']);
 			}
+			default:
+				S.sendErrors(dbData,['changePassword'=>'Das Passwort ist nicht korrekt!']);
 		}		
 		dbData.dataInfo['changePassword'] = 'OK';
 		S.sendInfo(dbData);

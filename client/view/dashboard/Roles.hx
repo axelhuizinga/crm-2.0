@@ -6,13 +6,13 @@ import haxe.ds.StringMap;
 //import haxe.Json;
 //import haxe.http.HttpJs;
 //import haxe.io.Bytes;
-import model.AjaxLoader;
-import model.AppState;
+import loader.AjaxLoader;
+import state.AppState;
 import react.ReactComponent.ReactFragment;
 import react.ReactComponent;
 import shared.DbData;
 
-import view.shared.io.BinaryLoader;
+import loader.BinaryLoader;
 import view.table.Table;
 //import react.ReactComponent.ReactComponentOfProps;
 import react.ReactEvent;
@@ -131,7 +131,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 	static function mapStateToProps(aState:AppState) {
-		return function(aState:model.AppState) 
+		return function(aState:AppState) 
 		{
 			var uState = aState.appWare.user;
 			trace(uState);		

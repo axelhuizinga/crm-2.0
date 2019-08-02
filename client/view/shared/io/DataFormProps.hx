@@ -5,7 +5,7 @@ import react.ReactComponent.ReactFragment;
 import view.shared.FormState;
 import react.router.Route;
 import redux.Redux.Dispatch;
-import model.UserState;
+import state.UserState;
 
 typedef DataFormProps =
 {

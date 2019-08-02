@@ -1,7 +1,7 @@
 package view.shared.io;
 
 import haxe.Timer;
-import model.AppState;
+import state.AppState;
 import redux.Redux.Dispatch;
 import react.ReactEvent;
 import react.router.ReactRouter;
@@ -25,10 +25,10 @@ import js.html.InputEvent;
 import js.html.TableRowElement;
 import js.html.XMLHttpRequest;
 import macrotools.AbstractEnumTools;
-import model.UserState;
+import state.UserState;
 import react.ReactDOM;
 
-import view.shared.FormElement;
+import view.shared.FormInputElement;
 import view.shared.FormField;
 import view.shared.FormState;
 import view.shared.OneOf;
@@ -309,7 +309,7 @@ class FormApi
 		var pID:String='';//PRIMARY ID
 		for (name in fields)			
 		{
-			if(_fstate.fields[name].type == FormElement.Hidden && _fstate.fields[name].primary)
+			if(_fstate.fields[name].type == FormInputElement.Hidden && _fstate.fields[name].primary)
 			{
 				pID = name;
 				break;		
@@ -323,7 +323,7 @@ class FormApi
 			for (name in fields)			
 			{
 				//public var primaryId:String = '';
-				if(_fstate.fields[name].type == FormElement.Hidden)
+				if(_fstate.fields[name].type == FormInputElement.Hidden)
 				{
 					continue;
 				}
@@ -356,7 +356,7 @@ class FormApi
 		var fields:Iterator<String> = _fstate.fields.keys();
 		for(name in fields)
 		{
-			if (_fstate.fields[name].type == FormElement.Hidden)
+			if (_fstate.fields[name].type == FormInputElement.Hidden)
 				continue;
 			formColElements[name] = new Array();
 		}
@@ -382,7 +382,7 @@ class FormApi
 		var c:Int = 0;
 		for(name in fields)
 		{
-			if (_fstate.fields[name].type == FormElement.Hidden)
+			if (_fstate.fields[name].type == FormInputElement.Hidden)
 				continue;			
 			var formField:FormField = _fstate.fields[name];		
 			cols.push( jsx('
@@ -409,7 +409,7 @@ class FormApi
 			case Hidden:
 				fF.primary ? null:
 				jsx('<inputl key=${Utils.genKey(k++)} name=${model}  type="hidden"/>');
-			case FormElement.Select:
+			case FormInputElement.Select:
 				jsx('
 				<select name=${model}>
 				${renderSelectOptions(fF.value)}
@@ -442,10 +442,10 @@ class FormApi
 		return elements;
 	}
 	
-	public static function renderSelectOptions(fel:FormElement):ReactFragment
+	public static function renderSelectOptions(fel:FormInputElement):ReactFragment
 	{
 		var sel:String = cast fel;
-		var opts:Array<String> = AbstractEnumTools.getValues(FormElement).map(function(fE:FormElement) return cast fE);
+		var opts:Array<String> = AbstractEnumTools.getValues(FormInputElement).map(function(fE:FormInputElement) return cast fE);
 		//trace(sel);		trace(opts);selected=${opt==sel}
 		var rOpts:Array<ReactFragment> = [];
 		var k:Int=0;

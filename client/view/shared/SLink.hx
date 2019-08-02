@@ -2,7 +2,7 @@ package view.shared;
 
 import haxe.Constraints.Function;
 import action.LocationAction;
-import model.AppState;
+import state.AppState;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
@@ -52,7 +52,7 @@ class SLink extends ReactComponentOfProps<SLinkProps>
 		props.dispatch(Push(props.to));	
 	}
 	
-	static function mapStateToProps(state:model.AppState) {
+	static function mapStateToProps(state:AppState) {
 		return {
 			//counter: state.data.counter
 		};

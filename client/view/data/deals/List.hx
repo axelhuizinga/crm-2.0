@@ -1,6 +1,6 @@
 package view.data.deals;
 
-import model.AppState;
+import state.AppState;
 import haxe.Constraints.Function;
 import me.cunity.debug.Out;
 import react.ReactComponent;
@@ -17,7 +17,7 @@ import view.shared.SMenuProps;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
-import view.shared.io.BinaryLoader;
+import loader.BinaryLoader;
 import view.table.Table;
 
 class List extends ReactComponentOf<DataFormProps,FormState>

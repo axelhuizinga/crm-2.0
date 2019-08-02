@@ -3,8 +3,8 @@ package view;
 import js.html.InputElement;
 import js.html.InputEvent;
 import js.html.XMLHttpRequest;
-import model.AppState;
-import model.UserState;
+import state.AppState;
+import state.UserState;
 import react.ReactComponent.ReactComponentOf;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
@@ -76,7 +76,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 	
 	static function mapStateToProps() {
 
-		return function(aState:model.AppState) 
+		return function(aState:AppState) 
 		{
 			var uState = aState.appWare.user;
 

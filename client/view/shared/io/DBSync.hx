@@ -1,7 +1,7 @@
 package view.shared.io;
 
 import haxe.DynamicAccess;
-import model.AppState;
+import state.AppState;
 import haxe.Constraints.Function;
 import js.html.AreaElement;
 import haxe.Json;
@@ -9,6 +9,7 @@ import haxe.Unserializer;
 import haxe.ds.Map;
 import haxe.io.Bytes;
 import hxbit.Serializer;
+import loader.BinaryLoader;
 import js.html.Event;
 import js.html.FormData;
 import js.html.FormDataIterator;

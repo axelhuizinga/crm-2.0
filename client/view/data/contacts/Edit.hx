@@ -1,4 +1,7 @@
 package view.data.contacts;
+import js.html.HTMLCollection;
+import js.html.HTMLFormControlsCollection;
+import js.html.SelectElement;
 import haxe.macro.Type.Ref;
 import js.html.InputElement;
 import react.React;
@@ -6,7 +9,7 @@ import js.html.Element;
 import js.html.Event;
 import js.html.FormElement;
 import react.router.RouterMatch;
-import model.AppState;
+import state.AppState;
 import haxe.Constraints.Function;
 import react.ReactComponent;
 import react.ReactEvent;
@@ -24,9 +27,9 @@ import view.shared.SMenuProps;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
-import view.shared.io.BinaryLoader;
+import loader.BinaryLoader;
 import view.table.Table;
-import shared.model.Contact;
+import model.Contact;
 
 using  shared.Utils;
 
@@ -176,7 +179,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				
 		//trace(formRef.current != null);
 		if(formRef.current != null)
-		formRef.current.addEventListener('keyup', handleChange);
+		{
+			formRef.current.addEventListener('keyup', handleChange);
+			formRef.current.addEventListener('mouseup', function(ev:Dynamic)
+			{
+				trace(Reflect.fields(ev));
+				trace(ev.target.value);
+			});
+		}
 
 		for(dC in state.formBuilder.dateControls)
 			dC.createFlatPicker();
@@ -187,19 +197,37 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		Reflect.setField(state.actualState,name,value);
 	}
 
-	public function handleChange(e:Event) {
-		var el:InputElement = cast(e.target,InputElement);
+	public function handleChange(e:Event) 
+	{
+		var el:Dynamic = e.target;
+		trace(Type.typeof(el));
+
 		trace('${el.name}:${el.value}');
-		Reflect.setField(state.actualState,el.name,el.value);
+		if(el.name != '' && el.name != null)
+		{
+			trace('>>${el.name}<<');
+			trace(state.actualState);
+			Reflect.setField(state.actualState,el.name,el.value);
+		}	
+
 		trace(state.actualState);
 	}		
 
-	function handleSubmit(event:ReactEvent) {
+	function handleSubmit(event:Event) {
 		trace(Reflect.fields(event));
 		trace(Type.typeof(event));
 		event.preventDefault();
-		trace(event.target);		
+		var target:FormElement = cast(event.target, FormElement);
+		var elements:HTMLCollection = target.elements;
+		//trace(elements.each(function(name:String, el:Dynamic)
+		trace(elements.dynaMap());
+		trace(state.actualState);
+		/*{
+			//trace('$name => $el');
+			//trace(el.value);
+		});		*/
 	}	
+
 
 	function save()
 	{
@@ -215,12 +243,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{
 			case 'edit':
-			//trace(model(initialState, contact, first_name));
 				trace(state.initialState);
 				var fields:Map<String,FormField> = [
 					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
 				];
-				//trace(fields);
 				
 				state.formBuilder.renderForm({
 					handleSubmit:handleSubmit,
@@ -234,7 +260,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				//null;
 			case 'add':
 				trace(dataDisplay["fieldsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["fieldsList"]} 

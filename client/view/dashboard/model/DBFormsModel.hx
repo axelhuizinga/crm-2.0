@@ -10,7 +10,7 @@ import shared.DBMetaData;
 
 
 import haxe.ds.StringMap;
-import view.shared.FormElement;
+import view.shared.FormInputElement;
 //import view.shared.io.DataAccessForm;
 import view.table.Table.DataColumn;
 import view.table.Table.DataState;
@@ -60,7 +60,7 @@ class DBFormsModel
 }
 /*	id:Int,
 	mandator:Int,
-	element:FormElement,
+	element:FormInputElement,
 	table_name:String,
 	field_name:String,
 	field_type:String,

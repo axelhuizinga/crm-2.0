@@ -864,9 +864,13 @@ form td, form caption
 	height: inherit;
 }
 .g_cell_r{
-	justify-content: end;
-	justify-self: end;
+	width:auto;
 }
 .g_cell_r input{
 	border: none;
+}
+.g_cell_r input[type=checkbox]{
+	justify-self: start;
+	width:auto;
+	margin-left: 1rem;;
 }

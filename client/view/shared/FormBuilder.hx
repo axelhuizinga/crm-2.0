@@ -11,8 +11,9 @@ import js.html.XMLHttpRequest;
 import haxe.http.HttpJs;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
+import view.shared.FormInputElement;
+import view.shared.FormState;
 import view.shared.io.DataAccess;
-
 import react.DateControl;
 import react.DateTimeControl;
 
@@ -48,26 +49,58 @@ class FormBuilder {
 	}  
 
 
-	function renderElement():ReactFragment
+	function renderElement(el:ReactFragment, ki, label):ReactFragment
 	{
+		return	jsx('
+			<div key=${ki} className="g_row_2" role="rowgroup">
+				<div className="g_cell" role="cell">${label}</div>
+				<div className="g_cell_r" role="cell">
+				${el}
+				</div>
+			</div>
+		');	
+	}
 
-		return null;
+	function renderOption(si:Int,label:String,?value:Dynamic) {
+		return	
+			value == null ? jsx('<option>$label</option>'):
+			jsx('<option key=${si} value=${value}>$label</option>');
+	}
+
+	function renderSelect(name:String,options:StringMap<String>):ReactFragment
+	{
+		var si:Int = 1;
+		return [for (value=>label in options)
+		{
+			renderOption(si++, label,value);
+		}].array();
 	}
 	
-	function renderFormElements(fields:Map<String, FormField>, model:String, ?compOnChange:Function):ReactFragment
+	function renderFormInputElements(fields:Map<String, FormField>, model:String, ?compOnChange:Function):ReactFragment
 	{
 		var ki:Int = 0;
 		//return fields.array().map(function(field:FormField){
 		return [for(name => field in fields){
 			switch (field.type)
 			{
-				case FormElement.Hidden:
+				case FormInputElement.Hidden:
 					null;
-				case FormElement.Button:
+				case FormInputElement.Button:
 					jsx('<button type="submit">
 						${field.value.value}
 					</button>');
-				case FormElement.DateTimePicker:
+				case FormInputElement.Checkbox:			
+					renderElement(
+						jsx('<input name=${name}  type="checkbox" disabled=${field.readonly} required=${field.required}/>'),
+						ki++, field.label
+					);
+				case Select:
+				renderElement(
+					jsx('<select name=${name} >${renderSelect(name,field.options)}</select>'),
+					ki++, field.label
+				);
+				case FormInputElement.DateTimePicker:
+					
 				    jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
@@ -82,11 +115,11 @@ class FormBuilder {
 							 />
 						</div>
 					</div>');
-				case FormElement.DatePicker:
+				case FormInputElement.DatePicker:
 					var dC:DateControl = new DateControl({
 						comp:comp,
 						name:name,
-						onChange: comp.onChange,
+						onChange: comp.handleChange,
 						options:{
 							dateFormat:field.displayFormat(),
 							defaultDate:Date.now(),
@@ -102,14 +135,10 @@ class FormBuilder {
 						</div>
 					</div>');
 				default:
-					jsx('
-					<div key=${ki++} className="g_row_2" role="rowgroup">
-						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r" role="cell">
-						<input name=${name}  type="text" disabled=${field.readonly} required=${field.required}/>
-						</div>
-					</div>
-					');
+					renderElement(
+						jsx('<input name=${name}  type="text" disabled=${field.readonly} required=${field.required}/>'),
+						ki++, field.label
+					);
 			}
 		}].array();
 		//trace(fields.array());
@@ -125,7 +154,7 @@ class FormBuilder {
 			<form name=${props.model} onSubmit=${props.handleSubmit} ref=${props.ref}  className="tabComponentForm formField">
 				<div className="grid_box" role="table" aria-label="Destinations">
 					<div className="g_caption" >${props.title}</div>	
-					${renderFormElements(props.fields, props.model)}
+					${renderFormInputElements(props.fields, props.model)}
 					<div className="g_fill_row">
 						<input type="submit" className="center" value="Speichern"/>
 					</div>					
@@ -140,5 +169,9 @@ class FormBuilder {
 		//return null;
 		return jsx('<input type="hidden" name=${cm} />');
 	}
+	
+	function onChange(_) {
+
+	}	
 }
 

@@ -1,6 +1,6 @@
 package view.shared;
 
-import model.AppState;
+import state.AppState;
 import action.LocationAction;
 import js.html.ButtonElement;
 import js.html.Event;

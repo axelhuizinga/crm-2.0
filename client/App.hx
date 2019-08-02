@@ -32,8 +32,8 @@ import js.Error;
 import js.Promise;
 import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
-import model.ApplicationStore;
-import model.CState;
+import store.ApplicationStore;
+import state.CState;
 import view.shared.io.User.UserProps;
 import react.ReactMacro.jsx;
 import react.ReactComponent;
@@ -50,8 +50,8 @@ import Webpack.*;
 import react.intl.DateTimeFormatOptions.NumericFormat.Numeric;
 import react.intl.ReactIntl;
 import react.intl.comp.IntlProvider;
-import model.AppState;
-import view.shared.io.BinaryLoader;
+import state.AppState;
+import loader.BinaryLoader;
 import view.shared.io.FormApi;
 import action.AppAction;
 
@@ -75,19 +75,19 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static var config:Dynamic = Webpack.require('../httpdocs/config.js').config;
 	public static var flatpickr:Function = Webpack.require('flatpickr');
 	static var German = js.Lib.require('flatpickr/dist/l10n/de.js');
+	//static var css = js.Lib.require('react-datepicker/dist/react-datepicker.css');
+	//static var flat = js.Lib.require('flatpickr/dist/themes/light.css');	
 	public static var sprintf:Function = Webpack.require('sprintf-js').sprintf;
 	//public static var flatpickr = js.Lib.require('flatpickr');
-	//public static var user_name:String = Cookie.get('user.user_name');
-	//public static var jwt:String = Cookie.get('user.jwt');
+
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
 	public static var onResizeComponents:List<Dynamic> = new List();
-	//public static var firstLoad:Bool;
 
   public function new(?props:AppProps) 
 	{
 		super(props);
 		trace(flatpickr);
-		trace(German);
+		//trace(German);
 		untyped flatpickr.localize(German);
 		ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
@@ -107,9 +107,9 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 				}
 			},250);
 		}
-		trace(modalBox);
+		//trace(modalBox);
 		//trace('user_name:$user_name jwt:$jwt ' + (!(App.user_name == '' || App.jwt == '')?'Y':'N' ));
-		store = model.ApplicationStore.create();
+		store = ApplicationStore.create();
 		state = store.getState();
 		//trace(store);
 		trace(state.appWare.redirectAfterLogin);

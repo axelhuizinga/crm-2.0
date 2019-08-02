@@ -1,5 +1,5 @@
 package view.data.accounts;
-import model.AppState;
+import state.AppState;
 import haxe.Constraints.Function;
 import react.ReactComponent;
 import react.ReactEvent;
@@ -14,9 +14,9 @@ import view.shared.SMenuProps;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
-import view.shared.io.BinaryLoader;
+import loader.BinaryLoader;
 import view.table.Table;
-import shared.model.Account;
+import model.Account;
 
 /*
  * GNU Affero General Public License

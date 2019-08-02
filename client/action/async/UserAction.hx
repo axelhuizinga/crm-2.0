@@ -10,7 +10,7 @@ import js.Cookie;
 import js.Syntax;
 import js.html.FormData;
 import me.cunity.debug.Out;
-import model.AppState;
+import state.AppState;
 
 import js.html.XMLHttpRequest;
 
@@ -20,8 +20,8 @@ import shared.DbData;
 import view.LoginForm.LoginState;
 import view.shared.FormState;
 import view.shared.OneOf;
-import view.shared.io.BinaryLoader;
-import model.UserState;
+import loader.BinaryLoader;
+import state.UserState;
 
 typedef UserProps = UserState;
 /**
@@ -33,7 +33,7 @@ class UserAction
 {
 	public static function loginReq(props:LoginState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
-		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(props);
 			//trace(getState());
 			if (props.pass == '' || props.user_name == '') 
@@ -50,7 +50,7 @@ class UserAction
 				filter:'user_name|${props.user_name}',
 				dataSource:Serializer.run([
 					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login'],
+						"fields" => 'user_name,last_login,mandator'],
 					"contacts" => [
 						"alias" => 'co',
 						"fields" => 'first_name,last_name,email',
@@ -84,7 +84,7 @@ class UserAction
 
 	public static function logOff(props:LoginState) 
 	{
-		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(getState());
 			if (props.user_name == '') 
 				return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:'UserId fehlt!'}));

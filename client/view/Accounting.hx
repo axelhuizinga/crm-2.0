@@ -15,7 +15,7 @@ import view.shared.RouteTabProps;
 
 
 import Webpack.*;
-import model.AppState;
+import state.AppState;
 
 //@:expose('default')
 @:connect
@@ -54,7 +54,7 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 	
 	static function mapStateToProps() {
 
-		return function(aState:model.AppState) 
+		return function(aState:state.AppState) 
 		{
 			var uState = aState.appWare.user;
 

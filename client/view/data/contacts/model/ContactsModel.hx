@@ -4,7 +4,7 @@ import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
 import view.table.Table.DataColumn;
 import view.table.Table.DataState;
-import view.shared.FormElement;
+import view.shared.FormInputElement;
 
 /**
  * @author axel@cunity.me
@@ -41,9 +41,14 @@ class ContactsModel
 					//displayFormat: function () return {format:"dd.MM.yyyy H:MM", readonly:true}},
 					displayFormat: function() return "d.m.Y H:i"}, 
 				'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat:  function() return "d.m.Y"},
-				'gender'=>{label:'Geschlecht'},
+				'gender'=>{label:'Geschlecht',type:Select,options:[
+						'U'=>'Unbekannt',
+						'M'=>'Männlich',
+						'F'=>'Weiblich'
+					]
+				},
 				'comment'=>{label:'Kommentar'},
-				'use_email'=>{label:'Post per Email'},
+				'use_email'=>{label:'Post per Email',type: Checkbox},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},
 				//'mandator'=>{label:''},

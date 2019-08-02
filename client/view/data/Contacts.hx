@@ -15,7 +15,7 @@ import js.html.XMLHttpRequest;
 import haxe.http.HttpJs;
 import macrotools.Macro.model;
 import me.cunity.debug.Out;
-import model.AppState;
+import state.AppState;
 import react.ReactEvent;
 import react.Fragment;
 import react.ReactComponent;
@@ -23,16 +23,16 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import react.ReactType;
 import redux.Redux.Dispatch;
-import model.AjaxLoader;
+import loader.AjaxLoader;
 import view.data.contacts.List;
 import view.data.contacts.Edit;
 
 import view.data.contacts.model.ContactsModel;
 import shared.DbData;
 import shared.DBMetaData;
-import shared.model.Contact;
+import model.Contact;
 import view.shared.FormField;
-import view.shared.io.BinaryLoader;
+import loader.BinaryLoader;
 import view.shared.io.DataAccess;
 import view.shared.io.DataFormProps;
 import view.shared.io.FormApi;
@@ -124,14 +124,14 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
     {
 		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
         return {
-			storeFormChange: function(url:String, cState:FormState) 
+			storeFormChange: function(url:String, formState:FormState) 
 			{
-				trace(Reflect.fields(cState));
-				trace(cState.selectedRows.length);
+				trace(Reflect.fields(formState));
+				trace(formState.selectedRows.length);
 				return;
 				dispatch(AppAction.FormChange(
 					url,
-					cState
+					formState
 				));
 			}
 		};

@@ -1,11 +1,11 @@
 package view;
-import model.UserState;
+import state.UserState;
 import react.ReactType;
 import view.shared.io.User;
 
 import action.AppAction;
 import bulma_components.Tabs;
-import model.LocationState;
+import state.LocationState;
 //import view.shared.io.UserState;
 import react.Partial;
 import react.React;
@@ -28,12 +28,12 @@ import view.LoginForm;
 import redux.Redux;
 
 //import Webpack.*;
-import model.AppState;
+import state.AppState;
 import view.data.Contacts;
 import view.data.Deals;
 import view.data.Accounts;
 
-using model.CState;
+using state.CState;
 
 @:connect
 class Data extends ReactComponentOf<RouteTabProps,CompState>

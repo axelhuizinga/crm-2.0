@@ -29,13 +29,8 @@ using shared.DateFormat;
 
 class DateControl
 {
-	//static var css = js.Lib.require('react-datepicker/dist/react-datepicker.css');
-	//static var flat = js.Lib.require('flatpickr/dist/themes/light.css');
-
-		
-
 	var fpRef:ReactRef<InputElement>;
-	//var fP:FlatpickrJS;
+	var fpInstance:Dynamic;//FlashPicker instance
 	var tip:Tooltip;
 	public var props:DateTimeProps;
 
@@ -50,11 +45,9 @@ class DateControl
 
 	public function createFlatPicker():Void 
 	{
-		var fP = App.flatpickr;
-		trace(Type.typeof(fP));
-		trace(Reflect.isFunction(fP));
+		var fP:Dynamic = App.flatpickr;
 		var val = (props.value == null ?'0000.00.00':props.value);
-		trace(untyped fP(fpRef.current,{
+		fpInstance = fP(fpRef.current,{
 				allowInput:true,
 				altFormat:props.options.dateFormat,
 				dateFormat:'Y-m-d',
@@ -62,26 +55,17 @@ class DateControl
 				altInputClass: "form-control input",
 				defaultValue:val,
 				locale:'de',
-				//onChange:onChange,
+				onChange:onChange,
 				onClose:onClose
-}));
-		//get flatpickr instance);
-	/*var fP:Dynamic = App.flatpickr(fpRef.current, {});
-		trace('flatpickr Instance: ${fP}');
-		if(fP==null)
-			return;		*/
+		});
 
-		var fP:Dynamic = Reflect.field(fpRef, 'flatpickr');
-		trace('flatpickr Instance: ${fP}');
-		if(fP==null)
-			return;
-		var altInput:InputElement = fP.altInput;
-		trace(Reflect.fields(fP));
+		var altInput:InputElement = fpInstance.altInput;
+		//trace(Reflect.fields(fP));
 		trace(Reflect.fields(altInput));
 
 		altInput.addEventListener('keyup', function(ev:KeyboardEvent){
 			//trace(ev.key);
-			fP.close();
+			fpInstance.close();
 			if(ev.key=='Enter')
 			{
 				var dF:DateFormatted = altInput.value.parseDE();
@@ -101,19 +85,19 @@ class DateControl
 			//trace(fP.input);
 			//trace(fP.input.value);
 			var val:String = altInput.value;
-			var pd:Date = fP.parseDate(val, fP.config.altFormat);
+			var pd:Date = fpInstance.parseDate(val, fpInstance.config.altFormat);
 			//trace('$val === ${pd.toString()}');
-			var fD:String = fP.formatDate(pd, fP.config.altFormat);
+			var fD:String = fpInstance.formatDate(pd, fpInstance.config.altFormat);
 			trace('$val==$fD');
 			if(val==fD)
 			{
-				fP.setDate(val,true,fP.config.altFormat);
+				fpInstance.setDate(val,true,fpInstance.config.altFormat);
 			}
 		});
 
 		altInput.addEventListener('blur', function(ev:KeyboardEvent){
 			//trace(ev.key);
-//			fP.close();	
+//			fpInstance.close();	
 			var dF:DateFormatted = altInput.value.parseDE();
 			//if(dF.result.getName() != DateFormatResult.OK)
 			switch (dF.result)//,DateFormatResult.OK))
@@ -127,35 +111,38 @@ class DateControl
 				tip = new Tooltip(altInput.parentElement, {data: Std.string(dF.result),classes:['danger','active']});			
 			}
 
-			//trace(fP.input);
-			//trace(fP.input.value);
+			//trace(fpInstance.input);
+			//trace(fpInstance.input.value);
 			var val:String = altInput.value;
-			var pd:Date = fP.parseDate(val, fP.config.altFormat);
+			var pd:Date = fpInstance.parseDate(val, fpInstance.config.altFormat);
 			//trace('$val === ${pd.toString()}');
-			var fD:String = fP.formatDate(pd, fP.config.altFormat);
+			var fD:String = fpInstance.formatDate(pd, fpInstance.config.altFormat);
 			trace('$val==$fD');
 			if(val==fD)
 			{
-				fP.setDate(val,true,fP.config.altFormat);
+				fpInstance.setDate(val,true,fpInstance.config.altFormat);
 			}
 		});		
-		if(props.comp != null)
-		fP.input.addEventListener('change', function (evt:InputEvent)
+		/*if(props.comp != null)
+		altInput.addEventListener('change', function (evt:InputEvent)
 		{
 			trace(Reflect.fields(props));
 			props.onChange(props.name, cast(evt.target, InputElement).value);
-		});
+		});*/
 	}
 
-	function onChange() {
-		
+	function onChange(_) {
+		if(props.comp != null)
+		{
+			props.comp.dcChange(props.name, fpInstance.input.value);
+		}
 	}
 
 	function onClose (sDates:Array<Dynamic>,val:String,me:DateTimePicker)
 	{
 		trace(sDates);
 		trace(val);
-		if(tip != null)
+		if(tip != null && val==fpInstance.parseDate(fpInstance.altInput.value))
 			tip.clear();
 	}
 	

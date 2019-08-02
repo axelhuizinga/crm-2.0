@@ -1,7 +1,7 @@
 package shared;
 
 import shared.FieldFormat;
-import view.shared.FormElement;
+import js.html.FormElement;
 import haxe.ds.IntMap;
 import haxe.ds.Map;
 import hxbit.Schema;
@@ -53,7 +53,7 @@ class DBMetaData implements Serializable
       	return {
 			id:d.id,
 			mandator:d.mandator,
-			element:d.element,
+			//element:d.element,
 			table_name:d.table_name,
 			field_name:d.field_name,
 			field_type:d.field_type,
@@ -72,7 +72,7 @@ typedef DataField =
 {
 	id:Int,
 	mandator:Int,
-	element:FormElement,
+	//element:FormElement,
 	table_name:String,
 	field_name:String,
 	field_type:String,
@@ -82,6 +82,5 @@ typedef DataField =
 	required:Bool,
 	readonly:Bool,
 	use_as_index:Bool
-	//primary:Bool
 }
 

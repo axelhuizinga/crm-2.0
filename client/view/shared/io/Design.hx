@@ -2,7 +2,7 @@ package view.shared.io;
 
 import js.html.Event;
 import haxe.ds.StringMap;
-import model.AjaxLoader;
+import loader.AjaxLoader;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;

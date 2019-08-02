@@ -3,7 +3,7 @@ package action;
 import view.shared.FormState;
 import view.shared.io.User;
 
-import model.UserState;
+import state.UserState;
 
 /**
  * @author axel@cunity.me

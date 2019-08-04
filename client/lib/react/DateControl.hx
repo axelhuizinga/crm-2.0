@@ -1,5 +1,6 @@
 package react;
 
+import js.lib.intl.DateTimeFormat;
 import js.html.InputEvent;
 import haxe.Timer;
 import js.html.Element;
@@ -10,11 +11,15 @@ import js.html.KeyboardEvent;
 import js.html.Document;
 import react.ReactComponent.ReactFragment;
 import react.ReactRef;
-import js.Lib;
+import js.lib.Date;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;
 import react.DateControlTypes;
-//import react.Flatpickr;
+import react.intl.ReactIntl;
+import react.intl.DateTimeFormatOptions;
+import react.intl.IntlShape;
+import react.intl.ReactIntl.*;
+import react.intl.comp.FormattedDate;
 import shared.DateFormat;
 import view.shared.io.Tooltip;
 import haxe.EnumTools.EnumValueTools;
@@ -26,7 +31,8 @@ using shared.DateFormat;
  * ...
  * @author axel@cunity.me
  */
-
+//@:noPublicProps
+//@:wrap(injectIntl)
 class DateControl
 {
 	var fpRef:ReactRef<InputElement>;
@@ -38,7 +44,7 @@ class DateControl
 	{
 		//trace( props.value );
 		this.props = props;
-		
+		trace( ReactIntl.formatDate );
 		trace(Reflect.fields(props));
 		fpRef = React.createRef();
 	}
@@ -121,6 +127,8 @@ class DateControl
 			if(val==fD)
 			{
 				fpInstance.setDate(val,true,fpInstance.config.altFormat);
+				if(tip != null)
+					tip.clear();
 			}
 		});		
 		/*if(props.comp != null)
@@ -134,17 +142,30 @@ class DateControl
 	function onChange(_) {
 		if(props.comp != null)
 		{
-			props.comp.dcChange(props.name, fpInstance.input.value);
+			props.comp.doChange(props.name, fpInstance.input.value);
 		}
 	}
 
 	function onClose (sDates:Array<Dynamic>,val:String,me:DateTimePicker)
 	{
-		trace(sDates);
-		trace(val);
-		if(tip != null && val==fpInstance.parseDate(fpInstance.altInput.value))
-			tip.clear();
-	}
+		trace(tip);
+		trace(fpInstance.altInput.value);
+		trace(val + '==' + fpInstance.formatDate(fpInstance.parseDate(fpInstance.altInput.value), fpInstance.config.altFormat));
+		if(tip != null)
+			tip.clear();			
+		if(val==fpInstance.formatDate(fpInstance.parseDate(fpInstance.altInput.value), fpInstance.config.altFormat))
+		{
+
+		}
+		else 
+		{
+			fpInstance.altInput.value = fpInstance.formatDate(fpInstance.input.value, fpInstance.config.altFormat);
+			tip = new Tooltip(fpInstance.altInput.parentElement, {data: 'DateFormat',classes:['danger','active']});
+
+		}
+		
+
+	}//fpInstance.formatDate(fpInstance.parseDate(fpInstance.altInput.value), fpInstance.config.altFormat);
 	
 	public function render():ReactFragment
 	{
@@ -156,8 +177,15 @@ class DateControl
 			
 		trace( props.name );		
 		var val = (props.value == null ?'0000.00.00':props.value);
+		return jsx('<$FormattedDate value=${Date.now()} month=${MonthFormat.TwoDigit} day=${NumericFormat.TwoDigit} year=${NumericFormat.Numeric} />');
 		//var val:String = props.value;
-		//val = val.split('+')[0];
-		return  jsx('<input className="h100" name=${props.name} id=${props.name} ref=${fpRef} />');
+		//val = val.split('+')[0];props.intl.formatDate(val
+		var date = new Date(Date.parse(val));
+		val = new DateTimeFormat('de',{
+			year:YearRepresentation.Numeric,
+			month: MonthRepresentation.TwoDigit, 
+			day: DayRepresentation.TwoDigit }).format(date);
+		return  jsx('<input className="h100" name=${props.name} id=${props.name} ref=${fpRef} 
+			defaultValue=${val}/>');
 	}	
 }

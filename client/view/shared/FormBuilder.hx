@@ -96,7 +96,7 @@ class FormBuilder {
 					);
 				case Select:
 				renderElement(
-					jsx('<select name=${name} >${renderSelect(name,field.options)}</select>'),
+					jsx('<select name=${name} onChange=${onChange} >${renderSelect(name,field.options)}</select>'),
 					ki++, field.label
 				);
 				case FormInputElement.DateTimePicker:
@@ -170,8 +170,10 @@ class FormBuilder {
 		return jsx('<input type="hidden" name=${cm} />');
 	}
 	
-	function onChange(_) {
-
+	function onChange(ev:Dynamic) {
+		trace(ev.target);
+		trace('${ev.target.name}:${ev.target.value}');
+		comp.doChange(ev.target.name, ev.target.value);
 	}	
 }
 

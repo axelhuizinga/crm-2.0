@@ -1,7 +1,7 @@
 package react;
 
 import haxe.Constraints.Function;
-import react.ControlTypes.InputProps;
+import react.ControlTypes;
 
 /**
  * ...

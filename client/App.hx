@@ -127,11 +127,11 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 				filter:'user_name|${state.appWare.user.user_name}',//LOGIN NAME
 				dataSource:Serializer.run([
 					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login'],
+						"fields" => 'user_name,last_login,mandator,id'],
 					"contacts" => [
 						"alias" => 'co',
 						"fields" => 'first_name,last_name,email',
-						"jCond"=>'contact=co.id']
+						"jCond"=>'contact=co.id'] 
 				]),
 				devIP:devIP
 			},			

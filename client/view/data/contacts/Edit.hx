@@ -1,4 +1,6 @@
 package view.data.contacts;
+import js.Browser;
+import js.html.Window;
 import js.html.HTMLCollection;
 import js.html.HTMLFormControlsCollection;
 import js.html.SelectElement;
@@ -86,14 +88,20 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace('...' + Reflect.fields(props));
 		formRef = React.createRef();
 		//var formBuilder = new FormBuilder(this);
+		trace(props.user);
+		initialState = {
+			id:0,
+			edited_by: props.user.id,				
+			mandator: props.user.mandator
+		};
 		state =  App.initEState({
 			dataTable:[],
 			formBuilder:new FormBuilder(this),
 			actualState:
 			{
 				id:0,
-				edited_by: 0,				
-				mandator: 0
+				edited_by: props.user.id,				
+				mandator: props.user.mandator
 			},
 			initialState:initialState,
 			loading:false,
@@ -141,24 +149,25 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.selectedData.keys().keysList());
 		trace(FormApi.params(state.selectedData.keys().keysList()));
 		props.history.push('${baseUrl}Edit/edit/${FormApi.params(state.selectedData.keys().keysList())}');
-		var initialState:Contact = {
+		initialState = {
 			id:0,
-			edited_by: 0,
-			mandator: 0
+			edited_by: props.user.id,				
+			mandator: props.user.mandator
 		};
 		for(k in dataAccess['edit'].view.keys())
 		{
 			//trace('$k => ' + sData[k]);
 			Reflect.setField(initialState, k, sData[k]);
 		}
-		setState({initialState: initialState});
+		setState({actualState:initialState,initialState: initialState});
 		//trace(it.hasNext());				
 	}
 		
 	override public function componentDidMount():Void 
 	{	
-		trace(props.location);
+		//trace(props.location);
 		//setState({mounted:true});
+		return;
 		var baseUrl:String = props.match.path.split(':section')[0];
 		trace(props.match);
 		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
@@ -180,19 +189,23 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//trace(formRef.current != null);
 		if(formRef.current != null)
 		{
+			//trace(Reflect.fields(formRef.current));
 			formRef.current.addEventListener('keyup', handleChange);
-			formRef.current.addEventListener('mouseup', function(ev:Dynamic)
+			/*var formElement:Element = Browser.window.document.querySelector('form[name="contact"]');
+			trace(Reflect.fields(formElement));
+			formElement.addEventListener('mouseup', function(ev:Dynamic)
 			{
-				trace(Reflect.fields(ev));
+				trace(Reflect.fields(ev.originalTarget));
 				trace(ev.target.value);
-			});
+				doChange(ev.target.name,ev.target.value);
+			});*/
 		}
 
 		for(dC in state.formBuilder.dateControls)
 			dC.createFlatPicker();
 	}
 	
-	public function dcChange(name,value) {
+	public function doChange(name,value) {
 		trace('$name: $value');
 		Reflect.setField(state.actualState,name,value);
 	}
@@ -220,7 +233,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var target:FormElement = cast(event.target, FormElement);
 		var elements:HTMLCollection = target.elements;
 		//trace(elements.each(function(name:String, el:Dynamic)
-		trace(elements.dynaMap());
+		//trace(elements.dynaMap());
 		trace(state.actualState);
 		/*{
 			//trace('$name => $el');
@@ -288,7 +301,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{	
 			case 'edit':
-			 (state.loading ? state.formApi.renderWait():
+			 (state.loading || state.initialState.edited_by==0 ? state.formApi.renderWait():
 				state.formApi.render(jsx('
 						${renderResults()}
 				')));	

@@ -56,7 +56,7 @@ class AppStore
 				loggedIn:false,
 				last_login:null,
 				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
-				waiting: false
+				waiting: true
 			}
 		};
 
@@ -103,7 +103,8 @@ class AppStore
 			case AppWait:
 				copy(state, {waiting:true});				
 			case LoginComplete(uState):
-				trace(uState.user_name + ':' + uState.loggedIn);
+				//trace(uState.user_name + ':' + uState.loggedIn);
+				trace(uState);
 				uState.loginError = null;
 				uState.loggedIn = true;
 				copy(state, //uState.change_pass_required?:

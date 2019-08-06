@@ -1,5 +1,6 @@
 package view.data.contacts.model;
 
+import react.DateControl;
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
 import view.table.Table.DataColumn;
@@ -37,10 +38,10 @@ class ContactsModel
 				'state'=>{label:'Status'},
 				'country_code'=>{label:'Land'},
 				'c/o'=>{label: 'c/o'},
-				'creation_date'=>{label: 'Hinzugefügt', type:DateTimePicker, readonly: true, 
-					//displayFormat: function () return {format:"dd.MM.yyyy H:MM", readonly:true}},
+				'creation_date'=>{label: 'Hinzugefügt', type:DateTimeControl, disabled: true, 
+					//displayFormat: function () return {format:"dd.MM.yyyy H:MM", disabled:true}},
 					displayFormat: function() return "d.m.Y H:i"}, 
-				'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat:  function() return "d.m.Y"},
+				'date_of_birth'=>{label: 'Geburtsdatum', type:DateControl, displayFormat:  function() return "d.m.Y"},
 				'gender'=>{label:'Geschlecht',type:Select,options:[
 						'U'=>'Unbekannt',
 						'M'=>'Männlich',

@@ -69,7 +69,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{
 				user_name:props.user.user_name,
 				jwt:props.user.jwt,
-				//fields:'readonly:readonly,element=:element,required=:required,use_as_index=:use_as_index',
+				//fields:'disabled:disabled,element=:element,required=:required,use_as_index=:use_as_index',
 				className:'data.Contacts',
 				action:'find',
 				//dataSource:Serializer.run(dataAccess['find'].source),

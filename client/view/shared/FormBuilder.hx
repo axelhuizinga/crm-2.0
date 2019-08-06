@@ -25,6 +25,7 @@ class FormBuilder {
 	public var dbData:DbData;
 	public var dbMetaData:DBMetaData;
 	public var dateControls:StringMap<DateControl>;
+	public var dateTimeControls:StringMap<DateTimeControl>;
 	public var formColElements:Map<String,Array<FormField>>;
 	public var _menuItems:Array<SMItem>;
 	public var fState:FormState;
@@ -40,6 +41,7 @@ class FormBuilder {
 		trace(comp.handleChange);
 		requests = [];
 		dateControls = new StringMap();
+		dateTimeControls = new StringMap();
 		if(rc.props != null)
 		{
 			
@@ -81,49 +83,58 @@ class FormBuilder {
 		var ki:Int = 0;
 		//return fields.array().map(function(field:FormField){
 		return [for(name => field in fields){
+			trace (field.type +' $name:' + field.value);
 			switch (field.type)
 			{
 				case FormInputElement.Hidden:
-					null;
+					jsx('<input type="hidden" name=${name} defaultValue=${field.value}/>');
 				case FormInputElement.Button:
 					jsx('<button type="submit">
-						${field.value.value}
+						${field.value}
 					</button>');
 				case FormInputElement.Checkbox:			
 					renderElement(
-						jsx('<input name=${name}  type="checkbox" disabled=${field.readonly} required=${field.required}/>'),
+						jsx('<input name=${name}  type="checkbox" onChange=${onChange} disabled=${field.disabled} required=${field.required}/>'),
 						ki++, field.label
 					);
 				case Select:
 				renderElement(
-					jsx('<select name=${name} onChange=${onChange} >${renderSelect(name,field.options)}</select>'),
+					jsx('<select name=${name} onChange=${onChange} multiple="multiple">${renderSelect(name,field.options)}</select>'),
 					ki++, field.label
 				);
-				case FormInputElement.DateTimePicker:
-					
-				    jsx('
+				case FormInputElement.DateTimeControl:
+					var dC:DateTimeControl = new DateTimeControl({
+						comp:comp,
+						name:name,
+						disabled:field.disabled,
+						onChange: comp.handleChange,						
+						options:{
+							dateFormat:field.displayFormat(), 
+							defaultDate: '2000-01-01 00:00',
+							time_24hr:true,
+							_inline:field.disabled
+						},
+						value:'2000-01-01 00:00'
+					});
+					dateTimeControls.set('${model}.${name}',dC);
+					jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
-							<$DateTimeControl options=${{
-									dateFormat:field.displayFormat(), 
-									onChange:comp.handleChange, time_24hr:true,
-									_inline:field.readonly
-								}}
-								disabled=${field.readonly} 
-								name="${model}.${name}" 								
-							 />
+							${dC.render()}
 						</div>
-					</div>');
-				case FormInputElement.DatePicker:
+					</div>');								
+				case FormInputElement.DateControl:
+					trace(field.disabled);
 					var dC:DateControl = new DateControl({
 						comp:comp,
+						//disabled:field.disabled,
 						name:name,
-						onChange: comp.handleChange,
+						//onChange: comp.handleChange,
 						options:{
 							dateFormat:field.displayFormat(),
 							defaultDate:Date.now(),
-							_inline:field.readonly
+							_inline:field.disabled
 						}
 					});
 					dateControls.set('${model}.${name}',dC);
@@ -136,7 +147,7 @@ class FormBuilder {
 					</div>');
 				default:
 					renderElement(
-						jsx('<input name=${name}  type="text" disabled=${field.readonly} required=${field.required}/>'),
+						jsx('<input name=${name}  onChange=${onChange} type="text" disabled=${field.disabled} required=${field.required}/>'),
 						ki++, field.label
 					);
 			}
@@ -151,7 +162,7 @@ class FormBuilder {
 		//trace(props);
 		
 		return jsx('
-			<form name=${props.model} onSubmit=${props.handleSubmit} ref=${props.ref}  className="tabComponentForm formField">
+			<form name=${props.model} onSubmit=${props.handleSubmit} ref=${props.ref} className="tabComponentForm formField">
 				<div className="grid_box" role="table" aria-label="Destinations">
 					<div className="g_caption" >${props.title}</div>	
 					${renderFormInputElements(props.fields, props.model)}
@@ -160,8 +171,7 @@ class FormBuilder {
 					</div>					
 				</div>									
 			</form>
-		');
-		
+		');		
     }	
 
 	public function  hidden(cm:String):ReactFragment
@@ -171,6 +181,22 @@ class FormBuilder {
 	}
 	
 	function onChange(ev:Dynamic) {
+		trace(ev.target.type);
+		switch (ev.target.type)
+		{
+			case 'checkbox':
+			trace('${ev.target.name}:${ev.target.checked?true:false}');
+			case 'select-multiple'|'select-one':
+			trace (ev.target.selectedOptions.length);
+			default:
+			trace('${ev.target.name}:${ev.target.value}');
+		}
+		
+		return;
+		comp.doChange(ev.target.name, ev.target.value);
+	}	
+
+	function formChange(ev:Dynamic) {
 		trace(ev.target);
 		trace('${ev.target.name}:${ev.target.value}');
 		comp.doChange(ev.target.name, ev.target.value);

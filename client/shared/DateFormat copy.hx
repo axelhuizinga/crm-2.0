@@ -36,7 +36,7 @@ class DateFormat {
 		if(dP.length!=3)
 		{
 			//VERIFY PARTS COUNT
-			return {result:DateFormat};
+			return {result:PartMisMatch};
 		}
 
 		if(dP[1] == null || dP[1] == 0 || dP[1] >12)

@@ -163,7 +163,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			{
 				user_name:props.user_name,
 				jwt:props.jwt,
-				fields:'readonly:readonly,element=:element,required=:required,use_as_index=:use_as_index',
+				fields:'disabled:disabled,element=:element,required=:required,use_as_index=:use_as_index',
 				className:'tools.DB',
 				action:'saveTableFields',
 				dbData:s.serialize(dbData),
@@ -185,7 +185,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			{
 				user_name:props.user.user_name,
 				jwt:props.user.jwt,
-				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
+				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
 				className:'tools.DB',
 				action:'createFieldList',
 				devIP:App.devIP
@@ -226,14 +226,14 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 					"selectedRows" => null//selectedRowsMap()
 				],
 				view:[
-					'table_name'=>{label:'Tabelle',readonly:true},
-					'field_name'=>{label:'Feldname',readonly:true},
+					'table_name'=>{label:'Tabelle',disabled:true},
+					'field_name'=>{label:'Feldname',disabled:true},
 					'field_type'=>{label:'Datentyp',type:Select},
 					'element'=>{label:'Eingabefeld', type:Select},
-					'readonly' => {label:'Readonly', type:Checkbox},
+					'disabled' => {label:'Readonly', type:Checkbox},
 					'required' => {label:'Required', type:Checkbox},
 					'use_as_index' => {label:'Index', type:Checkbox},
-					'any' => {label:'Eigenschaften', readonly:true, type:Hidden},
+					'any' => {label:'Eigenschaften', disabled:true, type:Hidden},
 					'id' =>{primary:true, type:Hidden}
 				]
 			},

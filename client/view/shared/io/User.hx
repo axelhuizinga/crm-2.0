@@ -86,12 +86,12 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 						"jCond"=>'contact=co.id']
 				],
 				view:[
-					'user_name'=>{label:'UserID',readonly:true, type:Hidden},
+					'user_name'=>{label:'UserID',disabled:true, type:Hidden},
 					'pass'=>{label:'Passwort', type:Hidden},
 					'first_name'=>{label:'Vorname'},
 					'last_name'=>{label:'Name'},
 					'email' => {label:'Email'},
-					'last_login'=>{label:'Letze Anmeldung',readonly:true, displayFormat:FormApi.localDate}
+					'last_login'=>{label:'Letze Anmeldung',disabled:true, displayFormat:FormApi.localDate}
 				]
 			},
 			'save' => {
@@ -268,13 +268,13 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		var skeys:Array<String> =  [];
 		for(k in dataAccess['edit'].view.keys())
 		{
-			if(!dataAccess['edit'].view[k].readonly)
+			if(!dataAccess['edit'].view[k].disabled)
 			{
 				skeys.push(k);
 			}
 		};
 		//var skeys:Array<String> =  dataAccess['edit'].view.keys().array();
-		//skeys = skeys.filter(function(k) return !dataAccess['edit'].view[k].readonly);
+		//skeys = skeys.filter(function(k) return !dataAccess['edit'].view[k].disabled);
 		trace(FormApi.filterMap(state.values, skeys));
 		trace(skeys.toString());
 		trace(dataAccess['edit'].source);

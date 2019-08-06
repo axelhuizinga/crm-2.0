@@ -74,11 +74,10 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static var devIP = Webpack.require('./webpack.local.js').ip;
 	public static var config:Dynamic = Webpack.require('../httpdocs/config.js').config;
 	public static var flatpickr:Function = Webpack.require('flatpickr');
-	static var German = js.Lib.require('flatpickr/dist/l10n/de.js');
-	//static var css = js.Lib.require('react-datepicker/dist/react-datepicker.css');
+	public static var German = js.Lib.require('flatpickr/dist/l10n/de.js');
+	static var flat = js.Lib.require('flatpickr/dist/flatpickr.min.css');
 	//static var flat = js.Lib.require('flatpickr/dist/themes/light.css');	
 	public static var sprintf:Function = Webpack.require('sprintf-js').sprintf;
-	//public static var flatpickr = js.Lib.require('flatpickr');
 
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
 	public static var onResizeComponents:List<Dynamic> = new List();
@@ -154,7 +153,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		{// WE HAVE EITHER NO VALID JWT OR user_name
 			trace('LOGIN required');
 			store.dispatch(AppAction.LoginRequired(state.appWare.user));
-			//props = { waiting:false};
+			props = { waiting:false};
 		}
 		//trace(App.config);
 		//trace(props);

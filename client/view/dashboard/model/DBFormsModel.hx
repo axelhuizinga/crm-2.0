@@ -68,6 +68,6 @@ class DBFormsModel
 	format_store:String,
 	admin_only:Bool,
 	required:Bool,
-	readonly:Bool,
+	disabled:Bool,
 	use_as_index:Bool,
 	primary:Bool*/

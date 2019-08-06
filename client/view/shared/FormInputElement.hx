@@ -5,8 +5,8 @@ abstract FormInputElement(String)
 {
 	var Button = 'Button';
 	var Hidden = 'Hidden';
-	var DatePicker = 'DatePicker';
-	var DateTimePicker = 'DateTimePicker';	
+	var DateControl = 'DateControl';
+	var DateTimeControl = 'DateTimeControl';	
 	var Input = 'Input';
 	var Password = 'Password';
 	var Checkbox = 'Checkbox';

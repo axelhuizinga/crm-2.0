@@ -1,4 +1,5 @@
 package view.data.contacts;
+import js.html.Document;
 import js.Browser;
 import js.html.Window;
 import js.html.HTMLCollection;
@@ -84,6 +85,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
+		dataAccess = ContactsModel.dataAccess;
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		formRef = React.createRef();
@@ -94,6 +96,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			edited_by: props.user.id,				
 			mandator: props.user.mandator
 		};
+		for(k in dataAccess['edit'].view.keys())
+		{
+			trace('$k => ' );
+			if(!Reflect.hasField(initialState,k))
+				Reflect.setField(initialState, k, '');
+		}		
+		trace(initialState);
 		state =  App.initEState({
 			dataTable:[],
 			formBuilder:new FormBuilder(this),
@@ -108,8 +117,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			selectedRows:[],
 			values:new Map<String,Dynamic>()
 		},this);
-		dataAccess = ContactsModel.dataAccess;
 		trace(state.loading);
+
 	}
 	
 	static function mapStateToProps(aState:AppState) 
@@ -128,37 +137,42 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	public function edit(ev:ReactEvent):Void
 	{
 		//trace(ev);
-		trace(state.selectedData.keys());
-		if(!state.selectedData.keys().hasNext())
+		if(state.selectedData != null )
 		{
-			//NO SELECTION  - CHECK PARAMS
+			trace(state.selectedData.keys());
+			if(!state.selectedData.keys().hasNext())
+			{
+				//NO SELECTION  - CHECK PARAMS
 
-			//NO SELECTION  - NOTHING TO EDIT
-			
-			//setState({loading: false});
-			
-			trace(props.match);
-			return;
+				//NO SELECTION  - NOTHING TO EDIT
+				
+				//setState({loading: false});
+				
+				trace(props.match);
+				return;
+			}
+			var baseUrl:String = props.match.path.split(':section')[0];
+			//setState({loading: true});
+			var it:Iterator<Map<String,Dynamic>> = state.selectedData.iterator();
+			var sData:Map<String,Dynamic> = it.next();
+			//trace(sData);
+			//sData = state.selectedData.get(state.selectedData.keys().next());
+			trace(state.selectedData.keys().keysList());
+			trace(FormApi.params(state.selectedData.keys().keysList()));
+			props.history.push('${baseUrl}Edit/edit/${FormApi.params(state.selectedData.keys().keysList())}');
+			initialState = {
+				id:0,
+				edited_by: props.user.id,				
+				mandator: props.user.mandator
+			};			for(k in dataAccess['edit'].view.keys())
+			{
+				trace('$k => ' + sData[k]);
+				Reflect.setField(initialState, k, sData[k]);
+			}			
 		}
-		var baseUrl:String = props.match.path.split(':section')[0];
-		//setState({loading: true});
-		var it:Iterator<Map<String,Dynamic>> = state.selectedData.iterator();
-		var sData:Map<String,Dynamic> = it.next();
-		//trace(sData);
-		//sData = state.selectedData.get(state.selectedData.keys().next());
-		trace(state.selectedData.keys().keysList());
-		trace(FormApi.params(state.selectedData.keys().keysList()));
-		props.history.push('${baseUrl}Edit/edit/${FormApi.params(state.selectedData.keys().keysList())}');
-		initialState = {
-			id:0,
-			edited_by: props.user.id,				
-			mandator: props.user.mandator
-		};
-		for(k in dataAccess['edit'].view.keys())
-		{
-			//trace('$k => ' + sData[k]);
-			Reflect.setField(initialState, k, sData[k]);
-		}
+		
+
+
 		setState({actualState:initialState,initialState: initialState});
 		//trace(it.hasNext());				
 	}
@@ -167,7 +181,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{	
 		//trace(props.location);
 		//setState({mounted:true});
-		return;
+		//return;
 		var baseUrl:String = props.match.path.split(':section')[0];
 		trace(props.match);
 		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
@@ -192,21 +206,24 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//trace(Reflect.fields(formRef.current));
 			formRef.current.addEventListener('keyup', handleChange);
 			/*var formElement:Element = Browser.window.document.querySelector('form[name="contact"]');
-			trace(Reflect.fields(formElement));
-			formElement.addEventListener('mouseup', function(ev:Dynamic)
+			trace(Reflect.fields(formElement));*/
+			formRef.current.addEventListener('mouseup', function(ev:Dynamic)
 			{
-				trace(Reflect.fields(ev.originalTarget));
+				//trace(Reflect.fields(ev.originalTarget));
 				trace(ev.target.value);
-				doChange(ev.target.name,ev.target.value);
-			});*/
+				//doChange(ev.target.name,ev.target.value);
+			});
 		}
 
 		for(dC in state.formBuilder.dateControls)
 			dC.createFlatPicker();
+		for(dtC in state.formBuilder.dateTimeControls)
+			dtC.createFlatPicker();			
 	}
 	
 	public function doChange(name,value) {
 		trace('$name: $value');
+		if(name!=null && name!='')
 		Reflect.setField(state.actualState,name,value);
 	}
 
@@ -227,18 +244,54 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	}		
 
 	function handleSubmit(event:Event) {
-		trace(Reflect.fields(event));
-		trace(Type.typeof(event));
+		//trace(Reflect.fields(event));
+		//trace(Type.typeof(event));
 		event.preventDefault();
-		var target:FormElement = cast(event.target, FormElement);
-		var elements:HTMLCollection = target.elements;
+		//var target:FormElement = cast(event.target, FormElement);
+		//var elements:HTMLCollection = target.elements;
 		//trace(elements.each(function(name:String, el:Dynamic)
 		//trace(elements.dynaMap());
 		trace(state.actualState);
+		trace(state.initialState);
 		/*{
 			//trace('$name => $el');
 			//trace(el.value);
 		});		*/
+		var doc:Document = Browser.window.document;
+
+		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
+		trace('isSame?:${formElement == doc.forms.namedItem("contact")?"Y":"N"}');
+		var elements:HTMLCollection = formElement.elements;
+		for(item in elements)
+		{
+			var el:Dynamic = cast item;
+			trace('${el.tagName}.${el.type}::${el.name}:${el.value}');
+		}
+		trace(Reflect.fields(elements.namedItem('use_email')));		
+		trace(untyped elements.namedItem('use_email')._valueTracker.getValue());
+		for(k in dataAccess['edit'].view.keys())
+		{
+			trace(k);
+			try 
+			{
+				var item:Dynamic = elements.namedItem(k);
+				trace('$k => ${item.type}:' + item.value);
+				switch (item.type)
+				{
+					case 'checkbox':
+					trace('${item.name}:${item.checked?true:false}');
+					case 'select-multiple'|'select-one':
+					trace (item.selectedOptions.length);
+					default:
+					trace('${item.name}:${item.value}');
+				}				
+			}
+			catch(ex:Dynamic)
+			{
+				trace(ex);
+			}
+
+		}
 	}	
 
 
@@ -257,9 +310,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'edit':
 				trace(state.initialState);
-				var fields:Map<String,FormField> = [
+				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
-				];
+				];*/
 				
 				state.formBuilder.renderForm({
 					handleSubmit:handleSubmit,

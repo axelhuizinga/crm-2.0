@@ -267,9 +267,9 @@ class FormApi
 		var field = switch(formField.type)
 		{
 			case Hidden:
-				jsx('<input key=${Utils.genKey(k++)} name=${name} type="hidden" defaultValue=${state.values[name]} readOnly=${formField.readonly}/>');
+				jsx('<input key=${Utils.genKey(k++)} name=${name} type="hidden" defaultValue=${state.values[name]} readOnly=${formField.disabled}/>');
 			default:
-				jsx('<input key=${Utils.genKey(k++)} name=${name} defaultValue=${state.values[name]} onChange=${formField.readonly?null:state.handleChange} readOnly=${formField.readonly}/>');
+				jsx('<input key=${Utils.genKey(k++)} name=${name} defaultValue=${state.values[name]} onChange=${formField.disabled?null:state.handleChange} readOnly=${formField.disabled}/>');
 			
 		};
 		return formField.type == Hidden? field:[jsx('<label key=${Utils.genKey(k++)}>${formField.label}</label>'), field];
@@ -340,7 +340,7 @@ class FormApi
 					//?dataField:String,c
 					displayFormat:fF.displayFormat,
 					type:fF.type,
-					readonly:fF.readonly,
+					disabled:fF.disabled,
 					required:fF.required,
 					handleChange:fF.handleChange,
 					placeholder:fF.placeholder,
@@ -405,7 +405,7 @@ class FormApi
 		{
 			case Checkbox:
 			trace(fF.value);
-				jsx('<input key=${Utils.genKey(k++)} name=${model}  disabled=${fF.readonly}/>');
+				jsx('<input key=${Utils.genKey(k++)} name=${model}  disabled=${fF.disabled}/>');
 			case Hidden:
 				fF.primary ? null:
 				jsx('<inputl key=${Utils.genKey(k++)} name=${model}  type="hidden"/>');

@@ -16,7 +16,7 @@ typedef FormField =
 	?displayFormat:Function,
 	?type:FormInputElement,
 	?primary:Bool,
-	?readonly:Bool,
+	?disabled:Bool,
 	?required:Bool,
 	?handleChange:Function,
 	?placeholder:String,

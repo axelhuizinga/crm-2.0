@@ -56,7 +56,7 @@ class AppStore
 				loggedIn:false,
 				last_login:null,
 				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
-				waiting: true
+				waiting: false
 			}
 		};
 
@@ -144,22 +144,19 @@ class AppStore
 	public function middleware(action:AppAction, next:Void -> Dynamic)
 	{
 		trace(action);
-		/*var n = next();
-		trace(n);
-		return n;*/
 		return switch(action)
 		{			
-			/*case LoginReq(uState):
+			/*case LoginRequired(uState):
 				//store.getState().userStore.
 				var n:Dynamic = next();
 				trace(n);
-				n;*/
+				n;
 			case LoginComplete(state):
 				//App.firstLoad = false;	
 				trace(state);
 				var n:Dynamic = next();		
 				trace(n);
-				n;
+				n;*/
 			case LoginError(err):
 				trace(err);
 				store.dispatch(AppAction.LoginRequired(store.getState().appWare.user));

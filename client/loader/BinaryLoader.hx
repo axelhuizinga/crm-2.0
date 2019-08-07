@@ -40,7 +40,8 @@ class BinaryLoader {
 		xhr = new js.html.XMLHttpRequest();
 	}
 
-	public dynamic function onLoaded( bytes : haxe.io.Bytes ) {
+	//public dynamic function onLoaded( bytes : haxe.io.Bytes ) {
+	public function onLoaded( bytes : haxe.io.Bytes ) {
 		var u:Serializer = new Serializer();
 		var data:DbData = u.unserialize(bytes, DbData);
 		cB(data);

@@ -1,4 +1,7 @@
 package view.data.contacts;
+import js.html.HTMLOptionsCollection;
+import js.html.HTMLPropertiesCollection;
+import me.cunity.debug.Out.DebugOutput;
 import js.html.Document;
 import js.Browser;
 import js.html.Window;
@@ -260,42 +263,40 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var doc:Document = Browser.window.document;
 
 		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
-		trace('isSame?:${formElement == doc.forms.namedItem("contact")?"Y":"N"}');
 		var elements:HTMLCollection = formElement.elements;
-		for(item in elements)
-		{
-			var el:Dynamic = cast item;
-			trace('${el.tagName}.${el.type}::${el.name}:${el.value}');
-		}
-		trace(Reflect.fields(elements.namedItem('use_email')));		
-		trace(untyped elements.namedItem('use_email')._valueTracker.getValue());
+		var aState = state.actualState;
 		for(k in dataAccess['edit'].view.keys())
 		{
-			trace(k);
+			//trace(k);
 			try 
 			{
 				var item:Dynamic = elements.namedItem(k);
-				trace('$k => ${item.type}:' + item.value);
-				switch (item.type)
+				//trace('$k => ${item.type}:' + item.value);
+				Reflect.setField(aState, item.name, switch (item.type)
 				{
 					case 'checkbox':
 					trace('${item.name}:${item.checked?true:false}');
+					item.checked?1:0;
 					case 'select-multiple'|'select-one':
-					trace (item.selectedOptions.length);
+					var sOpts:HTMLOptionsCollection = item.selectedOptions;
+					trace (sOpts.length);
+					sOpts.length>1 ? [for(o in 0...sOpts.length)sOpts[o].value ].join('|'):item.value;
 					default:
 					trace('${item.name}:${item.value}');
-				}				
+					item.value;
+				});			
 			}
 			catch(ex:Dynamic)
 			{
 				trace(ex);
 			}
-
 		}
+		//setState({actualState: aState});
+		trace(aState);
 	}	
 
 
-	function save()
+	function save(aState:Contact)
 	{
 		
 	}

@@ -119,7 +119,6 @@ class DB extends Model
 			UPDATE crm.table_fields SET $fields WHERE id=${Std.parseInt(k)}
 			*/;
 			
-			//var stmt:PDOStatement = S.dbh.prepare(sql,[store.dispatch(AppAction.LoginRequired(state.appWare.user)),[]);
 			var stmt:PDOStatement = S.dbh.prepare(sql, Util.initNativeArray());
 			if( !Model.paramExecute(stmt, Lib.associativeArrayOfHash(pData.dataParams[k])))
 			{

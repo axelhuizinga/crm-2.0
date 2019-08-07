@@ -2,7 +2,6 @@ import js.html.Window;
 import view.shared.FormBuilder;
 import view.shared.FormState;
 import view.shared.SMenuProps;
-import react.intl.DateTimeFormatOptions.NumericFormat;
 import haxe.Serializer;
 import js.html.BodyElement;
 //import js.html.svg.Document;

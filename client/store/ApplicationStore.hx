@@ -10,7 +10,7 @@ import history.History;
 import history.Location;
 import history.TransitionManager;
 import store.AppStore;
-import store.FormStore;
+import store.DataStore;
 import store.LocationStore;
 import store.StatusBarStore;
 //import store.UserStore;
@@ -28,7 +28,7 @@ class ApplicationStore
 	{
 		// store model, implementing reducer and middleware logic
 		var appWare = new AppStore();
-		var formStore = new FormStore();
+		var dataStore = new DataStore();
 		var locationStore = new LocationStore();
 		var statusBarStore = new StatusBarStore();
 		//var userStore = new UserStore();
@@ -40,7 +40,7 @@ class ApplicationStore
 				appWare: mapReducer(AppAction, appWare),
 				locationStore: mapReducer(LocationAction, locationStore),
 				statusBar: mapReducer(StatusAction, statusBarStore),
-				formStore: mapReducer(FormAction, formStore)
+				dataStore: mapReducer(FormAction, dataStore)
 				//userStore: mapReducer(UserAction, userStore)
 			}
 		);

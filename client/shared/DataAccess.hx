@@ -1,9 +1,9 @@
-package state;
+package shared;
 
 import action.AppAction.*;
 import haxe.Serializer;
 import haxe.http.HttpJs;
-import model.DataAccessState;
+import state.DataAccessState;
 
 import js.html.XMLHttpRequest;
 
@@ -20,6 +20,14 @@ import view.shared.OneOf;
 
 class DataAccess
 {
+	public static function create() {
+		
+	}
+
+	public static function delete() {
+		
+	}
+
 	public static function load(props:DataAccessState) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->DataAccessState){
@@ -42,13 +50,20 @@ class DataAccess
 		});
 	}
 
-	public static function updateRequest(props:DataAccessState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
+	public static function update(props:DataAccessState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->DataAccessState){
 			trace(props);
 			//trace(getState());
-			if (props.user.pass == '' || props.user.user_name == '') 
-				return dispatch(LoginError({user_name:props.user.user_name, loginError:'Passwort und user_name eintragen!'}));
+						if (!props.user.loggedIn)
+			{
+				return dispatch(LoginError(
+				{
+					user_name:props.user.user_name,
+					loginError:'Du musst dich neu anmelden!',
+					id:props.user.id
+				}));
+			}	
 			var spin:Dynamic = dispatch(AppWait);
 			trace(spin);
 			var bL:XMLHttpRequest = BinaryLoader.create(
@@ -56,7 +71,7 @@ class DataAccess
 			{				
 				user_name:props.user.user_name,
 				jwt:props.user.jwt,
-				className:'auth.User',
+				className:props.source.dbTable,
 				action:'login',
 				filter:'user_name|${props.user.user_name}',
 				dataSource:Serializer.run([

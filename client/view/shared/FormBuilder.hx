@@ -87,19 +87,19 @@ class FormBuilder {
 			switch (field.type)
 			{
 				case FormInputElement.Hidden:
-					jsx('<input type="hidden" name=${name} defaultValue=${field.value}/>');
+					jsx('<input key=${ki++} type="hidden" name=${name} defaultValue=${field.value}/>');
 				case FormInputElement.Button:
 					jsx('<button type="submit">
 						${field.value}
 					</button>');
 				case FormInputElement.Checkbox:			
 					renderElement(
-						jsx('<input name=${name}  type="checkbox" onChange=${onChange} disabled=${field.disabled} required=${field.required}/>'),
+						jsx('<input name=${name}  key=${ki++} type="checkbox" onChange=${onChange} disabled=${field.disabled} required=${field.required}/>'),
 						ki++, field.label
 					);
 				case Select:
 				renderElement(
-					jsx('<select name=${name} onChange=${onChange} multiple="multiple">${renderSelect(name,field.options)}</select>'),
+					jsx('<select name=${name} onChange=${onChange} key=${ki++} multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
 					ki++, field.label
 				);
 				case FormInputElement.DateTimeControl:
@@ -147,7 +147,7 @@ class FormBuilder {
 					</div>');
 				default:
 					renderElement(
-						jsx('<input name=${name}  onChange=${onChange} type="text" disabled=${field.disabled} required=${field.required}/>'),
+						jsx('<input name=${name} onChange=${onChange} type="text" disabled=${field.disabled} required=${field.required}/>'),
 						ki++, field.label
 					);
 			}

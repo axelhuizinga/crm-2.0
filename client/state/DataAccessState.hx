@@ -16,8 +16,7 @@ typedef DataSource =
 typedef DataAccessState = 
 {
 	dbData:DbData,
-	?hasError:Bool,
 	user:UserState,
     ?source:DataSource,
-    waiting:Bool
+    ?waiting:Bool
 }

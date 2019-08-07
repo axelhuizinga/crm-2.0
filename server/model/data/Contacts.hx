@@ -68,7 +68,31 @@ class Contacts extends Model
 	{
 		var id = q.get('id');
 		fieldNames.remove('id');
-		return false;
+		var dBytes:Bytes = Bytes.ofString(param.get('dbData'));
+		var s:Serializer = new Serializer();
+		var pData:DbData = s.unserialize(dBytes, DbData);
+		trace(pData.dataParams);
+		var updated:Int = 0;
+		for (k in pData.dataParams.keys())
+		{
+			//updateFieldsTable(pData.dataParams[k];
+			var fields:String = S.dbh.quote(param.get('fields'), PDO.PARAM_STR);
+			
+			var sql = comment(unindent, format) /*
+			UPDATE crm.table_fields SET $fields WHERE id=${Std.parseInt(k)}
+			*/;
+			
+			var stmt:PDOStatement = S.dbh.prepare(sql, Util.initNativeArray());
+			if( !Model.paramExecute(stmt, Lib.associativeArrayOfHash(pData.dataParams[k])))
+			{
+				S.sendErrors(dbData,['${param.get('action')}' => stmt.errorInfo()]);
+			}
+			if(stmt.rowCount()==1)
+			{
+				updated++;
+			}
+		}
+		S.sendInfo(dbData, ['saveTableFields' => 'OK', 'updatedRows' => updated]);
 	}
 	
 	public static function syncFromCRM1()

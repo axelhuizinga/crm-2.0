@@ -10,6 +10,7 @@ import store.StatusBarStore.StatusBarState;
 typedef AppState =
 {
 	appWare:GlobalAppState,
+	dataStore:DataAccessState,
 	locationHistory:LocationState,
 	statusBar:StatusBarState
 };

@@ -1,22 +1,30 @@
 package store;
 
+import js.Cookie;
+import redux.StoreMethods;
+import redux.IMiddleware;
 import action.async.DataAction;
-import model.DataAccess;
-import model.DataAccessState;
+import shared.DataAccess;
+import state.DataAccessState;
 import react.ReactUtil.copy;
 import redux.IReducer;
 import shared.DbData;
 
 class DataStore
 	implements IReducer<DataAction, DataAccessState>
-	//implements IMiddleware<DataAction, DataAccessState>
+	implements IMiddleware<DataAction, DataAccessState>
 {
 	public var initState:DataAccessState;
+	public var store:StoreMethods<DataAccessState>;	
+
 	public function new() 
 	{ 
 		initState = {
 			dbData:new DbData(),
-			user:App._app.state.appWare.user,
+			user:{
+				user_name:(Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name')),
+				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt'))
+			},
 			waiting:false
 		};
 		trace('ok');
@@ -30,7 +38,9 @@ class DataStore
 			case Load(data):
 			trace(data.dataParams);
 				copy(state, {
-					dbData:data
+					dbData:data,
+					//user:initState.user,
+					waiting:true
 				});
 			default:
 				state;
@@ -42,6 +52,8 @@ class DataStore
 		trace(action);
 		return switch(action)
 		{
+			case Update(data):
+				next();
 			default: next();
 		}
 	}	

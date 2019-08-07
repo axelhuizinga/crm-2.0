@@ -69,4 +69,19 @@ class Utils
 		return key;
 	}
 	
+	public static function stateToDataParams(dT:Dynamic):Map<String,Map<String,Dynamic>>
+   	{
+      	return  [
+         	for(f in Reflect.fields(dT))
+            	f => dynToMap(Reflect.field(dT, f))
+      	];
+   	}
+
+   	public static function dynToMap(d:Dynamic):Map<String,Dynamic>
+   	{
+      	return [
+         	for(f in Reflect.fields(d))
+            	f => Reflect.field(d, f)
+      	];
+  	}	
 }

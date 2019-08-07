@@ -36,13 +36,11 @@ class User extends Model
 		var user_name:String = param.get('user_name');
 		if (verify(jwt, user_name))
 		{			
-			data = {
+			/*data = {
 				content:'OK'
-			};
+			};*/
 			dbData.dataInfo['verified'] = true;
 			dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(doSelect()[0]);
-			//param.set('filter','user_name|${user_name}');
-			//sendRows(doSelect());
 			S.sendInfo(dbData);
 		}
 	}
@@ -79,16 +77,15 @@ class User extends Model
 			{
 				S.sendErrors(dbData,['${param.get('action')}'=>'pass']);
 			}
+			// USER AUTHORIZED
 			var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(stmt.fetch(PDO.FETCH_ASSOC));			
 			dbData.dataInfo['mandator'] = res['mandator'];
 			dbData.dataInfo['last_login'] = res['last_login'];
 			dbData.dataInfo['loggedIn'] = true;
-			trace(res);
-			//if (res == 'TRUE' || res == '1')
+			trace(res['user_name']);
 			trace(res['change_pass_required']==1 || res['change_pass_required']==true?'Y':'N');
 			if (res['change_pass_required']==1 || res['change_pass_required']==true)
 				return UserAuth.PassChangeRequired;
-			// USER AUTHORIZED
 			return UserAuth.AuthOK;			
 		}
 		else
@@ -111,7 +108,6 @@ class User extends Model
 						user_name:params.get('user_name'),
 						validUntil:d,
 						ip: Web.getClientIP()
-						//validUntil:Date.now().getTime()
 					}, secret);						
 				trace(JWT.extract(jwt));
 				Web.setCookie('user.jwt', jwt, Date.fromTime(d + 86400000));

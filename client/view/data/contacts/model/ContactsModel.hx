@@ -17,7 +17,7 @@ class ContactsModel
 		'edit' => {
 			source:[
 				"contacts" => [
-					"fields" => '*'
+					"filter" => 'id'
 					]
 				],
 			view:[

@@ -4,6 +4,7 @@ import action.FormAction;
 import view.shared.io.DataAccess.DataSource;
 import react.router.ReactRouter;
 import action.AppAction;
+import action.async.DataAction;
 import action.LocationAction;
 import history.Action;
 import history.History;
@@ -40,7 +41,7 @@ class ApplicationStore
 				appWare: mapReducer(AppAction, appWare),
 				locationStore: mapReducer(LocationAction, locationStore),
 				statusBar: mapReducer(StatusAction, statusBarStore),
-				dataStore: mapReducer(FormAction, dataStore)
+				dataStore: mapReducer(DataAction, dataStore)
 				//userStore: mapReducer(UserAction, userStore)
 			}
 		);
@@ -48,8 +49,8 @@ class ApplicationStore
 		// create middleware normally, excepted you must use 
 		// 'StoreBuilder.mapMiddleware' to wrap the Enum-based middleware
 		var middleware = Redux.applyMiddleware(
-			mapMiddleware(Thunk, new ThunkMiddleware())
-			//mapMiddleware(StatusAction, statusBarStore)
+			mapMiddleware(Thunk, new ThunkMiddleware()),
+			mapMiddleware(DataAction, dataStore)
 			//mapMiddleware(AppAction, appWare)
 			//mapMiddleware(LocationAction, locationStore)
 		);

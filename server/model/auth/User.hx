@@ -107,7 +107,8 @@ class User extends Model
 				var	jwt = JWT.sign({
 						user_name:params.get('user_name'),
 						validUntil:d,
-						ip: Web.getClientIP()
+						ip: Web.getClientIP(),
+						mandator:params.get('mandator')
 					}, secret);						
 				trace(JWT.extract(jwt));
 				Web.setCookie('user.jwt', jwt, Date.fromTime(d + 86400000));
@@ -184,7 +185,7 @@ class User extends Model
 	
 	public static function verify(jwt:String, user_name:String,?params:StringMap<String>):Bool
 	{
-		trace(jwt);
+		trace(jwt);//TODO:REPLACE user_name with id
 		//Out.dumpStack(Out.aStack());
 		try{
 			var userInfo:Dynamic = JWT.extract(jwt);

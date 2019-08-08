@@ -18,7 +18,9 @@ import view.shared.OneOf;
  * @author axel@cunity.me
  */
 
-class DataAccess
+typedef DBAccessProps = Dynamic;
+
+class DBAccess
 {
 	public static function create() {
 		
@@ -28,7 +30,7 @@ class DataAccess
 		
 	}
 
-	public static function load(props:DataAccessState) 
+	public static function load(props:DBAccessProps) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->DataAccessState){
 			trace(getState());
@@ -41,21 +43,16 @@ class DataAccess
 					id:props.user.id
 				}));
 			}				
-			return null;
-			//*****/
-			//var spin:Dynamic = dispatch(AppWait);
-			//req.send();
-			//trace(spin);
-			//return spin;			
+			return null;		
 		});
 	}
 
-	public static function update(props:DataAccessState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
+	public static function update(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->DataAccessState){
 			trace(props);
-			//trace(getState());
-						if (!props.user.loggedIn)
+			trace(getState());
+			if (!props.user.loggedIn)
 			{
 				return dispatch(LoginError(
 				{
@@ -66,24 +63,15 @@ class DataAccess
 			}	
 			var spin:Dynamic = dispatch(AppWait);
 			trace(spin);
+			var hS:hxbit.Serializer = new hxbit.Serializer();
 			var bL:XMLHttpRequest = BinaryLoader.create(
 			'${App.config.api}', 
 			{				
 				user_name:props.user.user_name,
 				jwt:props.user.jwt,
-				className:props.source.dbTable,
-				action:'login',
-				filter:'user_name|${props.user.user_name}',
-				dataSource:Serializer.run([
-					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login'],
-					"contacts" => [
-						"alias" => 'co',
-						"fields" => 'first_name,last_name,email',
-						"jCond"=>'contact=co.id']
-				]),
-				pass:props.user.pass,
-				devIP:App.devIP
+				className:props.className,
+				action:props.action,
+				dbData:hS.serialize(props.dataSource)
 			},
 			function(data:DbData)
 			{				

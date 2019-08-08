@@ -1,4 +1,6 @@
 package model.data;
+import php.Lib;
+import php.db.PDOStatement;
 import comments.CommentString.*;
 import haxe.ds.StringMap;
 import php.NativeArray;
@@ -62,37 +64,6 @@ class Contacts extends Model
 		return query(
 		'SELECT location, start_time, length_in_sec FROM recording_log WHERE lead_id = $lead_id AND length_in_sec>60 ORDER BY start_time DESC'
 		);			
-	}
-	
-	function save(q:StringMap<Dynamic>):Bool
-	{
-		var id = q.get('id');
-		fieldNames.remove('id');
-		var dBytes:Bytes = Bytes.ofString(param.get('dbData'));
-		var s:Serializer = new Serializer();
-		var pData:DbData = s.unserialize(dBytes, DbData);
-		trace(pData.dataParams);
-		var updated:Int = 0;
-		for (k in pData.dataParams.keys())
-		{
-			//updateFieldsTable(pData.dataParams[k];
-			var fields:String = S.dbh.quote(param.get('fields'), PDO.PARAM_STR);
-			
-			var sql = comment(unindent, format) /*
-			UPDATE crm.table_fields SET $fields WHERE id=${Std.parseInt(k)}
-			*/;
-			
-			var stmt:PDOStatement = S.dbh.prepare(sql, Util.initNativeArray());
-			if( !Model.paramExecute(stmt, Lib.associativeArrayOfHash(pData.dataParams[k])))
-			{
-				S.sendErrors(dbData,['${param.get('action')}' => stmt.errorInfo()]);
-			}
-			if(stmt.rowCount()==1)
-			{
-				updated++;
-			}
-		}
-		S.sendInfo(dbData, ['saveTableFields' => 'OK', 'updatedRows' => updated]);
 	}
 	
 	public static function syncFromCRM1()

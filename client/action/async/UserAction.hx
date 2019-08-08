@@ -47,7 +47,7 @@ class UserAction
 				jwt:props.jwt,
 				className:'auth.User',
 				action:'login',
-				filter:'user_name|${props.user_name}',
+				filter:'user_name|${props.user_name},us.mandator|1',//TODO. ADD MANDATOR SELECT AT LOGINFORM
 				dataSource:Serializer.run([
 					"users" => ["alias" => 'us',
 						"fields" => 'user_name,last_login,mandator'],
@@ -87,7 +87,7 @@ class UserAction
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(getState());
 			if (props.user_name == '') 
-				return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:'UserId fehlt!'}));
+				return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:'UserId fehlt!',mandator:props.mandator}));
 			var fD:FormData = new FormData();
 			fD.append('action', 'logOff');
 			fD.append('className', 'auth.User');

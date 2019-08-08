@@ -10,7 +10,7 @@ import haxe.ds.Map;
 import view.shared.FormField;
 
 /**
-   dataClassPath=><action>=>[?'alias',?'fields',?'jCond'] each=>String
+   keys = tablenames[?'alias',?'fields',?'jCond',?'filter']:String
 **/
    
 typedef DataSource = Map<String,Map<String,String>>;

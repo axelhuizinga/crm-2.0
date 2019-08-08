@@ -1,4 +1,5 @@
 package view.data.contacts;
+import shared.DBAccess;
 import js.html.HTMLOptionsCollection;
 import js.html.HTMLPropertiesCollection;
 import me.cunity.debug.Out.DebugOutput;
@@ -164,7 +165,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			trace(FormApi.params(state.selectedData.keys().keysList()));
 			props.history.push('${baseUrl}Edit/edit/${FormApi.params(state.selectedData.keys().keysList())}');
 			initialState = {
-				id:0,
+				id:2000328,
 				edited_by: props.user.id,				
 				mandator: props.user.mandator
 			};			for(k in dataAccess['edit'].view.keys())
@@ -292,13 +293,25 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			}
 		}
 		//setState({actualState: aState});
-		trace(aState);
+		//trace(aState);
+		update(aState);
 	}	
 
 
-	function save(aState:Contact)
+	function update(aState:Contact)
 	{
-		
+		var dbaProps:DBAccessProps = 
+		{
+			action:'update',
+			className:'Contacts',
+			dataSoure:[
+				"contacts" => [
+					"data" => aState
+				]
+			],
+			user:props.user
+		};
+		props.parentComponent.props.update(dbaProps);
 	}
 
 	function renderResults():ReactFragment

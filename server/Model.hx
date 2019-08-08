@@ -89,7 +89,7 @@ class Model
 	public var table:String;
 	public var num_rows(default, null):Int;
 	var dbData:DbData;
-	var qParam:DbData;
+	var dParam:DbData;
 	var dataSource:StringMap<StringMap<String>>;// EACH KEY IS A TABLE NAME
 	var dataSourceSql:String;
 	var param:Map<String, Dynamic>;
@@ -541,11 +541,13 @@ class Model
 		data = {};
 		data.rows = new NativeArray();
 		dbData = new DbData();
-		if (param.exists('qParam'))
+		if (param.exists('dbData'))
 		{
 			var s:Serializer = new Serializer();
-			qParam = s.unserialize(Bytes.ofString(param.get('qParam')),DbData);
-			trace(qParam);
+			dParam = s.unserialize(Bytes.ofString(param.get('dbData')),DbData);
+			trace(dParam);
+			dbData.dataInfo = ['result'=>'OK'];
+			S.sendData(dbData, {});
 		}
 		if (param.exists('filter'))
 		{			
@@ -581,6 +583,11 @@ class Model
 				trace('$table $tableName');
 				if(table.exists('fields'))
 					fields = fields.concat(buildFields(tableName, table));
+				if (table.exists('filter'))
+				{			
+					filterValues = new Array();
+					param.set('filter',table.get('filter'));
+				}
 			}
 		}
 		queryFields = fields.length > 0?fields.join(','):'*';		

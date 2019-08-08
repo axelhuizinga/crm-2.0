@@ -50,6 +50,7 @@ class AppStore
 			user:{
 				first_name:'',
 				last_name:'',
+				mandator: 1,
 				user_name:(Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name')),
 				email:'',
 				pass:'',

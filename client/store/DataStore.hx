@@ -4,7 +4,7 @@ import js.Cookie;
 import redux.StoreMethods;
 import redux.IMiddleware;
 import action.async.DataAction;
-import shared.DataAccess;
+import shared.DBAccess;
 import state.DataAccessState;
 import react.ReactUtil.copy;
 import redux.IReducer;
@@ -24,8 +24,7 @@ class DataStore
 			user:{
 				user_name:(Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name')),
 				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt'))
-			},
-			waiting:false
+			}
 		};
 		trace('ok');
 	}
@@ -42,6 +41,12 @@ class DataStore
 					//user:initState.user,
 					waiting:true
 				});
+			case Done(data):
+				copy(state,
+				{
+					dbData:data
+				}
+				);
 			default:
 				state;
 		}
@@ -53,7 +58,8 @@ class DataStore
 		return switch(action)
 		{
 			case Update(data):
-				next();
+			store.dispatch(DBAccess.update(data));
+				//next();
 			default: next();
 		}
 	}	

@@ -12,7 +12,7 @@ typedef DataFormProps =
 	>ChildrenRouteProps,
     ?formApi:FormApi,
 	?fullWidth:Bool,
-	?parentComponent:ReactComponent,
+	?parentComponent:Dynamic,
 	?setStateFromChild:FormState->Void,
 	?setFormState:FormState->Void,
 	?sideMenu:SMenuProps,

@@ -18,6 +18,7 @@ typedef LoginState =
 	?waiting:Bool,
 	?error:Dynamic,
 	?user_name:String,
+	?mandator:Int,
 	?pass:String,
 	?jwt:String
 }
@@ -87,6 +88,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 				api:aState.appWare.config.api,
 				pass:uState.pass,
 				jwt:uState.jwt,
+				mandator:uState.mandator,
 				loggedIn:uState.loggedIn,
 				loginError:uState.loginError,
 				last_login:uState.last_login,

@@ -1,5 +1,8 @@
 package view.data;
 
+import action.async.DataAction;
+import haxe.Constraints.Function;
+import state.DataAccessState;
 import haxe.macro.Expr.Catch;
 import action.AppAction;
 import react.ReactRef;
@@ -28,6 +31,7 @@ import view.data.contacts.List;
 import view.data.contacts.Edit;
 
 import view.data.contacts.model.ContactsModel;
+import shared.DBAccess;
 import shared.DbData;
 import shared.DBMetaData;
 import model.Contact;
@@ -133,12 +137,17 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 					url,
 					formState
 				));
+			},
+			update: function(dbaProps:DBAccessProps) {
+				trace(dbaProps);
+				dispatch(DataAction.Update(dbaProps));
 			}
 		};
     }
 	
 	static function mapStateToProps(aState:AppState) 
 	{
+		trace(aState.dataStore.dbData);
 		return {
 			user:aState.appWare.user
 		};
@@ -369,7 +378,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 					');					
 			case "Edit":
 				jsx('
-					<$Edit ${...props} formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$Edit ${...props} parentComponent=${this} formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
 				');				
 			default:
 				null;					

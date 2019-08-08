@@ -122,7 +122,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 				jwt:state.appWare.user.jwt,
 				className:'auth.User',
 				action:'clientVerify',
-				filter:'user_name|${state.appWare.user.user_name}',//LOGIN NAME
+				filter:'user_name|${state.appWare.user.user_name},us.mandator|${state.appWare.user.mandator}',//LOGIN NAME
 				dataSource:Serializer.run([
 					"users" => ["alias" => 'us',
 						"fields" => 'user_name,last_login,mandator,id'],
@@ -135,8 +135,6 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 			},			
 			function(data:DbData)
 			{
-				//trace(dBytes.toString());
-				//trace(data.dataInfo);
 				if (data.dataErrors.keys().hasNext())
 				{
 					trace(data.dataErrors);
@@ -154,8 +152,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 			store.dispatch(AppAction.LoginRequired(state.appWare.user));
 			props = { waiting:false};
 		}
-		//trace(App.config);
-		//trace(props);
+
 		trace(state.appWare.user.jwt);
 		
 		//state.appWare.history.listen(CState.historyChange);

@@ -51,7 +51,7 @@ class AppStore
 				first_name:'',
 				last_name:'',
 				mandator: 1,
-				user_name:(Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name')),
+				id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
 				email:'',
 				pass:'',
 				loggedIn:false,
@@ -90,7 +90,7 @@ class AppStore
 				});			
 			case LoginChange(uState):
 				copy(state, {
-					user:{user_name:uState.user_name, pass:uState.pass}
+					user:{id:uState.id, pass:uState.pass}
 				});
 			case LoginRequired(uState):
 				trace(uState);
@@ -99,12 +99,12 @@ class AppStore
 				});				
 			case LoginError(err):
 				trace(err);
-				//if(err.user_name==state.user.user_name)
+				//if(err.id==state.user.id)
 				copy(state, {user:{loginError:err.loginError, waiting:false}});
 			case AppWait:
 				copy(state, {waiting:true});				
 			case LoginComplete(uState):
-				//trace(uState.user_name + ':' + uState.loggedIn);
+				//trace(uState.id + ':' + uState.loggedIn);
 				trace(uState);
 				uState.loginError = null;
 				uState.loggedIn = true;

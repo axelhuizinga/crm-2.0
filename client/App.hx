@@ -106,26 +106,26 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 			},250);
 		}
 		//trace(modalBox);
-		//trace('user_name:$user_name jwt:$jwt ' + (!(App.user_name == '' || App.jwt == '')?'Y':'N' ));
+		//trace('id:$id jwt:$jwt ' + (!(App.id == null || App.jwt == '')?'Y':'N' ));
 		store = ApplicationStore.create();
 		state = store.getState();
 		//trace(store);
 		trace(state.appWare.redirectAfterLogin);
 		//CState.init(store);		
-		if (!(state.appWare.user.user_name == '' || state.appWare.user.jwt == ''))
+		if (!(state.appWare.user.id == null || state.appWare.user.jwt == ''))
 		{			
 			trace('clientVerify');
 			var bL:XMLHttpRequest = BinaryLoader.create(
 			'${state.appWare.config.api}', 
 			{				
-				user_name:state.appWare.user.user_name,
+				id:state.appWare.user.id,
 				jwt:state.appWare.user.jwt,
-				className:'auth.User',
+				className:'auth.User', 
 				action:'clientVerify',
-				filter:'user_name|${state.appWare.user.user_name},us.mandator|${state.appWare.user.mandator}',//LOGIN NAME
+				filter:'id|${state.appWare.user.id}',//LOGIN NAME
 				dataSource:Serializer.run([
 					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login,mandator,id'],
+						"fields" => 'id,last_login,mandator'],
 					"contacts" => [
 						"alias" => 'co',
 						"fields" => 'first_name,last_name,email',
@@ -139,7 +139,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 				{
 					trace(data.dataErrors);
 					return store.dispatch(AppAction.LoginError(
-						{user_name:state.appWare.user.user_name, loginError:data.dataErrors.iterator().next()}));
+						{id:state.appWare.user.id, loginError:data.dataErrors.iterator().next()}));
 				}	
 				var uState:UserProps = data.dataInfo['user_data'];
 				uState.waiting = false;
@@ -147,7 +147,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 			});					
 		}
 		else
-		{// WE HAVE EITHER NO VALID JWT OR user_name
+		{// WE HAVE EITHER NO VALID JWT OR id
 			trace('LOGIN required');
 			store.dispatch(AppAction.LoginRequired(state.appWare.user));
 			props = { waiting:false};
@@ -239,7 +239,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		{
 			trace(data.dataErrors);
 			store.dispatch(AppAction.LoginError(
-				{user_name:_app.state.appWare.user.user_name, loginError:data.dataErrors.iterator().next()}));
+				{id:_app.state.appWare.user.id, loginError:data.dataErrors.iterator().next()}));
 		}		
 	}
 	
@@ -248,7 +248,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		Cookie.set('user.jwt', '', -10, '/');
 		//trace(Cookie.get('user.jwt')); 
 		trace(Cookie.all());
-		store.dispatch(AppAction.LogOut({jwt:'', user_name: store.getState().appWare.user.user_name }));
+		store.dispatch(AppAction.LogOut({jwt:'', id: store.getState().appWare.user.id }));
 	}
 
 	public static function queryString2(params:Dynamic)

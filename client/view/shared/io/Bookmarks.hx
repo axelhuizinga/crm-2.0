@@ -58,11 +58,11 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 		props.formApi.requests.push(AjaxLoader.load(	
 			'${App.config.api}', 
 			{
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'auth.User',
 				action:'edit',
-				filter:'user_name|${props.user.user_name}',
+				filter:'id|${props.user.id}',
 				dataSource:Serializer.run(null)
 			},
 			function(data:Dynamic )

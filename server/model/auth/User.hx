@@ -32,13 +32,8 @@ class User extends Model
 	
 	public function clientVerify():Void
 	{
-		var jwt:String = param.get('jwt');
-		var user_name:String = param.get('user_name');
-		if (verify(jwt, user_name))
+		if (verify())
 		{			
-			/*data = {
-				content:'OK'
-			};*/
 			dbData.dataInfo['verified'] = true;
 			dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(doSelect()[0]);
 			S.sendInfo(dbData);
@@ -68,7 +63,7 @@ class User extends Model
 		{
 			//ACTIVE USER EXISTS
 			stmt = S.dbh.prepare(
-				'SELECT change_pass_required, last_login, user_name, mandator FROM ${S.db}.users WHERE user_name=:user_name AND password=crypt(:password,password)',Syntax.array(null));
+				'SELECT change_pass_required, last_login, id, mandator FROM ${S.db}.users WHERE user_name=:user_name AND password=crypt(:password,password)',Syntax.array(null));
 			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}',':password':'${param.get('pass')}'})))
 			{
 				S.sendErrors(dbData,['${param.get('action')}' => stmt.errorInfo()]);
@@ -78,12 +73,22 @@ class User extends Model
 				S.sendErrors(dbData,['${param.get('action')}'=>'pass']);
 			}
 			// USER AUTHORIZED
-			var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(stmt.fetch(PDO.FETCH_ASSOC));			
+			var assoc:Dynamic = stmt.fetch(PDO.FETCH_ASSOC);
+			var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(assoc);	
+			dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(assoc);		
+			dbData.dataInfo['id'] = res['id'];
 			dbData.dataInfo['mandator'] = res['mandator'];
 			dbData.dataInfo['last_login'] = res['last_login'];
 			dbData.dataInfo['loggedIn'] = true;
 			trace(res['user_name']);
 			trace(res['change_pass_required']==1 || res['change_pass_required']==true?'Y':'N');
+			// UPDATE LAST_LOGIN
+			var rTime:String = DateTools.format(Date.now(), "'%Y-%m-%d %H:%M:%S'");//,request=?
+			var update:PDOStatement = S.dbh.prepare('UPDATE users SET last_login=${rTime} WHERE id=:id',Syntax.array(null));
+			var success:Bool = Model.paramExecute(update, Lib.associativeArrayOfObject({':id':dbData.dataInfo['user_data'].id}));
+			trace(update.errorCode());
+			trace(update.errorInfo());
+			//UPDATE DONE			
 			if (res['change_pass_required']==1 || res['change_pass_required']==true)
 				return UserAuth.PassChangeRequired;
 			return UserAuth.AuthOK;			
@@ -100,22 +105,23 @@ class User extends Model
 		var me:User = new User(params);
 		trace(me);
 		switch(me.userIsAuthorized())
-		{
+		{//TODO:CONFIG JWT DURATION
 			case uath = UserAuth.AuthOK|UserAuth.PassChangeRequired:
 				var d:Float = DateTools.delta(Date.now(), DateTools.hours(11)).getTime();
 				trace(d + ':' + Date.fromTime(d));
 				var	jwt = JWT.sign({
-						user_name:params.get('user_name'),
+						id:me.dbData.dataInfo['user_data'].id,
 						validUntil:d,
 						ip: Web.getClientIP(),
 						mandator:params.get('mandator')
 					}, secret);						
 				trace(JWT.extract(jwt));
 				Web.setCookie('user.jwt', jwt, Date.fromTime(d + 86400000));
-				Web.setCookie('user.user_name', jwt, Date.fromTime(d + 86400000));
-				me.dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(me.doSelect()[0]);
+				Web.setCookie('user.id', me.dbData.dataInfo['user_data'].id, Date.fromTime(d + 86400000));
+				//me.dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(me.doSelect()[0]);
 				if (uath == UserAuth.PassChangeRequired)
 				me.dbData.dataInfo['change_pass_required'] = true;
+				//me.dbData.dataInfo['user_data'].id = jwt;
 				me.dbData.dataInfo['user_data'].jwt = jwt;
 				//trace(me.dbData);
 				S.sendInfo(me.dbData);
@@ -132,23 +138,21 @@ class User extends Model
 			dbData.dataErrors['changePassword'] = 'Das Passwort wurde nicht geändert!';
 			S.sendInfo(dbData);
 		}
-		switch (userIsAuthorized())
+		
+		if (verify())
 		{
-			case UserAuth.AuthOK|UserAuth.PassChangeRequired:
-			trace('UPDATE ${S.db}.users SET password=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE user_name=:user_name AND password=CRYPT(:pass, password)');
+			trace('UPDATE ${S.db}.users SET password=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id ');
 			var stmt:PDOStatement = S.dbh.prepare(
-				'UPDATE ${S.db}.users SET password=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE user_name=:user_name AND password=CRYPT(:pass, password)',Syntax.array(null));
+				'UPDATE ${S.db}.users SET password=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id ',Syntax.array(null));
 			if ( !Model.paramExecute(stmt, Lib.associativeArrayOfObject(
-				{':user_name': '${param.get('user_name')}',':new_password':'${param.get('new_pass')}',':pass':'${param.get('pass')}'})))
+				{':id': '${param.get('id')}',':new_password':'${param.get('new_pass')}'})))
 			{
 				S.sendErrors(dbData,['changePassword' => stmt.errorInfo()]);
 			}
 			if (stmt.rowCount()==0)
 			{
-				S.sendErrors(dbData,['changePassword'=>'Das Passwort ist nicht korrekt!']);
+				S.sendErrors(dbData,['changePassword'=>'Benutzer nicht gefunden!']);
 			}
-			default:
-				S.sendErrors(dbData,['changePassword'=>'Das Passwort ist nicht korrekt!']);
 		}		
 		dbData.dataInfo['changePassword'] = 'OK';
 		S.sendInfo(dbData);
@@ -164,40 +168,41 @@ class User extends Model
 		return true;
 	}
 	
-	static function saveRequest(user_name:String, params:StringMap<String>):Bool
+	static function saveRequest(id:String, params:StringMap<String>):Bool
 	{
 		var request:String = Serializer.run(params);
 		var rTime:String = DateTools.format(S.last_request_time, "'%Y-%m-%d %H:%M:%S'");//,request=?
-		var stmt:PDOStatement = S.dbh.prepare('UPDATE users SET online=TRUE,last_request_time=${rTime},"request"=:request WHERE user_name=:user_name',Syntax.array(null));
-		//trace('UPDATE users SET last_request_time=${rTime},request=\'$request\' WHERE user_name=\'$user_name\'');
+		var stmt:PDOStatement = S.dbh.prepare('UPDATE users SET online=TRUE,last_request_time=${rTime},"request"=:request WHERE id=:id',Syntax.array(null));
+		//trace('UPDATE users SET last_request_time=${rTime},request=\'$request\' WHERE id=\'$id\'');
 		var success:Bool = Model.paramExecute(stmt, //null
-			Lib.associativeArrayOfObject({':user_name': '$user_name', ':request': '$request'})
+			Lib.associativeArrayOfObject({':id': '$id', ':request': '$request'})
 		);
 		trace(stmt.errorCode());
 		trace(stmt.errorInfo());
 		return success;
 	}
 
-	public static function getViciDialPassword(jwt:String, user_name:String,?params:StringMap<String>):String
+	public static function getViciDialPassword(jwt:String, user:String,?params:StringMap<String>):String
 	{
 		return '';
 	}
 	
-	public static function verify(jwt:String, user_name:String,?params:StringMap<String>):Bool
+	public function verify(?params:StringMap<String>):Bool
 	{
-		trace(jwt);//TODO:REPLACE user_name with id
-		//Out.dumpStack(Out.aStack());
+		var jwt:String = param.get('jwt');
+		var id:String = param.get('id');		
+		trace(jwt);
 		try{
 			var userInfo:Dynamic = JWT.extract(jwt);
 			var now:Float = Date.now().getTime();
-			trace('$user_name==${userInfo.user_name}::${userInfo.ip}::${Web.getClientIP()}:' + Date.fromTime(userInfo.validUntil) + ':${userInfo.validUntil} - $now:' + cast( userInfo.validUntil - now));
-			if (user_name == userInfo.user_name && userInfo.ip == Web.getClientIP() && (userInfo.validUntil - Date.now().getTime()) > 0)
+			trace('$id==${userInfo.id}::${userInfo.ip}::${Web.getClientIP()}:' + Date.fromTime(userInfo.validUntil) + ':${userInfo.validUntil} - $now:' + cast( userInfo.validUntil - now));
+			if (id == userInfo.id && userInfo.ip == Web.getClientIP() && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
 				return switch(JWT.verify(jwt, S.secret))
 				{
 					case Valid(payload):
 						// JWT VALID AND NOT OLDER THAN 11 h
-						saveRequest(user_name, params);
+						saveRequest(id, params);
 						true;
 					default:
 						S.sendErrors(new DbData(), ['loginError'=>'JWT invalid!']);

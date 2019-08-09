@@ -172,7 +172,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		state.formApi.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'data.Contacts',
 				action:'find',

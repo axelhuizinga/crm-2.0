@@ -1,5 +1,6 @@
 package shared;
 
+import state.AppState;
 import action.AppAction.*;
 import haxe.Serializer;
 import haxe.http.HttpJs;
@@ -32,15 +33,15 @@ class DBAccess
 
 	public static function load(props:DBAccessProps) 
 	{
-		return Thunk.Action(function(dispatch:Dispatch, getState:Void->DataAccessState){
-			trace(getState());
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+			trace(getState().dataStore);
 			if (!props.user.loggedIn)
 			{
 				return dispatch(LoginError(
 				{
-					user_name:props.user.user_name,
+					id:props.user.id,
 					loginError:'Du musst dich neu anmelden!',
-					id:props.user.id
+					user_name:props.user.user_name
 				}));
 			}				
 			return null;		
@@ -49,16 +50,16 @@ class DBAccess
 
 	public static function update(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
-		return Thunk.Action(function(dispatch:Dispatch, getState:Void->DataAccessState){
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(props);
 			trace(getState());
 			if (!props.user.loggedIn)
 			{
 				return dispatch(LoginError(
 				{
-					user_name:props.user.user_name,
+					id:props.user.id,
 					loginError:'Du musst dich neu anmelden!',
-					id:props.user.id
+					user_name:props.user.user_name
 				}));
 			}	
 			var spin:Dynamic = dispatch(AppWait);
@@ -67,7 +68,7 @@ class DBAccess
 			var bL:XMLHttpRequest = BinaryLoader.create(
 			'${App.config.api}', 
 			{				
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				className:props.className,
 				action:props.action,

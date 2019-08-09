@@ -12,7 +12,7 @@ import view.table.Table.*;
 class RolesFormModel
 {
 	public static var userListColumns:StringMap<DataColumn> =  [
-		'user_name'=>{label:'Benutzer'},
+		'id'=>{label:'Benutzer'},
 		'first_name'=>{label:'Vorname', flexGrow:0},
 		'last_name'=>{label:'Name', flexGrow:0},
 		'email'=>{label:'Email'},

@@ -20,6 +20,7 @@ typedef LoginState =
 	?user_name:String,
 	?mandator:Int,
 	?pass:String,
+	?id:Int,
 	?jwt:String
 }
 

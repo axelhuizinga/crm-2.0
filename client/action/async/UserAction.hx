@@ -50,7 +50,7 @@ class UserAction
 				filter:'user_name|${props.user_name},us.mandator|1',//TODO. ADD MANDATOR SELECT AT LOGINFORM
 				dataSource:Serializer.run([
 					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login,mandator'],
+						"fields" => 'id,last_login,mandator'],
 					"contacts" => [
 						"alias" => 'co',
 						"fields" => 'first_name,last_name,email',
@@ -67,7 +67,7 @@ class UserAction
 					return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:data.dataErrors.iterator().next()}));
 				}
 				var uState:UserProps = data.dataInfo['user_data'];
-				Cookie.set('user.user_name', props.user_name, null, '/');
+				Cookie.set('user.id', Std.string(uState.id), null, '/');
 				Cookie.set('user.jwt',uState.jwt, null, '/');
 				trace(Cookie.get('user.jwt'));
 				uState.loggedIn = true;
@@ -86,12 +86,12 @@ class UserAction
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(getState());
-			if (props.user_name == '') 
-				return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:'UserId fehlt!',mandator:props.mandator}));
+			if (props.id == null) 
+				return dispatch(AppAction.LoginError({id:props.id, loginError:'UserId fehlt!',mandator:props.mandator}));
 			var fD:FormData = new FormData();
 			fD.append('action', 'logOff');
 			fD.append('className', 'auth.User');
-			fD.append('user_name', props.user_name);
+			fD.append('id', Std.string(props.id));
 			var req:XMLHttpRequest = new XMLHttpRequest();
 			req.open('POST', '${props.api}');
 			req.onload = function()
@@ -100,14 +100,14 @@ class UserAction
 					 // OK
 					var jRes:LoginState = Json.parse( req.response);
 					trace(jRes.jwt);
-					Cookie.set('user.user_name', props.user_name);
+					//Cookie.set('user.id', Std.string(props.id));
 					Cookie.set('user.jwt', jRes.jwt);
 					trace(Cookie.get('user.jwt'));
-					return dispatch(AppAction.LoginComplete({user_name:props.user_name, jwt:jRes.jwt, loggedIn:false}));
+					return dispatch(AppAction.LoginComplete({id:props.id, jwt:jRes.jwt, loggedIn:false}));
 				} else {
 					  // Otherwise reject with the status text
 					  // which will hopefully be a meaningful error
-					return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:req.statusText}));
+					return dispatch(AppAction.LoginError({id:props.id, loginError:req.statusText}));
 				}
 			};
 			var spin:Dynamic = dispatch(AppAction.AppWait);

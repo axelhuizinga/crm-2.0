@@ -19,7 +19,7 @@ typedef UserState =
 	?phone_pass:String,
 	?new_pass:String,
 	?new_pass_confirm:String,
-	user_name:String,
+	?user_name:String,
 	?id:Int,
 	?waiting:Bool    
 }

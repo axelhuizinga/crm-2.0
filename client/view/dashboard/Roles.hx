@@ -118,7 +118,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 		props.formApi.requests.push(AjaxLoader.load(
 			'${App.config.api}', 
 			{
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				first_name:props.user.first_name,
 				className:'admin.CreateUsers',
@@ -150,14 +150,14 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 			BinaryLoader.create(
 			'${App.config.api}', 
 			{
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'roles.Users',
 				action:'list',
 				filter:'active|TRUE',
 				dataSource:Serializer.run([
 					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login'],
+						"fields" => 'id,last_login'],
 					"user_groups" => [
 						"alias" => 'ug', 
 						"fields" => 'name', 

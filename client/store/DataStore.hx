@@ -1,5 +1,6 @@
 package store;
 
+import state.AppState;
 import js.Cookie;
 import redux.StoreMethods;
 import redux.IMiddleware;
@@ -12,18 +13,21 @@ import shared.DbData;
 
 class DataStore
 	implements IReducer<DataAction, DataAccessState>
-	implements IMiddleware<DataAction, DataAccessState>
+	implements IMiddleware<DataAction, AppState>
 {
 	public var initState:DataAccessState;
-	public var store:StoreMethods<DataAccessState>;	
+	public var store:StoreMethods<AppState>;	
 
 	public function new() 
 	{ 
 		initState = {
 			dbData:new DbData(),
+			//user:store.getState().appWare.user 
 			user:{
-				user_name:(Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name')),
-				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt'))
+				mandator: 1,
+				id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
+				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
+				waiting: false
 			}
 		};
 		trace('ok');

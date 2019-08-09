@@ -25,7 +25,7 @@ import shared.Utils;
 	sortBy:String,
 	scrollToIndex: Int,
 	?defaultSort:Dynamic, 	
-	?user_name:String,
+	?id:String,
 	?jwt:String,
 	?first_name:String
 }

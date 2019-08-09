@@ -68,10 +68,10 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 			{
 				source:[
 					"users" => [
-						"fields" => 'user_name,change_pass_required,password']
+						"fields" => 'id,change_pass_required,password']
 				],
 				view:[
-					'user_name' => {type:Hidden},
+					'id' => {type:Hidden},
 					'pass' => {type:Password},
 					'new_pass' => {type:Password}
 				]
@@ -79,14 +79,14 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 			'edit' =>{
 				source:[
 					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login,change_pass_required,password'],
+						"fields" => 'id,last_login,change_pass_required,password'],
 					"contacts" => [
 						"alias" => 'co',
 						"fields" => 'first_name,last_name,email',
 						"jCond"=>'contact=co.id']
 				],
 				view:[
-					'user_name'=>{label:'UserID',disabled:true, type:Hidden},
+					'id'=>{label:'UserID',disabled:true, type:Hidden},
 					'pass'=>{label:'Passwort', type:Hidden},
 					'first_name'=>{label:'Vorname'},
 					'last_name'=>{label:'Name'},
@@ -107,11 +107,11 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		props.formApi.requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'auth.User',
 				action:'edit',
-				filter:'user_name|${props.user.user_name}',
+				filter:'id|${props.user.id}',
 				dataSource:Serializer.run(dataAccess['edit'].source),
 				devIP:App.devIP	
 			},
@@ -130,7 +130,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 					App.store.dispatch(AppAction.User({
 						first_name:data.dataRows[0]['first_name'],
 						last_name:data.dataRows[0]['last_name'],
-						user_name:props.user.user_name,
+						id:props.user.id,
 						email:data.dataRows[0]['email'],
 						pass:'',
 						new_pass:'',
@@ -149,7 +149,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 					App.store.dispatch(AppAction.User({
 						first_name:data.dataRows[0]['first_name'],
 						last_name:data.dataRows[0]['last_name'],
-						user_name:props.user.user_name,
+						id:props.user.id,
 						email:data.dataRows[0]['email'],
 						pass:'',
 						waiting:false,
@@ -179,7 +179,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		if(props.match.params.action!='changePassword')
 		{
 			updateMenu('changePassword');
-			props.history.push(props.location.pathname + '/user/changePassword/${props.user.user_name}');
+			props.history.push(props.location.pathname + '/user/changePassword/${props.user.id}');
 			return setState({action:'changePassword'});
 		}
 		else {
@@ -195,7 +195,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		props.formApi.requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
-				user_name:props.user.user_name, 
+				id:props.user.id, 
 				jwt:props.user.jwt,
 				className:'auth.User',
 				action:'changePassword',
@@ -232,11 +232,11 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		props.formApi.requests.push(Loader.loadData(	
 			'${App.config.api}', 
 			{
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'auth.User',
 				action:'edit',
-				filter:'user_name|${props.user.user_name}',
+				filter:'id|${props.user.id}',
 				dataSource:Serializer.run(dataAccess['edit'].source)
 			},
 			function(data:Array<Map<String,String>>)
@@ -282,11 +282,11 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		props.formApi.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'auth.User',
 				action:'save',
-				filter:'user_name|${props.user.user_name}',
+				filter:'id|${props.user.id}',
 				dataSource:Serializer.run(dataAccess['edit'].source)
 				//dataSource:Serializer.run(filterMap(state.values, skeys))
 			},

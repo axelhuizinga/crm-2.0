@@ -79,7 +79,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			//trace(uState);		
 			return {
 				//appConfig:aState.appWare.config,
-				user_name:uState.user_name,
+				id:uState.id,
 				jwt:uState.jwt,
 				first_name:uState.first_name
 			};
@@ -108,7 +108,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 		//TODO: AUTOMATE CREATE HISTORY TRIGGER IF DB TABLES CHANGED
 		/*AjaxLoader.loadData('${App.config.api}', 
 			{
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'admin.CreateHistoryTrigger',
 				action:'run'				

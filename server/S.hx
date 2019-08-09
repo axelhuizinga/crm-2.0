@@ -110,12 +110,11 @@ class S
 		//dbh.set_charset("utf8");
 		//trace(dbh.errorInfo());
 		var jwt:String = params.get('jwt');
-		var user_name:String = params.get('user_name');
+		//var id:String = params.get('id');
 		trace(jwt +':' + (jwt != null));
 		if (jwt.length > 0)
 		{
-			//if(true || User.verify(jwt, user_name,params))
-			if(User.verify(jwt, user_name,params))
+			if(new User(params).verify())
 				Model.dispatch(params);		
 			trace('SHOULD NEVER HAPPEN');
 		}

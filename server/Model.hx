@@ -71,7 +71,6 @@ typedef DataSource =
 {
 	@:optional var alias:String;
 	@:optional var fields:Array<String>;
-//	@:optional var alias:String;
 	@:optional var filter:Array<StringMap<String>>;
 }
 
@@ -554,11 +553,6 @@ class Model
 			filterValues = new Array();
 		}
 
-		/*if (param != null && param.get('fullReload') == 'true')
-		{
-			trace('fullReload');
-			globals = {users: query("SELECT first_name, last_name, user_name, active, user_group FROM vicidial_users") };
-		}*/
 		table = param.get('table');
 		if(table != null)
 		{

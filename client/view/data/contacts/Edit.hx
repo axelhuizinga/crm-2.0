@@ -1,4 +1,5 @@
 package view.data.contacts;
+import action.async.DataAction;
 import shared.DBAccess;
 import js.html.HTMLOptionsCollection;
 import js.html.HTMLPropertiesCollection;
@@ -300,18 +301,22 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function update(aState:Contact)
 	{
+		dbData = new DbData();
+		dbData.dataParams = [
+				"contacts" => [
+					"data" => aState
+				]
+			];
 		var dbaProps:DBAccessProps = 
 		{
 			action:'update',
 			className:'Contacts',
-			dataSoure:[
-				"contacts" => [
-					"data" => aState
-				]
-			],
+			dataSoure:dbData,
 			user:props.user
 		};
-		props.parentComponent.props.update(dbaProps);
+		
+		App.store.dispatch(DataAction.Update(dbaProps));
+		//props.parentComponent.props.update(dbaProps);
 	}
 
 	function renderResults():ReactFragment

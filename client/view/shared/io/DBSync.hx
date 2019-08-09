@@ -82,7 +82,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		props.formApi.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'tools.DB',
 				action:'createFieldList',
@@ -144,7 +144,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		props.formApi.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				fields:'disabled:disabled,element=:element,required=:required,use_as_index=:use_as_index',
 				className:'tools.DB',
@@ -166,7 +166,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		BinaryLoader.create(
 			'${App.config.api}', 
 			{
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
 				className:'admin.SyncExternalClients',
@@ -199,7 +199,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			'${App.config.api}', 
 			//'https://pitverwaltung.de/sync/proxy.php', 
 			{
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
 				className:'admin.SyncExternal',

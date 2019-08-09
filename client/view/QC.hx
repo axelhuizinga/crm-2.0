@@ -58,7 +58,7 @@ class QC extends ReactComponentOf<RouteTabProps, Dynamic>
 				appConfig:aState.appWare.config,
 				redirectAfterLogin:aState.appWare.redirectAfterLogin,
 				user:uState/*
-				user_name:uState.user_name,
+				id:uState.id,
 				pass:uState.pass,
 				jwt:uState.jwt,
 				loggedIn:uState.loggedIn,

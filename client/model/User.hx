@@ -9,7 +9,7 @@ typedef User =
 	?last_login:String,
 	//{"name":"password","type":"character varying(512)","default":"","attnum":"4","required":false}
 	?password:String,
-	//{"name":"user_name","type":"character varying(64)","default":"","attnum":"5","required":true}
+	//{"name":"id","type":"character varying(64)","default":"","attnum":"5","required":true}
 	user_name:String,
 	//{"name":"active","type":"boolean","default":"true","attnum":"6","required":false}
 	?active:String,

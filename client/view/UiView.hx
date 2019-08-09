@@ -153,7 +153,6 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 			');		
 		}
 		
-		//if(props.user.user_name == null || props.user.user_name == '' || props.user.jwt == null || props.user.jwt == '')
 		trace('${props.user.jwt} ${props.user.loggedIn}');
 		if(props.user.jwt == null || props.user.jwt == '' )//|| !props.user.loggedIn
 		{

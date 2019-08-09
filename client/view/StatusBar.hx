@@ -115,22 +115,22 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	
 	override public function render()
 	{
-		var user_name:String = 'Gast';
+		var id:String = 'Gast';
 		var userIcon:String = 'fa fa-user-o';
 		//trace(props.user);
 		if (props.user != null)
 		{
-		 user_name = props.user.first_name != null &&  props.user.first_name !='' ?
-		[props.user.first_name , props.user.last_name].join(' ') : props.user.user_name;
+		 id = props.user.first_name != null &&  props.user.first_name !='' ?
+		[props.user.first_name , props.user.last_name].join(' ') :'';
 		 userIcon = 'fa fa-user';			
 		}
-		//trace(user_name +':' + cast user_name.length);
+		//trace(id +':' + cast id.length);
 		return jsx('
 		<Footer>
 			<div className="statusbar">
 				<span className="column" > Pfad: ${props.pathname}</span>				
 				<span className="column">
-				<i className=${userIcon}></i> $user_name</span>
+				<i className=${userIcon}></i> $id</span>
 				<$DateTime />			
 			</div>
 		</Footer>

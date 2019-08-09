@@ -67,7 +67,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		state.formApi.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
-				user_name:props.user.user_name,
+				id:props.user.id,
 				jwt:props.user.jwt,
 				//fields:'disabled:disabled,element=:element,required=:required,use_as_index=:use_as_index',
 				className:'data.Contacts',

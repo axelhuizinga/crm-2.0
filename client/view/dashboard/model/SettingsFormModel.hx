@@ -19,7 +19,7 @@ typedef FormRelation =
 class SettingsFormModel
 {
 	public static var accountDataElements:StringMap<FormField> =  [
-		'user_name'=>{label:'Benutzer'},
+		'id'=>{label:'Benutzer'},
 		'first_name'=>{label:'Vorname'},
 		'last_name'=>{label:'Name'},
 		'email'=>{label:'Email'},		

@@ -122,7 +122,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 				jwt:state.appWare.user.jwt,
 				className:'auth.User', 
 				action:'clientVerify',
-				filter:'id|${state.appWare.user.id}',//LOGIN NAME
+				filter:'us.id|${state.appWare.user.id}',//LOGIN NAME
 				dataSource:Serializer.run([
 					"users" => ["alias" => 'us',
 						"fields" => 'id,last_login,mandator'],

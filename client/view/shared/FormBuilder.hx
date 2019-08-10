@@ -83,7 +83,7 @@ class FormBuilder {
 		var ki:Int = 0;
 		//return fields.array().map(function(field:FormField){
 		return [for(name => field in fields){
-			trace (field.type +' $name:' + field.value);
+			if(name=='id')trace (field.type +' $name:' + field.value);
 			switch (field.type)
 			{
 				case FormInputElement.Hidden:

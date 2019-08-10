@@ -114,7 +114,7 @@ class S
 		trace(jwt +':' + (jwt != null));
 		if (jwt.length > 0)
 		{
-			if(new User(params).verify())
+			if(User.verify(params))
 				Model.dispatch(params);		
 			trace('SHOULD NEVER HAPPEN');
 		}

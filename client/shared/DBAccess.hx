@@ -51,8 +51,8 @@ class DBAccess
 	public static function update(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			trace(props);
-			trace(getState());
+			trace(props.dataSource);
+			//trace(getState());
 			if (!props.user.loggedIn)
 			{
 				return dispatch(LoginError(
@@ -65,6 +65,7 @@ class DBAccess
 			var spin:Dynamic = dispatch(AppWait);
 			trace(spin);
 			var hS:hxbit.Serializer = new hxbit.Serializer();
+			trace(hS.serialize(props.dataSource));
 			var bL:XMLHttpRequest = BinaryLoader.create(
 			'${App.config.api}', 
 			{				

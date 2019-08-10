@@ -44,6 +44,7 @@ class BinaryLoader {
 
 	//public dynamic function onLoaded( bytes : haxe.io.Bytes ) {
 	public function onLoaded( bytes : haxe.io.Bytes ) {
+		trace(bytes.length);
 		var u:Serializer = new Serializer();
 		var data:DbData = u.unserialize(bytes, DbData);
 		cB(data);
@@ -68,6 +69,7 @@ class BinaryLoader {
 				onError(xhr.statusText);
 				return;
 			}
+			trace(xhr.response.length);
 			onLoaded(haxe.io.Bytes.ofData(xhr.response));
 		}
 		

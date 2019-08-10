@@ -82,7 +82,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	
 	public static var initialState:Contact =
 	{
-		id:0,
+		id:2000328,
 		edited_by: 0,
 		mandator: 0
 	};	
@@ -97,17 +97,17 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//var formBuilder = new FormBuilder(this);
 		trace(props.user);
 		initialState = {
-			id:0,
+			id:2000328,
 			edited_by: props.user.id,				
 			mandator: props.user.mandator
 		};
 		for(k in dataAccess['edit'].view.keys())
 		{
-			trace('$k => ' );
+			//trace('$k => ' );
 			if(!Reflect.hasField(initialState,k))
 				Reflect.setField(initialState, k, '');
 		}		
-		trace(initialState);
+		//trace(initialState);
 		state =  App.initEState({
 			dataTable:[],
 			formBuilder:new FormBuilder(this),
@@ -169,14 +169,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				id:2000328,
 				edited_by: props.user.id,				
 				mandator: props.user.mandator
-			};			for(k in dataAccess['edit'].view.keys())
+			};			
+			for(k in dataAccess['edit'].view.keys())
 			{
 				trace('$k => ' + sData[k]);
 				Reflect.setField(initialState, k, sData[k]);
 			}			
 		}
-		
-
 
 		setState({actualState:initialState,initialState: initialState});
 		//trace(it.hasNext());				
@@ -204,6 +203,16 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			trace('select ID(s)');
 			
 		}
+
+		/**
+		 * testing => init view values
+		 */		
+
+		for(k in dataAccess['edit'].view.keys())
+		{
+			dataAccess['edit'].view[k].value = Reflect.field(initialState,k);
+		}
+		setState({actualState:initialState,initialState: initialState});		
 				
 		//trace(formRef.current != null);
 		if(formRef.current != null)
@@ -310,7 +319,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var dbaProps:DBAccessProps = 
 		{
 			action:'update',
-			className:'Contacts',
+			className:'data.Contacts',
 			dataSoure:dbData,
 			user:props.user
 		};

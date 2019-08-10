@@ -21,6 +21,14 @@ import php.db.PDOStatement;
  * @author axel@bi4.me
  */
 
+ typedef  UserInfo = 
+ {
+	?id:Int,
+	?ip:String,
+	?mandator:Int,
+	?validUntil:Int
+ }
+
 class User extends Model
 {
 	public static function create(param:StringMap<String>):Void
@@ -32,7 +40,7 @@ class User extends Model
 	
 	public function clientVerify():Void
 	{
-		if (verify())
+		if (verify(param))
 		{			
 			dbData.dataInfo['verified'] = true;
 			dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(doSelect()[0]);
@@ -63,7 +71,9 @@ class User extends Model
 		{
 			//ACTIVE USER EXISTS
 			stmt = S.dbh.prepare(
-				'SELECT change_pass_required, last_login, id, mandator FROM ${S.db}.users WHERE user_name=:user_name AND password=crypt(:password,password)',Syntax.array(null));
+				'SELECT change_pass_required, first_name, last_name, last_login, us.id, us.mandator FROM ${S.db}.users us
+				INNER JOIN contacts cl ON us.contact=cl.id 
+				WHERE user_name=:user_name AND password=crypt(:password,password)',Syntax.array(null));
 			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}',':password':'${param.get('pass')}'})))
 			{
 				S.sendErrors(dbData,['${param.get('action')}' => stmt.errorInfo()]);
@@ -81,7 +91,7 @@ class User extends Model
 			dbData.dataInfo['last_login'] = res['last_login'];
 			dbData.dataInfo['loggedIn'] = true;
 			trace(res['user_name']);
-			trace(res['change_pass_required']==1 || res['change_pass_required']==true?'Y':'N');
+			trace('change_pass_required'+(res['change_pass_required']==1 || res['change_pass_required']==true?'Y':'N'));
 			// UPDATE LAST_LOGIN
 			var rTime:String = DateTools.format(Date.now(), "'%Y-%m-%d %H:%M:%S'");//,request=?
 			var update:PDOStatement = S.dbh.prepare('UPDATE users SET last_login=${rTime} WHERE id=:id',Syntax.array(null));
@@ -103,7 +113,7 @@ class User extends Model
 	public static function login(params:StringMap<String>, secret:String):Bool
 	{
 		var me:User = new User(params);
-		trace(me);
+		//trace(me);
 		switch(me.userIsAuthorized())
 		{//TODO:CONFIG JWT DURATION
 			case uath = UserAuth.AuthOK|UserAuth.PassChangeRequired:
@@ -113,8 +123,10 @@ class User extends Model
 						id:me.dbData.dataInfo['user_data'].id,
 						validUntil:d,
 						ip: Web.getClientIP(),
-						mandator:params.get('mandator')
+						mandator:me.dbData.dataInfo['user_data'].mandator
 					}, secret);						
+				
+				trace(jwt);
 				trace(JWT.extract(jwt));
 				Web.setCookie('user.jwt', jwt, Date.fromTime(d + 86400000));
 				Web.setCookie('user.id', me.dbData.dataInfo['user_data'].id, Date.fromTime(d + 86400000));
@@ -168,14 +180,14 @@ class User extends Model
 		return true;
 	}
 	
-	static function saveRequest(id:String, params:StringMap<String>):Bool
+	static function saveRequest(id:Int, params:StringMap<String>):Bool
 	{
 		var request:String = Serializer.run(params);
 		var rTime:String = DateTools.format(S.last_request_time, "'%Y-%m-%d %H:%M:%S'");//,request=?
 		var stmt:PDOStatement = S.dbh.prepare('UPDATE users SET online=TRUE,last_request_time=${rTime},"request"=:request WHERE id=:id',Syntax.array(null));
 		//trace('UPDATE users SET last_request_time=${rTime},request=\'$request\' WHERE id=\'$id\'');
 		var success:Bool = Model.paramExecute(stmt, //null
-			Lib.associativeArrayOfObject({':id': '$id', ':request': '$request'})
+			Lib.associativeArrayOfObject({':id': id, ':request': '$request'})
 		);
 		trace(stmt.errorCode());
 		trace(stmt.errorInfo());
@@ -187,18 +199,26 @@ class User extends Model
 		return '';
 	}
 	
-	public function verify(?params:StringMap<String>):Bool
+	public static function verify(?params:StringMap<String>):Bool
 	{
-		var jwt:String = param.get('jwt');
-		var id:String = param.get('id');		
+		var jwt:String = params.get('jwt');
+		var id:Int = Std.parseInt(params.get('id'));		
 		trace(jwt);
 		try{
-			var userInfo:Dynamic = JWT.extract(jwt);
+			var userInfo:UserInfo = JWT.extract(jwt);
 			var now:Float = Date.now().getTime();
-			trace('$id==${userInfo.id}::${userInfo.ip}::${Web.getClientIP()}:' + Date.fromTime(userInfo.validUntil) + ':${userInfo.validUntil} - $now:' + cast( userInfo.validUntil - now));
+			trace('$id==${userInfo.id}::${userInfo.ip}::${Web.getClientIP()}:' + Date.fromTime(userInfo.validUntil) + 
+			':${userInfo.validUntil} - $now:' + cast( userInfo.validUntil - now) + 
+			(userInfo.validUntil - Date.now().getTime()) > 0?'Y':'N');
+			
+			trace(':'+(id == userInfo.id));
+			trace(':'+(userInfo.ip == Web.getClientIP()));
+			trace(':'+((userInfo.validUntil - Date.now().getTime()) > 0));
 			if (id == userInfo.id && userInfo.ip == Web.getClientIP() && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
-				return switch(JWT.verify(jwt, S.secret))
+				trace('calling JWT.verify now...');
+				trace(JWT.verify(jwt, S.secret));
+				return switch(JWT.verify(jwt, S.secret))				
 				{
 					case Valid(payload):
 						// JWT VALID AND NOT OLDER THAN 11 h

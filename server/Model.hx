@@ -81,15 +81,18 @@ class Model
 	public var joinSql:String;
 	public var queryFields:String;
 	public var filterSql:String;
+	public var setSql:String;
 	var filterValues:Array<Array<Dynamic>>;
+	var setValues:Array<Dynamic>;
 	public var globals:Dynamic;
 	public var fieldNames:Array<String>;
 	public var tableNames:Array<String>;
 	public var table:String;
 	public var num_rows(default, null):Int;
+	var action:String;
 	var dbData:DbData;
 	var dParam:DbData;
-	var dataSource:StringMap<StringMap<String>>;// EACH KEY IS A TABLE NAME
+	var dataSource:Map<String,Map<String,Dynamic>>;// EACH KEY IS A TABLE NAME
 	var dataSourceSql:String;
 	var param:Map<String, Dynamic>;
 	
@@ -173,9 +176,38 @@ class Model
 		{
 			var tRel:StringMap<String> = dataSource.get(table);
 			var alias:String = (tRel.exists('alias')? quoteIdent(tRel.get('alias')):'');
-			var jCond:String = tRel.exists('jCond') ? quoteIdent(tRel.get('jCond')):null;
+			var jCond:String = tRel.exists('jCond') ? tRel.get('jCond'):null;
 			if (jCond != null)
 			{
+				if(~/\./.match(jCond))
+				{
+					var jParts = jCond.split('=');					
+					trace(jParts.join('='));
+					trace(jParts[0]);
+					trace(jParts[1]);
+					if(jParts[0].indexOf('.')>-1)
+					{
+						var dots = jParts[0].split('.');
+						if(dots.length>2)
+						{
+							S.sendErrors(dbData,['invalidJoinCond'=>jCond]);
+						}
+						if(dots.length==2){
+							jCond = '${quoteIdent(dots[0])}.${dots[1]}=${jParts[1]}';
+						}
+					}
+					else {
+						var dots = jParts[1].split('.');
+						trace(dots);
+						if(dots.length>2)
+						{
+							S.sendErrors(dbData,['invalidJoinCond'=>jCond]);
+						}
+						if(dots.length==2){
+							jCond = '${jParts[0]}=${quoteIdent(dots[0])}.${dots[1]}';
+						}						
+					}
+				}
 				var jType:String = switch(tRel.get('jType'))
 				{
 					case JoinType.LEFT:
@@ -185,11 +217,11 @@ class Model
 					default:
 						'INNER';
 				}
-				sqlBf.add('$jType JOIN $table $alias ON $jCond ');		
+				sqlBf.add('$jType JOIN ${quoteIdent(table)} $alias ON $jCond ');		
 			}
 			else
 			{// FIRST TABLE
-				sqlBf.add('$table $alias ');
+				sqlBf.add('${quoteIdent(table)} $alias ');
 			}
 		}
 		joinSql = sqlBf.toString();
@@ -283,9 +315,23 @@ class Model
 		//trace(filterValues);
 		var data:NativeArray = null;
 		var success: Bool;
-		if(filterValues.any2bool())
+		var i:Int = 0;
+		if(setValues.length>0)
 		{
-			var i:Int = 0;
+			for (fV in setValues)
+			{
+				var type:Int = PDO.PARAM_STR; //dbFieldTypes.get(fV[0]);
+				values2bind[i++] = fV;
+				//if (!stmt.bindParam(i, fV[1], type))//TODO: CHECK POSTGRES DRIVER OPTIONS
+				if (!stmt.bindValue(i, fV, type))//TODO: CHECK POSTGRES DRIVER OPTIONS
+				{
+					trace('ooops:' + stmt.errorInfo());
+					Sys.exit(0);
+				}
+			}	
+		}
+		if(filterValues.length>0)
+		{
 			for (fV in filterValues)
 			{
 				var type:Int = PDO.PARAM_STR; //dbFieldTypes.get(fV[0]);
@@ -296,7 +342,10 @@ class Model
 					trace('ooops:' + stmt.errorInfo());
 					Sys.exit(0);
 				}
-			}			
+			}	
+		}		
+		if(i>0)
+		{
 			success = stmt.execute(values2bind);
 			if (!success)
 			{
@@ -304,6 +353,11 @@ class Model
 				return null;
 			}
 			dbData.dataInfo['count'] = stmt.rowCount();
+			if(action=='update'||action=='delete')
+			{
+				//EXIT
+				S.sendInfo(dbData);
+			}
 			if (dbData.dataInfo['count']>0)
 			{
 				data = stmt.fetchAll(PDO.FETCH_ASSOC);
@@ -366,14 +420,16 @@ class Model
 		var sqlBf:StringBuf = new StringBuf();
 		trace(queryFields);
 		sqlBf.add('UPDATE ');
+		trace ('${tableNames.length} $joinSql');
 		if (tableNames.length>1)
 		{
 			sqlBf.add(joinSql);
 		}		
 		else
 		{
-			sqlBf.add('$tableNames[0] ');
+			sqlBf.add('${quoteIdent(tableNames[0])} ');
 		}
+		sqlBf.add(setSql);
 		if (filterSql != null)
 		{
 			sqlBf.add(filterSql);
@@ -386,14 +442,10 @@ class Model
 		return execute(sqlBf.toString());
 	}
 	
-	public function buildCond():String
+	public function buildCond(filter:String):String
 	{
-		if (filterSql != null)
-			return filterSql;
-		var filter:String = param.get('filter');
 		if (filter == null)		
 		{
-			filterSql = '';
 			return filterSql;			
 		}
 		var filters:Array<Dynamic> = filter.split(',');
@@ -402,45 +454,56 @@ class Model
 		filterValues = new Array();
 		for (w in filters)
 		{			
+			//if(alias!=null)
+				//fBuf.add(quoteIdent(alias))+'.';
 			var wData:Array<String> = w.split('|');
+			var dots = wData[0].split('.');
+			if(dots.length>2)
+			{
+				S.sendErrors(dbData,['invalidFilter'=>wData[0]]);
+			}
+
 			var values:Array<String> = wData.slice(2);			
-			trace(wData + ':' + ':');			
+			
 			if (first)
 				fBuf.add(' WHERE ' );
 			else
 				fBuf.add(' AND ');
 			first = false;			
-			
+
+			if(dots.length==2)
+			{
+				fBuf.add('${quoteIdent(dots[0])}.${quoteIdent(dots[1])}');
+			}			
+			else //no alias
+				fBuf.add(quoteIdent(wData[0]));
 			switch(wData[1].toUpperCase())
 			{
 				case 'BETWEEN':
 					if (!(values.length == 2) && values.foreach(function(s:String) return s.any2bool()))
 						S.exit( {error:'BETWEEN needs 2 values - got only:' + values.join(',')});
-					fBuf.add(quoteIdent(wData[0]));
+					
 					fBuf.add(' BETWEEN ? AND ?');
-					filterValues.push([wData[0], values[0]]);
-					filterValues.push([wData[0], values[1]]);
+					filterValues.push([dots[0], values[0]]);
+					filterValues.push([dots[0], values[1]]);
 				case 'IN':					
-					fBuf.add(quoteIdent(wData[0]));					
 					fBuf.add(' IN(');
 					fBuf.add( values.map(function(s:String) { 
-						filterValues.push([wData[0], values.shift()]);
+						filterValues.push([dots[0], values.shift()]);
 						return '?'; 
 						} ).join(','));							
 					fBuf.add(')');
 				case 'LIKE':					
-					fBuf.add(quoteIdent(wData[0]));
 					fBuf.add(' LIKE ?');
-					filterValues.push([wData[0], wData[2]]);
+					filterValues.push([dots[0], wData[2]]);
 				case _:
-					fBuf.add(quoteIdent(wData[0]));
 					if (~/^(<|>)/.match(wData[1]))
 					{
 						var eR:EReg = ~/^(<|>)/;
 						eR.match(wData[1]);
 						var val = Std.parseFloat(eR.matchedRight());
 						fBuf.add(eR.matched(0) + '?');
-						filterValues.push([wData[0],val]);
+						filterValues.push([dots[0],val]);
 						continue;
 					}
 					//PLAIN VALUES
@@ -448,7 +511,7 @@ class Model
 						fBuf.add(" IS NULL");
 					else {
 						fBuf.add(" = ?");
-						filterValues.push([wData[0],wData[1]]);	
+						filterValues.push([dots[0],wData[1]]);	
 					}			
 			}			
 		}
@@ -481,16 +544,17 @@ class Model
 		return true;
 	}
 
-	public function buildSet(param:StringMap<String>, sqlBf:StringBuf):Bool
+	public function buildSet(data:StringMap<String>, alias:String):String
 	{
-		for(key in fieldNames)
+		//var sqlBf:StringBuf = new StringBuf();
+		alias = alias!=null?'${quoteIdent(alias)}.':'';
+		var set:Array<String> = new Array();
+		for(key in data.keys())
 		{
-			if(param.has(key))
-			{
-				trace('set $key => ${param.get(key)}');
-			}
+			set.push('${alias}$key=?');
+			setValues.push(data.get(key));
 		}
-		return true;
+		return 'SET ${set.join(',')} ';
 	}
 	
 	public function buildLimit(limitParam:String, sqlBf:StringBuf):Void
@@ -501,13 +565,12 @@ class Model
 	
 	function quoteIdent(f : String):String 
 	{
-		if ( ~/^([a-zA-Z_])[a-zA-Z0-9_\.=\/]+$/.match(f))
+		if ( ~/^([a-zA-Z_])[a-zA-Z0-9_]+$/.match(f))
 		{
 			return f;
 		}
 		
 		return '"$f"';
-		//return S.dbh.quote(f);
 	}	
 	
 	function row2jsonb(row:Dynamic):String
@@ -540,70 +603,80 @@ class Model
 		data = {};
 		data.rows = new NativeArray();
 		dbData = new DbData();
-		if (param.exists('dbData'))
+		filterSql = '';
+		filterValues = new Array();
+		setValues = new Array();
+		queryFields = '';
+		tableNames = new Array();
+		trace('has dbData:' + (param.exists('dbData')?'Y':'N'));
+		if(param.exists('dbData'))
 		{
+			trace(Bytes.ofString(param.get('dbData')));
 			var s:Serializer = new Serializer();
 			dParam = s.unserialize(Bytes.ofString(param.get('dbData')),DbData);
-			trace(dParam);
-			dbData.dataInfo = ['result'=>'OK'];
-			S.sendData(dbData, {});
+			dataSource = dParam.dataParams;
+			trace(dataSource.toString());
 		}
-		if (param.exists('filter'))
-		{			
-			filterValues = new Array();
-		}
-
-		table = param.get('table');
-		if(table != null)
+		else 
 		{
-			fieldNames = S.tableFields(table);
-			tableNames = [table];
-		}
-		else
-			tableNames = [];
-		trace(tableNames.toString());
-		var fields:Array<String> = [];
-		//trace('>'+param.get('dataSource')+'<');
-		if(param.get('dataSource') != null)
-		{
-			dataSource = Unserializer.run(param.get('dataSource'));
-			//trace(dataSource);
-			var tnI:Iterator<String> = dataSource.keys();
-			while(tnI.hasNext()) 
+			table = param.get('table');
+			if(table != null)
 			{
-				var tableName:String = quoteIdent(tnI.next());
-				tableNames.push(tableName);
-				var table:StringMap<String> = dataSource.get(tableName);
-				trace('$table $tableName');
-				if(table.exists('fields'))
-					fields = fields.concat(buildFields(tableName, table));
-				if (table.exists('filter'))
-				{			
-					filterValues = new Array();
-					param.set('filter',table.get('filter'));
-				}
+				fieldNames = param.has('fields')? param.get('fields').split(',').map(function (f)return quoteIdent(f)): S.tableFields(table);
+				tableNames = [table];
+				queryFields = fieldNames.join(',');
+			}
+			else
+				tableNames = [];
+			var fields:Array<String> = [];
+			if(param.get('dataSource') != null)
+			{
+				dataSource = Unserializer.run(param.get('dataSource'));	
 			}
 		}
-		queryFields = fields.length > 0?fields.join(','):'*';		
+		var fields:Array<String> = [];
+		if(dataSource != null)
+		{
+			var tKeys:Iterator<String> = dataSource.keys();
+			while(tKeys.hasNext())
+			{
+				var tableName = tKeys.next();
+				tableNames.push(tableName);
+				var tableProps = dataSource.get(tableName);
+				trace(tableProps.toString());
+				if(param.get('action') == 'update')
+				{
+					setSql += buildSet(tableProps.get('data'), tableProps.get('alias'));
+				}
+				fields = fields.concat(buildFieldsSql(tableName, tableProps));	
+				var prefix:String = (tableProps.has('alias')?	
+					'${quoteIdent(tableProps.get('alias'))}.':'');
+				//queryFields += fields.length > 0 ? fields.map(function (f:String)return '${prefix}${quoteIdent(f)}').join(','):'';
+				if(tableProps.has('filter'))
+					filterSql += buildCond(tableProps.get('filter'));
+			
+			}			
+			queryFields += fields.length > 0 ? fields.join(','):'';
+		}		
+		trace('${param.get('action')}:' + tableNames.toString());
 		trace(queryFields);
-		//trace(param.get('values'));
+		trace(setSql);
 		if (tableNames.length>1)
 		{
 			joinSql = buildJoin();
-		}
-			
-		//trace(joinSql);
-		filterSql = buildCond();
+		}			
+		if(param.exists('filter'))
+			filterSql += buildCond(param.get('filter'));
 	}
 	
-	function buildFields(name:String, table:StringMap<String>):Array<String>
+	function buildFieldsSql(name:String, table:StringMap<String>):Array<String>
 	{
-		var prefix = (table.exists('alias')?quoteIdent(table.get('alias')):name);
+		var prefix = (table.exists('alias')?quoteIdent(table.get('alias')):'');
 		if (table.exists('fields'))
 		{
 			return table.get('fields').split(',').map(function(field) return '$prefix.${quoteIdent(field)}');
 		}
-		return [];
+		return S.tableFields(name);
 	}
 	
 	public function json_encode():Void

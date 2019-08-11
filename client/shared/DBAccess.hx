@@ -1,5 +1,6 @@
 package shared;
 
+import state.UserState;
 import state.AppState;
 import action.AppAction.*;
 import haxe.Serializer;
@@ -19,7 +20,14 @@ import view.shared.OneOf;
  * @author axel@cunity.me
  */
 
-typedef DBAccessProps = Dynamic;
+//typedef DBAccessProps = Dynamic;
+typedef DBAccessProps = 
+{
+	action:String,
+	className:String,
+	dataSource:DbData,
+	user:UserState
+}
 
 class DBAccess
 {
@@ -51,7 +59,7 @@ class DBAccess
 	public static function update(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			trace(props.dataSource);
+			trace(props);
 			//trace(getState());
 			if (!props.user.loggedIn)
 			{
@@ -73,7 +81,7 @@ class DBAccess
 				jwt:props.user.jwt,
 				className:props.className,
 				action:props.action,
-				dbData:hS.serialize(props.dataSource)
+				dbData:hS.serialize(props.dataSource)..toString()
 			},
 			function(data:DbData)
 			{				

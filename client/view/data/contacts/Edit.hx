@@ -212,8 +212,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{
 			dataAccess['edit'].view[k].value = Reflect.field(initialState,k);
 		}
-		setState({actualState:initialState,initialState: initialState});		
-				
+		var actualState = copy(initialState);
+		Reflect.deleteField(actualState,'id');
+		setState({actualState:actualState,initialState: initialState});		
+		
 		//trace(formRef.current != null);
 		if(formRef.current != null)
 		{
@@ -265,8 +267,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//var elements:HTMLCollection = target.elements;
 		//trace(elements.each(function(name:String, el:Dynamic)
 		//trace(elements.dynaMap());
-		trace(state.actualState);
-		trace(state.initialState);
+		//trace(state.actualState);
+		trace(state.initialState.id);
 		/*{
 			//trace('$name => $el');
 			//trace(el.value);
@@ -278,7 +280,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var aState = state.actualState;
 		for(k in dataAccess['edit'].view.keys())
 		{
-			//trace(k);
+			if(k=='id')
+				continue;
 			try 
 			{
 				var item:Dynamic = elements.namedItem(k);
@@ -312,15 +315,17 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		dbData = new DbData();
 		dbData.dataParams = [
-				"contacts" => [
-					"data" => aState
-				]
-			];
+			"contacts" => [
+				"data" => aState,
+				"filter" => 'id|${state.initialState.id}'
+			]
+		];
+		trace(Reflect.fields(aState));
 		var dbaProps:DBAccessProps = 
 		{
 			action:'update',
 			className:'data.Contacts',
-			dataSoure:dbData,
+			dataSource:dbData,
 			user:props.user
 		};
 		

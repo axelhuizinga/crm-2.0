@@ -2,7 +2,7 @@ package model;
 typedef Contact = 
 {
 	//{"name":"id","type":"bigint","default":"nextval('contacts_id_seq'::regclass)","attnum":"1","required":true}
-	id:Int,
+	?id:Int,
 	//{"name":"mandator","type":"bigint","default":"","attnum":"2","required":true}
 	mandator:Int,
 	//{"name":"creation_date","type":"timestamp with time zone","default":"now()","attnum":"3","required":false}

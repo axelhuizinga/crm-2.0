@@ -103,12 +103,14 @@ class S
 		{
 			trace(Web.getMethod());
 			trace(Web.getClientHeaders());
+			try {
+				Model.binary(params.get('dbData'));
+			}
 			exit( { error:"required params action and/or className missing" } );
 		}
 			
 		dbh = new PDO('pgsql:host=$dbHost;dbname=$db',dbUser,dbPass,Syntax.array(['client_encoding','UTF8']));
-		//dbh.set_charset("utf8");
-		//trace(dbh.errorInfo());
+
 		var jwt:String = params.get('jwt');
 		//var id:String = params.get('id');
 		trace(jwt +':' + (jwt != null));
@@ -182,17 +184,13 @@ class S
 				dbData.dataRows.push(Lib.hashOfAssociativeArray(v));			
 			});			
 		}
-
-		//trace(dbData.dataRows[0]);
-		//trace(dbData.dataRows[dbData.dataRows.length-2]);
-		/*var b:Bytes = s.serialize(dbData);
-		var v:DbData = s.unserialize(b, DbData);
-		trace(v);*/
+		trace(dbData);
 		return sendbytes(s.serialize(dbData));
 	}
 
-	public static function sendErrors(dbData:DbData, ?err:Map<String,Dynamic>):Bool
+	public static function sendErrors(dbData:DbData, ?err:Map<String,Dynamic>, ?pos:PosInfos):Bool
 	{
+	 	trace('${pos.fileName}::${pos.lineNumber}');
 		var s:Serializer = new Serializer();
 		if (err != null)
 		{
@@ -201,6 +199,7 @@ class S
 				dbData.dataErrors[k] = err[k];
 			}
 		}
+		trace(dbData);
 		return sendbytes(s.serialize(dbData));
 	}
 	
@@ -214,6 +213,7 @@ class S
 				dbData.dataInfo[k] = info[k];
 			}
 		}
+		trace(dbData);
 		return sendbytes(s.serialize(dbData));
 	}
 	
@@ -300,7 +300,7 @@ class S
 		return d;
 	}
 
-	public static function errorInfo(m:String,?pos:PosInfos):String
+	public static function errorInfo(m:Dynamic,?pos:PosInfos):String
 	{
 		if(pos==null)
 			return m;

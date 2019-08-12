@@ -1,5 +1,6 @@
 package shared;
 
+import js.html.Blob;
 import state.UserState;
 import state.AppState;
 import action.AppAction.*;
@@ -25,7 +26,7 @@ typedef DBAccessProps =
 {
 	action:String,
 	className:String,
-	dataSource:DbData,
+	dataSource:Map<String,Map<String,Dynamic>>,
 	user:UserState
 }
 
@@ -72,8 +73,8 @@ class DBAccess
 			}	
 			var spin:Dynamic = dispatch(AppWait);
 			trace(spin);
-			var hS:hxbit.Serializer = new hxbit.Serializer();
-			trace(hS.serialize(props.dataSource));
+			//var hS:hxbit.Serializer = new hxbit.Serializer();
+			//trace(hS.serialize(props.dataSource));
 			var bL:XMLHttpRequest = BinaryLoader.create(
 			'${App.config.api}', 
 			{				
@@ -81,7 +82,7 @@ class DBAccess
 				jwt:props.user.jwt,
 				className:props.className,
 				action:props.action,
-				dbData:hS.serialize(props.dataSource)..toString()
+				dataSource:Serializer.run(props.dataSource)
 			},
 			function(data:DbData)
 			{				

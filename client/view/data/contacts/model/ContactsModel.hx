@@ -35,7 +35,7 @@ class ContactsModel
 				'address_2'=>{label:'Hausnummer'},
 				'plz'=>{label:'PLZ'},
 				'city'=>{label:'Ort'},
-				'state'=>{label:'Status'},
+				'state'=>{label:'Status',type:Select,options:['active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
 				'country_code'=>{label:'Land'},
 				'c/o'=>{label: 'c/o'},
 				'creation_date'=>{label: 'Hinzugefügt', type:DateTimeControl, disabled: true, 

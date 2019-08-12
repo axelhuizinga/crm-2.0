@@ -35,11 +35,6 @@ class Contacts extends Model
 	
 	public static function create(param:StringMap<String>):Contacts
 	{
-		trace(!param.exists('table')?'Y':'N');
-		if(!(param.exists('table')&&param.get('table').any2bool()))
-		{
-			param.set('table', 'contacts');
-		}
 		trace(param);
 		var self:Contacts = new Contacts(param);		
 

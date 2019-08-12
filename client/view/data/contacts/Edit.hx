@@ -313,19 +313,17 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function update(aState:Contact)
 	{
-		dbData = new DbData();
-		dbData.dataParams = [
-			"contacts" => [
-				"data" => aState,
-				"filter" => 'id|${state.initialState.id}'
-			]
-		];
 		trace(Reflect.fields(aState));
 		var dbaProps:DBAccessProps = 
 		{
 			action:'update',
 			className:'data.Contacts',
-			dataSource:dbData,
+			dataSource:[
+				"contacts" => [
+					"data" => aState,
+					"filter" => 'id|${state.initialState.id}'
+				]
+			],
 			user:props.user
 		};
 		

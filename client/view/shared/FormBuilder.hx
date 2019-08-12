@@ -1,5 +1,6 @@
 package view.shared;
 
+import shared.Utils;
 import haxe.ds.StringMap;
 import react.ReactType;
 import haxe.ds.Map;
@@ -81,6 +82,7 @@ class FormBuilder {
 	function renderFormInputElements(fields:Map<String, FormField>, model:String, ?compOnChange:Function):ReactFragment
 	{
 		var ki:Int = 0;
+		trace(Utils.genKey(1));
 		//return fields.array().map(function(field:FormField){
 		return [for(name => field in fields){
 			if(name=='id')trace (field.type +' $name:' + field.value);

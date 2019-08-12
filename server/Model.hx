@@ -143,11 +143,6 @@ class Model
 		var sqlBf:StringBuf = new StringBuf();
 		sqlBf.add('SELECT COUNT(*) AS count FROM ');
 
-		if (tableNames.length==0)
-		{
-			dbData.dataErrors['tableNames'] = tableNames.toString();
-			S.sendErrors(dbData);
-		}
 		if (tableNames.length>1)
 		{
 			sqlBf.add(buildJoin());
@@ -350,7 +345,7 @@ class Model
 			if (!success)
 			{
 				trace(stmt.errorInfo());
-				return null;
+				S.sendErrors(dbData,['execute' =>S.errorInfo(stmt.errorInfo())]);
 			}
 			dbData.dataInfo['count'] = stmt.rowCount();
 			if(action=='update'||action=='delete')
@@ -371,7 +366,7 @@ class Model
 			{
 				trace(stmt.errorInfo());
 				dbData.dataErrors = [
-					'error' => stmt.errorInfo(),
+					'error' => S.errorInfo(stmt.errorInfo()),
 					'sql'	=> sql
 				];
 				S.sendErrors(dbData);
@@ -386,7 +381,8 @@ class Model
 			trace(data);
 			return(data);	
 		}
-		return Syntax.assocDecl({'error': stmt.errorInfo()});
+		S.sendErrors(dbData, ['error'=> S.errorInfo(stmt.errorInfo())]);
+		return null;
 	}
 	
 	public  function query(sql:String, ?resultType):NativeArray
@@ -434,9 +430,7 @@ class Model
 		{
 			sqlBf.add(filterSql);
 		}		
-
-		var limit:String = param.get('limit');
-		buildLimit((limit == null?'25':limit), sqlBf);	//	TODO: CONFIG LIMIT DEFAULT
+		//buildLimit((limit == null?'25':limit), sqlBf);	//	TODO: CONFIG LIMIT REQUIRES SUBSELECT ON UPDATE 
 		trace(sqlBf.toString());
 		//return null;
 		return execute(sqlBf.toString());
@@ -460,7 +454,7 @@ class Model
 			var dots = wData[0].split('.');
 			if(dots.length>2)
 			{
-				S.sendErrors(dbData,['invalidFilter'=>wData[0]]);
+				S.sendErrors(dbData,['invalidFilter'=>S.errorInfo(wData[0])]);
 			}
 
 			var values:Array<String> = wData.slice(2);			
@@ -544,16 +538,18 @@ class Model
 		return true;
 	}
 
-	public function buildSet(data:StringMap<String>, alias:String):String
+	public function buildSet(data:Dynamic, alias:String):String
 	{
 		//var sqlBf:StringBuf = new StringBuf();
 		alias = alias!=null?'${quoteIdent(alias)}.':'';
-		var set:Array<String> = new Array();
-		for(key in data.keys())
+		var set:Array<String> = new Array();		
+		trace(Reflect.fields(data));
+		for(key in Reflect.fields(data))
 		{
-			set.push('${alias}$key=?');
-			setValues.push(data.get(key));
+			set.push('${alias}${quoteIdent(key)}=?');
+			setValues.push(Reflect.field(data,key));
 		}
+		trace( 'SET ${set.join(',')} ');
 		return 'SET ${set.join(',')} ';
 	}
 	
@@ -595,6 +591,15 @@ class Model
 		}
 		return _jsonb_array_text.toString();
 	}
+
+	public static function binary(param:Bytes)
+	{
+		param = Bytes.ofString(Web.getPostData());
+		var d:DbData = new DbData();
+		trace(param);
+		var s:Serializer = new Serializer();
+		trace(s.unserialize(param, DbData));
+	}
 	
 	public function new(?param:StringMap<String>) 
 	{
@@ -606,13 +611,14 @@ class Model
 		filterSql = '';
 		filterValues = new Array();
 		setValues = new Array();
-		queryFields = '';
+		queryFields = setSql = '';
 		tableNames = new Array();
 		trace('has dbData:' + (param.exists('dbData')?'Y':'N'));
 		if(param.exists('dbData'))
 		{
+			trace(param.get('dbData'));
 			trace(Bytes.ofString(param.get('dbData')));
-			var s:Serializer = new Serializer();
+			var s:Serializer = new Serializer();			
 			dParam = s.unserialize(Bytes.ofString(param.get('dbData')),DbData);
 			dataSource = dParam.dataParams;
 			trace(dataSource.toString());
@@ -625,6 +631,7 @@ class Model
 				fieldNames = param.has('fields')? param.get('fields').split(',').map(function (f)return quoteIdent(f)): S.tableFields(table);
 				tableNames = [table];
 				queryFields = fieldNames.join(',');
+				trace(tableNames);
 			}
 			else
 				tableNames = [];
@@ -649,9 +656,6 @@ class Model
 					setSql += buildSet(tableProps.get('data'), tableProps.get('alias'));
 				}
 				fields = fields.concat(buildFieldsSql(tableName, tableProps));	
-				var prefix:String = (tableProps.has('alias')?	
-					'${quoteIdent(tableProps.get('alias'))}.':'');
-				//queryFields += fields.length > 0 ? fields.map(function (f:String)return '${prefix}${quoteIdent(f)}').join(','):'';
 				if(tableProps.has('filter'))
 					filterSql += buildCond(tableProps.get('filter'));
 			

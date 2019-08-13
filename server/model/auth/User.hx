@@ -62,7 +62,8 @@ class User extends Model
 	
 	public function userIsAuthorized():UserAuth
 	{
-		var stmt:PDOStatement = S.dbh.prepare('SELECT user_name FROM ${S.db}.users WHERE user_name=:user_name AND active=TRUE',Syntax.array(null));
+		var sql:String = 'SELECT user_name FROM ${S.db}.users WHERE user_name=:user_name AND active=TRUE';
+		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}'})))
 		{
 			S.sendErrors(dbData,['${param.get('action')}' => stmt.errorInfo()]);
@@ -105,6 +106,7 @@ class User extends Model
 		}
 		else
 		{
+			trace(stmt.rowCount+':$sql');
 			S.sendErrors(dbData,['${param.get('action')}'=>'user_name']);
 			return UserAuth.NotOK;
 		}
@@ -189,8 +191,8 @@ class User extends Model
 		var success:Bool = Model.paramExecute(stmt, //null
 			Lib.associativeArrayOfObject({':id': id, ':request': '$request'})
 		);
-		trace(stmt.errorCode());
-		trace(stmt.errorInfo());
+		if(Std.parseInt(stmt.errorCode())>0)
+			trace(stmt.errorInfo());
 		return success;
 	}
 

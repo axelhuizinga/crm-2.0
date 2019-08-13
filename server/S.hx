@@ -184,7 +184,7 @@ class S
 				dbData.dataRows.push(Lib.hashOfAssociativeArray(v));			
 			});			
 		}
-		trace(dbData);
+		trace(Std.string(dbData).substr(0,250));
 		return sendbytes(s.serialize(dbData));
 	}
 
@@ -219,13 +219,13 @@ class S
 	
 	public static function sendbytes(b:Bytes):Bool
 	{		
-		Web.setHeader('Content-Type', 'text/plain');
+		//Web.setHeader('Content-Type', 'text/plain');
 		//trace(b.toString());
 		/*var s:Serializer = new Serializer();
 		var v:DbData = s.unserialize(b, DbData);
 		trace(v);*/
 		trace('OK ${b.length}');
-		//Web.setHeader('Content-Type', 'application/octet-stream');
+		Web.setHeader('Content-Type', 'application/octet-stream');
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 		Web.setHeader("Access-Control-Allow-Credentials", "true");
 		Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');
@@ -234,6 +234,7 @@ class S
 		out.bigEndian = true;
 		out.write(b);
 		Sys.exit(0);
+		trace('SHOULD NEVER HAPPEN');
 		return true;
 	}
 	

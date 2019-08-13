@@ -90,6 +90,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
+		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
+		{
+			//~/ 
+			trace('nothing selected - redirect');
+			var baseUrl:String = props.match.path.split(':section')[0];
+			props.history.push('${baseUrl}List');
+		}		
 		dataAccess = ContactsModel.dataAccess;
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));

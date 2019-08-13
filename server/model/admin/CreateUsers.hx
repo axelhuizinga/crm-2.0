@@ -170,7 +170,7 @@ class CreateUsers extends Model
 			*/;
 			trace(sql);
 			var res:PDOStatement = S.dbh.query(sql);
-			if (untyped res == false)
+			if (res.errorCode() != '0000')
 			{
 				trace(S.dbh.errorInfo());
 				S.exit({data:'error'});

@@ -42,12 +42,14 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 		super(props);	
 		trace(Reflect.fields(props));
 		trace(props.match.params.section);
-		state = {
+		state = /*{
 			clean:true,
 			//formApi: new FormApi(this),
 			hasError:false,
 			mounted:false,
-			loading:true,
+			loading:true,*/
+		App.initEState({
+			//dataTable:[],loading:false,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
 			sideMenu:FormApi.initSideMenu( this,
 				[
 					{
@@ -67,7 +69,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 					section: props.match.params.section==null? 'DBSync':props.match.params.section, 
 					sameWidth: true}					
 			)
-		};
+		},this);
 		trace(Reflect.fields(props));		
 	}
 	

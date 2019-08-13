@@ -106,7 +106,6 @@ class SyncExternalClients extends Model
             }
             catch(ex:Dynamic)
             {
-                trace(Type.typeof(foo));
                 trace(row == null?'true':'false');
                 //trace(ex);
             }

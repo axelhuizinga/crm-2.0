@@ -82,7 +82,8 @@ class DBAccess
 				jwt:props.user.jwt,
 				className:props.className,
 				action:props.action,
-				dataSource:Serializer.run(props.dataSource)
+				dataSource:Serializer.run(props.dataSource),
+				devIP:App.devIP
 			},
 			function(data:DbData)
 			{				

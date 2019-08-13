@@ -55,6 +55,7 @@ class BinaryLoader {
 
 	public dynamic function onError( msg : String ) {
 		Out.dumpStack(CallStack.callStack());
+		trace(msg);
 		throw msg;
 	}
 

@@ -175,7 +175,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			},
 			function(data:DbData)
 			{
-				App.jwtCheck(data);
+				//App.jwtCheck(data);
 				trace(data);
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				trace(data.dataErrors.keys().hasNext());
@@ -196,8 +196,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		//FormApi.requests.push( 
 		trace(App.config.api);
 		BinaryLoader.create(
-			'${App.config.api}', 
-			//'https://pitverwaltung.de/sync/proxy.php', 
+			//'${App.config.api}', 
+			'https://pitverwaltung.de/sync/proxy.php', 
 			{
 				id:props.user.id,
 				jwt:props.user.jwt,
@@ -209,7 +209,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			},
 			function(data:DbData)
 			{
-				App.jwtCheck(data);
+				//App.jwtCheck(data);
 				//trace(data);
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				trace(data.dataRows.length);

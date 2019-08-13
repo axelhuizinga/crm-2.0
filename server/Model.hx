@@ -347,17 +347,19 @@ class Model
 				trace(stmt.errorInfo());
 				S.sendErrors(dbData,['execute' =>S.errorInfo(stmt.errorInfo())]);
 			}
-			dbData.dataInfo['count'] = stmt.rowCount();
+			dbData.dataInfo['count'] = stmt.rowCount();			
+			trace('>>$action<<');
 			if(action=='update'||action=='delete')
 			{
 				//EXIT
+				trace('done');
 				S.sendInfo(dbData);
 			}
 			if (dbData.dataInfo['count']>0)
 			{
 				data = stmt.fetchAll(PDO.FETCH_ASSOC);
 			}			
-			trace(data);		
+			trace(Lib.toHaxeArray(data).join(','));		
 			return(data);		
 		}
 		else {
@@ -378,7 +380,7 @@ class Model
 			{
 				data = stmt.fetchAll(PDO.FETCH_ASSOC);				
 			}			
-			trace(data);
+			trace(Std.string(data).substr(0,150));
 			return(data);	
 		}
 		S.sendErrors(dbData, ['error'=> S.errorInfo(stmt.errorInfo())]);
@@ -543,7 +545,7 @@ class Model
 		//var sqlBf:StringBuf = new StringBuf();
 		alias = alias!=null?'${quoteIdent(alias)}.':'';
 		var set:Array<String> = new Array();		
-		trace(Reflect.fields(data));
+		trace(Reflect.fields(data).join(','));
 		for(key in Reflect.fields(data))
 		{
 			set.push('${alias}${quoteIdent(key)}=?');
@@ -578,12 +580,12 @@ class Model
 			var val:Dynamic = Reflect.field(row, f);
 			if (val == null)
 			{
-				trace(null);
+				//trace(null);
 				val = '""';
 			}
 			else if (val == '')
 			{
-				trace("''");
+				//trace("''");
 				val = '""';
 			}
 			var _comma:String = _jsonb_array_text.length > 2?',':'';
@@ -605,6 +607,7 @@ class Model
 	{
 		this.param = param;
 		trace(param);
+		action = param.get('action');
 		data = {};
 		data.rows = new NativeArray();
 		dbData = new DbData();
@@ -613,7 +616,7 @@ class Model
 		setValues = new Array();
 		queryFields = setSql = '';
 		tableNames = new Array();
-		trace('has dbData:' + (param.exists('dbData')?'Y':'N'));
+		trace('exists dbData:' + (param.exists('dbData')?'Y':'N'));
 		if(param.exists('dbData'))
 		{
 			trace(param.get('dbData'));
@@ -625,10 +628,13 @@ class Model
 		}
 		else 
 		{
-			table = param.get('table');
+			if(param.exists('table'))
+				table = param.get('table');
 			if(table != null)
 			{
-				fieldNames = param.has('fields')? param.get('fields').split(',').map(function (f)return quoteIdent(f)): S.tableFields(table);
+				fieldNames = param.exists('fields')? 
+					param.get('fields').split(',').map(function (f)return quoteIdent(f)): 
+					S.tableFields(table).map(function (f)return quoteIdent(f));
 				tableNames = [table];
 				queryFields = fieldNames.join(',');
 				trace(tableNames);
@@ -656,9 +662,9 @@ class Model
 					setSql += buildSet(tableProps.get('data'), tableProps.get('alias'));
 				}
 				fields = fields.concat(buildFieldsSql(tableName, tableProps));	
-				if(tableProps.has('filter'))
+				if(tableProps.exists('filter'))
 					filterSql += buildCond(tableProps.get('filter'));
-			
+				trace('filterSql:$filterSql::${}');
 			}			
 			queryFields += fields.length > 0 ? fields.join(','):'';
 		}		

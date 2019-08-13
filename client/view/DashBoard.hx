@@ -121,9 +121,9 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 		<>
 			<div className="tabNav2" >
 				<Tabs className="is-boxed" >
-						<TabLink to="/DashBoard/Roles" ${...props}>Benutzer</TabLink>
-						<TabLink to="/DashBoard/Settings" ${...props}>Meine Einstellungen</TabLink>
-						<TabLink to="/DashBoard/Setup" ${...props}>Setup</TabLink>
+					<TabLink to="/DashBoard/Roles" ${...props}>Benutzer</TabLink>
+					<TabLink to="/DashBoard/Settings" ${...props}>Meine Einstellungen</TabLink>
+					<TabLink to="/DashBoard/Setup" ${...props}>Setup</TabLink>
 				</Tabs>
 			</div>
             <div className="tabContent2" >

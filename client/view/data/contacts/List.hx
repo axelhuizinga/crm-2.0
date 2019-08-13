@@ -84,7 +84,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			},
 			function(data:DbData)
 			{			
-				App.jwtCheck(data);
+				//App.jwtCheck(data);
 				trace(data.dataInfo);
 				trace(data.dataRows.length);
 				if(data.dataRows.length>0) 

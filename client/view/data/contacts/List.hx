@@ -50,6 +50,17 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			loading:false,
 			selectedData:new IntMap(),			
 			selectedRows:[],
+			sideMenu:FormApi.initSideMenu2( this,
+				{
+					dataClassPath:'data.Contacts',
+					label:'Auswahl',
+					section: 'List',
+					items: menuItems
+				}					
+				,{	
+					section: props.match.params.section==null? 'Edit':props.match.params.section, 
+					sameWidth: true
+				}),
 			values:new Map<String,Dynamic>()
 		},this);
 		trace(state.loading);
@@ -209,16 +220,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		var sideMenu = state.sideMenu;
 		trace(sideMenu.section);
-		for(mI in sideMenu.menuBlocks['Contact'].items)
+		for(mI in sideMenu.menuBlocks['List'].items)
 		{
 			switch(mI.action)
 			{
-				case 'editTableFields':
+				case 'edit'|'delete':
 					mI.disabled = state.selectedRows.length==0;
-				case 'save':
-					mI.disabled = state.clean;
 				default:
-
 			}			
 		}
 		return sideMenu;

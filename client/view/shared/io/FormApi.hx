@@ -159,22 +159,27 @@ class FormApi
 	public function callMethod(method:String, ?e:Event):Bool
 	{
 		//trace(Reflect.fields(e));
-		var targetSection = cast(e.target, Element).dataset.section;
+		var eTarget:Element = cast(e.target, Element);
+		var targetSection = eTarget.dataset.section;
 		trace(targetSection);
 		if(targetSection != comp.props.match.params.section)
 		{
-			var match:RouterMatch = comp.props.match;
+			/*var match:RouterMatch = comp.props.match;
 			var baseUrl:String = match.path.split(':section')[0];
 			var fS:FormState = comp.state;
 			var sData = fS.selectedData;			
 			baseUrl = '${baseUrl}${targetSection}/${method}';		
 			trace('${baseUrl}/${match.params.id}');	
+			//comp.setState(copy(comp.state,{formStateKey:baseUrl}));*/
+			//comp.props.history.push('${baseUrl}/${match.params.id==null?"":match.params.id}');
 			//comp.setState(copy(comp.state,{formStateKey:baseUrl}));
-			comp.props.history.push('${baseUrl}/${match.params.id==null?"":match.params.id}');
-			//comp.setState(copy(comp.state,{formStateKey:baseUrl}));
+			comp.props.history.push(getUrl(eTarget.dataset.action,targetSection));
+			return true;
 		}
-		if(section !=null)
+		if(targetSection !=null)
 		{
+			comp.props.history.push(getUrl(eTarget.dataset.action));
+			return true;			
 			var fun:Function = Reflect.field(section,method);
 			if(Reflect.isFunction(fun))
 			{
@@ -195,11 +200,13 @@ class FormApi
 		return false;
 	}
 
-	/*public function handleChange(e:InputEvent)
+	public function getUrl(?action:String,?targetSection:String):String
 	{
-		var t:InputElement = cast e.target;
-		trace('${t.name} ${t.value}');
-	}*/
+		var match:RouterMatch = comp.props.match;
+		var baseUrl:String = match.path.split(':section')[0];		
+		var section = match.params.section;
+		return '${baseUrl}${targetSection==null?section:targetSection}/${action}/${match.params.id==null?"":match.params.id}';
+	}
 	
 	public function selectAllRows(state:FormState,unselect:Bool = false)
 	{
@@ -253,7 +260,7 @@ class FormApi
 		return jsx('
 			<div className="columns">
 				${content}
-				<$SMenu className="menu" {...sM} ${...comp.props} itemHandler=${itemHandler} />
+				<$SMenu className="menu" ${...sM} ${...comp.props} itemHandler=${itemHandler} />
 			</div>			
 		');
 	}
@@ -597,9 +604,18 @@ class FormApi
 		return ids.pInts();
 	}
 
+	public static function initSideMenu2(comp:Dynamic, sMb:SMenuBlock, sM:SMenuProps):SMenuProps
+	{
+		for(sI in sMb.items)
+			if(sI.section == null)
+				sI.section = sM.section;
+		sM.menuBlocks = [sM.section => sMb];
+		return sM;
+	}
+
 	public static function initSideMenu(comp:Dynamic, sMa:Array<SMenuBlock>, sM:SMenuProps):SMenuProps
 	{
-		var sma:SMenuBlock = {};
+		var sma:SMenuBlock;
 		sM.menuBlocks = [
 			for (sma in sMa)
 				sma.section => sma

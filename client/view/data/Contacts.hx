@@ -87,7 +87,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		
 		state =  App.initEState({
 			dataTable:[],loading:false,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
-			sideMenu:FormApi.initSideMenu( this,
+			/*sideMenu:FormApi.initSideMenu( this,
 				[
 					{
 						dataClassPath:'data.Contacts',
@@ -105,7 +105,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				,{	
 					section: props.match.params.section==null? 'Contact':props.match.params.section, 
 					sameWidth: true}					
-			)			
+			)			*/
 		},this);
 		//trace(state.selectedData);
 		//trace(state.loading);		
@@ -384,23 +384,5 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				null;					
 		}		
 	}
-	
-	function updateMenu(?viewClassPath:String):SMenuProps
-	{
-		var sideMenu = state.sideMenu;
-		trace(sideMenu.section);
-		for(mI in sideMenu.menuBlocks['Contact'].items)
-		{
-			switch(mI.action)
-			{
-				case 'editTableFields':
-					mI.disabled = state.selectedRows.length==0;
-				case 'save':
-					mI.disabled = state.clean;
-				default:
 
-			}			
-		}
-		return sideMenu;
-	}
 }

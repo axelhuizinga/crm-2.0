@@ -248,7 +248,7 @@ class Model
 		if (order != null)
 			buildOrder(order, sqlBf);
 		var limit:String = param.get('limit');
-		buildLimit((limit == null?'25':limit), sqlBf);	//	TODO: CONFIG LIMIT DEFAULT
+		buildLimit((limit == null?'150':limit), sqlBf);	//	TODO: CONFIG LIMIT DEFAULT
 		return execute(sqlBf.toString());
 		//return execute(sqlBf.toString(), q,filterValuess);
 	}

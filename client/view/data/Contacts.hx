@@ -128,13 +128,13 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
     {
 		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
         return {
-			storeFormChange: function(url:String, formState:FormState) 
+			storeFormChange: function(path:String, formState:FormState) 
 			{
 				trace(Reflect.fields(formState));
 				trace(formState.selectedRows.length);
 				return;
 				dispatch(AppAction.FormChange(
-					url,
+					path,
 					formState
 				));
 			},

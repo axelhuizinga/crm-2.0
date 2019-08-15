@@ -355,14 +355,14 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			var id:String = (dR.exists(primary)? '${dR.get(primary)}':'');
 			var fRRef:ReactRef<TableRowElement> = (row==0?firstRowRef:null);
 			dRs.push(
-			jsx('<$Tr key=${dR.get("id")} columns=${props.dataState.columns} data=${dR} fieldNames=${fieldNames} firstTableRow=${fRRef} row=${row++} parentComponent=${props.parentComponent}/>')
-			);
+			jsx('<$Tr key=${dR.get("id")} columns=${props.dataState.columns} data=${dR} firstTableRow=${fRRef} fieldNames=${fieldNames} row=${row++} parentComponent=${props.parentComponent}/>')
+			);//
 		}
 		trace(dRs.length);
 		return dRs;
 	}
 
-	function renderRows3(?dRows:Array<Map<String,Dynamic>>):ReactFragment
+	/*function renderRows3(?dRows:Array<Map<String,Dynamic>>):ReactFragment
 	{
 		if (dRows == null)
 			dRows = props.data;
@@ -383,7 +383,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 
 		trace(trs.length);
 		return trs.map(function (tr:Tr)return tr.me);
-	}	
+	}	*/
 	
 	public function select(mEv:MouseEvent, tr:Tr)
 	{
@@ -557,7 +557,13 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			fixedHeaderCell.setAttribute('style', 'width:${w}px');
 			i++;
 		}
-		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');		
+		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
+		var firstSelectedRow = firstRowRef.current.parentElement.querySelector('[class="is-selected"]');
+		trace(firstSelectedRow.offsetTop);
+		if(firstSelectedRow!=null)
+		{
+			Browser.document.querySelector('[class="grid-container-inner"]').scrollTo(0,firstSelectedRow.offsetTop);
+		}
 	}
 	
 	override function componentDidMount()//,snapshot:Dynamic

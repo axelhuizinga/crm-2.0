@@ -95,7 +95,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			},
 			function(data:DbData)
 			{			
-				//App.jwtCheck(data);
+				App.jwtCheck(data);
 				trace(data.dataInfo);
 				trace(data.dataRows.length);
 				if(data.dataRows.length>0) 
@@ -214,6 +214,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				${renderResults()}
 			</form>
 		</>'));		
+	}
+
+	function select(data:IntMap<Map<String,Dynamic>>)
+	{
+		
 	}
 	
 	function updateMenu(?viewClassPath:String):SMenuProps

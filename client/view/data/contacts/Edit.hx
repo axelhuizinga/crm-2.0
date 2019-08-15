@@ -67,7 +67,7 @@ using  shared.Utils;
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		{label:'Anzeigen',action:'find',section: 'List'},
+		{label:'Auswahl',action:'find',section: 'List'},
 		{label:'Bearbeiten',action:'edit'},
 		{label:'Neu', action:'add'},
 		{label:'Löschen',action:'delete'}
@@ -103,6 +103,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		formRef = React.createRef();
 		//var formBuilder = new FormBuilder(this);
 		trace(props.user);
+		trace(App.store.appware)
 		initialState = {
 			id:2000328,
 			edited_by: props.user.id,				

@@ -10,6 +10,7 @@ import react.ReactComponent.ReactFragment;
 import react.ReactComponent;
 import react.PureComponent;
 import react.ReactMacro.jsx;
+import react.React;
 import react.ReactRef;
 import react.ReactUtil.copy;
 import view.shared.FormState;
@@ -47,10 +48,12 @@ class Tr extends PureComponentOf<TrProps,TrState>
 {
 	public var me:ReactFragment;
 	var selected:Bool;
+	var ref:ReactRef<TableRowElement>;
 
 	public function new(?props:Dynamic)
 	{
 		super(props);	
+		ref = React.createRef();
 		var match:RouterMatch = props.parentComponent.props.match;
 		var id:String = props.data != null ? props.data.get('id'): '';
 		//trace('$id ${match.params.id !=null && match.params.id.indexOf(id)>-1}');
@@ -60,7 +63,8 @@ class Tr extends PureComponentOf<TrProps,TrState>
 			var fS:FormState = props.parentComponent.state;
 			var sData = fS.selectedData;
 			var baseUrl:String = match.path.split(':section')[0];
-			baseUrl = '${baseUrl}${match.params.section}/${match.params.action}';			
+			baseUrl = '${baseUrl}${match.params.section}/${match.params.action}';		
+			trace('props.parentComponent.props.storeFormChange:${props.parentComponent.props.storeFormChange}');
 			props.parentComponent.props.storeFormChange(baseUrl,copy(fS,{selectedData:sData}));
 		}
 		selected = state.selected;
@@ -68,10 +72,12 @@ class Tr extends PureComponentOf<TrProps,TrState>
 
 	override function componentDidMount()//,snapshot:Dynamic
 	{
-		if(props.row<3)
+		/*if(selected && ref.current != null)
 		{
-			//trace(props.data);
-		}
+			trace(ref.current.offsetTop);
+			ref.current.scrollTo(0, ref.current.offsetTop);
+
+		}*/
 	}
 
 	function renderCells(rdMap:Map<String,Dynamic>):ReactFragment
@@ -126,6 +132,11 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		if(props.row==0)
 		{
 			//trace(props.data);setFormState
+			ref = props.firstTableRow;
+		}
+		else if(selected)
+		{
+			//re
 		}
 		if(props.data==null)
 		{
@@ -137,8 +148,9 @@ class Tr extends PureComponentOf<TrProps,TrState>
 			cl = state.selected ? 'is-selected' : '';
 		}
 		//trace('class:$cl');
+		var makeRef:String = selected && props.row>0?'ref=${ref}':'';
 		me = jsx('
-		<tr className=${cl} data-id=${props.data["id"]} title=${props.data["id"]} ref=${props.firstTableRow} onClick=${select}>
+		<tr className=${cl} data-id=${props.data["id"]} title=${props.data["id"]} ref=${ref} onClick=${select}>
 		${renderCells(props.data)}
 		</tr>
 		');
@@ -152,7 +164,7 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		trace(props.row +':' + props.data.toString());
 		//setFormState
 		//setState({selected:!state.selected});
-		selected = !state.selected;
+		selected = mEvOrID.selected ? true:!state.selected;
 		//trace(props.parentComponent);
 		if(props.parentComponent != null)
 		{

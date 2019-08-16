@@ -87,25 +87,6 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		
 		state =  App.initEState({
 			dataTable:[],loading:false,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
-			/*sideMenu:FormApi.initSideMenu( this,
-				[
-					{
-						dataClassPath:'data.Contacts',
-						label:'Auswahl',
-						section: 'List',
-						items: List.menuItems
-					},
-					{
-						dataClassPath:'data.Contacts',
-						label:'Bearbeiten',
-						section: 'Edit',
-						items: Edit.menuItems
-					}					
-				]
-				,{	
-					section: props.match.params.section==null? 'Contact':props.match.params.section, 
-					sameWidth: true}					
-			)			*/
 		},this);
 		//trace(state.selectedData);
 		//trace(state.loading);		
@@ -124,10 +105,23 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		Out.dumpStack(CallStack.callStack());
 	}	
 
+	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
+		trace('compareProps:${nextProps!=props}');
+		trace('compareStates:${nextState!=state}');
+		//if(nextState!=state)
+			//return true;
+		return nextProps!=props || false;
+	}
+
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
     {
 		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
         return {
+			select:function(id:Int,data:Map<String,Dynamic>,match:RouterMatch)
+			{
+				trace('select:$id');
+				dispatch(DataAction.CreateSelect(id,data,match));
+			},
 			storeFormChange: function(path:String, formState:FormState) 
 			{
 				trace(Reflect.fields(formState));

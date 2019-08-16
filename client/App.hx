@@ -69,6 +69,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
   	static var STYLES = require('App.scss');
  
+	public static var browserHistory:History;
 	public static var store:Store<AppState>;
 	public static var devIP = Webpack.require('./webpack.local.js').ip;
 	public static var config:Dynamic = Webpack.require('../httpdocs/config.js').config;
@@ -109,6 +110,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		//trace('id:$id jwt:$jwt ' + (!(App.id == null || App.jwt == '')?'Y':'N' ));
 		store = ApplicationStore.create();
 		state = store.getState();
+		browserHistory = state.appWare.history;
 		//trace(store);
 		trace(state.appWare.redirectAfterLogin);
 		//CState.init(store);		

@@ -1,11 +1,12 @@
 package view.table;
 
+import haxe.ds.IntMap;
 import react.router.RouterMatch;
 import js.html.TableRowElement;
 import js.html.MouseEvent;
 import react.ReactMouseEvent;
 import haxe.extern.EitherType;
-import react.ReactComponent.ReactComponentOf;
+import react.ReactComponent.ReactComponentOfProps;
 import react.ReactComponent.ReactFragment;
 import react.ReactComponent;
 import react.PureComponent;
@@ -44,7 +45,7 @@ typedef  TrState =
 	var selected:Bool;
 };
 
-class Tr extends PureComponentOf<TrProps,TrState>
+class Tr extends PureComponentOfProps<TrProps>
 {
 	public var me:ReactFragment;
 	var selected:Bool;
@@ -57,17 +58,12 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		var match:RouterMatch = props.parentComponent.props.match;
 		var id:String = props.data != null ? props.data.get('id'): '';
 		//trace('$id ${match.params.id !=null && match.params.id.indexOf(id)>-1}');
-		state = {cells:[], selected:match.params.id !=null && match.params.id.indexOf(id)>-1?true:false};	
-		if(state.selected)
+		//state = {cells:[], selected:match.params.id !=null && match.params.id.indexOf(id)>-1?true:false};	
+		selected = false;
+		if(match.params.id !=null && match.params.id.indexOf(id)>-1)
 		{
-			var fS:FormState = props.parentComponent.state;
-			var sData = fS.selectedData;
-			var baseUrl:String = match.path.split(':section')[0];
-			baseUrl = '${baseUrl}${match.params.section}/${match.params.action}';		
-			trace('props.parentComponent.props.storeFormChange:${props.parentComponent.props.storeFormChange}');
-			props.parentComponent.props.storeFormChange(baseUrl,copy(fS,{selectedData:sData}));
+			select({select:true});
 		}
-		selected = state.selected;
 	}
 
 	override function componentDidMount()//,snapshot:Dynamic
@@ -142,37 +138,38 @@ class Tr extends PureComponentOf<TrProps,TrState>
 		{
 			return null;
 		}
-		var cl:String = '';
-		if(state !=null)
-		{
-			cl = state.selected ? 'is-selected' : '';
-		}
-		//trace('class:$cl');
+		var cl:String =  selected ? 'is-selected' : '';
+		
+		trace('class:$cl');
 		var makeRef:String = selected && props.row>0?'ref=${ref}':'';
-		me = jsx('
+		return jsx('
 		<tr className=${cl} data-id=${props.data["id"]} title=${props.data["id"]} ref=${ref} onClick=${select}>
 		${renderCells(props.data)}
 		</tr>
 		');
 		//key=${"r"+props.row} 
-		return me;
+		//return me;
 	}
 
 	public function select(mEvOrID:Dynamic)
 	{
 		trace(Type.typeof(mEvOrID));
+		trace('selected:$selected');
 		trace(props.row +':' + props.data.toString());
 		//setFormState
 		//setState({selected:!state.selected});
-		selected = mEvOrID.selected ? true:!state.selected;
+		//selected = mEvOrID.selected ? true:!state.selected;
 		//trace(props.parentComponent);
 		if(props.parentComponent != null)
 		{
-			var fS:FormState = props.parentComponent.state;
+			if(!selected)
+			{
+				props.parentComponent.props.select(props.data['id'], props.data, props.parentComponent.props.match);
+			}
+	
+			/*var fS:FormState = props.parentComponent.state;
 			var sData = fS.selectedData;
-			var match:RouterMatch = props.parentComponent.props.match;
-			var baseUrl:String = match.path.split(':section')[0];
-			baseUrl = '${baseUrl}${match.params.section}/${match.params.action}';
+
 
 			trace('selected:${selected}');
 			if(selected)
@@ -187,10 +184,13 @@ class Tr extends PureComponentOf<TrProps,TrState>
 			}
 			trace(FormApi.params(sData.keys().keysList()));
 			props.parentComponent.props.storeFormChange(baseUrl,copy(fS,{selectedData:sData}));
-			props.parentComponent.props.history.push('${baseUrl}/${FormApi.params(sData.keys().keysList())}');
+			*/
 		}
 		//trace(selected);
-		setState({selected: selected});
+		//setState({selected: mEvOrID.select ? true:!state.selected});
+		selected = mEvOrID.select ? true:!selected;
+		trace('selected:$selected');
+		forceUpdate();
 	}
 
 }

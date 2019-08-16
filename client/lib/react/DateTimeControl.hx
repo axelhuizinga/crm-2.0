@@ -28,7 +28,7 @@ class DateTimeControl
 	{
 		//trace( props.value );
 		this.props = props;
-		trace(Reflect.fields(props));
+		//trace(Reflect.fields(props));
 		fpRef = React.createRef();
 	}
 
@@ -36,7 +36,7 @@ class DateTimeControl
 	{
 		var fP:Dynamic = App.flatpickr;
 		var val = (props.value == null ?'0000.00.00':props.value);
-		trace('$val ${props.options.dateFormat}');
+		//trace('$val ${props.options.dateFormat}');
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
@@ -49,8 +49,8 @@ class DateTimeControl
 		});
 
 		var altInput:InputElement = fpInstance.altInput;
-		trace(fpInstance.altInput.value);
-		trace(untyped  fpRef.current.value);
+		//trace(fpInstance.altInput.value);
+		//trace(untyped  fpRef.current.value);
 		if(!props.disabled)
 		{
 			altInput.addEventListener('keyup', function(ev:KeyboardEvent){
@@ -79,7 +79,7 @@ class DateTimeControl
 				var pd:Date = fpInstance.parseDate(val, fpInstance.config.altFormat);
 				//trace('$val === ${pd.toString()}');
 				var fD:String = fpInstance.formatDate(pd, fpInstance.config.altFormat);
-				trace('$val==$fD');
+				//trace('$val==$fD');
 				if(val==fD)
 				{
 					fpInstance.setDate(val,true,fpInstance.config.altFormat);
@@ -108,7 +108,7 @@ class DateTimeControl
 				var pd:Date = fpInstance.parseDate(val, fpInstance.config.altFormat);
 				//trace('$val === ${pd.toString()}');
 				var fD:String = fpInstance.formatDate(pd, fpInstance.config.altFormat);
-				trace('$val==$fD');
+				//trace('$val==$fD');
 				if(val==fD)
 				{
 					fpInstance.setDate(val,true,fpInstance.config.altFormat);
@@ -128,10 +128,10 @@ class DateTimeControl
 
 	function onClose (sDates:Array<Dynamic>,val:String,me:DateTimePicker)
 	{
-		trace(tip);
-		trace(fpInstance.altInput.value);
-		if(fpInstance.altInput.value!=null)
-		trace(val + '==' + fpInstance.formatDate(fpInstance.parseDate(fpInstance.altInput.value), fpInstance.config.altFormat));
+		//trace(tip);
+		//trace(fpInstance.altInput.value);
+		//if(fpInstance.altInput.value!=null)
+		//trace(val + '==' + fpInstance.formatDate(fpInstance.parseDate(fpInstance.altInput.value), fpInstance.config.altFormat));
 		if(tip != null)
 			tip.clear();
 		if(fpInstance.altInput.value==null)
@@ -156,16 +156,16 @@ class DateTimeControl
 			return null;
 		}
 			
-		trace( props.name );		
+		//trace( props.name );		
 		var val:Dynamic = (props.value == null ?'2000-01-01 00:00':props.value);
-		trace(val);		
+		//trace(val);		
 		val = Date.parse(val);
 		if(!Math.isNaN(val))
 		{
-			trace(val);
+			//trace(val);
 			var d:Date = new Date(val);
 			
-			trace(d.toDateString());
+			//trace(d.toDateString());
 			val = App.sprintf('%d-%02d-%02d %02d:%02d',
 				d.getFullYear(),
 				d.getMonth()+1,
@@ -177,9 +177,9 @@ class DateTimeControl
 		}
 		else
 			val = '';
-		trace(val == '2000-01-01 00:00');
+		//trace(val == '2000-01-01 00:00');
 		//val = '2000-01-01 00:00';
-		trace(val);	
+		//trace(val);	
 		return  jsx('<input className="h100"  name=${props.name} id=${props.name} ref=${fpRef} disabled=${props.disabled}
 			defaultValue=${val}/>');
 	}	

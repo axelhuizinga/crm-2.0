@@ -1,5 +1,6 @@
 package action;
 
+import react.router.RouterMatch;
 import view.shared.FormState;
 import view.shared.io.User;
 
@@ -35,7 +36,7 @@ enum AppAction
 	//AddContact(id:Int);
 	SetLocale(locale:String);
 	SetTheme(color:String);
-
+	//Select(id:Int,data:Map<String,Dynamic>,match:RouterMatch);
 	User(state:UserState);
 	//Users(filter:UserFilter);
 	//SetEntries(entries:Array<DataCell>);

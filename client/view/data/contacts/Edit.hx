@@ -82,7 +82,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	
 	public static var initialState:Contact =
 	{
-		id:2000328,
+		id:0,//2000328,
 		edited_by: 0,
 		mandator: 0
 	};	
@@ -90,12 +90,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
+		trace(props.match.params);
+		if((props.match.params.id==null || !App.store.getState().dataStore.selectedData.exists(Std.parseInt(props.match.params.id))) && ~/edit(\/)*$/.match(props.match.params.action) )
 		{
-			//~/ 
 			trace('nothing selected - redirect');
 			var baseUrl:String = props.match.path.split(':section')[0];
-			props.history.push('${baseUrl}List');
+			props.history.push('${baseUrl}List/find');
 		}		
 		dataAccess = ContactsModel.dataAccess;
 		dataDisplay = ContactsModel.dataDisplay;
@@ -103,28 +103,28 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		formRef = React.createRef();
 		//var formBuilder = new FormBuilder(this);
 		trace(props.user);
-		trace(App.store.appware)
-		initialState = {
-			id:2000328,
-			edited_by: props.user.id,				
-			mandator: props.user.mandator
-		};
+		trace(App.store.getState().dataStore.selectedData);
+		initialState = loadContactData(Std.parseInt(props.match.params.id));
+		trace(initialState);
+		/**
+		 * testing => init view values
+		 */		
+
 		for(k in dataAccess['edit'].view.keys())
+		{
+			dataAccess['edit'].view[k].value = Reflect.field(initialState,k);
+		}		
+		/*for(k in dataAccess['edit'].view.keys())
 		{
 			//trace('$k => ' );
 			if(!Reflect.hasField(initialState,k))
 				Reflect.setField(initialState, k, '');
-		}		
+		}	*/	
 		//trace(initialState);
 		state =  App.initEState({
 			dataTable:[],
 			formBuilder:new FormBuilder(this),
-			actualState:
-			{
-				id:0,
-				edited_by: props.user.id,				
-				mandator: props.user.mandator
-			},
+			actualState:initialState,
 			initialState:initialState,
 			loading:false,
 			selectedRows:[],
@@ -143,6 +143,19 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		},this);
 		trace(state.loading);
 
+	}
+
+	function loadContactData(id:Int)
+	{
+		trace('loading:$id');
+		var c:Contact = {edited_by: props.user.id,mandator: 0};
+		var data = App.store.getState().dataStore.selectedData.get(id);
+		trace(data);
+		for(k=>v in data.keyValueIterator())
+		{
+			Reflect.setField(c,k, v);
+		}
+		return c;
 	}
 	
 	static function mapStateToProps(aState:AppState) 
@@ -210,7 +223,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
 		{
 			//~/ 
-			//trace('reme');
+			trace('reme');
 			//props.history.push(baseUrl);
 		}
 		
@@ -223,14 +236,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			
 		}
 
-		/**
-		 * testing => init view values
-		 */		
 
-		for(k in dataAccess['edit'].view.keys())
-		{
-			dataAccess['edit'].view[k].value = Reflect.field(initialState,k);
-		}
 		var actualState = copy(initialState);
 		Reflect.deleteField(actualState,'id');
 		setState({actualState:actualState,initialState: initialState});		
@@ -359,7 +365,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{
 			case 'edit':
-				trace(state.initialState);
+				//trace(state.initialState);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
 				];*/

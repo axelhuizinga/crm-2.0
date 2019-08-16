@@ -86,6 +86,7 @@ class FormBuilder {
 		//return fields.array().map(function(field:FormField){
 		return [for(name => field in fields){
 			if(name=='id')trace (field.type +' $name:' + field.value);
+			if(name=='last_name')trace (field.type +' $name:' + field.value);
 			switch (field.type)
 			{
 				case FormInputElement.Hidden:
@@ -96,12 +97,12 @@ class FormBuilder {
 					</button>');
 				case FormInputElement.Checkbox:			
 					renderElement(
-						jsx('<input name=${name}  key=${ki++} type="checkbox" onChange=${onChange} disabled=${field.disabled} required=${field.required}/>'),
+						jsx('<input name=${name}  key=${ki++} type="checkbox" checked=${field.value} onChange=${onChange} disabled=${field.disabled} required=${field.required}/>'),
 						ki++, field.label
 					);
 				case Select:
 				renderElement(
-					jsx('<select name=${name} onChange=${onChange} key=${ki++} multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
+					jsx('<select name=${name} onChange=${onChange}  defaultValue=${field.value} key=${ki++} multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
 					ki++, field.label
 				);
 				case FormInputElement.DateTimeControl:
@@ -137,7 +138,8 @@ class FormBuilder {
 							dateFormat:field.displayFormat(),
 							defaultDate:Date.now(),
 							_inline:field.disabled
-						}
+						},
+						value:field.value
 					});
 					dateControls.set('${model}.${name}',dC);
 					jsx('
@@ -149,7 +151,7 @@ class FormBuilder {
 					</div>');
 				default:
 					renderElement(
-						jsx('<input name=${name} onChange=${onChange} type="text" disabled=${field.disabled} required=${field.required}/>'),
+						jsx('<input name=${name} onChange=${onChange} type="text"  defaultValue=${field.value} disabled=${field.disabled} required=${field.required}/>'),
 						ki++, field.label
 					);
 			}

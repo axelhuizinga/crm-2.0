@@ -122,7 +122,10 @@ class AppStore
 						locale:locale
 					});
 				}
-				else state;				
+				else state;	
+			/*case Select(id, data, match):
+				var sData = state.selectedData;
+				state;	*/			
 			case SetTheme(color):
 				if (color != state.themeColor)
 				{

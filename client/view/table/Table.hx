@@ -559,9 +559,9 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		}
 		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
 		var firstSelectedRow = firstRowRef.current.parentElement.querySelector('[class="is-selected"]');
-		trace(firstSelectedRow.offsetTop);
 		if(firstSelectedRow!=null)
 		{
+			trace(firstSelectedRow.offsetTop);
 			Browser.document.querySelector('[class="grid-container-inner"]').scrollTo(0,firstSelectedRow.offsetTop);
 		}
 	}

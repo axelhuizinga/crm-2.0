@@ -162,7 +162,34 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		else
 		{			
 			trace('render Router :)' + browserHistory.location.pathname);
-			return jsx('
+			return
+			#if debug 
+				jsx('
+			<$Router history={browserHistory} >
+			<>
+				<div className="modal" ref=${App.modalBox}/>
+				<div className="topNav">
+					<$Route path="/DashBoard" {...props} component=${NavTabs}/>
+					<$Route path="/Accounting" {...props} component=${NavTabs}/>
+					<$Route path="/Data" {...props} component=${NavTabs}/>
+					<$Route path="/Qc" {...props} component=${NavTabs}/>
+					<$Route path="/Reports" {...props} component=${NavTabs}/>
+				</div>
+				
+				<div className="tabComponent" id="development">
+					<$Route path="/"  render={renderRedirect} exact={true}/>									
+					<$Route path="/DashBoard*" component=${DashBoard}/>
+					<$Route path="/Accounting" component=${Accounting}/>
+					
+					<$Route path="/Data" component=${Data}/>
+					<$Route path="/Qc" component=${QC}/>
+					<$Route path="/Reports" component=${Reports}/>
+				</div>
+			</>
+			</$Router>
+			');
+			#else 
+				jsx('
 			<$Router history={browserHistory} >
 			<>
 				<div className="modal" ref=${App.modalBox}/>
@@ -181,10 +208,11 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 					<$Route path="/Data" component=${Bundle.load(Data)}/>
 					<$Route path="/Qc" component=${Bundle.load(QC)}/>
 					<$Route path="/Reports" component=${Bundle.load(Reports)}/>
-				</div>
+				</div>				
 			</>
 			</$Router>
-			');
+			');		
+			#end
 		}
 		
 	}

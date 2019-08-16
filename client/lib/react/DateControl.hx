@@ -28,21 +28,21 @@ class DateControl
 	{
 		//trace( props.value );
 		this.props = props;
-		trace(Reflect.fields(props));
+		//trace(Reflect.fields(props));
 		fpRef = React.createRef();
 	}
 
 	public function createFlatPicker():Void 
 	{
 		var fP:Dynamic = App.flatpickr;
-		var val = (props.value == null ?'0000.00.00':props.value);
+		var val = (props.value == null ?'2000-01-01':props.value);
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
 				dateFormat:'Y-m-d',
 				altInput:true,
 				altInputClass: "form-control input",
-				//defaultValue:val,
+				defaultValue:val,
 				//locale:'de',
 				//onChange:onChange,
 				onClose:onClose,
@@ -51,7 +51,9 @@ class DateControl
 
 		var altInput:InputElement = fpInstance.altInput;
 		//trace(Reflect.fields(fP));
-		trace(Reflect.fields(altInput));
+		trace('${props.value}:${fpInstance.config.altFormat}');
+		//altInput.value = fpInstance.formatDate(props.value, fpInstance.config.altFormat);
+		trace(fpInstance.formatDate(props.value, fpInstance.config.altFormat));
 
 		altInput.addEventListener('keyup', function(ev:KeyboardEvent){
 			//trace(ev.key);
@@ -73,12 +75,12 @@ class DateControl
 				}
 
 			}
-			trace(fpInstance.input.value);
+			//trace(fpInstance.input.value);
 			var val:String = altInput.value;
 			var pd:Date = fpInstance.parseDate(val, fpInstance.config.altFormat);
 			//trace('$val === ${pd.toString()}');
 			var fD:String = fpInstance.formatDate(pd, fpInstance.config.altFormat);
-			trace('$val==$fD');
+			//trace('$val==$fD');
 			if(val==fD)
 			{
 				fpInstance.setDate(val,true,fpInstance.config.altFormat);
@@ -107,7 +109,7 @@ class DateControl
 			var pd:Date = fpInstance.parseDate(val, fpInstance.config.altFormat);
 			//trace('$val === ${pd.toString()}');
 			var fD:String = fpInstance.formatDate(pd, fpInstance.config.altFormat);
-			trace('$val==$fD');
+			//trace('$val==$fD');
 			if(val==fD)
 			{
 				fpInstance.setDate(val,true,fpInstance.config.altFormat);
@@ -130,10 +132,10 @@ class DateControl
 
 	function onClose (sDates:Array<Dynamic>,val:String,me:DateTimePicker)
 	{
-		trace(tip);
-		trace(fpInstance.altInput.value);
-		if(fpInstance.altInput.value!=null)
-		trace(val + '==' + fpInstance.formatDate(fpInstance.parseDate(fpInstance.altInput.value), fpInstance.config.altFormat));
+		//trace(tip);
+		//trace(fpInstance.altInput.value);
+		//if(fpInstance.altInput.value!=null)
+		//trace(val + '==' + fpInstance.formatDate(fpInstance.parseDate(fpInstance.altInput.value), fpInstance.config.altFormat));
 		if(tip != null)
 			tip.clear();
 		if(fpInstance.altInput.value==null)
@@ -158,9 +160,9 @@ class DateControl
 			return null;
 		}
 			
-		trace( props.name );		
+		//trace( props.name );		
 		var val:Dynamic = (props.value == null ?'2000-01-01':props.value);
-		trace(val);
+		//trace(val);
 		val = Date.parse(val);
 		if(!Math.isNaN(val))
 		{

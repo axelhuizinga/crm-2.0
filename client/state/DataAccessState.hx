@@ -1,4 +1,5 @@
 package state;
+import haxe.ds.IntMap;
 import shared.DbData;
 import state.UserState;
 
@@ -16,7 +17,8 @@ typedef DataSource =
 typedef DataAccessState = 
 {
 	dbData:DbData,
-	user:UserState,
+	selectedData:IntMap<Map<String,Dynamic>>,
+	//user:UserState,
     ?source:DataSource,
     ?waiting:Bool
 }

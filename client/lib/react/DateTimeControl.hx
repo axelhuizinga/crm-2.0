@@ -35,20 +35,22 @@ class DateTimeControl
 	public function createFlatPicker():Void 
 	{
 		var fP:Dynamic = App.flatpickr;
-		var val = (props.value == null ?'0000.00.00':props.value);
+		var val = (props.value == null ? null:new Date(Date.parse(props.value)));
 		//trace('$val ${props.options.dateFormat}');
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
-				dateFormat:'Y-m-d H:i',
+				dateFormat:'Y-m-d H:i:m',
+				//dateFormat:props.options.dateFormat,
 				altInput:true,
 				altInputClass: "form-control input",
-				//defaultValue:val, 
+				defaultValue:val, 
 				//onChange:onChange,
 				onClose:onClose
 		});
 
 		var altInput:InputElement = fpInstance.altInput;
+		altInput.value = fpInstance.formatDate(new Date(Date.parse(props.value)), fpInstance.config.altFormat);
 		//trace(fpInstance.altInput.value);
 		//trace(untyped  fpRef.current.value);
 		if(!props.disabled)
@@ -157,14 +159,14 @@ class DateTimeControl
 		}
 			
 		//trace( props.name );		
-		var val:Dynamic = (props.value == null ?'2000-01-01 00:00':props.value);
-		//trace(val);		
+		/*var val:Dynamic = (props.value == null ?'2000-01-01 00:00':props.value);
+		trace(val);		
 		val = Date.parse(val);
 		if(!Math.isNaN(val))
 		{
-			//trace(val);
+			trace(val);
 			var d:Date = new Date(val);
-			
+			trace('date:$d');
 			//trace(d.toDateString());
 			val = App.sprintf('%d-%02d-%02d %02d:%02d',
 				d.getFullYear(),
@@ -176,11 +178,11 @@ class DateTimeControl
 
 		}
 		else
-			val = '';
+			val = '';*/
 		//trace(val == '2000-01-01 00:00');
 		//val = '2000-01-01 00:00';
-		//trace(val);	
+		//trace(val);	defaultValue=${val}
 		return  jsx('<input className="h100"  name=${props.name} id=${props.name} ref=${fpRef} disabled=${props.disabled}
-			defaultValue=${val}/>');
+			/>');
 	}	
 }

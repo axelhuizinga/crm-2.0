@@ -313,6 +313,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				//trace('$k => ${item.type}:' + item.value);
 				Reflect.setField(aState, item.name, switch (item.type)
 				{
+					//case DateControl|DateTimrControl:
+
 					case 'checkbox':
 					trace('${item.name}:${item.checked?true:false}');
 					item.checked?1:0;
@@ -331,8 +333,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			}
 		}
 		//setState({actualState: aState});
-		//trace(aState);
-		update(aState);
+		trace(aState);
+		//update(aState);
 	}	
 
 

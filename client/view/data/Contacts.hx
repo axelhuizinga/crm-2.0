@@ -106,11 +106,11 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	}	
 
 	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
-		trace('compareProps:${nextProps!=props}');
-		trace('compareStates:${nextState!=state}');
-		//if(nextState!=state)
-			//return true;
-		return nextProps!=props || false;
+		trace('propsChanged:${nextProps!=props}');
+		trace('stateChanged:${nextState!=state}');
+		if(nextState!=state)
+			return true;
+		return nextProps!=props;
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic

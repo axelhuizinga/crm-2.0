@@ -36,6 +36,7 @@ class DateControl
 	{
 		var fP:Dynamic = App.flatpickr;
 		var val = (props.value == null ?'2000-01-01':props.value);
+		trace(val);
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
@@ -46,14 +47,15 @@ class DateControl
 				//locale:'de',
 				//onChange:onChange,
 				onClose:onClose,
-				onOpen:onOpen
+				onOpen:onOpen,
+				onReady:onReady
 		});
-
+		trace('fpInstance.input.value:${fpInstance.defaultValue}');
 		var altInput:InputElement = fpInstance.altInput;
 		//trace(Reflect.fields(fP));
 		trace('${props.value}:${fpInstance.config.altFormat}');
-		//altInput.value = fpInstance.formatDate(props.value, fpInstance.config.altFormat);
-		trace(fpInstance.formatDate(props.value, fpInstance.config.altFormat));
+		altInput.value = fpInstance.formatDate(new Date(Date.parse(props.value)), fpInstance.config.altFormat);
+		//trace(fpInstance.formatDate(new Date(Date.parse(props.value)), fpInstance.config.altFormat));
 
 		altInput.addEventListener('keyup', function(ev:KeyboardEvent){
 			//trace(ev.key);
@@ -132,7 +134,7 @@ class DateControl
 
 	function onClose (sDates:Array<Dynamic>,val:String,me:DateTimePicker)
 	{
-		//trace(tip);
+		trace(val);
 		//trace(fpInstance.altInput.value);
 		//if(fpInstance.altInput.value!=null)
 		//trace(val + '==' + fpInstance.formatDate(fpInstance.parseDate(fpInstance.altInput.value), fpInstance.config.altFormat));
@@ -151,6 +153,12 @@ class DateControl
 		}		
 
 	}
+
+	function onReady(sDates:Array<Dynamic>,val:String,me:Dynamic)
+	{
+		trace('${sDates} $val ');
+		trace(me);
+	}
 	
 	public function render():ReactFragment
 	{
@@ -161,7 +169,7 @@ class DateControl
 		}
 			
 		//trace( props.name );		
-		var val:Dynamic = (props.value == null ?'2000-01-01':props.value);
+	/*	var val:Dynamic = (props.value == null ?'2000-01-01':props.value);
 		//trace(val);
 		val = Date.parse(val);
 		if(!Math.isNaN(val))
@@ -175,8 +183,8 @@ class DateControl
 		}
 		else
 			val = '';
-
+//defaultValue=${val}*/
 		return  jsx('<input className="h100" name=${props.name} id=${props.name} ref=${fpRef} 
-			defaultValue=${val}/>');
+			/>');
 	}	
 }

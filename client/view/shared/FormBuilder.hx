@@ -113,11 +113,11 @@ class FormBuilder {
 						onChange: comp.handleChange,						
 						options:{
 							dateFormat:field.displayFormat(), 
-							defaultDate: '2000-01-01 00:00',
+							defaultDate: field.value,
 							time_24hr:true,
 							_inline:field.disabled
 						},
-						value:'2000-01-01 00:00'
+						value:field.value
 					});
 					dateTimeControls.set('${model}.${name}',dC);
 					jsx('

@@ -36,6 +36,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
+
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
@@ -58,11 +59,18 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 					items: menuItems
 				}					
 				,{	
-					section: props.match.params.section==null? 'Edit':props.match.params.section, 
+					section: props.match.params.section==null? 'List':props.match.params.section, 
 					sameWidth: true
 				}),
 			values:new Map<String,Dynamic>()
 		},this);
+		if(props.match.params.section==null||props.match.params.action==null)
+		{
+			//var sData = App.store.getState().dataStore.selectedData;
+			var baseUrl:String = props.match.path.split(':section')[0];
+			props.history.push('${baseUrl}List/find');
+			find(null);
+}		
 		trace(state.loading);
 	}
 	

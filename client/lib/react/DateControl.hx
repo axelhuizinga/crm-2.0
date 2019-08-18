@@ -50,7 +50,7 @@ class DateControl
 				onOpen:onOpen,
 				onReady:onReady
 		});
-		trace('fpInstance.input.value:${fpInstance.defaultValue}');
+		trace('fpInstance.input.value:${fpInstance.input.value}');
 		var altInput:InputElement = fpInstance.altInput;
 		//trace(Reflect.fields(fP));
 		trace('${props.value}:${fpInstance.config.altFormat}');
@@ -157,7 +157,7 @@ class DateControl
 	function onReady(sDates:Array<Dynamic>,val:String,me:Dynamic)
 	{
 		trace('${sDates} $val ');
-		trace(me);
+		//trace(me);
 	}
 	
 	public function render():ReactFragment
@@ -185,6 +185,6 @@ class DateControl
 			val = '';
 //defaultValue=${val}*/
 		return  jsx('<input className="h100" name=${props.name} id=${props.name} ref=${fpRef} 
-			/>');
+			defaultValue=${props.value}/>');
 	}	
 }

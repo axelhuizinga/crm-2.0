@@ -46,12 +46,13 @@ class DateTimeControl
 				altInputClass: "form-control input",
 				defaultValue:val, 
 				//onChange:onChange,
-				onClose:onClose
+				onClose:onClose,
+				onReady:onReady
 		});
 
 		var altInput:InputElement = fpInstance.altInput;
 		altInput.value = fpInstance.formatDate(new Date(Date.parse(props.value)), fpInstance.config.altFormat);
-		//trace(fpInstance.altInput.value);
+		trace(fpInstance.input.value);
 		//trace(untyped  fpRef.current.value);
 		if(!props.disabled)
 		{
@@ -149,7 +150,13 @@ class DateTimeControl
 		}		
 
 	}
-	
+
+	function onReady(sDates:Array<Dynamic>,val:String,me:Dynamic)
+	{
+		trace('${sDates} $val ');
+		//trace(me);
+	}
+
 	public function render():ReactFragment
 	{
 		if(props == null)
@@ -183,6 +190,6 @@ class DateTimeControl
 		//val = '2000-01-01 00:00';
 		//trace(val);	defaultValue=${val}
 		return  jsx('<input className="h100"  name=${props.name} id=${props.name} ref=${fpRef} disabled=${props.disabled}
-			/>');
+			defaultValue=${props.value}/>');
 	}	
 }

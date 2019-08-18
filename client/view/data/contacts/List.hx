@@ -110,12 +110,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				{
 					if(!data.dataErrors.keys().hasNext())
 					{
-						setState({dataTable:data.dataRows, values: ['loadResult'=>'','closeAfter'=>100]});
+						setState({dataTable:data.dataRows});
 					}
 					else 
 						setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});					
 				}
-				//setState({dataTable:data.dataRows, loading: false});
 			}
 		));
 	}

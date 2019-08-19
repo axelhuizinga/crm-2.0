@@ -8,7 +8,7 @@ import haxe.ds.StringMap;
 
 class Users extends Model
 {
-	public static function create(param:StringMap<String>):Void
+	public static function _create(param:StringMap<String>):Void
 	{
 		var self:Users = new Users(param);	
 		Reflect.callMethod(self, Reflect.field(self, param.get('action')), [param]);
@@ -17,7 +17,7 @@ class Users extends Model
 	public function list() 
 	{
 		trace(param);
-		find();
+		read();
 	}
 	
 }

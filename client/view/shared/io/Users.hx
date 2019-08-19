@@ -14,7 +14,7 @@ class Users extends ReactComponentOf<DataFormProps,FormState>
     public static var menuItems:Array<SMItem> = [
 		{label:'Liste',action:'show'},
 		{label:'Neu',action:'create'},
-		{label:'Bearbeiten',action:'edit'},
+		{label:'Bearbeiten',action:'update'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];

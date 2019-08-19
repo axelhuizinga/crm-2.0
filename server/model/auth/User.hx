@@ -31,7 +31,7 @@ import php.db.PDOStatement;
 
 class User extends Model
 {
-	public static function create(param:StringMap<String>):Void
+	public static function _create(param:StringMap<String>):Void
 	{
 		var self:User = new User(param);	
 		trace(param.get('action'));

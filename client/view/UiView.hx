@@ -85,7 +85,6 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	
 	public function new(props:Dynamic) {
 		trace(Reflect.fields(props));
-		trace(props.store == App.store);
         super(props);
 		state = {hasError:false};
 		browserHistory = App.store.getState().appWare.history;// BrowserHistory.create({basename:"/"});

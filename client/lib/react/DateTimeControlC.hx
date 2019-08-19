@@ -8,6 +8,7 @@ import react.ReactComponent.ReactFragment;
 import react.ReactRef;
 import react.ReactMacro.jsx;
 import react.DateControlTypes;
+import react.PureComponent.PureComponentOfProps;
 import view.shared.io.Tooltip;
 
 using shared.DateFormat;
@@ -17,41 +18,42 @@ using shared.DateFormat;
  * @author axel@cunity.me
  */
 
-class DateTimeControl
+class DateTimeControlC extends  PureComponentOfProps<DateTimeProps>
 {
 	var fpRef:ReactRef<InputElement>;
 	var fpInstance:Dynamic;//FlashPicker instance
 	var tip:Tooltip;
-	public var props:DateTimeProps;
 
 	public function new(props:DateTimeProps) 
 	{
 		//trace( props.value );
-		this.props = props;
+		super(props);
 		//trace(Reflect.fields(props));
 		fpRef = React.createRef();
 	}
 
-	public function createFlatPicker():Void 
+	//public function createFlatPicker():Void 
+	override public function componentDidMount():Void 
 	{
 		var fP:Dynamic = App.flatpickr;
-		var val = (props.value == null ? null:new Date(Date.parse(props.value)));
+		//var val = (props.value == null ? null:new Date(Date.parse(props.value)));
+		//var val = (props.value == null ? null:props.value);
 		//trace('$val ${props.options.dateFormat}');
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
-				dateFormat:'Y-m-d H:i:m',
+				dateFormat:'Y-m-d H:i:S',
 				//dateFormat:props.options.dateFormat,
 				altInput:true,
 				altInputClass: "form-control input",
-				defaultValue:val, 
+				defaultValue:props.value, 
 				//onChange:onChange,
 				onClose:onClose,
 				onReady:onReady
 		});
 
 		var altInput:InputElement = fpInstance.altInput;
-		altInput.value = fpInstance.formatDate(new Date(Date.parse(props.value)), fpInstance.config.altFormat);
+		altInput.value = props.value == null? '': fpInstance.formatDate(new Date(Date.parse(props.value)), fpInstance.config.altFormat);
 		trace(fpInstance.input.value);
 		//trace(untyped  fpRef.current.value);
 		if(!props.disabled)
@@ -157,38 +159,14 @@ class DateTimeControl
 		//trace(me);
 	}
 
-	public function render():ReactFragment
+	override public function render():ReactFragment
 	{
 		if(props == null)
 		{
 			trace(null);
 			return null;
 		}
-			
-		//trace( props.name );		
-		/*var val:Dynamic = (props.value == null ?'2000-01-01 00:00':props.value);
-		trace(val);		
-		val = Date.parse(val);
-		if(!Math.isNaN(val))
-		{
-			trace(val);
-			var d:Date = new Date(val);
-			trace('date:$d');
-			//trace(d.toDateString());
-			val = App.sprintf('%d-%02d-%02d %02d:%02d',
-				d.getFullYear(),
-				d.getMonth()+1,
-				d.getDate(),
-				d.getHours(),
-				d.getMinutes()
-			);
-
-		}
-		else
-			val = '';*/
-		//trace(val == '2000-01-01 00:00');
-		//val = '2000-01-01 00:00';
-		//trace(val);	defaultValue=${val}
+		trace('${props.value}');
 		return  jsx('<input className="h100"  name=${props.name} id=${props.name} ref=${fpRef} disabled=${props.disabled}
 			defaultValue=${props.value}/>');
 	}	

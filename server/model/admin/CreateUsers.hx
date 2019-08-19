@@ -24,7 +24,7 @@ using Util;
 @:keep
 class CreateUsers extends Model 
 {
-	public static function create(param:StringMap<String>):Void
+	public static function _create(param:StringMap<String>):Void
 	{
 		var self:CreateUsers = new CreateUsers(param);	
 		//self.table = 'columns';

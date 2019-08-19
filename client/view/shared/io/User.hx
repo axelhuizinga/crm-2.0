@@ -51,7 +51,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 	static var _instance:User;
 	public static var menuItems:Array<SMItem> = [
 		{label:'Neu',action:'create'},
-		{label:'Bearbeiten',action:'edit'},
+		{label:'Bearbeiten',action:'update'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -76,7 +76,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 					'new_pass' => {type:Password}
 				]
 			},
-			'edit' =>{
+			'update' =>{
 				source:[
 					"users" => ["alias" => 'us',
 						"fields" => 'id,last_login,change_pass_required,password'],
@@ -110,9 +110,9 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'auth.User',
-				action:'edit',
+				action:'update',
 				filter:'id|${props.user.id}',
-				dataSource:Serializer.run(dataAccess['edit'].source),
+				dataSource:Serializer.run(dataAccess['update'].source),
 				devIP:App.devIP	
 			},
 			function(data:DbData)
@@ -141,10 +141,10 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 					}));				
 				}
 				else{
-					setState({data:data.dataRows[0], action:'edit',
-					fields:dataAccess['edit'].view,
+					setState({data:data.dataRows[0], action:'update',
+					fields:dataAccess['update'].view,
 					values:props.formApi.createStateValues(data.dataRows[0], 
-					dataAccess['edit'].view), loading:false});	
+					dataAccess['update'].view), loading:false});	
 					trace(Date.fromString(data.dataRows[0]['last_login']));
 					App.store.dispatch(AppAction.User({
 						first_name:data.dataRows[0]['first_name'],
@@ -216,9 +216,9 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				{
 					trace(App.store.getState().appWare.user.dynaMap());
 					setState({
-						//viewClassPath:'edit',
-						fields:dataAccess['edit'].view,
-						values:props.formApi.createStateValues(App.store.getState().appWare.user.dynaMap(), dataAccess['edit'].view),
+						//viewClassPath:'update',
+						fields:dataAccess['update'].view,
+						values:props.formApi.createStateValues(App.store.getState().appWare.user.dynaMap(), dataAccess['update'].view),
 					 	loading:false});
 				}
 				else trace(data.dataErrors);				
@@ -235,9 +235,9 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'auth.User',
-				action:'edit',
+				action:'update',
 				filter:'id|${props.user.id}',
-				dataSource:Serializer.run(dataAccess['edit'].source)
+				dataSource:Serializer.run(dataAccess['update'].source)
 			},
 			function(data:Array<Map<String,String>>)
 			{
@@ -253,9 +253,9 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				//trace(dataRows[0].active);
 				setState({
 					//data:data[0],
-					fields:dataAccess['edit'].view,
+					fields:dataAccess['update'].view,
 					values:props.formApi.createStateValues(data[0], 
-					dataAccess['edit'].view), loading:false});					
+					dataAccess['update'].view), loading:false});					
 			}
 		));
 	}
@@ -266,18 +266,18 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.data);
 		trace(state.values);
 		var skeys:Array<String> =  [];
-		for(k in dataAccess['edit'].view.keys())
+		for(k in dataAccess['update'].view.keys())
 		{
-			if(!dataAccess['edit'].view[k].disabled)
+			if(!dataAccess['update'].view[k].disabled)
 			{
 				skeys.push(k);
 			}
 		};
-		//var skeys:Array<String> =  dataAccess['edit'].view.keys().array();
-		//skeys = skeys.filter(function(k) return !dataAccess['edit'].view[k].disabled);
+		//var skeys:Array<String> =  dataAccess['update'].view.keys().array();
+		//skeys = skeys.filter(function(k) return !dataAccess['update'].view[k].disabled);
 		trace(FormApi.filterMap(state.values, skeys));
 		trace(skeys.toString());
-		trace(dataAccess['edit'].source);
+		trace(dataAccess['update'].source);
 		//return;,
 		props.formApi.requests.push(Loader.load(	
 			'${App.config.api}', 
@@ -287,7 +287,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				className:'auth.User',
 				action:'save',
 				filter:'id|${props.user.id}',
-				dataSource:Serializer.run(dataAccess['edit'].source)
+				dataSource:Serializer.run(dataAccess['update'].source)
 				//dataSource:Serializer.run(filterMap(state.values, skeys))
 			},
 			function(data:Array<Map<String,String>>)

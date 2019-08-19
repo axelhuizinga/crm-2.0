@@ -15,13 +15,13 @@ import shared.DBAccess;
 
 enum  DataAction
 {
-	Create(data:DbData);
-	Delete(data:DbData);
+	Execute(dataAccess:DBAccessProps);
+	//Delete(data:DbData);
 	Done(data:DbData);
 	Error(data:DbData);
 	Load(data:DbData);
 	CreateSelect(id:Int,data:Map<String,Dynamic>,match:RouterMatch);
 	Select(id:Int,data:Map<String,Dynamic>);
 
-	Update(data:DBAccessProps);
+	//Update(data:DBAccessProps);
 }

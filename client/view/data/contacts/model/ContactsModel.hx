@@ -1,6 +1,5 @@
 package view.data.contacts.model;
 
-import react.DateControl;
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
 import view.table.Table.DataColumn;
@@ -14,7 +13,7 @@ import view.shared.FormInputElement;
 class ContactsModel
 {
 	public static var dataAccess:DataAccess = [
-		'edit' => {
+		'update' => {
 			source:[
 				"contacts" => [
 					"filter" => 'id'
@@ -39,8 +38,7 @@ class ContactsModel
 				'country_code'=>{label:'Land'},
 				'c/o'=>{label: 'c/o'},
 				'creation_date'=>{label: 'Hinzugefügt', type:DateTimeControl, disabled: true, 
-					//displayFormat: function () return {format:"dd.MM.yyyy H:MM", disabled:true}},
-					displayFormat: function() return "d.m.Y H:i"}, 
+					displayFormat: function() return "d.m.Y H:i:S"}, 
 				'date_of_birth'=>{label: 'Geburtsdatum', type:DateControl, displayFormat:  function() return "d.m.Y"},
 				'gender'=>{label:'Geschlecht',type:Select,options:[
 						'U'=>'Unbekannt',
@@ -52,8 +50,7 @@ class ContactsModel
 				'use_email'=>{label:'Post per Email',type: Checkbox},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},
-				//'mandator'=>{label:''},
-				//'submit'=>{type:Button,value:{type:'submit',value: 'Speichern'}}
+				'mandator'=>{type:Hidden},
 			]
 		}
 	];

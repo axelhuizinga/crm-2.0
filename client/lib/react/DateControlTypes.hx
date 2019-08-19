@@ -34,7 +34,7 @@ typedef DateTimeProps =
 	>InputProps,
 	?comp:Dynamic,
     ?defaultValue: String,
-    options: FlatpickrProps,
+    ?options: FlatpickrProps,
     ?onOpen: Function,
     ?onClose: Function,
     ?onMonthChange: Function,

@@ -31,7 +31,7 @@ using Util;
 @:keep
 class SyncExternalClients extends Model 
 {
-	public static function create(param:StringMap<String>):Void
+	public static function _create(param:StringMap<String>):Void
 	{
 		var self:SyncExternalClients = new SyncExternalClients(param);	
 		//self.table = 'columns';

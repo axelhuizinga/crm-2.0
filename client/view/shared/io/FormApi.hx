@@ -164,15 +164,6 @@ class FormApi
 		trace(targetSection);
 		if(targetSection != comp.props.match.params.section)
 		{
-			/*var match:RouterMatch = comp.props.match;
-			var baseUrl:String = match.path.split(':section')[0];
-			var fS:FormState = comp.state;
-			var sData = fS.selectedData;			
-			baseUrl = '${baseUrl}${targetSection}/${method}';		
-			trace('${baseUrl}/${match.params.id}');	
-			//comp.setState(copy(comp.state,{formStateKey:baseUrl}));*/
-			//comp.props.history.push('${baseUrl}/${match.params.id==null?"":match.params.id}');
-			//comp.setState(copy(comp.state,{formStateKey:baseUrl}));
 			comp.props.history.push(getUrl(eTarget.dataset.action,targetSection));
 			return true;
 		}
@@ -205,7 +196,8 @@ class FormApi
 		var match:RouterMatch = comp.props.match;
 		var baseUrl:String = match.path.split(':section')[0];		
 		var section = match.params.section;
-		return '${baseUrl}${targetSection==null?section:targetSection}/${action}/${match.params.id==null?"":match.params.id}';
+		var id:String = (match.params.id==null||action=='create'?'':match.params.id);
+		return '${baseUrl}${targetSection==null?section:targetSection}/${action}/${id}';
 	}
 	
 	public function selectAllRows(state:FormState,unselect:Bool = false)
@@ -231,7 +223,7 @@ class FormApi
 		{
 			switch(mI.action)
 			{		
-				case 'edit':
+				case 'update':
 					mI.disabled = state.selectedRows.length==0;
 				case 'save':
 					mI.disabled = state.clean;

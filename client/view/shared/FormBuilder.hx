@@ -1,11 +1,13 @@
 package view.shared;
 
+import react.DateControlTypes.DateTimeProps;
 import shared.Utils;
 import haxe.ds.StringMap;
 import react.ReactType;
 import haxe.ds.Map;
 import haxe.Constraints.Function;
 import macrotools.Macro.model;
+import shared.DateFormat;
 import shared.DBMetaData;
 import shared.DbData;
 import js.html.XMLHttpRequest;
@@ -15,8 +17,8 @@ import react.ReactMacro.jsx;
 import view.shared.FormInputElement;
 import view.shared.FormState;
 import view.shared.io.DataAccess;
-import react.DateControl;
-import react.DateTimeControl;
+import react.DateControlC;
+import react.DateTimeControlC;
 
 using Lambda;
 
@@ -25,8 +27,8 @@ class FormBuilder {
 	public var dataAccess:DataAccess;
 	public var dbData:DbData;
 	public var dbMetaData:DBMetaData;
-	public var dateControls:StringMap<DateControl>;
-	public var dateTimeControls:StringMap<DateTimeControl>;
+	public var dateControls:StringMap<DateControlC>;
+	public var dateTimeControls:StringMap<DateTimeControlC>;
 	public var formColElements:Map<String,Array<FormField>>;
 	public var _menuItems:Array<SMItem>;
 	public var fState:FormState;
@@ -106,7 +108,7 @@ class FormBuilder {
 					ki++, field.label
 				);
 				case FormInputElement.DateTimeControl:
-					var dC:DateTimeControl = new DateTimeControl({
+					var dTC:DateTimeProps = {
 						comp:comp,
 						name:name,
 						disabled:field.disabled,
@@ -118,18 +120,17 @@ class FormBuilder {
 							_inline:field.disabled
 						},
 						value:field.value
-					});
-					dateTimeControls.set('${model}.${name}',dC);
+					};
 					jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
-							${dC.render()}
+							<$DateTimeControlC ${...dTC}/>
 						</div>
 					</div>');								
 				case FormInputElement.DateControl:
 					trace(field.disabled);
-					var dC:DateControl = new DateControl({
+					var dC:DateTimeProps = {
 						comp:comp,
 						//disabled:field.disabled,
 						name:name,
@@ -140,13 +141,12 @@ class FormBuilder {
 							_inline:field.disabled
 						},
 						value:field.value
-					});
-					dateControls.set('${model}.${name}',dC);
+					};
 					jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
-							${dC.render()}
+							<$DateControlC ${...dC}/>
 						</div>
 					</div>');
 				default:

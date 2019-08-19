@@ -57,7 +57,7 @@ class DBAccess
 		});
 	}
 
-	public static function update(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
+	public static function execute(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(props);
@@ -73,8 +73,6 @@ class DBAccess
 			}	
 			var spin:Dynamic = dispatch(AppWait);
 			trace(spin);
-			//var hS:hxbit.Serializer = new hxbit.Serializer();
-			//trace(hS.serialize(props.dataSource));
 			var bL:XMLHttpRequest = BinaryLoader.create(
 			'${App.config.api}', 
 			{				
@@ -93,7 +91,49 @@ class DBAccess
 					trace(data.dataErrors);
 				}
 				return null;
+			});
+			if (requests != null)
+			{
+				requests.push(bL);
+			}
+			return null;
+		});
+	}
 
+	public static function update(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
+	{
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+			trace(props);
+			//trace(getState());
+			if (!props.user.loggedIn)
+			{
+				return dispatch(LoginError(
+				{
+					id:props.user.id,
+					loginError:'Du musst dich neu anmelden!',
+					user_name:props.user.user_name
+				}));
+			}	
+			var spin:Dynamic = dispatch(AppWait);
+			trace(spin);
+			var bL:XMLHttpRequest = BinaryLoader.create(
+			'${App.config.api}', 
+			{				
+				id:props.user.id,
+				jwt:props.user.jwt,
+				className:props.className,
+				action:props.action,
+				dataSource:Serializer.run(props.dataSource),
+				devIP:App.devIP
+			},
+			function(data:DbData)
+			{				
+				trace(data);
+				if (data.dataErrors.keys().hasNext())
+				{
+					trace(data.dataErrors);
+				}
+				return null;
 			});
 			if (requests != null)
 			{

@@ -45,9 +45,9 @@ import view.table.Table;
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		{label:'Anzeigen',action:'find'},
-		{label:'Bearbeiten',action:'edit'},
-		{label:'Neu', action:'add'},
+		{label:'Anzeigen',action:'read'},
+		{label:'Bearbeiten',action:'update'},
+		{label:'Neu', action:'create'},
 		{label:'Löschen',action:'delete'}
 	];
 	
@@ -77,7 +77,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
-	public function find(ev:ReactEvent):Void
+	public function read(ev:ReactEvent):Void
 	{
 		trace('hi :)');
 		//return;
@@ -94,8 +94,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				jwt:props.user.jwt,
 				//fields:'disabled:disabled,element=:element,required=:required,use_as_index=:use_as_index',
 				className:'data.Contacts',
-				action:'find',
-				//dataSource:Serializer.run(dataAccess['find'].source),
+				action:'read',
+				//dataSource:Serializer.run(dataAccess['read'].source),
 				devIP:App.devIP
 			},
 			function(data:DbData)
@@ -138,7 +138,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{	
 		dataAccess = [
-			'find' =>{
+			'read' =>{
 				source:[
 					"contacts" => []
 				],
@@ -171,19 +171,19 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
-			case 'find':
+			case 'read':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["contactList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
-			case 'edit':
+			case 'update':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["clientList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');			
-			case 'add':
+			case 'create':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
 				jsx('

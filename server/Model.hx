@@ -106,7 +106,7 @@ class Model
 			S.add2Response({error:' cannot find model.' + cast param.get('className')}, true);
 			//return false;
 		}
-		var fl:Dynamic = Reflect.field(cl, 'create');
+		var fl:Dynamic = Reflect.field(cl, '_create');
 		//trace(fl);
 		if (fl == null)
 		{
@@ -285,7 +285,7 @@ class Model
 		return fieldsWithFormat.join(',');
 	}
 	
-	public function find():Void
+	public function read():Void
 	{	
 		var rData:RData =  {
 			info:['count'=>count(),'page'=>(param.exists('page') ? Std.parseInt( param.get('page') ) : 1)],
@@ -435,6 +435,56 @@ class Model
 		//buildLimit((limit == null?'25':limit), sqlBf);	//	TODO: CONFIG LIMIT REQUIRES SUBSELECT ON UPDATE 
 		trace(sqlBf.toString());
 		//return null;
+		return execute(sqlBf.toString());
+	}
+
+	public function delete():NativeArray
+	{
+		var sqlBf:StringBuf = new StringBuf();
+		trace(queryFields);
+		sqlBf.add('DELETE FROM ');
+		if (tableNames.length>1)
+		{
+			S.sendErrors(dbData, ['error'=> S.errorInfo('Delete with join not supported!')]);
+			return null;
+		}		
+		else
+		{
+			sqlBf.add('${quoteIdent(tableNames[0])} ');
+		}
+		if (filterSql != null)
+		{
+			sqlBf.add(filterSql);
+		}	
+		else 
+		{
+			S.sendErrors(dbData, ['error'=> S.errorInfo('Delete without Filter not supported!')]);
+			return null;			
+		}	
+		trace(sqlBf.toString());
+		return execute(sqlBf.toString());
+	}
+
+	public function create():NativeArray
+	{
+		var sqlBf:StringBuf = new StringBuf();
+		trace(queryFields);
+		sqlBf.add('INSERT INTO ');
+		if (tableNames.length>1)
+		{
+			S.sendErrors(dbData, ['error'=> S.errorInfo('Create with join not supported!')]);
+			return null;
+		}		
+		else
+		{
+			sqlBf.add('${quoteIdent(tableNames[0])} ');
+		}
+		sqlBf.add('($queryFields) VALUES${setSql}');
+		if (filterSql != null)
+		{
+			sqlBf.add(filterSql);
+		}		
+		trace(sqlBf.toString());
 		return execute(sqlBf.toString());
 	}
 	
@@ -657,11 +707,19 @@ class Model
 				tableNames.push(tableName);
 				var tableProps = dataSource.get(tableName);
 				trace(tableProps.toString());
-				if(param.get('action') == 'update')
+				if(action == 'update')
 				{
 					setSql += buildSet(tableProps.get('data'), tableProps.get('alias'));
 				}
 				fields = fields.concat(buildFieldsSql(tableName, tableProps));	
+				if(action == 'create')
+				{
+					fields.remove('id');
+					fieldNames = fields;
+					buildValues(tableProps.get('data'));
+					setSql = fields.map(function (_)return '?').join(',');
+					setSql = '($setSql)';
+				}
 				if(tableProps.exists('filter'))
 					filterSql += buildCond(tableProps.get('filter'));
 				trace('filterSql:$filterSql::${}');
@@ -679,14 +737,24 @@ class Model
 			filterSql += buildCond(param.get('filter'));
 	}
 	
-	function buildFieldsSql(name:String, table:StringMap<String>):Array<String>
+	function buildFieldsSql(name:String, tParam:StringMap<String>):Array<String>
 	{
-		var prefix = (table.exists('alias')?quoteIdent(table.get('alias')):'');
-		if (table.exists('fields'))
+		var prefix = (tParam.exists('alias')?quoteIdent(tParam.get('alias')+'.'):'');
+		if (tParam.exists('fields'))
 		{
-			return table.get('fields').split(',').map(function(field) return '$prefix.${quoteIdent(field)}');
+			return tParam.get('fields').split(',').map(function(field) return '${prefix}${quoteIdent(field)}');
 		}
-		return S.tableFields(name);
+		return S.tableFields(name).map(function(field) return '${prefix}${quoteIdent(field)}');
+	}
+
+	function buildValues(data:Dynamic):Void
+	{
+		//var fields:Array<String> = [];
+		for(key in fieldNames)
+		{
+			setValues.push(Reflect.field(data,key));
+		}		
+		//return fields;
 	}
 	
 	public function json_encode():Void

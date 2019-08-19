@@ -84,4 +84,12 @@ class Utils
             	f => Reflect.field(d, f)
       	];
   	}	
+
+	public static function MapToDyn(map:Map<String,Dynamic>):Dynamic
+	{
+		var obj:Dynamic = {};
+		for(k=>v in map.keyValueIterator())
+			Reflect.setField(obj, k, v);
+		return obj;
+	}
 }

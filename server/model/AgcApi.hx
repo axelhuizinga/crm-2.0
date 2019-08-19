@@ -16,7 +16,7 @@ class AgcApi extends Model
 	var vicidialPass:String;
 	var statuses:StringMap<String>;
 	
-	public static function create(param:StringMap<String>):EitherType<String,Bool>
+	public static function _create(param:StringMap<String>):EitherType<String,Bool>
 	{
 		var self:AgcApi = new AgcApi(param);	
 		self.vicidialUser = param.get('user_name');

@@ -77,8 +77,8 @@ class DataStore
 				//next();
 				store.dispatch(LiveDataAccess.select({id:id,data:data,match:match}));
 				//next();
-			case Update(data):
-			store.dispatch(DBAccess.update(data));
+			case Execute(data):
+				store.dispatch(DBAccess.execute(data));
 				//next();
 			default: next();
 		}

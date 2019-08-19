@@ -132,10 +132,10 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 					formState
 				));
 			},
-			update: function(dbaProps:DBAccessProps) {
+			/*update: function(dbaProps:DBAccessProps) {
 				trace(dbaProps);
 				dispatch(DataAction.Update(dbaProps));
-			}
+			}*/
 		};
     }
 	
@@ -153,7 +153,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
-	public function find(ev:ReactEvent):Void
+	public function read(ev:ReactEvent):Void
 	{
 		trace('hi :)');
 		//return;
@@ -169,7 +169,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'data.Contacts',
-				action:'find',
+				action:'read',
 				devIP:App.devIP
 			},
 			function(data:DbData)
@@ -210,8 +210,8 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				//props.history.push('${baseUrl}${props.match.params.section}');
 				props.history.push('${baseUrl}');
 				
-				find(ev);
-				//state.formApi.doAction('find');	
+				read(ev);
+				//state.formApi.doAction('read');	
 			}			*/
 			return;
 		}
@@ -224,7 +224,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.selectedData.keys().keysList());
 		trace(FormApi.params(state.selectedData.keys().keysList()));
 		props.history.push('${baseUrl}Edit/${FormApi.params(state.selectedData.keys().keysList())}');
-		for(k in dataAccess['edit'].view.keys())
+		for(k in dataAccess['update'].view.keys())
 		{
 			//trace('$k => ' + sData[k]);
 			Reflect.setField(initialState, k, sData[k]);
@@ -263,7 +263,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		else 
 		{
 			//invoke default action if any
-			state.formApi.doAction('find');	
+			state.formApi.doAction('read');	
 		}
 	}
 
@@ -313,7 +313,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
-			case 'find':
+			case 'read':
 				trace('state.dataTable.length:'+state.dataTable.length);
 				if(state.dataTable.length==0)				
 					return null;
@@ -322,22 +322,22 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 					${...props} dataState = ${dataDisplay["contactList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
-			case 'edit':
+			case 'update':
 			//trace(initialState);
 			//trace(model(initialState, contact, first_name));
 			var fields:Map<String,FormField> = [
-				for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
+				for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 			];
 			//trace(fields);
 			state.formBuilder.renderLocal({
 				fields:[
-					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
+					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 				],
 				model:'contact',
 				title: 'Kontakt - Bearbeite Stammdaten'
 			},initialState);
 				
-			case 'add':
+			case 'create':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
 				jsx('

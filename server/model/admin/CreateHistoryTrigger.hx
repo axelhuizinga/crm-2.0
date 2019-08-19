@@ -20,7 +20,7 @@ using Util;
 @:keep
 class CreateHistoryTrigger extends Model 
 {
-	public static function create(param:StringMap<String>):Void
+	public static function _create(param:StringMap<String>):Void
 	{
 		var self:CreateHistoryTrigger = new CreateHistoryTrigger(param);	
 		//self.table = 'columns';

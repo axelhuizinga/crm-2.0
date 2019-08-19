@@ -190,7 +190,7 @@ class Tr extends PureComponentOfProps<TrProps>
 		//setState({selected: mEvOrID.select ? true:!state.selected});
 		selected = mEvOrID.select ? true:!selected;
 		trace('selected:$selected');
-		forceUpdate();
+		//forceUpdate();
 	}
 
 }

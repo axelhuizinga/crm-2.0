@@ -42,10 +42,10 @@ class Deal extends ReactComponentOf<DataFormProps,FormState>
 	static var _instance:DBSync;
 
 	public static var menuItems:Array<SMItem> = [
-		{label:'Anzeigen',action:'find'},
-		{label:'Bearbeiten',action:'edit'},
-		//{label:'Finden',action:'find'},
-		{label:'Neu', action:'add'},
+		{label:'Anzeigen',action:'read'},
+		{label:'Bearbeiten',action:'update'},
+		//{label:'Finden',action:'read'},
+		{label:'Neu', action:'create'},
 		{label:'Löschen',action:'delete'}
 	];
 	
@@ -74,7 +74,7 @@ class Deal extends ReactComponentOf<DataFormProps,FormState>
 		};
 	}
 	
-	public function find(ev:ReactEvent):Void
+	public function read(ev:ReactEvent):Void
 	{
 		trace('hi :)');
 		return;
@@ -84,7 +84,7 @@ class Deal extends ReactComponentOf<DataFormProps,FormState>
 				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'data.Contacts',
-				action:'find',
+				action:'read',
 				update:'1'
 			},
 			function(data:Map<String,String>)

@@ -61,7 +61,7 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'auth.User',
-				action:'edit',
+				action:'update',
 				filter:'id|${props.user.id}',
 				dataSource:Serializer.run(null)
 			},
@@ -93,12 +93,12 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		/*dataAccess = [
-			'edit' =>{
+			'update' =>{
 				source:new Map(),
 				view:new Map()
 			}
 		];*/
-		//_menuItems = [];//{handler:edit, label:'Bearbeiten', action:'edit'}];
+		//_menuItems = [];//{handler:edit, label:'Bearbeiten', action:'update'}];
 		var sideMenu = updateMenu('bookmarks');
 		//sideMenu.menuBlocks['bookmarks'].items = function() return _menuItems;
 		//trace(sideMenu.menuBlocks['bookmarks'].items());
@@ -129,7 +129,7 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 
 	public static var menuItems:Array<SMItem> = [
 		{label:'Neu',action:'create'},
-		{label:'Bearbeiten',action:'edit'},
+		{label:'Bearbeiten',action:'update'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'},
 	];
@@ -148,7 +148,7 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 		{
 			switch(mI.action)
 			{		
-				case 'edit':
+				case 'update':
 					mI.disabled = state.selectedRows.length==0;
 				case 'save':
 					mI.disabled = state.clean;

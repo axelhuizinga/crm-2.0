@@ -29,11 +29,11 @@ class Contacts extends Model
 	
 	public function new(?param:StringMap<String>) 
 	{
-		table = 'contacts';
+		//table = 'contacts';
 		super(param);
 	}
 	
-	public static function create(param:StringMap<String>):Contacts
+	public static function _create(param:StringMap<String>):Contacts
 	{
 		trace(param);
 		var self:Contacts = new Contacts(param);		
@@ -45,13 +45,6 @@ class Contacts extends Model
 		//trace(param);
 		Reflect.callMethod(self, Reflect.field(self,param.get('action')), [param]);
 		return self;
-	}
-	
-	
-	public function edit(param:StringMap<Dynamic>):Void
-	{		
-		trace(param);
-		 json_encode();		
 	}
 	
 	function getRecordings(lead_id:Int):NativeArray

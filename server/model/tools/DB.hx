@@ -18,7 +18,7 @@ import sys.io.File;
  */
 class DB extends Model
 {
-	public static function create(param:StringMap<String>):Void
+	public static function _create(param:StringMap<String>):Void
 	{
 		var self:DB = new DB(param);	
 		Reflect.callMethod(self, Reflect.field(self, param.get('action')), [param]);

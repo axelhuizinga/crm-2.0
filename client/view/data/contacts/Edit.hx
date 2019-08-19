@@ -68,9 +68,9 @@ using  shared.Utils;
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		{label:'Auswahl',action:'find',section: 'List'},
-		{label:'Bearbeiten',action:'edit'},
-		{label:'Neu', action:'add'},
+		{label:'Auswahl',action:'read',section: 'List'},
+		{label:'Bearbeiten',action:'update'},
+		{label:'Neu', action:'create'},
 		{label:'Löschen',action:'delete'}
 	];
 	
@@ -99,6 +99,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			trace('nothing selected - redirect');
 			var baseUrl:String = props.match.path.split(':section')[0];
 			props.history.push('${baseUrl}List/find');
+			return;
 		}		
 		dataAccess = ContactsModel.dataAccess;
 		dataDisplay = ContactsModel.dataDisplay;
@@ -110,56 +111,16 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			initialState.id = Std.parseInt(props.match.params.id);
 		trace(App.store.getState().dataStore.selectedData);
 		trace(actualState);
-		if((false && initialState.id!=null && !App.store.getState().dataStore.selectedData.exists(initialState.id)))
-		{
-			//load id	
-			/*state.formApi.requests.push( BinaryLoader.create(
-				'${App.config.api}', 
-				{
-					id:props.user.id,
-					jwt:props.user.jwt,
-					className:'data.Contacts',
-					action:'find',
-					filter:'id|${initialState.id}',
-					devIP:App.devIP
-				},
-				function(data:DbData)
-				{			
-					App.jwtCheck(data);
-					trace(data.dataInfo);
-					trace(data.dataRows.length);
-					if(data.dataRows.length>0) 
-					{
-						if(!data.dataErrors.keys().hasNext())
-						{
-							App.store.getState().dataStore.selectedData.set(initialState.id,data.dataRows[0]);
-							actualState = initialState = loadContactData(initialState.id);
-							trace(initialState);
-							for(k in dataAccess['edit'].view.keys())
-							{
-								dataAccess['edit'].view[k].value = Reflect.field(actualState,k);
-							}		
-							setState({initialState: initialState});
-						}
-						else 
-						{
-							//TODO: IMPLEMENT GENERIC FAILURE FEEDBACK
-							var baseUrl:String = props.match.path.split(':section')[0];
-							props.history.push('${baseUrl}List/find');							
-						}				
-					}
-				}
-			));			*/
-		}
+		
 		if((initialState.id!=null && App.store.getState().dataStore.selectedData.exists(initialState.id)))
 		{
 			initialState = loadContactData(initialState.id);
 			actualState = copy(initialState);
 			trace(initialState);		
 
-			for(k in dataAccess['edit'].view.keys())
+			for(k in dataAccess['update'].view.keys())
 			{
-				dataAccess['edit'].view[k].value = Reflect.field(actualState,k);
+				dataAccess['update'].view[k].value = Reflect.field(actualState,k);
 			}			
 		}
 		
@@ -182,7 +143,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				}),	
 			values:new Map<String,Dynamic>()
 		},this);
-		trace(state.loading);
+		trace(state.initialState.id);
 	}
 
 	function loadContactData(id:Int)
@@ -210,48 +171,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.selectedRows.length);
 		var data = state.formApi.selectedRowsMap(state);
 	}
-	
-	/*public function edit(ev:ReactEvent):Void
-	{
-		//trace(ev);
-		if(state.selectedData != null )
-		{
-			trace(state.selectedData.keys());
-			if(!state.selectedData.keys().hasNext())
-			{
-				//NO SELECTION  - CHECK PARAMS
-
-				//NO SELECTION  - NOTHING TO EDIT
-				
-				//setState({loading: false});
-				
-				trace(props.match);
-				return;
-			}
-			var baseUrl:String = props.match.path.split(':section')[0];
-			//setState({loading: true});
-			var it:Iterator<Map<String,Dynamic>> = state.selectedData.iterator();
-			var sData:Map<String,Dynamic> = it.next();
-			//trace(sData);
-			//sData = state.selectedData.get(state.selectedData.keys().next());
-			trace(state.selectedData.keys().keysList());
-			trace(FormApi.params(state.selectedData.keys().keysList()));
-			props.history.push('${baseUrl}Edit/edit/${FormApi.params(state.selectedData.keys().keysList())}');
-			initialState = {
-				id:2000328,
-				edited_by: props.user.id,				
-				mandator: props.user.mandator
-			};			
-			for(k in dataAccess['edit'].view.keys())
-			{
-				trace('$k => ' + sData[k]);
-				Reflect.setField(initialState, k, sData[k]);
-			}			
-		}
-
-		setState({actualState:initialState,initialState: initialState});
-		//trace(it.hasNext());				
-	}*/
 		
 	override public function componentDidMount():Void 
 	{	
@@ -266,7 +185,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					id:props.user.id,
 					jwt:props.user.jwt,
 					className:'data.Contacts',
-					action:'find',
+					action:'read',
 					filter:'id|${initialState.id}',
 					devIP:App.devIP
 				},
@@ -280,11 +199,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						if(!data.dataErrors.keys().hasNext())
 						{
 							var sData:IntMap<Map<String,Dynamic>> = App.store.getState().dataStore.selectedData;
-							actualState = loadContactData(initialState.id);
+							actualState = data.dataRows[0].MapToDyn();
 							trace(actualState);
-							for(k in dataAccess['edit'].view.keys())
+							for(k in dataAccess['update'].view.keys())
 							{
-								dataAccess['edit'].view[k].value = Reflect.field(actualState,k);
+								dataAccess['update'].view[k].value = Reflect.field(actualState,k);
 							}		
 							sData.set(initialState.id,data.dataRows[0]);
 							setState({initialState: copy(actualState)});
@@ -313,16 +232,16 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			});
 		}
 
-		for(dC in state.formBuilder.dateControls)
+		/*for(dC in state.formBuilder.dateControls)
 			dC.createFlatPicker();
 		for(dtC in state.formBuilder.dateTimeControls)
-			dtC.createFlatPicker();			
+			dtC.createFlatPicker();			*/
 	}
 	
 	public function doChange(name,value) {
 		trace('$name: $value');
 		if(name!=null && name!='')
-		Reflect.setField(state.actualState,name,value);
+		Reflect.setField(actualState,name,value);
 	}
 
 	public function handleChange(e:Event) 
@@ -334,8 +253,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		if(el.name != '' && el.name != null)
 		{
 			trace('>>${el.name}<<');
-			trace(state.actualState);
-			Reflect.setField(state.actualState,el.name,el.value);
+			trace(actualState);
+			Reflect.setField(actualState,el.name,el.value);
 		}	
 
 		trace(state.actualState);
@@ -359,7 +278,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
 		var elements:HTMLCollection = formElement.elements;
-		for(k in dataAccess['edit'].view.keys())
+		for(k in dataAccess['update'].view.keys())
 		{
 			if(k=='id')
 				continue;
@@ -390,27 +309,45 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 		//setState({actualState: actualState});
 		trace(actualState);
-		//update(actualState);
+		execute(actualState);
 	}
 
 
-	function update(aState:Contact)
+	function execute(aState:Contact)
 	{
 		trace(Reflect.fields(aState));
 		var dbaProps:DBAccessProps = 
 		{
-			action:'update',
+			action:props.match.params.action,
 			className:'data.Contacts',
-			dataSource:[
-				"contacts" => [
-					"data" => aState,
-					"filter" => 'id|${state.initialState.id}'
-				]
-			],
+			dataSource:null,
 			user:props.user
 		};
-		
-		App.store.dispatch(DataAction.Update(dbaProps));
+		switch (props.match.params.action)
+		{
+			case 'create':
+				Reflect.deleteField(aState,'id');
+				dbaProps.dataSource = [
+					"contacts" => [
+						"data" => aState
+					]
+				];
+			case 'delete':
+				dbaProps.dataSource = [
+					"contacts" => [
+						"filter" => 'id|${state.initialState.id}'
+					]
+				];	
+			case 'update':
+				dbaProps.dataSource = [
+					"contacts" => [
+						"data" => aState,
+						"filter" => 'id|${state.initialState.id}'
+					]
+				];
+		}
+		App.store.dispatch(DataAction.Execute(dbaProps));
+
 		//props.parentComponent.props.update(dbaProps);
 	}
 
@@ -422,41 +359,35 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 		return switch(props.match.params.action)
 		{
-			case 'edit':
+			case 'update':
 				trace(actualState);
 				/*var fields:Map<String,FormField> = [
-					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
+					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 				];*/
 				(actualState.id==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
 					handleSubmit:handleSubmit,
 					fields:[
-						for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
+						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],
 					model:'contact',
 					ref:formRef,
 					title: 'Kontakt - Bearbeite Stammdaten' 
 				},initialState));
 				//null;
-			case 'add':
-				trace(dataDisplay["fieldsList"]);
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["fieldsList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>				
-				');	
-			case 'delete':
-				null;
+			case 'create':
+				state.formBuilder.renderForm({
+					handleSubmit:handleSubmit,
+					fields:[
+						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+					],
+					model:'contact',
+					ref:formRef,
+					title: 'Kontakt - Bearbeite Stammdaten' 
+				},initialState);
 			default:
-				if(state.dataTable.length==0)				
-					return null;
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable} parentComponent=${this}
-					${...props} dataState = ${dataDisplay["contactList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');
+				null;
 		}
-		return null;
 	}
 	
 	override function render():ReactFragment
@@ -464,26 +395,21 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);		
 		trace(props.match.params.action);		
-		trace('state.loading: ${state.loading}');		
+		//trace('state.loading: ${state.loading}');		
 		return switch(props.match.params.action)
 		{	
-			case 'edit':
+			case 'update':
 			 //(state.loading || state.initialState.edited_by==0 ? state.formApi.renderWait():
 				state.formApi.render(jsx('
 						${renderResults()}
 				'));	
-			case 'add':
+			case 'create':
 				state.formApi.render(jsx('
-				<>
-					<form className="tabComponentForm"  >
 						${renderResults()}
-					</form>
-				</>'));		
+				'));		
 			default:
 				state.formApi.render(jsx('
-					<form className="tabComponentForm"  >
 						${renderResults()}
-					</form>
 				'));			
 		}
 	}

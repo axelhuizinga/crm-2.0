@@ -26,7 +26,7 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import react.ReactType;
 import redux.Redux.Dispatch;
-import loader.AjaxLoader;
+import shared.LiveDataAccess;
 import view.data.contacts.List;
 import view.data.contacts.Edit;
 
@@ -120,7 +120,8 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			select:function(id:Int,data:Map<String,Dynamic>,match:RouterMatch)
 			{
 				trace('select:$id');
-				dispatch(DataAction.CreateSelect(id,data,match));
+				//dispatch(DataAction.CreateSelect(id,data,match));
+				dispatch(LiveDataAccess.select({id:id,data:data,match:match}));
 			},
 			storeFormChange: function(path:String, formState:FormState) 
 			{

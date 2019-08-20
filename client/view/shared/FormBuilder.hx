@@ -81,30 +81,32 @@ class FormBuilder {
 		}].array();
 	}
 	
-	function renderFormInputElements(fields:Map<String, FormField>, model:String, ?compOnChange:Function):ReactFragment
+	function renderFormInputElements(fields:Map<String, FormField>, initialData:Dynamic, ?compOnChange:Function):ReactFragment
 	{
 		var ki:Int = 0;
 		trace(Utils.genKey(1));
 		//return fields.array().map(function(field:FormField){
-		return [for(name => field in fields){
-			if(name=='id')trace (field.type +' $name:' + field.value);
-			if(name=='last_name')trace (field.type +' $name:' + field.value);
+		return [for(name => field in fields)
+		{
+			var value:String = Reflect.field(initialData,name);
+			if(name=='id')trace (field.type +' $name:' + value);
+			if(name=='last_name')trace (field.type +' $name:' + value);
 			switch (field.type)
 			{
 				case FormInputElement.Hidden:
-					jsx('<input key=${ki++} type="hidden" name=${name} defaultValue=${field.value}/>');
+					jsx('<input key=${ki++} type="hidden" name=${name} defaultValue=${value}/>');
 				case FormInputElement.Button:
 					jsx('<button type="submit">
-						${field.value}
+						${value}
 					</button>');
 				case FormInputElement.Checkbox:			
 					renderElement(
-						jsx('<input name=${name}  key=${ki++} type="checkbox" checked=${field.value} onChange=${onChange} disabled=${field.disabled} required=${field.required}/>'),
+						jsx('<input name=${name}  key=${ki++} type="checkbox" checked=${value} onChange=${onChange} disabled=${field.disabled} required=${field.required}/>'),
 						ki++, field.label
 					);
 				case Select:
 				renderElement(
-					jsx('<select name=${name} onChange=${onChange}  defaultValue=${field.value} key=${ki++} multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
+					jsx('<select name=${name} onChange=${onChange}  defaultValue=${value} key=${ki++} multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
 					ki++, field.label
 				);
 				case FormInputElement.DateTimeControl:
@@ -115,11 +117,11 @@ class FormBuilder {
 						onChange: comp.handleChange,						
 						options:{
 							dateFormat:field.displayFormat(), 
-							defaultDate: field.value,
+							defaultDate: value,
 							time_24hr:true,
 							_inline:field.disabled
 						},
-						value:field.value
+						value:value
 					};
 					jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">
@@ -140,7 +142,7 @@ class FormBuilder {
 							defaultDate:Date.now(),
 							_inline:field.disabled
 						},
-						value:field.value
+						value:value
 					};
 					jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">
@@ -151,7 +153,7 @@ class FormBuilder {
 					</div>');
 				default:
 					renderElement(
-						jsx('<input name=${name} onChange=${onChange} type="text"  defaultValue=${field.value} disabled=${field.disabled} required=${field.required}/>'),
+						jsx('<input name=${name} onChange=${onChange} type="text"  defaultValue=${value} disabled=${field.disabled} required=${field.required}/>'),
 						ki++, field.label
 					);
 			}
@@ -169,7 +171,7 @@ class FormBuilder {
 			<form name=${props.model} onSubmit=${props.handleSubmit} ref=${props.ref} className="tabComponentForm formField">
 				<div className="grid_box" role="table" aria-label="Destinations">
 					<div className="g_caption" >${props.title}</div>	
-					${renderFormInputElements(props.fields, props.model)}
+					${renderFormInputElements(props.fields, initialState)}
 					<div className="g_fill_row">
 						<input type="submit" className="center" value="Speichern"/>
 					</div>					

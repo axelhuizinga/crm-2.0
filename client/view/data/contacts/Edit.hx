@@ -41,7 +41,7 @@ import view.table.Table;
 import model.Contact;
 
 using  shared.Utils;
-
+using Lambda;
 /*
  * GNU Affero General Public License
  *
@@ -80,28 +80,34 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var dbMetaData:shared.DBMetaData;
 
 	var formRef:ReactRef<FormElement>;
+	var fieldNames:Array<String>;
 	var actualState:Contact;
 	
-	public static var initialState:Contact =
-	{
-		id:null,//2000328,
-		edited_by: 0,
-		mandator: 0
-	};	
+	public static var initialState:Contact;
 
 	public function new(props) 
 	{
 		super(props);
 		trace(props.match.params);
-		actualState = copy(initialState);
-		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
+		initialState = {
+			id:null,//2000328,
+			edited_by: props.user.id,
+			mandator: props.user.mandator
+		};	
+		//actualState = copy(initialState);initialState.mandator = props.user.mandator;
+		if(props.match.params.id==null && ~/update(\/)*$/.match(props.match.params.action) )
 		{
 			trace('nothing selected - redirect');
 			var baseUrl:String = props.match.path.split(':section')[0];
-			props.history.push('${baseUrl}List/find');
+			props.history.push('${baseUrl}List/read');
 			return;
 		}		
 		dataAccess = ContactsModel.dataAccess;
+		fieldNames = new Array();
+		for(k in dataAccess['update'].view.keys())
+		{
+			fieldNames.push(k);
+		}	
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		formRef = React.createRef();
@@ -110,18 +116,21 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		if(props.match.params.id!=null)
 			initialState.id = Std.parseInt(props.match.params.id);
 		trace(App.store.getState().dataStore.selectedData);
-		trace(actualState);
 		
 		if((initialState.id!=null && App.store.getState().dataStore.selectedData.exists(initialState.id)))
 		{
 			initialState = loadContactData(initialState.id);
 			actualState = copy(initialState);
-			trace(initialState);		
+			trace(actualState);		
 
-			for(k in dataAccess['update'].view.keys())
+			/*for(k in dataAccess['update'].view.keys())
 			{
 				dataAccess['update'].view[k].value = Reflect.field(actualState,k);
-			}			
+			}	*/		
+		}
+		else {			
+			//actualState = copy(initialState);
+			trace(actualState);
 		}
 		
 		state =  App.initEState({
@@ -187,6 +196,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					className:'data.Contacts',
 					action:'read',
 					filter:'id|${initialState.id}',
+					table:'contacts',
 					devIP:App.devIP
 				},
 				function(data:DbData)
@@ -198,15 +208,16 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					{
 						if(!data.dataErrors.keys().hasNext())
 						{
-							var sData:IntMap<Map<String,Dynamic>> = App.store.getState().dataStore.selectedData;
+							//var sData:IntMap<Map<String,Dynamic>> = App.store.getState().dataStore.selectedData;
 							actualState = data.dataRows[0].MapToDyn();
+							props.parentComponent.props.select(actualState.id,data.dataRows[0],props.match);
 							trace(actualState);
-							for(k in dataAccess['update'].view.keys())
+							/*for(k in dataAccess['update'].view.keys())
 							{
 								dataAccess['update'].view[k].value = Reflect.field(actualState,k);
-							}		
-							sData.set(initialState.id,data.dataRows[0]);
-							setState({initialState: copy(actualState)});
+							}*/
+							//sData.set(initialState.id,data.dataRows[0]);
+							//setState({initialState: copy(actualState)});
 						}
 						else 
 						{
@@ -218,6 +229,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				}
 			);			
 		}
+		else if(actualState==null)
+			actualState = copy(initialState);
 		if(formRef.current != null)
 		{
 			//trace(Reflect.fields(formRef.current));
@@ -247,8 +260,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	public function handleChange(e:Event) 
 	{
 		var el:Dynamic = e.target;
-		trace(Type.typeof(el));
-
+		//trace(Type.typeof(el));
 		trace('${el.name}:${el.value}');
 		if(el.name != '' && el.name != null)
 		{
@@ -257,7 +269,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			Reflect.setField(actualState,el.name,el.value);
 		}	
 
-		trace(state.actualState);
+		trace(actualState);
 	}		
 
 	function handleSubmit(event:Event) {
@@ -313,7 +325,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 
-	function execute(aState:Contact)
+	function execute(aState:Dynamic)
 	{
 		trace(Reflect.fields(aState));
 		var dbaProps:DBAccessProps = 
@@ -321,15 +333,24 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			action:props.match.params.action,
 			className:'data.Contacts',
 			dataSource:null,
+			//table:'contacts',
 			user:props.user
 		};
 		switch (props.match.params.action)
 		{
 			case 'create':
+				for(f in fieldNames)
+				{
+					trace('$f =>${Reflect.field(aState,f)}<=');
+					if(Reflect.field(aState,f)=='')
+						Reflect.deleteField(aState,f);
+				}
 				Reflect.deleteField(aState,'id');
+				Reflect.deleteField(aState,'creation_date');				
 				dbaProps.dataSource = [
 					"contacts" => [
-						"data" => aState
+						"data" => aState,
+						"fields" => Reflect.fields(aState).join(',')
 					]
 				];
 			case 'delete':
@@ -364,7 +385,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 				];*/
-				(actualState.id==null ? state.formApi.renderWait():
+				(actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
 					handleSubmit:handleSubmit,
 					fields:[
@@ -376,6 +397,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				},initialState));
 				//null;
 			case 'create':
+				trace(actualState);
 				state.formBuilder.renderForm({
 					handleSubmit:handleSubmit,
 					fields:[
@@ -383,7 +405,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					],
 					model:'contact',
 					ref:formRef,
-					title: 'Kontakt - Bearbeite Stammdaten' 
+					title: 'Kontakt - Neue Stammdaten' 
 				},initialState);
 			default:
 				null;

@@ -48,6 +48,7 @@ typedef  TrState =
 class Tr extends PureComponentOfProps<TrProps>
 {
 	public var me:ReactFragment;
+	var id:String;
 	var selected:Bool;
 	var ref:ReactRef<TableRowElement>;
 
@@ -56,7 +57,7 @@ class Tr extends PureComponentOfProps<TrProps>
 		super(props);	
 		ref = React.createRef();
 		var match:RouterMatch = props.parentComponent.props.match;
-		var id:String = props.data != null ? props.data.get('id'): '';
+		id = props.data != null ? props.data.get('id'): '';
 		//trace('$id ${match.params.id !=null && match.params.id.indexOf(id)>-1}');
 		//state = {cells:[], selected:match.params.id !=null && match.params.id.indexOf(id)>-1?true:false};	
 		selected = false;
@@ -130,9 +131,9 @@ class Tr extends PureComponentOfProps<TrProps>
 			//trace(props.data);setFormState
 			ref = props.firstTableRow;
 		}
-		else if(selected)
+		else if(id==props.parentComponent.props.match.id)
 		{
-			//re
+			selected = true;
 		}
 		if(props.data==null)
 		{

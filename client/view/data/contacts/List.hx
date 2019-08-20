@@ -99,7 +99,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				jwt:props.user.jwt,
 				className:'data.Contacts',
 				action:'read',
-				devIP:App.devIP
+				devIP:App.devIP,
+				table:'contacts'
 			},
 			function(data:DbData)
 			{			

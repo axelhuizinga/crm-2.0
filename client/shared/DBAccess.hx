@@ -26,7 +26,8 @@ typedef DBAccessProps =
 {
 	action:String,
 	className:String,
-	dataSource:Map<String,Map<String,Dynamic>>,
+	?dataSource:Map<String,Map<String,Dynamic>>,
+	?table:String,
 	user:UserState
 }
 
@@ -73,16 +74,19 @@ class DBAccess
 			}	
 			var spin:Dynamic = dispatch(AppWait);
 			trace(spin);
-			var bL:XMLHttpRequest = BinaryLoader.create(
-			'${App.config.api}', 
-			{				
+			var params:Dynamic = {				
 				id:props.user.id,
 				jwt:props.user.jwt,
 				className:props.className,
 				action:props.action,
 				dataSource:Serializer.run(props.dataSource),
 				devIP:App.devIP
-			},
+			};
+			if(props.table != null)
+				params.table = props.table;
+			var bL:XMLHttpRequest = BinaryLoader.create(
+			'${App.config.api}', 
+			params,
 			function(data:DbData)
 			{				
 				trace(data);

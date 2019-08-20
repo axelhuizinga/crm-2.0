@@ -297,6 +297,7 @@ class Model
 	public function execute(sql:String):NativeArray
 	{
 		trace(sql);	
+		trace(setValues.join(','));
 		var stmt:PDOStatement =  S.dbh.prepare(sql,Syntax.array(null));
 		if (S.dbh.errorCode()!='00000')
 		{
@@ -360,6 +361,7 @@ class Model
 				data = stmt.fetchAll(PDO.FETCH_ASSOC);
 			}			
 			trace(Lib.toHaxeArray(data).join(','));		
+			trace(stmt.errorInfo());
 			return(data);		
 		}
 		else {
@@ -479,7 +481,7 @@ class Model
 		{
 			sqlBf.add('${quoteIdent(tableNames[0])} ');
 		}
-		sqlBf.add('($queryFields) VALUES${setSql}');
+		sqlBf.add('($queryFields) VALUES${setSql} RETURNING id');
 		if (filterSql != null)
 		{
 			sqlBf.add(filterSql);
@@ -739,7 +741,8 @@ class Model
 	
 	function buildFieldsSql(name:String, tParam:StringMap<String>):Array<String>
 	{
-		var prefix = (tParam.exists('alias')?quoteIdent(tParam.get('alias')+'.'):'');
+		var prefix = (tParam.exists('alias')?quoteIdent(tParam.get('alias'))+'.':'');
+		trace(prefix);
 		if (tParam.exists('fields'))
 		{
 			return tParam.get('fields').split(',').map(function(field) return '${prefix}${quoteIdent(field)}');
@@ -752,7 +755,8 @@ class Model
 		//var fields:Array<String> = [];
 		for(key in fieldNames)
 		{
-			setValues.push(Reflect.field(data,key));
+			var val:String = Reflect.field(data,key);
+			setValues.push(val==''? 'DEFAULT':val);
 		}		
 		//return fields;
 	}

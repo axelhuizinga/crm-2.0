@@ -4,5 +4,8 @@
 			"path": "/opt/src/crm-2.0/client"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"workbench.settings.editor": "json",
+		"window.zoomLevel": 0.5
+	}
 }

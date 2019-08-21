@@ -36,7 +36,6 @@ enum AppAction
 	//AddContact(id:Int);
 	SetLocale(locale:String);
 	SetTheme(color:String);
-	//Select(id:Int,data:Map<String,Dynamic>,match:RouterMatch);
 	User(state:UserState);
 	//Users(filter:UserFilter);
 	//SetEntries(entries:Array<DataCell>);

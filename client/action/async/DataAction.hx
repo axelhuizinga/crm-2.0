@@ -2,16 +2,27 @@ package action.async;
 
 import haxe.ds.IntMap;
 import react.router.RouterMatch;
-import redux.Redux.Dispatch;
-import redux.thunk.Thunk;
 import shared.DbData;
-import state.DataAccessState;
+import shared.DBAccess;
 
 /**
  * ...
  * @author axel@cunity.me
  */
-import shared.DBAccess;
+
+enum abstract SelectType(String) {
+	var All;	
+	var One;
+	var Unselect;
+	var UnselectAll;
+}
+typedef LiveDataProps = 
+{
+	id:Dynamic,
+	data: IntMap<Map<String,Dynamic>>,
+	match:RouterMatch,
+	?selectType:SelectType
+}
 
 enum  DataAction
 {
@@ -20,8 +31,8 @@ enum  DataAction
 	Done(data:DbData);
 	Error(data:DbData);
 	Load(data:DbData);
-	CreateSelect(id:Int,data:Map<String,Dynamic>,match:RouterMatch);
-	Select(id:Int,data:Map<String,Dynamic>);
-
+	//CreateSelect(id:Int,data:Map<String,Dynamic>,match:RouterMatch);
+	Select(sData:IntMap<Map<String,Dynamic>>);
+	Unselect(id:Int);
 	//Update(data:DBAccessProps);
 }

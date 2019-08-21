@@ -27,20 +27,13 @@ class DataStore
 		initState = {
 			dbData:new DbData(),
 			selectedData: new IntMap()
-			//user:store.getState().appWare.user 
-			/*user:{
-				mandator: 1,
-				id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
-				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
-				waiting: false
-			}*/
 		};
 		trace('ok');
 	}
 	
 	public function reduce(state:DataAccessState, action:DataAction):DataAccessState
 	{
-		trace(state);
+		//trace(state);
 		return switch(action)
 		{
 			case Load(data):
@@ -56,13 +49,10 @@ class DataStore
 					dbData:data
 				}
 				);
-			case Select(id, data):
-				var sData = state.selectedData;
-				sData.set(id,data);			
-				//App.browserHistory	
+			case Select(sData):		
 				copy(state,{
 					selectedData:sData
-				});
+				});		
 			default:
 				state;
 		}
@@ -70,13 +60,13 @@ class DataStore
 	
 	public function middleware(action:DataAction, next:Void -> Dynamic)
 	{
-		trace(action);
+		trace(Type.enumConstructor(action));
 		return switch(action)
 		{
-			case CreateSelect(id, data, match):
+			/*case CreateSelect(id, data, match):
 				//next();
 				store.dispatch(LiveDataAccess.select({id:id,data:data,match:match}));
-				//next();
+				//next();*/
 			case Execute(data):
 				store.dispatch(DBAccess.execute(data));
 				//next();

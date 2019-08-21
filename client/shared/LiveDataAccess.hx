@@ -1,11 +1,13 @@
 package shared;
 
+import haxe.ds.IntMap;
 import react.router.RouterMatch;
 import js.html.Blob;
 import state.UserState;
 import state.AppState;
 import action.AppAction;
 import action.async.DataAction;
+import haxe.ds.Either;
 import haxe.Serializer;
 import haxe.http.HttpJs;
 import state.DataAccessState;
@@ -26,13 +28,7 @@ using shared.Utils;
  * @author axel@cunity.me
  */
 
-//typedef DBAccessProps = Dynamic;
-typedef LiveDataProps = 
-{
-	id:Dynamic,
-	data:Map<String,Dynamic>,
-	match:RouterMatch
-}
+
 
 class LiveDataAccess
 {
@@ -50,11 +46,31 @@ class LiveDataAccess
 			var aState:AppState = getState();
 			trace(aState.dataStore.selectedData);
 			var sData = aState.dataStore.selectedData;
-			sData.set(props.id,props.data);
+			if(props.id != null)
+			//trace('sData.keys().hasNext():${sData.get(props.id)}');
+			trace(sData);
+			trace(props);
+			switch(props.selectType)
+			{
+				case All:
+					sData = new IntMap();
+					for(k=>v in props.data.keyValueIterator())
+						sData.set(k,v);
+				case One:
+					sData.set(props.id,props.data.get(props.id));
+				case Unselect:
+					trace(sData.exists(props.id));
+					sData.remove(props.id);
+				case UnselectAll:
+					sData = new IntMap();
+				default:
+					sData = new IntMap();
+					sData.set(props.id,props.data.get(props.id));
+			}
 			var baseUrl:String = props.match.path.split(':section')[0];
 			baseUrl = '${baseUrl}${props.match.params.section}/${props.match.params.action}';	
 			aState.appWare.history.push('${baseUrl}/${FormApi.params(sData.keys().keysList())}');
-			dispatch(DataAction.Select(props.id,props.data));
+			dispatch(DataAction.Select(props.data));
 			/**
 			 * 				var state = store.getState();
 				var sData = state.dataStore.selectedData;
@@ -66,49 +82,4 @@ class LiveDataAccess
 		});
 	}
 
-	/*public static function update(props:LiveDataProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
-	{
-		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			trace(props);
-			//trace(getState());
-			if (!props.user.loggedIn)
-			{
-				return dispatch(LoginError(
-				{
-					id:props.user.id,
-					loginError:'Du musst dich neu anmelden!',
-					user_name:props.user.user_name
-				}));
-			}	
-			var spin:Dynamic = dispatch(AppWait);
-			trace(spin);
-			//var hS:hxbit.Serializer = new hxbit.Serializer();
-			//trace(hS.serialize(props.dataSource));
-			var bL:XMLHttpRequest = BinaryLoader.create(
-			'${App.config.api}', 
-			{				
-				id:props.user.id,
-				jwt:props.user.jwt,
-				className:props.className,
-				action:props.action,
-				dataSource:Serializer.run(props.dataSource),
-				devIP:App.devIP
-			},
-			function(data:DbData)
-			{				
-				trace(data);
-				if (data.dataErrors.keys().hasNext())
-				{
-					trace(data.dataErrors);
-				}
-				return null;
-
-			});
-			if (requests != null)
-			{
-				requests.push(bL);
-			}
-			return null;
-		});
-	}*/
 }

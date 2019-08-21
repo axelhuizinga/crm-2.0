@@ -123,10 +123,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			actualState = copy(initialState);
 			trace(actualState);		
 
-			/*for(k in dataAccess['update'].view.keys())
-			{
-				dataAccess['update'].view[k].value = Reflect.field(actualState,k);
-			}	*/		
+			//OK we got the data	
 		}
 		else {			
 			//actualState = copy(initialState);
@@ -185,7 +182,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{	
 		if((initialState.id!=null && !App.store.getState().dataStore.selectedData.exists(initialState.id)))
 		{
-			//load id	 state.formApi.requests.push( 
+			//DATA NOT IN STORE - LOAD IT
 			trace('creating BinaryLoader ${App.config.api}');
 			//return;
 			BinaryLoader.create(
@@ -212,12 +209,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 							actualState = data.dataRows[0].MapToDyn();
 							props.parentComponent.props.select(actualState.id,data.dataRows[0],props.match);
 							trace(actualState);
-							/*for(k in dataAccess['update'].view.keys())
-							{
-								dataAccess['update'].view[k].value = Reflect.field(actualState,k);
-							}*/
-							//sData.set(initialState.id,data.dataRows[0]);
-							//setState({initialState: copy(actualState)});
 						}
 						else 
 						{
@@ -244,11 +235,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				//doChange(ev.target.name,ev.target.value);
 			});
 		}
-
-		/*for(dC in state.formBuilder.dateControls)
-			dC.createFlatPicker();
-		for(dtC in state.formBuilder.dateTimeControls)
-			dtC.createFlatPicker();			*/
 	}
 	
 	public function doChange(name,value) {
@@ -381,6 +367,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{
 			case 'update':
+				trace(initialState);
 				trace(actualState);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
@@ -394,7 +381,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					model:'contact',
 					ref:formRef,
 					title: 'Kontakt - Bearbeite Stammdaten' 
-				},initialState));
+				},actualState));
 				//null;
 			case 'create':
 				trace(actualState);
@@ -406,7 +393,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					model:'contact',
 					ref:formRef,
 					title: 'Kontakt - Neue Stammdaten' 
-				},initialState);
+				},actualState);
 			default:
 				null;
 		}

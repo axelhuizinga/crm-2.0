@@ -72,8 +72,8 @@ class DBAccess
 					user_name:props.user.user_name
 				}));
 			}	
-			var spin:Dynamic = dispatch(AppWait);
-			trace(spin);
+			//var spin:Dynamic = dispatch(AppWait);
+			//trace(spin);
 			var params:Dynamic = {				
 				id:props.user.id,
 				jwt:props.user.jwt,

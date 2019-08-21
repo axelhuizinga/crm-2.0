@@ -1,5 +1,6 @@
 package view.table;
 
+import action.async.DataAction;
 import haxe.ds.IntMap;
 import react.router.RouterMatch;
 import js.html.TableRowElement;
@@ -165,33 +166,21 @@ class Tr extends PureComponentOfProps<TrProps>
 		{
 			if(!selected)
 			{
-				props.parentComponent.props.select(props.data['id'], props.data, props.parentComponent.props.match);
-			}
-	
-			/*var fS:FormState = props.parentComponent.state;
-			var sData = fS.selectedData;
-
-
-			trace('selected:${selected}');
-			if(selected)
+				props.parentComponent.props.select(props.data['id'], 
+					[Std.int(props.data['id'])=>props.data], props.parentComponent.props.match);
+			}//
+			else
 			{
-				trace(props.parentComponent.props.match);
-				sData.set(props.data["id"], props.data);
-			   	
-			}
-			else 
-			{
-				sData.remove(props.data["id"]);
-			}
-			trace(FormApi.params(sData.keys().keysList()));
-			props.parentComponent.props.storeFormChange(baseUrl,copy(fS,{selectedData:sData}));
-			*/
+				props.parentComponent.props.select(props.data['id'], null,props.parentComponent.props.match, Unselect);
+			}	
+			
 		}
 		//trace(selected);
 		//setState({selected: mEvOrID.select ? true:!state.selected});
 		selected = mEvOrID.select ? true:!selected;
 		trace('selected:$selected');
-		//forceUpdate();
+		if(!mEvOrID.select)
+			forceUpdate();
 	}
 
 }

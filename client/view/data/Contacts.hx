@@ -117,11 +117,11 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
     {
 		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
         return {
-			select:function(id:Int,data:Map<String,Dynamic>,match:RouterMatch)
+			select:function(id:Int,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
 			{
-				trace('select:$id');
+				trace('select:$id selectType:${selectType}');
 				//dispatch(DataAction.CreateSelect(id,data,match));
-				dispatch(LiveDataAccess.select({id:id,data:data,match:match}));
+				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
 			},
 			storeFormChange: function(path:String, formState:FormState) 
 			{
@@ -132,7 +132,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 					path,
 					formState
 				));
-			},
+			}
 			/*update: function(dbaProps:DBAccessProps) {
 				trace(dbaProps);
 				dispatch(DataAction.Update(dbaProps));
@@ -147,91 +147,6 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			user:aState.appWare.user
 		};
 	}
-	
-	public function delete(ev:ReactEvent):Void
-	{
-		trace(state.selectedRows.length);
-		var data = state.formApi.selectedRowsMap(state);
-	}
-
-	public function read(ev:ReactEvent):Void
-	{
-		trace('hi :)');
-		//return;
-		//dbMetaData = new  DBMetaData();
-		//dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
-		//trace(dbMetaData.dataFields.get(111));
-		var s:hxbit.Serializer = new hxbit.Serializer();
-		
-		//return;
-		state.formApi.requests.push( BinaryLoader.create(
-			'${App.config.api}', 
-			{
-				id:props.user.id,
-				jwt:props.user.jwt,
-				className:'data.Contacts',
-				action:'read',
-				devIP:App.devIP
-			},
-			function(data:DbData)
-			{			
-				App.jwtCheck(data);
-				trace(data.dataInfo);
-				trace(data.dataRows.length);
-				if(data.dataRows.length>0) 
-				{
-				if(!data.dataErrors.keys().hasNext())
-				{
-					setState({dataTable:data.dataRows, values: ['loadResult'=>'','closeAfter'=>100]});
-				}
-				else 
-					setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});					
-				}
-				//setState({dataTable:data.dataRows, loading: false});
-			}
-		));
-	}
-	
-	public function edit(ev:ReactEvent):Void
-	{
-		//trace(ev);
-		trace(state.selectedData.keys());
-		if(!state.selectedData.keys().hasNext())
-		{
-			//NO SELECTION  - CHECK PARAMS
-
-			//NO SELECTION  - NOTHING TO EDIT
-			
-			//setState({loading: false});
-			
-			//trace(props.match);
-			/*if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
-			{
-				trace('redirect 2 ${baseUrl}');
-				//props.history.push('${baseUrl}${props.match.params.section}');
-				props.history.push('${baseUrl}');
-				
-				read(ev);
-				//state.formApi.doAction('read');	
-			}			*/
-			return;
-		}
-		var baseUrl:String = props.match.path.split(':section')[0];
-		//setState({loading: true});
-		var it:Iterator<Map<String,Dynamic>> = state.selectedData.iterator();
-		var sData:Map<String,Dynamic> = it.next();
-		//trace(sData);
-		//sData = state.selectedData.get(state.selectedData.keys().next());
-		trace(state.selectedData.keys().keysList());
-		trace(FormApi.params(state.selectedData.keys().keysList()));
-		props.history.push('${baseUrl}Edit/${FormApi.params(state.selectedData.keys().keysList())}');
-		for(k in dataAccess['update'].view.keys())
-		{
-			//trace('$k => ' + sData[k]);
-			Reflect.setField(initialState, k, sData[k]);
-		}
-		//trace(it.hasNext());				
-	}
 		
 	override public function componentDidMount():Void 
 	{	
@@ -240,125 +155,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		return;
 		var baseUrl:String = props.match.path.split(':section')[0];
 		trace(props.match);
-		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
-		{
-			//~/ 
-			//trace('reme');
-			//props.history.push(baseUrl);
-		}
-		dataAccess = ContactsModel.dataAccess;
-		
-		if(props.match.params != null)
-		trace('yeah action: ${props.match.params.action}');
-		//dbData = FormApi.init(this, props);
-		if(props.match.params.id!=null)
-		{
-			trace('select ID(s)');
-			
-		}		
-
-		if(props.match.params.action != null)
-		{
-			state.formApi.doAction();	
-		}
-		else 
-		{
-			//invoke default action if any
-			state.formApi.doAction('read');	
-		}
 	}
-
-	function handleChange(contact, value, t) {
-		trace(contact);
-		var field:String = contact.split('.')[1];
-		trace(field);
-		trace(contact.length);
-		trace(t);
-		
-		//trace(Type.typeof(contact));
-		//Out.dumpObject(contact);
-		//trace(contact[0].fp_incr(1));
-		
-		trace(value);
-		Reflect.setField(initialState, field, value);
-	}		
-
-	function handleSubmit(contact, t) {
-		trace(contact);//initialState
-		trace(t._targetInst);
-		
-		
-		var fProps:Dynamic = Reflect.field(t._targetInst,'return').stateNode.props;
-		trace(fProps.store.getState());
-		trace(Reflect.fields(fProps));
-		var form_ = Reflect.field(fProps.formValue,"$form");
-		//trace(fProps.formValue);
-		trace(Reflect.fields(form_));
-		trace(form_.value);
-		trace(form_.intents );
-		trace(form_.pristine );
-		
-		return false;
-	}	
-
-	function save()
-	{
-		
-	}
-	
-	/*function renderResults():ReactFragment
-	{
-		trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.dataTable != null));
-		//trace(dataDisplay["userList"]);
-
-		trace('###########loading:' + state.loading);
-		return switch(props.match.params.action)
-		{
-			case 'read':
-				trace('state.dataTable.length:'+state.dataTable.length);
-				if(state.dataTable.length==0)				
-					return null;
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable} parentComponent=${this} 
-					${...props} dataState = ${dataDisplay["contactList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');
-			case 'update':
-			//trace(initialState);
-			//trace(model(initialState, contact, first_name));
-			var fields:Map<String,FormField> = [
-				for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
-			];
-			//trace(fields);
-			state.formBuilder.renderLocal({
-				fields:[
-					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
-				],
-				model:'contact',
-				title: 'Kontakt - Bearbeite Stammdaten'
-			},initialState);
-				
-			case 'create':
-				trace(dataDisplay["fieldsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["fieldsList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>				
-				');	
-			case 'delete':
-				null;
-			default:
-				if(state.dataTable.length==0)				
-					return null;
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable} parentComponent=${this}
-					${...props} dataState = ${dataDisplay["contactList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');
-		}
-		return null;
-	}*/
 	
 	override function render():ReactFragment
 	{

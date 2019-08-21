@@ -41,13 +41,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			dataTable:[],
-			/*initialState:
-			{
-				id:0,
-				edited_by: 0,
-				formBuilder:new FormBuilder(this),
-				mandator: 0
-			},*/
 			loading:false,
 			selectedData:new IntMap(),			
 			selectedRows:[],
@@ -68,7 +61,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			//var sData = App.store.getState().dataStore.selectedData;
 			var baseUrl:String = props.match.path.split(':section')[0];
-			props.history.push('${baseUrl}List/find');
+			props.history.push('${baseUrl}List/read');
 			read(null);
 }		
 		trace(state.loading);
@@ -179,33 +172,19 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
 		trace(state.loading);
-		if(state.loading)
+		if(state.dataTable.length==0)
 			return state.formApi.renderWait();
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
 			case 'read':
 				jsx('
+				<form className="tabComponentForm" >
 					<Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
 					${...props} dataState = ${dataDisplay["contactList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
+				</form>
 				');
-			case 'update':
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["clientList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');			
-			case 'create':
-				trace(dataDisplay["fieldsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["fieldsList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>				
-				');	
-			case 'delete':
-				null;
 			default:
 				null;
 		}
@@ -216,12 +195,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);		
-		return state.dataTable.length==0?null:state.formApi.render(jsx('
-		<>
-			<form className="tabComponentForm" >
+		return state.formApi.render(jsx('
 				${renderResults()}
-			</form>
-		</>'));		
+		'));		
 	}
 
 	function select(data:IntMap<Map<String,Dynamic>>)

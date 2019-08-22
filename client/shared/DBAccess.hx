@@ -93,6 +93,10 @@ class DBAccess
 				if (data.dataErrors.keys().hasNext())
 				{
 					trace(data.dataErrors);
+					if(data.dataErrors.exists('loginError'))
+					{
+						return dispatch(LoginError({loginError: data.dataErrors.get('loginError')}));
+					}
 				}
 				return null;
 			});

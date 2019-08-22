@@ -46,6 +46,12 @@ using Util;
  * @author axel@cunity.me
  */
 
+typedef ColDef =
+{
+	column_name:String,
+	column_default:String
+}
+
 typedef Response =
 {
 	?content:Dynamic,
@@ -324,6 +330,52 @@ class S
 		return;
 		dumpNativeArray(what, pos);
 	}
+
+	public static function columnDefaults(table:String, schema:String = 'crm'):Map<String,String>
+	{
+		var sql = comment(unindent, format) /*
+		SELECT column_name, column_default
+		FROM information_schema.columns
+		WHERE (table_schema, table_name) = ('${quoteIdent(schema)}', '${quoteIdent(table)}')
+		ORDER BY ordinal_position;
+		*/;
+		var stmt:PDOStatement = S.dbh.query(sql);
+		if (S.dbh.errorCode() != '00000')
+		{
+			trace(S.dbh.errorCode());
+			trace(S.dbh.errorInfo());
+			Sys.exit(0);
+		}		
+		var res:Map<String,String> = new Map();
+		var data:Dynamic =  stmt.fetch(PDO.FETCH_OBJ);
+	 	while ( data != null)
+		{
+			trace(data);
+			res.set(data.column_name, data.column_default);
+			data = stmt.fetch(PDO.FETCH_OBJ);
+		}
+		/*var data:Array<ColDef> = cast Lib.toHaxeArray(stmt.fetchAll(PDO.FETCH_ASSOC));
+		trace(data);
+		res = [
+			for (row in data)
+				row.column_name => row.column_default
+		];*/
+		return res;
+/*				
+		trace(Lib.toHaxeArray(data).join(','));		
+		trace(stmt.errorInfo());
+		return(Lib.toHaxeArray(data));	*/
+
+	}
+
+	public static function quoteIdent(f : String):String 
+	{
+		if ( ~/^([a-zA-Z_])[a-zA-Z0-9_]+$/.match(f))
+		{
+			return f;
+		}		
+		return '"$f"';
+	}
 	
 	public static function tableFields(table:String, db:String = 'crm'): Array<String>
 	{
@@ -350,7 +402,7 @@ class S
 		var sql:String = comment(unindent,format) /*
 		select column_name,data_type 
 		from information_schema.columns 
-		where table_name = '$table';
+		where table_name = ${quoteIdent(table)};
 		*/;
 		var stmt:PDOStatement = S.dbh.query(sql);
 		if (S.dbh.errorCode() != '00000')

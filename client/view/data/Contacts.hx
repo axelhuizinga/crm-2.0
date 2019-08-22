@@ -142,7 +142,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	
 	static function mapStateToProps(aState:AppState) 
 	{
-		trace(aState.dataStore.dbData);
+		//trace(aState.dataStore.dbData);
 		return {
 			user:aState.appWare.user
 		};

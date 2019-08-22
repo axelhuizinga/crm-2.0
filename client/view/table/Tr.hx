@@ -1,5 +1,10 @@
 package view.table;
 
+import js.html.Element;
+import js.Browser;
+import haxe.macro.Expr.Catch;
+import react.ReactEvent;
+import js.html.Event;
 import action.async.DataAction;
 import haxe.ds.IntMap;
 import react.router.RouterMatch;
@@ -46,7 +51,7 @@ typedef  TrState =
 	var selected:Bool;
 };
 
-class Tr extends PureComponentOfProps<TrProps>
+class Tr extends ReactComponentOfProps<TrProps>
 {
 	public var me:ReactFragment;
 	var id:String;
@@ -127,22 +132,21 @@ class Tr extends PureComponentOfProps<TrProps>
 	
 	override public function render():ReactFragment
 	{
+		trace(selected);
 		if(props.row==0)
 		{
 			//trace(props.data);setFormState
 			ref = props.firstTableRow;
 		}
-		else if(id==props.parentComponent.props.match.id)
-		{
-			selected = true;
-		}
+		else selected = props.parentComponent.props.match.params.id.indexOf(id)>-1;		
+
+		var cl:String =  selected ? 'is-selected' : '';
+		
+		trace('$id == ${props.parentComponent.props.match.id} class:$cl');
 		if(props.data==null)
 		{
 			return null;
-		}
-		var cl:String =  selected ? 'is-selected' : '';
-		
-		trace('class:$cl');
+		}		
 		var makeRef:String = selected && props.row>0?'ref=${ref}':'';
 		return jsx('
 		<tr className=${cl} data-id=${props.data["id"]} title=${props.data["id"]} ref=${ref} onClick=${select}>
@@ -155,13 +159,29 @@ class Tr extends PureComponentOfProps<TrProps>
 
 	public function select(mEvOrID:Dynamic)
 	{
-		trace(Type.typeof(mEvOrID));
+		trace('select from contructor:${mEvOrID.select}');
 		trace('selected:$selected');
-		trace(props.row +':' + props.data.toString());
-		//setFormState
-		//setState({selected:!state.selected});
-		//selected = mEvOrID.selected ? true:!state.selected;
-		//trace(props.parentComponent);
+		//trace(props.row +':' + props.data.toString());
+		if(mEvOrID.select == null)
+		{
+			try{
+				var evt:ReactMouseEvent = cast(mEvOrID);
+				
+				var tEl:Element = cast(mEvOrID.target,Element);
+				trace(tEl.closest('table'));
+				//trace(Browser.window.document.querySelector('table'));
+				/*trace(Reflect.fields(evt));
+				trace('altKey:${evt.altKey}');
+				trace('ctrlKey:${evt.ctrlKey}');
+				trace('shiftKey:${evt.shiftKey}');*/
+				
+				//var mEvt:MouseEvent = cast(evt.nativeEvent, MouseEvent);
+			}
+			catch(ex:Dynamic)
+			{
+				trace(ex);
+			}
+		}
 		if(props.parentComponent != null)
 		{
 			if(!selected)
@@ -175,12 +195,10 @@ class Tr extends PureComponentOfProps<TrProps>
 			}	
 			
 		}
-		//trace(selected);
-		//setState({selected: mEvOrID.select ? true:!state.selected});
 		selected = mEvOrID.select ? true:!selected;
 		trace('selected:$selected');
-		if(!mEvOrID.select)
-			forceUpdate();
+		//if(!mEvOrID.select)
+			//forceUpdate();
 	}
 
 }

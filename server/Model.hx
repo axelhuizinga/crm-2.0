@@ -592,6 +592,12 @@ class Model
 		return true;
 	}
 
+	public function buildSetWithDefaults(data:Dynamic, alias:String):String
+	{
+		trace(alias);
+		return alias;
+	}
+
 	public function buildSet(data:Dynamic, alias:String):String
 	{
 		//var sqlBf:StringBuf = new StringBuf();
@@ -709,11 +715,13 @@ class Model
 				tableNames.push(tableName);
 				var tableProps = dataSource.get(tableName);
 				trace(tableProps.toString());
+				var defaults:Map<String,String> = S.columnDefaults(tableName);
+				trace(defaults);
 				if(action == 'update')
 				{
 					setSql += buildSet(tableProps.get('data'), tableProps.get('alias'));
 				}
-				fields = fields.concat(buildFieldsSql(tableName, tableProps));	
+				fields = fields.concat(buildFieldsSql(tableName, tableProps));
 				if(action == 'create')
 				{
 					fields.remove('id');

@@ -9,6 +9,7 @@
 -cp src
 -php ../httpdocs
 #-D analyzer-optimize
+-debug
 -dce std
 -main S
 #--interp

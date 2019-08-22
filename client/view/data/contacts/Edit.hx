@@ -346,6 +346,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					]
 				];	
 			case 'update':
+				for(f in fieldNames)
+				{
+					//KEEP FIELDS WITH VALUES SET
+					//trace('$f =>${Reflect.field(aState,f)}<=');
+					if(Reflect.field(aState,f)=='')
+						Reflect.deleteField(aState,f);
+				}
 				dbaProps.dataSource = [
 					"contacts" => [
 						"data" => aState,

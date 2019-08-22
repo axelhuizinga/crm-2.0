@@ -352,7 +352,6 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		var primary:String = (props.primary!=null && props.primary.length > 0?props.primary:'id');
 		for (dR in dRows)
 		{			
-			var id:String = (dR.exists(primary)? '${dR.get(primary)}':'');
 			var fRRef:ReactRef<TableRowElement> = (row==0?firstRowRef:null);
 			dRs.push(
 			jsx('<$Tr key=${dR.get("id")} columns=${props.dataState.columns} data=${dR} firstTableRow=${fRRef} fieldNames=${fieldNames} row=${row++} parentComponent=${props.parentComponent}/>')

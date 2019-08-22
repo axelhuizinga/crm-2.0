@@ -44,12 +44,12 @@ class LiveDataAccess
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
-			trace(aState.dataStore.selectedData);
+			//trace(aState.dataStore.selectedData);
 			var sData = aState.dataStore.selectedData;
 			if(props.id != null)
 			//trace('sData.keys().hasNext():${sData.get(props.id)}');
-			trace(sData);
-			trace(props);
+			//trace(sData);
+			//trace(props);
 			switch(props.selectType)
 			{
 				case All:
@@ -59,7 +59,6 @@ class LiveDataAccess
 				case One:
 					sData.set(props.id,props.data.get(props.id));
 				case Unselect:
-					trace(sData.exists(props.id));
 					sData.remove(props.id);
 				case UnselectAll:
 					sData = new IntMap();

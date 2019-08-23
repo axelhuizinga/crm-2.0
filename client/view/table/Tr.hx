@@ -170,7 +170,7 @@ class Tr extends ReactComponentOfProps<TrProps>
 				var tEl:Element = cast(mEvOrID.target,Element);
 				trace(tEl.closest('table'));
 				//trace(Browser.window.document.querySelector('table'));
-				/*trace(Reflect.fields(evt));
+				/*TODO: IMPLEMENT MODIFIERS
 				trace('altKey:${evt.altKey}');
 				trace('ctrlKey:${evt.ctrlKey}');
 				trace('shiftKey:${evt.shiftKey}');*/

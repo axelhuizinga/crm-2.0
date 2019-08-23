@@ -331,7 +331,7 @@ class S
 		dumpNativeArray(what, pos);
 	}
 
-	public static function columnDefaults(table:String, schema:String = 'crm'):Map<String,String>
+	public static function columnDefaults(table:String, schema:String = 'crm'):Array<ColDef>
 	{
 		var sql = comment(unindent, format) /*
 		SELECT column_name, column_default
@@ -346,26 +346,29 @@ class S
 			trace(S.dbh.errorInfo());
 			Sys.exit(0);
 		}		
-		var res:Map<String,String> = new Map();
+		var res:Array<ColDef> = new Array();
 		var data:Dynamic =  stmt.fetch(PDO.FETCH_OBJ);
-	 	while ( data != null)
+	 	while (data)
 		{
 			trace(data);
-			res.set(data.column_name, data.column_default);
+			if(data.column_name!='id')
+			{
+				var value:String = data.column_default == null? null: data.column_default.split('::')[0];			
+				var defaultValue:String = switch (value)
+				{
+					/*case b if (b=="true"|b=="false"):
+						b;*/
+					case null|"''":
+						null;
+					default:
+						value;
+				}
+				res.push({column_name:quoteIdent(data.column_name), column_default:defaultValue});				
+			}
+
 			data = stmt.fetch(PDO.FETCH_OBJ);
 		}
-		/*var data:Array<ColDef> = cast Lib.toHaxeArray(stmt.fetchAll(PDO.FETCH_ASSOC));
-		trace(data);
-		res = [
-			for (row in data)
-				row.column_name => row.column_default
-		];*/
 		return res;
-/*				
-		trace(Lib.toHaxeArray(data).join(','));		
-		trace(stmt.errorInfo());
-		return(Lib.toHaxeArray(data));	*/
-
 	}
 
 	public static function quoteIdent(f : String):String 

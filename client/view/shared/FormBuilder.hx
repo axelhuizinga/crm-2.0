@@ -88,7 +88,7 @@ class FormBuilder {
 		//return fields.array().map(function(field:FormField){
 		return [for(name => field in fields)
 		{
-			var value:String = Reflect.field(initialData,name);
+			var value:Dynamic = Reflect.field(initialData,name);
 			if(name=='id')trace (field.type +' $name:' + value);
 			if(name=='last_name')trace (field.type +' $name:' + value);
 			switch (field.type)
@@ -99,9 +99,12 @@ class FormBuilder {
 					jsx('<button type="submit">
 						${value}
 					</button>');
-				case FormInputElement.Checkbox:			
+				case FormInputElement.Checkbox:		
+					trace(field);//disabled=${field.disabled} required=${field.required}
+					var checked = value ? "checked" : "";
+					trace('$checked $value');
 					renderElement(
-						jsx('<input name=${name}  key=${ki++} type="checkbox" checked=${value} onChange=${onChange} disabled=${field.disabled} required=${field.required}/>'),
+						jsx('<input name=${name}  key=${ki++} type="checkbox" checked=${checked} onChange=${onChange} />'),
 						ki++, field.label
 					);
 				case Select:
@@ -192,13 +195,14 @@ class FormBuilder {
 		{
 			case 'checkbox':
 			trace('${ev.target.name}:${ev.target.checked?true:false}');
+			return true;
 			case 'select-multiple'|'select-one':
 			trace (ev.target.selectedOptions.length);
 			default:
 			trace('${ev.target.name}:${ev.target.value}');
 		}
 		
-		return;
+		return true;
 		comp.doChange(ev.target.name, ev.target.value);
 	}	
 

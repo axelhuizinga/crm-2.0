@@ -81,8 +81,9 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
 	public static var onResizeComponents:List<Dynamic> = new List();
+	public static var maxLoginAttempts:Int = 3;
 
-  public function new(?props:AppProps) 
+  	public function new(?props:AppProps) 
 	{
 		super(props);
 		trace(flatpickr);
@@ -140,6 +141,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 				if (data.dataErrors.keys().hasNext())
 				{
 					trace(data.dataErrors);
+					
 					return store.dispatch(AppAction.LoginError(
 						{id:state.appWare.user.id, loginError:data.dataErrors.iterator().next()}));
 				}	

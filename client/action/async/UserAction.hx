@@ -38,9 +38,11 @@ class UserAction
 			//trace(getState());
 			if (props.pass == '' || props.user_name == '') 
 				return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:'Passwort und user_name eintragen!'}));
-			var spin:Dynamic = dispatch(AppAction.AppWait);
-			trace(spin);
-			var bL:XMLHttpRequest = BinaryLoader.create(
+			//var spin:Dynamic = dispatch(AppAction.AppWait);
+			//trace(spin);
+			var bL:XMLHttpRequest = null;
+			if(App.maxLoginAttempts-->0)
+			bL = BinaryLoader.create(
 			'${App.config.api}', 
 			{				
 				user_name:props.user_name,
@@ -64,6 +66,7 @@ class UserAction
 				trace(data);
 				if (data.dataErrors.keys().hasNext())
 				{
+					if(App.maxLoginAttempts-->0)
 					return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:data.dataErrors.iterator().next()}));
 				}
 				var uState:UserProps = data.dataInfo['user_data'];

@@ -1,5 +1,6 @@
 package;
 
+import S.ColDef;
 import haxe.Unserializer;
 import haxe.ds.StringMap;
 import haxe.io.Bytes;
@@ -598,16 +599,19 @@ class Model
 		return alias;
 	}
 
-	public function buildSet(data:Dynamic, alias:String):String
+	public function buildSet(tableName:String,data:Dynamic, alias:String):String
 	{
-		//var sqlBf:StringBuf = new StringBuf();
 		alias = alias!=null?'${quoteIdent(alias)}.':'';
+		var defaults:Array<ColDef> = S.columnDefaults(tableName);
+		trace(defaults[0]);		
 		var set:Array<String> = new Array();		
 		trace(Reflect.fields(data).join(','));
-		for(key in Reflect.fields(data))
+		for(col in defaults)
 		{
-			set.push('${alias}${quoteIdent(key)}=?');
-			setValues.push(Reflect.field(data,key));
+			set.push('${alias}${col.column_name}=?');
+			var val:String = Reflect.field(data,col.column_name);
+			trace('$val / default:${col.column_default}');
+			setValues.push(val==null?col.column_default:val);
 		}
 		trace( 'SET ${set.join(',')} ');
 		return 'SET ${set.join(',')} ';
@@ -715,11 +719,9 @@ class Model
 				tableNames.push(tableName);
 				var tableProps = dataSource.get(tableName);
 				trace(tableProps.toString());
-				var defaults:Map<String,String> = S.columnDefaults(tableName);
-				trace(defaults);
 				if(action == 'update')
 				{
-					setSql += buildSet(tableProps.get('data'), tableProps.get('alias'));
+					setSql += buildSet(tableName, tableProps.get('data'), tableProps.get('alias'));
 				}
 				fields = fields.concat(buildFieldsSql(tableName, tableProps));
 				if(action == 'create')

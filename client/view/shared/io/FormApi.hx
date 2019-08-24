@@ -199,6 +199,12 @@ class FormApi
 		var id:String = (match.params.id==null||action=='create'?'':match.params.id);
 		return '${baseUrl}${targetSection==null?section:targetSection}/${action}/${id}';
 	}
+
+	public function toParams(to:String):String
+	{
+		var id:String = comp.props.match.params.id;
+		return id==null?'':'/$id';
+	}
 	
 	public function selectAllRows(state:FormState,unselect:Bool = false)
 	{

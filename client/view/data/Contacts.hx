@@ -117,6 +117,11 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
     {
 		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
         return {
+			globalState: function (key:String,?data:Dynamic)
+			{
+				trace('$key => $data');
+				dispatch(GlobalState(key,data));
+			},
 			select:function(id:Int,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
 			{
 				trace('select:$id selectType:${selectType}');

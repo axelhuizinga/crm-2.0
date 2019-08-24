@@ -1,5 +1,6 @@
 package view.data.contacts;
 import haxe.ds.IntMap;
+import action.AppAction;
 import action.async.DataAction;
 import shared.DBAccess;
 import js.html.HTMLOptionsCollection;
@@ -183,6 +184,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		if((initialState.id!=null && !App.store.getState().dataStore.selectedData.exists(initialState.id)))
 		{
 			//DATA NOT IN STORE - LOAD IT
+			App.store.dispatch(AppAction.GlobalState('contacts',initialState.id));
+			//untyped props.globalState('contacts',initialState.id);
 			trace('creating BinaryLoader ${App.config.api}');
 			//return;
 			BinaryLoader.create(
@@ -241,6 +244,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace('$name: $value');
 		if(name!=null && name!='')
 		Reflect.setField(actualState,name,value);
+		setState({initialState:actualState});
 	}
 
 	public function handleChange(e:Event) 

@@ -18,7 +18,7 @@ using shared.DateFormat;
  * @author axel@cunity.me
  */
 
-class DateTimeControlC extends  PureComponentOfProps<DateTimeProps>
+class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 {
 	var fpRef:ReactRef<InputElement>;
 	var fpInstance:Dynamic;//FlashPicker instance

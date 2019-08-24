@@ -15,6 +15,7 @@ import react.ReactComponent;
 import react.ReactMacro.jsx;
 import redux.Redux.Dispatch;
 import react.router.Route;
+import react.router.RouterMatch;
 import react.router.Redirect;
 //import react.router.Route.RouteRenderProps;
 //import react.router.Switch;
@@ -22,6 +23,7 @@ import react.router.NavLink;
 import view.shared.io.FormApi;
 import view.shared.RouteTabProps;
 import view.shared.CompState;
+import view.shared.TabLink;
 import view.LoginForm;
 //import react.redux.form.Control.ControlProps;
 //import react.redux.form.Control;
@@ -120,18 +122,18 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 		return jsx('
 		<>
 			<div className="tabNav2" >
-				<Tabs className="is-boxed" >
-					<TabLink to="/Data/Contacts" ${...props}>Kontakte</TabLink>
-					<TabLink to="/Data/Deals" ${...props}>Aufträge</TabLink>
-					<TabLink to="/Data/Accounts" ${...props}>Konten</TabLink>
-				</Tabs>
+				<$Tabs className="is-boxed" >
+					<$TabLink to="/Data/Contacts" ${...props} >Kontakte</$TabLink>
+					<$TabLink to="/Data/Deals" ${...props} >Aufträge</$TabLink>
+					<$TabLink to="/Data/Accounts" ${...props} >Konten</$TabLink>
+				</$Tabs>
 			</div>
             <div className="tabContent2" >
 				<Route path="/Data/Contacts/:section?/:action?/:id?"  ${...props} component={Contacts}/>
 				<Route path="/Data/Deals/:section?/:action?/:id?"  ${...props} component={Deals}/>
-				<Route path="/Data/Accounts/:section?/:action?"   ${...props} component={Accounts}/>	
+				<Route path="/Data/Accounts/:section?/:action?/:id?"   ${...props} component={Accounts}/>	
             </div>
-			<StatusBar ${...props}/>
+			<$StatusBar ${...props}/>
 		</>
 			');			
     }
@@ -160,12 +162,15 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 		return null;
 	}
 	
-	function TabLink(rprops)
+	/*function TabLink(rprops)
 	{
-		//trace(Reflect.fields(rprops));
-		//trace(rprops.children);
+		trace(Reflect.fields(rprops));
+		trace('${rprops.to} ${rprops.location.pathname}');
+		var match:RouterMatch = rprops.match;
+		var baseUrl:String = match.path.split(':section')[0];
 		return jsx('
-		<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}><NavLink to=${rprops.to}>${rprops.children}</NavLink></li>
+		<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}>
+		<NavLink to=${rprops.to}/List/find/${match.params.id==null?"":match.params.id}>${rprops.children}</NavLink></li>
 		');
-	}
+	}*/
 }

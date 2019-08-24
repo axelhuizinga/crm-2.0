@@ -84,10 +84,10 @@ class AppStore
 				copy(state,{
 					formStates:formStates
 				});
-			case Load:
+			/*case Load:
 				copy(state, {
 					loading:true
-				});			
+				});	*/		
 			case LoginChange(uState):
 				copy(state, {
 					user:{id:uState.id, pass:uState.pass}
@@ -150,20 +150,12 @@ class AppStore
 		trace(action);
 		return switch(action)
 		{			
-			/*case LoginRequired(uState):
-				//store.getState().userStore.
-				var n:Dynamic = next();
-				trace(n);
-				n;
-			case LoginComplete(state):
-				//App.firstLoad = false;	
-				trace(state);
-				var n:Dynamic = next();		
-				trace(n);
-				n;*/
-			case LoginError(err):
+			case GlobalState(key, value):
+				trace('eating global $key=>$value');
+				next();
+			/*case LoginError(err):
 				trace(err);
-				store.dispatch(AppAction.LoginRequired(store.getState().appWare.user));
+				store.dispatch(AppAction.LoginRequired(store.getState().appWare.user));*/
 			default: next();
 		}
 	}

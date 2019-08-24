@@ -17,8 +17,8 @@ import react.ReactMacro.jsx;
 import view.shared.FormInputElement;
 import view.shared.FormState;
 import view.shared.io.DataAccess;
-import react.DateControlC;
-import react.DateTimeControlC;
+import react.DateControl;
+import react.DateTimeControl;
 
 using Lambda;
 
@@ -27,8 +27,6 @@ class FormBuilder {
 	public var dataAccess:DataAccess;
 	public var dbData:DbData;
 	public var dbMetaData:DBMetaData;
-	public var dateControls:StringMap<DateControlC>;
-	public var dateTimeControls:StringMap<DateTimeControlC>;
 	public var formColElements:Map<String,Array<FormField>>;
 	public var _menuItems:Array<SMItem>;
 	public var fState:FormState;
@@ -43,8 +41,6 @@ class FormBuilder {
 		comp = rc;
 		trace(comp.handleChange);
 		requests = [];
-		dateControls = new StringMap();
-		dateTimeControls = new StringMap();
 		if(rc.props != null)
 		{
 			
@@ -101,7 +97,13 @@ class FormBuilder {
 					</button>');
 				case FormInputElement.Checkbox:		
 					trace(field);//disabled=${field.disabled} required=${field.required}
-					var checked = value ? "checked" : "";
+					var checked = switch(value)
+					{
+						case "TRUE"|true|"on":
+							true;
+						default:
+							false;
+					}
 					trace('$checked $value');
 					renderElement(
 						jsx('<input name=${name}  key=${ki++} type="checkbox" checked=${checked} onChange=${onChange} />'),
@@ -112,7 +114,7 @@ class FormBuilder {
 					jsx('<select name=${name} onChange=${onChange}  defaultValue=${value} key=${ki++} multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
 					ki++, field.label
 				);
-				case FormInputElement.DateTimeControl:
+				case FormInputElement.DateTimePicker:
 					var dTC:DateTimeProps = {
 						comp:comp,
 						name:name,
@@ -130,10 +132,10 @@ class FormBuilder {
 					<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
-							<$DateTimeControlC ${...dTC}/>
+							<$DateTimeControl ${...dTC}/>
 						</div>
 					</div>');								
-				case FormInputElement.DateControl:
+				case FormInputElement.DatePicker:
 					trace(field.disabled);
 					var dC:DateTimeProps = {
 						comp:comp,
@@ -151,7 +153,7 @@ class FormBuilder {
 					<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
-							<$DateControlC ${...dC}/>
+							<$DateControl ${...dC}/>
 						</div>
 					</div>');
 				default:
@@ -194,22 +196,26 @@ class FormBuilder {
 		switch (ev.target.type)
 		{
 			case 'checkbox':
-			trace('${ev.target.name}:${ev.target.checked?true:false}');
-			return true;
+				trace('${ev.target.name}:${ev.target.checked?true:false}');
+				//trace('doChange:${Reflect.isFunction(Reflect.field(comp,'doChange'))}');
+				comp.doChange(ev.target.name, switch(ev.target.checked)
+					{
+						case "TRUE"|true|"on":
+							true;
+						default:
+							false;
+					});
 			case 'select-multiple'|'select-one':
-			trace (ev.target.selectedOptions.length);
+				trace (ev.target.selectedOptions.length);
 			default:
-			trace('${ev.target.name}:${ev.target.value}');
-		}
-		
-		return true;
-		comp.doChange(ev.target.name, ev.target.value);
+				trace('${ev.target.name}:${ev.target.value}');
+		}				
 	}	
 
-	function formChange(ev:Dynamic) {
+	/*function formChange(ev:Dynamic) {
 		trace(ev.target);
 		trace('${ev.target.name}:${ev.target.value}');
 		comp.doChange(ev.target.name, ev.target.value);
-	}	
+	}*/
 }
 

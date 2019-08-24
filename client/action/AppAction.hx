@@ -21,7 +21,8 @@ enum AppAction
 	 */
 	FormChange(cfp:String, state:FormState);
 
-	Load;
+	GlobalState(key:String,value:Dynamic);
+	//Load;
 	// LOGIN TODO: MOVE TO USERACTIONS
 	//LoginReq(state:UserState);
 	LoginChange(state:UserState);

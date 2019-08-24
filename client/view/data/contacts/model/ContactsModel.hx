@@ -37,9 +37,9 @@ class ContactsModel
 				'state'=>{label:'Status',type:Select,options:['active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
 				'country_code'=>{label:'Land'},
 				'c/o'=>{label: 'c/o'},
-				'creation_date'=>{label: 'Hinzugefügt', type:DateTimeControl, disabled: true, 
+				'creation_date'=>{label: 'Hinzugefügt', type:DateTimePicker, disabled: true, 
 					displayFormat: function() return "d.m.Y H:i:S"}, 
-				'date_of_birth'=>{label: 'Geburtsdatum', type:DateControl, displayFormat:  function() return "d.m.Y"},
+				'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat:  function() return "d.m.Y"},
 				'gender'=>{label:'Geschlecht',type:Select,options:[
 						'U'=>'Unbekannt',
 						'M'=>'Männlich',

@@ -132,17 +132,17 @@ class Tr extends ReactComponentOfProps<TrProps>
 	
 	override public function render():ReactFragment
 	{
-		trace(selected);
+		//trace(selected);
 		if(props.row==0)
 		{
 			//trace(props.data);setFormState
 			ref = props.firstTableRow;
 		}
-		else selected = props.parentComponent.props.match.params.id.indexOf(id)>-1;		
+		else selected = props.parentComponent.props.match.params.id !=null && props.parentComponent.props.match.params.id.indexOf(id)>-1;		
 
 		var cl:String =  selected ? 'is-selected' : '';
 		
-		trace('$id == ${props.parentComponent.props.match.id} class:$cl');
+		//trace('$id == ${props.parentComponent.props.match.id} class:$cl');
 		if(props.data==null)
 		{
 			return null;

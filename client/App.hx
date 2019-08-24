@@ -70,6 +70,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
   	static var STYLES = require('App.scss');
  
 	public static var browserHistory:History;
+	
 	public static var store:Store<AppState>;
 	public static var devIP = Webpack.require('./webpack.local.js').ip;
 	public static var config:Dynamic = Webpack.require('../httpdocs/config.js').config;
@@ -83,11 +84,12 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static var onResizeComponents:List<Dynamic> = new List();
 	public static var maxLoginAttempts:Int = 3;
 
+	var globalState:Map<String,Dynamic>;
+
   	public function new(?props:AppProps) 
 	{
 		super(props);
-		trace(flatpickr);
-		//trace(German);
+		globalState = new Map();
 		untyped flatpickr.localize(German);
 		ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
@@ -161,7 +163,17 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		
 		//state.appWare.history.listen(CState.historyChange);
 		trace(Reflect.fields(state));
-  }
+  	}
+
+	public function gGet(key:String):Dynamic
+	{
+		return globalState.get(key);
+	} 
+
+	public function gSet(key:String,val:Dynamic):Void 
+	{
+		globalState.set(key,val);
+	}
 
 	override function componentDidMount()
 	{

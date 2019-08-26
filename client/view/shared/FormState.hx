@@ -33,7 +33,7 @@ typedef FormState =
 	?formStateKey:String,
 	?clean:Bool,
 	?ref:ReactRef<FormElement>,
-	?selectedData:IntMap<Map<String,Dynamic>>,
+	?contactData:IntMap<Map<String,Dynamic>>,
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,
 	?handleChange:InputEvent->Void,

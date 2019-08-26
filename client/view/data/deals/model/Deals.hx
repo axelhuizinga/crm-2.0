@@ -27,6 +27,6 @@ class Deals
 	];
 
 	public static var dataDisplay:Map<String,DataState> = [
-		'read' => {columns:listColumns}
+		'show' => {columns:listColumns}
 	];	
 }

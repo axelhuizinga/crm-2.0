@@ -1,8 +1,8 @@
 package;
 
 import haxe.PosInfos;
-//import haxe.ds.Either;
 import haxe.ds.StringMap;
+
 import haxe.io.Bytes;
 import me.cunity.debug.Out;
 import php.Syntax;
@@ -67,7 +67,7 @@ class S
 	static var headerSent:Bool = false;
 	static var response:Response;
 	public static var secret:String;
-	public static var conf:StringMap<Dynamic>;
+	public static var conf:Map<String,Dynamic>;
 	public static var dbh:PDO;
 	public static var last_request_time:Date;
 	public static var host:String;
@@ -83,8 +83,6 @@ class S
 	
 	static function main() 
 	{		
-		haxe.Log.trace = Debug._trace;	
-
 		//trace(conf.get('ini'));
 		var ini:NativeArray = S.conf.get('ini');
 		var vD:NativeArray = ini['vicidial'];
@@ -99,7 +97,7 @@ class S
 		last_request_time = Date.now();
 		var now:String = DateTools.format(last_request_time, "%d.%m.%y %H:%M:%S");
 		response = {content:'',error:''};
-		var params:Map<String,Dynamic> = Web.getParams();
+		var params:StringMap<Dynamic> = Web.getParams();
 		devIP = params.get('devIP');
 		trace(Date.now().toString() + ' == $now' );		
 		trace(params);		
@@ -426,8 +424,9 @@ class S
 		Syntax.code('require_once({0})', '../.crm/functions.php');
 		//Syntax.code('require_once({0})', 'inc/PhpRbac/Rbac.php');
 		Debug.logFile = untyped Syntax.code("$appLog");
+		haxe.Log.trace = Debug._trace;
+		Out.skipFields = ['admin','keyPhrase','pass','password'];
 		//edump(Debug.logFile);
-		//Debug.logFile = untyped __var__("GLOBALS","appLog");
 		db = Syntax.code("$DB");
 		dbHost = Syntax.code("$DB_server");
 		dbUser = Syntax.code("$DB_user");
@@ -436,11 +435,9 @@ class S
 		request_scheme = Syntax.code("$_SERVER['REQUEST_SCHEME']");
 		secret = Syntax.code("$secret");
 		//edump(Syntax.code("$conf"));
-
 		conf =  Config.load('appData.js');
 		var ini:NativeArray = Syntax.code("$ini");
 		conf.set('ini', ini);		
-		Out.skipFields = ['admin','pass','password'];
+		//trace(conf.get('ini'));
 	}
-
 }

@@ -108,7 +108,7 @@ class DBAccess
 		});
 	}
 
-	public static function update(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
+	/*public static function update(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(props);
@@ -149,5 +149,5 @@ class DBAccess
 			}
 			return null;
 		});
-	}
+	}*/
 }

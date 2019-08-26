@@ -161,6 +161,7 @@ class Tr extends ReactComponentOfProps<TrProps>
 	{
 		trace('select from contructor:${mEvOrID.select}');
 		trace('selected:$selected');
+		trace(Reflect.fields(props));
 		//trace(props.row +':' + props.data.toString());
 		if(mEvOrID.select == null)
 		{

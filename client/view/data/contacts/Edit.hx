@@ -69,7 +69,7 @@ using Lambda;
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		{label:'Auswahl',action:'read',section: 'List'},
+		{label:'Auswahl',action:'show',section: 'List'},
 		{label:'Bearbeiten',action:'update'},
 		{label:'Neu', action:'create'},
 		{label:'Löschen',action:'delete'}
@@ -100,7 +100,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{
 			trace('nothing selected - redirect');
 			var baseUrl:String = props.match.path.split(':section')[0];
-			props.history.push('${baseUrl}List/read');
+			props.history.push('${baseUrl}List/show');
 			return;
 		}		
 		dataAccess = ContactsModel.dataAccess;
@@ -116,9 +116,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//trace(props.user);
 		if(props.match.params.id!=null)
 			initialState.id = Std.parseInt(props.match.params.id);
-		trace(App.store.getState().dataStore.selectedData);
+		trace(App.store.getState().dataStore.contactData);
 		
-		if((initialState.id!=null && App.store.getState().dataStore.selectedData.exists(initialState.id)))
+		if((initialState.id!=null && App.store.getState().dataStore.contactData.exists(initialState.id)))
 		{
 			initialState = loadContactData(initialState.id);
 			actualState = copy(initialState);
@@ -157,7 +157,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace('loading:$id');
 		var c:Contact = {edited_by: props.user.id,mandator: 0};
-		var data = App.store.getState().dataStore.selectedData.get(id);
+		var data = App.store.getState().dataStore.contactData.get(id);
 		trace(data);
 		for(k=>v in data.keyValueIterator())
 		{
@@ -181,7 +181,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		
 	override public function componentDidMount():Void 
 	{	
-		if((initialState.id!=null && !App.store.getState().dataStore.selectedData.exists(initialState.id)))
+		if((initialState.id!=null && !App.store.getState().dataStore.contactData.exists(initialState.id)))
 		{
 			//DATA NOT IN STORE - LOAD IT
 			App.store.dispatch(AppAction.GlobalState('contacts',initialState.id));
@@ -194,7 +194,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					id:props.user.id,
 					jwt:props.user.jwt,
 					className:'data.Contacts',
-					action:'read',
+					action:'show',
 					filter:'id|${initialState.id}',
 					table:'contacts',
 					devIP:App.devIP
@@ -208,7 +208,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					{
 						if(!data.dataErrors.keys().hasNext())
 						{
-							//var sData:IntMap<Map<String,Dynamic>> = App.store.getState().dataStore.selectedData;
+							//var sData:IntMap<Map<String,Dynamic>> = App.store.getState().dataStore.contactData;
 							actualState = data.dataRows[0].MapToDyn();
 							props.parentComponent.props.select(actualState.id,data.dataRows[0],props.match);
 							trace(actualState);

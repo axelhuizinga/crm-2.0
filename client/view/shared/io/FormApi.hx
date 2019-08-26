@@ -196,8 +196,15 @@ class FormApi
 		var match:RouterMatch = comp.props.match;
 		var baseUrl:String = match.path.split(':section')[0];		
 		var section = match.params.section;
-		var id:String = (match.params.id==null||action=='create'?'':match.params.id);
-		return '${baseUrl}${targetSection==null?section:targetSection}/${action}/${id}';
+		var id:String = (match.params.id==null||action=='create'?'':'/${match.params.id}');
+		return '${baseUrl}${targetSection==null?section:targetSection}/${action}${id}';
+	}
+
+	public static function getTableRoot(match:RouterMatch):Array<String>
+	{
+		var baseUrl:String = match.path.split('/:section')[0];
+		var newUrl = '${baseUrl}${match.params.section}/${match.params.action}';
+		return ~/^\//.replace(baseUrl,'').split('/').concat([newUrl]);
 	}
 
 	public function toParams(to:String):String

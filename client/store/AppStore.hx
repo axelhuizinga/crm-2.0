@@ -124,7 +124,7 @@ class AppStore
 				}
 				else state;	
 			/*case Select(id, data, match):
-				var sData = state.selectedData;
+				var sData = state.contactData;
 				state;	*/			
 			case SetTheme(color):
 				if (color != state.themeColor)

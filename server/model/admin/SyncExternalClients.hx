@@ -11,7 +11,7 @@ import php.db.Mysqli;
 import haxe.Http;
 import haxe.Json;
 import php.db.PDO;
-import haxe.ds.StringMap;
+
 import haxe.extern.EitherType;
 import php.Lib;
 import php.NativeArray;
@@ -31,7 +31,7 @@ using Util;
 @:keep
 class SyncExternalClients extends Model 
 {
-	public static function _create(param:StringMap<String>):Void
+	public static function _create(param:Map<String,String>):Void
 	{
 		var self:SyncExternalClients = new SyncExternalClients(param);	
 		//self.table = 'columns';

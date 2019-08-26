@@ -32,7 +32,9 @@ enum  DataAction
 	Error(data:DbData);
 	Load(data:DbData);
 	//CreateSelect(id:Int,data:Map<String,Dynamic>,match:RouterMatch);
-	Select(sData:IntMap<Map<String,Dynamic>>);
+	SelectAccounts(sData:IntMap<Map<String,Dynamic>>);
+	SelectContacts(sData:IntMap<Map<String,Dynamic>>);
+	SelectDeals(sData:IntMap<Map<String,Dynamic>>);
 	Unselect(id:Int);
 	//Update(data:DBAccessProps);
 }

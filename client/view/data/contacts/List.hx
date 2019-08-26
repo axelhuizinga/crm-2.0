@@ -23,7 +23,7 @@ import model.Contact;
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		//{label:'Anzeigen',action:'read'},
+		//{label:'Anzeigen',action:'show'},
 		{label:'Bearbeiten',action:'update',section: 'Edit'},
 		{label:'Neu', action:'create',section: 'Edit'},
 		{label:'Löschen',action:'delete'}
@@ -42,7 +42,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		state =  App.initEState({
 			dataTable:[],
 			loading:false,
-			selectedData:new IntMap(),			
+			contactData:new IntMap(),			
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu2( this,
 				{
@@ -59,10 +59,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		},this);
 		if(props.match.params.section==null||props.match.params.action==null)
 		{
-			//var sData = App.store.getState().dataStore.selectedData;
+			//var sData = App.store.getState().dataStore.contactData;
 			var baseUrl:String = props.match.path.split(':section')[0];
-			props.history.push('${baseUrl}List/read');
-			read(null);
+			props.history.push('${baseUrl}List/show');
+			show(null);
 }		
 		trace(state.loading);
 	}
@@ -80,7 +80,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
-	public function read(ev:ReactEvent):Void
+	public function show(ev:ReactEvent):Void
 	{
 		trace('hi :)');
 		var s:hxbit.Serializer = new hxbit.Serializer();
@@ -91,7 +91,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'data.Contacts',
-				action:'read',
+				action:'show',
 				devIP:App.devIP,
 				table:'contacts'
 			},
@@ -144,7 +144,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{	
 		dataAccess = [
-			'read' =>{
+			'show' =>{
 				source:[
 					"contacts" => []
 				],
@@ -177,7 +177,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
-			case 'read':
+			case 'show':
 				jsx('
 				<form className="tabComponentForm" >
 					<Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}

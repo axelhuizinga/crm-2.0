@@ -1,5 +1,5 @@
 package model;
-import haxe.ds.StringMap;
+
 import php.NativeArray;
 /**
  * ...
@@ -16,7 +16,7 @@ typedef UserInfo =
 class VicidialUsers extends Model
 {
 	
-	public function new(param:StringMap<String>)
+	public function new(param:Map<String,String>)
 	{
 		super(param);
 		//var me:VicidialUsers = new VicidialUsers(param);
@@ -28,7 +28,7 @@ class VicidialUsers extends Model
 		var sqlBf:StringBuf = new StringBuf();
 		var phValues:Array<Array<Dynamic>> = new Array();
 		var result:Array<UserInfo> = new Array();
-		var param:StringMap<String> = new StringMap();
+		var param:Map<String,String> = new Map();
 		param.set('table', 'asterisk.vicidial_users');
 		param.set('fields', 'user,user_level, pass,full_name');
 		param.set('filter', (user == null?'user_group|LIKE|AGENT%,active|Y':'user|$user'));

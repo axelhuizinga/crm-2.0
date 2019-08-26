@@ -1,7 +1,7 @@
 package;
 import php.Syntax;
 import php.NativeArray;
-import haxe.ds.StringMap;
+
 
 /**
  * ...
@@ -15,9 +15,9 @@ class Util
 		return (v != null && v != 0 && v !='');
 	}
 	
-	public static function copyStringMap<T>(source:StringMap<T>):StringMap<T>
+	public static function copyStringMap<T>(source:Map<String,T>):Map<String,T>
 	{
-		var copy:StringMap<T> = new StringMap();
+		var copy:Map<String,T> = new Map();
 		var keys = source.keys();
 		while (keys.hasNext())
 		{

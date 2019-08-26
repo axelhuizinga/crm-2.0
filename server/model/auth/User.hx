@@ -4,7 +4,7 @@ import haxe.Serializer;
 import haxe.crypto.Sha256;
 import haxe.ds.IntMap;
 import haxe.ds.Map;
-import haxe.ds.StringMap;
+
 import jwt.JWT;
 import me.cunity.debug.Out;
 import model.tools.DB;
@@ -31,7 +31,7 @@ import php.db.PDOStatement;
 
 class User extends Model
 {
-	public static function _create(param:StringMap<String>):Void
+	public static function _create(param:Map<String,String>):Void
 	{
 		var self:User = new User(param);	
 		trace(param.get('action'));
@@ -112,7 +112,7 @@ class User extends Model
 		}
 	}
 	
-	public static function login(params:StringMap<String>, secret:String):Bool
+	public static function login(params:Map<String,String>, secret:String):Bool
 	{
 		var me:User = new User(params);
 		//trace(me);
@@ -182,7 +182,7 @@ class User extends Model
 		return true;
 	}
 	
-	static function saveRequest(id:Int, params:StringMap<String>):Bool
+	static function saveRequest(id:Int, params:Map<String,String>):Bool
 	{
 		var request:String = Serializer.run(params);
 		var rTime:String = DateTools.format(S.last_request_time, "'%Y-%m-%d %H:%M:%S'");//,request=?
@@ -196,12 +196,12 @@ class User extends Model
 		return success;
 	}
 
-	public static function getViciDialPassword(jwt:String, user:String,?params:StringMap<String>):String
+	public static function getViciDialPassword(jwt:String, user:String,?params:Map<String,String>):String
 	{
 		return '';
 	}
 	
-	public static function verify(?params:StringMap<String>):Bool
+	public static function verify(?params:Map<String,String>):Bool
 	{
 		var jwt:String = params.get('jwt');
 		var id:Int = Std.parseInt(params.get('id'));		

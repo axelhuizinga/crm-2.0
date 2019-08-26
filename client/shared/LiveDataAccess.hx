@@ -28,8 +28,6 @@ using shared.Utils;
  * @author axel@cunity.me
  */
 
-
-
 class LiveDataAccess
 {
 	public static function create() {
@@ -43,42 +41,54 @@ class LiveDataAccess
 	public static function select(props:LiveDataProps) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+			if(props.id == null)
+				return null;
 			var aState:AppState = getState();
-			//trace(aState.dataStore.selectedData);
-			var sData = aState.dataStore.selectedData;
-			if(props.id != null)
-			//trace('sData.keys().hasNext():${sData.get(props.id)}');
-			//trace(sData);
-			//trace(props);
-			switch(props.selectType)
+			var tableRoot:Array<String> = FormApi.getTableRoot(props.match);
+			trace(tableRoot);
+			var sData:IntMap<Map<String,Dynamic>> = null;
+			switch(tableRoot[1])
 			{
-				case All:
-					sData = new IntMap();
-					for(k=>v in props.data.keyValueIterator())
-						sData.set(k,v);
-				case One:
-					sData.set(props.id,props.data.get(props.id));
-				case Unselect:
-					sData.remove(props.id);
-				case UnselectAll:
-					sData = new IntMap();
+				case 'Accounts':
+					sData = aState.dataStore.accountData;					
+					sData = selectType(props.id, props.data, sData, props.selectType);
+					aState.appWare.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
+					return dispatch(DataAction.SelectAccounts(props.data));				
+				case 'Contacts':
+					sData = aState.dataStore.contactData;
+					sData = selectType(props.id, props.data, sData, props.selectType);
+					aState.appWare.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
+					return dispatch(DataAction.SelectContacts(props.data));
+				case 'Deals':
+					sData = aState.dataStore.dealData;
+					sData = selectType(props.id, props.data, sData, props.selectType);
+					aState.appWare.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
+					return dispatch(DataAction.SelectDeals(props.data));
 				default:
-					sData = new IntMap();
-					sData.set(props.id,props.data.get(props.id));
-			}
-			var baseUrl:String = props.match.path.split(':section')[0];
-			baseUrl = '${baseUrl}${props.match.params.section}/${props.match.params.action}';	
-			aState.appWare.history.push('${baseUrl}/${FormApi.params(sData.keys().keysList())}');
-			dispatch(DataAction.Select(props.data));
-			/**
-			 * 				var state = store.getState();
-				var sData = state.dataStore.selectedData;
-				var baseUrl:String = match.path.split(':section')[0];
-				baseUrl = '${baseUrl}${match.params.section}/${match.params.action}';	
-				state.appWare.history.push('${baseUrl}/${FormApi.params(sData.keys().keysList())}');
-			 */
-			return null;		
+					return null;
+			}		
 		});
+	}
+
+	static function selectType(id:Dynamic,data:IntMap<Map<String,Dynamic>>,sData:IntMap<Map<String,Dynamic>>, sT:SelectType):IntMap<Map<String,Dynamic>>
+	{
+		switch(sT)
+		{
+			case All:
+				sData = new IntMap();
+				for(k=>v in data.keyValueIterator())
+					sData.set(k,v);
+			case One:
+				sData.set(id,data.get(id));
+			case Unselect:
+				sData.remove(id);
+			case UnselectAll:
+				sData = new IntMap();
+			default:
+				sData = new IntMap();
+				sData.set(id,data.get(id));
+		}
+		return sData;
 	}
 
 }

@@ -1,6 +1,6 @@
 package model;
 
-import haxe.ds.StringMap.StringMap<String>;
+import haxe.ds.StringMap.Map<String,String>;
 
 /**
  * ...
@@ -19,7 +19,7 @@ class AgencyBooking extends Model
 {
 	private static var booking_fields = 'id,entry_date,agency_project,start_datum,betrag,typ,user';
 	
-	public function new(?param:StringMap<String>) 
+	public function new(?param:Map<String,String>) 
 	{
 		super(param);		
 	}

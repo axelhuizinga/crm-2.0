@@ -100,33 +100,16 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{
 		//
-		setState({mounted:true});
+		//setState({mounted:true});
 		if (props.match.params.section == null)
 		{
 			var basePath:String = props.match.url;
-			props.history.push('$basePath/DB');
+			props.history.push('$basePath/List/show');
 			trace(props.history.location.pathname);
-			trace('setting section to:DB');
+			trace('redirecting to $basePath/List/show');
 		}		
 		trace('${}');
-		//TODO: AUTOMATE CREATE HISTORY TRIGGER IF DB TABLES CHANGED
-		/*AjaxLoader.loadData('${App.config.api}', 
-			{
-				id:props.user.id,
-				jwt:props.user.jwt,
-				className:'admin.CreateHistoryTrigger',
-				action:'run'				
-			}, 
-			function(data:String){
-				trace(data); 
-				if (data != null && data.length > 0)
-				{
-					var sData:StringMap<Dynamic> = state.data;
-					sData.set('historyTrigger', Json.parse(data).data.rows);
-					setState(ReactUtil.copy(state, {data:sData}));				
-				}
-			});	
-			*/		
+	
 	}
 	
 	override public function render() 

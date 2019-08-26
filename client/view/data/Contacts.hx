@@ -82,13 +82,13 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			//SET DEFAULT SECTION
 			//trace('reme');
 			var baseUrl:String = props.match.path.split(':section')[0];
-			props.history.push('${baseUrl}List');
+			props.history.push('${baseUrl}List/show');
 		}		
 		
 		state =  App.initEState({
-			dataTable:[],loading:false,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
+			dataTable:[],loading:false,contactData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
 		},this);
-		//trace(state.selectedData);
+		//trace(state.contactData);
 		//trace(state.loading);		
 	}
 	

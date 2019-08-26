@@ -25,8 +25,10 @@ class DataStore
 	public function new() 
 	{ 
 		initState = {
-			dbData:new DbData(),
-			selectedData: new IntMap()
+			dbData:new DbData(),			
+			contactData: new IntMap(),
+			dealData: new IntMap(),
+			accountData: new IntMap()
 		};
 		trace('ok');
 	}
@@ -47,12 +49,22 @@ class DataStore
 				copy(state,
 				{
 					dbData:data
-				}
-				);
-			case Select(sData):		
+				});
+			case SelectAccounts(sData):
+				trace(sData.keys().keysList());
 				copy(state,{
-					selectedData:sData
-				});		
+					contactData:sData
+				});
+			case SelectContacts(sData):
+				trace(sData.keys().keysList());
+				copy(state,{
+					contactData:sData
+				});
+			case SelectDeals(sData):
+				trace(sData.keys().keysList());
+				copy(state,{
+					contactData:sData
+				});
 			default:
 				state;
 		}

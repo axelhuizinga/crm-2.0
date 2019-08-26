@@ -1,5 +1,5 @@
 package;
-import haxe.ds.StringMap;
+
 import php.Lib;
 import php.Syntax;
 import php.Web;
@@ -15,14 +15,14 @@ using StringTools;
  */
 class Config
 {
-	public static function load(cjs:String) :StringMap<Dynamic>
+	public static function load(cjs:String) :Map<String,Dynamic>
 	{
 		var js:String = File.getContent(cjs);
 		//Syntax.("file_get_contents", cjs);
 		//trace(js);
 		var vars:Array<String> = js.split('var');
 		vars.shift();
-		var result:StringMap<Dynamic> = new StringMap();
+		var result:Map<String,Dynamic> = new Map();
 		//trace(vars.length);
 		for (v in vars)
 		{

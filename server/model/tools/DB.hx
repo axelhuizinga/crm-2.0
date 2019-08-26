@@ -1,7 +1,7 @@
 package model.tools;
 import haxe.io.Bytes;
 import hxbit.Serializer;
-import haxe.ds.StringMap;
+
 import php.Lib;
 import php.NativeArray;
 import php.Syntax;
@@ -18,7 +18,7 @@ import sys.io.File;
  */
 class DB extends Model
 {
-	public static function _create(param:StringMap<String>):Void
+	public static function _create(param:Map<String,String>):Void
 	{
 		var self:DB = new DB(param);	
 		Reflect.callMethod(self, Reflect.field(self, param.get('action')), [param]);

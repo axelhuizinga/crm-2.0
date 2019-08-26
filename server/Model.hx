@@ -2,7 +2,7 @@ package;
 
 import S.ColDef;
 import haxe.Unserializer;
-import haxe.ds.StringMap;
+
 import haxe.io.Bytes;
 import hxbit.Serializer;
 import php.Lib;
@@ -50,8 +50,8 @@ typedef MData =
 typedef RData =
 {
 	?rows:NativeArray,
-	?error:StringMap<Dynamic>,
-	?info:StringMap<Dynamic>
+	?error:Map<String,Dynamic>,
+	?info:Map<String,Dynamic>
 }
 
 @:enum
@@ -72,7 +72,7 @@ typedef DataSource =
 {
 	@:optional var alias:String;
 	@:optional var fields:Array<String>;
-	@:optional var filter:Array<StringMap<String>>;
+	@:optional var filter:Array<Map<String,String>>;
 }
 
 class Model
@@ -95,9 +95,9 @@ class Model
 	var dParam:DbData;
 	var dataSource:Map<String,Map<String,Dynamic>>;// EACH KEY IS A TABLE NAME
 	var dataSourceSql:String;
-	var param:Map<String, Dynamic>;
+	var param:Map<String, String>;
 	
-	public static function dispatch(param:StringMap<Dynamic>):Void
+	public static function dispatch(param:Map<String,Dynamic>):Void
 	{
 		var cl:Class<Dynamic> = Type.resolveClass('model.' + param.get('className'));
 		//trace(cl);
@@ -115,7 +115,7 @@ class Model
 			S.add2Response({error:cast cl + ' create is null'}, true);
 		}
 		var iFields:Array<String> = Type.getInstanceFields(cl);
-		//trace(iFields);
+		trace('$iFields ${param.get('action')}');
 		if (iFields.has(param.get('action')))
 		{
 			trace('calling create ' + cl);
@@ -170,7 +170,7 @@ class Model
 		var sqlBf:StringBuf = new StringBuf();				
 		for (table in tableNames)
 		{
-			var tRel:StringMap<String> = dataSource.get(table);
+			var tRel:Map<String,Dynamic> = dataSource.get(table);
 			var alias:String = (tRel.exists('alias')? quoteIdent(tRel.get('alias')):'');
 			var jCond:String = tRel.exists('jCond') ? tRel.get('jCond'):null;
 			if (jCond != null)
@@ -258,7 +258,7 @@ class Model
 	{
 		var fieldsWithFormat:Array<String> = new Array();
 		var sF:Array<String> = fields.split(',');
-		var dbQueryFormats:StringMap<Array<String>> = Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject((S.conf.get('dbQueryFormats'))));
+		var dbQueryFormats:Map<String,Array<String>> = Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject((S.conf.get('dbQueryFormats'))));
 		trace(dbQueryFormats);
 		
 		var qKeys:Array<String> = new Array();
@@ -286,7 +286,7 @@ class Model
 		return fieldsWithFormat.join(',');
 	}
 	
-	public function read():Void
+	public function show():Void
 	{	
 		var rData:RData =  {
 			info:['count'=>count(),'page'=>(param.exists('page') ? Std.parseInt( param.get('page') ) : 1)],
@@ -308,7 +308,7 @@ class Model
 		}		
 		var bindTypes:String = '';
 		var values2bind:NativeArray = null;
-		//var dbFieldTypes:StringMap<String> =  Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(S.conf.get('dbFieldTypes')));
+		//var dbFieldTypes:Map<String,String> =  Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(S.conf.get('dbFieldTypes')));
 		//trace(filterValues);
 		var data:NativeArray = null;
 		var success: Bool;
@@ -665,7 +665,7 @@ class Model
 		trace(s.unserialize(param, DbData));
 	}
 	
-	public function new(?param:StringMap<String>) 
+	public function new(?param:Map<String,String>) 
 	{
 		this.param = param;
 		trace(param);
@@ -749,7 +749,7 @@ class Model
 			filterSql += buildCond(param.get('filter'));
 	}
 	
-	function buildFieldsSql(name:String, tParam:StringMap<String>):Array<String>
+	function buildFieldsSql(name:String, tParam:Map<String,Dynamic>):Array<String>
 	{
 		var prefix = (tParam.exists('alias')?quoteIdent(tParam.get('alias'))+'.':'');
 		trace(prefix);
@@ -784,11 +784,11 @@ class Model
 		return Syntax.code("json_encode({0},{1})", {content:res}, 64);//JSON_UNESCAPED_SLASHES
 	}
 	
-	function getEditorFields(?table_name:String):StringMap<Array<StringMap<String>>>
+	function getEditorFields(?table_name:String):Map<String,Array<Map<String,String>>>
 	{
 		var sqlBf:StringBuf = new StringBuf();
 		var filterValues:Array<Array<Dynamic>> = new Array();
-		var param:StringMap<String> = new StringMap();
+		var param:Map<String,String> = new Map();
 		param.set('table', 'fly_crm.editor_fields');
 		
 		param.set('filter', 'field_cost|>-2' + (table_name != null ? 
@@ -802,8 +802,8 @@ class Model
 		//var eFields:Dynamic = doSelect(param, sqlBffilterValueses);
 		//trace(eFields);
 		//trace(eFields.length);
-		var ret:StringMap<Array<StringMap<String>>> = new StringMap();
-		//var ret:Array<StringMap<String>> = new Array();
+		var ret:Map<String,Array<Map<String,String>>> = new Map();
+		//var ret:Array<Map<String,String>> = new Array();
 		for (ef in eFields)
 		{
 			var table:String = untyped ef['table_name'];
@@ -811,9 +811,9 @@ class Model
 			{
 				ret.set(table, []);
 			}
-			//var field:StringMap<String> = Lib.hashOfAssociativeArray(ef);
+			//var field:Map<String,String> = Lib.hashOfAssociativeArray(ef);
 			//trace(field.get('field_label')+ ':' + field);
-			var a:Array<StringMap<String>> = ret.get(table);
+			var a:Array<Map<String,String>> = ret.get(table);
 			a.push(Lib.hashOfAssociativeArray(ef));
 			ret.set(table, a);
 			//return ret;

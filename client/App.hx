@@ -167,6 +167,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
 	public function gGet(key:String):Dynamic
 	{
+		trace(key);
 		return globalState.get(key);
 	} 
 
@@ -194,14 +195,14 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	// Use trace from props
 	public static function edump(el:Dynamic){Out.dumpObject(el); return 'OK'; };
 
-  override function render() {
+  	override function render() {
 		//trace(state.appWare.history.location.pathname);	store={store}		
         return jsx('
 		<>
 			<Provider store={store}><IntlProvider locale="de"><UiView/></IntlProvider></Provider>
 		</>			
         ');
-  }
+  	}
 
 	public static function 	await(delay:Int, check:Void->Dynamic, cb:Function):Timer
 	{

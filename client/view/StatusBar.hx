@@ -129,7 +129,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		<Footer>
 			<div className="statusbar">
 				<span className="column" > Pfad: ${props.pathname}</span>				
-				<span className="column">
+				<span className="column flex-end">
 				<i className=${userIcon}></i> $id</span>
 				<$DateTime />			
 			</div>

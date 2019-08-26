@@ -1,6 +1,6 @@
 package model.settings;
 
-import haxe.ds.StringMap;
+
 
 /**
  * ...

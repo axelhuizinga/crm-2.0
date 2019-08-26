@@ -1,6 +1,6 @@
 package model.admin;
 
-import haxe.ds.StringMap;
+
 import haxe.extern.EitherType;
 import php.Lib;
 import php.NativeArray;
@@ -20,7 +20,7 @@ using Util;
 @:keep
 class CreateHistoryTrigger extends Model 
 {
-	public static function _create(param:StringMap<String>):Void
+	public static function _create(param:Map<String,String>):Void
 	{
 		var self:CreateHistoryTrigger = new CreateHistoryTrigger(param);	
 		//self.table = 'columns';

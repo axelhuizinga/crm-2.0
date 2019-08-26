@@ -152,7 +152,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 			');		
 		}
 		
-		trace('${props.user.jwt} ${props.user.loggedIn}');
+		//trace('${props.user.jwt} ${props.user.loggedIn}');
 		if(props.user.jwt == null || props.user.jwt == '' )//|| !props.user.loggedIn
 		{
 			// WE NEED TO LOGIN FIRST
@@ -160,7 +160,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		}
 		else
 		{			
-			trace('render Router :)' + browserHistory.location.pathname);
+			//trace('render Router :)' + browserHistory.location.pathname);
 			return
 			#if debug 
 				jsx('

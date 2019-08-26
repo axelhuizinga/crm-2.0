@@ -1,5 +1,5 @@
 package model;
-import haxe.ds.StringMap;
+
 import haxe.extern.EitherType;
 import haxe.Http;
 import php.Lib;
@@ -14,9 +14,9 @@ class AgcApi extends Model
 {
 	var vicidialUser:String;
 	var vicidialPass:String;
-	var statuses:StringMap<String>;
+	var statuses:Map<String,String>;
 	
-	public static function _create(param:StringMap<String>):EitherType<String,Bool>
+	public static function _create(param:Map<String,String>):EitherType<String,Bool>
 	{
 		var self:AgcApi = new AgcApi(param);	
 		self.vicidialUser = param.get('user_name');
@@ -24,7 +24,7 @@ class AgcApi extends Model
 		return Reflect.callMethod(self, Reflect.field(self, param.get('action')), [param]);
 	}
 	
-	public function check4Update(param:StringMap<String>):EitherType<String,Bool>
+	public function check4Update(param:Map<String,String>):EitherType<String,Bool>
 	{
 		var lead_id:Dynamic = Std.parseInt(param.get('lead_id'));
 		trace(S.host + ':' + lead_id);
@@ -32,7 +32,7 @@ class AgcApi extends Model
 		return json_response(query('SELECT state FROM vicidial_list WHERE lead_id=$lead_id')[0]);
 	}
 	
-	public function external_dial(param:StringMap<String>):EitherType<String,Bool>
+	public function external_dial(param:Map<String,String>):EitherType<String,Bool>
 	{
 		//TODO: GET HOST FROM CONFIG OR SYSTEM
 		var url:String = '${S.request_scheme}://${S.host}/agc/api.php?source=flyCRM&user=$vicidialUser&pass=$vicidialPass&function=external_dial&search=NO&preview=NO&focus=NO&lead_id='
@@ -43,7 +43,7 @@ class AgcApi extends Model
 		return json_response(agcResponse.indexOf('SUCCESS') == 0 ? 'OK' : agcResponse);
 	}
 	
-	public function external_hangup(param:StringMap<String>):EitherType<String,Bool>
+	public function external_hangup(param:Map<String,String>):EitherType<String,Bool>
 	{
 		if(param.get('pause')=='Y')
 			Http.requestUrl('${S.request_scheme}://${S.host}/agc/api.php?source=flyCRM&user=$vicidialUser&pass=$vicidialPass&function=external_pause&value=PAUSE&agent_user=' + param.get('agent_user'));
@@ -72,7 +72,7 @@ class AgcApi extends Model
 		return json_response(agcResponse);		
 	}
 	
-	public function external_status(param:StringMap<String>):EitherType<String,Bool>
+	public function external_status(param:Map<String,String>):EitherType<String,Bool>
 	{
 		var status:String = param.get('dispo');
 		var url = '${S.request_scheme}://${S.host}/agc/api.php?source=flyCRM&user=$vicidialUser&pass=$vicidialPass&function=external_status&value=$status&agent_user=' + param.get('agent_user');
@@ -81,7 +81,7 @@ class AgcApi extends Model
 		return json_response(agcResponse.indexOf('SUCCESS') == 0 ? 'OK' : agcResponse);
 	}
 	
-	public function update_fields_x(param:StringMap<String>):EitherType<String,Bool>
+	public function update_fields_x(param:Map<String,String>):EitherType<String,Bool>
 	{
 		var state:String = param.get('state');
 		/*var user = param.get('agent_user');

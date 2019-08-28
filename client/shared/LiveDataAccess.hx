@@ -57,6 +57,7 @@ class LiveDataAccess
 				case 'Contacts':
 					sData = aState.dataStore.contactData;
 					sData = selectType(props.id, props.data, sData, props.selectType);
+					trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
 					aState.appWare.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
 					return dispatch(DataAction.SelectContacts(props.data));
 				case 'Deals':

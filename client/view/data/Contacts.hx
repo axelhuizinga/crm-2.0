@@ -1,5 +1,8 @@
 package view.data;
 
+
+import deepequal.DeepEqual;
+import deepequal.Outcome;
 import action.async.DataAction;
 import haxe.Constraints.Function;
 import state.DataAccessState;
@@ -80,7 +83,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		if(props.match.params.section==null)
 		{
 			//SET DEFAULT SECTION
-			//trace('reme');
+			trace('reme');
 			var baseUrl:String = props.match.path.split(':section')[0];
 			props.history.push('${baseUrl}List/show');
 		}		

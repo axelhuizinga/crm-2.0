@@ -164,11 +164,13 @@ class FormApi
 		trace(targetSection);
 		if(targetSection != comp.props.match.params.section)
 		{
+			trace(comp.props.match.params.section);
 			comp.props.history.push(getUrl(eTarget.dataset.action,targetSection));
 			return true;
 		}
 		if(targetSection !=null)
 		{
+			trace(getUrl(eTarget.dataset.action));
 			comp.props.history.push(getUrl(eTarget.dataset.action));
 			return true;			
 			var fun:Function = Reflect.field(section,method);

@@ -216,6 +216,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						else 
 						{
 							//TODO: IMPLEMENT GENERIC FAILURE FEEDBACK
+							trace('no matching data found for ${initialState.id}');
 							var baseUrl:String = props.match.path.split(':section')[0];
 							props.history.push('${baseUrl}List/find');							
 						}				

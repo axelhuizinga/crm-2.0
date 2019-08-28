@@ -18,7 +18,7 @@ import react.router.Route;
 import react.router.RouterMatch;
 import react.router.Redirect;
 //import react.router.Route.RouteRenderProps;
-//import react.router.Switch;
+import react.router.Switch;
 import react.router.NavLink;
 import view.shared.io.FormApi;
 import view.shared.RouteTabProps;
@@ -49,10 +49,11 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 		state = {hasError:false,mounted:false};
 		//trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} user:${props.user}');
 		super(props);
+		trace(props.match);
 		if (props.match.url == '/Data' && props.match.isExact)
 		{
-			props.history.push('/Data/Contacts');
-			trace('pushed2: /Data/Contacts');
+			trace('pushing2: /Data/Contacts/List/show');
+			props.history.push('/Data/Contacts/List/show');
 		}
 	}
 	
@@ -129,35 +130,28 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 				</$Tabs>
 			</div>
             <div className="tabContent2" >
-				<Route path="/Data/Contacts/:section?/:action?/:id?"  ${...props} component={Contacts}/>
-				<Route path="/Data/Deals/:section?/:action?/:id?"  ${...props} component={Deals}/>
-				<Route path="/Data/Accounts/:section?/:action?/:id?"   ${...props} component={Accounts}/>	
-            </div>
+			<$Switch>
+				<$Route path="/Data/Contacts/:section?/:action?/:id?"  ${...props} component={Contacts}/>
+				<$Route path="/Data/Deals/:section?/:action?/:id?"  ${...props} component={Deals}/>
+				<$Route path="/Data/Accounts/:section?/:action?/:id?"   ${...props} component={Accounts}/>	
+				<$Route ><$Redirect to=${App.defaultUrl}/></$Route>
+            </$Switch>
+			</div>
 			<$StatusBar ${...props}/>
 		</>
 			');			
     }
 
-	function renderComponent(comp:Dynamic,props:Dynamic, user:UserState):ReactFragment
+	function renderComponent(props:RouteRenderProps):ReactElement
 	{
-		trace(user.first_name);
-		props.user = user;
-		//return React.createElement(Comp,props);
-		return switch(comp)
-		{	
-			case Contacts:
-				jsx('<$Contacts  user=${this.props.user} ${...props}/>');			
-			case Deals:
-				jsx('<$Deals  user=${this.props.user} ${...props}/>');			
-			case Accounts:
-				jsx('<$Accounts  user=${this.props.user} ${...props}/>');
-			default:
-				null;
-		}
+		trace(props.location);
+		trace(props.match);
+		return null;
 	}
 	
-	function internalRedirect(path:String = '/Data/Contacts')
+	function internalRedirect(path:String = '/Data/Contacts/List/show')
 	{
+		trace(path);
 		props.history.push(path);
 		return null;
 	}

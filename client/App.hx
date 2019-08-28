@@ -83,6 +83,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
 	public static var onResizeComponents:List<Dynamic> = new List();
 	public static var maxLoginAttempts:Int = 3;
+	public static var defaultUrl = '/Data/Contacts/List/show';
 
 	var globalState:Map<String,Dynamic>;
 

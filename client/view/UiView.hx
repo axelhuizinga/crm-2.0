@@ -1,4 +1,5 @@
 package view;
+import react.router.RouterMatch;
 import view.shared.io.User;
 
 import comments.StringTransform;
@@ -160,7 +161,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		}
 		else
 		{			
-			//trace('render Router :)' + browserHistory.location.pathname);
+			//trace('render Router ' + browserHistory.location.pathname);
 			return
 			#if debug 
 				jsx('

@@ -2,6 +2,7 @@ package state;
 import state.UserState;
 import history.History;
 import state.LocationState;
+import state.StatusBarState;
 import view.shared.FormState;
 
 typedef GlobalAppState = 
@@ -15,6 +16,7 @@ typedef GlobalAppState =
 	?path:String,
 	?redirectAfterLogin:String,
 	?routeHistory:Array<LocationState>,
+	statusBar:StatusBarState,
 	?themeColor:String,
 	userList:Array<UserState>,
 	user:UserState

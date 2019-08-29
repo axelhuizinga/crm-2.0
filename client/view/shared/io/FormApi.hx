@@ -205,7 +205,7 @@ class FormApi
 	public static function getTableRoot(match:RouterMatch):Array<String>
 	{
 		var baseUrl:String = match.path.split('/:section')[0];
-		var newUrl = '${baseUrl}${match.params.section}/${match.params.action}';
+		var newUrl = '${baseUrl}/${match.params.section}/${match.params.action}';
 		return ~/^\//.replace(baseUrl,'').split('/').concat([newUrl]);
 	}
 

@@ -46,6 +46,7 @@ class AppStore
 			locale: 'de',
 			redirectAfterLogin: (Browser.location.pathname=='/'?'DashBoard':Browser.location.pathname), 
 			routeHistory: new Array(),
+			statusBar: null,
 			userList:[],
 			user:{
 				first_name:'',
@@ -69,6 +70,7 @@ class AppStore
 	
 	public function reduce(state:GlobalAppState, action:AppAction):GlobalAppState
 	{
+		trace(Reflect.fields(state));
 		return switch(action)
 		{
 			case FormChange(cfp, fState):
@@ -134,6 +136,12 @@ class AppStore
 					});
 				}
 				else state;
+			case Status(status):
+				trace(status);
+				//Out.dumpStack(CallStack.callStack());
+				copy(state.statusBar, {
+					status:status
+				});				
 			case User(uState):
 			trace(state.user);
 				copy(state, {

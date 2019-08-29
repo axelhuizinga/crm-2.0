@@ -1,4 +1,5 @@
 package view;
+import action.LocationAction;
 import state.UserState;
 import react.ReactType;
 import view.shared.io.User;
@@ -60,6 +61,14 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 	override public function componentDidMount():Void 
 	{
 		mounted = true;
+		trace(props.history.location);
+		trace(props.location);
+		trace(props.match);
+		var path:String = '/Data/Contacts/List/show';
+		trace(path);
+		internalRedirect();
+		//if(path != props.location.pathname)
+		//props.history.push(path);
 		//trace(mounted);
 		//trace(props.history.listen);
 		//this.addComponent();
@@ -73,14 +82,20 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 		trace(info);
 	}		
 	
-	override public function componentWillUnmount():Void 
+	override function shouldComponentUpdate(nextProps:RouteTabProps, nextState:CompState):Bool
 	{
-		trace('leaving...');
-		return;
-		super.componentWillUnmount();
+		trace('propsChanged:${nextProps!=props}');
+		trace('stateChanged:${nextState!=state}');
+		if(nextState!=state || nextProps!=props)
+		{
+			internalRedirect();
+			return true;
+		}
+			
+		return nextProps!=props;
 	}
 	
-	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
+	/*static function mapDispatchToProps(dispatch:Dispatch):Dynamic
     {
 		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
         return {
@@ -97,19 +112,9 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 		return {
 			appConfig:aState.appWare.config,
 			redirectAfterLogin:aState.appWare.redirectAfterLogin,
-			user:uState/*
-			id:uState.id,
-			pass:uState.pass,
-			jwt:uState.jwt,
-		//	isMounted:mounted,
-			loggedIn:uState.loggedIn,
-			loginError:uState.loginError,
-			last_login:uState.last_login,
-			first_name:uState.first_name,
-			//locationHistory:aState.appWare.history,
-			waiting:uState.waiting*/
+			user:uState
 		};		
-	}		
+	}		*/
 	
     override function render() 
 	{	
@@ -134,14 +139,14 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 				<$Route path="/Data/Contacts/:section?/:action?/:id?"  ${...props} component={Contacts}/>
 				<$Route path="/Data/Deals/:section?/:action?/:id?"  ${...props} component={Deals}/>
 				<$Route path="/Data/Accounts/:section?/:action?/:id?"   ${...props} component={Accounts}/>	
-				<$Route ><$Redirect to=${App.defaultUrl}/></$Route>
+				
             </$Switch>
 			</div>
 			<$StatusBar ${...props}/>
 		</>
 			');			
     }
-
+//<$Route >${internalRedirect()}</$Route>
 	function renderComponent(props:RouteRenderProps):ReactElement
 	{
 		trace(props.location);
@@ -151,8 +156,16 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 	
 	function internalRedirect(path:String = '/Data/Contacts/List/show')
 	{
+		trace(props.location.pathname);
+		//trace(props.match);
 		trace(path);
-		props.history.push(path);
+		if(path != props.location.pathname)
+		App.store.dispatch(
+			shared.LocationAccess.redirect(
+				['/Data/Contacts/:section?/:action?/:id?',
+				'/Data/Deals/:section?/:action?/:id?',
+				'/Data/Accounts/:section?/:action?/:id?'],path,props));
+		//props.history.push(path);
 		return null;
 	}
 	

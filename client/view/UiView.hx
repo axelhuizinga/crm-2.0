@@ -89,7 +89,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
         super(props);
 		state = {hasError:false};
 		browserHistory = App.store.getState().appWare.history;// BrowserHistory.create({basename:"/"});
-		ApplicationStore.startHistoryListener(App.store, browserHistory);
+		//ApplicationStore.startHistoryListener(App.store, browserHistory);
 		//trace(this.props.appWare.user.state.last_name);
 		mounted = false;
 		//_me = this;

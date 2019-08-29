@@ -39,6 +39,7 @@ enum AppAction
 	SetTheme(color:String);
 	User(state:UserState);
 	//Users(filter:UserFilter);
+	Status(status:String);
 	//SetEntries(entries:Array<DataCell>);
 }
 

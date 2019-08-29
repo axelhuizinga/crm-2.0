@@ -39,9 +39,9 @@ class ApplicationStore
 		var rootReducer = Redux.combineReducers(
 			{
 				appWare: mapReducer(AppAction, appWare),
-				locationStore: mapReducer(LocationAction, locationStore),
-				statusBar: mapReducer(StatusAction, statusBarStore),
-				dataStore: mapReducer(DataAction, dataStore)
+				//locationStore: mapReducer(LocationAction, locationStore),
+				dataStore: mapReducer(DataAction, dataStore),
+				statusBarStore: mapReducer(StatusAction, statusBarStore)
 				//userStore: mapReducer(UserAction, userStore)
 			}
 		);
@@ -51,7 +51,8 @@ class ApplicationStore
 		var middleware = Redux.applyMiddleware(
 			mapMiddleware(Thunk, new ThunkMiddleware()),
 			mapMiddleware(DataAction, dataStore),
-			mapMiddleware(AppAction, appWare)
+			mapMiddleware(AppAction, appWare),
+			mapMiddleware(StatusAction, statusBarStore)//,
 			//mapMiddleware(LocationAction, locationStore)
 		);
 		
@@ -63,7 +64,7 @@ class ApplicationStore
 	
 	static public function startHistoryListener(store:Store<AppState>, history:History):TUnlisten
 	{
-		//trace(store);
+		trace(history);
 		store.dispatch(InitHistory(history));
 	
 		return history.listen( function(location:Location, action:history.Action){

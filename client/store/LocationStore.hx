@@ -60,6 +60,10 @@ class LocationStore implements IReducer<LocationAction, LocationState>
 		trace(action);
 		return switch(action)
 		{
+			case LocationChange(location):
+				trace(location.pathname);
+				//state.history.push(location.pathname);
+				next();
 			/*case Push(url, state):
 				history.push(url, state);
 				{};

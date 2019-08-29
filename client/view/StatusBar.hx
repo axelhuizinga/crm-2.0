@@ -33,7 +33,7 @@ typedef StatusBarProps =
 {
 	> RouteComponentProps,
 	date:Date,
-	pathname:String,
+	status:String,
 	user:UserProps,
 	userList:Array<UserProps>
 }
@@ -99,17 +99,19 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 
 		//return function(state:state.AppState) {
 			trace(state.appWare.user.first_name);
+			trace(Reflect.fields(state));
+			trace(state.statusBar);
 			return {
 				/*date:state.statusBar.date,*/
 				userList:state.appWare.userList,
 				user:state.appWare.user,
-				pathname: state.appWare.history.location.pathname
+				status: state.appWare.history.location.pathname
 			};
 		//};
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch, ownProps:Dynamic) {
-		trace(ownProps.date);
+		//trace(ownProps);
 		return {};
 	}		
 	
@@ -128,7 +130,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		return jsx('
 		<Footer>
 			<div className="statusbar">
-				<span className="column" > Pfad: ${props.pathname}</span>				
+				<span className="column" > Status: ${props.status}</span>				
 				<span className="column flex-end">
 				<i className=${userIcon}></i> $id</span>
 				<$DateTime />			

@@ -1,5 +1,6 @@
 package shared;
 
+import action.AppAction.StatusAction;
 import js.html.Blob;
 import state.UserState;
 import state.AppState;
@@ -90,6 +91,7 @@ class DBAccess
 			function(data:DbData)
 			{				
 				trace(data);
+				var status:String = '';
 				if (data.dataErrors.keys().hasNext())
 				{
 					trace(data.dataErrors);
@@ -97,8 +99,17 @@ class DBAccess
 					{
 						return dispatch(LoginError({loginError: data.dataErrors.get('loginError')}));
 					}
+				}else 
+				status = switch ('${props.className}.${props.action}')
+				{
+					case "data.Contacts.update":
+						'Kontakt ${props.dataSource["contacts"]["filter"].substr(3)} wurde gespeichert';
+					default:
+						"Unbekannter Vorgang";
+
 				}
-				return null;
+				trace('${props.className}.${props.action} => $status');
+				return dispatch(StatusAction.Status(status));
 			});
 			if (requests != null)
 			{

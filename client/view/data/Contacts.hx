@@ -1,8 +1,5 @@
 package view.data;
 
-
-import deepequal.DeepEqual;
-import deepequal.Outcome;
 import action.async.DataAction;
 import haxe.Constraints.Function;
 import state.DataAccessState;

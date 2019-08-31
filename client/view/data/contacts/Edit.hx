@@ -168,6 +168,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	
 	static function mapStateToProps(aState:AppState) 
 	{
+		trace(aState);
 		return {
 			user:aState.appWare.user
 		};
@@ -212,6 +213,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 							actualState = data.dataRows[0].MapToDyn();
 							props.parentComponent.props.select(actualState.id,data.dataRows[0],props.match);
 							trace(actualState);
+							forceUpdate();
 						}
 						else 
 						{

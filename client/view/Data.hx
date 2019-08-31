@@ -61,11 +61,9 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 	override public function componentDidMount():Void 
 	{
 		mounted = true;
-		trace(props.history.location);
+		/*trace(props.history.location);
 		trace(props.location);
-		trace(props.match);
-		var path:String = '/Data/Contacts/List/show';
-		trace(path);
+		trace(props.match);*/
 		internalRedirect();
 		//if(path != props.location.pathname)
 		//props.history.push(path);
@@ -156,9 +154,8 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 	
 	function internalRedirect(path:String = '/Data/Contacts/List/show')
 	{
-		trace(props.location.pathname);
+		trace('${props.location.pathname} $path');
 		//trace(props.match);
-		trace(path);
 		if(path != props.location.pathname)
 		App.store.dispatch(
 			shared.LocationAccess.redirect(

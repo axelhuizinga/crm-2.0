@@ -29,7 +29,7 @@ typedef UserProps = UserState;
  * @author axel@cunity.me
  */
 
-class UserAction 
+class UserAction2
 {
 	public static function loginReq(props:LoginState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{

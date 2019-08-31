@@ -12,10 +12,10 @@ import history.Location;
 import history.TransitionManager;
 import store.AppStore;
 import store.DataStore;
-import store.LocationStore;
-import store.StatusBarStore;
+//import store.LocationStore;
+//import store.StatusBarStore;
 //import store.UserStore;
-import redux.Form;
+import redux.Reducer;
 import redux.Redux;
 import redux.Store;
 import redux.StoreBuilder.*;
@@ -30,8 +30,8 @@ class ApplicationStore
 		// store model, implementing reducer and middleware logic
 		var appWare = new AppStore();
 		var dataStore = new DataStore();
-		var locationStore = new LocationStore();
-		var statusBarStore = new StatusBarStore();
+		//var locationStore = new LocationStore();
+		//var statusBar = new StatusBarStore();
 		//var userStore = new UserStore();
 		
 		// create root reducer normally, excepted you must use 
@@ -40,8 +40,8 @@ class ApplicationStore
 			{
 				appWare: mapReducer(AppAction, appWare),
 				//locationStore: mapReducer(LocationAction, locationStore),
-				dataStore: mapReducer(DataAction, dataStore),
-				statusBarStore: mapReducer(StatusAction, statusBarStore)
+				dataStore: mapReducer(DataAction, dataStore)//,
+				//statusBar: mapReducer(StatusAction, statusBar)
 				//userStore: mapReducer(UserAction, userStore)
 			}
 		);
@@ -49,10 +49,10 @@ class ApplicationStore
 		// create middleware normally, excepted you must use 
 		// 'StoreBuilder.mapMiddleware' to wrap the Enum-based middleware
 		var middleware = Redux.applyMiddleware(
-			mapMiddleware(Thunk, new ThunkMiddleware()),
-			mapMiddleware(DataAction, dataStore),
-			mapMiddleware(AppAction, appWare),
-			mapMiddleware(StatusAction, statusBarStore)//,
+			mapMiddleware(Thunk, new ThunkMiddleware())//,
+			//mapMiddleware(DataAction, dataStore)//,
+			//mapMiddleware(AppAction, appWare)//,
+			//mapMiddleware(StatusAction, statusBar)//,
 			//mapMiddleware(LocationAction, locationStore)
 		);
 		

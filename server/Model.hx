@@ -608,9 +608,9 @@ class Model
 		trace(Reflect.fields(data).join(','));
 		for(col in defaults)
 		{
-			set.push('${alias}${col.column_name}=?');
+			set.push('${alias}${quoteIdent(col.column_name)}=?');
 			var val:String = Reflect.field(data,col.column_name);
-			trace('$val / default:${col.column_default}');
+			trace('${col.column_name} $val / default:${col.column_default}');
 			setValues.push(val==null?col.column_default:val);
 		}
 		trace( 'SET ${set.join(',')} ');

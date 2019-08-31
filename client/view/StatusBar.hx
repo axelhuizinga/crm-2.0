@@ -95,18 +95,18 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 			timer.stop();
 	}	
 	
-	static function mapStateToProps(state:AppState) {
-
-		//return function(state:state.AppState) {
-			trace(state.appWare.user.first_name);
-			trace(Reflect.fields(state));
-			trace(state.statusBar);
-			return {
-				/*date:state.statusBar.date,*/
-				userList:state.appWare.userList,
-				user:state.appWare.user,
-				status: state.appWare.history.location.pathname
-			};
+	static function mapStateToProps(state:AppState) 
+	{
+		trace(state.appWare.user.first_name);
+		trace(Reflect.fields(state));
+		trace(state.appWare.statusBar);
+		//setState({status:state.appWare.statusBar.status})
+		return {
+			/*date:state.statusBar.date,*/
+			userList:state.appWare.userList,
+			user:state.appWare.user,
+			status: state.appWare.statusBar.status//state.appWare.history.location.pathname
+		};
 		//};
 	}
 

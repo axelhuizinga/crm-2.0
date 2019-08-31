@@ -127,7 +127,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				trace('select:$id selectType:${selectType}');
 				//dispatch(DataAction.CreateSelect(id,data,match));
 				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
-			},
+			}/*,
 			storeFormChange: function(path:String, formState:FormState) 
 			{
 				trace(Reflect.fields(formState));
@@ -137,7 +137,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 					path,
 					formState
 				));
-			}
+			}*/
 			/*update: function(dbaProps:DBAccessProps) {
 				trace(dbaProps);
 				dispatch(DataAction.Update(dbaProps));
@@ -155,7 +155,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		
 	override public function componentDidMount():Void 
 	{	
-		trace(props.location);
+		trace(props.location.pathname);
 		//setState({mounted:true});
 		return;
 		var baseUrl:String = props.match.path.split(':section')[0];

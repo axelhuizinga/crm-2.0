@@ -1,7 +1,7 @@
 import js.html.Window;
-//import view.shared.FormBuilder;
-//import view.shared.FormState;
-//import view.shared.SMenuProps;
+import view.shared.FormBuilder;
+import view.shared.FormState;
+import view.shared.SMenuProps;
 import haxe.Serializer;
 import js.html.BodyElement;
 //import js.html.svg.Document;
@@ -12,7 +12,7 @@ import haxe.ds.List;
 import haxe.http.HttpJs;
 import js.html.ButtonElement;
 import js.html.DivElement;
-//import view.shared.io.User;
+import view.shared.io.User;
 
 /**
  * ...
@@ -31,19 +31,13 @@ import js.Error;
 import js.Promise;
 import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
-//import store.ApplicationStore;
-//import state.CState;
-//import view.shared.io.User.UserProps;
+import store.ApplicationStore;
+import state.CState;
+import view.shared.io.User.UserProps;
 import react.ReactMacro.jsx;
 import react.ReactComponent;
 import react.ReactEvent;
-import reduce.ConfigReducer;
-import reduce.StatusReducer;
-import redux.Redux;
 import redux.Store;
-import redux.StoreBuilder.*;
-import redux.thunk.Thunk;
-import redux.thunk.ThunkMiddleware;
 import redux.StoreMethods;
 import react.React;
 import react.ReactRef;
@@ -56,10 +50,11 @@ import react.intl.DateTimeFormatOptions.NumericFormat.Numeric;
 import react.intl.ReactIntl;
 import react.intl.comp.IntlProvider;
 import state.AppState;
-//import view.shared.io.FormApi;
+import loader.BinaryLoader;
+import view.shared.io.FormApi;
 import action.AppAction;
 
-//import view.UiView;
+import view.UiView;
 using StringTools;
 
 typedef AppProps =
@@ -100,7 +95,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
 		var ti:Timer = null;
-		store = initStore();
+		store = ApplicationStore.create();
 		state = store.getState();
 		Browser.window.onresize = function ()
 		{
@@ -117,11 +112,11 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 				}
 			},250);
 		}
-		//browserHistory = state.appWare.history;
+		browserHistory = state.appWare.history;
 		//trace(store);
-		//trace(state.appWare.redirectAfterLogin);
+		trace(state.appWare.redirectAfterLogin);
 		//CState.init(store);		
-		/*if (!(state.appWare.user.id == null || state.appWare.user.jwt == ''))
+		if (!(state.appWare.user.id == null || state.appWare.user.jwt == ''))
 		{			
 			//CHECK IF WE HAVE A VALID SESSION
 			trace('clientVerify');
@@ -162,9 +157,9 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 			trace('LOGIN required');
 			store.dispatch(AppAction.LoginRequired(state.appWare.user));
 			props = { waiting:false};
-		}*/
+		}
 
-		//trace(state.appWare.user.jwt);
+		trace(state.appWare.user.jwt);
 		
 		//state.appWare.history.listen(CState.historyChange);
 		trace(Reflect.fields(state));
@@ -201,13 +196,11 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static function edump(el:Dynamic){Out.dumpObject(el); return 'OK'; };
 
   	override function render() {
-		//trace(state.appWare.history.location.pathname);	store={store}	<UiView/>	
+		//trace(state.appWare.history.location.pathname);	store={store}		
         return jsx('
-			<Provider store={store}>
-				<IntlProvider locale="de">
-					<div>more soon...</div>
-				</IntlProvider>
-			</Provider>
+		<>
+			<Provider store={store}><IntlProvider locale="de"><UiView/></IntlProvider></Provider>
+		</>			
         ');
   	}
 
@@ -230,12 +223,12 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		return  ti;
 	} 
 
-	/*public static function initEState(init:Dynamic, ?comp:Dynamic)
+	public static function initEState(init:Dynamic, ?comp:Dynamic)
 	{
 		var fS:FormState =
 		{
 			clean: true,
-			formApi:null,//new FormApi(comp, init.sideMenu),
+			formApi:new FormApi(comp, init.sideMenu),
 			//formBuilder:new FormBuilder(comp),
 			hasError: false,
 			mounted: false,
@@ -249,7 +242,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 			}
 		}
 		return fS;
-	}*/
+	}
 
 	public static function jsxDump(el:Dynamic):String
 	{
@@ -257,20 +250,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		return 'OK';
 	}
 
-	private function initStore():Store<AppState>
-	{
-		var rootReducer = Redux.combineReducers(
-		{
-			config: ConfigReducer.reduce,
-			status: StatusReducer.reduce/*,
-			intl: myapp.state.IntlState.IntlRdcr.execute,*/
-		});
-		return createStore(rootReducer, null,  Redux.applyMiddleware(
-			mapMiddleware(Thunk, new ThunkMiddleware()))
-		);
-	}
-
-	/*public static function jwtCheck(data:DbData) 
+	public static function jwtCheck(data:DbData) 
 	{
 		if (data.dataErrors.keys().hasNext())
 		{
@@ -286,7 +266,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		//trace(Cookie.get('user.jwt')); 
 		trace(Cookie.all());
 		store.dispatch(AppAction.LogOut({jwt:'', id: store.getState().appWare.user.id }));
-	}*/
+	}
 
 	public static function queryString2(params:Dynamic)
 	{

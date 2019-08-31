@@ -4,7 +4,7 @@ import state.UserState;
 
 typedef StatusBarState =
 {
-	user:UserState,
+	?user:UserState,
 	status: String,
 	date:Date,
 	?hasError:Bool

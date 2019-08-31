@@ -138,8 +138,9 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 
 	override function render()
 	{
+		if(props.user !=null)
 		trace(props.user.jwt + ':' + props.user.waiting );
-		if (state.hasError) {
+		if (state.hasError || props.user == null) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
 		if (props.user.waiting)

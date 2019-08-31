@@ -2,13 +2,14 @@ package store;
 import react.ReactSharedInternals.Update;
 import App;
 import action.AppAction;
+import action.ReduxAction;
 import haxe.Http;
 import haxe.Json;
 import haxe.ds.StringMap;
 import js.Browser;
 import js.Cookie;
 import js.Promise;
-import view.shared.io.User;
+//import view.shared.io.User;
 import react.ReactUtil.copy;
 import redux.IMiddleware;
 import redux.IReducer;
@@ -18,7 +19,8 @@ import history.BrowserHistory;
 import history.History;
 import state.CState;
 import state.AppState;
-import state.GlobalAppState;
+//import state.GlobalAppState;
+import state.StatusState;
 import Webpack.*;
 
 /**
@@ -27,10 +29,10 @@ import Webpack.*;
  */
 
 class AppStore 
-	implements IReducer<AppAction, GlobalAppState>
-	implements IMiddleware<AppAction, AppState>
+	implements IReducer<AppAction, AppState>
+	implements IMiddleware<ReduxAction, AppState>
 {
-	public var initState:GlobalAppState;
+	public var initState:AppState;
 		
 	public var store:StoreMethods<AppState>;
 	
@@ -39,15 +41,19 @@ class AppStore
 		//trace('OK');
 		initState = {
 			config:App.config,
-			firstLoad:true,
+			/*firstLoad:true,
 			formStates: new Map(),
 			history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}),
 			themeColor: 'green',
 			locale: 'de',
-			redirectAfterLogin: (Browser.location.pathname=='/'?'DashBoard':Browser.location.pathname), 
-			routeHistory: new Array(),
-			statusBar: null,
-			userList:[],
+			
+			routeHistory: new Array(),*/
+			redirectAfterLogin: (Browser.location.pathname=='/'?'DashBoard':Browser.location.pathname), .
+			statusBar: {
+				status: Browser.location.pathname,
+				date:Date.now(),
+				user:null
+			},
 			user:{
 				first_name:'',
 				last_name:'',
@@ -68,12 +74,14 @@ class AppStore
 		//trace(initState.config);
 	}
 	
-	public function reduce(state:GlobalAppState, action:AppAction):GlobalAppState
+	public function reduce(state:AppState, action:AppAction):AppState
 	{
 		trace(Reflect.fields(state));
 		return switch(action)
 		{
-			case FormChange(cfp, fState):
+			case ApplySubState(subState):
+				copy(state,subState);
+			/*case FormChange(cfp, fState):
 				var formStates = state.formStates;
 				if(formStates.exists(cfp))
 				{
@@ -85,11 +93,7 @@ class AppStore
 				}
 				copy(state,{
 					formStates:formStates
-				});
-			/*case Load:
-				copy(state, {
-					loading:true
-				});	*/		
+				});			
 			case LoginChange(uState):
 				copy(state, {
 					user:{id:uState.id, pass:uState.pass}
@@ -125,9 +129,7 @@ class AppStore
 					});
 				}
 				else state;	
-			/*case Select(id, data, match):
-				var sData = state.contactData;
-				state;	*/			
+			
 			case SetTheme(color):
 				if (color != state.themeColor)
 				{
@@ -135,35 +137,40 @@ class AppStore
 						themeColor:color
 					});
 				}
-				else state;
-			case Status(status):
+				else state;*/	
+			/*case StatusBarStatus(status):
 				trace(status);
-				//Out.dumpStack(CallStack.callStack());
-				copy(state.statusBar, {
-					status:status
-				});				
+				copy(state, {
+					statusBar:{status:status}
+				});		
 			case User(uState):
 			trace(state.user);
 				copy(state, {
 					user:copy(state.user,{first_name:uState.first_name, last_name:uState.last_name, email:uState.email, 
 					last_login:uState.last_login, pass:uState.pass, new_pass:uState.new_pass, new_pass_confirm:uState.new_pass_confirm, waiting:uState.waiting})
-				});	
+				});	*/	
 			default:
 				state;
 		}
 	}
 	
-	public function middleware(action:AppAction, next:Void -> Dynamic)
+	public function middleware(action:ReduxAction, next:Void -> Dynamic)
 	{
 		trace(action);
 		return switch(action)
 		{			
-			case GlobalState(key, value):
+			/*case GlobalState(key, value):
 				trace('eating global $key=>$value');
 				next();
-			/*case LoginError(err):
-				trace(err);
-				store.dispatch(AppAction.LoginRequired(store.getState().appWare.user));*/
+			//case DataLoaded(component:String,sData:IntMap<Map<String,Dynamic>>):
+			case DataLoaded(component,sData):
+				next();
+			case Status(status):
+				trace(status);
+				//Out.dumpStack(CallStack.callStack());ReduxAction
+				//store.dispatch(StatusAction.Status(status));
+				next();*/
+	
 			default: next();
 		}
 	}

@@ -2,6 +2,7 @@ package store;
 import haxe.CallStack;
 import me.cunity.debug.Out;
 import action.AppAction;
+import action.StatusAction;
 import haxe.Http;
 import haxe.Json;
 import js.Browser;
@@ -20,7 +21,7 @@ import state.StatusBarState;
  */
 
 class StatusBarStore implements IReducer<StatusAction, StatusBarState>
-	implements IMiddleware<StatusAction, AppState>
+	//implements IMiddleware<StatusAction, AppState>
 {
 	public var initState:StatusBarState;
 	public var store:StoreMethods<AppState>;
@@ -49,7 +50,6 @@ class StatusBarStore implements IReducer<StatusAction, StatusBarState>
 				});
 			case Status(status):
 				trace(status);
-				//Out.dumpStack(CallStack.callStack());
 				copy(state, {
 					status:status
 				});

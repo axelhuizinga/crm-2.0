@@ -3,7 +3,7 @@ package action.async;
 import haxe.ds.IntMap;
 import react.router.RouterMatch;
 import shared.DbData;
-import shared.DBAccess;
+//import shared.DBAccess;
 
 /**
  * ...
@@ -26,7 +26,7 @@ typedef LiveDataProps =
 
 enum  DataAction
 {
-	Execute(dataAccess:DBAccessProps);
+	//Execute(dataAccess:DBAccessProps);
 	//Delete(data:DbData);
 	Done(data:DbData);
 	Error(data:DbData);

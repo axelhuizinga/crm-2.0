@@ -1,6 +1,6 @@
 package shared;
 
-import action.AppAction.StatusAction;
+import action.StatusAction;
 import js.html.Blob;
 import state.UserState;
 import state.AppState;
@@ -109,7 +109,8 @@ class DBAccess
 
 				}
 				trace('${props.className}.${props.action} => $status');
-				return dispatch(StatusAction.Status(status));
+				//return null;
+				return dispatch(Status(status));
 			});
 			if (requests != null)
 			{

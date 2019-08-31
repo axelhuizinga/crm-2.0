@@ -361,7 +361,8 @@ class S
 					default:
 						value;
 				}
-				res.push({column_name:quoteIdent(data.column_name), column_default:defaultValue});				
+				//res.push({column_name:quoteIdent(data.column_name), column_default:defaultValue});				
+				res.push({column_name:data.column_name, column_default:defaultValue});				
 			}
 
 			data = stmt.fetch(PDO.FETCH_OBJ);

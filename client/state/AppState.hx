@@ -1,16 +1,19 @@
 package state;
 //import view.shared.io.User;
 //import history.Location;
-import state.GlobalAppState;
+import state.ConfigState;
 import state.LocationState;
+import state.UserState;
 //import view.shared.io.User.UserProps;
 
-import store.StatusBarStore.StatusBarState;
+import state.StatusBarState;
 
 typedef AppState =
 {
-	appWare:GlobalAppState,
-	dataStore:DataAccessState,
-	locationHistory:LocationState,
-	statusBar:StatusBarState
+	config:ConfigState,
+	//dataStore:DataAccessState,
+	//locationHistory:LocationState,
+	redirectAfterLogin:String,
+	statusBar:StatusBarState,
+	user:UserState
 };

@@ -1,8 +1,11 @@
 package action;
-
+import action.UserAction;
+import action.StatusAction;
+import state.AppState;
+import haxe.ds.IntMap;
 import react.router.RouterMatch;
-import view.shared.FormState;
-import view.shared.io.User;
+//import view.shared.FormState;
+//import view.shared.io.User;
 
 import state.UserState;
 
@@ -12,38 +15,11 @@ import state.UserState;
 
 enum AppAction 
 {
-	// COMPONENTS
-	//AddComponent(path:String, cState:CompState);
-	/**
-	 * Action FormChange
-	 * @param cfp:String class.function path
-	 * @param state:FormState 
-	 */
-	FormChange(cfp:String, state:FormState);
-
-	GlobalState(key:String,value:Dynamic);
-	//Load;
-	// LOGIN TODO: MOVE TO USERACTIONS
-	//LoginReq(state:UserState);
-	LoginChange(state:UserState);
-	LoginComplete(state:UserState);
+	ApplySubState(state:AppState);
 	AppWait;
-
-	LoginError(state:UserState);
-	LogOut(state:UserState);	
-	LoginRequired(state:UserState);	
-	// LOGINEND
-	
-	//AddContact(id:Int);
-	SetLocale(locale:String);
-	SetTheme(color:String);
-	User(state:UserState);
-	//Users(filter:UserFilter);
-	Status(status:String);
-	//SetEntries(entries:Array<DataCell>);
+	GlobalState(key:String,value:Dynamic);
+	StatusBarStatus(status:String);
+	StatusBar(action:StatusAction);
+	User(action:UserAction);
 }
 
-enum StatusAction
-{
-	Tick(date:Date);	
-}

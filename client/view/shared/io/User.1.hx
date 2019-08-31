@@ -1,6 +1,8 @@
 package view.shared.io;
 
+//import action.async.UserAction;
 import action.AppAction;
+import action.UserAction;
 import tink.core.Error.Stack;
 import haxe.Serializer;
 import haxe.ds.StringMap;
@@ -146,7 +148,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 					values:props.formApi.createStateValues(data.dataRows[0], 
 					dataAccess['update'].view), loading:false});	
 					trace(Date.fromString(data.dataRows[0]['last_login']));
-					App.store.dispatch(AppAction.User({
+					App.store.dispatch(AppAction.User(UserAction.User({
 						first_name:data.dataRows[0]['first_name'],
 						last_name:data.dataRows[0]['last_name'],
 						id:props.user.id,
@@ -155,7 +157,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 						waiting:false,
 						loggedIn:false,
 						last_login:Date.fromString(data.dataRows[0]['last_login']),
-					}));
+					})));
 				} 				
 			}
 		));

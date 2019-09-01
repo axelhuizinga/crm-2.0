@@ -1,0 +1,2187 @@
+
+> crm-2.0@1.0.0 start /opt/src/crm-2.0/client
+> webpack-dev-server --mode=development --hot
+
+Output Directory:/opt/src/crm-2.0/httpdocs
+projectDirectory:/opt/src/crm-2.0/client isProd:false debugMode:true
+[34mℹ[39m [90m｢wds｣[39m: Project is running at https://192.168.178.20:9000/
+[34mℹ[39m [90m｢wds｣[39m: webpack output is served from /
+[34mℹ[39m [90m｢wds｣[39m: Content not from webpack is served from /opt/src/crm-2.0/httpdocs
+[34mℹ[39m [90m｢wds｣[39m: 404s will fallback to /
+Module /opt/src/crm-2.0/client/node_modules/haxe-modular/tool/bin/split.js requires node.js version 4.0.0 or higher
+haxe -debug -D webpack_namespace=build -lib haxe-loader:git:https://github.com/axelhuizinga/webpack-haxe-loader.git -lib history -lib hxbit -lib react-next -lib react-router-4 -lib redux -lib redux-connect -lib redux-thunk -lib CommentString -lib reselect -lib event-types -lib js-object -lib tink_hxx -cp "/opt/src/lib" -cp "/opt/src/crm-2.0/client/lib" -cp "/opt/src/crm-2.0/client/src" -js /tmp/user/1000/tmp-2199055Ujex0jnvzU.js -dce std -main Go -D "build_mode=development" -D "react_hot"
+[31m✖[39m [90m｢wdm｣[39m: Hash: 862454e59340bd9cfe67
+Version: webpack 4.35.3
+Time: 1858ms
+Built at: 2019-09-01 20:59:54
+        Asset     Size  Chunks  Chunk Names
+    js/app.js  388 KiB     app  app
+js/app.js.map  439 KiB     app  app
+Entrypoint app = js/app.js js/app.js.map
+chunk {app} js/app.js, js/app.js.map (app) 324 KiB [entry] [rendered]
+    > app
+ [0] multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml 52 bytes {app} [built]
+ [./build.hxml] 621 bytes {app} [built] [failed] [6 warnings] [41 errors]
+ [./node_modules/ansi-html/index.js] 4.16 KiB {app} [built]
+ [./node_modules/ansi-regex/index.js] 135 bytes {app} [built]
+ [./node_modules/loglevel/lib/loglevel.js] 7.68 KiB {app} [built]
+ [./node_modules/strip-ansi/index.js] 161 bytes {app} [built]
+ [./node_modules/url/url.js] 22.8 KiB {app} [built]
+ [./node_modules/webpack-dev-server/client/index.js?https://192.168.178.20:9000] (webpack)-dev-server/client?https://192.168.178.20:9000 7.78 KiB {app} [built]
+ [./node_modules/webpack-dev-server/client/overlay.js] (webpack)-dev-server/client/overlay.js 3.58 KiB {app} [built]
+ [./node_modules/webpack-dev-server/client/socket.js] (webpack)-dev-server/client/socket.js 1.05 KiB {app} [built]
+ [./node_modules/webpack/hot sync ^\.\/log$] (webpack)/hot sync nonrecursive ^\.\/log$ 170 bytes {app} [built]
+ [./node_modules/webpack/hot/dev-server.js] (webpack)/hot/dev-server.js 1.59 KiB {app} [built]
+ [./node_modules/webpack/hot/emitter.js] (webpack)/hot/emitter.js 75 bytes {app} [built]
+ [./node_modules/webpack/hot/log-apply-result.js] (webpack)/hot/log-apply-result.js 1.27 KiB {app} [built]
+ [./node_modules/webpack/hot/log.js] (webpack)/hot/log.js 1.34 KiB {app} [built]
+     + 13 hidden modules
+[0] multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml 52 bytes {app} [built]
+[./build.hxml] 621 bytes {app} [built] [failed] [6 warnings] [41 errors]
+[./node_modules/ansi-html/index.js] 4.16 KiB {app} [built]
+[./node_modules/ansi-regex/index.js] 135 bytes {app} [built]
+[./node_modules/loglevel/lib/loglevel.js] 7.68 KiB {app} [built]
+[./node_modules/strip-ansi/index.js] 161 bytes {app} [built]
+[./node_modules/url/url.js] 22.8 KiB {app} [built]
+[./node_modules/webpack-dev-server/client/index.js?https://192.168.178.20:9000] (webpack)-dev-server/client?https://192.168.178.20:9000 7.78 KiB {app} [built]
+[./node_modules/webpack-dev-server/client/overlay.js] (webpack)-dev-server/client/overlay.js 3.58 KiB {app} [built]
+[./node_modules/webpack-dev-server/client/socket.js] (webpack)-dev-server/client/socket.js 1.05 KiB {app} [built]
+[./node_modules/webpack/hot sync ^\.\/log$] (webpack)/hot sync nonrecursive ^\.\/log$ 170 bytes {app} [built]
+[./node_modules/webpack/hot/dev-server.js] (webpack)/hot/dev-server.js 1.59 KiB {app} [built]
+[./node_modules/webpack/hot/emitter.js] (webpack)/hot/emitter.js 75 bytes {app} [built]
+[./node_modules/webpack/hot/log-apply-result.js] (webpack)/hot/log-apply-result.js 1.27 KiB {app} [built]
+[./node_modules/webpack/hot/log.js] (webpack)/hot/log.js 1.34 KiB {app} [built]
+    + 13 hidden modules
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactComponent.hx:101: characters 35-40 : Warning : This typedef is deprecated in favor of js.lib.Error
+Error: /opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactComponent.hx:101: characters 35-40 : Warning : This typedef is deprecated in favor of js.lib.Error
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactPropTypes.hx:46: characters 65-70 : Warning : This typedef is deprecated in favor of js.lib.Error
+Error: /opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactPropTypes.hx:46: characters 65-70 : Warning : This typedef is deprecated in favor of js.lib.Error
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactPropTypes.hx:47: characters 110-115 : Warning : This typedef is deprecated in favor of js.lib.Error
+Error: /opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactPropTypes.hx:47: characters 110-115 : Warning : This typedef is deprecated in favor of js.lib.Error
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/redux/0,5,1/redux/Store.hx:12: characters 35-51 : Warning : This typedef is deprecated in favor of js.lib.Promise<js.Promise.T>
+Error: /opt/src/crm-2.0/client/.haxelib/redux/0,5,1/redux/Store.hx:12: characters 35-51 : Warning : This typedef is deprecated in favor of js.lib.Promise<js.Promise.T>
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/redux/0,5,1/redux/StoreMethods.hx:12: characters 35-51 : Warning : This typedef is deprecated in favor of js.lib.Promise<js.Promise.T>
+Error: /opt/src/crm-2.0/client/.haxelib/redux/0,5,1/redux/StoreMethods.hx:12: characters 35-51 : Warning : This typedef is deprecated in favor of js.lib.Promise<js.Promise.T>
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/tink_core/1,22,0/src/tink/core/Error.hx:102: characters 45-53 : Warning : This typedef is deprecated in favor of js.lib.Error
+Error: /opt/src/crm-2.0/client/.haxelib/tink_core/1,22,0/src/tink/core/Error.hx:102: characters 45-53 : Warning : This typedef is deprecated in favor of js.lib.Error
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/redux-connect/0,2,1/src/redux/react/ReactConnectorMacro.hx:100: characters 56-86 : (action : action.StatusAction) -> action.AppAction has no field mapStateToProps
+Error: /opt/src/crm-2.0/client/.haxelib/redux-connect/0,2,1/src/redux/react/ReactConnectorMacro.hx:100: characters 56-86 : (action : action.StatusAction) -> action.AppAction has no field mapStateToProps
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/redux-connect/0,2,1/src/redux/react/ReactConnectorMacro.hx:101: characters 62-95 : (action : action.StatusAction) -> action.AppAction has no field mapDispatchToProps
+Error: /opt/src/crm-2.0/client/.haxelib/redux-connect/0,2,1/src/redux/react/ReactConnectorMacro.hx:101: characters 62-95 : (action : action.StatusAction) -> action.AppAction has no field mapDispatchToProps
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/App.hx:136: characters 4-34 : Class<action.thunk.UserAccess> has no field verify
+Error: /opt/src/crm-2.0/client/src/App.hx:136: characters 4-34 : Class<action.thunk.UserAccess> has no field verify
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/App.hx:185: characters 16-19 : Unknown identifier : jsx
+Error: /opt/src/crm-2.0/client/src/App.hx:185: characters 16-19 : Unknown identifier : jsx
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/App.hx:215: characters 10-19 : Type not found : FormState
+Error: /opt/src/crm-2.0/client/src/App.hx:215: characters 10-19 : Type not found : FormState
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/Go.hx:9: lines 9-41 : Defined in this class
+Error: /opt/src/crm-2.0/client/src/Go.hx:9: lines 9-41 : Defined in this class
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:53: characters 14-30 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:53: characters 14-30 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:55: characters 6-20 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:55: characters 6-20 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:58: characters 14-30 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:58: characters 14-30 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:64: characters 14-30 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:64: characters 14-30 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:66: characters 6-20 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:66: characters 6-20 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/UserAccess.hx:65: characters 40-50 : For function argument 'element'
+Error: /opt/src/crm-2.0/client/src/action/thunk/UserAccess.hx:65: characters 40-50 : For function argument 'element'
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/UserAccess.hx:65: characters 40-50 : Type not found : LoginState
+Error: /opt/src/crm-2.0/client/src/action/thunk/UserAccess.hx:65: characters 40-50 : Type not found : LoginState
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/model/contacts/ContactsModel.hx:58: characters 43-53 : Type not found : DataColumn
+Error: /opt/src/crm-2.0/client/src/model/contacts/ContactsModel.hx:58: characters 43-53 : Type not found : DataColumn
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/state/CState.hx:23: characters 7-31 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/state/CState.hx:23: characters 7-31 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/state/CState.hx:71: characters 17-41 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/state/CState.hx:71: characters 17-41 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/state/CState.hx:73: characters 3-16 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/state/CState.hx:73: characters 3-16 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/Accounting.hx:37: characters 50-68 : Enum<action.AppAction> has no field SetTheme
+Error: /opt/src/crm-2.0/client/src/view/Accounting.hx:37: characters 50-68 : Enum<action.AppAction> has no field SetTheme
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/Accounting.hx:85: characters 5-27 : JSX error: invalid node "StatusBar"
+Error: /opt/src/crm-2.0/client/src/view/Accounting.hx:85: characters 5-27 : JSX error: invalid node "StatusBar"
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/DashBoard.hx:138: characters 5-29 : JSX error: invalid node "StatusBar"
+Error: /opt/src/crm-2.0/client/src/view/DashBoard.hx:138: characters 5-29 : JSX error: invalid node "StatusBar"
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/Data.hx:143: characters 5-29 : JSX error: invalid node "StatusBar"
+Error: /opt/src/crm-2.0/client/src/view/Data.hx:143: characters 5-29 : JSX error: invalid node "StatusBar"
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/LoginForm.hx:68: characters 61-80 : Class<action.thunk.UserAccess> has no field loginReq
+Error: /opt/src/crm-2.0/client/src/view/LoginForm.hx:68: characters 61-80 : Class<action.thunk.UserAccess> has no field loginReq
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/LoginForm.hx:89: characters 9-26 : state.ConfigState has no field api
+Error: /opt/src/crm-2.0/client/src/view/LoginForm.hx:89: characters 9-26 : state.ConfigState has no field api
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/NavTabs.hx:67: characters 82-92 : Class<App> has no field logOut
+Error: /opt/src/crm-2.0/client/src/view/NavTabs.hx:67: characters 82-92 : Class<App> has no field logOut
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:102: characters 9-24 : state.AppState has no field statusBar
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:102: characters 9-24 : state.AppState has no field statusBar
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:106: characters 13-27 : state.AppState has no field userList
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:106: characters 13-27 : state.AppState has no field userList
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:108: characters 12-27 : state.AppState has no field statusBar
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:108: characters 12-27 : state.AppState has no field statusBar
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:46: characters 1-10 : Incompatible expression for ReactType
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:46: characters 1-10 : Incompatible expression for ReactType
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:47: lines 47-148 : Defined in this class
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:47: lines 47-148 : Defined in this class
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:47: lines 47-148 : Defined in this class
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:47: lines 47-148 : Defined in this class
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/UiView.hx:72: lines 72-227 : Defined in this class
+Error: /opt/src/crm-2.0/client/src/view/UiView.hx:72: lines 72-227 : Defined in this class
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/UiView.hx:91: characters 20-55 : state.AppState has no field historyappWare
+Error: /opt/src/crm-2.0/client/src/view/UiView.hx:91: characters 20-55 : state.AppState has no field historyappWare
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:101: characters 9-39 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:101: characters 9-39 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:103: characters 32-62 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:103: characters 32-62 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:142: characters 14-44 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:142: characters 14-44 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:167: characters 33-63 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:167: characters 33-63 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:187: characters 6-16 : Type not found : UserAccess
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:187: characters 6-16 : Type not found : UserAccess
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:352: characters 22-40 : Enum<action.async.DataAction> has no field Execute
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:352: characters 22-40 : Enum<action.async.DataAction> has no field Execute
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:94: characters 17-42 : Class<model.contacts.ContactsModel> has no field dataDisplay
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:94: characters 17-42 : Class<model.contacts.ContactsModel> has no field dataDisplay
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/shared/io/FormApi.hx:311: characters 21-52 : state.AppState has no field formStates
+Error: /opt/src/crm-2.0/client/src/view/shared/io/FormApi.hx:311: characters 21-52 : state.AppState has no field formStates
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:266:5)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module build failed (from ./node_modules/haxe-loader/index.js):
+Haxe Loader: Compilation failed
+haxe -debug -D webpack_namespace=build -lib haxe-loader:git:https://github.com/axelhuizinga/webpack-haxe-loader.git -lib history -lib hxbit -lib react-next -lib react-router-4 -lib redux -lib redux-connect -lib redux-thunk -lib CommentString -lib reselect -lib event-types -lib js-object -lib tink_hxx -cp "/opt/src/lib" -cp "/opt/src/crm-2.0/client/lib" -cp "/opt/src/crm-2.0/client/src" -js /tmp/user/1000/tmp-2199055Ujex0jnvzU.js -dce std -main Go -D "build_mode=development" -D "react_hot"
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+Child html-webpack-plugin for "crm.html":
+       Asset     Size  Chunks  Chunk Names
+    crm.html  558 KiB       0  
+    Entrypoint undefined = crm.html
+    chunk    {0} crm.html 529 KiB [entry] [rendered]
+        > /opt/src/crm-2.0/client/node_modules/html-webpack-plugin/lib/loader.js!/opt/src/crm-2.0/client/res/crm.html 
+     [./node_modules/html-webpack-plugin/lib/loader.js!./res/crm.html] 629 bytes {0} [built]
+     [./node_modules/html-webpack-plugin/node_modules/lodash/lodash.js] 528 KiB {0} [built]
+     [./node_modules/webpack/buildin/global.js] (webpack)/buildin/global.js 472 bytes {0} [built]
+     [./node_modules/webpack/buildin/module.js] (webpack)/buildin/module.js 497 bytes {0} [built]
+    [./node_modules/html-webpack-plugin/lib/loader.js!./res/crm.html] 629 bytes {0} [built]
+    [./node_modules/html-webpack-plugin/node_modules/lodash/lodash.js] 528 KiB {0} [built]
+    [./node_modules/webpack/buildin/global.js] (webpack)/buildin/global.js 472 bytes {0} [built]
+    [./node_modules/webpack/buildin/module.js] (webpack)/buildin/module.js 497 bytes {0} [built]
+[34mℹ[39m [90m｢wdm｣[39m: Failed to compile.
+[34mℹ[39m [90m｢wdm｣[39m: Compiling...
+haxe -debug -D webpack_namespace=build -lib haxe-loader:git:https://github.com/axelhuizinga/webpack-haxe-loader.git -lib history -lib hxbit -lib react-next -lib react-router-4 -lib redux -lib redux-connect -lib redux-thunk -lib CommentString -lib reselect -lib event-types -lib js-object -lib tink_hxx -cp "/opt/src/lib" -cp "/opt/src/crm-2.0/client/lib" -cp "/opt/src/crm-2.0/client/src" -js /tmp/user/1000/tmp-2199021x3bxVeOyyl.js -dce std -main Go -D "build_mode=development" -D "react_hot"
+[31m✖[39m [90m｢wdm｣[39m: Hash: ab6f3083846b3633e962
+Version: webpack 4.35.3
+Time: 2037ms
+Built at: 2019-09-01 20:59:56
+                               Asset      Size  Chunks  Chunk Names
+dd91a580554cb8f5849f.hot-update.json  44 bytes          
+                           js/app.js   388 KiB     app  app
+                       js/app.js.map   439 KiB     app  app
+Entrypoint app = js/app.js js/app.js.map
+chunk {app} js/app.js, js/app.js.map (app) 324 KiB [entry] [rendered]
+    > app
+ [0] multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml 52 bytes {app}
+ [./build.hxml] 621 bytes {app} [built] [failed] [6 warnings] [41 errors]
+ [./node_modules/ansi-html/index.js] 4.16 KiB {app}
+ [./node_modules/ansi-regex/index.js] 135 bytes {app}
+ [./node_modules/loglevel/lib/loglevel.js] 7.68 KiB {app}
+ [./node_modules/strip-ansi/index.js] 161 bytes {app}
+ [./node_modules/url/url.js] 22.8 KiB {app}
+ [./node_modules/webpack-dev-server/client/index.js?https://192.168.178.20:9000] (webpack)-dev-server/client?https://192.168.178.20:9000 7.78 KiB {app}
+ [./node_modules/webpack-dev-server/client/overlay.js] (webpack)-dev-server/client/overlay.js 3.58 KiB {app}
+ [./node_modules/webpack-dev-server/client/socket.js] (webpack)-dev-server/client/socket.js 1.05 KiB {app}
+ [./node_modules/webpack/hot sync ^\.\/log$] (webpack)/hot sync nonrecursive ^\.\/log$ 170 bytes {app}
+ [./node_modules/webpack/hot/dev-server.js] (webpack)/hot/dev-server.js 1.59 KiB {app}
+ [./node_modules/webpack/hot/emitter.js] (webpack)/hot/emitter.js 75 bytes {app}
+ [./node_modules/webpack/hot/log-apply-result.js] (webpack)/hot/log-apply-result.js 1.27 KiB {app}
+ [./node_modules/webpack/hot/log.js] (webpack)/hot/log.js 1.34 KiB {app}
+     + 13 hidden modules
+[0] multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml 52 bytes {app}
+[./build.hxml] 621 bytes {app} [built] [failed] [6 warnings] [41 errors]
+[./node_modules/ansi-html/index.js] 4.16 KiB {app}
+[./node_modules/ansi-regex/index.js] 135 bytes {app}
+[./node_modules/loglevel/lib/loglevel.js] 7.68 KiB {app}
+[./node_modules/strip-ansi/index.js] 161 bytes {app}
+[./node_modules/url/url.js] 22.8 KiB {app}
+[./node_modules/webpack-dev-server/client/index.js?https://192.168.178.20:9000] (webpack)-dev-server/client?https://192.168.178.20:9000 7.78 KiB {app}
+[./node_modules/webpack-dev-server/client/overlay.js] (webpack)-dev-server/client/overlay.js 3.58 KiB {app}
+[./node_modules/webpack-dev-server/client/socket.js] (webpack)-dev-server/client/socket.js 1.05 KiB {app}
+[./node_modules/webpack/hot sync ^\.\/log$] (webpack)/hot sync nonrecursive ^\.\/log$ 170 bytes {app}
+[./node_modules/webpack/hot/dev-server.js] (webpack)/hot/dev-server.js 1.59 KiB {app}
+[./node_modules/webpack/hot/emitter.js] (webpack)/hot/emitter.js 75 bytes {app}
+[./node_modules/webpack/hot/log-apply-result.js] (webpack)/hot/log-apply-result.js 1.27 KiB {app}
+[./node_modules/webpack/hot/log.js] (webpack)/hot/log.js 1.34 KiB {app}
+    + 13 hidden modules
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactComponent.hx:101: characters 35-40 : Warning : This typedef is deprecated in favor of js.lib.Error
+Error: /opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactComponent.hx:101: characters 35-40 : Warning : This typedef is deprecated in favor of js.lib.Error
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactPropTypes.hx:46: characters 65-70 : Warning : This typedef is deprecated in favor of js.lib.Error
+Error: /opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactPropTypes.hx:46: characters 65-70 : Warning : This typedef is deprecated in favor of js.lib.Error
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactPropTypes.hx:47: characters 110-115 : Warning : This typedef is deprecated in favor of js.lib.Error
+Error: /opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactPropTypes.hx:47: characters 110-115 : Warning : This typedef is deprecated in favor of js.lib.Error
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/redux/0,5,1/redux/Store.hx:12: characters 35-51 : Warning : This typedef is deprecated in favor of js.lib.Promise<js.Promise.T>
+Error: /opt/src/crm-2.0/client/.haxelib/redux/0,5,1/redux/Store.hx:12: characters 35-51 : Warning : This typedef is deprecated in favor of js.lib.Promise<js.Promise.T>
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/redux/0,5,1/redux/StoreMethods.hx:12: characters 35-51 : Warning : This typedef is deprecated in favor of js.lib.Promise<js.Promise.T>
+Error: /opt/src/crm-2.0/client/.haxelib/redux/0,5,1/redux/StoreMethods.hx:12: characters 35-51 : Warning : This typedef is deprecated in favor of js.lib.Promise<js.Promise.T>
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/tink_core/1,22,0/src/tink/core/Error.hx:102: characters 45-53 : Warning : This typedef is deprecated in favor of js.lib.Error
+Error: /opt/src/crm-2.0/client/.haxelib/tink_core/1,22,0/src/tink/core/Error.hx:102: characters 45-53 : Warning : This typedef is deprecated in favor of js.lib.Error
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/redux-connect/0,2,1/src/redux/react/ReactConnectorMacro.hx:100: characters 56-86 : (action : action.StatusAction) -> action.AppAction has no field mapStateToProps
+Error: /opt/src/crm-2.0/client/.haxelib/redux-connect/0,2,1/src/redux/react/ReactConnectorMacro.hx:100: characters 56-86 : (action : action.StatusAction) -> action.AppAction has no field mapStateToProps
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/redux-connect/0,2,1/src/redux/react/ReactConnectorMacro.hx:101: characters 62-95 : (action : action.StatusAction) -> action.AppAction has no field mapDispatchToProps
+Error: /opt/src/crm-2.0/client/.haxelib/redux-connect/0,2,1/src/redux/react/ReactConnectorMacro.hx:101: characters 62-95 : (action : action.StatusAction) -> action.AppAction has no field mapDispatchToProps
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/App.hx:136: characters 4-34 : Class<action.thunk.UserAccess> has no field verify
+Error: /opt/src/crm-2.0/client/src/App.hx:136: characters 4-34 : Class<action.thunk.UserAccess> has no field verify
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/App.hx:185: characters 16-19 : Unknown identifier : jsx
+Error: /opt/src/crm-2.0/client/src/App.hx:185: characters 16-19 : Unknown identifier : jsx
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/App.hx:215: characters 10-19 : Type not found : FormState
+Error: /opt/src/crm-2.0/client/src/App.hx:215: characters 10-19 : Type not found : FormState
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/Go.hx:9: lines 9-41 : Defined in this class
+Error: /opt/src/crm-2.0/client/src/Go.hx:9: lines 9-41 : Defined in this class
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:53: characters 14-30 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:53: characters 14-30 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:55: characters 6-20 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:55: characters 6-20 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:58: characters 14-30 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:58: characters 14-30 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:64: characters 14-30 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:64: characters 14-30 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:66: characters 6-20 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:66: characters 6-20 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/UserAccess.hx:65: characters 40-50 : For function argument 'element'
+Error: /opt/src/crm-2.0/client/src/action/thunk/UserAccess.hx:65: characters 40-50 : For function argument 'element'
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/UserAccess.hx:65: characters 40-50 : Type not found : LoginState
+Error: /opt/src/crm-2.0/client/src/action/thunk/UserAccess.hx:65: characters 40-50 : Type not found : LoginState
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/model/contacts/ContactsModel.hx:58: characters 43-53 : Type not found : DataColumn
+Error: /opt/src/crm-2.0/client/src/model/contacts/ContactsModel.hx:58: characters 43-53 : Type not found : DataColumn
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/state/CState.hx:23: characters 7-31 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/state/CState.hx:23: characters 7-31 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/state/CState.hx:71: characters 17-41 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/state/CState.hx:71: characters 17-41 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/state/CState.hx:73: characters 3-16 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/state/CState.hx:73: characters 3-16 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/Accounting.hx:37: characters 50-68 : Enum<action.AppAction> has no field SetTheme
+Error: /opt/src/crm-2.0/client/src/view/Accounting.hx:37: characters 50-68 : Enum<action.AppAction> has no field SetTheme
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/Accounting.hx:85: characters 5-27 : JSX error: invalid node "StatusBar"
+Error: /opt/src/crm-2.0/client/src/view/Accounting.hx:85: characters 5-27 : JSX error: invalid node "StatusBar"
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/DashBoard.hx:138: characters 5-29 : JSX error: invalid node "StatusBar"
+Error: /opt/src/crm-2.0/client/src/view/DashBoard.hx:138: characters 5-29 : JSX error: invalid node "StatusBar"
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/Data.hx:143: characters 5-29 : JSX error: invalid node "StatusBar"
+Error: /opt/src/crm-2.0/client/src/view/Data.hx:143: characters 5-29 : JSX error: invalid node "StatusBar"
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/LoginForm.hx:68: characters 61-80 : Class<action.thunk.UserAccess> has no field loginReq
+Error: /opt/src/crm-2.0/client/src/view/LoginForm.hx:68: characters 61-80 : Class<action.thunk.UserAccess> has no field loginReq
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/LoginForm.hx:89: characters 9-26 : state.ConfigState has no field api
+Error: /opt/src/crm-2.0/client/src/view/LoginForm.hx:89: characters 9-26 : state.ConfigState has no field api
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/NavTabs.hx:67: characters 82-92 : Class<App> has no field logOut
+Error: /opt/src/crm-2.0/client/src/view/NavTabs.hx:67: characters 82-92 : Class<App> has no field logOut
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:102: characters 9-24 : state.AppState has no field statusBar
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:102: characters 9-24 : state.AppState has no field statusBar
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:106: characters 13-27 : state.AppState has no field userList
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:106: characters 13-27 : state.AppState has no field userList
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:108: characters 12-27 : state.AppState has no field statusBar
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:108: characters 12-27 : state.AppState has no field statusBar
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:46: characters 1-10 : Incompatible expression for ReactType
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:46: characters 1-10 : Incompatible expression for ReactType
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:47: lines 47-148 : Defined in this class
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:47: lines 47-148 : Defined in this class
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:47: lines 47-148 : Defined in this class
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:47: lines 47-148 : Defined in this class
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/UiView.hx:72: lines 72-227 : Defined in this class
+Error: /opt/src/crm-2.0/client/src/view/UiView.hx:72: lines 72-227 : Defined in this class
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/UiView.hx:91: characters 20-55 : state.AppState has no field historyappWare
+Error: /opt/src/crm-2.0/client/src/view/UiView.hx:91: characters 20-55 : state.AppState has no field historyappWare
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:101: characters 9-39 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:101: characters 9-39 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:103: characters 32-62 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:103: characters 32-62 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:142: characters 14-44 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:142: characters 14-44 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:167: characters 33-63 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:167: characters 33-63 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:187: characters 6-16 : Type not found : UserAccess
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:187: characters 6-16 : Type not found : UserAccess
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:352: characters 22-40 : Enum<action.async.DataAction> has no field Execute
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:352: characters 22-40 : Enum<action.async.DataAction> has no field Execute
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:94: characters 17-42 : Class<model.contacts.ContactsModel> has no field dataDisplay
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:94: characters 17-42 : Class<model.contacts.ContactsModel> has no field dataDisplay
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/shared/io/FormApi.hx:311: characters 21-52 : state.AppState has no field formStates
+Error: /opt/src/crm-2.0/client/src/view/shared/io/FormApi.hx:311: characters 21-52 : state.AppState has no field formStates
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module build failed (from ./node_modules/haxe-loader/index.js):
+Haxe Loader: Compilation failed
+haxe -debug -D webpack_namespace=build -lib haxe-loader:git:https://github.com/axelhuizinga/webpack-haxe-loader.git -lib history -lib hxbit -lib react-next -lib react-router-4 -lib redux -lib redux-connect -lib redux-thunk -lib CommentString -lib reselect -lib event-types -lib js-object -lib tink_hxx -cp "/opt/src/lib" -cp "/opt/src/crm-2.0/client/lib" -cp "/opt/src/crm-2.0/client/src" -js /tmp/user/1000/tmp-2199021x3bxVeOyyl.js -dce std -main Go -D "build_mode=development" -D "react_hot"
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+Child html-webpack-plugin for "crm.html":
+                                   Asset      Size  Chunks  Chunk Names
+                                crm.html   558 KiB       1  
+    dd91a580554cb8f5849f.hot-update.json  44 bytes          
+    Entrypoint undefined = crm.html
+    chunk    {1} crm.html 529 KiB [entry] [rendered]
+        > /opt/src/crm-2.0/client/node_modules/html-webpack-plugin/lib/loader.js!/opt/src/crm-2.0/client/res/crm.html 
+     [./node_modules/html-webpack-plugin/lib/loader.js!./res/crm.html] 629 bytes {1}
+     [./node_modules/html-webpack-plugin/node_modules/lodash/lodash.js] 528 KiB {1}
+     [./node_modules/webpack/buildin/global.js] (webpack)/buildin/global.js 472 bytes {1}
+     [./node_modules/webpack/buildin/module.js] (webpack)/buildin/module.js 497 bytes {1}
+    [./node_modules/html-webpack-plugin/lib/loader.js!./res/crm.html] 629 bytes {1}
+    [./node_modules/html-webpack-plugin/node_modules/lodash/lodash.js] 528 KiB {1}
+    [./node_modules/webpack/buildin/global.js] (webpack)/buildin/global.js 472 bytes {1}
+    [./node_modules/webpack/buildin/module.js] (webpack)/buildin/module.js 497 bytes {1}
+[34mℹ[39m [90m｢wdm｣[39m: Failed to compile.
+[34mℹ[39m [90m｢wdm｣[39m: Compiling...
+haxe -debug -D webpack_namespace=build -lib haxe-loader:git:https://github.com/axelhuizinga/webpack-haxe-loader.git -lib history -lib hxbit -lib react-next -lib react-router-4 -lib redux -lib redux-connect -lib redux-thunk -lib CommentString -lib reselect -lib event-types -lib js-object -lib tink_hxx -cp "/opt/src/lib" -cp "/opt/src/crm-2.0/client/lib" -cp "/opt/src/crm-2.0/client/src" -js /tmp/user/1000/tmp-21990E6l3YUI3Ww03.js -dce std -main Go -D "build_mode=development" -D "react_hot"
+[31m✖[39m [90m｢wdm｣[39m: Hash: fec49fee4a1ad1519599
+Version: webpack 4.35.3
+Time: 2071ms
+Built at: 2019-09-01 20:59:59
+                               Asset      Size  Chunks  Chunk Names
+30c6a63d3ab3f939f82c.hot-update.json  44 bytes          
+                           js/app.js   388 KiB     app  app
+                       js/app.js.map   439 KiB     app  app
+Entrypoint app = js/app.js js/app.js.map
+chunk {app} js/app.js, js/app.js.map (app) 324 KiB [entry] [rendered]
+    > app
+ [0] multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml 52 bytes {app}
+ [./build.hxml] 621 bytes {app} [built] [failed] [6 warnings] [41 errors]
+ [./node_modules/ansi-html/index.js] 4.16 KiB {app}
+ [./node_modules/ansi-regex/index.js] 135 bytes {app}
+ [./node_modules/loglevel/lib/loglevel.js] 7.68 KiB {app}
+ [./node_modules/strip-ansi/index.js] 161 bytes {app}
+ [./node_modules/url/url.js] 22.8 KiB {app}
+ [./node_modules/webpack-dev-server/client/index.js?https://192.168.178.20:9000] (webpack)-dev-server/client?https://192.168.178.20:9000 7.78 KiB {app}
+ [./node_modules/webpack-dev-server/client/overlay.js] (webpack)-dev-server/client/overlay.js 3.58 KiB {app}
+ [./node_modules/webpack-dev-server/client/socket.js] (webpack)-dev-server/client/socket.js 1.05 KiB {app}
+ [./node_modules/webpack/hot sync ^\.\/log$] (webpack)/hot sync nonrecursive ^\.\/log$ 170 bytes {app}
+ [./node_modules/webpack/hot/dev-server.js] (webpack)/hot/dev-server.js 1.59 KiB {app}
+ [./node_modules/webpack/hot/emitter.js] (webpack)/hot/emitter.js 75 bytes {app}
+ [./node_modules/webpack/hot/log-apply-result.js] (webpack)/hot/log-apply-result.js 1.27 KiB {app}
+ [./node_modules/webpack/hot/log.js] (webpack)/hot/log.js 1.34 KiB {app}
+     + 13 hidden modules
+[0] multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml 52 bytes {app}
+[./build.hxml] 621 bytes {app} [built] [failed] [6 warnings] [41 errors]
+[./node_modules/ansi-html/index.js] 4.16 KiB {app}
+[./node_modules/ansi-regex/index.js] 135 bytes {app}
+[./node_modules/loglevel/lib/loglevel.js] 7.68 KiB {app}
+[./node_modules/strip-ansi/index.js] 161 bytes {app}
+[./node_modules/url/url.js] 22.8 KiB {app}
+[./node_modules/webpack-dev-server/client/index.js?https://192.168.178.20:9000] (webpack)-dev-server/client?https://192.168.178.20:9000 7.78 KiB {app}
+[./node_modules/webpack-dev-server/client/overlay.js] (webpack)-dev-server/client/overlay.js 3.58 KiB {app}
+[./node_modules/webpack-dev-server/client/socket.js] (webpack)-dev-server/client/socket.js 1.05 KiB {app}
+[./node_modules/webpack/hot sync ^\.\/log$] (webpack)/hot sync nonrecursive ^\.\/log$ 170 bytes {app}
+[./node_modules/webpack/hot/dev-server.js] (webpack)/hot/dev-server.js 1.59 KiB {app}
+[./node_modules/webpack/hot/emitter.js] (webpack)/hot/emitter.js 75 bytes {app}
+[./node_modules/webpack/hot/log-apply-result.js] (webpack)/hot/log-apply-result.js 1.27 KiB {app}
+[./node_modules/webpack/hot/log.js] (webpack)/hot/log.js 1.34 KiB {app}
+    + 13 hidden modules
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactComponent.hx:101: characters 35-40 : Warning : This typedef is deprecated in favor of js.lib.Error
+Error: /opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactComponent.hx:101: characters 35-40 : Warning : This typedef is deprecated in favor of js.lib.Error
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactPropTypes.hx:46: characters 65-70 : Warning : This typedef is deprecated in favor of js.lib.Error
+Error: /opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactPropTypes.hx:46: characters 65-70 : Warning : This typedef is deprecated in favor of js.lib.Error
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactPropTypes.hx:47: characters 110-115 : Warning : This typedef is deprecated in favor of js.lib.Error
+Error: /opt/src/crm-2.0/client/.haxelib/react-next/1,116,0/src/lib/react/ReactPropTypes.hx:47: characters 110-115 : Warning : This typedef is deprecated in favor of js.lib.Error
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/redux/0,5,1/redux/Store.hx:12: characters 35-51 : Warning : This typedef is deprecated in favor of js.lib.Promise<js.Promise.T>
+Error: /opt/src/crm-2.0/client/.haxelib/redux/0,5,1/redux/Store.hx:12: characters 35-51 : Warning : This typedef is deprecated in favor of js.lib.Promise<js.Promise.T>
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/redux/0,5,1/redux/StoreMethods.hx:12: characters 35-51 : Warning : This typedef is deprecated in favor of js.lib.Promise<js.Promise.T>
+Error: /opt/src/crm-2.0/client/.haxelib/redux/0,5,1/redux/StoreMethods.hx:12: characters 35-51 : Warning : This typedef is deprecated in favor of js.lib.Promise<js.Promise.T>
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+WARNING in ./build.hxml
+Module Warning (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/tink_core/1,22,0/src/tink/core/Error.hx:102: characters 45-53 : Warning : This typedef is deprecated in favor of js.lib.Error
+Error: /opt/src/crm-2.0/client/.haxelib/tink_core/1,22,0/src/tink/core/Error.hx:102: characters 45-53 : Warning : This typedef is deprecated in favor of js.lib.Error
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/redux-connect/0,2,1/src/redux/react/ReactConnectorMacro.hx:100: characters 56-86 : (action : action.StatusAction) -> action.AppAction has no field mapStateToProps
+Error: /opt/src/crm-2.0/client/.haxelib/redux-connect/0,2,1/src/redux/react/ReactConnectorMacro.hx:100: characters 56-86 : (action : action.StatusAction) -> action.AppAction has no field mapStateToProps
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/.haxelib/redux-connect/0,2,1/src/redux/react/ReactConnectorMacro.hx:101: characters 62-95 : (action : action.StatusAction) -> action.AppAction has no field mapDispatchToProps
+Error: /opt/src/crm-2.0/client/.haxelib/redux-connect/0,2,1/src/redux/react/ReactConnectorMacro.hx:101: characters 62-95 : (action : action.StatusAction) -> action.AppAction has no field mapDispatchToProps
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/App.hx:136: characters 4-34 : Class<action.thunk.UserAccess> has no field verify
+Error: /opt/src/crm-2.0/client/src/App.hx:136: characters 4-34 : Class<action.thunk.UserAccess> has no field verify
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/App.hx:185: characters 16-19 : Unknown identifier : jsx
+Error: /opt/src/crm-2.0/client/src/App.hx:185: characters 16-19 : Unknown identifier : jsx
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/App.hx:215: characters 10-19 : Type not found : FormState
+Error: /opt/src/crm-2.0/client/src/App.hx:215: characters 10-19 : Type not found : FormState
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/Go.hx:9: lines 9-41 : Defined in this class
+Error: /opt/src/crm-2.0/client/src/Go.hx:9: lines 9-41 : Defined in this class
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:53: characters 14-30 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:53: characters 14-30 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:55: characters 6-20 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:55: characters 6-20 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:58: characters 14-30 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:58: characters 14-30 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:64: characters 14-30 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:64: characters 14-30 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:66: characters 6-20 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/action/thunk/LiveDataAccess.hx:66: characters 6-20 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/UserAccess.hx:65: characters 40-50 : For function argument 'element'
+Error: /opt/src/crm-2.0/client/src/action/thunk/UserAccess.hx:65: characters 40-50 : For function argument 'element'
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/action/thunk/UserAccess.hx:65: characters 40-50 : Type not found : LoginState
+Error: /opt/src/crm-2.0/client/src/action/thunk/UserAccess.hx:65: characters 40-50 : Type not found : LoginState
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/model/contacts/ContactsModel.hx:58: characters 43-53 : Type not found : DataColumn
+Error: /opt/src/crm-2.0/client/src/model/contacts/ContactsModel.hx:58: characters 43-53 : Type not found : DataColumn
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/state/CState.hx:23: characters 7-31 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/state/CState.hx:23: characters 7-31 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/state/CState.hx:71: characters 17-41 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/state/CState.hx:71: characters 17-41 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/state/CState.hx:73: characters 3-16 : state.AppState has no field history
+Error: /opt/src/crm-2.0/client/src/state/CState.hx:73: characters 3-16 : state.AppState has no field history
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/Accounting.hx:37: characters 50-68 : Enum<action.AppAction> has no field SetTheme
+Error: /opt/src/crm-2.0/client/src/view/Accounting.hx:37: characters 50-68 : Enum<action.AppAction> has no field SetTheme
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/Accounting.hx:85: characters 5-27 : JSX error: invalid node "StatusBar"
+Error: /opt/src/crm-2.0/client/src/view/Accounting.hx:85: characters 5-27 : JSX error: invalid node "StatusBar"
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/DashBoard.hx:138: characters 5-29 : JSX error: invalid node "StatusBar"
+Error: /opt/src/crm-2.0/client/src/view/DashBoard.hx:138: characters 5-29 : JSX error: invalid node "StatusBar"
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/Data.hx:143: characters 5-29 : JSX error: invalid node "StatusBar"
+Error: /opt/src/crm-2.0/client/src/view/Data.hx:143: characters 5-29 : JSX error: invalid node "StatusBar"
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/LoginForm.hx:68: characters 61-80 : Class<action.thunk.UserAccess> has no field loginReq
+Error: /opt/src/crm-2.0/client/src/view/LoginForm.hx:68: characters 61-80 : Class<action.thunk.UserAccess> has no field loginReq
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/LoginForm.hx:89: characters 9-26 : state.ConfigState has no field api
+Error: /opt/src/crm-2.0/client/src/view/LoginForm.hx:89: characters 9-26 : state.ConfigState has no field api
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/NavTabs.hx:67: characters 82-92 : Class<App> has no field logOut
+Error: /opt/src/crm-2.0/client/src/view/NavTabs.hx:67: characters 82-92 : Class<App> has no field logOut
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:102: characters 9-24 : state.AppState has no field statusBar
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:102: characters 9-24 : state.AppState has no field statusBar
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:106: characters 13-27 : state.AppState has no field userList
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:106: characters 13-27 : state.AppState has no field userList
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:108: characters 12-27 : state.AppState has no field statusBar
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:108: characters 12-27 : state.AppState has no field statusBar
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:46: characters 1-10 : Incompatible expression for ReactType
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:46: characters 1-10 : Incompatible expression for ReactType
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:47: lines 47-148 : Defined in this class
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:47: lines 47-148 : Defined in this class
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/StatusBar.hx:47: lines 47-148 : Defined in this class
+Error: /opt/src/crm-2.0/client/src/view/StatusBar.hx:47: lines 47-148 : Defined in this class
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/UiView.hx:72: lines 72-227 : Defined in this class
+Error: /opt/src/crm-2.0/client/src/view/UiView.hx:72: lines 72-227 : Defined in this class
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/UiView.hx:91: characters 20-55 : state.AppState has no field historyappWare
+Error: /opt/src/crm-2.0/client/src/view/UiView.hx:91: characters 20-55 : state.AppState has no field historyappWare
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:101: characters 9-39 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:101: characters 9-39 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:103: characters 32-62 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:103: characters 32-62 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:142: characters 14-44 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:142: characters 14-44 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:167: characters 33-63 : state.AppState has no field dataStore
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:167: characters 33-63 : state.AppState has no field dataStore
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:187: characters 6-16 : Type not found : UserAccess
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:187: characters 6-16 : Type not found : UserAccess
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:352: characters 22-40 : Enum<action.async.DataAction> has no field Execute
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:352: characters 22-40 : Enum<action.async.DataAction> has no field Execute
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:94: characters 17-42 : Class<model.contacts.ContactsModel> has no field dataDisplay
+Error: /opt/src/crm-2.0/client/src/view/data/contacts/Edit.hx:94: characters 17-42 : Class<model.contacts.ContactsModel> has no field dataDisplay
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module Error (from ./node_modules/haxe-loader/index.js):
+/opt/src/crm-2.0/client/src/view/shared/io/FormApi.hx:311: characters 21-52 : state.AppState has no field formStates
+Error: /opt/src/crm-2.0/client/src/view/shared/io/FormApi.hx:311: characters 21-52 : state.AppState has no field formStates
+    at lines.forEach.line (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:58:29)
+    at Array.forEach (<anonymous>)
+    at exec (/opt/src/crm-2.0/client/node_modules/haxe-loader/index.js:56:19)
+    at ChildProcess.exithandler (child_process.js:306:5)
+    at ChildProcess.emit (events.js:193:13)
+    at maybeClose (internal/child_process.js:999:16)
+    at Socket.stream.socket.on (internal/child_process.js:403:11)
+    at Socket.emit (events.js:193:13)
+    at Pipe._handle.close (net.js:614:12)
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+
+ERROR in ./build.hxml
+Module build failed (from ./node_modules/haxe-loader/index.js):
+Haxe Loader: Compilation failed
+haxe -debug -D webpack_namespace=build -lib haxe-loader:git:https://github.com/axelhuizinga/webpack-haxe-loader.git -lib history -lib hxbit -lib react-next -lib react-router-4 -lib redux -lib redux-connect -lib redux-thunk -lib CommentString -lib reselect -lib event-types -lib js-object -lib tink_hxx -cp "/opt/src/lib" -cp "/opt/src/crm-2.0/client/lib" -cp "/opt/src/crm-2.0/client/src" -js /tmp/user/1000/tmp-21990E6l3YUI3Ww03.js -dce std -main Go -D "build_mode=development" -D "react_hot"
+ @ multi (webpack)-dev-server/client?https://192.168.178.20:9000 (webpack)/hot/dev-server.js ./build.hxml app[2]
+Child html-webpack-plugin for "crm.html":
+                                   Asset      Size  Chunks  Chunk Names
+    30c6a63d3ab3f939f82c.hot-update.json  44 bytes          
+                                crm.html   558 KiB       0  
+    Entrypoint undefined = crm.html
+    chunk    {0} crm.html 529 KiB [entry] [rendered]
+        > /opt/src/crm-2.0/client/node_modules/html-webpack-plugin/lib/loader.js!/opt/src/crm-2.0/client/res/crm.html 
+     [./node_modules/html-webpack-plugin/lib/loader.js!./res/crm.html] 629 bytes {0}
+     [./node_modules/html-webpack-plugin/node_modules/lodash/lodash.js] 528 KiB {0}
+     [./node_modules/webpack/buildin/global.js] (webpack)/buildin/global.js 472 bytes {0}
+     [./node_modules/webpack/buildin/module.js] (webpack)/buildin/module.js 497 bytes {0}
+    [./node_modules/html-webpack-plugin/lib/loader.js!./res/crm.html] 629 bytes {0}
+    [./node_modules/html-webpack-plugin/node_modules/lodash/lodash.js] 528 KiB {0}
+    [./node_modules/webpack/buildin/global.js] (webpack)/buildin/global.js 472 bytes {0}
+    [./node_modules/webpack/buildin/module.js] (webpack)/buildin/module.js 497 bytes {0}
+[34mℹ[39m [90m｢wdm｣[39m: Failed to compile.

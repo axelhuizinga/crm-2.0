@@ -15,6 +15,7 @@
 
 -cp /opt/src/lib
 -cp lib
+-cp src
 
 -js ../httpdocs/app.js
 -dce std

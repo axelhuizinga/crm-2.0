@@ -1,5 +1,4 @@
 package state;
-import react.router.RouterMatch;
 import history.History;
 import history.Location;
 
@@ -11,5 +10,5 @@ typedef LocationState =
 {
 	history:History,
 	location:Location,
-	?date:Date
+	?lastModified:Date
 }

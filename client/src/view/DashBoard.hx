@@ -93,7 +93,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 	static function mapStateToProps(aState:AppState) {
 		var uState:UserProps = aState.user;
 		trace(uState.first_name);
-		//trace(' ${aState.history.location.pathname + (aState.compState.exists('dashboard') && aState.compState.get('dashboard').isMounted ? "Y":"N")}');
+		//trace(' ${aState.locationState.history.location.pathname + (aState.compState.exists('dashboard') && aState.compState.get('dashboard').isMounted ? "Y":"N")}');
 		
 		return {
 			appConfig:aState.config,
@@ -107,7 +107,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 			loginError:uState.loginError,
 			last_login:uState.last_login,
 			first_name:uState.first_name,
-			//locationHistory:aState.history,
+			//location:aState.locationState.history.,
 			waiting:uState.waiting*/
 		};		
 	}		

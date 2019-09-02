@@ -23,7 +23,7 @@ enum AppAction
 	Config(action:ConfigAction);
 	GlobalState(key:String,value:Dynamic);
 	Location(action:LocationAction);
-	StatusBar(action:StatusAction);
+	Status(action:StatusAction);
 	User(action:UserAction);
 }
 

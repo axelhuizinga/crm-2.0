@@ -1,3 +1,4 @@
+import store.DataStore;
 import haxe.Constraints.Function;
 import haxe.Timer;
 import haxe.ds.List;
@@ -12,26 +13,29 @@ import history.TransitionManager;
 import js.Browser;
 
 import me.cunity.debug.Out;
-
-//import state.CState;
-
 import view.UiView;
 import action.AppAction;
 import action.ConfigAction;
+import action.DataAction;
 import action.LocationAction;
 import action.StatusAction;
 import action.UserAction;
 import action.thunk.UserAccess;
 import state.AppState;
+import state.CState;
 import state.ConfigState;
 import state.FormState;
 import store.ConfigStore;
+import store.LocationStore;
 import store.StatusStore;
 import store.UserStore;
 import react.React;
 import react.ReactComponent.ReactComponentOf;
+import react.ReactMacro.jsx;
 import react.ReactRef;
-//import react.ReactIn
+import react.intl.ReactIntl;
+import react.intl.comp.IntlProvider;
+import redux.react.Provider;
 import redux.Redux;
 import redux.Store;
 import redux.StoreBuilder.*;
@@ -47,16 +51,15 @@ typedef AppProps =
 
 class App  extends ReactComponentOf<AppProps, AppState>
 {
-	public static var _app:App;
 	//static var fa = require('./node_modules/font-awesome/css/font-awesome.min.css');
-
+	public static var _app:App;
   	static var STYLES = Webpack.require('App.scss');
  
 	public static var browserHistory:History;
 	
 	public static var store:Store<AppState>;
-	public static var devIP = Webpack.require('./webpack.local.js').ip;
-	public static var config:Dynamic = Webpack.require('../httpdocs/config.js').config;
+	public static var devIP = Webpack.require('../webpack.local.js').ip;
+	public static var config:Dynamic = Webpack.require('../../httpdocs/config.js').config;
 	public static var flatpickr:Function = Webpack.require('flatpickr');
 	public static var German = js.Lib.require('flatpickr/dist/l10n/de.js');
 	static var flat = js.Lib.require('flatpickr/dist/flatpickr.min.css');
@@ -69,12 +72,15 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	public static var defaultUrl = '/Data/Contacts/List/show';
 
 	var globalState:Map<String,Dynamic>;
+	var tul:TUnlisten;
 
-	private function initStore():Store<AppState>
+	private function initStore(history:History):Store<AppState>
 	{
 		var rootReducer = Redux.combineReducers(
 		{
-			config: mapReducer(ConfigAction, new ConfigStore()),
+			config: mapReducer(ConfigAction, new ConfigStore(config)),
+			dataStore: mapReducer(DataAction, new DataStore()),
+			locationState: mapReducer(LocationAction, new LocationStore(history)),
 			status: mapReducer(StatusAction, new StatusStore()),
 			user: mapReducer(UserAction, new UserStore())
 		});
@@ -86,7 +92,14 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	static function startHistoryListener(store:Store<AppState>, history:History):TUnlisten
 	{
 		trace(history);
-		store.dispatch(Location(InitHistory(history)));
+		store.dispatch(Location(InitHistory(history,
+		{
+			pathname:store.getState().redirectAfterLogin,
+			search:'',
+			hash:'',
+			key:'',
+			state:{}
+		})));
 	
 		return history.listen( function(location:Location, action:history.Action){
 			//trace(action);
@@ -107,12 +120,16 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		super(props);
 		globalState = new Map();
 		untyped flatpickr.localize(German);
-		//ReactIntl.addLocaleData({locale:'de'});
+		ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
 		var ti:Timer = null;
-		store = initStore();
-		//state = store.getState();
-		Browser.window.onresize = function ()
+		store = initStore(BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}));
+		state = store.getState();
+		trace(state);
+		//tul = startHistoryListener(store, BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}));
+		tul = startHistoryListener(store, state.locationState.history);
+		
+		Browser.window.onresize = function()
 		{
 			if(ti!=null)
 				ti.stop();
@@ -177,17 +194,22 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		trace('...'); 
 		//firstLoad = false;
 	}
+
+	override function componentWillUnmount() 
+	{
+		tul();
+	}
 	// Use trace from props
 	public static function edump(el:Dynamic){Out.dumpObject(el); return 'OK'; };
 
   	override function render() {
-		//trace(state.history.location.pathname);	store={store}	<UiView/>	
+		//trace(state.history.location.pathname);	store={store}	<UiView/>	<div>more soon...</div>
         return jsx('
-			<Provider store={store}>
-				<IntlProvider locale="de">
-					<div>more soon...</div>
-				</IntlProvider>
-			</Provider>
+			<$Provider store={store}>
+				<$IntlProvider locale="de">
+					<UiView/>
+				</$IntlProvider>
+			</$Provider>
         ');
   	}
 

@@ -20,5 +20,6 @@
 -js ../httpdocs/app.js
 -dce std
 #--no-traces
+#-D eval-stack
 -main Go
 

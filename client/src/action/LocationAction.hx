@@ -15,6 +15,6 @@ enum LocationAction
 	Go(to:Int);
 	Back;
 	Forward;
-	InitHistory(history:History);
+	InitHistory(history:History,location:Location);
 	LocationChange(location:Location);
 }

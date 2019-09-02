@@ -11,10 +11,10 @@ class ConfigStore
 {
 	public var initState:ConfigState;
 	
-	public function new() {
+	public function new(p:Dynamic) {
 		
 		initState = {
-			params:null
+			params:p
 		};
 	}
 

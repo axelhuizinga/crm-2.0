@@ -1,5 +1,5 @@
 package view;
-
+import action.thunk.UserAccess;
 import react.ReactComponent;
 import react.ReactMacro.jsx;
 import react.router.Route;
@@ -64,7 +64,7 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 			<TabLink to="/Qc" ${...props}>QC</TabLink>
 			<TabLink to="/Accounting" ${...props}>Buchhaltung</TabLink>
 			<TabLink to="/Reports" ${...props}>Berichte</TabLink>
-			<i className = "icon abs-right fa fa-sign-out"  title = "Abmelden"  onClick=${App.logOut}
+			<i className = "icon abs-right fa fa-sign-out"  title = "Abmelden"  onClick=${UserAccess.logOff}
 			style={{margin:".8rem .5rem",fontSize:"1.7rem", cursor:"pointer", color:"#801111"}}></i>
 		</>
 		');

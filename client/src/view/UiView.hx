@@ -8,7 +8,6 @@ import history.History;
 import history.BrowserHistory;
 import me.cunity.debug.Out;
 import state.AppState;
-import state.GlobalAppState;
 import state.UserState;
 import react.Fragment;
 import react.ReactComponent.ReactFragment;
@@ -88,7 +87,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		trace(Reflect.fields(props));
         super(props);
 		state = {hasError:false};
-		browserHistory = App.store.getState().historyappWare.history;// BrowserHistory.create({basename:"/"});
+		browserHistory = App.store.getState().locationState.history;// BrowserHistory.create({basename:"/"});
 		//ApplicationStore.startHistoryListener(App.store, browserHistory);
 		//trace(this.props.user.state.last_name);
 		mounted = false;

@@ -2,16 +2,21 @@ package action.thunk;
 
 import action.AppAction;
 import action.UserAction;
+import haxe.http.HttpJs;
+import haxe.Json;
 import haxe.Serializer;
 import loader.BinaryLoader;
 import redux.Redux;
 import redux.StoreMethods;
 import redux.thunk.Thunk;
 import js.Cookie;
+import js.html.FormData;
 import js.html.XMLHttpRequest;
+
 import shared.DbData;
 import state.AppState;
 import state.UserState;
+import view.shared.OneOf;
 
 class UserAccess {
 
@@ -42,7 +47,7 @@ class UserAccess {
 					}
 					if (data.dataInfo['changePassword'] == 'OK')
 					{
-						trace(aState.user.dynaMap());
+						trace(aState.user);
 						/*setState({
 							//viewClassPath:'update',
 							fields:dataAccess['update'].view,
@@ -61,13 +66,13 @@ class UserAccess {
 			return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 				trace(data.dataErrors);
 				return dispatch(User(LoginError(
-					{id:aState.user.id, loginError:data.dataErrors.iterator().next()})));
+					{id:getState().user.id, loginError:data.dataErrors.iterator().next()})));
 			});
 		}		
 		return null;
 	}
 	
-	public static function loginReq(props:LoginState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
+	public static function loginReq(props:UserState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(props);
@@ -121,7 +126,7 @@ class UserAccess {
 		});
 	}
 
-	public static function logOff(props:LoginState) 
+	public static function logOff(props:UserState) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(getState());
@@ -132,12 +137,12 @@ class UserAccess {
 			fD.append('className', 'auth.User');
 			fD.append('id', Std.string(props.id));
 			var req:XMLHttpRequest = new XMLHttpRequest();
-			req.open('POST', '${props.api}');
+			req.open('POST', '${App.config.api}');
 			req.onload = function()
 			{
 				 if (req.status == 200) {
 					 // OK
-					var jRes:LoginState = Json.parse( req.response);
+					var jRes:UserState = Json.parse( req.response);
 					trace(jRes.jwt);
 					//Cookie.set('user.id', Std.string(props.id));
 					Cookie.set('user.jwt', jRes.jwt);
@@ -159,7 +164,7 @@ class UserAccess {
 	public static function logout() {
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace('logout');		
-			return dispatch(User(LogOut({jwt:'', id: store.getState().user.id })));
+			return dispatch(User(LogOut({jwt:'', id: getState().user.id })));
 		});
 	}
 
@@ -167,8 +172,9 @@ class UserAccess {
 		//CHECK IF WE HAVE A VALID SESSION
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace('clientVerify');
+			var state:AppState = getState();
 			var bL:XMLHttpRequest = BinaryLoader.create(
-			'${state.config.api}', 
+			'${App.config.api}', 
 			{				
 				id:state.user.id,
 				jwt:state.user.jwt,
@@ -183,7 +189,7 @@ class UserAccess {
 						"fields" => 'first_name,last_name,email',
 						"jCond"=>'contact=co.id'] 
 				]),
-				devIP:devIP
+				devIP:App.devIP
 			},			
 			function(data:DbData)
 			{
@@ -191,12 +197,12 @@ class UserAccess {
 				{
 					trace(data.dataErrors);
 					
-					return store.dispatch(User(LoginError(
+					return dispatch(User(LoginError(
 						{id:state.user.id, loginError:data.dataErrors.iterator().next()})));
 				}	
 				var uState:UserState = data.dataInfo['user_data'];
 				uState.waiting = false;
-				return store.dispatch(User(LoginComplete(uState)));			
+				return dispatch(User(LoginComplete(uState)));			
 			});
 		});	
 	}

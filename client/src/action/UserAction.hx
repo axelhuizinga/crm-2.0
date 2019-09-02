@@ -8,5 +8,4 @@ enum UserAction
 	LoginError(state:UserState);
 	LogOut(state:UserState);	
 	LoginRequired(state:UserState);		
-	// User(state:UserState);
 }

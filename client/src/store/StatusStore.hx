@@ -23,7 +23,7 @@ class StatusStore
 		trace(state);
 		return switch(action)
 		{
-			case Status(status):
+			case Update(status):
 				trace(status);
 				copy(state, {
 					status:status

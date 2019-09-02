@@ -2,6 +2,6 @@ package action;
 
 enum StatusAction
 {	
-	Status(status:String);
+	Update(status:String);
 }
 

@@ -1,4 +1,4 @@
-package action.async;
+package action;
 
 import haxe.ds.IntMap;
 import react.router.RouterMatch;
@@ -27,14 +27,11 @@ typedef LiveDataProps =
 enum  DataAction
 {
 	Execute(dataAccess:DBAccessProps);
-	//Delete(data:DbData);
 	Done(data:DbData);
 	Error(data:DbData);
 	Load(data:DbData);
-	//CreateSelect(id:Int,data:Map<String,Dynamic>,match:RouterMatch);
 	SelectAccounts(sData:IntMap<Map<String,Dynamic>>);
 	SelectContacts(sData:IntMap<Map<String,Dynamic>>);
 	SelectDeals(sData:IntMap<Map<String,Dynamic>>);
 	Unselect(id:Int);
-	//Update(data:DBAccessProps);
 }

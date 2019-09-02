@@ -41,7 +41,9 @@ class AppStore
 		//trace('OK');
 		initState = {
 			config:App.config,
-			history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}),
+			dataStore: null,
+			formStates: null,
+			//history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}),
 			/*firstLoad:true,
 			formStates: new Map(),
 			themeColor: 'green',

@@ -271,7 +271,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			action:props.match.params.action,
 			className:'data.Contacts',
 			dataSource:null,
-			//table:'contacts',
+			table:'contacts',
 			user:props.user
 		};
 		switch (props.match.params.action)
@@ -291,7 +291,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						"fields" => Reflect.fields(aState).join(',')
 					]
 				];
-			case 'delete':
+			case 'delete'|'show':
 				dbaProps.dataSource = [
 					"contacts" => [
 						"filter" => 'id|${state.initialState.id}'

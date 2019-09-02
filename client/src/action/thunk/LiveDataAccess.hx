@@ -52,18 +52,18 @@ class LiveDataAccess
 				case 'Accounts':
 					sData = aState.dataStore.accountData;					
 					sData = selectType(props.id, props.data, sData, props.selectType);
-					aState.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
+					aState.locationState.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
 					return dispatch(DataAction.SelectAccounts(props.data));				
 				case 'Contacts':
 					sData = aState.dataStore.contactData;
 					sData = selectType(props.id, props.data, sData, props.selectType);
 					trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
-					//aState.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
+					//aState.locationState.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
 					return dispatch(DataAction.SelectContacts(props.data));
 				case 'Deals':
 					sData = aState.dataStore.dealData;
 					sData = selectType(props.id, props.data, sData, props.selectType);
-					aState.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
+					aState.locationState.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
 					return dispatch(DataAction.SelectDeals(props.data));
 				default:
 					return null;

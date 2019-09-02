@@ -12,22 +12,10 @@ import redux.Redux;
 import action.thunk.UserAccess;
 import view.shared.RouteTabProps;
 
-typedef LoginState = 
-{
-	?api:Dynamic,
-	?waiting:Bool,
-	?error:Dynamic,
-	?user_name:String,
-	?mandator:Int,
-	?pass:String,
-	?id:Int,
-	?jwt:String
-}
-
 typedef LoginProps =
 {
 	>RouteTabProps,
-	submitLogin:LoginState->Dispatch,
+	submitLogin:UserState->Dispatch,
 	user:UserState,
 	api:String,
 	pass:String,
@@ -48,7 +36,7 @@ typedef LoginProps =
 
 //@:expose('default')
 @:connect
-class LoginForm extends ReactComponentOf<LoginProps, LoginState>
+class LoginForm extends ReactComponentOf<LoginProps, UserState>
 {
 	
 	public function new(?props:LoginProps)
@@ -60,16 +48,16 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 			trace(props.match.path + ':' + props.match.url);	
 		}
 		trace(props);
-		state = {api:props.api,user_name:'',pass:''};
+		state = {user_name:'',pass:''};
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		return {
-			submitLogin: function(lState:LoginState) return dispatch(UserAccess.loginReq(lState))
+			submitLogin: function(lState:UserState) return dispatch(UserAccess.loginReq(lState))
 		};
 	}
 
-	/*static function mergeProps(stateProps:LoginState, dispatchProps:Dynamic, ownProps:LoginProps)
+	/*static function mergeProps(stateProps:UserState, dispatchProps:Dynamic, ownProps:LoginProps)
 	{
 		trace(stateProps);
 		trace(ownProps);
@@ -86,7 +74,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 			//trace(aState.config);
 			
 			return {
-				api:aState.config.api,
+				api:App.config.api,
 				pass:uState.pass,
 				jwt:uState.jwt,
 				mandator:uState.mandator,
@@ -123,7 +111,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		//this.setState({waiting:true});
 		//props.dispatch(AppAction.Login("{user_name:state.user_name,pass:state.pass}"));
 		//trace(props.dispatch);
-		props.submitLogin({user_name:state.user_name, pass:state.pass,api:props.api, jwt:''});
+		props.submitLogin({user_name:state.user_name, pass:state.pass, jwt:''});
 		//trace(_dispatch == App.store.dispatch);
 		//trace(App.store.dispatch(UserAction.loginReq(state)));
 		//trace(props.dispatch(AppAction.LoginReq(state)));

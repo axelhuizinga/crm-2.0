@@ -6,15 +6,14 @@ import state.LocationState;
 import state.UserState;
 //import view.shared.io.User.UserProps;
 
-import state.StatusBarState;
 
 typedef AppState =
 {
 	config:ConfigState,
-	formStates:Map<String, FormState>,
-	//dataStore:DataAccessState,
-	//locationHistory:LocationState,
+	?formStates:Map<String, FormState>,
+	?dataStore:DataAccessState,
+	?locationState:LocationState,
 	redirectAfterLogin:String,
-	status:StatusState,
+	?status:StatusState,
 	user:UserState
 };

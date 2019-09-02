@@ -26,6 +26,7 @@ import view.shared.RouteTabProps;
 import view.shared.CompState;
 import view.shared.TabLink;
 import view.LoginForm;
+import view.StatusBar;
 //import react.redux.form.Control.ControlProps;
 //import react.redux.form.Control;
 import redux.Redux;
@@ -105,7 +106,7 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 	static function mapStateToProps(aState:AppState) {
 		var uState:UserProps = aState.user;
 		trace(uState.first_name);
-		//trace(' ${aState.history.location.pathname + (aState.compState.exists('contacts') && aState.compState.get('contacts').isMounted ? "Y":"N")}');
+		//trace(' ${aState.locationState.history.location.pathname + (aState.compState.exists('contacts') && aState.compState.get('contacts').isMounted ? "Y":"N")}');
 		
 		return {
 			appConfig:aState.config,

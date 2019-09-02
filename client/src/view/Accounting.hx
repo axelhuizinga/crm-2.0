@@ -1,6 +1,7 @@
 package view;
 import bulma_components.*;
 import action.AppAction;
+import action.ConfigAction;
 import react.ReactComponent;
 import react.ReactDateTimeClock;
 import react.ReactMacro.jsx;
@@ -34,7 +35,7 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		return {
-			onTodoClick: function(id:Int) return dispatch(AppAction.SetTheme('orange'))
+			onTodoClick: function(id:Int) return dispatch(Config(SetTheme('orange')))
 		};
 	}
 	

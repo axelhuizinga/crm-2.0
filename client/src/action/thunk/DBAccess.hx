@@ -40,7 +40,7 @@ class DBAccess
 		
 	}
 
-	public static function load(props:DBAccessProps) 
+	/*public static function load(props:DBAccessProps) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(getState());
@@ -60,10 +60,10 @@ class DBAccess
 				{
 					id:props.user.id,
 					jwt:props.user.jwt,
-					className:'data.Contacts',
-					action:'show',
+					className:props.className,
+					action:props.action,
 					filter:'id|${initialState.id}',
-					table:'contacts',
+					table:props.table,
 					devIP:App.devIP
 				},
 				function(data:DbData)
@@ -92,7 +92,7 @@ class DBAccess
 				}
 			);			
 		});
-	}
+	}*/
 
 	public static function execute(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
@@ -145,7 +145,7 @@ class DBAccess
 				}
 				trace('${props.className}.${props.action} => $status');
 				//return null;
-				return dispatch(StatusBar(Status(status)));
+				return dispatch(Status(Update(status)));
 			});
 			if (requests != null)
 			{

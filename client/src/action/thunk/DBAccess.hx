@@ -15,7 +15,7 @@ import redux.thunk.Thunk;
 import shared.DbData;
 import loader.BinaryLoader;
 import view.shared.OneOf;
-
+using action.thunk.Utils;
 /**
  * ...
  * @author axel@cunity.me
@@ -25,6 +25,7 @@ typedef DBAccessProps =
 {
 	action:String,
 	className:String,
+	?filter:String,
 	?dataSource:Map<String,Map<String,Dynamic>>,
 	?table:String,
 	user:UserState
@@ -40,10 +41,11 @@ class DBAccess
 		
 	}
 
-	/*public static function load(props:DBAccessProps) 
+	public static function get(props:DBAccessProps) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			trace(getState());
+			//trace(getState());
+			trace(props);
 			if (!props.user.loggedIn)
 			{
 				return dispatch(User(LoginError(
@@ -62,37 +64,51 @@ class DBAccess
 					jwt:props.user.jwt,
 					className:props.className,
 					action:props.action,
-					filter:'id|${initialState.id}',
+					filter:props.filter,
+					//dataSource:Serializer.run(props.dataSource),
 					table:props.table,
 					devIP:App.devIP
 				},
 				function(data:DbData)
 				{			
-					UserAccess.jwtCheck(data);
 					trace(data.dataInfo);
 					trace(data.dataRows.length);
+					var status:String = '';
 					if(data.dataRows.length>0) 
 					{
 						if(!data.dataErrors.keys().hasNext())
 						{
-							//var sData:IntMap<Map<String,Dynamic>> = App.store.getState().dataStore.contactData;
-							actualState = data.dataRows[0].MapToDyn();
-							props.parentComponent.props.select(actualState.id,data.dataRows[0],props.match);
-							trace(actualState);
-							//forceUpdate();
+							trace(data.dataRows);
+							dispatch(AppAction.Data(SelectContacts([
+								for(row in data.dataRows)
+									Std.parseInt(row['id']) => row
+							])));//.then(function()trace('yeah'));
+							return dispatch(Status(Update(switch ('${props.className}.${props.action}')
+							{
+								case "data.Contacts.get":
+									'Kontakt ${props.filter.substr(3)} geladen';
+								case "data.Contacts.update":
+									'Kontakt ${props.filter.substr(3)} wurde gespeichert';
+								default:
+									"Unbekannter Vorgang";
+							})));
 						}
 						else 
 						{
 							//TODO: IMPLEMENT GENERIC FAILURE FEEDBACK
-							trace('no matching data found for ${initialState.id}');
-							var baseUrl:String = props.match.path.split(':section')[0];
-							props.history.push('${baseUrl}List/find');							
+							return dispatch(Status(Update(
+								'${data.dataErrors.get(props.action)}'.errorStatus())));
+						
 						}				
 					}
+					else
+						return dispatch(Status(Update(
+							status = 'Keine Daten für ${props.filter.substr(3)} gefunden')));
 				}
-			);			
+			);
+			return null;
 		});
-	}*/
+	}
 
 	public static function execute(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
@@ -137,6 +153,8 @@ class DBAccess
 				}else 
 				status = switch ('${props.className}.${props.action}')
 				{
+					case "data.Contacts.edit":
+						'Kontakt ${props.dataSource["contacts"]["filter"].substr(3)} geladen';
 					case "data.Contacts.update":
 						'Kontakt ${props.dataSource["contacts"]["filter"].substr(3)} wurde gespeichert';
 					default:

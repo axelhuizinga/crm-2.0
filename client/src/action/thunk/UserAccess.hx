@@ -49,9 +49,9 @@ class UserAccess {
 					{
 						trace(aState.user);
 						/*setState({
-							//viewClassPath:'update',
-							fields:dataAccess['update'].view,
-							values:props.formApi.createStateValues(App.store.getState().user.dynaMap(), dataAccess['update'].view),
+							//viewClassPath:'edit',
+							fields:dataAccess['edit'].view,
+							values:props.formApi.createStateValues(App.store.getState().user.dynaMap(), dataAccess['edit'].view),
 							loading:false});*/
 					}
 					else trace(data.dataErrors);				
@@ -115,6 +115,8 @@ class UserAccess {
 				Cookie.set('user.jwt',uState.jwt, null, '/');
 				trace(Cookie.get('user.jwt'));
 				uState.loggedIn = true;
+				trace(uState);
+				trace(dispatch);
 				return dispatch(User(LoginComplete(uState)));
 				//return dispatch(AppAction.LoginComplete(
 			});

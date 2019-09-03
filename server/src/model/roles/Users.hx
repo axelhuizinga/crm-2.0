@@ -17,7 +17,7 @@ class Users extends Model
 	public function list() 
 	{
 		trace(param);
-		show();
+		get();
 	}
 	
 }

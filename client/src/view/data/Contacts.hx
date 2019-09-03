@@ -82,7 +82,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			//SET DEFAULT SECTION
 			trace('reme');
 			var baseUrl:String = props.match.path.split(':section')[0];
-			props.history.push('${baseUrl}List/show');
+			props.history.push('${baseUrl}List/get');
 		}		
 		
 		state =  App.initEState({
@@ -138,7 +138,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 					formState
 				));
 			}*/
-			/*update: function(dbaProps:DBAccessProps) {
+			/*edit: function(dbaProps:DBAccessProps) {
 				trace(dbaProps);
 				dispatch(DataAction.Update(dbaProps));
 			}*/
@@ -147,10 +147,14 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	
 	static function mapStateToProps(aState:AppState) 
 	{
-		//trace(aState.dataStore.dbData);
-		return {
-			user:aState.user
+		//trace(aState.dataStore.contactData);
+		trace(aState.dataStore.contactData.keys().next());
+		var bState =  {
+			user:aState.user,
+			idLoaded:aState.dataStore.contactData.keys().next()
 		};
+		trace(bState);
+		return bState;
 	}
 		
 	override public function componentDidMount():Void 

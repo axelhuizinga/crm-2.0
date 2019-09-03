@@ -13,9 +13,7 @@ class ConfigStore
 	
 	public function new(p:Dynamic) {
 		
-		initState = {
-			params:p
-		};
+		initState = p;
 	}
 
 	public function reduce(state:ConfigState, action:ConfigAction):ConfigState
@@ -26,9 +24,7 @@ class ConfigStore
 		{
 			case Loaded(p):
 				trace(p);
-				copy(initState, {
-					params:p
-				});
+				copy(state, p);
 			default:
 				state;
 		}

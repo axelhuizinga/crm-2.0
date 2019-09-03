@@ -9,6 +9,7 @@ import state.UserState;
 
 typedef AppState =
 {
+	?app:Dynamic,
 	config:ConfigState,
 	?formStates:Map<String, FormState>,
 	?dataStore:DataAccessState,

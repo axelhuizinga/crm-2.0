@@ -119,7 +119,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	{
 		var id:String = 'Gast';
 		var userIcon:String = 'fa fa-user-o';
-		//trace(props.user);
+		trace(props.status);
 		if (props.user != null)
 		{
 		 id = props.user.first_name != null &&  props.user.first_name !='' ?
@@ -130,7 +130,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		return jsx('
 		<Footer>
 			<div className="statusbar">
-				<span className="column" > Status: ${props.status}</span>				
+				<span className="column" >${props.status}</span>				
 				<span className="column flex-end">
 				<i className=${userIcon}></i> $id</span>
 				<$DateTime />			

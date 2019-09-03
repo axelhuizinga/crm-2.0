@@ -2,14 +2,12 @@ package store;
 import react.ReactSharedInternals.Update;
 import App;
 import action.AppAction;
-import action.ReduxAction;
 import haxe.Http;
 import haxe.Json;
 import haxe.ds.StringMap;
 import js.Browser;
 import js.Cookie;
 import js.Promise;
-//import view.shared.io.User;
 import react.ReactUtil.copy;
 import redux.IMiddleware;
 import redux.IReducer;
@@ -19,7 +17,6 @@ import history.BrowserHistory;
 import history.History;
 import state.CState;
 import state.AppState;
-//import state.GlobalAppState;
 import state.StatusState;
 import Webpack.*;
 
@@ -30,7 +27,7 @@ import Webpack.*;
 
 class AppStore 
 	implements IReducer<AppAction, AppState>
-	implements IMiddleware<ReduxAction, AppState>
+	implements IMiddleware<AppAction, AppState>
 {
 	public var initState:AppState;
 		
@@ -38,20 +35,17 @@ class AppStore
 	
 	public function new() 
 	{
-		//trace('OK');
 		initState = {
+			app:{},
 			config:App.config,
 			dataStore: null,
-			formStates: null,
-			//history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}),
-			/*firstLoad:true,
+			//firstLoad:true,
 			formStates: new Map(),
-			themeColor: 'green',
-			locale: 'de',
-			
-			routeHistory: new Array(),*/
+			//themeColor: 'green',
+			//locale: 'de',			
+			//routeHistory: new Array(),
 			redirectAfterLogin: (Browser.location.pathname=='/'?'DashBoard':Browser.location.pathname), 
-			statusBar: {
+			status: {
 				status: Browser.location.pathname,
 				date:Date.now(),
 				user:null
@@ -71,9 +65,6 @@ class AppStore
 		};
 
 		trace('redirectAfterLogin: ${initState.redirectAfterLogin}');
-		//initState.config = Reflect.field(appCconf, 'default');		
-		//initState.config = appCconf;		
-		//trace(initState.config);
 	}
 	
 	public function reduce(state:AppState, action:AppAction):AppState
@@ -95,68 +86,13 @@ class AppStore
 				}
 				copy(state,{
 					formStates:formStates
-				});			
-			case LoginChange(uState):
-				copy(state, {
-					user:{id:uState.id, pass:uState.pass}
-				});
-			case LoginRequired(uState):
-				trace(uState);
-				copy(state, {
-					user:uState
-				});				
-			case LoginError(err):
-				trace(err);
-				//if(err.id==state.user.id)
-				copy(state, {user:{loginError:err.loginError, waiting:false}});
-			case AppWait:
-				copy(state, {waiting:true});				
-			case LoginComplete(uState):
-				//trace(uState.id + ':' + uState.loggedIn);
-				trace(uState);
-				uState.loginError = null;
-				uState.loggedIn = true;
-				copy(state, //uState.change_pass_required?:
-				{
-					user:copy(state.user,uState)
-				});						
-			case LogOut(uState):
-				trace(uState);
-				copy(state, {user:uState});				
-			case SetLocale(locale):
-				if (locale != state.locale)
-				{
-					copy(state, {
-						locale:locale
-					});
-				}
-				else state;	
-			
-			case SetTheme(color):
-				if (color != state.themeColor)
-				{
-					copy(state, {
-						themeColor:color
-					});
-				}
-				else state;*/	
-			/*case StatusBarStatus(status):
-				trace(status);
-				copy(state, {
-					statusBar:{status:status}
-				});		
-			case User(uState):
-			trace(state.user);
-				copy(state, {
-					user:copy(state.user,{first_name:uState.first_name, last_name:uState.last_name, email:uState.email, 
-					last_login:uState.last_login, pass:uState.pass, new_pass:uState.new_pass, new_pass_confirm:uState.new_pass_confirm, waiting:uState.waiting})
-				});	*/	
+				});		*/
 			default:
 				state;
 		}
 	}
 	
-	public function middleware(action:ReduxAction, next:Void -> Dynamic)
+	public function middleware(action:AppAction, next:Void -> Dynamic)
 	{
 		trace(action);
 		return switch(action)
@@ -172,8 +108,16 @@ class AppStore
 				//Out.dumpStack(CallStack.callStack());ReduxAction
 				//store.dispatch(StatusAction.Status(status));
 				next();*/
-	
-			default: next();
+			case Data(action):
+				store.dispatch(action);		
+			case Status(action):	
+				store.dispatch(action);
+			case User(action):
+				store.dispatch(action);
+			//default: next();
+			default: 
+				next();
+				//store.dispatch(action);
 		}
 	}
 	

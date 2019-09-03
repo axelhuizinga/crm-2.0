@@ -25,6 +25,7 @@ import state.AppState;
 import state.CState;
 import state.ConfigState;
 import state.FormState;
+import store.AppStore;
 import store.ConfigStore;
 import store.LocationStore;
 import store.StatusStore;
@@ -41,6 +42,8 @@ import redux.Store;
 import redux.StoreBuilder.*;
 import redux.thunk.Thunk;
 import redux.thunk.ThunkMiddleware;
+import view.shared.io.FormApi;
+import view.shared.FormBuilder;
 
 using StringTools;
 
@@ -59,7 +62,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	
 	public static var store:Store<AppState>;
 	public static var devIP = Webpack.require('../webpack.local.js').ip;
-	public static var config:Dynamic = Webpack.require('../../httpdocs/config.js').config;
+	public static var config:ConfigState = Webpack.require('../../httpdocs/config.js').config;
 	public static var flatpickr:Function = Webpack.require('flatpickr');
 	public static var German = js.Lib.require('flatpickr/dist/l10n/de.js');
 	static var flat = js.Lib.require('flatpickr/dist/flatpickr.min.css');
@@ -69,15 +72,18 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
 	public static var onResizeComponents:List<Dynamic> = new List();
 	public static var maxLoginAttempts:Int = 3;
-	public static var defaultUrl = '/Data/Contacts/List/show';
+	public static var defaultUrl = '/Data/Contacts/List/get';
 
 	var globalState:Map<String,Dynamic>;
 	var tul:TUnlisten;
 
 	private function initStore(history:History):Store<AppState>
 	{
+		var appWare = new AppStore();
+
 		var rootReducer = Redux.combineReducers(
 		{
+			//app:mapReducer(AppAction, appWare),
 			config: mapReducer(ConfigAction, new ConfigStore(config)),
 			dataStore: mapReducer(DataAction, new DataStore()),
 			locationState: mapReducer(LocationAction, new LocationStore(history)),
@@ -85,7 +91,8 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			user: mapReducer(UserAction, new UserStore())
 		});
 		return createStore(rootReducer, null,  Redux.applyMiddleware(
-			mapMiddleware(Thunk, new ThunkMiddleware()))
+			mapMiddleware(Thunk, new ThunkMiddleware()),
+			mapMiddleware(AppAction, appWare))
 		);
 	}
 
@@ -102,7 +109,6 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		})));
 	
 		return history.listen( function(location:Location, action:history.Action){
-			//trace(action);
 			trace(location.pathname);
 			
 			store.dispatch(LocationChange({
@@ -126,7 +132,6 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		store = initStore(BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}));
 		state = store.getState();
 		trace(state);
-		//tul = startHistoryListener(store, BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}));
 		tul = startHistoryListener(store, state.locationState.history);
 		
 		Browser.window.onresize = function()
@@ -144,13 +149,12 @@ class App  extends ReactComponentOf<AppProps, AppState>
 				}
 			},250);
 		}
-		//browserHistory = state.history;
 		//trace(store);
 		trace(state.redirectAfterLogin);
 		//CState.init(store);		
 		if (!(state.user.id == null || state.user.jwt == ''))
 		{			
-			action.thunk.UserAccess.verify();
+			store.dispatch(action.thunk.UserAccess.verify());
 		}
 		else
 		{// WE HAVE EITHER NO VALID JWT OR id
@@ -237,8 +241,8 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		var fS:FormState =
 		{
 			clean: true,
-			formApi:null,//new FormApi(comp, init.sideMenu),
-			//formBuilder:new FormBuilder(comp),
+			formApi:new FormApi(comp, init.sideMenu),
+			formBuilder:new FormBuilder(comp),
 			hasError: false,
 			mounted: false,
 			sideMenu: init==null? {}:init.sideMenu

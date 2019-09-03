@@ -1,5 +1,6 @@
 package action;
 
+import action.DataAction;
 import action.ConfigAction;
 import action.LocationAction;
 import action.UserAction;
@@ -21,6 +22,7 @@ enum AppAction
 	ApplySubState(state:AppState);
 	AppWait;
 	Config(action:ConfigAction);
+	Data(action:DataAction);
 	GlobalState(key:String,value:Dynamic);
 	Location(action:LocationAction);
 	Status(action:StatusAction);

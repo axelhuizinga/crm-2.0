@@ -26,7 +26,7 @@ class UserStore implements IReducer<UserAction, UserState>
 		loggedIn:false,
 		last_login:null,
 		jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
-		waiting: false	
+		waiting: true	
 	};
 	
 	public var store:StoreMethods<state.AppState>;
@@ -38,11 +38,22 @@ class UserStore implements IReducer<UserAction, UserState>
 		trace(state);
 		return switch(action)
 		{
+			case LoginRequired(uState):
+					trace(uState);
+					copy(state, uState);                             
 			case LoginError(err):
-				if(err.id==state.id)
-					copy(state, err);
-				else
-					state;				
+					trace(err);
+					//if(err.id==state.user.id)
+					copy(state, {loginError:err.loginError, waiting:false});                       
+			case LoginComplete(uState):
+					//trace(uState.id + ':' + uState.loggedIn);
+					trace(uState);
+					uState.loginError = null;
+					uState.loggedIn = true;
+					copy(state, uState);                                             
+			case LogOut(uState):
+					trace(uState);
+					copy(state, uState);      		
 			default:
 				state;
 		}

@@ -4,7 +4,6 @@ import state.UserState;
 import react.ReactType;
 import view.shared.io.User;
 
-import action.AppAction;
 import bulma_components.Tabs;
 import state.LocationState;
 //import view.shared.io.UserState;
@@ -54,8 +53,8 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 		trace(props.match);
 		if (props.match.url == '/Data' && props.match.isExact)
 		{
-			trace('pushing2: /Data/Contacts/List/show');
-			props.history.push('/Data/Contacts/List/show');
+			trace('pushing2: /Data/Contacts/List/get');
+			props.history.push('/Data/Contacts/List/get');
 		}
 	}
 	
@@ -153,7 +152,7 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 		return null;
 	}
 	
-	function internalRedirect(path:String = '/Data/Contacts/List/show')
+	function internalRedirect(path:String = '/Data/Contacts/List/get')
 	{
 		trace('${props.location.pathname} $path');
 		//trace(props.match);

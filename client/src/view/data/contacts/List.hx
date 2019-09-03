@@ -23,8 +23,8 @@ import model.Contact;
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		//{label:'Anzeigen',action:'show'},
-		{label:'Bearbeiten',action:'update',section: 'Edit'},
+		//{label:'Anzeigen',action:'get'},
+		{label:'Bearbeiten',action:'edit',section: 'Edit'},
 		{label:'Neu', action:'create',section: 'Edit'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -61,9 +61,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			//var sData = App.store.getState().dataStore.contactData;			
 			var baseUrl:String = props.match.path.split(':section')[0];
-			trace('redirecting to ${baseUrl}List/show');
-			props.history.push('${baseUrl}List/show');
-			//show(null);
+			trace('redirecting to ${baseUrl}List/get');
+			props.history.push('${baseUrl}List/get');
+			//get(null);
 }		
 		trace(state.loading);
 	}
@@ -81,7 +81,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
-	public function show(ev:ReactEvent):Void
+	public function get(ev:ReactEvent):Void
 	{
 		trace('hi :)');
 		var s:hxbit.Serializer = new hxbit.Serializer();
@@ -92,7 +92,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'data.Contacts',
-				action:'show',
+				action:'get',
 				devIP:App.devIP,
 				table:'contacts'
 			},
@@ -145,7 +145,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{	
 		dataAccess = [
-			'show' =>{
+			'get' =>{
 				source:[
 					"contacts" => []
 				],
@@ -178,7 +178,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
-			case 'show':
+			case 'get':
 				jsx('
 				<form className="tabComponentForm" >
 					<Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
@@ -214,7 +214,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			switch(mI.action)
 			{
-				case 'update'|'delete':
+				case 'edit'|'delete':
 					mI.disabled = state.selectedRows.length==0;
 				default:
 			}			

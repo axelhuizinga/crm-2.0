@@ -23,7 +23,7 @@ class TabLink extends ReactComponentOfProps<TabLinkProps>
 		//trace('${props.to} ${props.location.pathname}');
 		return jsx('
 		<li className=${props.location.pathname.indexOf(props.to) == 0 ?"is-active":""}>
-		<$NavLink to=${props.to + '/List/show'}>${props.children}</$NavLink></li>
+		<$NavLink to=${props.to + '/List/get'}>${props.children}</$NavLink></li>
 		');		
 	}
 }

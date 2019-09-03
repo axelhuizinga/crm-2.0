@@ -42,9 +42,9 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	static var _instance:DBSync;
 
 	public static var menuItems:Array<SMItem> = [
-		{label:'Anzeigen',action:'show'},
-		{label:'Bearbeiten',action:'update'},
-		//{label:'Finden',action:'show'},
+		{label:'Anzeigen',action:'get'},
+		{label:'Bearbeiten',action:'edit'},
+		//{label:'Finden',action:'get'},
 		{label:'Neu', action:'create'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -74,7 +74,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		};
 	}
 	
-	public function show(ev:ReactEvent):Void
+	public function get(ev:ReactEvent):Void
 	{
 		trace('hi :)');
 		return;
@@ -84,8 +84,8 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'data.Contacts',
-				action:'show',
-				update:'1'
+				action:'get',
+				edit:'1'
 			},
 			function(data:Map<String,String>)
 			{

@@ -12,9 +12,9 @@ import view.table.Table.DataState;
 class Users extends ReactComponentOf<DataFormProps,FormState>
 {
     public static var menuItems:Array<SMItem> = [
-		{label:'Liste',action:'show'},
+		{label:'Liste',action:'get'},
 		{label:'Neu',action:'create'},
-		{label:'Bearbeiten',action:'update'},
+		{label:'Bearbeiten',action:'edit'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];

@@ -35,7 +35,7 @@ import react.router.bundle.Bundle;
 
 import bulma_components.Tabs;
 
-import action.AppAction;
+//import action.AppAction;
 import state.AppState;
 import App;
 //import view.relationsBox;
@@ -138,7 +138,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	override function render()
 	{
 		if(props.user !=null)
-		trace(props.user.jwt + ':' + props.user.waiting );
+		trace(props.user);
 		if (state.hasError || props.user == null) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
@@ -154,7 +154,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		}
 		
 		//trace('${props.user.jwt} ${props.user.loggedIn}');
-		if(props.user.jwt == null || props.user.jwt == '' )//|| !props.user.loggedIn
+		if(props.user.jwt == null || props.user.jwt == '' || !props.user.loggedIn )//
 		{
 			// WE NEED TO LOGIN FIRST
 			return jsx('<$LoginForm {...props.user}/>');
@@ -179,8 +179,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 				<div className="tabComponent" id="development">
 					<$Route path="/"  render={renderRedirect} exact={true}/>									
 					<$Route path="/DashBoard*" component=${DashBoard}/>
-					<$Route path="/Accounting" component=${Accounting}/>
-					
+					<$Route path="/Accounting" component=${Accounting}/>					
 					<$Route path="/Data" component=${Data}/>
 					<$Route path="/Qc" component=${QC}/>
 					<$Route path="/Reports" component=${Reports}/>

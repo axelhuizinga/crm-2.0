@@ -1,6 +1,4 @@
 package state;
 
 
-typedef ConfigState = {
-    ?params:Dynamic,
-}
+typedef ConfigState = Dynamic;

@@ -21,9 +21,9 @@ import model.Account;
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		{label:'Anzeigen',action:'show'},
-		{label:'Bearbeiten',action:'update'},
-		//{label:'Finden',action:'show'},
+		{label:'Anzeigen',action:'get'},
+		{label:'Bearbeiten',action:'edit'},
+		//{label:'Finden',action:'get'},
 		{label:'Neu', action:'create'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -54,7 +54,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
-	public function show(ev:ReactEvent):Void
+	public function get(ev:ReactEvent):Void
 	{
 		trace('hi :)');
 		//return;
@@ -71,8 +71,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				jwt:props.user.jwt,
 				//fields:'disabled:disabled,element=:element,required=:required,use_as_index=:use_as_index',
 				className:'data.Contacts',
-				action:'show',
-				//dataSource:Serializer.run(dataAccess['show'].source),
+				action:'get',
+				//dataSource:Serializer.run(dataAccess['get'].source),
 				devIP:App.devIP
 			},
 			function(data:DbData)
@@ -115,7 +115,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{	
 		dataAccess = [
-			'show' =>{
+			'get' =>{
 				source:[
 					"contacts" => []
 				],
@@ -148,13 +148,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
-			case 'show':
+			case 'get':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["contactList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
-			case 'update':
+			case 'edit':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["clientList"]} 

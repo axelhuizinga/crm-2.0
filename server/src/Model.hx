@@ -286,7 +286,7 @@ class Model
 		return fieldsWithFormat.join(',');
 	}
 	
-	public function show():Void
+	public function get():Void
 	{	
 		var rData:RData =  {
 			info:['count'=>count(),'page'=>(param.exists('page') ? Std.parseInt( param.get('page') ) : 1)],

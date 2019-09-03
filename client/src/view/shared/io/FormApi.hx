@@ -238,7 +238,7 @@ class FormApi
 		{
 			switch(mI.action)
 			{		
-				case 'update':
+				case 'edit':
 					mI.disabled = state.selectedRows.length==0;
 				case 'save':
 					mI.disabled = state.clean;

@@ -1,4 +1,5 @@
 package view.data.contacts;
+import js.lib.Promise;
 import haxe.ds.IntMap;
 import action.AppAction;
 import action.async.DataAction;
@@ -51,8 +52,8 @@ using Lambda;
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		{label:'Auswahl',action:'show',section: 'List'},
-		{label:'Bearbeiten',action:'update'},
+		{label:'Auswahl',action:'get',section: 'List'},
+		{label:'Bearbeiten',action:'edit'},
 		{label:'Neu', action:'create'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -72,22 +73,22 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		trace(props.match.params);
-		initialState = {
+		initialState = props.idLoaded == null? {
 			id:null,//2000328,
 			edited_by: props.user.id,
 			mandator: props.user.mandator
-		};	
+		}:loadContactData(props.idLoaded);	
 		//actualState = copy(initialState);initialState.mandator = props.user.mandator;
-		if(props.match.params.id==null && ~/update(\/)*$/.match(props.match.params.action) )
+		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
 		{
 			trace('nothing selected - redirect');
 			var baseUrl:String = props.match.path.split(':section')[0];
-			props.history.push('${baseUrl}List/show');
+			props.history.push('${baseUrl}List/get');
 			return;
 		}		
 		dataAccess = ContactsModel.dataAccess;
 		fieldNames = new Array();
-		for(k in dataAccess['update'].view.keys())
+		for(k in dataAccess['edit'].view.keys())
 		{
 			fieldNames.push(k);
 		}	
@@ -138,6 +139,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	function loadContactData(id:Int)
 	{
 		trace('loading:$id');
+		if(id == null)
+			return null;
 		var c:Contact = {edited_by: props.user.id,mandator: 0};
 		var data = App.store.getState().dataStore.contactData.get(id);
 		trace(data);
@@ -167,7 +170,15 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		if((initialState.id!=null && !App.store.getState().dataStore.contactData.exists(initialState.id)))
 		{
 			//DATA NOT IN STORE - LOAD IT
-			App.store.dispatch(AppAction.GlobalState('contacts',initialState.id));
+			App.store.dispatch(DBAccess.get({
+				action:'get',
+				className:'data.Contacts',
+				table:'contacts',
+				filter:	'id|${initialState.id}',
+				user:App.store.getState().user
+			}));
+			//p.then(function ())
+			//App.store.dispatch(AppAction.GlobalState('contacts',initialState.id));
 			//untyped props.globalState('contacts',initialState.id);
 			
 		}
@@ -228,7 +239,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
 		var elements:HTMLCollection = formElement.elements;
-		for(k in dataAccess['update'].view.keys())
+		for(k in dataAccess['edit'].view.keys())
 		{
 			if(k=='id')
 				continue;
@@ -291,13 +302,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						"fields" => Reflect.fields(aState).join(',')
 					]
 				];
-			case 'delete'|'show':
+			case 'delete'|'get':
 				dbaProps.dataSource = [
 					"contacts" => [
 						"filter" => 'id|${state.initialState.id}'
 					]
 				];	
-			case 'update':
+			case 'edit':
 				for(f in fieldNames)
 				{
 					//KEEP FIELDS WITH VALUES SET
@@ -314,7 +325,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 		App.store.dispatch(DataAction.Execute(dbaProps));
 
-		//props.parentComponent.props.update(dbaProps);
+		//props.parentComponent.props.edit(dbaProps);
 	}
 
 	function renderResults():ReactFragment
@@ -325,17 +336,17 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 		return switch(props.match.params.action)
 		{
-			case 'update':
+			case 'edit':
 				trace(initialState);
 				trace(actualState);
 				/*var fields:Map<String,FormField> = [
-					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
 				];*/
 				(actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
 					handleSubmit:handleSubmit,
 					fields:[
-						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+						for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
 					],
 					model:'contact',
 					ref:formRef,
@@ -347,7 +358,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				state.formBuilder.renderForm({
 					handleSubmit:handleSubmit,
 					fields:[
-						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+						for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
 					],
 					model:'contact',
 					ref:formRef,
@@ -360,13 +371,20 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		trace(props.match.params.section);		
+		if(props.idLoaded != null && actualState == null)
+		{
+			actualState = loadContactData(props.idLoaded);
+			setState({
+				initialState:actualState,
+				actualState:actualState
+			});
+		}
+		trace('>>${props.idLoaded}<<');		
 		trace(props.match.params.action);		
 		//trace('state.loading: ${state.loading}');		
 		return switch(props.match.params.action)
 		{	
-			case 'update':
+			case 'edit':
 			 //(state.loading || state.initialState.edited_by==0 ? state.formApi.renderWait():
 				state.formApi.render(jsx('
 						${renderResults()}

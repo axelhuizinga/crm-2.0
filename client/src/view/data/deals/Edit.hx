@@ -45,8 +45,8 @@ import view.table.Table;
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		{label:'Anzeigen',action:'show'},
-		{label:'Bearbeiten',action:'update'},
+		{label:'Anzeigen',action:'get'},
+		{label:'Bearbeiten',action:'edit'},
 		{label:'Neu', action:'create'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -77,7 +77,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
-	public function show(ev:ReactEvent):Void
+	public function get(ev:ReactEvent):Void
 	{
 		trace('hi :)');
 		//return;
@@ -120,7 +120,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{	
 		dataAccess = [
-			'show' =>{
+			'get' =>{
 				source:[
 					"contacts" => []
 				],
@@ -153,13 +153,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
-			case 'show':
+			case 'get':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["contactList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
-			case 'update':
+			case 'edit':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["clientList"]} 

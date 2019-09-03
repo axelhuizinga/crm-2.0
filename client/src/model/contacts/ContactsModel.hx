@@ -13,7 +13,7 @@ import view.shared.FormInputElement;
 class ContactsModel
 {
 	public static var dataAccess:DataAccess = [
-		'update' => {
+		'edit' => {
 			source:[
 				"contacts" => [
 					"filter" => 'id'

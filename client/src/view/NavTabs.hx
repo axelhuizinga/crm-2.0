@@ -1,5 +1,5 @@
 package view;
-import action.thunk.UserAccess;
+import action.async.UserAccess;
 import react.ReactComponent;
 import react.ReactMacro.jsx;
 import react.router.Route;

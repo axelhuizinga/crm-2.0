@@ -10,11 +10,11 @@ import state.UserState;
 typedef AppState =
 {
 	?app:Dynamic,
-	config:ConfigState,
+	?config:ConfigState,
 	?formStates:Map<String, FormState>,
 	?dataStore:DataAccessState,
 	?locationState:LocationState,
-	redirectAfterLogin:String,
+	?redirectAfterLogin:String,
 	?status:StatusState,
-	user:UserState
+	?user:UserState
 };

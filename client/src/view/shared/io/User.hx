@@ -3,7 +3,7 @@ package view.shared.io;
 //import action.async.UserAction;
 import action.AppAction;
 import action.UserAction;
-import action.thunk.UserAccess;
+import action.async.UserAccess;
 import tink.core.Error.Stack;
 import haxe.Serializer;
 import haxe.ds.StringMap;

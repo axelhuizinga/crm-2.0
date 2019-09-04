@@ -94,7 +94,7 @@ class AppStore
 	
 	public function middleware(action:AppAction, next:Void -> Dynamic)
 	{
-		trace(action);
+		trace(Type.enumConstructor(action)+'.'+Type.enumConstructor(Type.enumParameters(action)[0]));
 		return switch(action)
 		{			
 			/*case GlobalState(key, value):

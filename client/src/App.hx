@@ -1,6 +1,10 @@
+import state.DataAccessState;
+import haxe.macro.Expr.Catch;
 import store.DataStore;
 import haxe.Constraints.Function;
 import haxe.Timer;
+import haxe.Serializer;
+import haxe.Unserializer;
 import haxe.ds.List;
 import js.html.DivElement;
 
@@ -20,7 +24,7 @@ import action.DataAction;
 import action.LocationAction;
 import action.StatusAction;
 import action.UserAction;
-import action.thunk.UserAccess;
+import action.async.UserAccess;
 import state.AppState;
 import state.CState;
 import state.ConfigState;
@@ -90,15 +94,40 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			status: mapReducer(StatusAction, new StatusStore()),
 			user: mapReducer(UserAction, new UserStore())
 		});
-		return createStore(rootReducer, null,  Redux.applyMiddleware(
+		var dataStore:DataAccessState = loadFromLocalStorage();
+		trace(dataStore);
+		return createStore(rootReducer, {dataStore:loadFromLocalStorage()},  Redux.applyMiddleware(
 			mapMiddleware(Thunk, new ThunkMiddleware()),
 			mapMiddleware(AppAction, appWare))
 		);
 	}
 
+	private function loadFromLocalStorage():state.DataAccessState {
+		try{
+			var sState = Browser.getLocalStorage().getItem('state');
+			if(sState == null)
+				return null;
+			return Unserializer.run(sState);
+		} catch(e:Dynamic){
+			trace(e);
+			return null;
+		}
+
+	}
+
+	private function saveToLocalStorage(){
+		try{
+			//trace('storing ${state.dataStore} locally');
+			Browser.getLocalStorage().setItem('state', Serializer.run(store.getState().dataStore));
+			//trace( Unserializer.run(Browser.getLocalStorage().getItem('state')));
+		}catch(e:Dynamic){
+			trace(e);
+		}
+	}
+
 	static function startHistoryListener(store:Store<AppState>, history:History):TUnlisten
 	{
-		trace(history);
+		//trace(history);
 		store.dispatch(Location(InitHistory(history,
 		{
 			pathname:store.getState().redirectAfterLogin,
@@ -109,8 +138,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		})));
 	
 		return history.listen( function(location:Location, action:history.Action){
-			trace(location.pathname);
-			
+			//trace(location.pathname);			
 			store.dispatch(LocationChange({
 				pathname:location.pathname,
 				search: location.search,
@@ -124,16 +152,17 @@ class App  extends ReactComponentOf<AppProps, AppState>
   	public function new(?props:AppProps) 
 	{
 		super(props);
-		globalState = new Map();
+		//globalState = new Map();
 		untyped flatpickr.localize(German);
 		ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
 		var ti:Timer = null;
 		store = initStore(BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}));
 		state = store.getState();
-		trace(state);
+		//trace(state);
 		tul = startHistoryListener(store, state.locationState.history);
-		
+		store.subscribe(saveToLocalStorage);
+
 		Browser.window.onresize = function()
 		{
 			if(ti!=null)
@@ -154,7 +183,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//CState.init(store);		
 		if (!(state.user.id == null || state.user.jwt == ''))
 		{			
-			store.dispatch(action.thunk.UserAccess.verify());
+			store.dispatch(action.async.UserAccess.verify());
 		}
 		else
 		{// WE HAVE EITHER NO VALID JWT OR id

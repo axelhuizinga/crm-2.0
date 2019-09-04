@@ -48,6 +48,7 @@ typedef FormState =
 	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES
 	?section:String,
 	?sideMenu:SMenuProps,
+	?storeListener:redux.Redux.Unsubscribe,
 	?submitted:Bool,
 	?errors:Map<String,String>,
 	?title:String

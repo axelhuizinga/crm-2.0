@@ -80,13 +80,12 @@ class FormBuilder {
 	function renderFormInputElements(fields:Map<String, FormField>, initialData:Dynamic, ?compOnChange:Function):ReactFragment
 	{
 		var ki:Int = 0;
-		trace(Utils.genKey(1));
-		//return fields.array().map(function(field:FormField){
+		//trace(Utils.genKey(1));
 		return [for(name => field in fields)
 		{
 			var value:Dynamic = Reflect.field(initialData,name);
 			if(name=='id')trace (field.type +' $name:' + value);
-			if(name=='last_name')trace (field.type +' $name:' + value);
+			//if(name=='last_name')trace (field.type +' $name:' + value);
 			switch (field.type)
 			{
 				case FormInputElement.Hidden:
@@ -96,7 +95,7 @@ class FormBuilder {
 						${value}
 					</button>');
 				case FormInputElement.Checkbox:		
-					trace(field);//disabled=${field.disabled} required=${field.required}
+					//trace(field);//disabled=${field.disabled} required=${field.required}
 					var checked = switch(value)
 					{
 						case "TRUE"|true|"on":
@@ -136,7 +135,7 @@ class FormBuilder {
 						</div>
 					</div>');								
 				case FormInputElement.DatePicker:
-					trace(field.disabled);
+					//trace(field.disabled);
 					var dC:DateTimeProps = {
 						comp:comp,
 						//disabled:field.disabled,
@@ -192,11 +191,11 @@ class FormBuilder {
 	}
 	
 	function onChange(ev:Dynamic) {
-		trace(ev.target.type);
+		//trace(ev.target.type);
 		switch (ev.target.type)
 		{
 			case 'checkbox':
-				trace('${ev.target.name}:${ev.target.checked?true:false}');
+				//trace('${ev.target.name}:${ev.target.checked?true:false}');
 				//trace('doChange:${Reflect.isFunction(Reflect.field(comp,'doChange'))}');
 				comp.doChange(ev.target.name, switch(ev.target.checked)
 					{
@@ -206,16 +205,10 @@ class FormBuilder {
 							false;
 					});
 			case 'select-multiple'|'select-one':
-				trace (ev.target.selectedOptions.length);
+				//trace (ev.target.selectedOptions.length);
 			default:
-				trace('${ev.target.name}:${ev.target.value}');
+				//trace('${ev.target.name}:${ev.target.value}');
 		}				
 	}	
-
-	/*function formChange(ev:Dynamic) {
-		trace(ev.target);
-		trace('${ev.target.name}:${ev.target.value}');
-		comp.doChange(ev.target.name, ev.target.value);
-	}*/
 }
 

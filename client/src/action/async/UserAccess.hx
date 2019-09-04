@@ -1,4 +1,4 @@
-package action.thunk;
+package action.async;
 
 import action.AppAction;
 import action.UserAction;

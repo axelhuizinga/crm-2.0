@@ -1,6 +1,6 @@
 package view.shared.io;
 
-import action.thunk.UserAccess;
+import action.async.UserAccess;
 import haxe.DynamicAccess;
 import state.AppState;
 import haxe.Constraints.Function;

@@ -9,7 +9,7 @@ import react.ReactComponent.ReactComponentOf;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
 import redux.Redux;
-import action.thunk.UserAccess;
+import action.async.UserAccess;
 import view.shared.RouteTabProps;
 
 typedef LoginProps =

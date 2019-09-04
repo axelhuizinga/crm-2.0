@@ -2,8 +2,8 @@ package view.data.contacts;
 import js.lib.Promise;
 import haxe.ds.IntMap;
 import action.AppAction;
-import action.async.DataAction;
-import action.thunk.DBAccess;
+import action.DataAction;
+import action.async.DBAccess;
 import js.html.HTMLOptionsCollection;
 import js.html.HTMLPropertiesCollection;
 import me.cunity.debug.Out.DebugOutput;
@@ -131,6 +131,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					section: props.match.params.section==null? 'Edit':props.match.params.section, 
 					sameWidth: true
 				}),	
+			storeListener:App.store.subscribe(function(){
+				trace(App.store.getState().dataStore);
+			}),
 			values:new Map<String,Dynamic>()
 		},this);
 		trace(state.initialState.id);
@@ -198,6 +201,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			});
 		}
 	}
+
+	override public function componentWillUnmount() {
+		state.storeListener();
+	}
 	
 	public function doChange(name,value) {
 		trace('$name: $value');
@@ -210,15 +217,15 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		var el:Dynamic = e.target;
 		//trace(Type.typeof(el));
-		trace('${el.name}:${el.value}');
+		//trace('${el.name}:${el.value}');
 		if(el.name != '' && el.name != null)
 		{
 			trace('>>${el.name}<<');
-			trace(actualState);
+			//trace(actualState);
 			Reflect.setField(actualState,el.name,el.value);
 		}	
 
-		trace(actualState);
+		//trace(actualState);
 	}		
 
 	function handleSubmit(event:Event) {
@@ -252,14 +259,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					//case DateControl|DateTimrControl:
 
 					case 'checkbox':
-					trace('${item.name}:${item.checked?true:false}');
+					//trace('${item.name}:${item.checked?true:false}');
 					item.checked?1:0;
 					case 'select-multiple'|'select-one':
 					var sOpts:HTMLOptionsCollection = item.selectedOptions;
-					trace (sOpts.length);
+					//trace (sOpts.length);
 					sOpts.length>1 ? [for(o in 0...sOpts.length)sOpts[o].value ].join('|'):item.value;
 					default:
-					trace('${item.name}:${item.value}');
+					//trace('${item.name}:${item.value}');
 					item.value;
 				});			
 			}
@@ -270,16 +277,16 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 		//setState({actualState: actualState});
 		trace(actualState);
-		execute(actualState);
+		update(actualState);
 	}
 
 
-	function execute(aState:Dynamic)
+	function update(aState:Dynamic)
 	{
 		trace(Reflect.fields(aState));
 		var dbaProps:DBAccessProps = 
 		{
-			action:props.match.params.action,
+			action:'update',
 			className:'data.Contacts',
 			dataSource:null,
 			table:'contacts',
@@ -323,7 +330,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					]
 				];
 		}
-		App.store.dispatch(DataAction.Execute(dbaProps));
+		App.store.dispatch(DBAccess.execute(dbaProps));
 
 		//props.parentComponent.props.edit(dbaProps);
 	}
@@ -331,14 +338,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	function renderResults():ReactFragment
 	{
 		trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.dataTable != null));
-		trace('###########loading:' + state.loading);
+		//trace('###########loading:' + state.loading);
 		trace('########### action:' + props.match.params.action);
 
 		return switch(props.match.params.action)
 		{
 			case 'edit':
-				trace(initialState);
-				trace(actualState);
+				//trace(initialState);
+				//trace(actualState);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
 				];*/

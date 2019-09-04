@@ -1,6 +1,6 @@
 package view.dashboard;
 
-import action.thunk.UserAccess;
+import action.async.UserAccess;
 //import gigatables_react.Reactables.ReactableSettings;
 import haxe.Serializer;
 import haxe.ds.StringMap;

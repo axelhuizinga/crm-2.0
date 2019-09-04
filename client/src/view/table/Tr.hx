@@ -5,7 +5,7 @@ import js.Browser;
 import haxe.macro.Expr.Catch;
 import react.ReactEvent;
 import js.html.Event;
-import action.async.DataAction;
+import action.DataAction;
 import haxe.ds.IntMap;
 import react.router.RouterMatch;
 import js.html.TableRowElement;
@@ -160,7 +160,7 @@ class Tr extends ReactComponentOfProps<TrProps>
 	public function select(mEvOrID:Dynamic)
 	{
 		trace('select from contructor:${mEvOrID.select}');
-		trace('selected:$selected');
+		trace('${props.data['id']} selected:$selected');
 		trace(Reflect.fields(props));
 		//trace(props.row +':' + props.data.toString());
 		if(mEvOrID.select == null)

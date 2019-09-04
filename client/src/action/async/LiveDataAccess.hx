@@ -1,4 +1,4 @@
-package action.thunk;
+package action.async;
 
 import haxe.ds.IntMap;
 import react.router.RouterMatch;
@@ -6,7 +6,7 @@ import js.html.Blob;
 import state.UserState;
 import state.AppState;
 import action.AppAction;
-import action.async.DataAction;
+import action.DataAction;
 import haxe.ds.Either;
 import haxe.Serializer;
 import haxe.http.HttpJs;
@@ -58,7 +58,7 @@ class LiveDataAccess
 					sData = aState.dataStore.contactData;
 					sData = selectType(props.id, props.data, sData, props.selectType);
 					trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
-					//aState.locationState.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
+					aState.locationState.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
 					return dispatch(DataAction.SelectContacts(props.data));
 				case 'Deals':
 					sData = aState.dataStore.dealData;

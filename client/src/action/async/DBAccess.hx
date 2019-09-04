@@ -1,4 +1,4 @@
-package action.thunk;
+package action.async;
 import action.AppAction;
 import action.StatusAction;
 import js.html.Blob;
@@ -15,7 +15,7 @@ import redux.thunk.Thunk;
 import shared.DbData;
 import loader.BinaryLoader;
 import view.shared.OneOf;
-using action.thunk.Utils;
+using action.async.Utils;
 /**
  * ...
  * @author axel@cunity.me
@@ -111,7 +111,7 @@ class DBAccess
 	}
 
 	public static function execute(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
-	{
+	{trace(props);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(props);
 			//trace(getState());

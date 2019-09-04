@@ -1,5 +1,5 @@
 package view;
-import action.LocationAction;
+import action.async.LocationAccess;
 import state.UserState;
 import react.ReactType;
 import view.shared.io.User;
@@ -158,7 +158,7 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 		//trace(props.match);
 		if(path != props.location.pathname)
 		App.store.dispatch(
-			shared.LocationAccess.redirect(
+			LocationAccess.redirect(
 				['/Data/Contacts/:section?/:action?/:id?',
 				'/Data/Deals/:section?/:action?/:id?',
 				'/Data/Accounts/:section?/:action?/:id?'],path,props));

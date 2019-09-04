@@ -3,7 +3,7 @@ package action;
 import haxe.ds.IntMap;
 import react.router.RouterMatch;
 import shared.DbData;
-import action.thunk.DBAccess;
+import action.async.DBAccess;
 
 /**
  * ...

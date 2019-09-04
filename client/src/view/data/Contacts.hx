@@ -1,6 +1,6 @@
 package view.data;
 
-import action.async.DataAction;
+import action.DataAction;
 import haxe.Constraints.Function;
 import state.DataAccessState;
 import haxe.macro.Expr.Catch;
@@ -26,12 +26,12 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import react.ReactType;
 import redux.Redux.Dispatch;
-import action.thunk.LiveDataAccess;
+import action.async.LiveDataAccess;
 import view.data.contacts.List;
 import view.data.contacts.Edit;
 
 import view.data.contacts.model.ContactsModel;
-import action.thunk.DBAccess;
+import action.async.DBAccess;
 import shared.DbData;
 import shared.DBMetaData;
 import model.Contact;
@@ -151,9 +151,9 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		trace(aState.dataStore.contactData.keys().next());
 		var bState =  {
 			user:aState.user,
-			idLoaded:aState.dataStore.contactData.keys().next()
+			//idLoaded:aState.dataStore.contactData.keys().next()
 		};
-		trace(bState);
+		//trace(bState);
 		return bState;
 	}
 		

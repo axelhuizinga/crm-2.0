@@ -35,11 +35,11 @@ class UserStore implements IReducer<UserAction, UserState>
 	
 	public function reduce(state:UserState, action:UserAction):UserState
 	{
-		trace(state);
+		//trace(action);
 		return switch(action)
 		{
 			case LoginRequired(uState):
-					trace(uState);
+					//trace(uState);
 					copy(state, uState);                             
 			case LoginError(err):
 					trace(err);
@@ -47,12 +47,12 @@ class UserStore implements IReducer<UserAction, UserState>
 					copy(state, {loginError:err.loginError, waiting:false});                       
 			case LoginComplete(uState):
 					//trace(uState.id + ':' + uState.loggedIn);
-					trace(uState);
+					//trace(uState);
 					uState.loginError = null;
 					uState.loggedIn = true;
 					copy(state, uState);                                             
 			case LogOut(uState):
-					trace(uState);
+					//trace(uState);
 					copy(state, uState);      		
 			default:
 				state;

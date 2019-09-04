@@ -1,6 +1,6 @@
 package view;
 
-import action.thunk.UserAccess;
+import action.async.UserAccess;
 import action.ConfigAction;
 import state.UserState;
 import react.ReactType;

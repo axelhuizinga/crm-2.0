@@ -24,7 +24,7 @@ $buttonSun:#ffdd57;
 $cell-border: 1px solid #ccc;
 $cellPadding: 0px 0.75rem;
 $headPadding: 0.35rem 0.75rem;
-$ePad:0.5rem 1rem;
+$ePad:0.3rem 1rem;
 $darkBlue: rgb(10,20,60);
 $disabled: rgb(80,80,80);
 $logoBlue: #3292ca;
@@ -322,7 +322,7 @@ h1 {
   border-left-style:none;
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;  
-  font-size: 1.25rem;  
+  font-size: 1.0rem;  
 }
 .formField label {
   background-color: eee;
@@ -627,6 +627,10 @@ form{
 	flex:0 1 auto;
 	display:flex
 }
+.formField select
+{
+	font-size: 1rem;
+}
 
 /*side menu*/
 .is-right .menu
@@ -818,7 +822,7 @@ form td, form caption
 	grid-auto-rows:  min-content;
 	grid-gap: 1rem;
 	grid-template-columns: 1fr 1fr;
-	font-size: 1.25rem;
+	font-size: 1.0rem;
 	overflow-y: auto;
 	padding-right: 1rem;
 }

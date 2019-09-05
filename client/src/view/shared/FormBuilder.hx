@@ -85,7 +85,7 @@ class FormBuilder {
 		{
 			var value:Dynamic = Reflect.field(initialData,name);
 			if(name=='id')trace (field.type +' $name:' + value);
-			//if(name=='last_name')trace (field.type +' $name:' + value);
+			if(name=='last_name')trace (field.type +' $name:' + value);
 			switch (field.type)
 			{
 				case FormInputElement.Hidden:

@@ -10,6 +10,7 @@ import state.UserState;
 typedef DataFormProps =
 {
 	>ChildrenRouteProps,
+	?dataStore:state.DataAccessState,
     ?formApi:FormApi,
 	?fullWidth:Bool,
 	?parentComponent:Dynamic,
@@ -19,6 +20,5 @@ typedef DataFormProps =
 	?storeFormChange:String->FormState->Void,
 	?render:FormState->ReactFragment,
 	user:UserState,
-	model:String,
-	idLoaded:Int
+	model:String
 }

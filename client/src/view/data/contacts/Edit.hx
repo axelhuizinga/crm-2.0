@@ -1,4 +1,5 @@
 package view.data.contacts;
+import haxe.Json;
 import js.lib.Promise;
 import haxe.ds.IntMap;
 import action.AppAction;
@@ -73,12 +74,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		trace(props.match.params);
-		initialState = props.idLoaded == null? {
+		initialState = {
 			id:null,//2000328,
 			edited_by: props.user.id,
 			mandator: props.user.mandator
-		}:loadContactData(props.idLoaded);	
-		//actualState = copy(initialState);initialState.mandator = props.user.mandator;
+		};	
+
+		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
 		{
 			trace('nothing selected - redirect');
@@ -95,19 +97,21 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		formRef = React.createRef();
-		//var formBuilder = new FormBuilder(this);
-		//trace(props.user);
 		if(props.match.params.id!=null)
 			initialState.id = Std.parseInt(props.match.params.id);
-		trace(App.store.getState().dataStore.contactData);
 		
-		if((initialState.id!=null && App.store.getState().dataStore.contactData.exists(initialState.id)))
+		trace(props.dataStore.contactActData);
+		trace(props.dataStore.contactData);
+		if((initialState.id!=null && props.dataStore.contactData.exists(initialState.id)))
 		{
 			initialState = loadContactData(initialState.id);
-			actualState = copy(initialState);
+			//actualState = copy(initialState);
 			trace(actualState);		
-
-			//OK we got the data	
+			//OK we got the data
+			actualState = view.shared.io.Observer.run(actualState, function(newState){
+				actualState = newState;
+				trace(actualState);
+			});	
 		}
 		else {			
 			//actualState = copy(initialState);
@@ -131,9 +135,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					section: props.match.params.section==null? 'Edit':props.match.params.section, 
 					sameWidth: true
 				}),	
-			storeListener:App.store.subscribe(function(){
+			/*storeListener:App.store.subscribe(function(){
 				trace(App.store.getState().dataStore);
-			}),
+			}),*/
 			values:new Map<String,Dynamic>()
 		},this);
 		trace(state.initialState.id);
@@ -145,12 +149,16 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		if(id == null)
 			return null;
 		var c:Contact = {edited_by: props.user.id,mandator: 0};
-		var data = App.store.getState().dataStore.contactData.get(id);
+		var data = props.dataStore.contactData.get(id);
 		trace(data);
 		for(k=>v in data.keyValueIterator())
 		{
 			Reflect.setField(c,k, v);
 		}
+		actualState = view.shared.io.Observer.run(c, function(newState){
+				actualState = newState;
+			trace(actualState);
+		});
 		return c;
 	}
 	
@@ -170,7 +178,16 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		
 	override public function componentDidMount():Void 
 	{	
-		if((initialState.id!=null && !App.store.getState().dataStore.contactData.exists(initialState.id)))
+		Browser.window.addEventListener('beforeunload', sessionStore);
+		var sessContacts = Browser.window.sessionStorage.getItem('contacts');
+		if(sessContacts != null)
+		{
+			trace(Json.parse(sessContacts));
+			actualState = Json.parse(sessContacts);
+			trace(actualState);
+			forceUpdate();
+		}
+		else if((initialState.id!=null && !App.store.getState().dataStore.contactData.exists(initialState.id)))
 		{
 			//DATA NOT IN STORE - LOAD IT
 			App.store.dispatch(DBAccess.get({
@@ -185,8 +202,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//untyped props.globalState('contacts',initialState.id);
 			
 		}
-		else if(actualState==null)
+		else if(actualState==null){
 			actualState = copy(initialState);
+			actualState = view.shared.io.Observer.run(actualState, function(newState){
+				actualState = newState;
+				trace(actualState);
+			});	
+		}
 		if(formRef.current != null)
 		{
 			//trace(Reflect.fields(formRef.current));
@@ -201,9 +223,37 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			});
 		}
 	}
+	
+	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
+		trace('propsChanged:${nextProps!=props}');
+		trace('stateChanged:${nextState!=state}');
+		if(props.dataStore != null && actualState == null)
+		{
+			actualState = loadContactData(initialState.id);
+			setState({
+				initialState:actualState,
+				actualState:actualState
+			});
+		}		
+		if(nextState!=state)
+			return true;
+		return nextProps!=props;
+	}
 
 	override public function componentWillUnmount() {
-		state.storeListener();
+		//state.storeListener();
+		var actData:IntMap<Map<String,Dynamic>> = [initialState.id => [
+		for(f in Reflect.fields(actualState))
+			f => Reflect.field(actualState,f)		
+		]];
+		trace(actData);
+		App.store.dispatch(DataAction.SelectActContacts(actData));
+	}
+
+	function sessionStore(){
+		trace(actualState);
+		Browser.window.sessionStorage.setItem('contacts',Json.stringify(actualState));
+		Browser.window.removeEventListener('beforeunload', sessionStore);
 	}
 	
 	public function doChange(name,value) {
@@ -220,9 +270,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//trace('${el.name}:${el.value}');
 		if(el.name != '' && el.name != null)
 		{
-			trace('>>${el.name}<<');
+			trace('>>${el.name}=>${el.value}<<');
 			//trace(actualState);
 			Reflect.setField(actualState,el.name,el.value);
+			trace(actualState.last_name);
 		}	
 
 		//trace(actualState);
@@ -345,7 +396,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'edit':
 				//trace(initialState);
-				//trace(actualState);
+				trace(actualState);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
 				];*/
@@ -378,15 +429,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render():ReactFragment
 	{
-		if(props.idLoaded != null && actualState == null)
-		{
-			actualState = loadContactData(props.idLoaded);
-			setState({
-				initialState:actualState,
-				actualState:actualState
-			});
-		}
-		trace('>>${props.idLoaded}<<');		
 		trace(props.match.params.action);		
 		//trace('state.loading: ${state.loading}');		
 		return switch(props.match.params.action)

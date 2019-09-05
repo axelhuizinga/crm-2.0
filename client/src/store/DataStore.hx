@@ -25,7 +25,7 @@ class DataStore
 	public function new() 
 	{ 
 		initState = {
-			dbData:new DbData(),			
+			//dbData:new DbData(),			
 			contactData: new IntMap(),
 			dealData: new IntMap(),
 			accountData: new IntMap()
@@ -36,6 +36,7 @@ class DataStore
 	public function reduce(state:DataAccessState, action:DataAction):DataAccessState
 	{
 		//trace(state);
+		trace(Reflect.fields(state));
 		return switch(action)
 		{
 			case Load(data):
@@ -55,6 +56,11 @@ class DataStore
 				copy(state,{
 					contactData:sData
 				});
+			case SelectActContacts(sData):
+				trace(sData.keys().keysList());
+				copy(state,{
+					contactActData:sData
+				});				
 			case SelectContacts(sData):
 				trace(sData.keys().keysList());
 				copy(state,{

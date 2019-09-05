@@ -105,13 +105,13 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		Out.dumpStack(CallStack.callStack());
 	}	
 
-	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
+	/*override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
 		trace('propsChanged:${nextProps!=props}');
 		trace('stateChanged:${nextState!=state}');
 		if(nextState!=state)
 			return true;
 		return nextProps!=props;
-	}
+	}*/
 
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
     {
@@ -127,6 +127,10 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				trace('select:$id selectType:${selectType}');
 				//dispatch(DataAction.CreateSelect(id,data,match));
 				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
+			},
+			storeActData:function (data:IntMap<Map<String,Dynamic>>)
+			{
+				dispatch(DataAction.SelectActContacts(data));
 			}/*,
 			storeFormChange: function(path:String, formState:FormState) 
 			{
@@ -150,6 +154,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		//trace(aState.dataStore.contactData);
 		trace(aState.dataStore.contactData.keys().next());
 		var bState =  {
+			dataStore:aState.dataStore,
 			user:aState.user,
 			//idLoaded:aState.dataStore.contactData.keys().next()
 		};

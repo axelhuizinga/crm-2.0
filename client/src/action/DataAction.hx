@@ -31,6 +31,7 @@ enum  DataAction
 	Error(data:DbData);
 	Load(data:DbData);
 	SelectAccounts(sData:IntMap<Map<String,Dynamic>>);
+	SelectActContacts(sData:IntMap<Map<String,Dynamic>>);
 	SelectContacts(sData:IntMap<Map<String,Dynamic>>);
 	SelectDeals(sData:IntMap<Map<String,Dynamic>>);
 	Unselect(id:Int);

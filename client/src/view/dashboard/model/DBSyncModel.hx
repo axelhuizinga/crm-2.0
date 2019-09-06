@@ -7,12 +7,56 @@ package view.dashboard.model;
 
 import view.table.Table.DataColumn;
 import view.table.Table.DataState;
+import view.shared.FormInputElement;
+import view.shared.io.DataAccess;
 
 class DBSyncModel 
 {
 	public static var formatBool = function(v:Dynamic) {return (v?'Y':'N'); }
 	public static var formatElementSelection = function(v:Dynamic) {return (v?'Y':'N'); }
     static var formatPhone = function(p:Dynamic){trace(p);return (p?p.login:'');};
+	public static function dataAccess(action:String):DataAccess {
+		
+		return switch (action){
+			case 'editTableFields':
+			['$action'=>{
+				source:[
+					"selectedRows" => null//selectedRowsMap()
+				],
+				view:[
+					'table_name'=>{label:'Tabelle',disabled:true},
+					'field_name'=>{label:'Feldname',disabled:true},
+					'field_type'=>{label:'Datentyp',type:Select},
+					'element'=>{label:'Eingabefeld', type:Select},
+					'disabled' => {label:'Readonly', type:Checkbox},
+					'required' => {label:'Required', type:Checkbox},
+					'use_as_index' => {label:'Index', type:Checkbox},
+					'any' => {label:'Eigenschaften', disabled:true, type:Hidden},
+					'id' =>{type:Hidden}
+				]
+			}];
+			case 'importClientList':
+			['$action'=>{
+				source:[
+					"selectedRows" => null//selectedRowsMap()
+				],
+				view:[
+					'import_contacts'=>{label:'Kontakte',type:Checkbox, preset:true},
+					'contacts_limit'=>{label:'Anzahl',type:Input},
+					'import_deals'=>{label:'Aufträge',type:Checkbox, preset:true},
+					'import_accounts'=>{label:'Kontent', type:Checkbox, preset:true},
+				]
+			}];
+			case 'saveTableFields':
+			['$action'=>{
+				source:null,
+				view:null
+			}];
+			default:
+			null;
+		};
+	}		
+	
 	public static var clientListColumns:Map<String,DataColumn> =  [
 		'client_id'=>{label: 'ID', show:true},
 		'first_name'=>{label:'Vorname',editable:true},

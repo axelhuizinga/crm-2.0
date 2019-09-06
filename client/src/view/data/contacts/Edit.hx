@@ -54,8 +54,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
 		{label:'Auswahl',action:'get',section: 'List'},
-		{label:'Bearbeiten',action:'edit'},
-		{label:'Neu', action:'create'},
+		{label:'Bearbeiten',action:'update'},
+		{label:'Neu', action:'insert'},
 		{label:'Löschen',action:'delete'}
 	];
 	
@@ -90,7 +90,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}		
 		dataAccess = ContactsModel.dataAccess;
 		fieldNames = new Array();
-		for(k in dataAccess['edit'].view.keys())
+		for(k in dataAccess['update'].view.keys())
 		{
 			fieldNames.push(k);
 		}	
@@ -297,7 +297,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
 		var elements:HTMLCollection = formElement.elements;
-		for(k in dataAccess['edit'].view.keys())
+		for(k in dataAccess['update'].view.keys())
 		{
 			if(k=='id')
 				continue;
@@ -345,7 +345,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		};
 		switch (props.match.params.action)
 		{
-			case 'create':
+			case 'insert':
 				for(f in fieldNames)
 				{
 					trace('$f =>${Reflect.field(aState,f)}<=');
@@ -366,7 +366,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						"filter" => 'id|${state.initialState.id}'
 					]
 				];	
-			case 'edit':
+			case 'update':
 				for(f in fieldNames)
 				{
 					//KEEP FIELDS WITH VALUES SET
@@ -394,29 +394,29 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 		return switch(props.match.params.action)
 		{
-			case 'edit':
+			case 'update':
 				//trace(initialState);
 				trace(actualState);
 				/*var fields:Map<String,FormField> = [
-					for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
+					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 				];*/
 				(actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
 					handleSubmit:handleSubmit,
 					fields:[
-						for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
+						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],
 					model:'contact',
 					ref:formRef,
 					title: 'Kontakt - Bearbeite Stammdaten' 
 				},actualState));
 				//null;
-			case 'create':
+			case 'insert':
 				trace(actualState);
 				state.formBuilder.renderForm({
 					handleSubmit:handleSubmit,
 					fields:[
-						for(k in dataAccess['edit'].view.keys()) k => dataAccess['edit'].view[k]
+						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],
 					model:'contact',
 					ref:formRef,
@@ -433,12 +433,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//trace('state.loading: ${state.loading}');		
 		return switch(props.match.params.action)
 		{	
-			case 'edit':
+			case 'update':
 			 //(state.loading || state.initialState.edited_by==0 ? state.formApi.renderWait():
 				state.formApi.render(jsx('
 						${renderResults()}
 				'));	
-			case 'create':
+			case 'insert':
 				state.formApi.render(jsx('
 						${renderResults()}
 				'));		

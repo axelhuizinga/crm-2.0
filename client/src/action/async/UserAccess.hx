@@ -49,9 +49,9 @@ class UserAccess {
 					{
 						trace(aState.user);
 						/*setState({
-							//viewClassPath:'edit',
-							fields:dataAccess['edit'].view,
-							values:props.formApi.createStateValues(App.store.getState().user.dynaMap(), dataAccess['edit'].view),
+							//viewClassPath:'update',
+							fields:dataAccess['update'].view,
+							values:props.formApi.createStateValues(App.store.getState().user.dynaMap(), dataAccess['update'].view),
 							loading:false});*/
 					}
 					else trace(data.dataErrors);				

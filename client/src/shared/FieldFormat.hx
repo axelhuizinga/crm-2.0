@@ -20,7 +20,7 @@ class FieldFormat
     {
         return switch(dv.field_type)
         {
-            case Date_:
+            case 'Date':
                 DateTools.format(Date.fromString(v), dv.format_display);
 
             default:

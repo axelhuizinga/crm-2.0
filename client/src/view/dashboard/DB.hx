@@ -1,4 +1,4 @@
-package view.shared.io;
+package view.dashboard;
 
 import state.AppState;
 import js.html.AreaElement;
@@ -159,7 +159,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		var s:hxbit.Serializer = new hxbit.Serializer();
 		
 		return;
-		requests.push( BinaryLoader.create(
+		requests.push( BinaryLoader.insert(
 			'${App.config.api}', 
 			{
 				id:props.id,
@@ -181,7 +181,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	public function showFieldList(_):Void
 	{
 		//state.formApi.selectAllRows(state);
-		state.formApi.requests.push( /*BinaryLoader.create(
+		state.formApi.requests.push( /*BinaryLoader.insert(
 			'${App.config.api}', 
 			{
 				id:props.user.id,

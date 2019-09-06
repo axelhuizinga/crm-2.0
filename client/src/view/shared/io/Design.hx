@@ -22,8 +22,8 @@ class Design extends ReactComponentOf<DataFormProps,FormState>
 {
 	
 	public static var menuItems:Array<SMItem> = [
-		{label:'Neu',action:'create'},
-		{label:'Bearbeiten',action:'edit'},
+		{label:'Neu',action:'insert'},
+		{label:'Bearbeiten',action:'update'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -37,7 +37,7 @@ class Design extends ReactComponentOf<DataFormProps,FormState>
 				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'auth.User',
-				action:'edit',
+				action:'update',
 				filter:'id|${props.user.id}',
 				//dataSource:Serializer.run(view.shared.io.User.userModel)
 			},
@@ -58,7 +58,7 @@ class Design extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props:DataFormProps)
 	{
 		super(props);		
-		//menuItems = [{handler:edit, label:'Bearbeiten', section:'edit'}];
+		//menuItems = [{handler:edit, label:'Bearbeiten', section:'update'}];
 		//sideMenu.menuBlocks['bookmarks'].items = function() return _menuItems;
 		//trace(sideMenu.menuBlocks['bookmarks'].items());
 		state = {

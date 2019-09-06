@@ -43,9 +43,9 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 
 	public static var menuItems:Array<SMItem> = [
 		{label:'Anzeigen',action:'get'},
-		{label:'Bearbeiten',action:'edit'},
+		{label:'Bearbeiten',action:'update'},
 		//{label:'Finden',action:'get'},
-		{label:'Neu', action:'create'},
+		{label:'Neu', action:'insert'},
 		{label:'Löschen',action:'delete'}
 	];
 	

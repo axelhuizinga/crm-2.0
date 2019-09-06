@@ -22,7 +22,7 @@ class Tooltip {
 			if(!tProps.classes.has('tooltip'))
 				tProps.classes.remove('tooltip');
 			classes = tProps.classes;
-			classes.map(function(cN:String) el.classList.add('is-tooltip-$cN'));
+			classes.map(function(cN:String) {el.classList.add('is-tooltip-$cN');return null;});
 		}
 			
 		el.classList.add('tooltip');
@@ -31,7 +31,7 @@ class Tooltip {
 
 	public function clear() {
 		el.classList.remove('tooltip');
-		classes.map(function(cN:String) el.classList.remove('is-tooltip-$cN'));
+		classes.map(function(cN:String) {el.classList.remove('is-tooltip-$cN');return null;});
 		el.removeAttribute('data-tooltip');
 	}
 	

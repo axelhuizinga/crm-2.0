@@ -13,6 +13,7 @@ typedef FormField =
 	?value:Dynamic,
 	?dataTable:String,
 	?dataField:String,
+	?preset:Any,
 	?displayFormat:Function,
 	?type:FormInputElement,
 	?primary:Bool,

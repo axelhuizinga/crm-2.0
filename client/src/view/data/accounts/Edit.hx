@@ -1,41 +1,41 @@
 package view.data.accounts;
+import haxe.Json;
+import js.lib.Promise;
+import haxe.ds.IntMap;
+import action.AppAction;
+import action.DataAction;
+import action.async.DBAccess;
+import js.html.HTMLOptionsCollection;
+import js.html.HTMLPropertiesCollection;
+import js.html.Document;
+import js.Browser;
+import js.html.HTMLCollection;
+import haxe.macro.Type.Ref;
+import react.React;
+import js.html.Event;
+import js.html.FormElement;
 import state.AppState;
-import haxe.Constraints.Function;
 import react.ReactComponent;
 import react.ReactEvent;
+import react.ReactRef;
 import react.ReactMacro.jsx;
+import react.ReactUtil.copy;
 import shared.DbData;
 import shared.DBMetaData;
+import view.shared.FormBuilder;
 import view.shared.FormField;
 import state.FormState;
-import view.data.accounts.model.Accounts;
+import model.contacts.ContactsModel;
 import view.shared.SMItem;
 import view.shared.SMenuProps;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
-import loader.BinaryLoader;
 import view.table.Table;
-import model.Account;
+import model.Contact;
 
-/*
- * GNU Affero General Public License
- *
- * Copyright (c) 2019 ParadiseProjects.de
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation::,\n either version 3 of the License:, or
- * (at your option) any later version.
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
+using  shared.Utils;
+using Lambda;
 
 /**
  * 
@@ -44,10 +44,9 @@ import model.Account;
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		{label:'Anzeigen',action:'get'},
-		{label:'Bearbeiten',action:'edit'},
-		//{label:'Finden',action:'get'},
-		{label:'Neu', action:'create'},
+		{label:'Auswahl',action:'get',section: 'List'},
+		{label:'Bearbeiten',action:'update'},
+		{label:'Neu', action:'insert'},
 		{label:'Löschen',action:'delete'}
 	];
 	
@@ -55,17 +54,108 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
+
+	var formRef:ReactRef<FormElement>;
+	var fieldNames:Array<String>;
+	var actualState:Contact;
+	
+	var initialState:Contact;
+
 	public function new(props) 
 	{
 		super(props);
-		dataDisplay = Accounts.dataDisplay;
+		trace(props.match.params);
+		initialState = {
+			id:null,//2000328,
+			edited_by: props.user.id,
+			mandator: props.user.mandator
+		};	
+
+		//REDIRECT WITHOUT ID OR edit action
+		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
+		{
+			trace('nothing selected - redirect');
+			var baseUrl:String = props.match.path.split(':section')[0];
+			props.history.push('${baseUrl}List/get');
+			return;
+		}		
+		dataAccess = ContactsModel.dataAccess;
+		fieldNames = new Array();
+		for(k in dataAccess['update'].view.keys())
+		{
+			fieldNames.push(k);
+		}	
+		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
-		trace(state.loading);
+		formRef = React.createRef();
+		if(props.match.params.id!=null)
+			initialState.id = Std.parseInt(props.match.params.id);
+		
+		trace(props.dataStore.contactActData);
+		trace(props.dataStore.contactData);
+		if((initialState.id!=null && props.dataStore.contactData.exists(initialState.id)))
+		{
+			initialState = loadContactData(initialState.id);
+			//actualState = copy(initialState);
+			trace(actualState);		
+			//OK we got the data
+			actualState = view.shared.io.Observer.run(actualState, function(newState){
+				actualState = newState;
+				trace(actualState);
+			});	
+		}
+		else {			
+			//actualState = copy(initialState);
+			trace(actualState);
+		}
+		
+		state =  App.initEState({
+			dataTable:[],
+			formBuilder:new FormBuilder(this),
+			initialState:initialState,
+			loading:false,
+			selectedRows:[],
+			sideMenu:FormApi.initSideMenu2( this,
+				{
+					dataClassPath:'data.Contacts',
+					label:'Bearbeiten',
+					section: 'Edit',
+					items: menuItems
+				}					
+				,{	
+					section: props.match.params.section==null? 'Edit':props.match.params.section, 
+					sameWidth: true
+				}),	
+			/*storeListener:App.store.subscribe(function(){
+				trace(App.store.getState().dataStore);
+			}),*/
+			values:new Map<String,Dynamic>()
+		},this);
+		trace(state.initialState.id);
+	}
+
+	function loadContactData(id:Int)
+	{
+		trace('loading:$id');
+		if(id == null)
+			return null;
+		var c:Contact = {edited_by: props.user.id,mandator: 0};
+		var data = props.dataStore.contactData.get(id);
+		trace(data);
+		for(k=>v in data.keyValueIterator())
+		{
+			Reflect.setField(c,k, v);
+		}
+		actualState = view.shared.io.Observer.run(c, function(newState){
+				actualState = newState;
+			trace(actualState);
+		});
+		return c;
 	}
 	
 	static function mapStateToProps(aState:AppState) 
 	{
+		trace(aState);
 		return {
 			user:aState.user
 		};
@@ -76,118 +166,278 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.selectedRows.length);
 		var data = state.formApi.selectedRowsMap(state);
 	}
-
-	public function get(ev:ReactEvent):Void
-	{
-		trace('hi :)');
-		//return;
-		//dbMetaData = new  DBMetaData();
-		//dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
-		//trace(dbMetaData.dataFields.get(111));
-		var s:hxbit.Serializer = new hxbit.Serializer();
-	}
-	
-	public function edit(ev:ReactEvent):Void
-	{
-		trace(state.selectedRows.length);				
-	}
-
-	function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
-	{
-		var iS:Dynamic = {};
-		for(dR in dt)
-		{
-			var rS:Dynamic = {};
-			for(k in dR.keys())
-			{
-				trace(k);
-				if(dataDisplay['fieldsList'].columns[k].cellFormat == view.shared.Format.formatBool)
-				{
-					Reflect.setField(rS,k, dR[k] == 'Y');
-				}
-				else
-					Reflect.setField(rS,k, dR[k]);
-			}
-			Reflect.setField(iS, dR['id'], rS);			
-		}
-		trace(iS);
-		return iS;
-	}
 		
 	override public function componentDidMount():Void 
 	{	
-		dataAccess = [
-			'get' =>{
-				source:[
-					"contacts" => []
-				],
-				view:[]
-			},
-		];			
-		//
-		if(props.user != null)
-		trace('yeah: ${props.user.first_name}');
-		//dbData = FormApi.init(this, props);
-		if(props.match.params.action != null)
+		Browser.window.addEventListener('beforeunload', sessionStore);
+		var sessContacts = Browser.window.sessionStorage.getItem('contacts');
+		if(sessContacts != null)
 		{
-			var fun:Function = Reflect.field(this,props.match.params.action);
-			if(Reflect.isFunction(fun))
-			{
-				Reflect.callMethod(this,fun,null);
-			}
+			trace(Json.parse(sessContacts));
+			actualState = Json.parse(sessContacts);
+			trace(actualState);
+			forceUpdate();
 		}
-		else 
-			setState({loading: false});
+		else if((initialState.id!=null && !App.store.getState().dataStore.contactData.exists(initialState.id)))
+		{
+			//DATA NOT IN STORE - LOAD IT
+			App.store.dispatch(DBAccess.get({
+				action:'get',
+				className:'data.Contacts',
+				table:'contacts',
+				filter:	'id|${initialState.id}',
+				user:App.store.getState().user
+			}));
+			//p.then(function ())
+			//App.store.dispatch(AppAction.GlobalState('contacts',initialState.id));
+			//untyped props.globalState('contacts',initialState.id);
+			
+		}
+		else if(actualState==null){
+			actualState = copy(initialState);
+			actualState = view.shared.io.Observer.run(actualState, function(newState){
+				actualState = newState;
+				trace(actualState);
+			});	
+		}
+		if(formRef.current != null)
+		{
+			//trace(Reflect.fields(formRef.current));
+			formRef.current.addEventListener('keyup', handleChange);
+			/*var formElement:Element = Browser.window.document.querySelector('form[name="contact"]');
+			trace(Reflect.fields(formElement));*/
+			formRef.current.addEventListener('mouseup', function(ev:Dynamic)
+			{
+				//trace(Reflect.fields(ev.originalTarget));
+				trace(ev.target.value);
+				//doChange(ev.target.name,ev.target.value);
+			});
+		}
 	}
 	
+	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
+		trace('propsChanged:${nextProps!=props}');
+		trace('stateChanged:${nextState!=state}');
+		if(props.dataStore != null && actualState == null)
+		{
+			actualState = loadContactData(initialState.id);
+			setState({
+				initialState:actualState,
+				actualState:actualState
+			});
+		}		
+		if(nextState!=state)
+			return true;
+		return nextProps!=props;
+	}
+
+	override public function componentWillUnmount() {
+		//state.storeListener();
+		var actData:IntMap<Map<String,Dynamic>> = [initialState.id => [
+		for(f in Reflect.fields(actualState))
+			f => Reflect.field(actualState,f)		
+		]];
+		trace(actData);
+		App.store.dispatch(DataAction.SelectActContacts(actData));
+	}
+
+	function sessionStore(){
+		trace(actualState);
+		Browser.window.sessionStorage.setItem('contacts',Json.stringify(actualState));
+		Browser.window.removeEventListener('beforeunload', sessionStore);
+	}
+	
+	public function doChange(name,value) {
+		trace('$name: $value');
+		if(name!=null && name!='')
+		Reflect.setField(actualState,name,value);
+		setState({initialState:actualState});
+	}
+
+	public function handleChange(e:Event) 
+	{
+		var el:Dynamic = e.target;
+		//trace(Type.typeof(el));
+		//trace('${el.name}:${el.value}');
+		if(el.name != '' && el.name != null)
+		{
+			trace('>>${el.name}=>${el.value}<<');
+			//trace(actualState);
+			Reflect.setField(actualState,el.name,el.value);
+			trace(actualState.last_name);
+		}	
+
+		//trace(actualState);
+	}		
+
+	function handleSubmit(event:Event) {
+		//trace(Reflect.fields(event));
+		//trace(Type.typeof(event));
+		event.preventDefault();
+		//var target:FormElement = cast(event.target, FormElement);
+		//var elements:HTMLCollection = target.elements;
+		//trace(elements.each(function(name:String, el:Dynamic)
+		//trace(elements.dynaMap());
+		//trace(state.actualState);
+		trace(state.initialState.id);
+		/*{
+			//trace('$name => $el');
+			//trace(el.value);
+		});		*/
+		var doc:Document = Browser.window.document;
+
+		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
+		var elements:HTMLCollection = formElement.elements;
+		for(k in dataAccess['update'].view.keys())
+		{
+			if(k=='id')
+				continue;
+			try 
+			{
+				var item:Dynamic = elements.namedItem(k);
+				//trace('$k => ${item.type}:' + item.value);
+				Reflect.setField(actualState, item.name, switch (item.type)
+				{
+					//case DateControl|DateTimrControl:
+
+					case 'checkbox':
+					//trace('${item.name}:${item.checked?true:false}');
+					item.checked?1:0;
+					case 'select-multiple'|'select-one':
+					var sOpts:HTMLOptionsCollection = item.selectedOptions;
+					//trace (sOpts.length);
+					sOpts.length>1 ? [for(o in 0...sOpts.length)sOpts[o].value ].join('|'):item.value;
+					default:
+					//trace('${item.name}:${item.value}');
+					item.value;
+				});			
+			}
+			catch(ex:Dynamic)
+			{
+				trace(ex);
+			}
+		}
+		//setState({actualState: actualState});
+		trace(actualState);
+		update(actualState);
+	}
+
+
+	function update(aState:Dynamic)
+	{
+		trace(Reflect.fields(aState));
+		var dbaProps:DBAccessProps = 
+		{
+			action:props.match.params.action,
+			className:'data.Contacts',
+			dataSource:null,
+			table:'contacts',
+			user:props.user
+		};
+		switch (props.match.params.action)
+		{
+			case 'insert':
+				for(f in fieldNames)
+				{
+					trace('$f =>${Reflect.field(aState,f)}<=');
+					if(Reflect.field(aState,f)=='')
+						Reflect.deleteField(aState,f);
+				}
+				Reflect.deleteField(aState,'id');
+				Reflect.deleteField(aState,'creation_date');				
+				dbaProps.dataSource = [
+					"contacts" => [
+						"data" => aState,
+						"fields" => Reflect.fields(aState).join(',')
+					]
+				];
+			case 'delete'|'get':
+				dbaProps.dataSource = [
+					"contacts" => [
+						"filter" => 'id|${state.initialState.id}'
+					]
+				];	
+			case 'update':
+				for(f in fieldNames)
+				{
+					//KEEP FIELDS WITH VALUES SET
+					//trace('$f =>${Reflect.field(aState,f)}<=');
+					if(Reflect.field(aState,f)=='')
+						Reflect.deleteField(aState,f);
+				}
+				dbaProps.dataSource = [
+					"contacts" => [
+						"data" => aState,
+						"filter" => 'id|${state.initialState.id}'
+					]
+				];
+		}
+		App.store.dispatch(DBAccess.execute(dbaProps));
+
+		//props.parentComponent.props.edit(dbaProps);
+	}
+
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
-		//trace(dataDisplay["userList"]);
-		trace(state.loading);
-		if(state.loading)
-			return state.formApi.renderWait();
-		trace('###########loading:' + state.loading);
+		trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.dataTable != null));
+		//trace('###########loading:' + state.loading);
+		trace('########### action:' + props.match.params.action);
+
 		return switch(props.match.params.action)
 		{
-			case 'get':
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["contactList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');
-			case 'edit':
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["clientList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');			
-			case 'create':
-				trace(dataDisplay["fieldsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["fieldsList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>				
-				');	
-			case 'delete':
-				null;
+			case 'update':
+				//trace(initialState);
+				trace(actualState);
+				/*var fields:Map<String,FormField> = [
+					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+				];*/
+				(actualState==null ? state.formApi.renderWait():
+				state.formBuilder.renderForm({
+					handleSubmit:handleSubmit,
+					fields:[
+						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+					],
+					model:'contact',
+					ref:formRef,
+					title: 'Kontakt - Bearbeite Stammdaten' 
+				},actualState));
+				//null;
+			case 'insert':
+				trace(actualState);
+				state.formBuilder.renderForm({
+					handleSubmit:handleSubmit,
+					fields:[
+						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+					],
+					model:'contact',
+					ref:formRef,
+					title: 'Kontakt - Neue Stammdaten' 
+				},actualState);
 			default:
 				null;
 		}
-		return null;
 	}
 	
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		trace(props.match.params.section);		
-		return state.formApi.render(jsx('
-		<>
-			<form className="tabComponentForm"  >
-				${renderResults()}
-			</form>
-		</>'));		
+		trace(props.match.params.action);		
+		//trace('state.loading: ${state.loading}');		
+		return switch(props.match.params.action)
+		{	
+			case 'update':
+			 //(state.loading || state.initialState.edited_by==0 ? state.formApi.renderWait():
+				state.formApi.render(jsx('
+						${renderResults()}
+				'));	
+			case 'insert':
+				state.formApi.render(jsx('
+						${renderResults()}
+				'));		
+			default:
+				state.formApi.render(jsx('
+						${renderResults()}
+				'));			
+		}
 	}
 	
 	function updateMenu(?viewClassPath:String):SMenuProps

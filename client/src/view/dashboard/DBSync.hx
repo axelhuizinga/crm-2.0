@@ -1,36 +1,16 @@
-package view.shared.io;
+package view.dashboard;
 
-import action.async.UserAccess;
-import haxe.DynamicAccess;
 import state.AppState;
-import haxe.Constraints.Function;
-import js.html.AreaElement;
-import haxe.Json;
-import haxe.Unserializer;
 import haxe.ds.Map;
-import haxe.io.Bytes;
-import hxbit.Serializer;
-import loader.BinaryLoader;
-import js.html.Event;
-import js.html.FormData;
-import js.html.FormDataIterator;
-import js.html.HTMLCollection;
 import me.cunity.debug.Out;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
-import shared.DbData;
-import shared.DBMetaData;
+
 import view.dashboard.model.DBSyncModel;
-import view.shared.FormField;
-import state.FormState;
-import view.shared.SMItem;
-import view.shared.io.FormApi;
-import view.shared.io.DataFormProps;
-import view.shared.io.DataAccess;
-import view.shared.io.Loader;
-import view.table.Table;
+import view.shared.io.BaseForm;
+
 
 
 /**
@@ -38,29 +18,35 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 @:connect
-class DBSync extends ReactComponentOf<DataFormProps,FormState>
+class DBSync extends BaseForm
 {
 
 	static var _instance:DBSync;
 
 	public static var menuItems:Array<SMItem> = [
-		{label:'Create Fields Table',action:'createFieldList'},
 		{label:'BenutzerDaten Abgleich',action:'showUserList'},
 		{label:'Stammdaten Import ',action:'importClientList'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];
 	
-	var dataDisplay:Map<String,DataState>;
-	var dataAccess:DataAccess;	
-	var dbData: shared.DbData;
-	var dbMetaData:shared.DBMetaData;
+
 	public function new(props) 
 	{
 		super(props);
+		initialState = {
+			id:null,//2000328,
+			edited_by: props.user.id,
+			mandator: props.user.mandator
+		}
 		dataDisplay = DBSyncModel.dataDisplay;
+		dataAccess = DBSyncModel.dataAccess(props.match.params.action);
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState({loading:true,values:new Map<String,Dynamic>()},this);
+		state =  App.initEState({
+			loading:false,
+			dataTable:[],
+			formBuilder:new FormBuilder(this),
+			initialState:{},values:new Map<String,Dynamic>()},this);
 		trace(state.loading);
 		//trace(props.sideMenu);
 		//trace(state.sideMenu);
@@ -142,7 +128,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		var s:hxbit.Serializer = new hxbit.Serializer();
 		
 		return;
-		props.formApi.requests.push( /*BinaryLoader.create(
+		props.formApi.requests.push( /*BinaryLoader.insert(
 			'${App.config.api}', 
 			{
 				id:props.user.id,
@@ -221,49 +207,15 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 	override public function componentDidMount():Void 
-	{	
-		dataAccess = [
-			'editTableFields' =>{
-				source:[
-					"selectedRows" => null//selectedRowsMap()
-				],
-				view:[
-					'table_name'=>{label:'Tabelle',disabled:true},
-					'field_name'=>{label:'Feldname',disabled:true},
-					'field_type'=>{label:'Datentyp',type:Select},
-					'element'=>{label:'Eingabefeld', type:Select},
-					'disabled' => {label:'Readonly', type:Checkbox},
-					'required' => {label:'Required', type:Checkbox},
-					'use_as_index' => {label:'Index', type:Checkbox},
-					'any' => {label:'Eigenschaften', disabled:true, type:Hidden},
-					'id' =>{primary:true, type:Hidden}
-				]
-			},
-			'saveTableFields' => {
-				source:null,
-				view:null
-			}
-		];			
+	{				
 		//
 		if(props.user != null)
 		trace('yeah: ${props.user.first_name}');
-		//dbData = FormApi.init(this, props);
-		if(props.match.params.action != null)
-		{
-			var fun:Function = Reflect.field(this,props.match.params.action);
-			if(Reflect.isFunction(fun))
-			{
-				Reflect.callMethod(this,fun,null);
-			}
-		}
-		else 
-			setState({loading: false});
 	}
 	
 	function renderResults():ReactFragment
 	{
 		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
-		//trace(dataDisplay["userList"]);
 		trace(state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
@@ -277,11 +229,21 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'importClientList':
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["clientList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');			
+				//trace(initialState);
+				trace(actualState);
+				/*var fields:Map<String,FormField> = [
+					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+				];*/
+				(actualState==null ? state.formApi.renderWait():
+				state.formBuilder.renderForm({
+					handleSubmit:handleSubmit,
+					fields:[
+						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+					],
+					model:'importClientList',
+					//ref:formRef,
+					title: 'Kontakt - Bearbeite Stammdaten' 
+				},actualState));	
 			case 'showFieldList2':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');

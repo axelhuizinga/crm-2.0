@@ -22,9 +22,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
 		{label:'Anzeigen',action:'get'},
-		{label:'Bearbeiten',action:'edit'},
+		{label:'Bearbeiten',action:'update'},
 		//{label:'Finden',action:'get'},
-		{label:'Neu', action:'create'},
+		{label:'Neu', action:'insert'},
 		{label:'Löschen',action:'delete'}
 	];
 	
@@ -154,13 +154,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 					${...props} dataState = ${dataDisplay["contactList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
-			case 'edit':
+			case 'update':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["clientList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');			
-			case 'create':
+			case 'insert':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
 				jsx('

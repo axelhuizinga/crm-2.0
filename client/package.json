@@ -16,6 +16,7 @@
     "deep-extend": "0.5.1",
     "extend": "3.0.2",
     "font-awesome": "^4.7.0",
+    "formik": "^1.5.8",
     "fs": "0.0.1-security",
     "fstream": "1.0.12",
     "hoek": "^6.1.3",

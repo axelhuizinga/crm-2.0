@@ -198,7 +198,7 @@ class FormApi
 		var match:RouterMatch = comp.props.match;
 		var baseUrl:String = match.path.split(':section')[0];		
 		var section = match.params.section;
-		var id:String = (match.params.id==null||action=='create'?'':'/${match.params.id}');
+		var id:String = (match.params.id==null||action=='insert'?'':'/${match.params.id}');
 		return '${baseUrl}${targetSection==null?section:targetSection}/${action}${id}';
 	}
 
@@ -238,7 +238,7 @@ class FormApi
 		{
 			switch(mI.action)
 			{		
-				case 'edit':
+				case 'update':
 					mI.disabled = state.selectedRows.length==0;
 				case 'save':
 					mI.disabled = state.clean;

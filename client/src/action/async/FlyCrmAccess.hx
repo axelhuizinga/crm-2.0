@@ -23,15 +23,8 @@ using action.async.Utils;
  */
 
 
-class DBAccess
+class FlyCrmAccess
 {
-	public static function create() {
-		
-	}
-
-	public static function delete() {
-		
-	}
 
 	public static function get(props:DBAccessProps) 
 	{

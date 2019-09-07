@@ -24,8 +24,8 @@ import state.FormState;
 import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.SMenuProps;
-import view.shared.io.DB;
-import view.shared.io.DBSync;
+import view.dashboard.DB;
+import view.dashboard.DBSync;
 import view.table.Table;
 
 /**

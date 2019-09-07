@@ -5,6 +5,7 @@ import haxe.ds.IntMap;
 import action.AppAction;
 import action.DataAction;
 import action.async.DBAccess;
+import action.async.DBAccessProps;
 import js.html.HTMLOptionsCollection;
 import js.html.HTMLPropertiesCollection;
 import me.cunity.debug.Out.DebugOutput;

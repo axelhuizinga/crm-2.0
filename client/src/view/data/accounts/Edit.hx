@@ -5,6 +5,7 @@ import haxe.ds.IntMap;
 import action.AppAction;
 import action.DataAction;
 import action.async.DBAccess;
+import action.async.DBAccessProps;
 import js.html.HTMLOptionsCollection;
 import js.html.HTMLPropertiesCollection;
 import js.html.Document;
@@ -319,11 +320,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 		//setState({actualState: actualState});
 		trace(actualState);
-		update(actualState);
+		go(actualState);
 	}
 
 
-	function update(aState:Dynamic)
+	function go(aState:Dynamic)
 	{
 		trace(Reflect.fields(aState));
 		var dbaProps:DBAccessProps = 

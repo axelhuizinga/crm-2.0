@@ -1,5 +1,5 @@
 package view.dashboard;
-
+import action.async.DBAccessProps;
 import state.AppState;
 import haxe.ds.Map;
 import me.cunity.debug.Out;
@@ -7,7 +7,9 @@ import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
-
+import view.shared.FormBuilder;
+import view.shared.SMItem;
+import view.shared.SMenuProps;
 import view.dashboard.model.DBSyncModel;
 import view.shared.io.BaseForm;
 
@@ -35,19 +37,20 @@ class DBSync extends BaseForm
 	{
 		super(props);
 		initialState = {
-			id:null,//2000328,
 			edited_by: props.user.id,
 			mandator: props.user.mandator
 		}
 		dataDisplay = DBSyncModel.dataDisplay;
 		dataAccess = DBSyncModel.dataAccess(props.match.params.action);
+		formFields = DBSyncModel.formFields(props.match.params.action);
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			loading:false,
 			dataTable:[],
 			formBuilder:new FormBuilder(this),
-			initialState:{},values:new Map<String,Dynamic>()},this);
+			initialState:initialState,values:new Map<String,Dynamic>()},this);
 		trace(state.loading);
+		actualState = initialState;
 		//trace(props.sideMenu);
 		//trace(state.sideMenu);
 		//var sideMenu =  updateMenu('DBSync');//state.sideMenu;
@@ -66,7 +69,7 @@ class DBSync extends BaseForm
 	{
 		trace('hi :)');
 		return;
-		props.formApi.requests.push(Loader.load(	
+		/*props.formApi.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
 				id:props.user.id,
@@ -84,7 +87,7 @@ class DBSync extends BaseForm
 					return;
 				}				 
 				setState({data:data});
-		}));
+		}));*/
 		trace(props.history);
 		trace(props.match);
 		//setState({viewClassPath:viewClassPath});
@@ -122,10 +125,10 @@ class DBSync extends BaseForm
 	{
 		trace(vA);
 		//Out.dumpObject(vA);
-		dbMetaData = new  DBMetaData();
+		/*dbMetaData = new  DBMetaData();
 		dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
 		trace(dbMetaData.dataFields.get(111));
-		var s:hxbit.Serializer = new hxbit.Serializer();
+		var s:hxbit.Serializer = new hxbit.Serializer();*/
 		
 		return;
 		props.formApi.requests.push( /*BinaryLoader.insert(
@@ -212,22 +215,67 @@ class DBSync extends BaseForm
 		if(props.user != null)
 		trace('yeah: ${props.user.first_name}');
 	}
+
+	override function go(aState:Dynamic)
+	{
+		trace(Reflect.fields(aState));
+		var dbaProps:DBAccessProps = 
+		{
+			action:props.match.params.action,
+			className:'data.Contacts',
+			dataSource:null,
+			table:'contacts',
+			user:props.user
+		};
+		switch (props.match.params.action)
+		{
+			case 'insert':
+				for(f in fieldNames)
+				{
+					trace('$f =>${Reflect.field(aState,f)}<=');
+					if(Reflect.field(aState,f)=='')
+						Reflect.deleteField(aState,f);
+				}
+				Reflect.deleteField(aState,'id');
+				Reflect.deleteField(aState,'creation_date');				
+				dbaProps.dataSource = [
+					"contacts" => [
+						"data" => aState,
+						"fields" => Reflect.fields(aState).join(',')
+					]
+				];
+			case 'delete'|'get':
+			//#
+		}
+	}
+
+	override function render():ReactFragment
+	{
+		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		trace(props.match.params.section);		
+		return state.formApi.render(jsx('
+		<>
+			<form className="tabComponentForm"  >
+				${renderResults()}
+			</form>
+		</>'));		
+	}
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
+		trace(props.match.params.action + ':' + Std.string(state.dataTable != null));
 		trace(state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
-			case 'showUserList':
+			/*case 'showUserList':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["userList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
-				');
+				');*/
 			case 'importClientList':
 				//trace(initialState);
 				trace(actualState);
@@ -237,21 +285,21 @@ class DBSync extends BaseForm
 				(actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
 					handleSubmit:handleSubmit,
-					fields:[
+					fields:formFields,/*[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
-					],
+					],*/
 					model:'importClientList',
 					//ref:formRef,
-					title: 'Kontakt - Bearbeite Stammdaten' 
+					title: 'Stammdaten Import' 
 				},actualState));	
-			case 'showFieldList2':
+			/*case 'showFieldList2':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["fieldsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>				
-				');	
+				');	*/
 			case 'shared.io.DB.editTableFields':
 				null;
 			default:
@@ -260,18 +308,6 @@ class DBSync extends BaseForm
 		return null;
 	}
 	
-	override function render():ReactFragment
-	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		trace(props.match.params.section);		
-		//return null;<form className="form60"></form>	
-		return state.formApi.render(jsx('
-		<>
-			<form className="tabComponentForm"  >
-				${renderResults()}
-			</form>
-		</>'));		
-	}
 	
 	function updateMenu(?viewClassPath:String):SMenuProps
 	{

@@ -36,47 +36,14 @@ class SyncExternalClients extends Model
 		var self:SyncExternalClients = new SyncExternalClients(param);	
 		//self.table = 'columns';
         trace('calling ${param.get("action")}');
-		Reflect.callMethod(self, Reflect.field(self,param.get('action')), [param]);
+		//Reflect.callMethod(self, Reflect.field(self,action), [param]);
 	}	
 
     public function importClientDetails(?user:Dynamic):Void
     {
         var info:Map<String,Dynamic>  = getViciDialData();
-        //trace(info);
-        var data:String = Syntax.code("exec({0})", 
-            'curl -X POST -o "../.crm/sync.csv" -d "user=${info['admin']}&pass=${info['pass']}" ${info['syncApi']+"/exportClients.php"}');
-        
-        dbData.dataInfo = ['sync.csv.size'=>FileSystem.stat('../.crm/sync.csv').size];
-        if(data.indexOf('Error') == 0)
-        {
-            dbData.dataErrors['importClientDetails.import'] = data;
-        }
-        else 
-        {
-            if(processImport('../.crm/sync.csv'))
-            {
-                dbData.dataInfo['sync.csv.complete'] = true;
-            };
-        }
+        trace(info);        
         S.sendData(dbData, null);
-        trace('nono');
-        return;
-            //var dRows:Array<Map<String, Dynamic>> = cast Json.parse(data).contacts;
-            var dRows:Array<Array<Dynamic>> = cast Json.parse(data).contacts;
-            //var dRows:Array<Map<String, Dynamic>> = [['test'=>"hallo welt"]];
-            trace(dRows.length);
-            trace(dRows[0].length);
-            dbData.dataRows = [];
-            
-            S.sendData(dbData, null);
-        /*};
-        req.onError = function (msg:String)
-        {
-            trace(msg);
-        }
-        req.onStatus = function (s:Int)
-        { trace(s);}
-        req.request(true);*/
         trace('done');
     }
 	
@@ -160,8 +127,7 @@ class SyncExternalClients extends Model
                 ,'${cD["creation_date"]}','${cD["creation_date"]}','${cD["creation_date"]}'
                 )
 				ON CONFLICT (id) DO UPDATE
-SET
-				returning id)
+				SET returning id)
 				select id from new_contact;
 			*/;
 		trace(sql);
@@ -186,7 +152,7 @@ SET
             var q:EitherType<PDOStatement,Bool> = S.dbh.query(sql);
             if(!q)
             {
-               dbData.dataErrors['${param.get('action')}'] = S.dbh.errorInfo();
+               dbData.dataErrors['${action}'] = S.dbh.errorInfo();
                return dbData;
             } 
         }        

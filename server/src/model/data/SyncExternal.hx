@@ -32,7 +32,7 @@ class SyncExternal extends Model
 		var self:SyncExternal = new SyncExternal(param);	
 		//self.table = 'columns';
         trace('calling ${param.get("action")}');
-		Reflect.callMethod(self, Reflect.field(self,param.get('action')), [param]);
+		Reflect.callMethod(self, Reflect.field(self,action), [param]);
 	}	
 
     public function syncContactDetails(?contact:Dynamic):Void
@@ -98,7 +98,7 @@ class SyncExternal extends Model
             var q:EitherType<PDOStatement,Bool> = S.dbh.query(sql);
             if(!q)
             {
-                dbData.dataErrors = ['${param.get('action')}' => S.dbh.errorInfo()];
+                dbData.dataErrors = ['${action}' => S.dbh.errorInfo()];
                 return dbData;
             }
             var eStmt:PDOStatement = cast(q, PDOStatement);
@@ -117,7 +117,7 @@ class SyncExternal extends Model
             var q:EitherType<PDOStatement,Bool> = S.dbh.query(sql);
             if(!q)
             {
-               dbData.dataErrors = ['${param.get('action')}' => S.dbh.errorInfo()];
+               dbData.dataErrors = ['${action}' => S.dbh.errorInfo()];
                return dbData;
             } 
         }        

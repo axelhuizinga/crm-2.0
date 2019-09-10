@@ -21,7 +21,8 @@ class DB extends Model
 	public static function _create(param:Map<String,String>):Void
 	{
 		var self:DB = new DB(param);	
-		Reflect.callMethod(self, Reflect.field(self, param.get('action')), [param]);
+		//Reflect.callMethod(self, Reflect.field(self, action), [param]);
+		self.run();
 	}
 	
 	public function buildFieldList():Map<String,String>
@@ -122,7 +123,7 @@ class DB extends Model
 			var stmt:PDOStatement = S.dbh.prepare(sql, Util.initNativeArray());
 			if( !Model.paramExecute(stmt, Lib.associativeArrayOfHash(pData.dataParams[k])))
 			{
-				S.sendErrors(dbData,['${param.get('action')}' => stmt.errorInfo()]);
+				S.sendErrors(dbData,['${action}' => stmt.errorInfo()]);
 			}
 			if(stmt.rowCount()==1)
 			{

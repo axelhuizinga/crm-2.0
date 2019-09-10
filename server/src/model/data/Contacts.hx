@@ -32,19 +32,23 @@ class Contacts extends Model
 		super(param);
 	}
 	
-	public static function _create(param:Map<String,String>):Contacts
+	public static function _create(param:Map<String,String>):Void
 	{
 		trace(param);
 		var self:Contacts = new Contacts(param);		
-
-		if(param.get('action')==null)
-		{
-			return self;
-		}
-		//trace(param);
-		Reflect.callMethod(self, Reflect.field(self,param.get('action')), [param]);
-		return self;
+		trace(self.action);
+		self.go();
 	}
+
+	function go():Void {
+		trace(action);
+		switch(action ){
+			case 'sync':
+				sync();
+			case _:
+				run();
+		}		
+	}	
 	
 	function getRecordings(lead_id:Int):NativeArray
 	{
@@ -53,7 +57,7 @@ class Contacts extends Model
 		);			
 	}
 	
-	public static function syncFromCRM1()
+	function sync()
 	{
 		
 	}

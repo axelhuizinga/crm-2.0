@@ -24,10 +24,17 @@ class CreateHistoryTrigger extends Model
 	{
 		var self:CreateHistoryTrigger = new CreateHistoryTrigger(param);	
 		//self.table = 'columns';
-		Reflect.callMethod(self, Reflect.field(self,param.get('action')), [param]);
+		//Reflect.callMethod(self, Reflect.field(self,action), [param]);
+		switch(self.action ){
+			case 'run':
+				self.run();
+			case _:
+				//self.run();
+				trace(self.action);
+		}		
 	}
 
-	public function run():Void
+	override function run():Void
 	{
 		var sql:String = comment(unindent, format) /*
 			SELECT string_agg(table_name, ',')

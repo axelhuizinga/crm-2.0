@@ -34,8 +34,9 @@ class User extends Model
 	public static function _create(param:Map<String,String>):Void
 	{
 		var self:User = new User(param);	
-		trace(param.get('action'));
-		Reflect.callMethod(self, Reflect.field(self, param.get('action')),[]);
+		self.run();
+		//trace(action);
+		//Reflect.callMethod(self, Reflect.field(self, action),[]);
 	}
 	
 	public function clientVerify():Void
@@ -66,7 +67,7 @@ class User extends Model
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}'})))
 		{
-			S.sendErrors(dbData,['${param.get('action')}' => stmt.errorInfo()]);
+			S.sendErrors(dbData,['${action}' => stmt.errorInfo()]);
 		}
 		if(stmt.rowCount()>0)
 		{
@@ -77,11 +78,11 @@ class User extends Model
 				WHERE user_name=:user_name AND password=crypt(:password,password)',Syntax.array(null));
 			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}',':password':'${param.get('pass')}'})))
 			{
-				S.sendErrors(dbData,['${param.get('action')}' => stmt.errorInfo()]);
+				S.sendErrors(dbData,['${action}' => stmt.errorInfo()]);
 			}
 			if (stmt.rowCount()==0)
 			{
-				S.sendErrors(dbData,['${param.get('action')}'=>'pass']);
+				S.sendErrors(dbData,['${action}'=>'pass']);
 			}
 			// USER AUTHORIZED
 			var assoc:Dynamic = stmt.fetch(PDO.FETCH_ASSOC);
@@ -107,7 +108,7 @@ class User extends Model
 		else
 		{
 			trace(stmt.rowCount+':$sql');
-			S.sendErrors(dbData,['${param.get('action')}'=>'user_name']);
+			S.sendErrors(dbData,['${action}'=>'user_name']);
 			return UserAuth.NotOK;
 		}
 	}

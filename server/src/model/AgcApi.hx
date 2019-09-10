@@ -21,7 +21,7 @@ class AgcApi extends Model
 		var self:AgcApi = new AgcApi(param);	
 		self.vicidialUser = param.get('user_name');
 		self.vicidialPass = S.vicidialPass;
-		return Reflect.callMethod(self, Reflect.field(self, param.get('action')), [param]);
+		return Reflect.callMethod(self, Reflect.field(self, action), [param]);
 	}
 	
 	public function check4Update(param:Map<String,String>):EitherType<String,Bool>

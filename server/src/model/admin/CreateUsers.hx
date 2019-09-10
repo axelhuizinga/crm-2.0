@@ -27,9 +27,20 @@ class CreateUsers extends Model
 	public static function _create(param:Map<String,String>):Void
 	{
 		var self:CreateUsers = new CreateUsers(param);	
+		self.go();
 		//self.table = 'columns';
-		Reflect.callMethod(self, Reflect.field(self,param.get('action')), [param]);
+		//Reflect.callMethod(self, Reflect.field(self,action), [param]);
 	}	
+
+	function go():Void{
+		trace(action);
+		switch(action ){
+			case 'run':
+				run();
+			case _:
+				//self.run();
+		}			
+	}
 	
 	public function addContact(contact:Dynamic):Int
 	{

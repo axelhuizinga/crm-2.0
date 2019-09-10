@@ -1,5 +1,6 @@
 package;
 
+import haxe.Constraints.Function;
 import S.ColDef;
 import haxe.Unserializer;
 
@@ -107,7 +108,7 @@ class Model
 			S.add2Response({error:' cannot find model.' + cast param.get('className')}, true);
 			//return false;
 		}
-		var fl:Dynamic = Reflect.field(cl, '_create');
+		var fl:Function = Reflect.field(cl, '_create');
 		//trace(fl);
 		if (fl == null)
 		{
@@ -115,16 +116,15 @@ class Model
 			S.add2Response({error:cast cl + ' create is null'}, true);
 		}
 		var iFields:Array<String> = Type.getInstanceFields(cl);
-		trace('$iFields ${param.get('action')}');
-		if (iFields.has(param.get('action')))
+		trace('$iFields ${param['action']}');
+		if (iFields.has(param['action']))
 		{
 			trace('calling create ' + cl);
 			Reflect.callMethod(cl, fl, [param]);
 		}
 		else 
 		{
-			trace('not calling create ');
-			false;
+			trace('not calling create ');			
 		}
 	}
 	
@@ -679,6 +679,9 @@ class Model
 		queryFields = setSql = '';
 		tableNames = new Array();
 		trace('exists dbData:' + (param.exists('dbData')?'Y':'N'));
+	}
+
+	function run(){
 		if(param.exists('dbData'))
 		{
 			trace(param.get('dbData'));
@@ -738,7 +741,7 @@ class Model
 			}			
 			queryFields += fields.length > 0 ? fields.join(','):'';
 		}		
-		trace('${param.get('action')}:' + tableNames.toString());
+		trace('${action}:' + tableNames.toString());
 		trace(queryFields);
 		trace(setSql);
 		if (tableNames.length>1)
@@ -747,6 +750,7 @@ class Model
 		}			
 		if(param.exists('filter'))
 			filterSql += buildCond(param.get('filter'));
+		Reflect.callMethod(this, Reflect.field(this,action), [param]);
 	}
 	
 	function buildFieldsSql(name:String, tParam:Map<String,Dynamic>):Array<String>

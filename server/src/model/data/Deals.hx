@@ -13,12 +13,12 @@ class Deals extends Model
 		trace(param);
 		var self:Contacts = new Contacts(param);		
 
-		if(param.get('action')==null)
+		if(action==null)
 		{
 			return self;
 		}
 		//trace(param);
-		Reflect.callMethod(self, Reflect.field(self,param.get('action')), [param]);
+		Reflect.callMethod(self, Reflect.field(self,action), [param]);
 		return self;
 	}
 	

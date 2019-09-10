@@ -78,6 +78,9 @@ class S
 	public static var dbHost:String;
 	public static var dbUser:String;
 	public static var dbPass:String;	
+	public static var dbViciBoxHost:String;
+	public static var dbViciBoxUser:String;
+	public static var dbViciBoxPass:String;	
 	public static var vicidialUser:String;
 	public static var viciDial: Map<String, Dynamic>;
 	
@@ -432,6 +435,9 @@ class S
 		dbHost = Syntax.code("$DB_server");
 		dbUser = Syntax.code("$DB_user");
 		dbPass = Syntax.code("$DB_pass");		
+		dbViciBoxHost = Syntax.code("$DB_vicibox_server");
+		dbViciBoxUser = Syntax.code("$DB_vicibox_user");
+		dbViciBoxPass = Syntax.code("$DB_vicibox_pass");
 		host = Web.getHostName();
 		request_scheme = Syntax.code("$_SERVER['REQUEST_SCHEME']");
 		secret = Syntax.code("$secret");

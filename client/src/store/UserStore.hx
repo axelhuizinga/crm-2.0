@@ -26,7 +26,7 @@ class UserStore implements IReducer<UserAction, UserState>
 		loggedIn:false,
 		last_login:null,
 		jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
-		waiting: true	
+		waiting: false	
 	};
 	
 	public var store:StoreMethods<state.AppState>;

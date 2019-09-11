@@ -59,7 +59,7 @@ class Contacts extends Model
 	
 	function sync()
 	{
-		
+		trace(param);
 	}
 	
 }

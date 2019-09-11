@@ -24,7 +24,7 @@ using Util;
  * @author axel@bi4.me
  */
 
-@:keep
+
 class SyncExternal extends Model 
 {
 	public static function _create(param:Map<String,String>):Void
@@ -32,8 +32,22 @@ class SyncExternal extends Model
 		var self:SyncExternal = new SyncExternal(param);	
 		//self.table = 'columns';
         trace('calling ${param.get("action")}');
-		Reflect.callMethod(self, Reflect.field(self,self.action), [param]);
+
 	}	
+	
+	function go():Void {
+		trace(action);
+		switch(action ){
+			case 'syncAll':
+				syncAll();
+			case _:
+				run();
+		}		
+	}
+
+	function syncAll() {
+		
+	}
 
     public function syncUserDetails(?user:Dynamic):Void
     {

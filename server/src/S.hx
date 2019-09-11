@@ -69,6 +69,7 @@ class S
 	public static var secret:String;
 	public static var conf:Map<String,Dynamic>;
 	public static var dbh:PDO;
+	public static var syncDbh:PDO;
 	public static var last_request_time:Date;
 	public static var host:String;
 	public static var request_scheme:String;
@@ -78,6 +79,8 @@ class S
 	public static var dbHost:String;
 	public static var dbUser:String;
 	public static var dbPass:String;	
+	public static var dbViciBoxCRM:String;
+	public static var dbViciBoxDB:String;
 	public static var dbViciBoxHost:String;
 	public static var dbViciBoxUser:String;
 	public static var dbViciBoxPass:String;	
@@ -115,8 +118,18 @@ class S
 			}
 			exit( { error:"required params action and/or className missing" } );
 		}
-			
-		dbh = new PDO('pgsql:host=$dbHost;dbname=$db',dbUser,dbPass,Syntax.array(['client_encoding','UTF8']));
+			//host=$dbHost;
+		dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
+			Syntax.array([PDO.ATTR_PERSISTENT,true]));
+		
+		if(action.indexOf('sync')==0)
+		{
+			//CONNECT DIALER DB	
+			trace('PDO.ATTR_PERSISTENT:${PDO.ATTR_PERSISTENT}');
+			syncDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM',
+				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
+			trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
+		}
 
 		var jwt:String = params.get('jwt');
 		//var id:String = params.get('id');
@@ -435,8 +448,10 @@ class S
 		dbHost = Syntax.code("$DB_server");
 		dbUser = Syntax.code("$DB_user");
 		dbPass = Syntax.code("$DB_pass");		
-		dbViciBoxHost = Syntax.code("$DB_vicibox_server");
 		dbViciBoxUser = Syntax.code("$DB_vicibox_user");
+		dbViciBoxCRM = Syntax.code("$DB_vicibox_crm");
+		dbViciBoxDB = Syntax.code("$DB_vicibox_db");
+		dbViciBoxHost = Syntax.code("$DB_vicibox_server");
 		dbViciBoxPass = Syntax.code("$DB_vicibox_pass");
 		host = Web.getHostName();
 		request_scheme = Syntax.code("$_SERVER['REQUEST_SCHEME']");

@@ -10,7 +10,8 @@
 -lib reselect
 -lib event-types 
 -lib js-object
--lib tink_hxx
+-lib tink_core
+#-lib tink_hxx
 #-lib deep_equal
 
 -cp /opt/src/lib

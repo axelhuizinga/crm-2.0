@@ -1,12 +1,15 @@
 package view.dashboard;
 import action.async.DBAccessProps;
+import action.async.LivePBXSync;
 import state.AppState;
 import haxe.ds.Map;
+import loader.BinaryLoader;
 import me.cunity.debug.Out;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
+import shared.DbData;
 import view.shared.FormBuilder;
 import view.shared.SMItem;
 import view.shared.SMenuProps;
@@ -27,7 +30,7 @@ class DBSync extends BaseForm
 
 	public static var menuItems:Array<SMItem> = [
 		{label:'BenutzerDaten Abgleich',action:'showUserList'},
-		{label:'Stammdaten Import ',action:'importClientList'},
+		{label:'Stammdaten Import ',action:'importAll'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -150,42 +153,22 @@ class DBSync extends BaseForm
 		)*/null);
 	}
 	
-	public function importClientList(_):Void
+	public function importAll(_):Void
 	{
-		//FormApi.requests.push( 
-		/*BinaryLoader.create(
-			'${App.config.api}', 
-			{
-				id:props.user.id,
-				jwt:props.user.jwt,
-				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
-				className:'admin.SyncExternalClients',
-				action:'importClientDetails',
-				devIP:App.devIP
-			},
-			function(data:DbData)
-			{
-				//UserAccess.jwtCheck(data);
-				trace(data);
-				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
-				trace(data.dataErrors.keys().hasNext());
-				if(!data.dataErrors.keys().hasNext())
-				{
-					setState({values: ['loadResult'=>'Verarbeite Importdaten...','closeAfter'=>8000]});
-				}
-				else 
-					setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});
-			}
-		);*/
-		trace('setState loading true => ${state.loading}');
-		setState({loading: true});
+		action.async.LivePBXSync.syncAll({
+				batchCount: 0,
+				batchSize: 100,
+				user:props.user,
+				className:'admin.SyncExternal',
+				action:'syncAll'
+			});
 	}
 
 	public function showUserList(_):Void
 	{
 		//FormApi.requests.push( 
 		trace(App.config.api);
-		/*BinaryLoader.create(
+		BinaryLoader.create(
 			//'${App.config.api}', 
 			'https://pitverwaltung.de/sync/proxy.php', 
 			{
@@ -206,7 +189,7 @@ class DBSync extends BaseForm
 				if(data.dataRows.length>0)
 				setState({dataTable:data.dataRows});
 			}
-		);*/
+		);
 	}
 	
 	override public function componentDidMount():Void 

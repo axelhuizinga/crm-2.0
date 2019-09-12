@@ -46,7 +46,7 @@ class SyncExternal extends Model
 	}
 
 	function syncAll() {
-		
+		trace(param);
 	}
 
     public function syncUserDetails(?user:Dynamic):Void

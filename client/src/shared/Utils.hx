@@ -92,4 +92,9 @@ class Utils
 			Reflect.setField(obj, k, v);
 		return obj;
 	}
+
+	public static function errorStatus(status:String):String
+	{
+		return '<span className="error">$status</span>';
+	}
 }

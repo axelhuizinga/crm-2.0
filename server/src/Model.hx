@@ -105,30 +105,35 @@ class Model
 		if (cl == null)
 		{
 			trace('model.' + param.get('className') + ' ???');
-			S.add2Response({error:' cannot find model.' + cast param.get('className')}, true);
+			S.sendErrors(null,['invalid className' => ' cannot find model.' + cast param.get('className')]);
+			//S.add2Response({error:' cannot find model.' + cast param.get('className')}, true);
 			//return false;
 		}
-		var fl:Function = Reflect.field(cl, '_create');
+		/*var fl:Function = Reflect.field(cl, '_create');
 		//trace(fl);
 		if (fl == null)
 		{
 			trace(cl + 'create is null');
 			S.add2Response({error:cast cl + ' create is null'}, true);
-		}
+		}*/
 		var iFields:Array<String> = Type.getInstanceFields(cl);
-		trace('$iFields ${param['action']}');
+		//trace('$iFields ${param['action']}');
 		if (iFields.has(param['action']))
 		{
-			trace('calling create ' + cl);
-			Reflect.callMethod(cl, fl, [param]);
+			//trace('calling ${param.get('className')}.${param['action']} ');
+			trace('creating instance of ${param.get('className')}');
+			var cInst:Model = Type.createInstance(cl,[param]);
+			Reflect.callMethod(cInst, Reflect.field(cInst, param['action']),[]);
 		}
 		else 
-		{
-			trace('not calling create ');			
+		{					
+			trace('Method ${param.get('className')}.${} does not exist!');	
+			S.sendErrors(null,['invalid method' => 'Method ${param.get('className')}.${} does not exist!']);
+			trace('not calling create ');	
 		}
 	}
 	
-	public static function paramExecute(stmt:PDOStatement, ?values:NativeArray):Bool
+	static function paramExecute(stmt:PDOStatement, ?values:NativeArray):Bool
 	{
 		S.saveLog(values);
 		if (!stmt.execute(values))
@@ -678,7 +683,7 @@ class Model
 		setValues = new Array();
 		queryFields = setSql = '';
 		tableNames = new Array();
-		trace('exists dbData:' + (param.exists('dbData')?'Y':'N'));
+		//trace('exists dbData:' + (param.exists('dbData')?'Y':'N'));
 	}
 
 	function run(){

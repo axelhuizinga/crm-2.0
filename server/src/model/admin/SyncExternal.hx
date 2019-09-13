@@ -27,16 +27,17 @@ using Util;
 
 class SyncExternal extends Model 
 {
-	public static function _create(param:Map<String,String>):Void
+	public function new(param:Map<String,String>):Void
 	{
-		var self:SyncExternal = new SyncExternal(param);	
+		super(param);	
 		//self.table = 'columns';
-        trace('calling ${param.get("action")}');
-
+        trace('calling ${action}');
+		go();
 	}	
 	
 	function go():Void {
 		trace(action);
+		//SWITCH Call either an instance method directly or use the shared Model query execution
 		switch(action ){
 			case 'syncAll':
 				syncAll();
@@ -47,6 +48,7 @@ class SyncExternal extends Model
 
 	function syncAll() {
 		trace(param);
+		S.sendErrors(dbData,['syncAll'=>'OK']);
 	}
 
     public function syncUserDetails(?user:Dynamic):Void

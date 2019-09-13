@@ -116,7 +116,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 	{	
 		//trace(this.state);
 		//trace(props.history.location.pathname);
-		trace(props.user);
+		trace(props.user.first_name);
 		if (state.hasError)
 			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');
 		trace(Reflect.fields(props));

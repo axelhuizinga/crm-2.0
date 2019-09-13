@@ -46,7 +46,7 @@ class AppStore
 			//routeHistory: new Array(),
 			redirectAfterLogin: (Browser.location.pathname=='/'?'DashBoard':Browser.location.pathname), 
 			status: {
-				status: Browser.location.pathname,
+				text: Browser.location.pathname,
 				date:Date.now(),
 				user:null
 			},

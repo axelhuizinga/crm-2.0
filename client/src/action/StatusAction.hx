@@ -2,6 +2,11 @@ package action;
 
 enum StatusAction
 {	
-	Update(status:String);
+	Update(
+		status:{
+			?className:String,
+			text:String
+		}
+	);
 }
 

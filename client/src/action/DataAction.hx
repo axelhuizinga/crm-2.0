@@ -35,5 +35,6 @@ enum  DataAction
 	SelectActContacts(sData:IntMap<Map<String,Dynamic>>);
 	SelectContacts(sData:IntMap<Map<String,Dynamic>>);
 	SelectDeals(sData:IntMap<Map<String,Dynamic>>);
+	Sync(dataAccess:DBAccessProps);
 	Unselect(id:Int);
 }

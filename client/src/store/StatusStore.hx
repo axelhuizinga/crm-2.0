@@ -13,7 +13,7 @@ class StatusStore
 	
 	public function new() {
 		initState = {
-			status:Browser.location.pathname,// '',
+			text:Browser.location.pathname,// '',
 			date:Date.now(),
 			user:null
 		}
@@ -25,9 +25,7 @@ class StatusStore
 		{
 			case Update(status):
 				trace(status);
-				copy(state, {
-					status:status
-				});
+				copy(state, status);
 			default:
 				state;
 		}

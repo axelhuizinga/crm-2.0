@@ -35,9 +35,10 @@ class LivePBXSync
 
 	public static function syncAll(props:DBAccessProps) 
 	{
+		trace(props.batchSize);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
-			trace(props);
+			trace(props.batchCount);
 			if (!props.user.loggedIn)
 			{
 				return dispatch(User(LoginError(
@@ -63,19 +64,22 @@ class LivePBXSync
 				{			
 					trace(data.dataInfo);
 					trace(data.dataRows.length);
-					var status:String = '';
-		
 					if(data.dataErrors.keys().hasNext())
 					{
 						return dispatch(Status(Update(
-								'${data.dataErrors.iterator().next()}'.errorStatus())));
+							{
+								className:'error',
+								text:data.dataErrors.iterator().next()
+							}							
+						)));
 					}
 					trace(data.dataInfo);
 					props.batchCount += data.dataInfo['count'];
-					dispatch(Status(Update('Kontakte Aktualisiert:${props.batchCount}')));
+					dispatch(Status(Update({text:'Kontakte Aktualisiert:${props.batchCount}'})));
 					if(data.dataInfo['done'])
 					{
-						return dispatch(Status(Update('Alle Kontakte Aktualisiert:${props.batchCount}')));
+						return dispatch(Status(Update(
+							{text:'Alle Kontakte Aktualisiert:${props.batchCount}'})));
 					}
 					if(props.limit==null || props.limit < props.batchCount)
 						return dispatch(syncAll(props));

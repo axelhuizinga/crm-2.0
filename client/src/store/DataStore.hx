@@ -1,5 +1,6 @@
 package store;
 
+import action.async.LivePBXSync;
 import haxe.ds.IntMap;
 import state.AppState;
 import js.Cookie;
@@ -88,6 +89,8 @@ class DataStore
 			case Execute(data):
 				store.dispatch(DBAccess.execute(data));
 				//next();
+			case Sync(data):
+				store.dispatch(LivePBXSync.syncAll(data));
 			default: next();
 		}
 	}	

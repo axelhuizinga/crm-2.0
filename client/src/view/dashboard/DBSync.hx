@@ -60,7 +60,7 @@ class DBSync extends BaseForm
 		//trace(sideMenu.section);
 
 	}
-	
+
 	static function mapStateToProps(aState:AppState) 
 	{
 		return {
@@ -155,13 +155,14 @@ class DBSync extends BaseForm
 	
 	public function importAll(_):Void
 	{
-		action.async.LivePBXSync.syncAll({
+		trace(props.user.first_name);
+		App.store.dispatch(action.async.LivePBXSync.syncAll({
 				batchCount: 0,
 				batchSize: 100,
 				user:props.user,
 				className:'admin.SyncExternal',
 				action:'syncAll'
-			});
+			}));
 	}
 
 	public function showUserList(_):Void

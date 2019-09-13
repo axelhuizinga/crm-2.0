@@ -32,10 +32,11 @@ import react.intl.DateTimeFormatOptions.NumericFormat.TwoDigit;
 typedef StatusBarProps =
 {
 	> RouteComponentProps,
+	?className:String,
 	date:Date,
-	status:String,
+	text:String,
 	user:UserState,
-	userList:Array<UserState>
+	?userList:Array<UserState>
 }
 
 typedef StatusBarState = 
@@ -104,33 +105,29 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		return {
 			/*date:state.statusBar.date,*/
 			//userList:state.userList,
+			className:state.status.className==null?'':state.status.className,
 			user:state.user,
-			status: state.status.status//state.history.location.pathname
+			text: state.status.text//state.history.location.pathname
 		};
 		//};
-	}
-
-	static function mapDispatchToProps(dispatch:Dispatch, ownProps:Dynamic) {
-		//trace(ownProps);
-		return {};
-	}		
+	}	
 	
 	override public function render()
 	{
 		var id:String = 'Gast';
 		var userIcon:String = 'fa fa-user-o';
-		trace(props.status);
+		trace(props.text);
 		if (props.user != null)
 		{
 		 id = props.user.first_name != null &&  props.user.first_name !='' ?
-		[props.user.first_name , props.user.last_name].join(' ') :'';
+			[props.user.first_name , props.user.last_name].join(' ') :'';
 		 userIcon = 'fa fa-user';			
 		}
 		//trace(id +':' + cast id.length);
 		return jsx('
 		<Footer>
 			<div className="statusbar">
-				<span className="column" >${props.status}</span>				
+				<span className="column ${props.className}" >${props.text}</span>				
 				<span className="column flex-end">
 				<i className=${userIcon}></i> $id</span>
 				<$DateTime />			
@@ -138,6 +135,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		</Footer>
 		');
 	}
+
 
 	function DateTimeClock(p:Dynamic):ReactFragment
 	{

@@ -30,15 +30,16 @@ class Contacts extends Model
 	{
 		//table = 'contacts';
 		super(param);
+		go();
 	}
 	
-	public static function _create(param:Map<String,String>):Void
+	/*public static function _create(param:Map<String,String>):Void
 	{
 		trace(param);
 		var self:Contacts = new Contacts(param);		
 		trace(self.action);
 		self.go();
-	}
+	}*/
 
 	function go():Void {
 		trace(action);

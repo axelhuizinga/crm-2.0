@@ -208,9 +208,11 @@ class S
 		return sendbytes(s.serialize(dbData));
 	}
 
-	public static function sendErrors(dbData:DbData, ?err:Map<String,Dynamic>, ?pos:PosInfos):Bool
+	public static function sendErrors(dbData:DbData = null, ?err:Map<String,Dynamic>, ?pos:PosInfos):Bool
 	{
 	 	trace('${pos.fileName}::${pos.lineNumber}');
+		if(dbData==null)
+			dbData = new DbData();
 		var s:Serializer = new Serializer();
 		if (err != null)
 		{
@@ -254,7 +256,7 @@ class S
 		out.bigEndian = true;
 		out.write(b);
 		Sys.exit(0);
-		trace('SHOULD NEVER HAPPEN');
+		trace('SHOULD NEVER EVER HAPPEN');
 		return true;
 	}
 	

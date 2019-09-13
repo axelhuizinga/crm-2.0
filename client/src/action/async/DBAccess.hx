@@ -65,7 +65,6 @@ class DBAccess
 				{			
 					trace(data.dataInfo);
 					trace(data.dataRows.length);
-					var status:String = '';
 					if(data.dataRows.length>0) 
 					{
 						if(!data.dataErrors.keys().hasNext())
@@ -75,7 +74,7 @@ class DBAccess
 								for(row in data.dataRows)
 									Std.parseInt(row['id']) => row
 							])));//.then(function()trace('yeah'));
-							return dispatch(Status(Update(switch ('${props.className}.${props.action}')
+							return dispatch(Status(Update({text:switch ('${props.className}.${props.action}')
 							{
 								case "data.Contacts.get":
 									'Kontakt ${props.filter.substr(3)} geladen';
@@ -83,19 +82,25 @@ class DBAccess
 									'Kontakt ${props.filter.substr(3)} wurde gespeichert';
 								default:
 									"Unbekannter Vorgang";
-							})));
+							}})));
 						}
 						else 
 						{
 							//TODO: IMPLEMENT GENERIC FAILURE FEEDBACK
 							return dispatch(Status(Update(
-								'${data.dataErrors.get(props.action)}'.errorStatus())));
+								{
+									className:'error',
+									text:'${data.dataErrors.get(props.action)}',
+								})));
 						
 						}				
 					}
 					else
 						return dispatch(Status(Update(
-							status = 'Keine Daten für ${props.filter.substr(3)} gefunden')));
+							{
+								className: 'warn',
+								text: 'Keine Daten für ${props.filter.substr(3)} gefunden'
+							})));
 				}
 			);
 			return null;
@@ -134,16 +139,12 @@ class DBAccess
 			function(data:DbData)
 			{				
 				trace(data);
-				var status:String = '';
-				if (data.dataErrors.keys().hasNext())
+				if(data.dataErrors.exists('loginError'))
 				{
-					trace(data.dataErrors);
-					if(data.dataErrors.exists('loginError'))
-					{
-						return dispatch(User(LoginError({loginError: data.dataErrors.get('loginError')})));
-					}
-				}else 
-				status = switch ('${props.className}.${props.action}')
+					return dispatch(User(LoginError({loginError: data.dataErrors.get('loginError')})));
+				}
+
+				return dispatch(Status(Update({text:switch ('${props.className}.${props.action}')
 				{
 					case "data.Contacts.edit":
 						'Kontakt ${props.dataSource["contacts"]["filter"].substr(3)} geladen';
@@ -152,10 +153,7 @@ class DBAccess
 					default:
 						"Unbekannter Vorgang";
 
-				}
-				trace('${props.className}.${props.action} => $status');
-				//return null;
-				return dispatch(Status(Update(status)));
+				}})));
 			});
 			if (requests != null)
 			{

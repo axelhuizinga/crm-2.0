@@ -210,17 +210,15 @@ class User extends Model
 		try{
 			var userInfo:UserInfo = JWT.extract(jwt);
 			var now:Float = Date.now().getTime();
-			trace('$id==${userInfo.id}::${userInfo.ip}::${Web.getClientIP()}:' + Date.fromTime(userInfo.validUntil) + 
-			':${userInfo.validUntil} - $now:' + cast( userInfo.validUntil - now) + 
-			(userInfo.validUntil - Date.now().getTime()) > 0?'Y':'N');
+			//trace('$id==${userInfo.id}::${userInfo.ip}::${Web.getClientIP()}:' + Date.fromTime(userInfo.validUntil) + ':${userInfo.validUntil} - $now:' + cast( userInfo.validUntil - now) + (userInfo.validUntil - Date.now().getTime()) > 0?'Y':'N');
 			
-			trace(':'+(id == userInfo.id));
-			trace(':'+(userInfo.ip == Web.getClientIP()));
-			trace(':'+((userInfo.validUntil - Date.now().getTime()) > 0));
+			//trace(':'+(id == userInfo.id));
+			//trace(':'+(userInfo.ip == Web.getClientIP()));
+			//trace(':'+((userInfo.validUntil - Date.now().getTime()) > 0));
 			if (id == userInfo.id && userInfo.ip == Web.getClientIP() && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
 				trace('calling JWT.verify now...');
-				trace(JWT.verify(jwt, S.secret));
+				//trace(JWT.verify(jwt, S.secret));
 				return switch(JWT.verify(jwt, S.secret))				
 				{
 					case Valid(payload):
@@ -232,7 +230,7 @@ class User extends Model
 						false;
 				}
 			}
-			S.sendErrors(new DbData(), ['loginError'=>'JWT invalid!']);		
+			S.sendErrors(new DbData(), ['loginError'=>'JWT verify failed!']);		
 			return false;
 		}
 		catch (ex:Dynamic)

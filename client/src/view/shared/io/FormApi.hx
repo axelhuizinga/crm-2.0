@@ -161,8 +161,8 @@ class FormApi
 		//trace(Reflect.fields(e));
 		var eTarget:Element = cast(e.target, Element);
 		var targetSection = eTarget.dataset.section;
-		trace(targetSection);
-		if(targetSection != comp.props.match.params.section)
+		trace('$targetSection ${comp.props.match.params.section}');
+		if(targetSection !=null && targetSection != comp.props.match.params.section)
 		{
 			trace(comp.props.match.params.section);
 			comp.props.history.push(getUrl(eTarget.dataset.action,targetSection));

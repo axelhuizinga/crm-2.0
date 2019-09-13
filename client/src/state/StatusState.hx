@@ -3,8 +3,9 @@ package state;
 import state.UserState;
 
 typedef StatusState = {
+	?className:String,
     user:UserState,
-	status: String,
+	text: String,
 	date:Date,
 }
 

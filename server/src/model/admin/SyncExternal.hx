@@ -27,15 +27,13 @@ using Util;
 
 class SyncExternal extends Model 
 {
+	var sEC:SyncExternalClients;
+
 	public function new(param:Map<String,String>):Void
 	{
 		super(param);	
 		//self.table = 'columns';
         trace('calling ${action}');
-		go();
-	}	
-	
-	function go():Void {
 		trace(action);
 		//SWITCH Call either an instance method directly or use the shared Model query execution
 		switch(action ){
@@ -48,6 +46,7 @@ class SyncExternal extends Model
 
 	function syncAll() {
 		trace(param);
+		sEC = new SyncExternalClients(param);
 		S.sendErrors(dbData,['syncAll'=>'OK']);
 	}
 

@@ -106,21 +106,19 @@ class Model
 		{
 			trace('model.' + param.get('className') + ' ???');
 			S.sendErrors(null,['invalid className' => ' cannot find model.' + cast param.get('className')]);
-			//S.add2Response({error:' cannot find model.' + cast param.get('className')}, true);
-			//return false;
 		}
-		/*var fl:Function = Reflect.field(cl, '_create');
-		//trace(fl);
-		if (fl == null)
+		var staticMethods:Array<String> = Type.getClassFields(cl);
+		if (staticMethods.has(param['action']))
 		{
-			trace(cl + 'create is null');
-			S.add2Response({error:cast cl + ' create is null'}, true);
-		}*/
+			trace('calling static Method ${param.get('className')}.${param['action']}');
+			Reflect.callMethod(cl, Reflect.field(cl, param['action']),[param['action']]);
+			return;
+		}
+
 		var iFields:Array<String> = Type.getInstanceFields(cl);
-		//trace('$iFields ${param['action']}');
+		trace('$iFields ${param['action']}');
 		if (iFields.has(param['action']))
 		{
-			//trace('calling ${param.get('className')}.${param['action']} ');
 			trace('creating instance of ${param.get('className')}');
 			var cInst:Model = Type.createInstance(cl,[param]);
 			Reflect.callMethod(cInst, Reflect.field(cInst, param['action']),[]);

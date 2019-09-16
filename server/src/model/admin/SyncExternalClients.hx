@@ -1,5 +1,6 @@
 package model.admin;
 
+import php.NativeAssocArray;
 import haxe.macro.Expr.Catch;
 import sys.io.File;
 import sys.FileSystem;
@@ -28,20 +29,32 @@ using Util;
  * @author axel@bi4.me
  */
 
-@:keep
 class SyncExternalClients extends Model 
 {
-	public static function _create(param:Map<String,String>):Void
+	public function new(param:Map<String,String>):Void
 	{
-		var self:SyncExternalClients = new SyncExternalClients(param);	
+		super(param);	
 		//self.table = 'columns';
-        trace('calling ${param.get("action")}');
-		//Reflect.callMethod(self, Reflect.field(self,action), [param]);
-	}	
+        trace('calling ${action}');
+		trace(action);
+		//SWITCH Call either an instance method directly or use the shared Model query execution
+		switch(action ){
+			case 'syncAll':
+				syncAll();
+			case _:
+				run();
+		}		
+	}
+
+	function syncAll() {
+		trace(param);
+		getCrmData();
+		S.sendErrors(dbData,['syncAll'=>'OK']);
+	}
 
     public function importClientDetails(?user:Dynamic):Void
     {
-        var info:Map<String,Dynamic>  = getViciDialData();
+        var info:Map<String,Dynamic>  = getCrmData();
         trace(info);        
         S.sendData(dbData, null);
         trace('done');
@@ -161,10 +174,34 @@ class SyncExternalClients extends Model
 		return dbData; 
     }
 
-    public function getViciDialData():Map<String,Dynamic> 
+    public function getCrmData():Map<String,Dynamic> 
 	{		        
-        S.saveLog(S.conf.get('ini'));
-        var ini:NativeArray = S.conf.get('ini');
+        var sql = comment(unindent,format)/*
+		SELECT cl.client_id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title,cl.anrede,cl.namenszusatz,cl.co_field,cl.storno_grund,cl.birth_date,cl.old_active,
+pp.pay_plan_id,pp.client_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,pp.product,pp.agent,pp.agency_project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,
+ ps.pay_source_id,ps.client_id,ps.lead_id,ps.debtor,ps.bank_name,ps.account,ps.blz,ps.iban,ps.sign_date,ps.pay_source_state,ps.creation_date,
+vl.lead_id,vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.called_since_last_reset,vl.phone_code,vl.phone_number,vl.title,vl.first_name,vl.middle_initial,vl.last_name,vl.address1,vl.address2,vl.city,vl.state,vl.province,vl.postal_code,vl.country_code,vl.gender,vl.date_of_birth,vl.alt_phone,vl.email,vl.security_phrase,vl.comments,vl.called_count,vl.last_local_call_time,vl.owner,vl.entry_list_id
+FROM clients cl
+INNER JOIN pay_plan pp
+ON pp.client_id=cl.client_id
+INNER JOIN pay_source ps
+ON ps.client_id=cl.client_id
+INNER JOIN asterisk.vicidial_list vl
+ON vl.vendor_lead_code=cl.client_id
+LIMIT 100
+*/;
+
+        var stmt:PDOStatement = S.syncDbh.query(sql);
+		var result:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		trace(result);
+		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
+		for(k=>v in result.keyValueIterator())
+		{
+			trace('$k => $v');
+			//var result:NativeAssocArray<Dynamic>
+		}
+		var ini:NativeArray = null;
+
         ini = ini['vicidial'];
         var fields:Array<String> = Reflect.fields(Lib.objectOfAssociativeArray(ini));
         var info:Map<String,Dynamic> = [

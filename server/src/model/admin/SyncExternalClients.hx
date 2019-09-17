@@ -48,106 +48,63 @@ class SyncExternalClients extends Model
 
 	function syncAll() {
 		trace(param);
-		getCrmData();
+		if(param['batchSize']==null)
+			param['batchSize'] = '1000';
+		importCrmData();
 		S.sendErrors(dbData,['syncAll'=>'OK']);
 	}
 
-    public function importClientDetails(?user:Dynamic):Void
+    public function importCrmData():Void
     {
-        var info:Map<String,Dynamic>  = getCrmData();
-        trace(info);        
+        var cData:NativeArray = getCrmData();
+        trace(cData[0]);        
+		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
+		for(row in cData.iterator())
+		{
+			/*if (! cast stmt:PDOStatement = upsertClient(row))
+			{S.sendErrors(dbData, ['upsertClient'=>S.errorInfo(row)]);}		
+			trace(stmt.fetchAll())*/
+			trace(upsertClient(row));
+		}		
         S.sendData(dbData, null);
         trace('done');
-    }
-	
-    public function processImport(path:String):Bool
-	{
-		var fh:Dynamic = Syntax.code("fopen({0}, 'r')",path);
-        var fInfo:String = Syntax.code("exec({0})", 'wc -L ${path}');
-        var len:Int = Std.parseInt(fInfo.split(' ')[0]);
-        if(!fh)
-        {
-            dbData.dataErrors['processImport.fopen'] = 'Datei ${path} konnte nicht geöffnet werden';
-            return false;
-        }
-        var data:Dynamic = null;
-        var row:NativeArray = null;
-        var index:Int = 1;
-        var fNames:Array<String> = null;
-        var foo:Dynamic = null;
-        while(/*{
-            foo = (row = Syntax.code("fgetcsv({0},{1},';')", fh, len));
-            foo != null && foo != false;
-        }*/
-        testValue(row = Syntax.code("fgetcsv({0},{1},';')", fh, len)))
-        {
-            try {
-                data = Lib.toHaxeArray(row);
-            }
-            catch(ex:Dynamic)
-            {
-                trace(row == null?'true':'false');
-                //trace(ex);
-            }
-            trace(Type.typeof(data));
-            if(fNames==null)
-            {
-                fNames = data;
-                trace(Std.string(fNames));
-                continue;
-            }
-            if(!processImportRow(fNames,data))
-            {
-                dbData.dataErrors['processImportRow.zeile'] = S.errorInfo(Std.string(index));
-                break;
-            }
-            index++;
-        }
-        return true;
-		//setState({dataTable:data.dataRows});
-	}    
-
-    function processImportRow(fNames:Array<String>,row:Array<Dynamic>):Bool
-    {
-        //trace(fNames.length + ':' + row.length);
-        if(fNames.length != row.length)
-        {
-            dbData.dataErrors['processImportRow.fieldCount'] = S.errorInfo('Zeile hat '+ row.length + ' Werte:${Std.string(row)}');
-            return false;
-        }
-        var dMap:Map<String,Dynamic> = [
-            for(n in fNames)
-            n => row.shift()
-        ];
-
-        return updateClient(dMap);
     }
     
     inline function testValue(v:Dynamic):Bool return cast v;
     //inline function testValue(v:Dynamic):Bool return cast v != null && v != false;
 
-    function updateClient(cD:Map<String,Dynamic>):Bool
+    function upsertClient(rD:NativeArray):PDOStatement
     {
-        var cNames:Array<String> = S.tableFields('contacts');
-        trace(cNames.join(','));
+		var cD:Map<String,Dynamic> = clientRowData(rD);
+        var cNames:String = [for(k in cD.keys()) k].join(',');
+		var cVals:String =  [for(v in cD.iterator()) v].map(function (v) return '\'$v\'').join(',');
+
         var sql:String = comment(unindent, format) /*
 			WITH new_contact AS (
-				INSERT INTO crm.contacts (id,mandator,creation_date,state,use_email,
-                phone_code,phone_number,first_name,last_name,edited_by)
-				VALUES ('${cD["client_id"]}',1,'${cD["creation_date"]}', ,'${cD["state"]}'
-                ,'${cD["use_email"]}','${cD["phone_code"]}','${cD["phone_number"]}'
-                ,'${cD["creation_date"]}','${cD["creation_date"]}','${cD["creation_date"]}'
-                ,'${cD["creation_date"]}','${cD["creation_date"]}','${cD["creation_date"]}'
-                )
+				INSERT INTO crm.contacts ($cNames)
+				VALUES ($cVals)
 				ON CONFLICT (id) DO UPDATE
 				SET returning id)
 				select id from new_contact;
 			*/;
 		trace(sql);
-        return true;
+		return S.dbh.query(sql, PDO.FETCH_ASSOC);
     }/**
     client_id,creation_date,state,use_email,register_on,register_off,register_off_to,teilnahme_beginn,title,anrede,namenszusatz,co_field,storno_grund,birth_date,old_active
+	##
+	'${cD["client_id"]}',1,'${cD["creation_date"]}', ,'${cD["state"]}'
+                ,'${cD["use_email"]}','${cD["phone_code"]}','${cD["phone_number"]}'
+                ,'${cD["creation_date"]}','${cD["creation_date"]}','${cD["creation_date"]}'
+                ,'${cD["creation_date"]}','${cD["creation_date"]}','${cD["creation_date"]}'
     **/
+	function clientRowData(row:NativeArray):Map<String,Dynamic> {
+		var keys:Array<String> = S.tableFields('contacts');
+		keys.filter(function (k) return row[k]!=null);
+		return[
+			for(k in keys)
+				k => row[k]
+		];
+	}
 
     function saveClientDetails():DbData
     {
@@ -174,13 +131,14 @@ class SyncExternalClients extends Model
 		return dbData; 
     }
 
-    public function getCrmData():Map<String,Dynamic> 
+    public function getCrmData():NativeArray
 	{		        
         var sql = comment(unindent,format)/*
-		SELECT cl.client_id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title,cl.anrede,cl.namenszusatz,cl.co_field,cl.storno_grund,cl.birth_date,cl.old_active,
-pp.pay_plan_id,pp.client_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,pp.product,pp.agent,pp.agency_project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,
- ps.pay_source_id,ps.client_id,ps.lead_id,ps.debtor,ps.bank_name,ps.account,ps.blz,ps.iban,ps.sign_date,ps.pay_source_state,ps.creation_date,
-vl.lead_id,vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.called_since_last_reset,vl.phone_code,vl.phone_number,vl.title,vl.first_name,vl.middle_initial,vl.last_name,vl.address1,vl.address2,vl.city,vl.state,vl.province,vl.postal_code,vl.country_code,vl.gender,vl.date_of_birth,vl.alt_phone,vl.email,vl.security_phrase,vl.comments,vl.called_count,vl.last_local_call_time,vl.owner,vl.entry_list_id
+		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title,cl.anrede,cl.namenszusatz,cl.co_field,cl.storno_grund,cl.birth_date date_of_birth,IF(cl.old_active=1,'true','false')old_active,
+pp.pay_plan_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,IF(pp.product='K',2,3) product ,pp.agent,pp.agency_project project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,
+ ps.pay_source_id,ps.debtor,ps.bank_name,ps.account,ps.blz,ps.iban,ps.sign_date,ps.pay_source_state,ps.creation_date account_creation_date,
+vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,vl.first_name,vl.last_name,vl.address1,vl.address2,vl.city,vl.postal_code,vl.country_code,vl.gender,
+IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobil,vl.email,vl.comments,vl.last_local_call_time,vl.owner,vl.entry_list_id, 1 mandator, 100 edited_by, '' company_name
 FROM clients cl
 INNER JOIN pay_plan pp
 ON pp.client_id=cl.client_id
@@ -188,28 +146,12 @@ INNER JOIN pay_source ps
 ON ps.client_id=cl.client_id
 INNER JOIN asterisk.vicidial_list vl
 ON vl.vendor_lead_code=cl.client_id
-LIMIT 100
+ORDER BY cl.client_id 
+LIMIT
 */;
 
-        var stmt:PDOStatement = S.syncDbh.query(sql);
-		var result:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
-		trace(result);
-		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
-		for(k=>v in result.keyValueIterator())
-		{
-			trace('$k => $v');
-			//var result:NativeAssocArray<Dynamic>
-		}
-		var ini:NativeArray = null;
-
-        ini = ini['vicidial'];
-        var fields:Array<String> = Reflect.fields(Lib.objectOfAssociativeArray(ini));
-        var info:Map<String,Dynamic> = [
-            for(f in fields)
-            f => ini[f]
-        ];
-        //S.saveLog(info);
-        return info;
+        var stmt:PDOStatement = S.syncDbh.query('$sql ${param['batchSize']}');
+		return (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 	}
 
 }

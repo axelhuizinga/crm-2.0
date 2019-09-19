@@ -72,17 +72,16 @@ class User extends Model
 		if(stmt.rowCount()>0)
 		{
 			//ACTIVE USER EXISTS
+			trace('SELECT change_pass_required, first_name, last_name, last_login, us.id, us.mandator FROM ${S.db}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name AND password=crypt (:password,password)');
 			stmt = S.dbh.prepare(
-				'SELECT change_pass_required, first_name, last_name, last_login, us.id, us.mandator FROM ${S.db}.users us
-				INNER JOIN contacts cl ON us.contact=cl.id 
-				WHERE user_name=:user_name AND password=crypt(:password,password)',Syntax.array(null));
+				'SELECT change_pass_required, first_name, last_name, last_login, us.id, us.mandator FROM ${S.db}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name AND password=crypt(:password,password)',Syntax.array(null));
 			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}',':password':'${param.get('pass')}'})))
 			{
 				S.sendErrors(dbData,['${action}' => stmt.errorInfo()]);
 			}
 			if (stmt.rowCount()==0)
 			{
-				S.sendErrors(dbData,['${action}'=>'pass']);
+				S.sendErrors(dbData,['${action}'=>'pass','sql'=>stmt.errorInfo]);
 			}
 			// USER AUTHORIZED
 			var assoc:Dynamic = stmt.fetch(PDO.FETCH_ASSOC);

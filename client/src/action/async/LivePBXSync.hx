@@ -74,6 +74,11 @@ class LivePBXSync
 						)));
 					}
 					trace(data.dataInfo);
+					if(data.dataInfo['count']==null)
+					{
+						return dispatch(Status(Update(
+							{text:'Fehler 0 Kontakte Aktualisiert'})));
+					}
 					props.batchCount += data.dataInfo['count'];
 					dispatch(Status(Update({text:'Kontakte Aktualisiert:${props.batchCount}'})));
 					if(data.dataInfo['done'])

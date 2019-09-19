@@ -416,13 +416,18 @@ class S
 		}
 		return null;
 	}
+	/**
+	 * [Returns a map of metadatas for the columns of a given table]
+	 * @param table 
+	 * @param db 
+	 * @return Map<String,NativeArray>
+	 */
 
-	public static function typedFields(table:String, db:String = 'crm'): Array<String>
+	public static function columnsMeta(table:String, db:String = 'crm'): Map<String,NativeArray>
 	{
 		var sql:String = comment(unindent,format) /*
-		select column_name,data_type 
-		from information_schema.columns 
-		where table_name = ${quoteIdent(table)};
+		select * 
+		from $table limit 1;
 		*/;
 		var stmt:PDOStatement = S.dbh.query(sql);
 		if (S.dbh.errorCode() != '00000')
@@ -433,7 +438,12 @@ class S
 		}		
 		if (stmt.rowCount() == 1)
 		{
-			return stmt.fetchColumn().split(',');
+			var colNames:Array<String> = tableFields(table, db);
+			var i = 0;
+			return [
+				for(c in colNames)			
+					c => stmt.getColumnMeta(i++)
+			];
 		}
 		return null;
 	}

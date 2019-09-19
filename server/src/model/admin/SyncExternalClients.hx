@@ -60,11 +60,20 @@ class SyncExternalClients extends Model
         trace(cData[0]);        
 		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
 		for(row in cData.iterator())
-		{
-			/*if (! cast stmt:PDOStatement = upsertClient(row))
-			{S.sendErrors(dbData, ['upsertClient'=>S.errorInfo(row)]);}		
-			trace(stmt.fetchAll())*/
-			trace(upsertClient(row));
+		{			
+			var stmt:PDOStatement = upsertClient(row);
+			try{
+				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
+				trace(res);
+			}
+			catch(e:Dynamic)
+			{
+				{S.sendErrors(dbData, [
+					'dbError'=>S.dbh.errorInfo(),
+					'upsertClient'=>S.errorInfo(row),
+					'exception'=>e
+				]);}		
+			}
 		}		
         S.sendData(dbData, null);
         trace('done');
@@ -76,30 +85,46 @@ class SyncExternalClients extends Model
     function upsertClient(rD:NativeArray):PDOStatement
     {
 		var cD:Map<String,Dynamic> = clientRowData(rD);
-        var cNames:String = [for(k in cD.keys()) k].join(',');
-		var cVals:String =  [for(v in cD.iterator()) v].map(function (v) return '\'$v\'').join(',');
-
+        var cNames:Array<String> = [for(k in cD.keys()) k].filter(function(k)return k!='id');
+		//var cVals:String =  [for(v in cD.iterator()) v].map(function (v) return '\'$v\'').join(',');
+		var cPlaceholders:Array<String> =  [for(k in cNames) k].map(function (k) return ':$k');
+		var cSet:String = [
+			for(k in cNames) k
+			].map(function (k) return ' "$k"=:$k').join(',');
+		
         var sql:String = comment(unindent, format) /*
-			WITH new_contact AS (
-				INSERT INTO crm.contacts ($cNames)
-				VALUES ($cVals)
+				INSERT INTO contacts (${cNames.join(',')})
+				VALUES (${cPlaceholders.join(',')})
 				ON CONFLICT (id) DO UPDATE
-				SET returning id)
-				select id from new_contact;
+				SET $cSet returning id;
 			*/;
 		trace(sql);
-		return S.dbh.query(sql, PDO.FETCH_ASSOC);
-    }/**
-    client_id,creation_date,state,use_email,register_on,register_off,register_off_to,teilnahme_beginn,title,anrede,namenszusatz,co_field,storno_grund,birth_date,old_active
-	##
-	'${cD["client_id"]}',1,'${cD["creation_date"]}', ,'${cD["state"]}'
-                ,'${cD["use_email"]}','${cD["phone_code"]}','${cD["phone_number"]}'
-                ,'${cD["creation_date"]}','${cD["creation_date"]}','${cD["creation_date"]}'
-                ,'${cD["creation_date"]}','${cD["creation_date"]}','${cD["creation_date"]}'
-    **/
+		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
+		bindClientData(stmt,rD);
+		if(!stmt.execute()){
+			S.sendErrors(dbData, ['execute'=>Lib.hashOfAssociativeArray(stmt.errorInfo())]);
+		}
+		trace(stmt.columnCount());
+		return stmt;
+		//return S.dbh.query(sql, PDO.FETCH_ASSOC);
+    }
+	
+	function bindClientData(stmt:PDOStatement, row:NativeArray)
+	{
+		var meta:Map<String, NativeArray> = S.columnsMeta('contacts');
+		for(k => v in meta.keyValueIterator())
+		{
+			if(!stmt.bindValue(':$k',row[k], v['pdo_type']))
+			{
+				trace('$k => $v');
+				S.sendErrors(dbData,['bindValue'=>'${row[k]}:${v['pdo_type']}']);
+			}		}
+	}
+
 	function clientRowData(row:NativeArray):Map<String,Dynamic> {
 		var keys:Array<String> = S.tableFields('contacts');
-		keys.filter(function (k) return row[k]!=null);
+		keys = keys.filter(function (k) return Syntax.code("isset({0}[{1}])",row,k) && row[k]!=null);
+		trace(keys);
 		return[
 			for(k in keys)
 				k => row[k]

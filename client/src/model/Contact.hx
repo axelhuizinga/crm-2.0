@@ -39,7 +39,7 @@ typedef Contact =
 	?plz:String,
 	//{"name":"country_code","type":"character varying(3)","default":"''::character varying","attnum":"19","required":false}
 	?country_code:String,
-	//{"name":"gender","type":"contacts_gender","default":"'U'::contacts_gender","attnum":"20","required":false}
+	//{"name":"gender","type":"contacts_gender","default":"''::contacts_gender","attnum":"20","required":false}
 	?gender:String,
 	//{"name":"date_of_birth","type":"date","default":"","attnum":"21","required":false}
 	?date_of_birth:String,

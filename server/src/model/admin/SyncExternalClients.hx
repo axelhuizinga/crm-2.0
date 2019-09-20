@@ -31,10 +31,12 @@ using Util;
 
 class SyncExternalClients extends Model 
 {
+	var keys:Array<String>;	
 	public function new(param:Map<String,String>):Void
 	{
 		super(param);	
 		//self.table = 'columns';
+		keys = S.tableFields('contacts');
         trace('calling ${action}');
 		trace(action);
 		//SWITCH Call either an instance method directly or use the shared Model query execution
@@ -57,14 +59,14 @@ class SyncExternalClients extends Model
     public function importCrmData():Void
     {
         var cData:NativeArray = getCrmData();
-        trace(cData[0]);        
+        //trace(cData[0]);        
 		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
 		for(row in cData.iterator())
 		{			
 			var stmt:PDOStatement = upsertClient(row);
 			try{
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
-				trace(res);
+				//trace(res);
 			}
 			catch(e:Dynamic)
 			{
@@ -98,13 +100,13 @@ class SyncExternalClients extends Model
 				ON CONFLICT (id) DO UPDATE
 				SET $cSet returning id;
 			*/;
-		trace(sql);
+		//trace(sql);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		bindClientData(stmt,rD);
 		if(!stmt.execute()){
 			S.sendErrors(dbData, ['execute'=>Lib.hashOfAssociativeArray(stmt.errorInfo())]);
 		}
-		trace(stmt.columnCount());
+		//trace(stmt.columnCount());
 		return stmt;
 		//return S.dbh.query(sql, PDO.FETCH_ASSOC);
     }
@@ -114,17 +116,31 @@ class SyncExternalClients extends Model
 		var meta:Map<String, NativeArray> = S.columnsMeta('contacts');
 		for(k => v in meta.keyValueIterator())
 		{
-			if(!stmt.bindValue(':$k',row[k], v['pdo_type']))
+			if(k=='id')
+				continue;
+			
+			var pdoType:Int = v['pdo_type'];
+			if(row[k]==null||row[k].indexOf('0000-00-00')==0)
 			{
-				trace('$k => $v');
-				S.sendErrors(dbData,['bindValue'=>'${row[k]}:${v['pdo_type']}']);
-			}		}
+				switch (v['native_type'])
+				{
+					case 'date'|'datetime'|'timestamp':
+					pdoType = PDO.PARAM_NULL;
+					case 'text'|'varchar':
+					row[k] = '';
+				}
+			}
+			//trace('$k => $pdoType:${row[k]}');
+			if(!stmt.bindValue(':$k',row[k], pdoType))//row[k]==null?1:
+			{
+				//trace('$k => $v');
+				S.sendErrors(dbData,['bindValue'=>'${row[k]}:$pdoType']);
+			}		
+		}
 	}
 
 	function clientRowData(row:NativeArray):Map<String,Dynamic> {
-		var keys:Array<String> = S.tableFields('contacts');
-		keys = keys.filter(function (k) return Syntax.code("isset({0}[{1}])",row,k) && row[k]!=null);
-		trace(keys);
+		//trace(keys);
 		return[
 			for(k in keys)
 				k => row[k]
@@ -159,11 +175,11 @@ class SyncExternalClients extends Model
     public function getCrmData():NativeArray
 	{		        
         var sql = comment(unindent,format)/*
-		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title,cl.anrede,cl.namenszusatz,cl.co_field,cl.storno_grund,cl.birth_date date_of_birth,IF(cl.old_active=1,'true','false')old_active,
+		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,cl.birth_date date_of_birth,IF(cl.old_active=1,'true','false')old_active,
 pp.pay_plan_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,IF(pp.product='K',2,3) product ,pp.agent,pp.agency_project project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,
  ps.pay_source_id,ps.debtor,ps.bank_name,ps.account,ps.blz,ps.iban,ps.sign_date,ps.pay_source_state,ps.creation_date account_creation_date,
-vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,vl.first_name,vl.last_name,vl.address1,vl.address2,vl.city,vl.postal_code,vl.country_code,vl.gender,
-IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobil,vl.email,vl.comments,vl.last_local_call_time,vl.owner,vl.entry_list_id, 1 mandator, 100 edited_by, '' company_name
+vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
+IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner,vl.entry_list_id, 1 mandator, 100 edited_by, '' company_name
 FROM clients cl
 INNER JOIN pay_plan pp
 ON pp.client_id=cl.client_id
@@ -176,6 +192,10 @@ LIMIT
 */;
 
         var stmt:PDOStatement = S.syncDbh.query('$sql ${param['batchSize']}');
+		if(stmt.errorCode() !='0000')
+		{
+			trace(stmt.errorInfo());
+		}
 		return (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 	}
 

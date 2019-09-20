@@ -86,6 +86,7 @@ class S
 	public static var dbViciBoxPass:String;	
 	public static var vicidialUser:String;
 	public static var viciDial: Map<String, Dynamic>;
+	static var ts:Float;
 	
 	static function main() 
 	{		
@@ -93,19 +94,21 @@ class S
 		var ini:NativeArray = S.conf.get('ini');
 		var vD:NativeArray = ini['vicidial'];
 		//trace(ini);
-		trace(vD['syncApi']);
+		ts = Sys.time();
+		last_request_time = Date.fromTime(ts);
+		var now:String = DateTools.format(last_request_time, "%d.%m.%y %H:%M:%S");		
+		trace(last_request_time.toString() + ' == $now' );		
+		//trace(vD['syncApi']);
 		var viciDial = Lib.hashOfAssociativeArray(vD);
-		trace(viciDial['url']);
-		trace(viciDial['admin']);
+		//trace(viciDial['url']);
+		//trace(viciDial['admin']);
 		if(Syntax.code("isset($_SERVER['VERIFIED'])"))
 		{trace(Syntax.code("$_SERVER['VERIFIED']"));}
 		//var pd:Dynamic = Web.getPostData();
-		last_request_time = Date.now();
-		var now:String = DateTools.format(last_request_time, "%d.%m.%y %H:%M:%S");
+
 		response = {content:'',error:''};
 		var params:StringMap<Dynamic> = Web.getParams();
 		devIP = params.get('devIP');
-		trace(Date.now().toString() + ' == $now' );		
 		trace(params);		
 
 		var action:String = params.get('action');
@@ -125,15 +128,15 @@ class S
 		if(action.indexOf('sync')==0)
 		{
 			//CONNECT DIALER DB	
-			trace('PDO.ATTR_PERSISTENT:${PDO.ATTR_PERSISTENT}');
+			//trace('PDO.ATTR_PERSISTENT:${PDO.ATTR_PERSISTENT}');
 			syncDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM',
 				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
-			trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
+			//trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
 		}
 
 		var jwt:String = params.get('jwt');
 		//var id:String = params.get('id');
-		trace(jwt +':' + (jwt != null));
+		//trace(jwt +':' + (jwt != null));
 		if (jwt.length > 0)
 		{
 			if(User.verify(params))
@@ -176,6 +179,7 @@ class S
 		//trace( Syntax.code("json_encode({0})",r));
 		//Sys.print(Syntax.code("json_encode({0})",r));
 		Sys.print(Json.stringify(r));
+		trace('done at ${Sys.time()-ts} ms');
 		Sys.exit(0);		
 	}
 	
@@ -190,6 +194,7 @@ class S
 			headerSent = true;
 		}			
 		Sys.print(r);
+		trace('done at ${Sys.time()-ts} ms');
 		Sys.exit(0);
 	}
 	
@@ -236,6 +241,7 @@ class S
 			}
 		}
 		trace(dbData);
+		//trace('done at ${Sys.time()-ts} ms');
 		return sendbytes(s.serialize(dbData));
 	}
 	
@@ -255,6 +261,7 @@ class S
 		var out = File.write("php://output", true);
 		out.bigEndian = true;
 		out.write(b);
+		trace('done at ${Sys.time()-ts} ms');
 		Sys.exit(0);
 		trace('SHOULD NEVER EVER HAPPEN');
 		return true;
@@ -449,6 +456,7 @@ class S
 	}
 		
 	static function __init__() {
+		Syntax.code("error_log('.')");
 		Syntax.code('require_once({0})', '../.crm/db.php');
 		Syntax.code('require_once({0})', '../.crm/functions.php');
 		//Syntax.code('require_once({0})', 'inc/PhpRbac/Rbac.php');

@@ -24,7 +24,7 @@ typedef Contact =
 	//{"name":"title","type":"character varying(64)","default":"''::character varying","attnum":"11","required":false}
 	?title:String,
 	//{"name":"title_2","type":"character varying(64)","default":"''::character varying","attnum":"12","required":false}
-	?title_2:String,
+	?title_pro:String,
 	//{"name":"first_name","type":"character varying(32)","default":"''::character varying","attnum":"13","required":false}
 	?first_name:String,
 	//{"name":"last_name","type":"character varying(32)","default":"''::character varying","attnum":"14","required":false}
@@ -39,7 +39,7 @@ typedef Contact =
 	?plz:String,
 	//{"name":"country_code","type":"character varying(3)","default":"''::character varying","attnum":"19","required":false}
 	?country_code:String,
-	//{"name":"gender","type":"contacts_gender","default":"'U'::contacts_gender","attnum":"20","required":false}
+	//{"name":"gender","type":"contacts_gender","default":"''::contacts_gender","attnum":"20","required":false}
 	?gender:String,
 	//{"name":"date_of_birth","type":"date","default":"","attnum":"21","required":false}
 	?date_of_birth:String,

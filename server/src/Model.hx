@@ -116,7 +116,7 @@ class Model
 		}
 
 		var iFields:Array<String> = Type.getInstanceFields(cl);
-		trace('$iFields ${param['action']}');
+		//trace('$iFields ${param['action']}');
 		if (iFields.has(param['action']))
 		{
 			trace('creating instance of ${param.get('className')}');
@@ -671,7 +671,7 @@ class Model
 	public function new(?param:Map<String,String>) 
 	{
 		this.param = param;
-		trace(param);
+		//trace(param);
 		action = param.get('action');
 		data = {};
 		data.rows = new NativeArray();

@@ -41,7 +41,7 @@ class ContactsModel
 					displayFormat: function() return "d.m.Y H:i:S"}, 
 				'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat:  function() return "d.m.Y"},
 				'gender'=>{label:'Geschlecht',type:Select,options:[
-						'U'=>'Unbekannt',
+						''=>'Unbekannt',
 						'M'=>'Männlich',
 						'F'=>'Weiblich'
 					]

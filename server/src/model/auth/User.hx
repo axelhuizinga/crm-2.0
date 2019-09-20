@@ -205,7 +205,7 @@ class User extends Model
 	{
 		var jwt:String = params.get('jwt');
 		var id:Int = Std.parseInt(params.get('id'));		
-		trace(jwt);
+		//trace(jwt);
 		try{
 			var userInfo:UserInfo = JWT.extract(jwt);
 			var now:Float = Date.now().getTime();
@@ -216,7 +216,7 @@ class User extends Model
 			//trace(':'+((userInfo.validUntil - Date.now().getTime()) > 0));
 			if (id == userInfo.id && userInfo.ip == Web.getClientIP() && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
-				trace('calling JWT.verify now...');
+				//trace('calling JWT.verify now...');
 				//trace(JWT.verify(jwt, S.secret));
 				return switch(JWT.verify(jwt, S.secret))				
 				{

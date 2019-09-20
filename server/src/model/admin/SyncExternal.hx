@@ -33,8 +33,8 @@ class SyncExternal extends Model
 	{
 		super(param);	
 		//self.table = 'columns';
-        trace('calling ${action}');
-		trace(action);
+        //trace('calling ${action}');
+		//trace(action);
 		//SWITCH Call either an instance method directly or use the shared Model query execution
 		switch(action ){
 			case 'syncAll':

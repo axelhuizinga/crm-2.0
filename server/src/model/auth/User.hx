@@ -39,6 +39,12 @@ class User extends Model
 		//Reflect.callMethod(self, Reflect.field(self, action),[]);
 	}
 	
+	public function new(?param:Map<String,String>) 
+	{
+		super(param);
+		run();
+	}	
+	
 	public function clientVerify():Void
 	{
 		if (verify(param))

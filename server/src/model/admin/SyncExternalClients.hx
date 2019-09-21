@@ -32,6 +32,7 @@ using Util;
 class SyncExternalClients extends Model 
 {
 	var keys:Array<String>;	
+
 	public function new(param:Map<String,String>):Void
 	{
 		super(param);	
@@ -77,8 +78,8 @@ class SyncExternalClients extends Model
 				]);}		
 			}
 		}		
-        S.sendData(dbData, null);
         trace('done');
+        S.sendData(dbData, null);
     }
     
     inline function testValue(v:Dynamic):Bool return cast v;
@@ -107,6 +108,7 @@ class SyncExternalClients extends Model
 			S.sendErrors(dbData, ['execute'=>Lib.hashOfAssociativeArray(stmt.errorInfo())]);
 		}
 		//trace(stmt.columnCount());
+		dbData.dataInfo['synced'] = ++synced;
 		return stmt;
 		//return S.dbh.query(sql, PDO.FETCH_ASSOC);
     }
@@ -174,8 +176,14 @@ class SyncExternalClients extends Model
 
     public function getCrmData():NativeArray
 	{		        
+		var firstBatch:Bool = param.exists('firstBatch') && param['firstBatch'];
+		var selectTotalCount:String = '';
+		if(firstBatch)
+		{
+			selectTotalCount = 'SQL_CALC_FOUND_ROWS';
+		}
         var sql = comment(unindent,format)/*
-		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,cl.birth_date date_of_birth,IF(cl.old_active=1,'true','false')old_active,
+		SELECT $firstBatch cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,cl.birth_date date_of_birth,IF(cl.old_active=1,'true','false')old_active,
 pp.pay_plan_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,IF(pp.product='K',2,3) product ,pp.agent,pp.agency_project project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,
  ps.pay_source_id,ps.debtor,ps.bank_name,ps.account,ps.blz,ps.iban,ps.sign_date,ps.pay_source_state,ps.creation_date account_creation_date,
 vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
@@ -192,11 +200,18 @@ LIMIT
 */;
 
         var stmt:PDOStatement = S.syncDbh.query('$sql ${param['batchSize']}');
-		if(stmt.errorCode() !='0000')
+		if(stmt.errorCode() !='00000')
 		{
 			trace(stmt.errorInfo());
 		}
-		return (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		if(firstBatch)
+		{
+			stmt:PDOStatement = S.syncDbh.query('SELECT FOUND_ROWS()');
+			var totalRes:NativeArray = 
+			dbData.dataInfo['totalRecords'] =  (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN,0):null);
+		}
+		return res;
 	}
 
 }

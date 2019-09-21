@@ -15,3 +15,4 @@
 #--interp
 
 #-cmd mv ../httpdocs/index.php ../httpdocs/server.php
+-cmd rsync -rav --size-only -e "ssh -p 666 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --progress ../httpdocs/lib  root@pitverwaltung.de:/var/www/vhosts/pitverwaltung.de/httpdocs

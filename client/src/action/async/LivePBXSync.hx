@@ -35,10 +35,10 @@ class LivePBXSync
 
 	public static function syncAll(props:DBAccessProps) 
 	{
-		trace(props.batchSize);
+		trace('${props.batchSize} ${props.batchCount} ${props.synced}');
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
-			trace(props.batchCount);
+			trace(props.synced);
 			if (!props.user.loggedIn)
 			{
 				return dispatch(User(LoginError(
@@ -57,7 +57,9 @@ class LivePBXSync
 					className:props.className,
 					action:props.action,
 					batchSize:props.batchSize,
+					offset:props.offset,
 					filter:props.filter,
+					firstBatch:props.synced==0, 
 					devIP:App.devIP
 				},
 				function(data:DbData)
@@ -72,19 +74,18 @@ class LivePBXSync
 								text:data.dataErrors.iterator().next()
 							}							
 						)));
-					}
+					} 
 					trace(data.dataInfo);
-					if(data.dataInfo['count']==null)
+					if(data.dataInfo['synced']==null)
 					{
 						return dispatch(Status(Update(
 							{text:'Fehler 0 Kontakte Aktualisiert'})));
 					}
-					props.batchCount += data.dataInfo['count'];
-					dispatch(Status(Update({text:'Kontakte Aktualisiert:${props.batchCount}'})));
-					if(data.dataInfo['done'])
+					props.batchCount += data.dataInfo['synced'];
+					if(data.dataInfo['synced']!=null)
 					{
 						return dispatch(Status(Update(
-							{text:'Alle Kontakte Aktualisiert:${props.batchCount}'})));
+							{text:'${data.dataInfo['synced']} Kontakte von ${props.batchCount} aktualisiert'})));
 					}
 					if(props.limit==null || props.limit < props.batchCount)
 						return dispatch(syncAll(props));

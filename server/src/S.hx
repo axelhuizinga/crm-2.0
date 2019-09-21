@@ -456,14 +456,14 @@ class S
 	}
 		
 	static function __init__() {
-		Syntax.code("error_log('.')");
 		Syntax.code('require_once({0})', '../.crm/db.php');
+		Syntax.code("file_put_contents($appLog,'.', FILE_APPEND)");
 		Syntax.code('require_once({0})', '../.crm/functions.php');
 		//Syntax.code('require_once({0})', 'inc/PhpRbac/Rbac.php');
 		Debug.logFile = untyped Syntax.code("$appLog");
 		haxe.Log.trace = Debug._trace;
 		Out.skipFields = ['admin','keyPhrase','pass','password'];
-		//edump(Debug.logFile);
+		edump(Debug.logFile);
 		db = Syntax.code("$DB");
 		dbHost = Syntax.code("$DB_server");
 		dbUser = Syntax.code("$DB_user");

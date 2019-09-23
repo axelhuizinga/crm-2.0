@@ -136,7 +136,7 @@ class S
 
 		var jwt:String = params.get('jwt');
 		//var id:String = params.get('id');
-		//trace(jwt +':' + (jwt != null));
+		trace(jwt.length +':' + (jwt != null));
 		if (jwt.length > 0)
 		{
 			if(User.verify(params))
@@ -144,7 +144,7 @@ class S
 			trace('SHOULD NEVER HAPPEN');
 		}
 	
-		User.login(params, secret);		
+		User.login(params);		
 		exit(response);
 
 	}

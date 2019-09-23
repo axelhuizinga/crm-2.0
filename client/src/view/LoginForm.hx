@@ -53,7 +53,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		return {
-			submitLogin: function(lState:UserState) return dispatch(UserAccess.loginReq(lState))
+			submitLogin: function(lState:UserState) return dispatch(UserAccess.doLogin(lState))
 		};
 	}
 
@@ -100,6 +100,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		//trace(props.dispatch + '==' + App.store.dispatch);
 		//trace(props.dispatch == App.store.dispatch);
 		//App.store.dispatch(AppAction.LoginChange(s));
+		//TODO: PUT INTO Global State to avoid rerender
 		this.setState(s);
 		//trace(this.state);
 	}

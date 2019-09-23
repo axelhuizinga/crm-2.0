@@ -159,6 +159,7 @@ class DBSync extends BaseForm
 		App.store.dispatch(action.async.LivePBXSync.syncAll({
 				batchSize: 100,
 				user:props.user,
+				synced:0,
 				className:'admin.SyncExternal',
 				action:'syncAll'
 			}));

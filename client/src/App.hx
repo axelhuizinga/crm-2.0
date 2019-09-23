@@ -84,6 +84,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	private function initStore(history:History):Store<AppState>
 	{
 		var appWare = new AppStore();
+		var user = new UserStore();
 
 		var rootReducer = Redux.combineReducers(
 		{
@@ -92,13 +93,15 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			dataStore: mapReducer(DataAction, new DataStore()),
 			locationState: mapReducer(LocationAction, new LocationStore(history)),
 			status: mapReducer(StatusAction, new StatusStore()),
-			user: mapReducer(UserAction, new UserStore())
+			user: mapReducer(UserAction, user)
 		});
 		var dataStore:DataAccessState = loadFromLocalStorage();
-		trace(dataStore.contactData);
+		//trace(dataStore.contactData);
 		return createStore(rootReducer, {dataStore:loadFromLocalStorage()},  Redux.applyMiddleware(
 			mapMiddleware(Thunk, new ThunkMiddleware()),
-			mapMiddleware(AppAction, appWare))
+			mapMiddleware(AppAction, appWare),
+			mapMiddleware(UserAction, user)
+			)
 		);
 	}
 
@@ -181,7 +184,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			},250);
 		}
 		//trace(store);
-		trace(state.redirectAfterLogin);
+		trace(state.user);
 		//CState.init(store);		
 		if (!(state.user.id == null || state.user.jwt == ''))
 		{			
@@ -238,11 +241,12 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	public static function edump(el:Dynamic){Out.dumpObject(el); return 'OK'; };
 
   	override function render() {
+		trace(state.user);
 		//trace(state.history.location.pathname);	store={store}	<UiView/>	<div>more soon...</div>
         return jsx('
 			<$Provider store={store}>
 				<$IntlProvider locale="de">
-					<UiView/>
+					<$UiView/>
 				</$IntlProvider>
 			</$Provider>
         ');

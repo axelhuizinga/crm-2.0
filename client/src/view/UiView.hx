@@ -144,6 +144,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		}
 		if (props.user.waiting)
 		{
+			trace('waiting hero');
 			return jsx('
 			<section className="hero is-alt is-fullheight">
 			  <div className="hero-body">
@@ -153,10 +154,12 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 			');		
 		}
 		
-		//trace('${props.user.jwt} ${props.user.loggedIn}');
+		trace('${props.user.jwt} ${props.user.loggedIn}');
 		if(props.user.jwt == null || props.user.jwt == '' || !props.user.loggedIn )//
 		{
 			// WE NEED TO LOGIN FIRST
+			trace(props.user);
+			//return null;
 			return jsx('<$LoginForm {...props.user}/>');
 		}
 		else

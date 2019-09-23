@@ -4,8 +4,8 @@ import haxe.Serializer;
 import haxe.crypto.Sha256;
 import haxe.ds.IntMap;
 import haxe.ds.Map;
-
 import jwt.JWT;
+import jwt.JWT.JWTResult;
 import me.cunity.debug.Out;
 import model.tools.DB;
 import php.Exception;
@@ -31,17 +31,25 @@ import php.db.PDOStatement;
 
 class User extends Model
 {
-	public static function _create(param:Map<String,String>):Void
+	static var lc:Int = 0;
+	var last_login:Date;
+
+	public static function _create(param:Map<String,Dynamic>):Void
 	{
 		var self:User = new User(param);	
-		self.run();
+		//self.run();
 		//trace(action);
 		//Reflect.callMethod(self, Reflect.field(self, action),[]);
 	}
 	
-	public function new(?param:Map<String,String>) 
+	public function new(?param:Map<String,Dynamic>) 
 	{
 		super(param);
+		if(lc++ >1)
+		{
+			trace('too much $lc');
+		}
+		else
 		run();
 	}	
 	
@@ -118,10 +126,10 @@ class User extends Model
 		}
 	}
 	
-	public static function login(params:Map<String,String>, secret:String):Bool
+	public static function login(params:Map<String,Dynamic>):Bool
 	{
 		var me:User = new User(params);
-		//trace(me);
+		trace(me);
 		switch(me.userIsAuthorized())
 		{//TODO:CONFIG JWT DURATION
 			case uath = UserAuth.AuthOK|UserAuth.PassChangeRequired:
@@ -132,7 +140,7 @@ class User extends Model
 						validUntil:d,
 						ip: Web.getClientIP(),
 						mandator:me.dbData.dataInfo['user_data'].mandator
-					}, secret);						
+					}, S.secret);						
 				
 				trace(jwt);
 				trace(JWT.extract(jwt));
@@ -151,6 +159,47 @@ class User extends Model
 		}
 	}
 	
+	public static function logout(params:Map<String,Dynamic>):Bool
+	{
+		
+		if(User.verify(params))
+		{
+			var me:User = new User(params);
+			trace(me);
+			stmt = S.dbh.prepare(
+				'SELECT last_login FROM ${S.db}.users WHERE user_name=:user_name AND password=crypt(:password,password)',Syntax.array(null));
+			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}',':password':'${param.get('pass')}'})))
+			{
+				S.sendErrors(dbData,['${action}' => stmt.errorInfo()]);
+			}
+			if (stmt.rowCount()==0)
+			{
+				S.sendErrors(dbData,['${action}'=>'pass','sql'=>stmt.errorInfo]);
+			}
+			// USER AUTHORIZED
+			var assoc:Dynamic = stmt.fetch(PDO.FETCH_ASSOC);
+			var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(assoc);	
+			dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(assoc);		
+			dbData.dataInfo['id'] = res['id'];
+			dbData.dataInfo['mandator'] = res['mandator'];
+			dbData.dataInfo['last_login'] = res['last_login'];			
+			Web.setCookie('user.jwt', '', -1);
+			Web.setCookie('user.id', me.dbData.dataInfo['user_data'].id, Date.fromTime(d + 86400000));
+
+			//me.dbData.dataInfo['user_data'].id = jwt;
+			me.dbData.dataInfo['user_data'].jwt = jwt;
+			//trace(me.dbData);
+			S.sendInfo(me.dbData);
+			return true;
+		}
+		else{
+			var dbData:DbData = new DbData();
+			dbData.dataErrors['logOut'] = 'Sie Sind nicht angemeldet!';
+			S.sendInfo(dbData);			
+			return false;
+		}
+	}
+
 	public function changePassword():Bool
 	{
 		if (param.get('new_pass') == param.get('pass'))
@@ -188,7 +237,7 @@ class User extends Model
 		return true;
 	}
 	
-	static function saveRequest(id:Int, params:Map<String,String>):Bool
+	static function saveRequest(id:Int, params:Map<String,Dynamic>):Bool
 	{
 		var request:String = Serializer.run(params);
 		var rTime:String = DateTools.format(S.last_request_time, "'%Y-%m-%d %H:%M:%S'");//,request=?
@@ -207,7 +256,7 @@ class User extends Model
 		return '';
 	}
 	
-	public static function verify(?params:Map<String,String>):Bool
+	public static function verify(?params:Map<String,Dynamic>):Bool
 	{
 		var jwt:String = params.get('jwt');
 		var id:Int = Std.parseInt(params.get('id'));		
@@ -224,18 +273,25 @@ class User extends Model
 			{
 				//trace('calling JWT.verify now...');
 				//trace(JWT.verify(jwt, S.secret));
-				return switch(JWT.verify(jwt, S.secret))				
+				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
+				return switch(jRes)				
 				{
+					case Invalid(payload):
+						trace(payload);
+						// JWT VALID AND NOT OLDER THAN 11 h
+						saveRequest(id, params);
+						S.sendErrors(new DbData(), ['jwtError'=>jRes]);
+						false;
 					case Valid(payload):
 						// JWT VALID AND NOT OLDER THAN 11 h
 						saveRequest(id, params);
 						true;
 					default:
-						S.sendErrors(new DbData(), ['loginError'=>'JWT invalid!']);
+						S.sendErrors(new DbData(), ['jwtError'=>jRes]);
 						false;
 				}
 			}
-			S.sendErrors(new DbData(), ['loginError'=>'JWT verify failed!']);		
+			S.sendErrors(new DbData(), ['jwtError'=>'JWT invalid!']);		
 			return false;
 		}
 		catch (ex:Dynamic)

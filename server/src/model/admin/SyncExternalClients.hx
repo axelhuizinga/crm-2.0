@@ -32,11 +32,16 @@ using Util;
 class SyncExternalClients extends Model 
 {
 	var keys:Array<String>;	
-
-	public function new(param:Map<String,String>):Void
+	var synced:Int;
+	public function new(param:Map<String,Dynamic>):Void
 	{
 		super(param);	
 		//self.table = 'columns';
+		if(param.exists('synced'))
+		{
+			synced = param['synced'];
+		}
+		else synced = 0;
 		keys = S.tableFields('contacts');
         trace('calling ${action}');
 		trace(action);
@@ -176,7 +181,7 @@ class SyncExternalClients extends Model
 
     public function getCrmData():NativeArray
 	{		        
-		var firstBatch:Bool = param.exists('firstBatch') && param['firstBatch'];
+		var firstBatch:Bool = param.exists('firstBatch') && param['firstBatch']=='true';
 		var selectTotalCount:String = '';
 		if(firstBatch)
 		{
@@ -207,7 +212,7 @@ LIMIT
 		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		if(firstBatch)
 		{
-			stmt:PDOStatement = S.syncDbh.query('SELECT FOUND_ROWS()');
+			stmt = S.syncDbh.query('SELECT FOUND_ROWS()');
 			var totalRes:NativeArray = 
 			dbData.dataInfo['totalRecords'] =  (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN,0):null);
 		}

@@ -71,8 +71,8 @@ class UserAccess {
 		}		
 		return null;
 	}
-	
-	public static function loginReq(props:UserState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
+
+	public static function doLogin(props:UserState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(props);
@@ -128,10 +128,65 @@ class UserAccess {
 		});
 	}
 
-	public static function logOff(props:UserState) 
+	public static function loginReq(props:UserState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			trace(getState());
+			trace(props);
+			trace(getState().user);
+			if (props.loginError != null) 
+				return dispatch(User(LoginRequired(props)));
+			//var spin:Dynamic = dispatch(AppAction.AppWait);
+			//trace(spin);
+			return null;
+		});
+	}
+	/**
+	 * 
+	 */
+	public static function logOut() 
+	{
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+			trace(getState().user);
+			var props:UserState = getState().user;
+			if (props.id == null) 
+				return dispatch(User(LoginError({id:props.id, loginError:'UserId fehlt!',mandator:props.mandator})));
+			var bL:XMLHttpRequest = null;
+			bL = BinaryLoader.create(
+			'${App.config.api}', 
+			{				
+				id:props.id,
+				jwt:props.jwt,
+				className:'auth.User',
+				action:'logOut',
+				devIP:App.devIP
+			},
+			function(data:DbData)
+			{
+				 if (req.status == 200) {
+					 // OK
+					var jRes:UserState = Json.parse( req.response);
+					trace(jRes.jwt);
+					//Cookie.set('user.id', Std.string(props.id));
+					Cookie.set('user.jwt', jRes.jwt);
+					trace(Cookie.get('user.jwt'));
+					return dispatch(User(LogoutComplete({id:props.id, jwt:jRes.jwt, loggedIn:false})));
+				} else {
+					  // Otherwise reject with the status text
+					  // which will hopefully be a meaningful error
+					return dispatch(User(LogoutComplete({id:props.id, loginError:req.statusText})));
+				}
+			};
+			req.send(fD);
+			return null;
+		}
+		
+	}
+
+	public static function logOff() 
+	{
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+			trace(getState().user);
+			var props:UserState = getState().user;
 			if (props.id == null) 
 				return dispatch(User(LoginError({id:props.id, loginError:'UserId fehlt!',mandator:props.mandator})));
 			var fD:FormData = new FormData();
@@ -156,25 +211,28 @@ class UserAccess {
 					return dispatch(User(LoginError({id:props.id, loginError:req.statusText})));
 				}
 			};
-			var spin:Dynamic = dispatch(AppWait);
 			req.send(fD);
+			return null;
+			/*var spin:Dynamic = dispatch(AppWait);
+			
 			trace(spin);
-			return spin;			
+			return spin;	*/		
 		});
 	}	
 
-	public static function logout() {
+	/*public static function logOut() {
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace('logout');		
 			return dispatch(User(LogOut({jwt:'', id: getState().user.id })));
 		});
-	}
+	}*/
 
 	public static function verify() {
 		//CHECK IF WE HAVE A VALID SESSION
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			trace('clientVerify');
+			//trace('clientVerify');
 			var state:AppState = getState();
+			trace(state.user);
 			var bL:XMLHttpRequest = BinaryLoader.create(
 			'${App.config.api}', 
 			{				
@@ -200,9 +258,15 @@ class UserAccess {
 					trace(data.dataErrors);
 					
 					return dispatch(User(LoginError(
-						{id:state.user.id, loginError:data.dataErrors.iterator().next()})));
+						{
+							id:state.user.id, 
+							jwt:'',
+							loginError:data.dataErrors.iterator().next(),
+							waiting: false
+						})));
 				}	
 				var uState:UserState = data.dataInfo['user_data'];
+				trace(uState);
 				uState.waiting = false;
 				return dispatch(User(LoginComplete(uState)));			
 			});

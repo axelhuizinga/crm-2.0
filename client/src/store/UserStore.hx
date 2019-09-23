@@ -1,20 +1,21 @@
 package store;
 
+import action.async.UserAccess;
 import action.UserAction;
 import js.Cookie;
 import react.ReactUtil.copy;
 import redux.IReducer;
 import redux.IMiddleware;
 import redux.StoreMethods;
+import state.AppState;
 import state.UserState;
-
 /**
  * ...
  * @author axel@cunity.me
  */
 
 class UserStore implements IReducer<UserAction, UserState>
-	//implements IMiddleware<UserAction, state.AppState>
+	implements IMiddleware<UserAction, AppState>
 {
 	public var initState:UserState = {
 		first_name:'',
@@ -26,10 +27,10 @@ class UserStore implements IReducer<UserAction, UserState>
 		loggedIn:false,
 		last_login:null,
 		jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
-		waiting: false	
+		waiting: true	
 	};
 	
-	public var store:StoreMethods<state.AppState>;
+	public var store:StoreMethods<AppState>;
 	
 	public function new() {}
 	
@@ -39,7 +40,7 @@ class UserStore implements IReducer<UserAction, UserState>
 		return switch(action)
 		{
 			case LoginRequired(uState):
-					//trace(uState);
+					trace(uState);
 					copy(state, uState);                             
 			case LoginError(err):
 					trace(err);
@@ -48,11 +49,13 @@ class UserStore implements IReducer<UserAction, UserState>
 			case LoginComplete(uState):
 					//trace(uState.id + ':' + uState.loggedIn);
 					//trace(uState);
-					uState.loginError = null;
-					uState.loggedIn = true;
-					copy(state, uState);                                             
+					copy(uState, {
+						loginError: null,
+						loggedIn: true,
+						waiting:false
+					});                                             
 			case LogOut(uState):
-					//trace(uState);
+					trace(uState);
 					copy(state, uState);      		
 			default:
 				state;
@@ -61,10 +64,16 @@ class UserStore implements IReducer<UserAction, UserState>
 
 	public function middleware(action:UserAction, next:Void -> Dynamic)
 	{
-		trace(action);
+		//trace(store);
 		return switch(action)
 		{		
-			default: next();
+			case LoginError(state):
+				store.dispatch(UserAccess.loginReq(state));
+			//store.dispatch(UserAction.LoginRequired(state));
+			//next();
+			//
+			default: 
+			next();
 		}
 	}	
 }

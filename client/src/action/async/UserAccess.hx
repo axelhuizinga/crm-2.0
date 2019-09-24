@@ -6,6 +6,7 @@ import haxe.http.HttpJs;
 import haxe.Json;
 import haxe.Serializer;
 import loader.BinaryLoader;
+import react.ReactUtil.copy;
 import redux.Redux;
 import redux.StoreMethods;
 import redux.thunk.Thunk;
@@ -17,6 +18,7 @@ import shared.DbData;
 import state.AppState;
 import state.UserState;
 import view.shared.OneOf;
+using DateTools;
 
 class UserAccess {
 
@@ -157,28 +159,25 @@ class UserAccess {
 				id:props.id,
 				jwt:props.jwt,
 				className:'auth.User',
-				action:'logOut',
+				action:'logout',
 				devIP:App.devIP
 			},
 			function(data:DbData)
 			{
-				 if (req.status == 200) {
+				 if (data.dataErrors.keys().hasNext()){
 					 // OK
-					var jRes:UserState = Json.parse( req.response);
-					trace(jRes.jwt);
+					trace(data.dataErrors);
 					//Cookie.set('user.id', Std.string(props.id));
-					Cookie.set('user.jwt', jRes.jwt);
-					trace(Cookie.get('user.jwt'));
-					return dispatch(User(LogoutComplete({id:props.id, jwt:jRes.jwt, loggedIn:false})));
+					return null;
 				} else {
-					  // Otherwise reject with the status text
-					  // which will hopefully be a meaningful error
-					return dispatch(User(LogoutComplete({id:props.id, loginError:req.statusText})));
+					//var d:Date = Date.now().delta(31556926000);//ADD one year				
+					Cookie.set('user.jwt', '', 31556926);
+					trace(Cookie.get('user.jwt'));
+					return dispatch(User(LogOutComplete({id:props.id, jwt:'', loggedIn:false, waiting: false})));
 				}
-			};
-			req.send(fD);
+			});
 			return null;
-		}
+		});
 		
 	}
 
@@ -268,7 +267,7 @@ class UserAccess {
 				var uState:UserState = data.dataInfo['user_data'];
 				trace(uState);
 				uState.waiting = false;
-				return dispatch(User(LoginComplete(uState)));			
+				return dispatch(User(LoginComplete(copy(state,{user:uState}))));			
 			});
 		});	
 	}

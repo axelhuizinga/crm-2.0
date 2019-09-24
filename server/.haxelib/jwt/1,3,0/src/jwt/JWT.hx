@@ -129,7 +129,7 @@ class JWT {
      */
     public static function extract<T:Dynamic>(jwt:String):T {
         var parts:Array<String> = jwt.split(".");
-        if(parts.length != 3) throw 'Malformed JWT!';
+        if(parts.length != 3) throw 'Malformed JWT! : ${parts}';
         return Json.parse(base64url_decode(parts[1]).toString());
     }
 }

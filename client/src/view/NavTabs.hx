@@ -47,8 +47,8 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 		');
 	}
 
-	function logOff() {
-		App.store.dispatch( UserAccess.logOff());
+	function logOut() {
+		App.store.dispatch( UserAccess.logOut());
 	}
 
 	function buildNav()
@@ -68,7 +68,7 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 			<TabLink to="/Qc" ${...props}>QC</TabLink>
 			<TabLink to="/Accounting" ${...props}>Buchhaltung</TabLink>
 			<TabLink to="/Reports" ${...props}>Berichte</TabLink>
-			<i className = "icon abs-right fa fa-sign-out"  title = "Abmelden"  onClick=${logOff}
+			<i className = "icon abs-right fa fa-sign-out"  title = "Abmelden"  onClick=${logOut}
 			style={{margin:".8rem .5rem",fontSize:"1.7rem", cursor:"pointer", color:"#801111"}}></i>
 		</>
 		');

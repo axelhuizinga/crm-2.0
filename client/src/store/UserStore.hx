@@ -49,11 +49,21 @@ class UserStore implements IReducer<UserAction, UserState>
 			case LoginComplete(uState):
 					//trace(uState.id + ':' + uState.loggedIn);
 					//trace(uState);
-					copy(uState, {
+					copy(state, {
+						jwt:uState.jwt,
 						loginError: null,
 						loggedIn: true,
 						waiting:false
 					});                                             
+			case LogOutComplete(uState):
+					//trace(uState.id + ':' + uState.loggedIn);
+					//trace(uState);
+					copy(state, {
+						loginError: null,
+						loggedIn: false,
+						jwt:'',
+						waiting:false
+					});   					
 			case LogOut(uState):
 					trace(uState);
 					copy(state, uState);      		

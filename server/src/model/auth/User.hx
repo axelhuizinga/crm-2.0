@@ -15,7 +15,7 @@ import php.Syntax;
 import php.Web;
 import php.db.PDO;
 import php.db.PDOStatement;
-
+using  DateTools;
 /**
  * ...
  * @author axel@bi4.me
@@ -160,44 +160,35 @@ class User extends Model
 	}
 	
 	public static function logout(params:Map<String,Dynamic>):Bool
-	{
-		
-		if(User.verify(params))
+	{	
+		trace(params);
+		var me:User = new User(params);		
+		trace(me.id);
+		/*var stmt:PDOStatement = S.dbh.prepare(
+			'SELECT last_login FROM ${S.db}.users WHERE id=:user_name',Syntax.array(null));
+		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':id': me.id})))
 		{
-			var me:User = new User(params);
-			trace(me);
-			stmt = S.dbh.prepare(
-				'SELECT last_login FROM ${S.db}.users WHERE user_name=:user_name AND password=crypt(:password,password)',Syntax.array(null));
-			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}',':password':'${param.get('pass')}'})))
-			{
-				S.sendErrors(dbData,['${action}' => stmt.errorInfo()]);
-			}
-			if (stmt.rowCount()==0)
-			{
-				S.sendErrors(dbData,['${action}'=>'pass','sql'=>stmt.errorInfo]);
-			}
-			// USER AUTHORIZED
-			var assoc:Dynamic = stmt.fetch(PDO.FETCH_ASSOC);
-			var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(assoc);	
-			dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(assoc);		
-			dbData.dataInfo['id'] = res['id'];
-			dbData.dataInfo['mandator'] = res['mandator'];
-			dbData.dataInfo['last_login'] = res['last_login'];			
-			Web.setCookie('user.jwt', '', -1);
-			Web.setCookie('user.id', me.dbData.dataInfo['user_data'].id, Date.fromTime(d + 86400000));
+			S.sendErrors(me.dbData,['${me.action}' => stmt.errorInfo()]);
+		}
+		if (stmt.rowCount()==0)
+		{
+			S.sendErrors(me.dbData,['${me.action}'=>'pass','sql'=>stmt.errorInfo]);
+		}
+		var res:Dynamic = stmt.fetch(PDO.FETCH_COLUMN,0);
+		trace(res);*/
+		/*var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(assoc);	
+		me.dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(assoc);		
+		me.dbData.dataInfo['id'] = res['id'];
+		me.dbData.dataInfo['mandator'] = res['mandator'];
+		me.dbData.dataInfo['last_login'] = res['last_login'];*/		
+		var expiryDate = Date.now().delta(31556926000);//1 year
+		Web.setCookie('user.jwt', '', expiryDate);
+		Web.setCookie('user.id', me.id, expiryDate);
 
-			//me.dbData.dataInfo['user_data'].id = jwt;
-			me.dbData.dataInfo['user_data'].jwt = jwt;
-			//trace(me.dbData);
-			S.sendInfo(me.dbData);
-			return true;
-		}
-		else{
-			var dbData:DbData = new DbData();
-			dbData.dataErrors['logOut'] = 'Sie Sind nicht angemeldet!';
-			S.sendInfo(dbData);			
-			return false;
-		}
+		//me.dbData.dataInfo['user_data'].id = jwt;
+		//trace(me.dbData);
+		S.sendInfo(me.dbData);
+		return true;
 	}
 
 	public function changePassword():Bool
@@ -260,7 +251,7 @@ class User extends Model
 	{
 		var jwt:String = params.get('jwt');
 		var id:Int = Std.parseInt(params.get('id'));		
-		//trace(jwt);
+		trace(jwt);
 		try{
 			var userInfo:UserInfo = JWT.extract(jwt);
 			var now:Float = Date.now().getTime();

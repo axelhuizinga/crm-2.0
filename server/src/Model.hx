@@ -90,6 +90,7 @@ class Model
 	public var fieldNames:Array<String>;
 	public var tableNames:Array<String>;
 	public var table:String;
+	public var id(default, null):String;
 	public var num_rows(default, null):Int;
 	var action:String;
 	var dbData:DbData;
@@ -111,7 +112,7 @@ class Model
 		if (staticMethods.has(param['action']))
 		{
 			trace('calling static Method ${param.get('className')}.${param['action']}');
-			Reflect.callMethod(cl, Reflect.field(cl, param['action']),[param['action']]);
+			Reflect.callMethod(cl, Reflect.field(cl, param['action']),[param]);
 			return;
 		}
 
@@ -672,7 +673,10 @@ class Model
 	{
 		this.param = param;
 		//trace(param);
+		id = param['id'];
+		trace(id);
 		action = param.get('action');
+		
 		data = {};
 		data.rows = new NativeArray();
 		dbData = new DbData();

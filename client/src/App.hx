@@ -1,3 +1,4 @@
+import react.ReactUtil;
 import state.DataAccessState;
 import haxe.macro.Expr.Catch;
 import store.DataStore;
@@ -196,7 +197,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			store.dispatch(
 				User(
 					UserAction.LoginRequired(
-						state.user)));
+						ReactUtil.copy( state.user, {waiting:false}))));
 		}
 
 		//trace(state.user.jwt);

@@ -87,8 +87,11 @@ class LivePBXSync
 						return dispatch(Status(Update(
 							{text:'${data.dataInfo['synced']} Kontakte von ${props.batchCount} aktualisiert'})));
 					}
-					if(props.limit==null || props.limit < props.batchCount)
+					if(props.limit==null || props.limit < props.batchCount){
+						//LOOP UNTIL LIMIT
 						return dispatch(syncAll(props));
+					}
+						
 					return null;
 				}
 			);

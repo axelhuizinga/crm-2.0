@@ -172,6 +172,7 @@ class UserAccess {
 				} else {
 					//var d:Date = Date.now().delta(31556926000);//ADD one year				
 					Cookie.set('user.jwt', '', 31556926);
+					Cookie.set('user.id', null, null, '/');					
 					trace(Cookie.get('user.jwt'));
 					return dispatch(User(LogOutComplete({id:props.id, jwt:'', loggedIn:false, waiting: false})));
 				}
@@ -265,9 +266,11 @@ class UserAccess {
 						})));
 				}	
 				var uState:UserState = data.dataInfo['user_data'];
+				trace(state.user.jwt);
+				trace(copy(state,{user:uState}).user);
 				trace(uState);
 				uState.waiting = false;
-				return dispatch(User(LoginComplete(copy(state,{user:uState}))));			
+				return dispatch(User(LoginComplete(copy(state,{user:uState}).user)));			
 			});
 		});	
 	}

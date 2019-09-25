@@ -1,4 +1,5 @@
 package model.auth;
+import haxe.CallStack;
 import shared.DbData;
 import haxe.Serializer;
 import haxe.crypto.Sha256;
@@ -32,11 +33,14 @@ using  DateTools;
 class User extends Model
 {
 	static var lc:Int = 0;
+	static var _me:User;
 	var last_login:Date;
 
 	public static function _create(param:Map<String,Dynamic>):Void
 	{
+		trace(param);
 		var self:User = new User(param);	
+		
 		//self.run();
 		//trace(action);
 		//Reflect.callMethod(self, Reflect.field(self, action),[]);
@@ -44,13 +48,24 @@ class User extends Model
 	
 	public function new(?param:Map<String,Dynamic>) 
 	{
+		trace(lc);
+		if(lc==1)
+		{
+			trace(_me.dbData);
+			Out.dumpStack(CallStack.callStack());
+			S.sendInfo(_me.dbData);
+		}
+		else{
+			_me = this;
+		}
 		super(param);
+
 		if(lc++ >1)
 		{
 			trace('too much $lc');
 		}
-		else
-		run();
+		else 
+			run();
 	}	
 	
 	public function clientVerify():Void
@@ -59,6 +74,7 @@ class User extends Model
 		{			
 			dbData.dataInfo['verified'] = true;
 			dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(doSelect()[0]);
+			dbData.dataInfo['user_data'].jwt = param['jwt'];
 			S.sendInfo(dbData);
 		}
 	}
@@ -75,13 +91,15 @@ class User extends Model
 		return null;
 	}
 	
-	public function userIsAuthorized():UserAuth
+	static function userIsAuthorized(param:Map<String,Dynamic>):UserAuth
 	{
+		var dbData:DbData = new DbData();
 		var sql:String = 'SELECT user_name FROM ${S.db}.users WHERE user_name=:user_name AND active=TRUE';
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}'})))
-		{
-			S.sendErrors(dbData,['${action}' => stmt.errorInfo()]);
+		{			
+			trace(stmt.errorInfo());
+			S.sendErrors(dbData,['${param['action']}' => stmt.errorInfo()]);
 		}
 		if(stmt.rowCount()>0)
 		{
@@ -91,20 +109,21 @@ class User extends Model
 				'SELECT change_pass_required, first_name, last_name, last_login, us.id, us.mandator FROM ${S.db}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name AND password=crypt(:password,password)',Syntax.array(null));
 			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}',':password':'${param.get('pass')}'})))
 			{
-				S.sendErrors(dbData,['${action}' => stmt.errorInfo()]);
+				S.sendErrors(dbData,['${param['action']}' => stmt.errorInfo()]);
 			}
 			if (stmt.rowCount()==0)
 			{
-				S.sendErrors(dbData,['${action}'=>'pass','sql'=>stmt.errorInfo]);
+				S.sendErrors(dbData,['user'=>'user ${param['user_name']} not found!']);
+				return UserAuth.NotOK;
 			}
 			// USER AUTHORIZED
 			var assoc:Dynamic = stmt.fetch(PDO.FETCH_ASSOC);
 			var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(assoc);	
 			dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(assoc);		
-			dbData.dataInfo['id'] = res['id'];
-			dbData.dataInfo['mandator'] = res['mandator'];
-			dbData.dataInfo['last_login'] = res['last_login'];
-			dbData.dataInfo['loggedIn'] = true;
+			//dbData.dataInfo['id'] = res['id'];
+			//dbData.dataInfo['mandator'] = res['mandator'];
+			//dbData.dataInfo['last_login'] = res['last_login'];
+			dbData.dataInfo['user_data'].loggedIn = true;
 			trace(res['user_name']);
 			trace('change_pass_required'+(res['change_pass_required']==1 || res['change_pass_required']==true?'Y':'N'));
 			// UPDATE LAST_LOGIN
@@ -115,44 +134,44 @@ class User extends Model
 			trace(update.errorInfo());
 			//UPDATE DONE			
 			if (res['change_pass_required']==1 || res['change_pass_required']==true)
-				return UserAuth.PassChangeRequired;
-			return UserAuth.AuthOK;			
+				return UserAuth.PassChangeRequired(dbData);
+			return UserAuth.AuthOK(dbData);			
 		}
 		else
 		{
 			trace(stmt.rowCount+':$sql');
-			S.sendErrors(dbData,['${action}'=>'user_name']);
+			S.sendErrors(dbData,['${param['action']}'=>'user_name']);
 			return UserAuth.NotOK;
 		}
 	}
 	
 	public static function login(params:Map<String,Dynamic>):Bool
 	{
-		var me:User = new User(params);
-		trace(me);
-		switch(me.userIsAuthorized())
+		//var me:User = new User(params);
+		//trace(me);
+		switch(userIsAuthorized(params))
 		{//TODO:CONFIG JWT DURATION
-			case uath = UserAuth.AuthOK|UserAuth.PassChangeRequired:
+			case uath = UserAuth.AuthOK(dbData)|UserAuth.PassChangeRequired(dbData):
 				var d:Float = DateTools.delta(Date.now(), DateTools.hours(11)).getTime();
 				trace(d + ':' + Date.fromTime(d));
 				var	jwt = JWT.sign({
-						id:me.dbData.dataInfo['user_data'].id,
+						id:dbData.dataInfo['user_data'].id,
 						validUntil:d,
 						ip: Web.getClientIP(),
-						mandator:me.dbData.dataInfo['user_data'].mandator
+						mandator:dbData.dataInfo['user_data'].mandator
 					}, S.secret);						
 				
-				trace(jwt);
-				trace(JWT.extract(jwt));
+				//trace(jwt);
+				//trace(JWT.extract(jwt));
 				Web.setCookie('user.jwt', jwt, Date.fromTime(d + 86400000));
-				Web.setCookie('user.id', me.dbData.dataInfo['user_data'].id, Date.fromTime(d + 86400000));
+				//Web.setCookie('user.id', me.dbData.dataInfo['user_data'].id, Date.fromTime(d + 86400000));
 				//me.dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(me.doSelect()[0]);
-				if (uath == UserAuth.PassChangeRequired)
-				me.dbData.dataInfo['change_pass_required'] = true;
+				trace(Type.enumConstructor(uath));
+				dbData.dataInfo['change_pass_required'] = (Type.enumConstructor(uath) == 'PassChangeRequired');
 				//me.dbData.dataInfo['user_data'].id = jwt;
-				me.dbData.dataInfo['user_data'].jwt = jwt;
+				dbData.dataInfo['user_data'].jwt = jwt;
 				//trace(me.dbData);
-				S.sendInfo(me.dbData);
+				S.sendInfo(dbData);
 				return true;
 			default:
 				return false;
@@ -162,8 +181,8 @@ class User extends Model
 	public static function logout(params:Map<String,Dynamic>):Bool
 	{	
 		trace(params);
-		var me:User = new User(params);		
-		trace(me.id);
+		//var me:User = new User(params);		
+		trace(params['id']);
 		/*var stmt:PDOStatement = S.dbh.prepare(
 			'SELECT last_login FROM ${S.db}.users WHERE id=:user_name',Syntax.array(null));
 		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':id': me.id})))
@@ -183,11 +202,11 @@ class User extends Model
 		me.dbData.dataInfo['last_login'] = res['last_login'];*/		
 		var expiryDate = Date.now().delta(31556926000);//1 year
 		Web.setCookie('user.jwt', '', expiryDate);
-		Web.setCookie('user.id', me.id, expiryDate);
+		Web.setCookie('user.id', params['id'], expiryDate);
 
 		//me.dbData.dataInfo['user_data'].id = jwt;
 		//trace(me.dbData);
-		S.sendInfo(me.dbData);
+		S.sendInfo(new DbData(),['logout'=>'Done']);
 		return true;
 	}
 
@@ -199,7 +218,7 @@ class User extends Model
 			S.sendInfo(dbData);
 		}
 		
-		if (verify())
+		if (verify(param))
 		{
 			trace('UPDATE ${S.db}.users SET password=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id ');
 			var stmt:PDOStatement = S.dbh.prepare(
@@ -297,7 +316,7 @@ class User extends Model
 }
 
 enum UserAuth{
-	AuthOK;
-	PassChangeRequired;
+	AuthOK(dbData:DbData);
+	PassChangeRequired(dbData:DbData);
 	NotOK;
 }

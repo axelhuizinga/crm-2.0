@@ -240,8 +240,9 @@ class S
 				dbData.dataInfo[k] = info[k];
 			}
 		}
-		trace(dbData);
 		//trace('done at ${Sys.time()-ts} ms');
+		trace(dbData.dataErrors);
+		//trace(dbData);
 		return sendbytes(s.serialize(dbData));
 	}
 	

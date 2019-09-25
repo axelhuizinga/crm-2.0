@@ -21,7 +21,7 @@ class UserStore implements IReducer<UserAction, UserState>
 		first_name:'',
 		last_name:'',
 		mandator: 1,
-		id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
+		id:Cookie.get('user.id')==null?null:Std.parseInt(Cookie.get('user.id')),
 		email:'',
 		pass:'',
 		loggedIn:false,
@@ -48,19 +48,19 @@ class UserStore implements IReducer<UserAction, UserState>
 					copy(state, {loginError:err.loginError, waiting:false});                       
 			case LoginComplete(uState):
 					//trace(uState.id + ':' + uState.loggedIn);
-					//trace(uState);
-					copy(state, {
+					trace(uState);
+					copy(state, {						
+						id:uState.id,
 						jwt:uState.jwt,
 						loginError: null,
 						loggedIn: true,
 						waiting:false
 					});                                             
 			case LogOutComplete(uState):
-					//trace(uState.id + ':' + uState.loggedIn);
-					//trace(uState);
+					trace(uState);
 					copy(state, {
 						loginError: null,
-						loggedIn: false,
+						loggedIn: false,					
 						jwt:'',
 						waiting:false
 					});   					

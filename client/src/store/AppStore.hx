@@ -113,15 +113,6 @@ class AppStore
 			case Status(action):	
 				store.dispatch(action);
 			case User(action):
-				switch (action)
-				{
-					case LoginError(state):
-						//store.dispatch(ApplySubState({user:state}));
-						trace(ApplySubState({user:state}));
-					
-					default:
-					//ignore
-				}
 				store.dispatch(action);
 			//default: next();
 			default: 

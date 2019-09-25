@@ -198,7 +198,7 @@ class Model
 					}
 					else {
 						var dots = jParts[1].split('.');
-						trace(dots);
+						//trace(dots);
 						if(dots.length>2)
 						{
 							S.sendErrors(dbData,['invalidJoinCond'=>jCond]);

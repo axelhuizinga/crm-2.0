@@ -188,7 +188,7 @@ class SyncExternalClients extends Model
 			selectTotalCount = 'SQL_CALC_FOUND_ROWS';
 		}
         var sql = comment(unindent,format)/*
-		SELECT $firstBatch cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,cl.birth_date date_of_birth,IF(cl.old_active=1,'true','false')old_active,
+		SELECT $selectTotalCount cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,cl.birth_date date_of_birth,IF(cl.old_active=1,'true','false')old_active,
 pp.pay_plan_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,IF(pp.product='K',2,3) product ,pp.agent,pp.agency_project project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,
  ps.pay_source_id,ps.debtor,ps.bank_name,ps.account,ps.blz,ps.iban,ps.sign_date,ps.pay_source_state,ps.creation_date account_creation_date,
 vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
@@ -204,7 +204,12 @@ ORDER BY cl.client_id
 LIMIT
 */;
 
-        var stmt:PDOStatement = S.syncDbh.query('$sql ${param['batchSize']}');
+        var stmt:PDOStatement = S.syncDbh.query('$sql ${Std.parseInt(param['batchSize'])}');
+		if(untyped stmt==false)
+		{
+			trace('$sql ${Std.parseInt(param['batchSize'])}');
+			S.sendErrors(dbData, ['getCrmData query:'=>S.syncDbh.errorInfo()]);
+		}
 		if(stmt.errorCode() !='00000')
 		{
 			trace(stmt.errorInfo());

@@ -89,7 +89,8 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 	}	*/
 	
 	override function componentDidCatch(error, info) {
-		// Display fallback UI
+		trace(info);
+		// TODO:Display fallback UI
 		if(state.mounted)
 		this.setState({ hasError: true });
 		trace(error);

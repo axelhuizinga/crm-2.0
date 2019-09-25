@@ -24,6 +24,7 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 
 	public function reduce(state:LocationState, action:LocationAction):LocationState
 	{
+		if(state.location !=null)
 		trace(state.location.pathname);
 		return switch(action)
 		{

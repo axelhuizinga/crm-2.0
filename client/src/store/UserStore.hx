@@ -59,6 +59,7 @@ class UserStore implements IReducer<UserAction, UserState>
 			case LogOutComplete(uState):
 					trace(uState);
 					copy(state, {
+						change_pass_required:uState.change_pass_required,
 						loginError: null,
 						loggedIn: false,					
 						jwt:'',

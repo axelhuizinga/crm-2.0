@@ -28,8 +28,9 @@ class DBSync extends BaseForm
 
 	static var _instance:DBSync;
 
-	public static var menuItems:Array<SMItem> = [
-		{label:'BenutzerDaten Abgleich',action:'showUserList'},
+	public static var menuItems:Array<SMItem> = [		
+		{label:'BenutzerDaten ',action:'showUserList'},
+		{label:'BenutzerDaten Abgleich',action:'syncUserList'},
 		{label:'Stammdaten Import ',action:'importAll'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
@@ -157,16 +158,42 @@ class DBSync extends BaseForm
 	{
 		trace(props.user.first_name);
 		App.store.dispatch(action.async.LivePBXSync.syncAll({
-				batchSize: 10,
-				limit:22,
-				user:props.user,
-				synced:0,
-				className:'admin.SyncExternal',
-				action:'syncAll'
-			}));
+			batchSize: 10,
+			limit:22,
+			user:props.user,
+			synced:0,
+			className:'admin.SyncExternal',
+			action:'syncAll'
+		}));
 	}
 
-	public function showUserList(_):Void
+	public function syncUserList(_):Void
+	{
+		//FormApi.requests.push( 
+		trace(App.config.api);
+		BinaryLoader.create(
+			'${App.config.api}', 
+			{
+				id:props.user.id,
+				jwt:props.user.jwt,
+				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
+				className:'admin.SyncExternal',
+				action:'syncUserDetails',
+				devIP:App.devIP
+			},
+			function(data:DbData)
+			{
+				//UserAccess.jwtCheck(data);
+				//trace(data);
+				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
+				trace(data.dataRows.length);
+				if(data.dataRows.length>0)
+				setState({dataTable:data.dataRows});
+			}
+		);
+	}
+
+	public function proxy_showUserList(_):Void
 	{
 		//FormApi.requests.push( 
 		trace(App.config.api);

@@ -32,7 +32,7 @@ class SyncExternal extends Model
 		var self:SyncExternal = new SyncExternal(param);	
 		//self.table = 'columns';
         trace('calling ${param.get("action")}');
-		Reflect.callMethod(self, Reflect.field(self,action), [param]);
+		Reflect.callMethod(self, Reflect.field(self,param.get("action")), [param]);
 	}	
 
     public function syncContactDetails(?contact:Dynamic):Void

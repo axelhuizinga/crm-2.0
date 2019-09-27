@@ -3,16 +3,15 @@ import state.UserState;
 
 typedef DBAccessProps = 
 {
-	action:String,	
-	?batchCount:Int,
-	?batchSize:Int,
-	?offset:Int,
-	className:String,
+	?action:String,	
+	?pages:Int,
+	?className:String,
 	?filter:String,
 	?dataSource:Map<String,Map<String,Dynamic>>,
 	?limit:Int,
+	?maxImport:Int,
 	?totalRecords:Int,
-	?synced:Int,
+	?offset:Int,
 	?table:String,
-	user:UserState
+	?user:UserState
 }

@@ -226,7 +226,7 @@ class S
 				dbData.dataErrors[k] = err[k];
 			}
 		}
-		trace(dbData);
+		trace(dbData.dataErrors);
 		return sendbytes(s.serialize(dbData));
 	}
 	

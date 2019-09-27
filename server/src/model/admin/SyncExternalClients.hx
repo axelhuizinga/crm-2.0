@@ -1,5 +1,6 @@
 package model.admin;
 
+import action.async.DBAccessProps;
 import php.NativeAssocArray;
 import haxe.macro.Expr.Catch;
 import sys.io.File;
@@ -56,10 +57,17 @@ class SyncExternalClients extends Model
 
 	function syncAll() {
 		trace(param);
-		if(param['batchSize']==null)
-			param['batchSize'] = '1000';
+		//dbAccessProps = initDbAccessProps();
+		if(param['offset']==null)
+			param['offset'] = 0;
+		if(param['limit']==null)			
+			param['limit'] = '1000';
+		if(param['offset']+param['limit']>param['maxImport'])
+		{
+			param['limit'] = param['maxImport'] - param['offset'];
+		}
 		importCrmData();
-		S.sendErrors(dbData,['syncAll'=>'OK']);
+		S.sendErrors(dbData,['syncAll'=>'NOTOK']);
 	}
 
     public function importCrmData():Void
@@ -69,6 +77,8 @@ class SyncExternalClients extends Model
 		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
 		for(row in cData.iterator())
 		{			
+			//trace(row);
+			//S.sendErrors(dbData,['syncAll'=>'NOTOK']);
 			var stmt:PDOStatement = upsertClient(row);
 			try{
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
@@ -84,6 +94,8 @@ class SyncExternalClients extends Model
 			}
 		}		
         trace('done');
+		dbData.dataInfo['offset'] = param['offset'] + synced;
+		trace(dbData.dataInfo);
         S.sendData(dbData, null);
     }
     
@@ -93,11 +105,11 @@ class SyncExternalClients extends Model
     function upsertClient(rD:NativeArray):PDOStatement
     {
 		var cD:Map<String,Dynamic> = clientRowData(rD);
-        var cNames:Array<String> = [for(k in cD.keys()) k].filter(function(k)return k!='id');
+        var cNames:Array<String> = [for(k in cD.keys()) k];
 		//var cVals:String =  [for(v in cD.iterator()) v].map(function (v) return '\'$v\'').join(',');
 		var cPlaceholders:Array<String> =  [for(k in cNames) k].map(function (k) return ':$k');
 		var cSet:String = [
-			for(k in cNames) k
+			for(k in cNames.filter(function(k)return k!='id')) k
 			].map(function (k) return ' "$k"=:$k').join(',');
 		
         var sql:String = comment(unindent, format) /*
@@ -113,7 +125,8 @@ class SyncExternalClients extends Model
 			S.sendErrors(dbData, ['execute'=>Lib.hashOfAssociativeArray(stmt.errorInfo())]);
 		}
 		//trace(stmt.columnCount());
-		dbData.dataInfo['synced'] = ++synced;
+		//dbData.dataInfo['synced'] = ++synced;
+		synced++;
 		return stmt;
 		//return S.dbh.query(sql, PDO.FETCH_ASSOC);
     }
@@ -123,8 +136,8 @@ class SyncExternalClients extends Model
 		var meta:Map<String, NativeArray> = S.columnsMeta('contacts');
 		for(k => v in meta.keyValueIterator())
 		{
-			if(k=='id')
-				continue;
+			//if(k=='id')
+				//continue;
 			
 			var pdoType:Int = v['pdo_type'];
 			if(row[k]==null||row[k].indexOf('0000-00-00')==0)
@@ -181,8 +194,10 @@ class SyncExternalClients extends Model
 
     public function getCrmData():NativeArray
 	{		        
-		var firstBatch:Bool = param.exists('firstBatch') && param['firstBatch']=='true';
+		var firstBatch:Bool = (param['offset']=='0');
 		var selectTotalCount:String = '';
+		
+		trace('offset:${param['offset']} firstBatch:$firstBatch ');
 		if(firstBatch)
 		{
 			selectTotalCount = 'SQL_CALC_FOUND_ROWS';
@@ -201,13 +216,13 @@ ON ps.client_id=cl.client_id
 INNER JOIN asterisk.vicidial_list vl
 ON vl.vendor_lead_code=cl.client_id
 ORDER BY cl.client_id 
-LIMIT
+LIMIT 
 */;
 
-        var stmt:PDOStatement = S.syncDbh.query('$sql ${Std.parseInt(param['batchSize'])}');
+        var stmt:PDOStatement = S.syncDbh.query('$sql ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');
 		if(untyped stmt==false)
 		{
-			trace('$sql ${Std.parseInt(param['batchSize'])}');
+			trace('$sql ${Std.parseInt(param['limit'])}');
 			S.sendErrors(dbData, ['getCrmData query:'=>S.syncDbh.errorInfo()]);
 		}
 		if(stmt.errorCode() !='00000')
@@ -215,11 +230,13 @@ LIMIT
 			trace(stmt.errorInfo());
 		}
 		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		//trace(res);
 		if(firstBatch)
 		{
 			stmt = S.syncDbh.query('SELECT FOUND_ROWS()');
-			var totalRes:NativeArray = 
-			dbData.dataInfo['totalRecords'] =  (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN,0):null);
+			var totalRes = stmt.fetchColumn();
+			trace(totalRes);
+			dbData.dataInfo['totalRecords'] = totalRes;
 		}
 		return res;
 	}

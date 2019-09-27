@@ -22,20 +22,24 @@ using DateTools;
 
 class UserAccess {
 
-	public static function changePassword(new_pass:String) 
+	public static function changePassword(props:UserState) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState)
 		{
-			var aState:AppState = getState();
+			if (props.pass == '' || props.new_pass == '' || props.user_name == '') 
+				return dispatch(
+					User(LoginError({user_name:props.user_name, loginError:'Neues Passwort eingeben!'})));
+			
+			var uState:UserState = getState().user;
 			BinaryLoader.create(
 				'${App.config.api}', 
 				{				
-					id:aState.user.id, 
-					jwt:aState.user.jwt,
+					id:uState.id, 
+					jwt:uState.jwt,
 					className:'auth.User',
 					action:'changePassword',
-					new_pass:new_pass,
-					//pass:aState.values['pass'],
+					new_pass:props.new_pass,
+					pass:props.pass,
 					devIP:App.devIP
 				},
 				function(data:DbData)
@@ -46,19 +50,21 @@ class UserAccess {
 					if (data.dataErrors.keys().hasNext())
 					{
 						trace(data.dataErrors.toString());
+						return dispatch(User(LoginError({loginError: data.dataErrors.iterator().next()})));
 					}
 					if (data.dataInfo['changePassword'] == 'OK')
 					{
-						trace(aState.user);
-						/*setState({
-							//viewClassPath:'update',
-							fields:dataAccess['update'].view,
-							values:props.formApi.createStateValues(App.store.getState().user.dynaMap(), dataAccess['update'].view),
-							loading:false});*/
+						trace(uState);						
+						uState.new_pass = '';
+						uState.pass = '';
+						uState.change_pass_required = false;
+						return dispatch(User(LoginComplete(uState)));
 					}
-					else trace(data.dataErrors);				
+					else trace(data.dataErrors);		
+					return null;		
 				}
 			);	
+			return null;
 		});
 	}
 	public static function jwtCheck(data:DbData) 
@@ -79,7 +85,7 @@ class UserAccess {
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(props);
 			//trace(getState());
-			if (props.pass == '' || props.user_name == '') 
+			if (props.pass == '' && props.new_pass == '' || props.user_name == '') 
 				return dispatch(User(LoginError({user_name:props.user_name, loginError:'Passwort und user_name eintragen!'})));
 			//var spin:Dynamic = dispatch(AppAction.AppWait);
 			//trace(spin);
@@ -91,7 +97,7 @@ class UserAccess {
 				user_name:props.user_name,
 				jwt:props.jwt,
 				className:'auth.User',
-				action:'login',
+				action: (props.new_pass != null?'changePassword':'login'),
 				filter:'user_name|${props.user_name},us.mandator|1',//TODO. ADD MANDATOR SELECT AT LOGINFORM
 				dataSource:Serializer.run([
 					"users" => ["alias" => 'us',
@@ -102,6 +108,7 @@ class UserAccess {
 						"jCond"=>'contact=co.id']
 				]),
 				pass:props.pass,
+				new_pass:props.new_pass,
 				devIP:App.devIP
 			},
 			function(data:DbData)
@@ -117,8 +124,10 @@ class UserAccess {
 				Cookie.set('user.jwt',uState.jwt, null, '/');
 				trace(Cookie.get('user.jwt'));
 				uState.loggedIn = true;
+				if(uState.change_pass_required)
+					uState.pass = props.pass;
 				trace(uState);
-				trace(dispatch);
+				//trace(dispatch);
 				return dispatch(User(LoginComplete(uState)));
 				//return dispatch(AppAction.LoginComplete(
 			});
@@ -174,7 +183,7 @@ class UserAccess {
 					Cookie.set('user.jwt', '', 31556926);
 					Cookie.set('user.id', null, null, '/');					
 					trace(Cookie.get('user.jwt'));
-					return dispatch(User(LogOutComplete({id:props.id, jwt:'', loggedIn:false, waiting: false})));
+					return dispatch(User(LogOutComplete({id:null, jwt:'', loggedIn:false, waiting: false})));
 				}
 			});
 			return null;

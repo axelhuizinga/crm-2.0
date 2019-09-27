@@ -56,8 +56,9 @@ class AppStore
 				mandator: 1,
 				id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
 				email:'',
-				pass:'',
-				loggedIn:false,
+				pass:'',				
+				change_pass_required:false,
+				loggedIn:Cookie.get('user.jwt')!=null,
 				last_login:null,
 				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
 				waiting: false

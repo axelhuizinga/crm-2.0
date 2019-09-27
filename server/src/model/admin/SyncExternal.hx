@@ -1,5 +1,6 @@
 package model.admin;
 
+import php.NativeAssocArray;
 import shared.DbData;
 import haxe.macro.Type.Ref;
 import haxe.ds.Map;
@@ -44,6 +45,10 @@ class SyncExternal extends Model
 		}		
 	}
 
+	/**
+	 * Import or Update crm clients, deals + accounts
+	 */
+
 	function syncAll() {
 		trace(param);
 		sEC = new SyncExternalClients(param);
@@ -52,53 +57,19 @@ class SyncExternal extends Model
 
     public function syncUserDetails(?user:Dynamic):Void
     {
-        var info:Map<String,Dynamic>  = getViciDialData();
-        //var req:Http = new Http(info['syncApi']);
-        //var req:Http = new Http('https://pitverwaltung.de/test/php/test.php');
-        trace(info['syncApi']);
-        //trace(info);
-        var user:String = info['admin'];
-        var pass:String = info['pass'];
-        var url:String = info['syncApi']+'/syncUsers.php';
-        var data:String = Syntax.code("exec({0})", 'curl -d "user=${user}&pass=${pass}" ${url}');
-        //var data:String = untyped __call__('exec','curl -d "user=${user}&pass=${pass}" ${url}');
-        trace(data);
-        /*return;
-        req.addParameter('pass', info['pass']);
-        req.addParameter('user', info['admin']);
-        req.addParameter('action', info['syncUserDetails']);
-        req.onData = function(data:String)
-        {*/
-            //S.saveLog(data);
-            var dRows:Array<Dynamic> = Json.parse(data);
-            trace(dRows.length);
-            //trace(dRows[dRows.length-2]);
-            trace(data.indexOf('phone_data'));
-            //dbData.dataRows = [['length'=>dRows.length]];
-            dbData.dataRows = [];
-            var fNames:Array<String> = Reflect.fields(dRows[0]);
-            if(!fNames.has('phone_data'))
-                fNames.push('phone_data');
-            trace(fNames.has('phone_data'));
-            for(r in dRows)
-            {
-                dbData.dataRows.push(
-                    [
-                        for(n in fNames)
-                        n => Reflect.field(r,n)
-                    ]
-                );
-            }
-            S.sendData(saveUserDetails(), null);
-        /*};
-        req.onError = function (msg:String)
-        {
-            trace(msg);
-        }
-        req.onStatus = function (s:Int)
-        { trace(s);}
-        req.request(true);*/
-        trace('done');
+		var res:NativeArray = fetchAll('SELECT user, full_name, active FROM asterisk.vicidial_users 
+		WHERE CAST(user AS UNSIGNED)>0 AND active="Y"',S.syncDbh,'syncUserDetails',3);
+		trace(res);
+		if(res != null)
+		{
+			//sendRows(res);
+			var updated:Int = syncUserIds(res);
+			S.sendInfo(dbData,['syncUserDetail'=>'DONE $updated']);
+		}
+			
+		else 
+			S.sendInfo(dbData,['syncUserDetail'=>'no results???']);
+		trace('done');
     }
 
     function saveUserDetails():DbData
@@ -154,6 +125,41 @@ class SyncExternal extends Model
         //S.saveLog(info);
         return info;
 		S.sendInfo(dbData, info);
+	}
+
+	function syncUserIds(vdUsers:NativeArray):Int 
+	{
+		var updated:Int = 0;
+		//var nrow:NativeArray;
+		for(nrow in vdUsers.iterator())
+		//user, full_name, active
+		{
+			//var name:Array<String> = Syntax.code("{0}['full_name']", row).split(' ');	
+			var row:Array<Dynamic> = Lib.toHaxeArray(nrow);
+			//trace(row);
+			var name:Array<String> = row[1].split(' ');			
+			var last_name = (name.length==3?name[1]:name.pop());
+			var first_name = (name.length>0?name.shift():'');
+			var user = row[0];
+			trace(
+				comment(unindent,format)/**
+				UPDATE users 
+				SET contact=contacts.id, active=true
+				FROM contacts
+				WHERE first_name='${first_name}' AND last_name='${last_name}'
+				AND "users"."mandator"="contacts"."mandator" and user_name='$user';
+			**/
+			);
+			updated += updateRows(
+				comment(unindent,format)/**
+				UPDATE users 
+				SET contact=contacts.id, active=true
+				FROM contacts
+				WHERE first_name='${first_name}' AND last_name='${last_name}'
+				AND "users"."mandator"="contacts"."mandator" and user_name='$user';
+			**/,S.dbh);
+		}
+		return updated;	
 	}
 
 }

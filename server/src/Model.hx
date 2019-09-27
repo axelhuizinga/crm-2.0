@@ -1,5 +1,7 @@
 package;
 
+import action.async.DBAccessProps;
+import haxe.PosInfos;
 import haxe.Constraints.Function;
 import S.ColDef;
 import haxe.Unserializer;
@@ -93,6 +95,7 @@ class Model
 	public var id(default, null):String;
 	public var num_rows(default, null):Int;
 	var action:String;
+	var dbAccessProps:DBAccessProps;
 	var dbData:DbData;
 	var dParam:DbData;
 	var dataSource:Map<String,Map<String,Dynamic>>;// EACH KEY IS A TABLE NAME
@@ -419,7 +422,77 @@ class Model
 		});
 		return res;
 	}
+
+	/**
+	 * creates PDOStatement and return all results from a query
+	 * @param sql 
+	 * @param dbh 
+	 * @param req 
+	 * @param pos 
+	 */
+
+	public function fetchAll(sql:String,dbh:PDO,req:String='', mode:Int=2,//PDO.FETCH_ASSOC
+		?pos:PosInfos):NativeArray
+	{
+        var stmt:PDOStatement = S.syncDbh.query(sql);
+		if(untyped stmt==false)
+		{
+			trace(sql);
+			S.sendErrors(dbData, ['$req query:'=>dbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+			S.sendErrors(dbData, ['$req query:'=>stmt.errorInfo()]);
+		}
+		return (stmt.execute()?stmt.fetchAll(mode):null);		
+	}
 	
+	public function fetchRow(sql:String,dbh:PDO,req:String='', mode:Int=2,//PDO.FETCH_ASSOC
+		?pos:PosInfos):NativeArray
+	{
+        var stmt:PDOStatement = S.syncDbh.query(sql);
+		if(untyped stmt==false)
+		{
+			trace(sql);
+			S.sendErrors(dbData, ['$req query:'=>dbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+			S.sendErrors(dbData, ['$req query:'=>stmt.errorInfo()]);
+		}
+		return (stmt.execute()?stmt.fetch(mode):null);		
+	}
+
+	public function updateRows(sql:String, dbh:PDO, req:String='', ?pos:PosInfos):Int
+	{
+		var rows:Int = dbh.exec(sql);
+		return rows;
+	}
+
+	public function prepareUpdateRows(sql:String,dbh:PDO, kv:Map<String,Dynamic>,req:String='',	?pos:PosInfos):Int
+	{
+        var stmt:PDOStatement = S.syncDbh.prepare(sql);
+		if(untyped stmt==false)
+		{
+			trace(sql);
+			S.sendErrors(dbData, ['$req prepare:'=>dbh.errorInfo()]);
+		}
+
+		for(k=>v in kv.keyValueIterator())
+		{
+			trace('$k:$v');
+		}
+
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+			S.sendErrors(dbData, ['$req query:'=>stmt.errorInfo()]);
+		}
+		return (stmt.execute()?stmt.rowCount():null);		
+	}
+
 	public function update():NativeArray
 	{	
 		var sqlBf:StringBuf = new StringBuf();
@@ -833,6 +906,22 @@ class Model
 		return ret;
 	}
 	
+	/*function initDbAccessProps():DBAccessProps
+	{
+		dbAccessProps = {};
+		for(k=>v in param.keyValueIterator())
+		{
+			switch(k)
+			{
+				case 'action'|'user'|'className':
+					//skip
+				default:
+				 	Reflect.set(dbAccessProps,k,v);
+			}
+		}
+		return dbAccessProps;
+	}*/
+		
 	function serializeRows(rows:NativeArray):Bytes
 	{
 		var s:Serializer = new Serializer();

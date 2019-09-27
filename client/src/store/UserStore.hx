@@ -21,13 +21,14 @@ class UserStore implements IReducer<UserAction, UserState>
 		first_name:'',
 		last_name:'',
 		mandator: 1,
-		id:Cookie.get('user.id')==null?null:Std.parseInt(Cookie.get('user.id')),
+		id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
 		email:'',
-		pass:'',
-		loggedIn:false,
+		pass:'',				
+		change_pass_required:false,
+		loggedIn:Cookie.get('user.jwt')!=null,
 		last_login:null,
 		jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
-		waiting: true	
+		waiting: false
 	};
 	
 	public var store:StoreMethods<AppState>;
@@ -45,15 +46,20 @@ class UserStore implements IReducer<UserAction, UserState>
 			case LoginError(err):
 					trace(err);
 					//if(err.id==state.user.id)
-					copy(state, {loginError:err.loginError, waiting:false});                       
+					copy(state, {
+						loggedIn:false,
+						jwt:'',
+						loginError:err.loginError, waiting:false});                       
 			case LoginComplete(uState):
 					//trace(uState.id + ':' + uState.loggedIn);
 					trace(uState);
-					copy(state, {						
+					copy(state, {		
+						change_pass_required:uState.change_pass_required,				
 						id:uState.id,
 						jwt:uState.jwt,
 						loginError: null,
 						loggedIn: true,
+						pass:uState.pass,
 						waiting:false
 					});                                             
 			case LogOutComplete(uState):
@@ -78,8 +84,8 @@ class UserStore implements IReducer<UserAction, UserState>
 		//trace(store);
 		return switch(action)
 		{		
-			case LoginError(state):
-				store.dispatch(UserAccess.loginReq(state));
+			//case LoginError(state):
+				//store.dispatch(UserAccess.loginReq(state));
 			//store.dispatch(UserAction.LoginRequired(state));
 			//next();
 			//

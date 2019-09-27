@@ -35,10 +35,10 @@ class LivePBXSync
 
 	public static function syncAll(props:DBAccessProps) 
 	{
-		trace('${props.batchSize} ${props.batchCount} ${props.synced}');
+		trace('${props.maxImport} ${props.limit} ${props.offset}');
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
-			trace(props.synced);
+			trace(props.offset);
 			if (!props.user.loggedIn)
 			{
 				return dispatch(User(LoginError(
@@ -56,10 +56,11 @@ class LivePBXSync
 					jwt:props.user.jwt,
 					className:props.className,
 					action:props.action,
-					batchSize:props.batchSize,
+					limit:props.limit,
 					offset:props.offset,
 					filter:props.filter,
-					firstBatch:props.synced==0, 
+					firstBatch:props.offset==0, 
+					maxImport:props.maxImport==null?1000:props.maxImport,
 					devIP:App.devIP
 				},
 				function(data:DbData)
@@ -76,19 +77,26 @@ class LivePBXSync
 						)));
 					} 
 					trace(data.dataInfo);
-					if(data.dataInfo['synced']==null)
+					if(data.dataInfo['offset']==null)
 					{
 						return dispatch(Status(Update(
-							{text:'Fehler 0 Kontakte Aktualisiert'})));
+							{
+								className:'error',
+								text:'Fehler 0 Kontakte Aktualisiert'})));
 					}
-					props.batchCount += data.dataInfo['synced'];
-					if(data.dataInfo['synced']!=null)
+					//props.batchCount += data.dataInfo['offset'];
+					if(data.dataInfo['offset']!=null)
 					{
-						return dispatch(Status(Update(
-							{text:'${data.dataInfo['synced']} Kontakte von ${props.batchCount} aktualisiert'})));
+						props.offset = data.dataInfo['offset'];
+						dispatch(Status(Update(
+							{
+								className:'',
+								text:'${props.offset} Kontakte von ${props.maxImport} aktualisiert'})));
 					}
-					if(props.limit==null || props.limit < props.batchCount){
+					trace('${props.offset} < ${props.maxImport}');
+					if(props.offset < props.maxImport){
 						//LOOP UNTIL LIMIT
+						trace('next loop:${props}');
 						return dispatch(syncAll(props));
 					}
 						

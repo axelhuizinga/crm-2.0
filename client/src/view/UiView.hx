@@ -77,7 +77,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 
 	static function mapStateToProps(aState:AppState):UIProps
 	{
-		//trace(aState.user);
+		trace(aState.user);
 		return {
 			user:aState.user
 		};
@@ -155,7 +155,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		}
 		
 		trace('${props.user.jwt} ${props.user.loggedIn}');
-		if(props.user.jwt == null || props.user.jwt == '' || !props.user.loggedIn )//
+		if(props.user.jwt == null || props.user.jwt == '' || !props.user.loggedIn || props.user.change_pass_required )//
 		{
 			// WE NEED TO LOGIN FIRST
 			trace(props.user);

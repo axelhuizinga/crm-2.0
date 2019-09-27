@@ -16,9 +16,11 @@ typedef LoginProps =
 {
 	>RouteTabProps,
 	submitLogin:UserState->Dispatch,
-	user:UserState,
+	//user:UserState,
 	api:String,
+	change_pass_required:Bool,
 	pass:String,
+	new_pass:String,
 	jwt:String,
 	loggedIn:Bool,
 	loginError:String,
@@ -48,21 +50,22 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			trace(props.match.path + ':' + props.match.url);	
 		}
 		trace(props);
-		state = {user_name:'',pass:''};
+		state = {user_name:'',pass:'',new_pass_confirm: '', new_pass: ''};
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		return {
-			submitLogin: function(lState:UserState) return dispatch(UserAccess.doLogin(lState))
+			submitLogin: function(lState:UserState) return dispatch(
+				lState.new_pass != null ?
+				UserAccess.changePassword(lState):
+				UserAccess.doLogin(lState))
 		};
 	}
 
-	/*static function mergeProps(stateProps:UserState, dispatchProps:Dynamic, ownProps:LoginProps)
+	override public function componentDidMount():Void 
 	{
-		trace(stateProps);
-		trace(ownProps);
-		return ReactUtil.copy( ReactUtil.copy(ownProps, stateProps), dispatchProps);
-	}*/
+		trace(state);
+	}
 	
 	static function mapStateToProps() {
 
@@ -75,7 +78,9 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			
 			return {
 				api:App.config.api,
+				change_pass_required:uState.change_pass_required,
 				pass:uState.pass,
+				new_pass:(uState.new_pass!=null?uState.new_pass:''),
 				jwt:uState.jwt,
 				mandator:uState.mandator,
 				loggedIn:uState.loggedIn,
@@ -95,6 +100,10 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		var t:InputElement = cast e.target;
 		trace(t.name);
 		trace(t.value);
+		if(t.name == 'new_pass'&& t.value==props.pass)
+		{
+			t.value='';
+		}
 		//t.className = 'input';
 		Reflect.setField(s, t.name, t.value);
 		//trace(props.dispatch + '==' + App.store.dispatch);
@@ -102,7 +111,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		//App.store.dispatch(AppAction.LoginChange(s));
 		//TODO: PUT INTO Global State to avoid rerender
 		this.setState(s);
-		//trace(this.state);
+		trace(this.state);
 	}
 	
 	dynamic function handleSubmit(e:InputEvent)
@@ -112,7 +121,10 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		//this.setState({waiting:true});
 		//props.dispatch(AppAction.Login("{user_name:state.user_name,pass:state.pass}"));
 		//trace(props.dispatch);
-		props.submitLogin({user_name:state.user_name, pass:state.pass, jwt:''});
+		props.submitLogin(
+			props.change_pass_required?
+			{user_name:state.user_name, new_pass:state.new_pass,pass:props.pass, jwt:''}:
+			{user_name:state.user_name, pass:state.pass, jwt:''});
 		//trace(_dispatch == App.store.dispatch);
 		//trace(App.store.dispatch(UserAction.loginReq(state)));
 		//trace(props.dispatch(AppAction.LoginReq(state)));
@@ -121,6 +133,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	override public function render()
 	{
 		trace(Reflect.fields(props));
+		trace(state.new_pass);
 		var style = 
 		{
 			maxWidth:'32rem'
@@ -135,6 +148,54 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			  </div>
 			</section> 
 			');		
+		}
+		if(props.change_pass_required)
+		{
+			return jsx('
+			<section className="hero is-alt is-fullheight">
+			<div className="formContainer">
+				<div className="formBox is-rounded" style=${style}>
+					<div className="logo">
+					<img src="img/schutzengelwerk-logo.png" style=${{width:'100%'}}/>
+					<h2 className="overlaySubTitle">				  
+					crm 2.0
+					</h2>
+					</div> 
+					<div className="form2">
+						<form name="form" onSubmit={handleSubmit} className="login" >
+							<input  name="pass" type="hidden" value=${props.pass} />														
+							<div className="formField">
+								<h3>Bitte neues Passwort eintragen!</h3>
+							</div>
+							<div className="formField">
+									<label className="fa userIcon" forhtml="login_user_name">
+											<span className="hidden">User ID</span>
+									</label>
+									<input id="login_user_name" name="user_name" 
+									className=${errorStyle("user_name") + "form-input"}  
+									placeholder="User ID" value=${state.user_name} onChange={handleChange} />
+							</div>
+							<div className="formField">
+									<label className="fa lockIcon" forhtml="pw">
+											<span className="hidden">Password</span>
+									</label>
+									<input  className=${errorStyle("new_pass") + "form-input"} name="new_pass" type="password" placeholder="New Password" value=${state.new_pass} onChange=${handleChange} />
+							</div>
+							<div className="formField">
+									<label className="fa lockIcon" forhtml="pw">
+											<span className="hidden">Password</span>
+									</label>
+									<input  className=${errorStyle("new_pass_confirm") + "form-input"} name="new_pass_confirm" type="password" placeholder="Confirm New Password" value=${state.new_pass_confirm} onChange=${handleChange} />
+							</div>							
+							<div className="formField">
+									<input type="submit" style=${{width:'100%'}} value="Login" />
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			</section>		
+			');
 		}
 		
 		return jsx('
@@ -155,13 +216,13 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								</label>
 								<input id="login_user_name" name="user_name" 
 								className=${errorStyle("user_name") + "form-input"}  
-								placeholder="User ID" value={state.user_name} onChange={handleChange} />
+								placeholder="User ID" value=${state.user_name} onChange=${handleChange} />
 						</div>
 						<div className="formField">
 								<label className="fa lockIcon" forhtml="pw">
 										<span className="hidden">Password</span>
 								</label>
-								<input id="pw" className=${errorStyle("pass") + "form-input"} name="pass" type="password" placeholder="Password" value={state.pass} onChange={handleChange} />
+								<input id="pw" className=${errorStyle("pass") + "form-input"} name="pass" type="password" placeholder="Password" value=${state.pass} onChange=${handleChange} />
 						</div>
 						<div className="formField">
 								<input type="submit" style=${{width:'100%'}} value="Login" />
@@ -186,6 +247,9 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			case "user_name":
 				props.loginError == "user_name"?"error ":"";
 			
+			case "new_pass_confirm":
+				state.new_pass != state.new_pass_confirm?"error ":"";
+
 			default:
 				'';
 		}

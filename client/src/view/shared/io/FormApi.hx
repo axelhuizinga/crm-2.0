@@ -152,7 +152,7 @@ class FormApi
 	{
 		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
 		var dataSet:DOMStringMap = cast(e.target, ButtonElement).dataset;
-		trace(dataSet);
+		//trace(dataSet);
 		callMethod(action, e);
 	}
 
@@ -161,10 +161,10 @@ class FormApi
 		//trace(Reflect.fields(e));
 		var eTarget:Element = cast(e.target, Element);
 		var targetSection = eTarget.dataset.section;
-		trace('$targetSection ${comp.props.match.params.section}');
+		//trace('$targetSection ${comp.props.match.params.section}');
 		if(targetSection !=null && targetSection != comp.props.match.params.section)
 		{
-			trace(comp.props.match.params.section);
+			trace(targetSection);
 			comp.props.history.push(getUrl(eTarget.dataset.action,targetSection));
 			return true;
 		}

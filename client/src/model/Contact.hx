@@ -48,7 +48,7 @@ typedef Contact =
 	//{"name":"email","type":"character varying(64)","default":"''::character varying","attnum":"23","required":false}
 	?email:String,
 	//{"name":"comment","type":"character varying(4096)","default":"''::character varying","attnum":"24","required":false}
-	?comment:String,
+	?comments:String,
 	//{"name":"edited_by","type":"bigint","default":"","attnum":"25","required":true}
 	edited_by:Int
 }

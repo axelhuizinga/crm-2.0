@@ -20,7 +20,13 @@ class ContactsModel
 					]
 				],
 			view:[
-				'title'=>{label:'Anrede'},
+				'title'=>{label:'Anrede',type:Select,options:[
+						''=>'Unbekannt',
+						'Herr'=>'Herr',
+						'Frau'=>'Frau',
+						'Familie'=>'Familie',
+						'Firma'=>'Firma'
+					]},
 				'title_2'=>{label:'Titel'},
 				'first_name'=>{label:'Vorname'},
 				'last_name'=>{label:'Name'},
@@ -46,7 +52,7 @@ class ContactsModel
 						'F'=>'Weiblich'
 					]
 				},
-				'comment'=>{label:'Kommentar'},
+				'comments'=>{label:'Kommentar'},
 				'use_email'=>{label:'Post per Email',type: Checkbox},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},

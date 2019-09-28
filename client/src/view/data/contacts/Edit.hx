@@ -37,6 +37,7 @@ import state.FormState;
 import model.contacts.ContactsModel;
 import view.shared.SMItem;
 import view.shared.SMenuProps;
+import view.shared.io.BaseForm;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
@@ -51,7 +52,7 @@ using Lambda;
  * 
  */
 
-class Edit extends ReactComponentOf<DataFormProps,FormState>
+class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
 		{label:'Auswahl',action:'get',section: 'List'},
@@ -60,16 +61,16 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Löschen',action:'delete'}
 	];
 	
-	var dataDisplay:Map<String,DataState>;
-	var dataAccess:DataAccess;	
+//	var dataDisplay:Map<String,DataState>;
+//	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
 
-	var formRef:ReactRef<FormElement>;
-	var fieldNames:Array<String>;
-	var actualState:Contact;
+//	var formRef:ReactRef<FormElement>;
+//	var fieldNames:Array<String>;
+//	var actualState:Contact;
 	
-	public static var initialState:Contact;
+//	public static var initialState:Contact;
 
 	public function new(props) 
 	{
@@ -179,14 +180,18 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		
 	override public function componentDidMount():Void 
 	{	
-		Browser.window.addEventListener('beforeunload', sessionStore);
+		initSession();
+		/*Browser.window.addEventListener('beforeunload', sessionStore);
 		var sessContacts = Browser.window.sessionStorage.getItem('contacts');
 		if(sessContacts != null)
 		{
-			trace(Json.parse(sessContacts));
-			actualState = Json.parse(sessContacts);
-			trace(actualState);
-			forceUpdate();
+			var sessionContact:Contact = Json.parse(sessContacts);
+			trace(sessionContact);
+			if(sessionContact.id == initialState.id)
+			{
+				trace(actualState);
+				forceUpdate();				
+			}
 		}
 		else if((initialState.id!=null && !App.store.getState().dataStore.contactData.exists(initialState.id)))
 		{
@@ -214,15 +219,15 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{
 			//trace(Reflect.fields(formRef.current));
 			formRef.current.addEventListener('keyup', handleChange);
-			/*var formElement:Element = Browser.window.document.querySelector('form[name="contact"]');
-			trace(Reflect.fields(formElement));*/
+			//var formElement:Element = Browser.window.document.querySelector('form[name="contact"]');
+			//trace(Reflect.fields(formElement));
 			formRef.current.addEventListener('mouseup', function(ev:Dynamic)
 			{
 				//trace(Reflect.fields(ev.originalTarget));
 				trace(ev.target.value);
 				//doChange(ev.target.name,ev.target.value);
 			});
-		}
+		}*/
 	}
 	
 	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
@@ -250,14 +255,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(actData);
 		App.store.dispatch(DataAction.SelectActContacts(actData));
 	}
-
-	function sessionStore(){
-		trace(actualState);
-		Browser.window.sessionStorage.setItem('contacts',Json.stringify(actualState));
-		Browser.window.removeEventListener('beforeunload', sessionStore);
-	}
 	
-	public function doChange(name,value) {
+	/*public function doChange(name,value) {
 		trace('$name: $value');
 		if(name!=null && name!='')
 		Reflect.setField(actualState,name,value);
@@ -278,9 +277,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}	
 
 		//trace(actualState);
-	}		
+	}		*/
 
-	function handleSubmit(event:Event) {
+	override function handleSubmit(event:Event) {
 		//trace(Reflect.fields(event));
 		//trace(Type.typeof(event));
 		event.preventDefault();

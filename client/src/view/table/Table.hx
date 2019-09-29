@@ -1,5 +1,6 @@
 package view.table;
 
+import react.ReactPaginate;
 import js.Browser;
 import haxe.Constraints.Function;
 import haxe.Timer;
@@ -123,6 +124,7 @@ typedef TableProps =
 	//?parentForm:DataAccessForm,
 	?parentComponent:Dynamic,
 	?primary:String,//defaults to 'id'
+	?renderPager:Function,
 	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>,
 	//?setStateFromChild:FormState->Void,
 }
@@ -199,7 +201,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 						</thead>
 					</table>				
 				</div>				
-				<div className="grid-container-inner">							
+				<div className="grid-container-inner" >							
 					<table className=${"table " + props.className} ref={tableRef}>
 						<thead>
 							<tr ref=${tHeadRef}>
@@ -209,10 +211,9 @@ class Table extends ReactComponentOf<TableProps, TableState>
 						<tbody>
 							${renderRows()}
 						</tbody>
-					</table>
+					</table>					
 				</div>
-				<div className="pager">
-				</div>
+				${props.renderPager()}
 			</div>
 		');		
 	}
@@ -274,75 +275,6 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		return headerRow;
 	}	
 
-	/*function renderCells(rdMap:Map<String,Dynamic>, row:Int):ReactFragment
-	{
-		//trace(rdMap);
-		//trace(rdMap.remove('primary'));
-		//trace(rdMap['use_as_index']);
-		if(props.dataState==null)
-		{
-			trace('oops...');
-			return null;
-		}
-		if(row==3)
-		{
-			trace(props.dataState.columns);
-			trace(rdMap);
-		}
-		var column:Int = 0;
-		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
-			var columnDataState:DataColumn = props.dataState.columns.get(fN);
-			//trace(columnDataState.cellFormat != null ? fN:'');
-			var cD:DataCell = {
-				cellFormat:columnDataState.cellFormat,
-				className:columnDataState.className,
-				data:rdMap[fN],
-				dataDisplay:columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap[fN]):rdMap[fN],
-				flexGrow:columnDataState.flexGrow,
-				name:fN,
-				pos:{column:column++, row:row},
-				show:columnDataState.show != false
-			};
-			return cD;					
-		});
-		var rCs:Array<ReactFragment> = [];
-		for (cD in cells)
-		{
-			if (!cD.show)
-			 continue;//!=null?cD.flexGrow:null
-			rCs.push(
-			jsx('<td className=${cD.className} data-name=${cD.name} key=${"r"+cD.pos.row+"c"+cD.pos.column} data-grow=${cD.flexGrow}>
-				${cD.dataDisplay}
-			</td>'));
-		}
-		return rCs;
-	}*/
-	
-	/*function renderRowsOrg(?dRows:Array<Map<String,Dynamic>>):ReactFragment
-	{
-		if (dRows == null)
-			dRows = props.data;
-		var dRs:Array<ReactFragment> = [];
-		var row:Int = 0;
-		var primary:String = (props.primary!=null && props.primary.length > 0?props.primary:'id');
-		for (dR in dRows)
-		{			
-			var id:String = (dR.exists(primary)? '${dR.get(primary)}':'');
-			if (row == 1)
-			{
-				//trace(dR);
-				trace('<tr data-id=${id}< ke..');
-			}
-				
-			dRs.push(
-			jsx('<tr data-id=${id} title=${id} key=${"r"+row} ref=${row==0?firstRowRef:null} onClick={select}>
-				${renderCells(dR, row++)}				
-			</tr>'));
-		}//
-		trace(dRs.length);
-		return dRs;
-	}*/
-
 	function renderRows(?dRows:Array<Map<String,Dynamic>>):ReactFragment
 	{
 		if (dRows == null)
@@ -360,29 +292,6 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		trace(dRs.length);
 		return dRs;
 	}
-
-	/*function renderRows3(?dRows:Array<Map<String,Dynamic>>):ReactFragment
-	{
-		if (dRows == null)
-			dRows = props.data;
-		var dRs:Array<ReactFragment> = [];
-		var row:Int = 0;
-		var primary:String = (props.primary!=null && props.primary.length > 0?props.primary:'id');
-		if(trs.length == 0)
-		{	//CREATE Tr Components
-			for (dR in dRows)
-			{			
-				var id:String = (dR.exists(primary)? '${dR.get(primary)}':'');
-				var fRRef:ReactRef<TableRowElement> = (row==0?firstRowRef:null);
-				var tr:view.table.Tr = new Tr({columns:props.dataState.columns,data:dR,
-					firstTableRow:fRRef,row:row++});
-				trs.push(tr);
-			}	
-		}
-
-		trace(trs.length);
-		return trs.map(function (tr:Tr)return tr.me);
-	}	*/
 	
 	public function select(mEv:MouseEvent, tr:Tr)
 	{
@@ -411,7 +320,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		//props.parentForm.setStateFromChild({selectedRows:selRows});
 	}
 
-	public function select2(mEv:MouseEvent)
+	/*public function select2(mEv:MouseEvent)
 	{
 		trace(mEv.altKey);
 		trace(mEv.currentTarget);
@@ -436,7 +345,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		}
 		setState({selectedRows:selRows});
 		//props.parentForm.setStateFromChild({selectedRows:selRows});
-	}
+	}*/
 	
 	function selectAltGroup(altGroupPos:Int, cRow:TableRowElement):Void
 	{
@@ -452,7 +361,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		
 	}
 
-	function selectAltGroup2(altGroupPos:Int, cRow:TableRowElement):Void
+	/*function selectAltGroup2(altGroupPos:Int, cRow:TableRowElement):Void
 	{
 		var groupName:String = cRow.cells.item(altGroupPos).textContent;
 		var tEl:TableElement = cast cRow.parentElement;
@@ -464,7 +373,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 				row.classList.toggle('is-selected');
 		}
 		
-	}
+	}*/
 
 	function selectedRowsMap():Array<Map<String,String>>
 	{
@@ -510,7 +419,13 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
 		trace('firstRowRef.current.offsetWidth:' + firstRowRef.current.offsetWidth);
 		//tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
-		tHeadRef.current.style.visibility = "collapse";						
+		tableRef.current.style.marginTop = '-'+(tHeadRef.current.offsetHeight-10) + 'px';
+		//tableRef.current.parentElement.style.marginBottom = '-'+(tHeadRef.current.offsetHeight-10) + 'px';
+
+		//tableRef.current.parentElement.querySelector('.pagination').style.marginRight = scrollBarWidth + 'px';
+		//trace(tableRef.current.parentElement.querySelector('.pagination'));
+		//trace(tableRef.current.parentElement.querySelector('.pagination').style.marginRight);
+		//tHeadRef.current.style.visibility = "collapse";						
 		//trace(tableRef.current.offsetHeight);
 		//trace(tHeadRef.current.nodeName + ':' + tHeadRef.current.style.visibility);						
 		var i:Int = 0;
@@ -632,28 +547,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		trace(' sum:$s');
 	}
 	
-}
 
-	/*function createColumns():ReactFragment
-	{
-		if(state.data.length>0)
-			trace(Reflect.fields(state.data[0]));
-		trace(Reflect.fields(props.headerColumns));
-		var cols:Array<ReactFragment> = [];
-		for (field in props.headerColumns.keys())
-		{
-			var hC:DataCell = props.headerColumns.get(field);
-			cols.push(jsx('	
-				<Column
-					label=${field.substr(0, 1).toUpperCase() + field.substr(1).toLowerCase()}
-					dataKey={field}
-					key={field}
-					width = {122}
-					className = {hC.className}
-					flexGrow = {hC.flexGrow}
-				/>
-				')
-			);
-		}
-		return cols;
-	}*/
+
+
+}

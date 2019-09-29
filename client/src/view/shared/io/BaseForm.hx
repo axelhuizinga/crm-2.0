@@ -162,5 +162,13 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 			});
 		}		
 	}
+
+	/**
+	 * PAGER HANDLING
+	 */
+
+	function onPageChange(data) {
+		trace(data);
+	}
 	
 }

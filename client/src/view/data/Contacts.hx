@@ -30,7 +30,7 @@ import action.async.LiveDataAccess;
 import view.data.contacts.List;
 import view.data.contacts.Edit;
 
-import view.data.contacts.model.ContactsModel;
+import model.contacts.ContactsModel;
 import action.async.DBAccess;
 import shared.DbData;
 import shared.DBMetaData;
@@ -180,7 +180,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case "List":
 				jsx('
-					<$List ${...props} formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$List ${...props} limit=${50} formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
 					');					
 			case "Edit":
 				jsx('

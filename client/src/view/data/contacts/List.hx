@@ -5,14 +5,16 @@ import haxe.ds.IntMap;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
+import react.ReactPaginate;
 import shared.DbData;
 import shared.DBMetaData;
 import view.shared.FormBuilder;
 import view.shared.FormField;
 import state.FormState;
-import view.data.contacts.model.ContactsModel;
+import model.contacts.ContactsModel;
 import view.shared.SMItem;
 import view.shared.SMenuProps;
+import view.shared.io.BaseForm;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
@@ -20,7 +22,7 @@ import loader.BinaryLoader;
 import view.table.Table;
 import model.Contact;
 
-class List extends ReactComponentOf<DataFormProps,FormState>
+class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
 		//{label:'Anzeigen',action:'get'},
@@ -29,8 +31,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Löschen',action:'delete'}
 	];
 	
-	var dataDisplay:Map<String,DataState>;
-	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
 	public function new(props) 
@@ -94,6 +94,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				className:'data.Contacts',
 				action:'get',
 				devIP:App.devIP,
+				limit:props.limit,
 				table:'contacts'
 			},
 			function(data:DbData)
@@ -105,7 +106,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				{
 					if(!data.dataErrors.keys().hasNext())
 					{
-						setState({dataTable:data.dataRows});
+						setState({
+							dataTable:data.dataRows,
+							pageCount: Math.ceil(data.dataRows.length / props.limit)
+						});
 					}
 					else 
 						setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});					
@@ -170,7 +174,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
+		trace(props.match.params.section + ':${props.match.params.action}::' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
 		trace(state.loading);
 		if(state.dataTable.length==0)
@@ -180,11 +184,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'get':
 				jsx('
-				<form className="tabComponentForm" >
-					<Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
-					${...props} dataState = ${dataDisplay["contactList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				</form>
+					<form className="tabComponentForm" >
+						<$Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
+						${...props} dataState = ${dataDisplay["contactList"]} renderPager=${renderPager}
+						className="is-striped is-hoverable" fullWidth=${true}/>
+					</form>
 				');
 			default:
 				null;
@@ -200,10 +204,30 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				${renderResults()}
 		'));		
 	}
-
-	function select(data:IntMap<Map<String,Dynamic>>)
+//className="pagination is-centered  is-small" role="navigation" aria-label="pagination"
+	function renderPager():ReactFragment
 	{
-		
+		trace('pageCount=${state.pageCount}');
+		return jsx('
+		<div className="paginationContainer">
+			<nav >
+				<$ReactPaginate previousLabel=${'<'} breakLinkClassName=${'pagination-link'}
+					pageLinkClassName=${'pagination-link'}					
+					nextLinkClassName=${'pagination-next'}
+					previousLinkClassName=${'pagination-previous'}
+					nextLabel=${'>'}
+					breakLabel=${'...'}
+					breakClassName=${'break-me'}
+					pageCount=${state.pageCount}
+					marginPagesDisplayed={2}
+					pageRangeDisplayed={5}
+					onPageChange=${onPageChange}
+					containerClassName=${'pagination  is-small'}
+					subContainerClassName=${'pages pagination'}
+					activeClassName=${'is-current'}/>
+			</nav>	
+		</div>		
+		');
 	}
 	
 	function updateMenu(?viewClassPath:String):SMenuProps

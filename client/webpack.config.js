@@ -165,13 +165,6 @@ module.exports = {
 					}*/
 				]
 			},
-           /* {
-                test: /\.css$/,
-                use: [
-                    'style-loader',                    
-                    'css-loader'
-                ]
-			},*/
             {
                 test: /\.(ttf|eot|svg|png|woff(2)?)(\?[a-z0-9]+)?$/,
                 use: [{

@@ -6,7 +6,11 @@
 	$br $br 0 0;
 }
 */
-	 
+/* bulma preload variables */
+
+$pagination-margin: 0px auto;
+$tooltip-background-opacity: 0.8;
+$tooltip-max-width: 24rem;	 
 
 //@import "../bulma/bulma.sass";
 @import "../../node_modules/react-bulma-components/node_modules/bulma/bulma.sass";
@@ -56,8 +60,6 @@ $darkGradient:linear-gradient($lightBlue 0%, $paleBlue 32%);
 
 /* bulma variables */
 $danger:$darkRed;
-$tooltip-background-opacity: 0.8;
-$tooltip-max-width: 24rem;
  
 html,body { 
     /*font-family:Arial;*/
@@ -180,16 +182,17 @@ h1 {
   flex-direction:column;
   flex-grow:1;
   background-color: white;
+  border-bottom: 1px solid grey;
   /*margin: 0.8rem 0rem 0.5rem 0.8rem
    /* position: relative;could be absolute or relative */
 }
 
 .grid-container-inner {
-	
+/*margin-bottom:-2.5rem;*/
 	overflow-x: hidden;
 	overflow-y: auto;
 	border:1px solid grey;
-	border-style:none solid solid;
+	border-style:none solid;
 }
 .gridHeadItem
 {
@@ -772,6 +775,15 @@ form td, form caption
 {
 	padding: 0.32rem;
 	vertical-align: middle;
+}
+
+.paginationContainer
+{
+	background-color: white;
+	display: flex;
+	border-left:1px solid grey;
+	border-right:1px solid grey;
+	justify-content: center;
 }
 
 /* OVERFLOW */

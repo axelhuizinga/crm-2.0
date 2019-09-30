@@ -54,7 +54,9 @@ class UserStore implements IReducer<UserAction, UserState>
 					//trace(uState.id + ':' + uState.loggedIn);
 					trace(uState);
 					copy(state, {		
-						change_pass_required:uState.change_pass_required,				
+						change_pass_required:uState.change_pass_required,			
+						first_name:uState.first_name,
+						last_name:uState.last_name,	
 						id:uState.id,
 						jwt:uState.jwt,
 						loginError: null,

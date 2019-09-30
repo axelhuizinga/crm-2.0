@@ -55,6 +55,15 @@ class SyncExternalClients extends Model
 		}		
 	}
 
+	function  getMissing() {
+		var sql:String = 'SELECT client_id FROM clients cl 
+INNER JOIN pay_plan pp 
+ON pp.client_id=cl.client_id 
+INNER JOIN pay_source ps 
+ON ps.client_id = cl.client_id;';
+		
+	}
+
 	function syncAll() {
 		trace(param);
 		//dbAccessProps = initDbAccessProps();
@@ -62,10 +71,11 @@ class SyncExternalClients extends Model
 			param['offset'] = 0;
 		if(param['limit']==null)			
 			param['limit'] = '1000';
-		if(param['offset']+param['limit']>param['maxImport'])
+		if(Std.parseInt(param['offset'])+Std.parseInt(param['limit'])>Std.parseInt(param['maxImport']))
 		{
-			param['limit'] = param['maxImport'] - param['offset'];
+			param['limit'] = Std.parseInt(param['maxImport']) - Std.parseInt(param['offset']);
 		}
+		trace(param);
 		importCrmData();
 		S.sendErrors(dbData,['syncAll'=>'NOTOK']);
 	}
@@ -122,7 +132,11 @@ class SyncExternalClients extends Model
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		bindClientData(stmt,rD);
 		if(!stmt.execute()){
-			S.sendErrors(dbData, ['execute'=>Lib.hashOfAssociativeArray(stmt.errorInfo())]);
+			trace(rD);
+			trace(stmt.errorInfo());
+			S.sendErrors(dbData, ['execute'=>Lib.hashOfAssociativeArray(stmt.errorInfo()),
+			'sql'=>sql,
+			'id'=>Std.string(Syntax.code("{0}['id']",rD))]);
 		}
 		//trace(stmt.columnCount());
 		//dbData.dataInfo['synced'] = ++synced;
@@ -203,7 +217,7 @@ class SyncExternalClients extends Model
 			selectTotalCount = 'SQL_CALC_FOUND_ROWS';
 		}
         var sql = comment(unindent,format)/*
-		SELECT $selectTotalCount cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,cl.birth_date date_of_birth,IF(cl.old_active=1,'true','false')old_active,
+		SELECT $selectTotalCount cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(TO_DAYS(STR_TO_DATE(cl.birth_date, '%Y-%m-%d'))>500000 ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,
 pp.pay_plan_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,IF(pp.product='K',2,3) product ,pp.agent,pp.agency_project project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,
  ps.pay_source_id,ps.debtor,ps.bank_name,ps.account,ps.blz,ps.iban,ps.sign_date,ps.pay_source_state,ps.creation_date account_creation_date,
 vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
@@ -215,11 +229,13 @@ INNER JOIN pay_source ps
 ON ps.client_id=cl.client_id
 INNER JOIN asterisk.vicidial_list vl
 ON vl.vendor_lead_code=cl.client_id
+WHERE cl.client_id>11019219
 ORDER BY cl.client_id 
 LIMIT 
 */;
 
         var stmt:PDOStatement = S.syncDbh.query('$sql ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');
+		trace('loading  ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');
 		if(untyped stmt==false)
 		{
 			trace('$sql ${Std.parseInt(param['limit'])}');

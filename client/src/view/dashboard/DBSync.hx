@@ -158,8 +158,8 @@ class DBSync extends BaseForm
 	{
 		trace(props.user.first_name);
 		App.store.dispatch(action.async.LivePBXSync.syncAll({
-			limit:10,
-			maxImport:22,
+			limit:1000,
+			maxImport:4000,
 			user:props.user,
 			offset:0,
 			className:'admin.SyncExternal',

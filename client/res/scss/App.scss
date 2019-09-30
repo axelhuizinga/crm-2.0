@@ -7,7 +7,10 @@
 }
 */
 /* bulma preload variables */
+@import "../../node_modules/react-bulma-components/node_modules/bulma/sass/utilities/initial-variables.sass";
 
+$pagination-focus-border-color:$grey-lighter;
+$pagination-hover-border-color:$grey-light;
 $pagination-margin: 0px auto;
 $tooltip-background-opacity: 0.8;
 $tooltip-max-width: 24rem;	 
@@ -784,6 +787,10 @@ form td, form caption
 	border-left:1px solid grey;
 	border-right:1px solid grey;
 	justify-content: center;
+}
+
+.paginationContainer li.disabled a, .paginationContainer li.selected a{
+	cursor: not-allowed;
 }
 
 /* OVERFLOW */

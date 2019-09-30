@@ -108,7 +108,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 					{
 						setState({
 							dataTable:data.dataRows,
-							pageCount: Math.ceil(data.dataRows.length / props.limit)
+							pageCount: Math.ceil(data.dataInfo['count'] / props.limit)
 						});
 					}
 					else 
@@ -224,7 +224,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 					onPageChange=${onPageChange}
 					containerClassName=${'pagination  is-small'}
 					subContainerClassName=${'pages pagination'}
-					activeClassName=${'is-current'}/>
+					activeLinkClassName=${'is-current'}/>
 			</nav>	
 		</div>		
 		');

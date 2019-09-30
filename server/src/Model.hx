@@ -368,8 +368,8 @@ class Model
 			{
 				data = stmt.fetchAll(PDO.FETCH_ASSOC);
 			}			
-			trace(Lib.toHaxeArray(data).join(','));		
-			trace(stmt.errorInfo());
+			//trace(Lib.toHaxeArray(data).join(','));		
+			//trace(stmt.errorInfo());
 			return(data);		
 		}
 		else {

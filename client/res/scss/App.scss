@@ -186,6 +186,7 @@ h1 {
   flex-grow:1;
   background-color: white;
   border-bottom: 1px solid grey;
+  min-height: 100%;
   /*margin: 0.8rem 0rem 0.5rem 0.8rem
    /* position: relative;could be absolute or relative */
 }
@@ -196,6 +197,7 @@ h1 {
 	overflow-y: auto;
 	border:1px solid grey;
 	border-style:none solid;
+	flex-grow: 1;
 }
 .gridHeadItem
 {

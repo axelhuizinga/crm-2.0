@@ -56,16 +56,122 @@ class SyncExternalClients extends Model
 	}
 
 	function  getMissing() {
-		var sql:String = 'SELECT client_id FROM clients cl 
+		var sql:String = '
+		SELECT DISTINCT(cl.client_id) FROM clients cl 
 INNER JOIN pay_plan pp 
 ON pp.client_id=cl.client_id 
 INNER JOIN pay_source ps 
 ON ps.client_id = cl.client_id;';
+        var stmt:PDOStatement = S.syncDbh.query(sql);
+		if(untyped stmt==false)
+		{
+			trace(S.syncDbh.errorInfo());
+			S.sendErrors(dbData, ['getAll query:'=>S.syncDbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+		}
+		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_NUM):null);	
 		
+		trace(Syntax.code("count({0})",res));
+				
+		var cleared:Int = S.dbh.exec('TRUNCATE contact_ids');
+		if(S.dbh.errorCode() !='00000')
+		{
+			trace(S.dbh.errorInfo());
+		}
+		else 	
+			trace('cleared all IDs from contact_ids');
+		var cIDs:NativeArray = Syntax.code("array_map(function($r){return $r[0];}, {0})",res);
+		trace(Syntax.code("print_r({0}[0],1)", cIDs));
+		var ok:Bool = S.dbh.pgsqlCopyFromArray("contact_ids",cIDs);
+		if(!ok)
+		{
+			trace(S.dbh.errorInfo());
+		}
+		if(S.dbh.errorCode() !='00000')
+		{
+			trace(S.dbh.errorInfo());
+		}
+		sql = comment(unindent, format)/* 
+		SELECT ARRAY_TO_STRING(array_agg(acid.id),',') from contact_ids acid
+		left join 
+		(SELECT 1 as gg,id from contacts) c
+		ON acid.id=c.id
+		where c.id IS NULL
+		GROUP BY gg;
+		*/;
+		stmt = S.dbh.query(sql);
+		if(untyped stmt==false)
+		{
+			trace('$sql ${Std.parseInt(param['limit'])}');
+			S.sendErrors(dbData, ['getMissingIDs query:'=>S.syncDbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+		}
+		var ids:String = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN,0):null);
+		trace(ids);
+		sql = comment(unindent,format)/*
+		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(TO_DAYS(STR_TO_DATE(cl.birth_date, '%Y-%m-%d'))>500000 ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,
+pp.pay_plan_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,IF(pp.product='K',2,3) product ,pp.agent,pp.agency_project project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,
+ ps.pay_source_id,ps.debtor,ps.bank_name,ps.account,ps.blz,ps.iban,ps.sign_date,ps.pay_source_state,ps.creation_date account_creation_date,
+vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
+IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner,vl.entry_list_id, 1 mandator, 100 edited_by, '' company_name
+FROM clients cl
+INNER JOIN pay_plan pp
+ON pp.client_id=cl.client_id
+INNER JOIN pay_source ps
+ON ps.client_id=cl.client_id
+INNER JOIN asterisk.vicidial_list vl
+ON (vl.lead_id=cl.lead_id )
+WHERE cl.client_id IN($ids)
+ORDER BY cl.client_id  
+*/;
+
+        stmt = S.syncDbh.query(sql);
+		if(untyped stmt==false)
+		{
+			trace(sql);
+			S.sendErrors(dbData, ['getMissingCrmData query:'=>S.syncDbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			S.sendErrors(dbData,['getMissingCrmData'=>stmt.errorInfo()]);
+		}
+		res = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		var missing:Int = Syntax.code("count({0})",res);
+		trace(missing);
+		for(row in res.iterator())
+		{			
+			//trace(row);
+			//S.sendErrors(dbData,['syncAll'=>'NOTOK']);
+			var stmt:PDOStatement = upsertClient(row);
+			try{
+				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
+				//trace(res);
+			}
+			catch(e:Dynamic)
+			{
+				{S.sendErrors(dbData, [
+					'dbError'=>S.dbh.errorInfo(),
+					'upsertClient'=>S.errorInfo(row),
+					'exception'=>e
+				]);}		
+			}
+		}		
+        trace('done');
+		//dbData.dataInfo['offset'] = param['offset'] + synced;
+		trace(dbData.dataInfo);
+        //S.sendData(dbData, null);
+		S.sendInfo(dbData,['gotMissing'=>'OK:$missing']);
 	}
 
 	function syncAll() {
 		trace(param);
+		getMissing();
 		//dbAccessProps = initDbAccessProps();
 		if(param['offset']==null)
 			param['offset'] = 0;

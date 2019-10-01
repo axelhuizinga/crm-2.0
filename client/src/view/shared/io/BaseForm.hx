@@ -1,4 +1,5 @@
 package view.shared.io;
+import haxe.Constraints.Function;
 import model.Contact;
 import haxe.Json;
 import action.async.DBAccess;
@@ -168,7 +169,12 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 	 */
 
 	function onPageChange(data) {
-		trace(data);
+		trace('${props.match.params.action}:${data.selected}');
+		var fun:Function = Reflect.field(this,props.match.params.action);
+		if(Reflect.isFunction(fun))
+		{
+			Reflect.callMethod(this,fun,[{page:data.selected}]);
+		}		
 	}
 	
 }

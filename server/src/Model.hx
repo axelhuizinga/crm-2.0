@@ -253,10 +253,17 @@ class Model
 			buildGroup(groupParam, sqlBf);
 		//TODO:HAVING
 		var order:String = param.get('order');
+		if(order == null)
+		{
+			order = 'id';
+		}
 		if (order != null)
 			buildOrder(order, sqlBf);
 		var limit:String = param.get('limit');
 		buildLimit((limit == null?'150':limit), sqlBf);	//	TODO: CONFIG LIMIT DEFAULT
+		if(param.get('offset')!=null)
+		buildOffset(param.get('offset'),sqlBf);
+		//trace(sqlBf.toString());
 		return execute(sqlBf.toString());
 		//return execute(sqlBf.toString(), q,filterValuess);
 	}
@@ -700,6 +707,11 @@ class Model
 			: Std.string(Std.parseInt(limitParam))));
 	}
 	
+	public function buildOffset(offsetParam:String, sqlBf:StringBuf):Void
+	{
+		sqlBf.add(' OFFSET $offsetParam');
+	}
+
 	function quoteIdent(f : String):String 
 	{
 		if ( ~/^([a-zA-Z_])[a-zA-Z0-9_]+$/.match(f))

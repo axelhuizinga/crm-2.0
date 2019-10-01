@@ -4,7 +4,7 @@ import react.ReactPaginate;
 import js.Browser;
 import haxe.Constraints.Function;
 import haxe.Timer;
-import haxe.ds.Map;
+//import haxe.ds.Map;
 import haxe.extern.EitherType;
 import js.html.DOMRect;
 import js.html.Element;
@@ -413,13 +413,13 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		headerUpdated = true;			
 		//var tableHeight:Float = tableRef.current.clientHeight;
 		//var leftMargin:Int = 
-		var scrollBarWidth:Float = App.config.getScrollbarWidth();
+		var scrollBarWidth:Float = App.config.getScrollbarWidth(true);
 		var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - scrollBarWidth;
 		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} parentElement.offsetWidth: ${tableRef.current.parentElement.offsetWidth} ');
 		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
-		trace('firstRowRef.current.offsetWidth:' + firstRowRef.current.offsetWidth);
+		trace('firstRowRef.current.offsetWidth:${firstRowRef.current.offsetWidth} scrollBarWidth:$scrollBarWidth');
 		//tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
-		tableRef.current.style.marginTop = '-'+(tHeadRef.current.offsetHeight-10) + 'px';
+		tableRef.current.style.marginTop = '-'+(tHeadRef.current.offsetHeight) + 'px';
 		//tableRef.current.parentElement.style.marginBottom = '-'+(tHeadRef.current.offsetHeight-10) + 'px';
 
 		//tableRef.current.parentElement.querySelector('.pagination').style.marginRight = scrollBarWidth + 'px';

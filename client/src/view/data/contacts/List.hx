@@ -81,20 +81,27 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
-	public function get(ev:ReactEvent):Void
+	public function get(ev:Dynamic):Void
 	{
-		trace('hi :)');
-		var s:hxbit.Serializer = new hxbit.Serializer();
-		
-		state.formApi.requests.push( BinaryLoader.create(
+		trace('hi $ev');
+		var offset:Int = 0;
+		if(ev != null && ev.page!=null)
+		{
+			offset = Std.int(props.limit * ev.page);
+		}
+		//var s:hxbit.Serializer = new hxbit.Serializer();		
+		//state.formApi.requests.push( 
+			BinaryLoader.create(
 			'${App.config.api}', 
 			{
 				id:props.user.id,
 				jwt:props.user.jwt,
 				className:'data.Contacts',
 				action:'get',
+				filter:(props.match.params.id!=null?'id|${props.match.params.id}':'mandator|1'),
 				devIP:App.devIP,
 				limit:props.limit,
+				offset:offset>0?offset:0,
 				table:'contacts'
 			},
 			function(data:DbData)
@@ -108,6 +115,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 					{
 						setState({
 							dataTable:data.dataRows,
+							dataCount:data.dataInfo['count'],
 							pageCount: Math.ceil(data.dataInfo['count'] / props.limit)
 						});
 					}
@@ -115,7 +123,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 						setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});					
 				}
 			}
-		));
+		);
 	}
 	
 	public function edit(ev:ReactEvent):Void
@@ -124,7 +132,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		trace(Reflect.fields(ev));
 	}
 
-	function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
+	/*function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
 	{
 		var iS:Dynamic = {};
 		for(dR in dt)
@@ -144,7 +152,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		}
 		trace(iS);
 		return iS;
-	}
+	}*/
 		
 	override public function componentDidMount():Void 
 	{	

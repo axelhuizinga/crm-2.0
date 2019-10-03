@@ -49,6 +49,7 @@ typedef FormState =
 	?modelClass:Dynamic,
 	?valuesArray:Array<Map<String,Dynamic>>,//FORMATTED DISPLAY VALUES
 	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES
+	?rows:Array<Dynamic>,
 	?section:String,
 	?sideMenu:SMenuProps,
 	?storeListener:redux.Redux.Unsubscribe,

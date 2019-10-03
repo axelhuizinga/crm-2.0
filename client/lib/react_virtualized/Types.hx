@@ -4,7 +4,7 @@ package react_virtualized;
  * ...
  * @author axel@cunity.me
  */
-
+import haxe.Constraints.Function;
 import haxe.extern.EitherType;
 import react.ReactComponent.ReactElement;
 
@@ -110,13 +110,6 @@ abstract SortDirection(String){
 	var DESC = 'DESC';
 }
 
-/*typedef SortDirection = {
-	@:value('ASC')
-	var ASC:String;
-	@:value('DESC')
-	var DESC:String;
-}*/
-
 typedef RenderedSection = {
 	var columnOverscanStartIndex: Int;
 	var columnOverscanStopIndex: Int;
@@ -170,4 +163,17 @@ typedef Alignment = {
 typedef VisibleCellRange = {
   @:optional var start: Int;
   @:optional var stop: Int;
+};
+
+typedef RowRendererParams = {
+  className: String,
+  columns: Array<Any>,
+  index: Int,
+  isScrolling: Bool,
+  ?onRowClick: Function,
+  ?onRowDoubleClick: Function,
+  ?onRowMouseOver: Function,
+  ?onRowMouseOut: Function,
+  rowData: Any,
+  style: Any
 };

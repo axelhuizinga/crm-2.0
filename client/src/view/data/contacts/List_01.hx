@@ -2,7 +2,6 @@ package view.data.contacts;
 import state.AppState;
 import haxe.Constraints.Function;
 import haxe.ds.IntMap;
-import react.data.ReactDataGrid;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
@@ -20,7 +19,7 @@ import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import loader.BinaryLoader;
-import view.table.VDataGrid;
+import view.table.Table;
 import model.Contact;
 
 class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
@@ -114,17 +113,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				{
 					if(!data.dataErrors.keys().hasNext())
 					{
-						var dRows:Array<Dynamic> = [];
-						for(row in data.dataRows)
-						{
-							var rO:Dynamic = {};
-							for(k=>v in row.keyValueIterator())
-								Reflect.setField(rO, k , v);
-							dRows.push(rO);						
-						}
-						trace(dRows);
 						setState({
-							rows:dRows,
 							dataTable:data.dataRows,
 							dataCount:data.dataInfo['count'],
 							pageCount: Math.ceil(data.dataInfo['count'] / props.limit)
@@ -196,19 +185,17 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.section + ':${props.match.params.action}::' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
 		trace(state.loading);
-		if( state.dataTable.length==0)
+		if(state.dataTable.length==0)
 			return state.formApi.renderWait();
-		trace('###########loading:' + state.rows[0]);
+		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
-		{//  ${...props}
+		{
 			case 'get':
 				jsx('
 					<form className="tabComponentForm" >
-						${VDataGrid.renderVirtualTable({
-							autoSize:true,
-							listColumns:cast ContactsModel.listColumns,
-							dataRows:state.rows
-						})}
+						<$Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
+						${...props} dataState = ${dataDisplay["contactList"]} renderPager=${renderPager}
+						className="is-striped is-hoverable" fullWidth=${true}/>
 					</form>
 				');
 			default:
@@ -216,11 +203,6 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		}
 		return null;
 	}
-
-	function getCellData(cP:Dynamic) {
-		trace(cP);
-	}
-//cellDataGetter=${getCellData}
 	
 	override function render():ReactFragment
 	{

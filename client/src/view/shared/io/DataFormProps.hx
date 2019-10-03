@@ -13,7 +13,9 @@ typedef DataFormProps =
 	?dataStore:state.DataAccessState,
     ?formApi:FormApi,
 	?fullWidth:Bool,
+	
 	?limit:Int,
+
 	?parentComponent:Dynamic,
 	?setStateFromChild:FormState->Void,
 	?setFormState:FormState->Void,

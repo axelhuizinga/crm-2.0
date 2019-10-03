@@ -11,7 +11,7 @@ import react_virtualized.Types.ScrollbarPresenceChange;
 import react_virtualized.Types.RenderedSection;
 import haxe.Constraints.Function;
 import haxe.extern.EitherType;
-import react.ReactComponent.ReactComponentOf;
+import react.ReactComponent.ReactComponentOfProps;
 
 /**
  * ...
@@ -19,7 +19,6 @@ import react.ReactComponent.ReactComponentOf;
  */
 
 typedef GridProps = {
-	@:nativeProperty('aria-label')
 	?aria_label:String,
 	?autoContainerWidth:Bool,
 	?autoHeight:Bool,
@@ -32,7 +31,6 @@ typedef GridProps = {
 	?containerProps:Dynamic,
 	?containerStyle:Dynamic,
 	?containerRole:String,
-    ?columnCount: Int,
 	?deferredMeasurementCache:Dynamic,
 	?estimatedColumnSize:Int,
 	?estimatedRowSize:Int,	
@@ -74,24 +72,22 @@ typedef InstanceProps = {
   scrollbarSizeMeasured: Bool,
 }
 
-typedef GridState = {
+/*typedef GridState = {
 	instanceProps: InstanceProps,
 	isScrolling: Bool,
-	@range(-1, 1)
-	scrollDirectionHorizontal: Int,
-	@range(-1, 1)
-	scrollDirectionVertical: Int,
+	@range(-1, 1) var	scrollDirectionHorizontal: Int,
+	@range(-1, 1) var	scrollDirectionVertical: Int,
 	scrollLeft: Int,
 	scrollTop: Int,
 	scrollPositionChangeReason: String,//'observed' | 'requested' | null,
 	needToResetStyleCache: Bool,
 	useDynamicRowHeight:Bool
-}
+}*/
 
 @:jsRequire('react-virtualized', 'Grid')
-extern class Grid implements Dynamic extends ReactComponentOf<GridProps,GridState>
+extern class Grid implements Dynamic extends ReactComponentOfProps<GridProps>
 {
-	public function new(?props:GridProps){};
+	public function new(props:GridProps):Void;
 	
-	public static function 	scrollbarSize(Void):Int;
+	public static function 	scrollbarSize():Int;
 }

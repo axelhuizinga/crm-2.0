@@ -47,10 +47,16 @@ typedef TableProps = {
 	?scrollToIndex:Int,
 	?sort:Function,
 	?sortBy:String,
-	?sortDirection:SortDirection,
+	?sortDirection:VSortDirection,
 	?style:Dynamic,
 	?tabIndex:Int,
 	width:Int	
+}
+
+enum abstract VSortDirection(String){
+	var ASC = 'ASC';
+	var DESC = 'DESC';
+	var NONE = '';
 }
 
 typedef TableState = {

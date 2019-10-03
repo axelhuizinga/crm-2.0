@@ -25,7 +25,7 @@ typedef ColumnProps = {
 	?className:String,
 	?columnData: Dynamic,
 	dataKey: Dynamic,
-	defaultSortDirection:SortDirection,
+	?defaultSortDirection:SortDirection,
 	?disableSort:Bool,	
 	?flexGrow:Int,
 	?flexShrink:Int,
@@ -34,8 +34,8 @@ typedef ColumnProps = {
 	?headerStyle:Dynamic,
 	?id:String,
 	?label:Dynamic,
-    maxHeight: Int,
-    maxWidth: Int,
+    ?maxHeight: Int,
+    ?maxWidth: Int,
 	?style:Dynamic,
 	width:Int	
 }

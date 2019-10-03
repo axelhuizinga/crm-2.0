@@ -71,6 +71,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	public static var flatpickr:Function = Webpack.require('flatpickr');
 	public static var German = js.Lib.require('flatpickr/dist/l10n/de.js');
 	static var flat = js.Lib.require('flatpickr/dist/flatpickr.min.css');
+	static var rvirt = js.Lib.require('react-virtualized/styles.css');	
 	//static var flat = js.Lib.require('flatpickr/dist/themes/light.css');	
 	public static var sprintf:Function = Webpack.require('sprintf-js').sprintf;
 

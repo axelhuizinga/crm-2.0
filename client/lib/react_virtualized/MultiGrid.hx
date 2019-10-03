@@ -3,7 +3,7 @@ package react_virtualized;
 
 import haxe.Constraints.Function;
 import haxe.extern.EitherType;
-import react.ReactComponent.ReactPureComponentOf;
+import react.ReactComponent.ReactComponentOf;
 
 
 /**
@@ -20,7 +20,6 @@ typedef MultiGridProps = {
 	?enableFixedRowScroll:Bool,
 	?fixedColumnCount:Int,
 	?fixedRowCount:Int,
-	?fixedColumnCount:Int,
 	?onScrollbarPresenceChange:Function,
 	?style:Dynamic,
 	?styleBottomLeftGrid:Dynamic,
@@ -40,7 +39,7 @@ typedef MultiGridState = {
 };
 
 @:jsRequire('react-virtualized', 'MultiGrid')
-extern class MultiGrid extends ReactPureComponentOf<MultiGridProps,MultiGridState>
+extern class MultiGrid extends ReactComponentOf<MultiGridProps,MultiGridState>
 {
 	public function new(?props:MultiGridProps):Void;
 	

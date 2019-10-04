@@ -208,9 +208,10 @@ h1 {
 	justify-content:space-between;*/
 }
 
-.header-background {
+.header-background, .ReactVirtualized__Table__headerRow {
   /*background-color: #D5ECFF;#eee;flex: 1 0 auto;background-color: $darkRed;
   color: $lightGreen; background-image:linear-gradient($lightGreen,$darkGreen, $darkGreen);	 */ 
+  color:white;
   background-origin:border-box;
   background-image:$darkGradient;
   border-color: grey;

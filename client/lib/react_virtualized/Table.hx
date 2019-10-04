@@ -13,7 +13,6 @@ import react_virtualized.Types.RenderedSection;
 import haxe.Constraints.Function;
 import haxe.extern.EitherType;
 import react.ReactComponent.ReactComponentOf;
-import react.ReactPropTypes;
 
 /**
  * ...
@@ -23,7 +22,7 @@ import react.ReactPropTypes;
 typedef TableProps = {
 	?autoHeight:Bool,
 	?callBack:Bool,
-	children:Column,
+	children:EitherType<Column, Array<Column>>,
 	?className:String,
 	?disableHeader:Bool,
 	?estimatedRowSize:Int,	

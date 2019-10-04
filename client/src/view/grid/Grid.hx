@@ -260,7 +260,7 @@ class Grid extends ReactComponentOf<TableProps, GridState>
 	function renderCells(rD:Dynamic, row:Int):ReactFragment
 	{
 		//@:arrayAccess
-		var rdMap:Map<String,Any> = Utils.dynaMap(rD);
+		var rdMap:Map<String,Dynamic> = Utils.dynaMap(rD);
 		var column:Int = 0;
 		var rowClass = (row % 2 == 0?'even':'odd');
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){

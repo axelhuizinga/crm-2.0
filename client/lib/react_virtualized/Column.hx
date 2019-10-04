@@ -13,6 +13,7 @@ import react_virtualized.Types.RenderedSection;
 import haxe.Constraints.Function;
 import haxe.extern.EitherType;
 import react.ReactComponent.ReactComponentOfProps;
+import react.ReactPropTypes;
 
 /**
  * ...
@@ -41,6 +42,7 @@ typedef ColumnProps = {
 }
 
 @:jsRequire('react-virtualized', 'Column')
+@:native('Column')
 extern class Column extends ReactComponentOfProps<ColumnProps>
 {
 	public function new(?props:ColumnProps):Void;

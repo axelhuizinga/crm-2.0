@@ -6,7 +6,6 @@ import react.data.ReactDataGrid;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
-import react.ReactPaginate;
 import shared.DbData;
 import shared.DBMetaData;
 import view.shared.FormBuilder;
@@ -204,11 +203,13 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			case 'get':
 				jsx('
 					<form className="tabComponentForm" >
-						${VDataGrid.renderVirtualTable({
-							autoSize:true,
-							listColumns:cast ContactsModel.listColumns,
-							dataRows:state.rows
-						})}
+						<$VDataGrid ${...props}
+							autoSize=${false} 
+							listColumns=${cast ContactsModel.listColumns}
+							dataRows=${state.rows}
+							renderPager=${renderPager} rowClassName=${
+								function (r:IObj)return(r.index % 2 == 0?'even':'odd')}
+						/>
 					</form>
 				');
 			default:
@@ -229,31 +230,6 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		return state.formApi.render(jsx('
 				${renderResults()}
 		'));		
-	}
-//className="pagination is-centered  is-small" role="navigation" aria-label="pagination"
-	function renderPager():ReactFragment
-	{
-		trace('pageCount=${state.pageCount}');
-		return jsx('
-		<div className="paginationContainer">
-			<nav >
-				<$ReactPaginate previousLabel=${'<'} breakLinkClassName=${'pagination-link'}
-					pageLinkClassName=${'pagination-link'}					
-					nextLinkClassName=${'pagination-next'}
-					previousLinkClassName=${'pagination-previous'}
-					nextLabel=${'>'}
-					breakLabel=${'...'}
-					breakClassName=${'break-me'}
-					pageCount=${state.pageCount}
-					marginPagesDisplayed={2}
-					pageRangeDisplayed={5}
-					onPageChange=${onPageChange}
-					containerClassName=${'pagination  is-small'}
-					subContainerClassName=${'pages pagination'}
-					activeLinkClassName=${'is-current'}/>
-			</nav>	
-		</div>		
-		');
 	}
 	
 	function updateMenu(?viewClassPath:String):SMenuProps

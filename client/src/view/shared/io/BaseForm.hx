@@ -15,6 +15,7 @@ import me.cunity.debug.Out;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
+import react.ReactPaginate;
 import react.ReactRef;
 import react.ReactUtil;
 import react.ReactUtil.copy;
@@ -167,6 +168,31 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 	/**
 	 * PAGER HANDLING
 	 */
+
+	function renderPager():ReactFragment
+	{
+		trace('pageCount=${state.pageCount}');
+		return jsx('
+		<div className="paginationContainer">
+			<nav>
+				<$ReactPaginate previousLabel=${'<'} breakLinkClassName=${'pagination-link'}
+					pageLinkClassName=${'pagination-link'}					
+					nextLinkClassName=${'pagination-next'}
+					previousLinkClassName=${'pagination-previous'}
+					nextLabel=${'>'}
+					breakLabel=${'...'}
+					breakClassName=${'break-me'}
+					pageCount=${state.pageCount}
+					marginPagesDisplayed={2}
+					pageRangeDisplayed={5}
+					onPageChange=${onPageChange}
+					containerClassName=${'pagination  is-small'}
+					subContainerClassName=${'pages pagination'}
+					activeLinkClassName=${'is-current'}/>
+			</nav>	
+		</div>		
+		');
+	}	
 
 	function onPageChange(data) {
 		trace('${props.match.params.action}:${data.selected}');

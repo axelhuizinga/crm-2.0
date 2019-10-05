@@ -136,6 +136,17 @@ class FormApi
 		rM['id'] = row.dataset.id;
 		return rM;
 	}
+
+	public static function dyn2map(d:Dynamic):Map<String,Dynamic> 
+	{
+		if(d==null)
+			return null;
+		return [
+			for(f in Reflect.fields(d))
+				f => Reflect.field(d, f)
+		];
+		
+	}
 	
 	/*public function setStateFromChild(newState:FormState)
 	{

@@ -121,7 +121,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 								Reflect.setField(rO, k , v);
 							dRows.push(rO);						
 						}
-						trace(dRows);
+						//trace(dRows);
 						setState({
 							rows:dRows,
 							dataTable:data.dataRows,

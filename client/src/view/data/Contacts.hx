@@ -132,6 +132,9 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			{
 				dispatch(DataAction.SelectActContacts(data));
 			}/*,
+				props.parentComponent.props.select(props.data['id'], 
+					[Std.int(props.data['id'])=>props.data], props.parentComponent.props.match);
+
 			storeFormChange: function(path:String, formState:FormState) 
 			{
 				trace(Reflect.fields(formState));

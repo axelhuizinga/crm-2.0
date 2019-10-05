@@ -1,4 +1,6 @@
 package react_virtualized;
+
+import react.ReactComponent.ReactFragment;
 import react_virtualized.Types.Alignment;
 import react_virtualized.Types.CellRenderer;
 import react_virtualized.Types.CellRangeRenderer;
@@ -22,7 +24,7 @@ import react.ReactComponent.ReactComponentOf;
 typedef TableProps = {
 	?autoHeight:Bool,
 	?callBack:Bool,
-	children:EitherType<Column, Array<Column>>,
+	children:ReactFragment, //EitherType<Column, Array<Column>>,
 	?className:String,
 	?disableHeader:Bool,
 	?estimatedRowSize:Int,	

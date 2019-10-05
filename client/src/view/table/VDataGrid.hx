@@ -1,5 +1,6 @@
 package view.table;
 
+import view.shared.io.FormApi;
 import js.html.Event;
 import js.html.Element;
 import js.Browser;
@@ -128,7 +129,7 @@ class VDataGrid  extends ReactComponentOf<VDataGridProps, VDataGridState>{
 			<$Table className="is-striped is-hoverable" width=${state.size.width}
 			 onRowClick=${select}
 			height=${state.size.height} rowHeight=${24}  headerHeight=${24} 
-				rowGetter=${function(p:Dynamic)return props.dataRows[p.index]}
+				rowGetter=${function(p:Dynamic){return props.dataRows[p.index];}} 
 				rowCount=${props.dataRows.length} >
 			${renderColumns(props.listColumns)}
 			</$Table>
@@ -162,7 +163,6 @@ class VDataGrid  extends ReactComponentOf<VDataGridProps, VDataGridState>{
 		{
 			try{
 				var evt:Event = cast(mEvOrID);
-				
 				var tEl:Element = cast(mEvOrID.target,Element);
 				trace(tEl.closest('table'));
 				//trace(Browser.window.document.querySelector('table'));
@@ -183,6 +183,11 @@ class VDataGrid  extends ReactComponentOf<VDataGridProps, VDataGridState>{
 			var tEl:Element = (mEvOrID.event.target.classList.contains('ReactVirtualized__Table__row')?
 				mEvOrID.event.target : mEvOrID.event.target.parentElement);
 			trace(tEl.classList.contains('is-selected'));
+			if(tEl.classList.contains('is-selected'))
+			{
+				props.parentComponent.props.select(mEvOrID.rowData.id, 
+					[Std.int(mEvOrID.rowData.id)=>FormApi.dyn2map(mEvOrID.rowData)], props.parentComponent.props.match);
+			}
 			tEl.classList.toggle('is-selected');
 		}
 		if(props.parentComponent != null)

@@ -32,6 +32,8 @@ class DBSync extends BaseForm
 		{label:'BenutzerDaten ',action:'showUserList'},
 		{label:'BenutzerDaten Abgleich',action:'syncUserList'},
 		{label:'Stammdaten Import ',action:'importAll'},
+		{label:'Abschlüsse Import ',action:'importDeals'},
+		{label:'Konten Import ',action:'importAccounts'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -165,6 +167,10 @@ class DBSync extends BaseForm
 			className:'admin.SyncExternal',
 			action:'syncAll'
 		}));
+	}
+
+	public function importDeals() {
+		
 	}
 
 	public function syncUserList(_):Void

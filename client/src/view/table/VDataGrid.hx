@@ -1,5 +1,7 @@
 package view.table;
 
+import react_virtualized.Types.ColumnSizerChildrenParam;
+import react_virtualized.Types.CellRendererParams;
 import view.shared.io.FormApi;
 import js.html.Event;
 import js.html.Element;
@@ -15,16 +17,32 @@ import react_virtualized.ColumnSizer;
 import react_virtualized.Grid;
 using Lambda;
 
+typedef VCellRenderProps = {
+	?className:String,
+  columnIndex:Int, // Horizontal (column) index of cell
+  ?isScrolling:Bool, // The Grid is currently being scrolled
+  ?isVisible:Bool,   // This cell is visible within the grid (eg it is not an overscanned cell)
+  key:String,         // Unique key within array of cells
+  ?parent:Grid,      // Reference to the parent Grid (instance)
+  rowIndex:Int,    // Vertical (row) index of cell
+  style:Dynamic       // Style object to be applied to cell (to position it);
+               // This must be passed through to the rendered cell element.
+}
+
 typedef IObj = {index:Int}
 
 typedef RowClickParam = { event: Event, index:Int, rowData: Dynamic }
 
 typedef VDataGridProps = 
 {
-	?autoSize:Bool,
+	?autoSize:Bool,	
 	?className:String,
-	?disableHeight:Bool,
+	?columnClassName:String,
+	?columnWidth:EitherType<Int,Function>,
+	?columnMinWidth:EitherType<Int,Function>,
+	?columnMaxWidth:EitherType<Int,Function>,
 	?disableWidth:Bool,
+	?disableHeight:Bool,
 	?width:Int,
 	?height:Int,	
 	?id:String,
@@ -58,6 +76,7 @@ typedef VDataColumn =
 
 typedef VDataGridState = 
 {
+	dataFields:Array<String>,
 	?headerHeight:Int,
 	?rowHeight:Int,
 	?pageCount:Int,
@@ -77,6 +96,7 @@ class VDataGrid  extends ReactComponentOf<VDataGridProps, VDataGridState>{
 	{
 		super(props);
 		state = {
+			dataFields: Reflect.fields(props.dataRows[0]),
 			size:{width: 500, height:400},
 			selectedRows:[]
 		};
@@ -85,7 +105,7 @@ class VDataGrid  extends ReactComponentOf<VDataGridProps, VDataGridState>{
 	override public function componentDidMount():Void 
 	{
 		trace('ok');
-		var container:Element = Browser.window.document.querySelector('#tableBox').parentElement;
+		var container:Element = Browser.window.document.querySelector('#tableBox');//.parentElement;
 		trace(container.offsetHeight);
 		setState({size:{
 			height:container.offsetHeight - container.lastElementChild.offsetHeight,
@@ -96,10 +116,15 @@ class VDataGrid  extends ReactComponentOf<VDataGridProps, VDataGridState>{
 	override public function render() 
 	{
 		return jsx('
-			<div className="fixed-grid-container" >
-				<div id="tableBox" >	
-					${renderTable()}							
-				</div>	
+			<div className="fixed-grid-container"  id="tableBox">
+				${renderTable()}							
+				${props.renderPager()}
+			</div>	
+		');	
+
+		return jsx('
+			<div className="fixed-grid-container"  id="tableBox">
+				${renderColumnSizer()}							
 				${props.renderPager()}
 			</div>	
 		');		
@@ -122,6 +147,35 @@ class VDataGrid  extends ReactComponentOf<VDataGridProps, VDataGridState>{
 	{
 		return new VDataGrid(props);
 	}
+	
+/*	public function renderColumnSizerChildren(p:ColumnSizerChildrenParam):ReactFragment
+	{
+		return renderGrid({
+			columnWidth:props.columnMinWidth,
+			columnCount:state.dataFields.length,
+			dataRows:props.dataRows,
+			ref:p.registerChild
+		});
+	}*/
+
+	public function renderGrid(p:ColumnSizerChildrenParam):ReactFragment	
+	{
+		return jsx('
+		<div                    
+                    style=${{
+                      height: state.size.height,
+                      width: state.size.width
+                    }}>
+		<$Grid cellRenderer=${renderCell}
+		columnCount=${state.dataFields.length}
+		columnWidth=${props.columnWidth}	
+		rowHeight=${24}
+		rowCount=${props.dataRows.length}
+		height=${state.size.height} 
+		width=${state.size.width}
+		/></div>
+		');
+	}
 
 	public function renderTable():ReactFragment
 	{
@@ -134,20 +188,50 @@ class VDataGrid  extends ReactComponentOf<VDataGridProps, VDataGridState>{
 			${renderColumns(props.listColumns)}
 			</$Table>
 		');
-	}//
-	
-	public function renderColumn(ki:Int,k:String,v:VDataColumn):ReactFragment
+	}//p:ColumnSizerChildrenParams
+	public function renderColumnSizer():ReactFragment
+	{
+		return  jsx('
+			<$ColumnSizer columnMinWidth=${props.columnMinWidth} columnMaxWidth=${props.columnMaxWidth}
+				columnCount=${state.dataFields.length}  key="GridColumnSizer"
+				width=${state.size.width}
+				>
+				${renderGrid}
+			</$ColumnSizer>
+		');
+	/**
+	 * ()
+	 */
+	}
+	public function renderColumn(ki:Int,k:String,v:VDataColumn):ReactFragment	
 	{
 		return jsx('<$Column key=${'c_' + ki} dataKey=${k} label=${v.label} 
 		flexGrow=${v.flexGrow} width=${100}/>');
+	}
+	
+	public function renderCell(cellProps:Dynamic):ReactFragment
+	{
+		//CellRendererParams
+		trace(cellProps.cellData);
+		//trace(cellProps.columnData);//null why?
+		trace(cellProps.rowData);
+		//trace(cellProps.style);
+		trace(Reflect.fields(cellProps));
+		return jsx('
+			<div className=${props.className} key=${cellProps.key} style=${cellProps.style}>
+				${Reflect.field(props.dataRows[cellProps.rowIndex], state.dataFields[cellProps.columnIndex])}
+			</div>		
+		');
 	}
 
 	public function renderColumns(colProps:Map<String,VDataColumn>):ReactFragment
 	{
 		var ki:Int = 0;
+		var style = {flex:"1 1"};
+		//cellRenderer=${renderCell}
 		return [for(k=>v in colProps.keyValueIterator())
 		 jsx('<$Column key=${'c_' + ki++} dataKey=${k} label=${v.label} 
-		 flexGrow=${v.flexGrow} width=${100}  />')
+		 flexGrow=${v.flexGrow} flexShrink=${1} width=${100}  style=${style} />')
 		];
 	}
 
@@ -182,9 +266,10 @@ class VDataGrid  extends ReactComponentOf<VDataGridProps, VDataGridState>{
 		{
 			var tEl:Element = (mEvOrID.event.target.classList.contains('ReactVirtualized__Table__row')?
 				mEvOrID.event.target : mEvOrID.event.target.parentElement);
+			if(!tEl.classList.contains('is-selected'))
 			trace(tEl.classList.contains('is-selected'));
-			if(tEl.classList.contains('is-selected'))
 			{
+				trace(FormApi.dyn2map(mEvOrID.rowData));
 				props.parentComponent.props.select(mEvOrID.rowData.id, 
 					[Std.int(mEvOrID.rowData.id)=>FormApi.dyn2map(mEvOrID.rowData)], props.parentComponent.props.match);
 			}

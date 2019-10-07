@@ -214,6 +214,35 @@ ORDER BY cl.client_id
 		trace(dbData.dataInfo);
         S.sendData(dbData, null);
     }
+
+    public function importDealData():Void
+    {
+        var cData:NativeArray = getCrmData();
+        //trace(cData[0]);        
+		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
+		for(row in cData.iterator())
+		{			
+			//trace(row);
+			//S.sendErrors(dbData,['syncAll'=>'NOTOK']);
+			var stmt:PDOStatement = upsertClient(row);
+			try{
+				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
+				//trace(res);
+			}
+			catch(e:Dynamic)
+			{
+				{S.sendErrors(dbData, [
+					'dbError'=>S.dbh.errorInfo(),
+					'upsertClient'=>S.errorInfo(row),
+					'exception'=>e
+				]);}		
+			}
+		}		
+        trace('done');
+		dbData.dataInfo['offset'] = param['offset'] + synced;
+		trace(dbData.dataInfo);
+        S.sendData(dbData, null);
+    }	
     
     inline function testValue(v:Dynamic):Bool return cast v;
     //inline function testValue(v:Dynamic):Bool return cast v != null && v != false;

@@ -58,7 +58,7 @@ typedef GridProps = {
 	width:Int	
 }
 
-typedef InstanceProps = {
+/*typedef InstanceProps = {
   prevColumnWidth: CellSize,
   prevRowHeight: CellSize,
   prevColumnCount: Int,
@@ -72,7 +72,7 @@ typedef InstanceProps = {
   scrollbarSizeMeasured: Bool,
 }
 
-/*typedef GridState = {
+typedef GridState = {
 	instanceProps: InstanceProps,
 	isScrolling: Bool,
 	@range(-1, 1) var	scrollDirectionHorizontal: Int,

@@ -30,9 +30,10 @@ $borderCol:$borderSmallWidth dotted #eee;
 $buttonSun:#ffdd57;
 $cell-border: 1px solid #ccc;
 $cellPadding: 0px 0.75rem;
-$headPadding: 0.35rem 0.75rem;
+$headPadding: 0.5rem 0.75rem;
 $ePad:0.3rem 1rem;
 $darkBlue: rgb(10,20,60);
+$strongViolet:#6b6ab3;
 $disabled: rgb(80,80,80);
 $logoBlue: #3292ca;
 $paleBlue: rgb(140,190,240);
@@ -52,10 +53,11 @@ $borderHeadCol:$borderSmallWidth solid $lightGreen;
 $tabs-boxed-link-radius: 0.3rem;//@include tabsradius(5);
 $tableHeader-radius: 0.3rem;
 $tableHeaderHeight: 2rem;
-
-/**/
+/*@import "virtual.scss";
+/*
 $darkGradient1:linear-gradient($lightGreen,$darkGreen, $darkGreen);	 
-$darkGradient:linear-gradient($lightBlue 0%, $paleBlue 32%);
+$darkGradient:linear-gradient($lightBlue 0%, $paleBlue 32%);*/
+$darkGradient:linear-gradient($lightBlue 0%, $strongViolet 32%);
 *{
 	border-collapse:collapse;
 	/*background-color:transparent!important;*/
@@ -71,6 +73,7 @@ html,body {
 	overflow:hidden!important;
 	height:100%;
 	line-height:1;
+	border-color:$border-light;
 } 
 
 .rootBox
@@ -185,7 +188,8 @@ h1 {
   flex-direction:column;
   flex-grow:1;
   background-color: white;
-  border-bottom: 1px solid grey;
+  border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
+  border: 1px solid $border-light;
   min-height: 100%;
   /*margin: 0.8rem 0rem 0.5rem 0.8rem
    /* position: relative;could be absolute or relative */
@@ -195,7 +199,7 @@ h1 {
 /*margin-bottom:-2.5rem;*/
 	overflow-x: hidden;
 	overflow-y: auto;
-	border:1px solid grey;
+	border:1px solid $border-light;
 	border-style:none solid;
 	flex-grow: 1;
 }
@@ -214,19 +218,11 @@ h1 {
   color:white;
   background-origin:border-box;
   background-image:$darkGradient;
-  border-color: grey;
+  border-color:$border-light;
   border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
   border-style: solid solid none solid;
   border-width: 1px 1px 0px 1px;  
 }
-/*.head tr
-{
-	background-color: $darkRed;
-	background-color:transparent!important;
-	background-image:linear-gradient($lightGreen,$darkGreen, $darkGreen);	
-	background-origin:border-box;
-	
-}*/
 	
 .gridHeadItem:hover
 {
@@ -306,6 +302,7 @@ h1 {
 	content: '\f007';
 }
 .lockIcon:before {
+
 	font: 1.55rem "Font Awesome 5 Free";
 	content: '\f023';
 }
@@ -737,8 +734,10 @@ form table{
 }*/
 .th-box
 {
-	margin:0.5rem 0.75rem;
+	/*margin:0.5rem 0.75rem;*/
+	margin:$headPadding;
 }
+
 .table td, .table th{
 	border: none;
 	border-left: $borderCol;
@@ -787,8 +786,7 @@ form td, form caption
 {
 	background-color: white;
 	display: flex;
-	border-left:1px solid grey;
-	border-right:1px solid grey;
+	border:1px solid $border-light;
 	justify-content: center;
 }
 

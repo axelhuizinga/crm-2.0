@@ -7,7 +7,7 @@ package react_virtualized;
 import haxe.Constraints.Function;
 import haxe.extern.EitherType;
 import react.ReactComponent.ReactElement;
-
+import react.ReactComponent.ReactFragment;
 /* CellSizeAndPositionManager.js */
 
 typedef  CellSizeAndPositionManagerParams = {
@@ -21,6 +21,14 @@ typedef  ConfigureParams = {
 	var cellCount: Int;
 	var estimatedCellSize: Float;
 };
+
+typedef ColumnSizerChildrenParam = 
+{
+      ?adjustedWidth:Int,
+      columnWidth:Int,
+      ?getColumnWidth: Void->Int,
+      registerChild: Function,
+    }
 
 typedef  GetUpdatedOffsetForIndex = {
 	var align: Alignment;
@@ -58,7 +66,7 @@ typedef CellRendererParams = {
 	@:optional var style: Dynamic;
 };
 
-typedef CellRenderer = CellRendererParams->ReactElement;
+typedef CellRenderer = CellRendererParams->ReactFragment;
 
 typedef CellRangeRendererParams = {
 	var cellCache: Dynamic;

@@ -91,9 +91,9 @@ typedef Size =
 
 @:enum
 abstract SortDirection(String){
-	var ASC = 'ASC';
-	var DESC = 'DESC';
-	var NONE = '';
+	var ASC;// = 'ASC';
+	var DESC;// = 'DESC';
+	var NONE;// = '';
 }
 
 typedef SortProps =
@@ -190,8 +190,11 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		fixedHeader = React.createRef();
 		tHeadRef = React.createRef();
 		firstRowRef = React.createRef();
+		/**
+		 * 				
+		 */
 		return jsx('		
-			<div className="fixed-grid-container" >
+					<div className="fixed-grid-container" >
 				<div className="header-background" >
 					<table className="table head">
 						<thead>
@@ -414,12 +417,15 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		//var tableHeight:Float = tableRef.current.clientHeight;
 		//var leftMargin:Int = 
 		var scrollBarWidth:Float = App.config.getScrollbarWidth(true);
-		var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - scrollBarWidth;
+		//
+		var hasScrollbar:Bool = tableRef.current.parentElement.offsetHeight < (tableRef.current.parentElement.offsetHeight-tHeadRef.current.offsetHeight);
+		var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - (hasScrollbar?scrollBarWidth:0);
+		freeWidth = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth;
 		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} parentElement.offsetWidth: ${tableRef.current.parentElement.offsetWidth} ');
 		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
 		trace('firstRowRef.current.offsetWidth:${firstRowRef.current.offsetWidth} scrollBarWidth:$scrollBarWidth');
-		//tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
-		tableRef.current.style.marginTop = '-'+(tHeadRef.current.offsetHeight) + 'px';
+		tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
+		//tableRef.current.style.marginTop = '-'+(tHeadRef.current.offsetHeight) + 'px';
 		//tableRef.current.parentElement.style.marginBottom = '-'+(tHeadRef.current.offsetHeight-10) + 'px';
 
 		//tableRef.current.parentElement.querySelector('.pagination').style.marginRight = scrollBarWidth + 'px';
@@ -447,7 +453,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			//trace (grow +':' + growSum );
 			if (growSum > 0)
 			{
-				var growUnit:Float = freeWidth / growSum;
+				var growUnit:Float = Math.ceil(freeWidth / growSum);
 				//trace(growSum);		
 				for (i in 0...grow.length)
 				{
@@ -468,7 +474,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			var w:Int = cell.offsetWidth;
 			//trace(w +':' + cell.clientWidth);
 			var fixedHeaderCell = cast(fixedHeader.current.childNodes[i],Element);
-			fixedHeaderCell.setAttribute('style', 'width:${w}px');
+			fixedHeaderCell.setAttribute('style', 'width:${i==0?w+1:w}px');
 			i++;
 		}
 		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');

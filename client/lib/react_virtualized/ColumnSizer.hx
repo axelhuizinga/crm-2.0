@@ -8,18 +8,19 @@ import react.ReactComponent.ReactFragment;
  * @author axel@cunity.me
  */
 
-typedef ColumnSizerParams =
+typedef ColumnSizerChildrenParams =
 {
 	adjustedWidth:Int,
 	columnWidth:Int,
-	getColumnWidth:Function,
+	?getColumnWidth:Function,
 	registerChild:Function	
 }
 
 typedef ColumnSizerProps =
 {
-	children:ColumnSizerParams->ReactFragment,
-	?columnMaxWidth:Int,
+	children:ColumnSizerChildrenParams->ReactFragment,
+	?columnCount:Int,
+	?columnMaxWidth:Int,	
 	?columnMinWidth:Int,
 	width:Int
 }

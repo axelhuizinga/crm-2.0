@@ -183,7 +183,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case "List":
 				jsx('
-					<$List ${...props} limit=${100} formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$List ${...props} limit=${100} parentComponent=${this} formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
 					');					
 			case "Edit":
 				jsx('

@@ -19,7 +19,7 @@ import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import loader.BinaryLoader;
-import view.table.Table;
+import view.table.VDataGrid;
 import model.Contact;
 
 class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
@@ -203,9 +203,14 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			case 'get':
 				jsx('
 					<form className="tabComponentForm" >
-						<$Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
-						${...props} dataState = ${dataDisplay["contactList"]} renderPager=${renderPager}
-						className="is-striped is-hoverable" fullWidth=${true}/>
+						<$VDataGrid ${...props} 
+							columnWidth=${100}
+							autoSize=${false} 
+							listColumns=${cast ContactsModel.listColumns}
+							dataRows=${state.rows}
+							renderPager=${renderPager} rowClassName=${
+								function (r:IObj)return(r.index % 2 == 0?'even':'odd')}
+						/>
 					</form>
 				');
 			default:

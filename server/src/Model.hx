@@ -113,7 +113,7 @@ class Model
 		}
 		var staticMethods:Array<String> = Type.getClassFields(cl);
 		if (staticMethods.has(param['action']))
-		{
+		{                                                                                        
 			trace('calling static Method ${param.get('className')}.${param['action']}');
 			Reflect.callMethod(cl, Reflect.field(cl, param['action']),[param]);
 			return;
@@ -129,7 +129,7 @@ class Model
 		}
 		else 
 		{					
-			trace('Method ${param.get('className')}.${} does not exist!');	
+			trace('Method ${param.get('className')}.${param['action']} does not exist!');	
 			S.sendErrors(null,['invalid method' => 'Method ${param.get('className')}.${} does not exist!']);
 			trace('not calling create ');	
 		}

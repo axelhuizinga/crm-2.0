@@ -107,7 +107,7 @@ class LivePBXSync
 		});
 	}
 
-public static function syncDeals(props:DBAccessProps) 
+public static function mergeContacts(props:DBAccessProps) 
 	{
 		trace('${props.maxImport} ${props.limit} ${props.offset}');
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
@@ -139,7 +139,7 @@ public static function syncDeals(props:DBAccessProps)
 				},
 				function(data:DbData)
 				{			
-					trace(data.dataInfo);
+					trace(data);
 					trace(data.dataRows.length);
 					if(data.dataErrors.keys().hasNext())
 					{

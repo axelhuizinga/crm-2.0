@@ -166,7 +166,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		var ti:Timer = null;
 		store = initStore(BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}));
 		state = store.getState();
-		//trace(state);
+		trace(state);
 		tul = startHistoryListener(store, state.locationState.history);
 		store.subscribe(saveToLocalStorage);
 

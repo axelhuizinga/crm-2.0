@@ -223,6 +223,6 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	{
 		trace(App.store.getState().redirectAfterLogin);
 		//return null;
-		return jsx('<RedirectBox {...p} to=${App.store.getState().redirectAfterLogin}/>');
+		return jsx('<RedirectBox {...p} to=${App.store.getState().locationState.redirectAfterLogin}/>');
 	}
 }

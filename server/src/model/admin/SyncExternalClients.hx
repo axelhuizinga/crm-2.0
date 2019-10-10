@@ -50,6 +50,11 @@ class SyncExternalClients extends Model
 		switch(action ){
 			case 'syncAll':
 				syncAll();
+			
+			case 'syncImportDeals':
+				syncImportDeals();
+			case 'mergeContacts':
+				mergeContacts();
 			case _:
 				run();
 		}		
@@ -169,6 +174,57 @@ ORDER BY cl.client_id
 		S.sendInfo(dbData,['gotMissing'=>'OK:$missing']);
 	}
 
+	function syncImportDeals() {
+		SyncExternalDeals.importDeals(S.dbh, dbData, getCrmData());
+	}
+
+	function mergeContacts() {
+		var sql:String = "SELECT array_to_string(array(SELECT unnest(merged) from contacts group by merged), ',')";
+		var stmt:PDOStatement = S.dbh.query(sql);
+		if(untyped stmt==false)
+		{
+			trace('$sql ${Std.parseInt(param['limit'])}');
+			S.sendErrors(dbData, ['getMergedIDs query:'=>S.dbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+		}
+		var merged_ids:String = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN,0):null);
+		trace(merged_ids.substr(0, 40) + '...');		
+		sql = comment(unindent,format)/*
+			UPDATE contacts SET state='merged' WHERE id IN($merged_ids)
+		*/;
+		stmt = S.dbh.query(sql);
+		if(untyped stmt==false)
+		{
+			trace('$sql');
+			S.sendErrors(dbData, ['updateMergedIDs query:'=>S.dbh.errorInfo()]);
+		}		
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+		}
+		var updated_ids:Bool = stmt.execute();
+		trace(updated_ids ? 'OK:' + stmt.rowCount() :'$sql');
+		//S.sendInfo(dbData,['updated_ids'=>'$updated_ids']);
+		sql = "SELECT id, merged from contacts WHERE merged IS NOT NULL";
+		stmt = S.dbh.query(sql);
+		if(untyped stmt==false)
+		{
+			trace('$sql ${Std.parseInt(param['limit'])}');
+			S.sendErrors(dbData, ['getMergedIDs query:'=>S.dbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+			S.sendErrors(dbData, ['getMergedIDs query:'=>stmt.errorInfo()]);
+		}
+		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		trace(Lib.toHaxeArray(res)[0]);
+		S.sendInfo(dbData,['OK'=> stmt.rowCount()]);
+	}
+
 	function syncAll() {
 		trace(param);
 		getMissing();
@@ -249,7 +305,7 @@ ORDER BY cl.client_id
 
     function upsertClient(rD:NativeArray):PDOStatement
     {
-		var cD:Map<String,Dynamic> = clientRowData(rD);
+		var cD:Map<String,Dynamic> = Util.map2fields(rD, keys);
         var cNames:Array<String> = [for(k in cD.keys()) k];
 		//var cVals:String =  [for(v in cD.iterator()) v].map(function (v) return '\'$v\'').join(',');
 		var cPlaceholders:Array<String> =  [for(k in cNames) k].map(function (k) return ':$k');
@@ -265,7 +321,7 @@ ORDER BY cl.client_id
 			*/;
 		//trace(sql);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
-		bindClientData(stmt,rD);
+		Util.bindClientData(stmt,rD,dbData);
 		if(!stmt.execute()){
 			trace(rD);
 			trace(stmt.errorInfo());
@@ -279,42 +335,6 @@ ORDER BY cl.client_id
 		return stmt;
 		//return S.dbh.query(sql, PDO.FETCH_ASSOC);
     }
-	
-	function bindClientData(stmt:PDOStatement, row:NativeArray)
-	{
-		var meta:Map<String, NativeArray> = S.columnsMeta('contacts');
-		for(k => v in meta.keyValueIterator())
-		{
-			//if(k=='id')
-				//continue;
-			
-			var pdoType:Int = v['pdo_type'];
-			if(row[k]==null||row[k].indexOf('0000-00-00')==0)
-			{
-				switch (v['native_type'])
-				{
-					case 'date'|'datetime'|'timestamp':
-					pdoType = PDO.PARAM_NULL;
-					case 'text'|'varchar':
-					row[k] = '';
-				}
-			}
-			//trace('$k => $pdoType:${row[k]}');
-			if(!stmt.bindValue(':$k',row[k], pdoType))//row[k]==null?1:
-			{
-				//trace('$k => $v');
-				S.sendErrors(dbData,['bindValue'=>'${row[k]}:$pdoType']);
-			}		
-		}
-	}
-
-	function clientRowData(row:NativeArray):Map<String,Dynamic> {
-		//trace(keys);
-		return[
-			for(k in keys)
-				k => row[k]
-		];
-	}
 
     function saveClientDetails():DbData
     {
@@ -364,11 +384,11 @@ INNER JOIN pay_source ps
 ON ps.client_id=cl.client_id
 INNER JOIN asterisk.vicidial_list vl
 ON vl.vendor_lead_code=cl.client_id
-WHERE cl.client_id>11019219
+WHERE cl.client_id>9999999
 ORDER BY cl.client_id 
 LIMIT 
 */;
-
+//WHERE cl.client_id>11019219
         var stmt:PDOStatement = S.syncDbh.query('$sql ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');
 		trace('loading  ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');
 		if(untyped stmt==false)

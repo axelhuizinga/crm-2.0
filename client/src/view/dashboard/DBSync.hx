@@ -172,6 +172,7 @@ class DBSync extends BaseForm
 	public function importDeals() {
 		App.store.dispatch(LivePBXSync.mergeContacts({
 			limit: 25000,
+			offset:0,
 			className: 'admin.SyncExternalClients',
 			action: 'syncImportDeals',
 			//action: 'mergeContacts',

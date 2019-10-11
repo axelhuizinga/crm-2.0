@@ -18,23 +18,26 @@ class Util
 		return (v != null && v != 0 && v !='');
 	}
 
-	public static function bindClientData(stmt:PDOStatement, row:NativeArray, dbData:DbData)
+	public static function bindClientData(table:String, stmt:PDOStatement, row:NativeArray, dbData:DbData)
 	{
-		var meta:Map<String, NativeArray> = S.columnsMeta('contacts');
+		var meta:Map<String, NativeArray> = S.columnsMeta(table);
 		for(k => v in meta.keyValueIterator())
 		{
 			//if(k=='id')
 				//continue;
 			
 			var pdoType:Int = v['pdo_type'];
-			if(row[k]==null||row[k].indexOf('0000-00-00')==0)
-			{
+			if(row[k]==null||row[k].indexOf('0000-00-00')==0||row[k]=='')
+			{				
+				//trace (v['native_type']);
 				switch (v['native_type'])
 				{
 					case 'date'|'datetime'|'timestamp':
 					pdoType = PDO.PARAM_NULL;
 					case 'text'|'varchar':
 					row[k] = '';
+					case 'int8':
+					row[k] = 0;
 				}
 			}
 			//trace('$k => $pdoType:${row[k]}');
@@ -54,6 +57,8 @@ class Util
 	 */
 
 	public static function map2fields(row:NativeArray,keys:Array<String>):Map<String,Dynamic> {
+		
+		//trace(row);
 		//trace(keys);
 		return[
 			for(k in keys)

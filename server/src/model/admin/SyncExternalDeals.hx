@@ -31,7 +31,7 @@ class SyncExternalDeals {
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		for(row in deals.iterator())
 		{
-			Util.bindClientData(stmt,row,dbData);
+			Util.bindClientData('deals',stmt,row,dbData);
 			if(!stmt.execute()){
 				trace(row);
 				trace(stmt.errorInfo());

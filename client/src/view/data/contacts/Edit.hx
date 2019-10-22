@@ -55,8 +55,9 @@ using Lambda;
 class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		{label:'Auswahl',action:'get',section: 'List'},
-		{label:'Bearbeiten',action:'update'},
+		{label:'Übersicht',action:'get',section: 'List'},		
+		{label:'Speichern + Schließen',action:'updateAndClose'},
+		{label:'Speichern',action:'update'},
 		{label:'Neu', action:'insert'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -280,10 +281,13 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 	}		*/
 
 	override function handleSubmit(event:Event) {
-		//trace(Reflect.fields(event));
+		trace(Reflect.fields(event));
 		//trace(Type.typeof(event));
 		event.preventDefault();
 		//var target:FormElement = cast(event.target, FormElement);
+		var target:InputElement = cast(event.target, InputElement);
+
+		trace(Reflect.fields(target));
 		//var elements:HTMLCollection = target.elements;
 		//trace(elements.each(function(name:String, el:Dynamic)
 		//trace(elements.dynaMap());

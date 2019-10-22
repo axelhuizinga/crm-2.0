@@ -169,7 +169,7 @@ class FormApi
 
 	public function callMethod(method:String, ?e:Event):Bool
 	{
-		//trace(Reflect.fields(e));
+		trace(Reflect.fields(e));
 		var eTarget:Element = cast(e.target, Element);
 		var targetSection = eTarget.dataset.section;
 		//trace('$targetSection ${comp.props.match.params.section}');

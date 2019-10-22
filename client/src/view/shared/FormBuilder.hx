@@ -172,12 +172,13 @@ class FormBuilder {
 		//trace(props);
 		
 		return jsx('
-			<form name=${props.model} onSubmit=${props.handleSubmit} ref=${props.ref} className="tabComponentForm formField">
+			<form name=${props.model} onSubmit="" ref=${props.ref} className="tabComponentForm formField">
 				<div className="grid_box" role="table" aria-label="Destinations">
 					<div className="g_caption" >${props.title}</div>	
 					${renderFormInputElements(props.fields, initialState)}
-					<div className="g_fill_row">
-						<input type="submit" className="center" value="Speichern"/>
+					<div className="g_footer">
+						<input type="submit" className="center" onClick=${props.handleSubmit} value="Speichern"/> 
+						<input type="submit" className="center" onClick=${props.handleSubmit} value="Zurück"/>
 					</div>					
 				</div>									
 			</form>

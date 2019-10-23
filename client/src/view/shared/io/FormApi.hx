@@ -495,7 +495,7 @@ class FormApi
 	}
 	
 
-	public function renderModalForm(fState:FormState):ReactFragment
+	/*public function renderModalForm(fState:FormState):ReactFragment
 	{
 		_fstate = fState;
 		trace(_fstate); 
@@ -507,7 +507,7 @@ class FormApi
 			trace(tfd);
 			if (_fstate.handleSubmit != null)
 			{
-				_fstate.handleSubmit(tfd);
+				_fstate.handleSubmit[0].handler(tfd);
 			}
 		};
 
@@ -534,7 +534,7 @@ class FormApi
 			</div>
 		</> 
 		'), App.modalBox.current, adjustModalFormColumns);
-	}
+	}*/
 
 	public function renderModalScreen(content:ReactFragment):ReactFragment
 	{

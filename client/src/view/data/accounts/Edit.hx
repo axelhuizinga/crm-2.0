@@ -394,7 +394,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				];*/
 				(actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
-					handleSubmit:handleSubmit,
+					handleSubmit:state.handleSubmit,
 					fields:[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],
@@ -406,7 +406,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			case 'insert':
 				trace(actualState);
 				state.formBuilder.renderForm({
-					handleSubmit:handleSubmit,
+					handleSubmit:state.handleSubmit,
 					fields:[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],

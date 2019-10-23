@@ -636,6 +636,9 @@ form{
 .formField select
 {
 	font-size: 1rem;
+	/*box-sizing: content-box;*/
+	margin-top: -1px;
+	margin-bottom: -1px;
 }
 
 /*side menu*/
@@ -699,7 +702,7 @@ label.panel-heading {
     overflow-y: auto;
     /*min-height: 0px;
      height: 100%;
-    padding-bottom: #{$statusBarHeight}px; */
+    -bottom: #{$statusBarHeight}px; */
 }
 
 /*tables*/
@@ -869,6 +872,12 @@ form td, form caption
 	padding: 0.5rem 8rem!important;	
 	margin: auto;
 	display: block;
+}
+.g_footer{
+	display: flex;
+	align-content: space-between;
+	justify-content: space-evenly;
+	grid-column: 1/3;
 }
 .g_row_2
 {

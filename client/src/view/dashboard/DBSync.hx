@@ -309,7 +309,7 @@ class DBSync extends BaseForm
 				];*/
 				(actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
-					handleSubmit:handleSubmit,
+					handleSubmit:state.handleSubmit,
 					fields:formFields,/*[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],*/

@@ -1,5 +1,6 @@
 package state;
 
+import js.html.InputElement;
 import haxe.ds.IntMap;
 import js.html.FormElement;
 import js.html.InputEvent;
@@ -10,13 +11,17 @@ import view.shared.FormBuilder;
 import view.shared.FormField;
 import view.shared.io.FormApi;
 
-
-/*enum Loading
+enum abstract HandlerAction(String) {
+	var Submit;
+	var SubmitAndClose;
+	var Close;
+}
+typedef SubmitHandler = 
 {
-	Component;
-	Data(action:Function);
-	State;
-}*/
+	handler:InputEvent->Void,
+	?handlerAction:HandlerAction,
+	label:String
+}
 
 typedef FormState =
 {
@@ -38,7 +43,7 @@ typedef FormState =
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,
 	?handleChange:InputEvent->Void,
-	?handleSubmit:Dynamic->Void,	
+	?handleSubmit:Array<SubmitHandler>,	
 	?hasError:Bool,
 	?limit:Int,
 	?mounted:Bool,

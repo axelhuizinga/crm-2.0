@@ -126,6 +126,23 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			formBuilder:new FormBuilder(this),
 			initialState:initialState,
 			loading:false,
+			handleSubmit:[
+				{
+					handler:handleSubmit,
+					handlerAction:SubmitAndClose,
+					label:'Speichern + Zurück',
+				},
+				{
+					handler:handleSubmit,
+					handlerAction:Submit,
+					label:'Speichern',
+				},
+				{
+					handler:handleSubmit,
+					handlerAction:Close,
+					label:'Zurück',
+				}				
+			],
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu2( this,
 				{
@@ -286,8 +303,8 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		event.preventDefault();
 		//var target:FormElement = cast(event.target, FormElement);
 		var target:InputElement = cast(event.target, InputElement);
-
-		trace(Reflect.fields(target));
+		//trace(Reflect.fields(target));
+		trace(target.value);
 		//var elements:HTMLCollection = target.elements;
 		//trace(elements.each(function(name:String, el:Dynamic)
 		//trace(elements.dynaMap());
@@ -406,7 +423,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				];*/
 				(actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
-					handleSubmit:handleSubmit,
+					handleSubmit:state.handleSubmit,
 					fields:[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],
@@ -418,7 +435,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			case 'insert':
 				trace(actualState);
 				state.formBuilder.renderForm({
-					handleSubmit:handleSubmit,
+					handleSubmit:state.handleSubmit,
 					fields:[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],

@@ -42,7 +42,7 @@ class ContactsModel
 				'city'=>{label:'Ort'},
 				'state'=>{label:'Status',type:Select,options:['active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
 				'country_code'=>{label:'Land'},
-				'c/o'=>{label: 'c/o'},
+				'co_field'=>{label: 'Adresszusatz'},
 				'creation_date'=>{label: 'Hinzugefügt', type:DateTimePicker, disabled: true, 
 					displayFormat: function() return "d.m.Y H:i:S"}, 
 				'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat:  function() return "d.m.Y"},

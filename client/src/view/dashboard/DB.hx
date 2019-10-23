@@ -114,7 +114,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		var view:Map<String,FormField> = dataAccess['editTableFields'].view.copy();
 		trace(dataAccess['editTableFields'].view['table_name']);
 		trace(data[0]['id']+'<');
-		state.formApi.renderModalForm({
+	/*	state.formApi.renderModalForm({
 			data:new Map(),
 			dataTable:data,
 			handleSubmit: saveTableFields,
@@ -127,7 +127,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			valuesArray:state.formApi.createStateValuesArray(data, dataAccess['editTableFields'].view), 
 			loading:false,
 			title:'Tabellenfelder Eigenschaften'
-		});	
+		});	*/
 		
 	}
 

@@ -14,11 +14,17 @@ class Observer{
 			},
 			set: function (target, property:String, value, receiver:Dynamic):Bool{
 				try{
+					if(property=='co_field')
+					{
+					trace('$value ${Reflect.getProperty(receiver, property)}');
+					trace('$value ${Reflect.getProperty(target, property)}');
+					}
+
 					//trace(target);
 					//trace(receiver);
 					//target=receiver;
 					Reflect.setField(target,property,value);
-					cb(target);
+					//cb(target);
 					return true;
 				} catch(e:Dynamic){
 					trace(e);

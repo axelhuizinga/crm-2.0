@@ -172,7 +172,7 @@ class FormApi
 		trace(Reflect.fields(e));
 		var eTarget:Element = cast(e.target, Element);
 		var targetSection = eTarget.dataset.section;
-		//trace('$targetSection ${comp.props.match.params.section}');
+		trace('>>$targetSection<< ${comp.props.match.params.section}');
 		if(targetSection !=null && targetSection != comp.props.match.params.section)
 		{
 			trace(targetSection);
@@ -182,16 +182,19 @@ class FormApi
 		if(targetSection !=null)
 		{
 			trace(getUrl(eTarget.dataset.action));
-			comp.props.history.push(getUrl(eTarget.dataset.action));
-			return true;			
-			var fun:Function = Reflect.field(section,method);
+			trace(Type.getClassName(Type.getClass(comp)));
+			//comp.props.history.push(getUrl(eTarget.dataset.action));
+			//return true;			
+			/*var fun:Function = Reflect.field(targetSection,method);
 			if(Reflect.isFunction(fun))
 			{
-				Reflect.callMethod(section,fun,[e]);
+				Reflect.callMethod(targetSection,fun,[e]);
 				return true;
 			}
-			else 
-				trace('$method not found in $section');			
+			else{
+				trace('$method not found in $targetSection');			
+				return false;
+			}*/
 		}
 		var fun:Function = Reflect.field(comp,method);
 		if(Reflect.isFunction(fun))

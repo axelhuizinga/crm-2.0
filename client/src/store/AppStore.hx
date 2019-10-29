@@ -38,7 +38,7 @@ class AppStore
 		initState = {
 			app:{},
 			config:App.config,
-			dataStore: null,
+			dataStore: {},
 			//firstLoad:true,
 			formStates: new Map(),
 			//themeColor: 'green',

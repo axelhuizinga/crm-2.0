@@ -98,7 +98,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			user: mapReducer(UserAction, user)
 		});
 		var dataStore:DataAccessState = loadFromLocalStorage();
-		//trace(dataStore.contactData);
+		trace(dataStore);
 		return createStore(rootReducer, {dataStore:loadFromLocalStorage()},  Redux.applyMiddleware(
 			mapMiddleware(Thunk, new ThunkMiddleware()),
 			mapMiddleware(AppAction, appWare),
@@ -111,11 +111,11 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		try{
 			var sState = Browser.getLocalStorage().getItem('state');
 			if(sState == null)
-				return null;
+				return {};
 			return Unserializer.run(sState);
 		} catch(e:Dynamic){
 			trace(e);
-			return null;
+			return {};
 		}
 
 	}

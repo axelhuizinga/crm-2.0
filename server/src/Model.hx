@@ -692,8 +692,12 @@ class Model
 		trace(Reflect.fields(data).join(','));
 		for(col in defaults)
 		{
-			set.push('${alias}${quoteIdent(col.column_name)}=?');
+			if(col.column_name == 'creation_date')
+				continue ;
 			var val:String = Reflect.field(data,col.column_name);
+			if(val == null)
+				continue;
+			set.push('${alias}${quoteIdent(col.column_name)}=?');
 			trace('${col.column_name} $val / default:${col.column_default}');
 			setValues.push(val==null?col.column_default:val);
 		}

@@ -36,16 +36,15 @@ class DataStore
 	
 	public function reduce(state:DataAccessState, action:DataAction):DataAccessState
 	{
-		//trace(state);
+		trace(action);
 		trace(Reflect.fields(state));
+		//return null;
 		return switch(action)
 		{
 			case Load(data):
 			trace(data.dataParams);
 				copy(state, {
 					dbData:data,
-					//user:initState.user,
-					waiting:true
 				});
 			case Done(data):
 				copy(state,
@@ -53,17 +52,21 @@ class DataStore
 					dbData:data
 				});
 			case SelectAccounts(sData):
-				trace(sData.keys().keysList());
+				//trace(sData.keys().keysList());
 				copy(state,{
 					contactData:sData
 				});
 			case SelectActContacts(sData):
-				trace(sData.keys().keysList());
+				//trace(sData.keys().keysList());
+				trace(sData);
+				
 				copy(state,{
 					contactActData:sData
 				});				
 			case SelectContacts(sData):
-				trace(sData.keys().keysList());
+				
+				trace(sData);
+				//trace(sData.keys().keysList());
 				copy(state,{
 					contactData:sData
 				});

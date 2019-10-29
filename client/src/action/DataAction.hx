@@ -1,5 +1,6 @@
 package action;
 
+import haxe.Constraints.Function;
 import haxe.ds.IntMap;
 import react.router.RouterMatch;
 import shared.DbData;
@@ -22,6 +23,7 @@ typedef LiveDataProps =
 	id:Dynamic,
 	data: IntMap<Map<String,Dynamic>>,
 	match:RouterMatch,
+	?callBack:Function,
 	?selectType:SelectType
 }
 

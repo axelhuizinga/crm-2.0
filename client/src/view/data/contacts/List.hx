@@ -1,4 +1,5 @@
 package view.data.contacts;
+import action.DataAction;
 import state.AppState;
 import haxe.Constraints.Function;
 import haxe.ds.IntMap;
@@ -27,8 +28,11 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 	public static var menuItems:Array<SMItem> = [
 		//{label:'Anzeigen',action:'get'},
 		{label:'Bearbeiten',action:'update',section: 'Edit'},
-		{label:'Neu', action:'insert',section: 'Edit'},
-		{label:'Löschen',action:'delete'}
+		{label:'Neu', action:'insert',section: 'Edit'},		
+		{label:'Löschen',action:'delete'},
+		{label:'Auswahl aufheben',action:'selectionClear'},
+	//	{label:'Auswahl umkehren',action:'selectionInvert'},
+	//	{label:'Auswahl alle',action:'selectionAll'},
 	];
 	
 	var dbData: shared.DbData;
@@ -47,7 +51,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			sideMenu:FormApi.initSideMenu2( this,
 				{
 					dataClassPath:'data.Contacts',
-					label:'Auswahl',
+					label:'Liste',
 					section: 'List',
 					items: menuItems
 				}					
@@ -64,7 +68,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			trace('redirecting to ${baseUrl}List/get');
 			props.history.push('${baseUrl}List/get');
 			//get(null);
-}		
+		}		
 		trace(state.loading);
 	}
 	
@@ -123,7 +127,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 						}
 						//trace(dRows);
 						setState({
-							rows:dRows,
+							//rows:dRows,
 							dataTable:data.dataRows,
 							dataCount:data.dataInfo['count'],
 							pageCount: Math.ceil(data.dataInfo['count'] / props.limit)
@@ -142,27 +146,9 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		trace(Reflect.fields(ev));
 	}
 
-	/*function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
-	{
-		var iS:Dynamic = {};
-		for(dR in dt)
-		{
-			var rS:Dynamic = {};
-			for(k in dR.keys())
-			{
-				trace(k);
-				if(dataDisplay['fieldsList'].columns[k].cellFormat == view.shared.Format.formatBool)
-				{
-					Reflect.setField(rS,k, dR[k] == 'Y');
-				}
-				else
-					Reflect.setField(rS,k, dR[k]);
-			}
-			Reflect.setField(iS, dR['id'], rS);			
-		}
-		trace(iS);
-		return iS;
-	}*/
+	public function selectionClear() {
+		props.parentComponent.props.select(0, null,props.parentComponent.props.match, UnselectAll);		
+	}
 		
 	override public function componentDidMount():Void 
 	{	

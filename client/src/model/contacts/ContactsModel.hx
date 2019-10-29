@@ -27,7 +27,7 @@ class ContactsModel
 						'Familie'=>'Familie',
 						'Firma'=>'Firma'
 					]},
-				'title_2'=>{label:'Titel'},
+				'title_pro'=>{label:'Titel'},
 				'first_name'=>{label:'Vorname'},
 				'last_name'=>{label:'Name'},
 				'email'=>{label:'Email'},
@@ -38,7 +38,7 @@ class ContactsModel
 				'company_name'=>{label:'Firmenname'},	
 				'address'=>{label:'Strasse'},
 				'address_2'=>{label:'Hausnummer'},
-				'plz'=>{label:'PLZ'},
+				'postal_code'=>{label:'PLZ'},
 				'city'=>{label:'Ort'},
 				'state'=>{label:'Status',type:Select,options:['active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
 				'country_code'=>{label:'Land'},
@@ -55,8 +55,9 @@ class ContactsModel
 				'comments'=>{label:'Kommentar'},
 				'use_email'=>{label:'Post per Email',type: Checkbox},
 				'id' => {type:Hidden},
-				'edited_by' => {type:Hidden},
+				'edited_by' => {type:Hidden},				
 				'mandator'=>{type:Hidden},
+				'merged'=>{type:Hidden},
 			]
 		}
 	];

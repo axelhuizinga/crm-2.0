@@ -131,30 +131,14 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			storeActData:function (data:IntMap<Map<String,Dynamic>>)
 			{
 				dispatch(DataAction.SelectActContacts(data));
-			}/*,
-				props.parentComponent.props.select(props.data['id'], 
-					[Std.int(props.data['id'])=>props.data], props.parentComponent.props.match);
-
-			storeFormChange: function(path:String, formState:FormState) 
-			{
-				trace(Reflect.fields(formState));
-				trace(formState.selectedRows.length);
-				return;
-				dispatch(AppAction.FormChange(
-					path,
-					formState
-				));
-			}*/
-			/*edit: function(dbaProps:DBAccessProps) {
-				trace(dbaProps);
-				dispatch(DataAction.Update(dbaProps));
-			}*/
+			}
 		};
     }
 	
 	static function mapStateToProps(aState:AppState) 
 	{
 		//trace(aState.dataStore.contactData);
+		if(aState.dataStore.contactData != null)
 		trace(aState.dataStore.contactData.keys().next());
 		var bState =  {
 			dataStore:aState.dataStore,

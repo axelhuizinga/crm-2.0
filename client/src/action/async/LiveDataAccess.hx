@@ -44,8 +44,9 @@ class LiveDataAccess
 			if(props.id == null)
 				return null;
 			var aState:AppState = getState();
-			var tableRoot:Array<String> = FormApi.getTableRoot(props.match);
+			var tableRoot:Array<String> = FormApi.getTableRoot(props.match);			
 			trace(tableRoot);
+			trace(aState);
 			var sData:IntMap<Map<String,Dynamic>> = null;
 			switch(tableRoot[1])
 			{

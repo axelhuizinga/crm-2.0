@@ -1,5 +1,6 @@
 package view.shared;
 
+import js.html.InputElement;
 import react.DateControlTypes.DateTimeProps;
 import shared.Utils;
 import haxe.ds.StringMap;
@@ -170,20 +171,25 @@ class FormBuilder {
     {
 		trace('props');
 		//trace(props);
+		var sK:Int = 0;
 		
 		return jsx('
-			<form name=${props.model} onSubmit="" ref=${props.ref} className="tabComponentForm formField">
+			<form name=${props.model}  ref=${props.ref} className="tabComponentForm formField">
 				<div className="grid_box" role="table" aria-label="Destinations">
 					<div className="g_caption" >${props.title}</div>	
 					${renderFormInputElements(props.fields, initialState)}
 					<div className="g_footer">
-						<input type="submit" className="center" onClick=${props.handleSubmit} value="Speichern"/> 
-						<input type="submit" className="center" onClick=${props.handleSubmit} value="Zurück"/>
+						${for (sH in props.handleSubmit) renderSubmit(sH,++sK)}
 					</div>					
 				</div>									
 			</form>
 		');		
     }	
+
+	function renderSubmit(submitHandler:SubmitHandler, i:Int) {
+		return jsx('<input type="submit" className="center" onClick=${submitHandler.handler} key=${'k_'+ i}
+		data-action=${submitHandler.handlerAction} value=${submitHandler.label}/> ');	
+	}
 
 	public function  hidden(cm:String):ReactFragment
 	{

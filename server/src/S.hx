@@ -374,16 +374,16 @@ class S
 		var data:Dynamic =  stmt.fetch(PDO.FETCH_OBJ);
 	 	while (data)
 		{
-			trace(data);
+			//trace(data);
 			if(data.column_name!='id')
 			{
 				var value:String = data.column_default == null? null: data.column_default.split('::')[0];			
 				var defaultValue:String = switch (value)
 				{
 					/*case b if (b=="true"|b=="false"):
-						b;*/
+						b;
 					case null|"''":
-						null;
+						null;*/
 					default:
 						value;
 				}

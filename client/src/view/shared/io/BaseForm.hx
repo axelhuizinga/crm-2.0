@@ -42,7 +42,7 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 		trace('$name: $value');
 		if(name!=null && name!='')
 		Reflect.setField(actualState,name,value);
-		setState({initialState:actualState});
+		//setState({initialState:actualState});
 	}
 
 	public function handleChange(e:Event) 
@@ -107,6 +107,14 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 	override public function render():ReactFragment {
 		return null;
 	}	
+
+	function initFieldNames(keys:Iterator<String>) {
+		fieldNames = new Array();
+		for(k in keys)
+		{
+			fieldNames.push(k);
+		}			
+	}
 	
 	function sessionStore(){
 		trace(actualState);
@@ -114,7 +122,7 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 		Browser.window.removeEventListener('beforeunload', sessionStore);
 	}
 
-	function initSession()
+	function initSession2()
 	{
 		Browser.window.addEventListener('beforeunload', sessionStore);
 		var sessContacts = Browser.window.sessionStorage.getItem('contacts');

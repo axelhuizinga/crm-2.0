@@ -34,13 +34,13 @@ class SyncExternalClients extends Model
 {
 	var keys:Array<String>;	
 	var synced:Int;
-	public function new(param:Map<String,Dynamic>):Void
+	public function new(param:Map<String,String>):Void
 	{
 		super(param);	
 		//self.table = 'columns';
 		if(param.exists('synced'))
 		{
-			synced = param['synced'];
+			synced = cast param['synced'];
 		}
 		else synced = 0;
 		keys = S.tableFields('contacts');
@@ -230,12 +230,12 @@ ORDER BY cl.client_id
 		getMissing();
 		//dbAccessProps = initDbAccessProps();
 		if(param['offset']==null)
-			param['offset'] = 0;
+			param['offset'] = '0';
 		if(param['limit']==null)			
 			param['limit'] = '1000';
 		if(Std.parseInt(param['offset'])+Std.parseInt(param['limit'])>Std.parseInt(param['maxImport']))
 		{
-			param['limit'] = Std.parseInt(param['maxImport']) - Std.parseInt(param['offset']);
+			param['limit'] = Std.string(Std.parseInt(param['maxImport']) - Std.parseInt(param['offset']));
 		}
 		trace(param);
 		importCrmData();
@@ -352,11 +352,11 @@ ORDER BY cl.client_id
             var q:EitherType<PDOStatement,Bool> = S.dbh.query(sql);
             if(!q)
             {
-               dbData.dataErrors['${action}'] = S.dbh.errorInfo();
+               dbData.dataErrors['${action}'] = Std.string(S.dbh.errorInfo());
                return dbData;
             } 
         }        
-        dbData.dataInfo = ['saveClientDetails' => 'OK', 'updatedRows' => updated];
+        dbData.dataInfo = ['saveClientDetails' => 'OK', 'updatedRows' => Std.string(updated)];
         trace(dbData.dataInfo);
 		return dbData; 
     }

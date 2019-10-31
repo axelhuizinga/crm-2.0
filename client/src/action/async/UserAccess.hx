@@ -119,7 +119,12 @@ class UserAccess {
 					if(App.maxLoginAttempts-->0)
 					return dispatch(User(LoginError({user_name:props.user_name, loginError:data.dataErrors.iterator().next()})));
 				}
-				var uState:UserState = data.dataInfo['user_data'];
+				var uState:UserState = {};
+				for(k=>v in data.dataInfo.keyValueIterator())
+				{
+					Reflect.setField(uState, k, v);
+				}
+				//var uState:UserState = data.dataInfo['user_data'];
 				Cookie.set('user.id', Std.string(uState.id), null, '/');
 				Cookie.set('user.jwt',uState.jwt, null, '/');
 				trace(Cookie.get('user.jwt'));
@@ -274,7 +279,11 @@ class UserAccess {
 							waiting: false
 						})));
 				}	
-				var uState:UserState = data.dataInfo['user_data'];
+				var uState:UserState = {};
+				for(k=>v in data.dataInfo.keyValueIterator())
+				{
+					Reflect.setField(uState, k, v);
+				}
 				trace(state.user.jwt);
 				trace(copy(state,{user:uState}).user);
 				trace(uState);

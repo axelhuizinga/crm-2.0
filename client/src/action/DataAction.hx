@@ -32,7 +32,7 @@ enum  DataAction
 	Execute(dataAccess:DBAccessProps);
 	Done(data:DbData);
 	Error(data:DbData);
-	Load(data:DbData);
+	ContactsLoaded(data:DbData);
 	SelectAccounts(sData:IntMap<Map<String,Dynamic>>);
 	SelectActContacts(sData:IntMap<Map<String,Dynamic>>);
 	SelectContacts(sData:IntMap<Map<String,Dynamic>>);

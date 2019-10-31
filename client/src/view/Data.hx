@@ -86,7 +86,7 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 		trace('stateChanged:${nextState!=state}');
 		if(nextState!=state || nextProps!=props)
 		{
-			internalRedirect();
+			//internalRedirect();
 			return true;
 		}
 			

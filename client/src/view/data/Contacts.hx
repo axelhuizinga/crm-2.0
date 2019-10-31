@@ -115,7 +115,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
     {
-		
+		trace('ok');
         return {
 			globalState: function (key:String,?data:Dynamic)
 			{
@@ -128,9 +128,14 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				//dispatch(DataAction.CreateSelect(id,data,match));
 				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
 			},
+			//setStateFromChild(cState:FormState)
 			storeActData:function (data:IntMap<Map<String,Dynamic>>)
 			{
 				dispatch(DataAction.SelectActContacts(data));
+			},		
+			storeContactsList:function (data:DbData)
+			{
+				dispatch(DataAction.ContactsLoaded(data));
 			}
 		};
     }
@@ -161,8 +166,9 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	override function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		trace(props.match.params.section);		
-		trace(props.match.params.action);		
+		trace(props.match.params.section);					
+		trace(props.match.params.action);	
+		trace(props.storeContactsList);	
 		return switch(props.match.params.section)
 		{
 			case "List":
@@ -176,6 +182,10 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			default:
 				null;					
 		}		
+	}
+
+	public function setStateFromChild(cState:FormState) {
+		setState(cState);
 	}
 
 }

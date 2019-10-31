@@ -215,6 +215,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 
 	override public function componentWillUnmount() {
 		//state.storeListener();
+		return;
 		var actData:IntMap<Map<String,Dynamic>> = [initialState.id => [
 		for(f in Reflect.fields(actualState))
 			f => Reflect.field(actualState,f)		

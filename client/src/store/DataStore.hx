@@ -38,18 +38,13 @@ class DataStore
 	{
 		trace(action);
 		trace(Reflect.fields(state));
-		//return null;
+		//return nul018l;
 		return switch(action)
 		{
-			case Load(data):
+			case ContactsLoaded(data):
 			trace(data.dataParams);
 				copy(state, {
-					dbData:data,
-				});
-			case Done(data):
-				copy(state,
-				{
-					dbData:data
+					contactsDbData:data,
 				});
 			case SelectAccounts(sData):
 				//trace(sData.keys().keysList());
@@ -63,8 +58,7 @@ class DataStore
 				copy(state,{
 					contactActData:sData
 				});				
-			case SelectContacts(sData):
-				
+			case SelectContacts(sData):				
 				trace(sData);
 				//trace(sData.keys().keysList());
 				copy(state,{

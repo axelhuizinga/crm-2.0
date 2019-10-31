@@ -65,8 +65,19 @@ class Util
 				k => row[k]
 		];
 	}
+
+	public static function copy(source1:Dynamic, ?source2:Dynamic):Dynamic
+	{
+		var target = {};
+		for (field in Reflect.fields(source1))
+			Reflect.setField(target, field, Reflect.field(source1, field));
+		if (source2 != null)
+			for (field in Reflect.fields(source2))
+				Reflect.setField(target, field, Reflect.field(source2, field));
+		return target;
+	}
 	
-	public static function copyStringMap<T>(source:Map<String,T>):Map<String,T>
+	public static function copyStringMap<T>(source:Map<String,T>, ?source2:Map<String,T>):Map<String,T>
 	{
 		var copy:Map<String,T> = new Map();
 		var keys = source.keys();
@@ -75,6 +86,13 @@ class Util
 			var k:String = keys.next();
 			copy.set(k, source.get(k));
 		}
+		if (source2 != null)
+			keys = source2.keys();
+			while (keys.hasNext())
+			{
+				var k:String = keys.next();
+				copy.set(k, source2.get(k));
+			}		
 		return copy;
 	}
 

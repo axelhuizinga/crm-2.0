@@ -87,7 +87,7 @@ class LivePBXSync
 					//props.batchCount += data.dataInfo['offset'];
 					if(data.dataInfo['offset']!=null)
 					{
-						props.offset = data.dataInfo['offset'];
+						props.offset = Std.parseInt(data.dataInfo['offset']);
 						dispatch(Status(Update(
 							{
 								className:'',
@@ -161,7 +161,7 @@ public static function mergeContacts(props:DBAccessProps)
 					//props.batchCount += data.dataInfo['offset'];
 					if(data.dataInfo['offset']!=null)
 					{
-						props.offset = data.dataInfo['offset'];
+						props.offset = Std.parseInt(data.dataInfo['offset']);
 						dispatch(Status(Update(
 							{
 								className:'',

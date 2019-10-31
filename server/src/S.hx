@@ -107,7 +107,7 @@ class S
 		//var pd:Dynamic = Web.getPostData();
 
 		response = {content:'',error:''};
-		var params:StringMap<Dynamic> = Web.getParams();
+		var params:Map<String,String> = Web.getParams();
 		devIP = params.get('devIP');
 		trace(params);		
 
@@ -117,7 +117,8 @@ class S
 			trace(Web.getMethod());
 			trace(Web.getClientHeaders());
 			try {
-				Model.binary(params.get('dbData'));
+				Model.binary();
+				//Model.binary(params.get('dbData'));
 			}
 			exit( { error:"required params action and/or className missing" } );
 		}
@@ -201,15 +202,15 @@ class S
 	public static function sendData(dbData:DbData, data:RData):Bool
 	{
 		var s:Serializer = new Serializer();
-		//trace(data);
+		//trace(data.info);
 		if(data != null){
-			dbData.dataInfo = data.info;
+			dbData.dataInfo = dbData.dataInfo.copyStringMap(data.info);
 			Syntax.foreach(data.rows, function(k:Int, v:Dynamic)
 			{
 				dbData.dataRows.push(Lib.hashOfAssociativeArray(v));			
 			});			
 		}
-		trace(Std.string(dbData).substr(0,250));
+		//trace(Std.string(dbData).substr(0,250));
 		return sendbytes(s.serialize(dbData));
 	}
 

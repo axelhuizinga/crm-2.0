@@ -53,8 +53,8 @@ typedef MData =
 typedef RData =
 {
 	?rows:NativeArray,
-	?error:Map<String,Dynamic>,
-	?info:Map<String,Dynamic>
+	?error:Map<String,String>,
+	?info:Map<String,String>
 }
 
 @:enum
@@ -100,7 +100,7 @@ class Model
 	var dParam:DbData;
 	var dataSource:Map<String,Map<String,Dynamic>>;// EACH KEY IS A TABLE NAME
 	var dataSourceSql:String;
-	var param:Map<String, Dynamic>;
+	var param:Map<String, String>;
 	
 	public static function dispatch(param:Map<String,Dynamic>):Void
 	{
@@ -303,7 +303,7 @@ class Model
 	public function get():Void
 	{	
 		var rData:RData =  {
-			info:['count'=>count(),'page'=>(param.exists('page') ? Std.parseInt( param.get('page') ) : 1)],
+			info:['count'=>Std.string(count()),'page'=>(param.exists('page') ? param.get('page') : '1')],
 			rows: doSelect()
 		};
 		S.sendData(dbData,rData);
@@ -363,7 +363,7 @@ class Model
 				trace(stmt.errorInfo());
 				S.sendErrors(dbData,['execute' =>S.errorInfo(stmt.errorInfo())]);
 			}
-			dbData.dataInfo['count'] = stmt.rowCount();			
+			dbData.dataInfo['count'] = Std.string(stmt.rowCount());			
 			trace('>>$action<<');
 			if(action=='update'||action=='delete')
 			{
@@ -371,7 +371,7 @@ class Model
 				trace('done');
 				S.sendInfo(dbData);
 			}
-			if (dbData.dataInfo['count']>0)
+			if (Std.parseInt(dbData.dataInfo['count'])>0)
 			{
 				data = stmt.fetchAll(PDO.FETCH_ASSOC);
 			}			
@@ -749,16 +749,16 @@ class Model
 		return _jsonb_array_text.toString();
 	}
 
-	public static function binary(param:Bytes)
+	public static function binary()
 	{
-		param = Bytes.ofString(Web.getPostData());
+		var pData = Bytes.ofString(Web.getPostData());
 		var d:DbData = new DbData();
-		trace(param);
+		trace(pData);
 		var s:Serializer = new Serializer();
-		trace(s.unserialize(param, DbData));
+		trace(s.unserialize(pData, DbData));
 	}
 	
-	public function new(?param:Map<String,Dynamic>) 
+	public function new(?param:Map<String,String>) 
 	{
 		this.param = param;
 		//trace(param);
@@ -769,6 +769,7 @@ class Model
 		data = {};
 		data.rows = new NativeArray();
 		dbData = new DbData();
+		dbData.dataInfo = dbData.dataInfo.copyStringMap(param);
 		filterSql = '';
 		filterValues = new Array();
 		setValues = new Array();

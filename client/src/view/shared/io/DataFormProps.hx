@@ -5,6 +5,7 @@ import react.ReactComponent.ReactFragment;
 import state.FormState;
 import react.router.Route;
 import redux.Redux.Dispatch;
+import shared.DbData;
 import state.UserState;
 
 typedef DataFormProps =
@@ -20,6 +21,7 @@ typedef DataFormProps =
 	?setStateFromChild:FormState->Void,
 	?setFormState:FormState->Void,
 	?sideMenu:SMenuProps,
+	?storeContactsList:DbData->Void,
 	?storeFormChange:String->FormState->Void,
 	?render:FormState->ReactFragment,
 	user:UserState,

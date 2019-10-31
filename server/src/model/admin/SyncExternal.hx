@@ -103,11 +103,12 @@ class SyncExternal extends Model
             var q:EitherType<PDOStatement,Bool> = S.dbh.query(sql);
             if(!q)
             {
-               dbData.dataErrors = ['${action}' => S.dbh.errorInfo()];
+               dbData.dataErrors = ['${action}' => Std.string(S.dbh.errorInfo())];
                return dbData;
             } 
         }        
-        dbData.dataInfo = ['saveUserDetails' => 'OK', 'updatedRows' => updated];
+        dbData.dataInfo = dbData.dataInfo.copyStringMap(
+			['saveUserDetails' => 'OK', 'updatedRows' => Std.string(updated)]);
         trace(dbData.dataInfo);
 		return dbData; 
     }

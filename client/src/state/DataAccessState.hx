@@ -16,7 +16,7 @@ typedef DataSource =
 
 typedef DataAccessState = 
 {
-	?dbData:DbData,
+	?contactDbData:DbData,
 	?contactActData:IntMap<Map<String,Dynamic>>,
 	?contactData:IntMap<Map<String,Dynamic>>,
 	?dealActData:IntMap<Map<String,Dynamic>>,

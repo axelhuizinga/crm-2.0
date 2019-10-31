@@ -1,4 +1,5 @@
 package view.data.contacts;
+import react.router.RouterMatch;
 import action.DataAction;
 import state.AppState;
 import haxe.Constraints.Function;
@@ -7,6 +8,7 @@ import react.data.ReactDataGrid;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
+import react.ReactUtil.copy;
 import shared.DbData;
 import shared.DBMetaData;
 import view.shared.FormBuilder;
@@ -95,7 +97,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		}
 		//var s:hxbit.Serializer = new hxbit.Serializer();		
 		//state.formApi.requests.push( 
-			BinaryLoader.create(
+		BinaryLoader.create(
 			'${App.config.api}', 
 			{
 				id:props.user.id,
@@ -117,20 +119,25 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				{
 					if(!data.dataErrors.keys().hasNext())
 					{
-						var dRows:Array<Dynamic> = [];
+						/*var dRows:Array<Dynamic> = [];
 						for(row in data.dataRows)
 						{
 							var rO:Dynamic = {};
 							for(k=>v in row.keyValueIterator())
 								Reflect.setField(rO, k , v);
 							dRows.push(rO);						
-						}
-						//trace(dRows);
+						}*/
+						trace(props.storeContactsList);
+						//trace(props.parentComponent.storeContactsList);
+						
+						if(props.storeContactsList !=null)
+						props.storeContactsList(data);
 						setState({
+						//props.parentComponent.setStateFromChild({
 							//rows:dRows,
 							dataTable:data.dataRows,
-							dataCount:data.dataInfo['count'],
-							pageCount: Math.ceil(data.dataInfo['count'] / props.limit)
+							dataCount:Std.parseInt(data.dataInfo['count']),
+							pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
 						});
 					}
 					else 
@@ -147,7 +154,10 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 	}
 
 	public function selectionClear() {
-		props.parentComponent.props.select(0, null,props.parentComponent.props.match, UnselectAll);		
+		var match:RouterMatch = copy(props.match);
+		match.params.action = 'get';
+		trace(state.dataTable.length);
+		props.parentComponent.props.select(0, null,match, UnselectAll);		 
 	}
 		
 	override public function componentDidMount():Void 
@@ -180,6 +190,8 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(props.match.params.section + ':${props.match.params.action}::' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
+		var pState:FormState = props.parentComponent.state;
+		trace(state.dataTable.length);
 		trace(state.loading);
 		if( state.dataTable.length==0)
 			return state.formApi.renderWait();
@@ -213,7 +225,11 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				${renderResults()}
 		'));		
 	}
-	
+
+	override public function componentWillUnmount() {
+		trace('...');
+	}
+
 	function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;

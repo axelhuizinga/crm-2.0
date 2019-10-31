@@ -17,6 +17,7 @@ import php.Web;
 import php.db.PDO;
 import php.db.PDOStatement;
 using  DateTools;
+using Util;
 /**
  * ...
  * @author axel@bi4.me
@@ -36,7 +37,7 @@ class User extends Model
 	static var _me:User;
 	var last_login:Date;
 
-	public static function _create(param:Map<String,Dynamic>):Void
+	public static function _create(param:Map<String,String>):Void
 	{
 		trace(param);
 		var self:User = new User(param);	
@@ -46,7 +47,7 @@ class User extends Model
 		//Reflect.callMethod(self, Reflect.field(self, action),[]);
 	}
 	
-	public function new(?param:Map<String,Dynamic>) 
+	public function new(?param:Map<String,String>) 
 	{
 		trace(lc);
 		if(lc==1)
@@ -72,9 +73,11 @@ class User extends Model
 	{
 		if (verify(param))
 		{			
-			dbData.dataInfo['verified'] = true;
-			dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(doSelect()[0]);
-			dbData.dataInfo['user_data'].jwt = param['jwt'];
+			dbData.dataInfo['verified'] = 'true';
+			
+			//dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(doSelect()[0]);
+			dbData.dataInfo.copyStringMap(Lib.hashOfAssociativeArray(doSelect()[0]));
+			//dbData.dataInfo['user_data'] = param['jwt'];
 			S.sendInfo(dbData);
 		}
 	}
@@ -99,7 +102,7 @@ class User extends Model
 		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}'})))
 		{			
 			trace(stmt.errorInfo());
-			S.sendErrors(dbData,['${param['action']}' => stmt.errorInfo()]);
+			S.sendErrors(dbData,['${param['action']}' => Std.string(stmt.errorInfo())]);
 		}
 		if(stmt.rowCount()>0)
 		{
@@ -118,22 +121,23 @@ class User extends Model
 			}
 			// USER AUTHORIZED
 			var assoc:Dynamic = stmt.fetch(PDO.FETCH_ASSOC);
-			var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(assoc);	
-			dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(assoc);		
+			var res:Map<String,String> = Lib.hashOfAssociativeArray(assoc);	
 			//dbData.dataInfo['id'] = res['id'];
+			//dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(assoc);		
+			dbData.dataInfo = res;		
 			//dbData.dataInfo['mandator'] = res['mandator'];
 			//dbData.dataInfo['last_login'] = res['last_login'];
-			dbData.dataInfo['user_data'].loggedIn = true;
+			dbData.dataInfo['loggedIn'] = 'true';
 			trace(res['user_name']);
-			trace('change_pass_required'+(res['change_pass_required']==1 || res['change_pass_required']==true?'Y':'N'));
+			trace('change_pass_required'+(res['change_pass_required']=='1' || res['change_pass_required']=='true'?'Y':'N'));
 			// UPDATE LAST_LOGIN
 			var rTime:String = DateTools.format(Date.now(), "'%Y-%m-%d %H:%M:%S'");//,request=?
 			var update:PDOStatement = S.dbh.prepare('UPDATE users SET last_login=${rTime} WHERE id=:id',Syntax.array(null));
-			var success:Bool = Model.paramExecute(update, Lib.associativeArrayOfObject({':id':dbData.dataInfo['user_data'].id}));
+			var success:Bool = Model.paramExecute(update, Lib.associativeArrayOfObject({':id':res['id']}));
 			trace(update.errorCode());
 			trace(update.errorInfo());
 			//UPDATE DONE			
-			if (res['change_pass_required']==1 || res['change_pass_required']==true)
+			if (res['change_pass_required']=='1' || res['change_pass_required']=='true')
 				return UserAuth.PassChangeRequired(dbData);
 			return UserAuth.AuthOK(dbData);			
 		}
@@ -155,10 +159,10 @@ class User extends Model
 				var d:Float = DateTools.delta(Date.now(), DateTools.hours(11)).getTime();
 				trace(d + ':' + Date.fromTime(d));
 				var	jwt = JWT.sign({
-						id:dbData.dataInfo['user_data'].id,
+						id:dbData.dataInfo['id'],
 						validUntil:d,
 						ip: Web.getClientIP(),
-						mandator:dbData.dataInfo['user_data'].mandator
+						mandator:dbData.dataInfo['mandator']
 					}, S.secret);						
 				
 				//trace(jwt);
@@ -167,9 +171,9 @@ class User extends Model
 				//Web.setCookie('user.id', me.dbData.dataInfo['user_data'].id, Date.fromTime(d + 86400000));
 				//me.dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(me.doSelect()[0]);
 				trace(Type.enumConstructor(uath));
-				dbData.dataInfo['change_pass_required'] = (Type.enumConstructor(uath) == 'PassChangeRequired');
+				dbData.dataInfo['change_pass_required'] = Std.string(Type.enumConstructor(uath) == 'PassChangeRequired');
 				//me.dbData.dataInfo['user_data'].id = jwt;
-				dbData.dataInfo['user_data'].jwt = jwt;
+				dbData.dataInfo['jwt'] = jwt;
 				//trace(me.dbData);
 				S.sendInfo(dbData);
 				return true;

@@ -149,7 +149,7 @@ class Tr extends ReactComponentOfProps<TrProps>
 		}		
 		var makeRef:String = selected && props.row>0?'ref=${ref}':'';
 		return jsx('
-		<tr className=${cl} data-id=${props.data["id"]} title=${props.data["id"]} ref=${ref} onClick=${select}>
+		<tr className=${cl} data-id=${props.data["id"]} data-row=${props.row} title=${props.data["id"]} ref=${ref} onClick=${select}>
 		${renderCells(props.data)}
 		</tr>
 		');
@@ -186,7 +186,7 @@ class Tr extends ReactComponentOfProps<TrProps>
 		if(props.parentComponent != null)
 		{
 			if(!selected)
-			{
+			{				
 				props.parentComponent.props.select(props.data['id'], 
 					[Std.int(props.data['id'])=>props.data], props.parentComponent.props.match);
 			}//

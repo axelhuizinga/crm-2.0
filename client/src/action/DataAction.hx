@@ -30,7 +30,7 @@ typedef LiveDataProps =
 enum  DataAction
 {
 	Execute(dataAccess:DBAccessProps);
-	Done(data:DbData);
+	Update(uData:IntMap<Map<String,Dynamic>>);
 	Error(data:DbData);
 	ContactsLoaded(data:DbData);
 	SelectAccounts(sData:IntMap<Map<String,Dynamic>>);

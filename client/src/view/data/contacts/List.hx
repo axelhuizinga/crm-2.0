@@ -76,6 +76,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 	
 	static function mapStateToProps(aState:AppState) 
 	{
+		throw ('never');
 		return {
 			user:aState.user
 		};

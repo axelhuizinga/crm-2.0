@@ -69,6 +69,18 @@ class DataStore
 				copy(state,{
 					contactData:sData
 				});
+			case Update(uData):
+				trace(uData);
+				var cData = state.contactData;
+				var uDataIt = uData.iterator();
+				var row:Map<String,Dynamic> = null;
+				for (i => row in uData.keyValueIterator())
+				{
+					cData.set(i, row);
+				}
+				copy(state,{
+					contactData:cData
+				});
 			default:
 				state;
 		}

@@ -102,7 +102,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			trace(actualState);		
 			//OK we got the data
 			actualState = view.shared.io.Observer.run(actualState, function(newState){
-				actualState = newState;
+				//actualState = newState;
 				trace(actualState);
 			});	
 		}
@@ -176,13 +176,13 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		return c;
 	}
 	
-	static function mapStateToProps(aState:AppState) 
+	/*static function mapStateToProps(aState:AppState) 
 	{
 		trace(aState);
 		return {
 			user:aState.user
 		};
-	}
+	}*/
 	
 	public function delete(ev:ReactEvent):Void
 	{

@@ -282,7 +282,14 @@ class UserAccess {
 				var uState:UserState = {};
 				for(k=>v in data.dataInfo.keyValueIterator())
 				{
-					Reflect.setField(uState, k, v);
+					switch (k)
+					{
+						case 'change_pass_required'|'loggedIn':
+							Reflect.setField(uState, k, v=='true');
+						default:
+							Reflect.setField(uState, k, v);
+
+					}						
 				}
 				trace(state.user.jwt);
 				trace(copy(state,{user:uState}).user);

@@ -1,4 +1,5 @@
 package store;
+import action.DataAction;
 import react.ReactSharedInternals.Update;
 import App;
 import action.AppAction;
@@ -71,10 +72,22 @@ class AppStore
 	public function reduce(state:AppState, action:AppAction):AppState
 	{
 		trace(Reflect.fields(state));
+		trace(action);
 		return switch(action)
 		{
 			case ApplySubState(subState):
 				copy(state,subState);
+			case Data(dataAction):
+				switch (dataAction)
+				{
+					case ContactsLoaded(data):
+					trace(data.dataRows);
+					copy(state,
+						{dataStore:{contactsDbData:data}});
+					default:
+						state;
+				}
+				
 			/*case FormChange(cfp, fState):
 				var formStates = state.formStates;
 				if(formStates.exists(cfp))
@@ -110,7 +123,8 @@ class AppStore
 				//store.dispatch(StatusAction.Status(status));
 				next();*/
 			case Data(action):
-				store.dispatch(action);		
+				//store.dispatch(action);		
+				next();
 			case Status(action):	
 				store.dispatch(action);
 			case User(action):

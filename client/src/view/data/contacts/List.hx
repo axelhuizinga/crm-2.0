@@ -154,11 +154,15 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		trace(Reflect.fields(ev));
 	}
 
+	public function restore() {
+		props.storeData('Contacts', DataAction.Restore);
+	}
+
 	public function selectionClear() {
 		var match:RouterMatch = copy(props.match);
 		match.params.action = 'get';
 		trace(state.dataTable.length);
-		props.parentComponent.props.select(0, null,match, UnselectAll);		 
+		props.select(0, null,match, UnselectAll);		 
 	}
 		
 	override public function componentDidMount():Void 
@@ -193,6 +197,9 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		//trace(dataDisplay["userList"]);
 		var pState:FormState = props.parentComponent.state;
 		trace(state.dataTable.length);
+		if(props.dataStore.contactsDbData != null)
+		trace(props.dataStore.contactsDbData.dataRows[0]);
+		else trace(props.dataStore.contactsDbData);
 		trace(state.loading);
 		if( state.dataTable.length==0)
 			return state.formApi.renderWait();

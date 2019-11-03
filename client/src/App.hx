@@ -98,8 +98,10 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			user: mapReducer(UserAction, user)
 		});
 		var dataStore:DataAccessState = loadFromLocalStorage();
-		trace(dataStore);
-		return createStore(rootReducer, {dataStore:loadFromLocalStorage()},  Redux.applyMiddleware(
+		trace(dataStore);		
+		//return createStore(rootReducer, {dataStore:loadFromLocalStorage()},  
+		return createStore(rootReducer, null,  
+		Redux.applyMiddleware(
 			mapMiddleware(Thunk, new ThunkMiddleware()),
 			mapMiddleware(AppAction, appWare),
 			mapMiddleware(UserAction, user)
@@ -168,7 +170,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		state = store.getState();
 		trace(state);
 		tul = startHistoryListener(store, state.locationState.history);
-		store.subscribe(saveToLocalStorage);
+		//store.subscribe(saveToLocalStorage);
 
 		Browser.window.onresize = function()
 		{

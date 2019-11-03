@@ -1,8 +1,12 @@
 package view.shared.io;
+import action.DataAction;
 import view.shared.io.FormApi;
+import haxe.Constraints.Function;
+import haxe.ds.IntMap;
 import react.ReactComponent;
 import react.ReactComponent.ReactFragment;
 import state.FormState;
+import react.router.RouterMatch;
 import react.router.Route;
 import redux.Redux.Dispatch;
 import shared.DbData;
@@ -13,15 +17,15 @@ typedef DataFormProps =
 	>ChildrenRouteProps,
 	?dataStore:state.DataAccessState,
     ?formApi:FormApi,
-	?fullWidth:Bool,
-	
+	?fullWidth:Bool,	
 	?limit:Int,
-
 	?parentComponent:Dynamic,
+	?select:Function, // Int->IntMap<Map<String,Dynamic>>->RouterMatch->SelectType,
 	?setStateFromChild:FormState->Void,
 	?setFormState:FormState->Void,
 	?sideMenu:SMenuProps,
 	?storeContactsList:DbData->Void,
+	?storeData:String->DataAction->Void,
 	?storeFormChange:String->FormState->Void,
 	?render:FormState->ReactFragment,
 	user:UserState,

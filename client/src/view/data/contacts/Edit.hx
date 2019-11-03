@@ -56,7 +56,7 @@ using Lambda;
 class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		{label:'Liste',action:'selectionClear',section: 'List'},		
+		{label:'Liste',action:'restore',section: 'List'},		
 		{label:'Speichern + Schließen',action:'updateAndClose'},
 		{label:'Speichern',action:'update'},
 		{label:'Neu', action:'insert'},

@@ -1,5 +1,6 @@
 package store;
 
+import action.AppAction;
 import action.async.LivePBXSync;
 import haxe.ds.IntMap;
 import state.AppState;
@@ -42,10 +43,18 @@ class DataStore
 		return switch(action)
 		{
 			case ContactsLoaded(data):
-			trace(data.dataParams);
+				if(data.dataRows != null)
+				{
+					trace(data.dataRows.length);
+					trace(copy(state, {
+						contactsDbData:data,
+					}).contactsDbData.dataRows.length);
+				}			
 				copy(state, {
 					contactsDbData:data,
 				});
+			case Restore:
+				state;
 			case SelectAccounts(sData):
 				//trace(sData.keys().keysList());
 				copy(state,{
@@ -95,6 +104,9 @@ class DataStore
 				//next();
 				store.dispatch(LiveDataAccess.select({id:id,data:data,match:match}));
 				//next();*/
+			case ContactsLoaded(data):
+				store.dispatch(Data(action));
+				next();
 			case Execute(data):
 				store.dispatch(DBAccess.execute(data));
 				//next();

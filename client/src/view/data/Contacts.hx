@@ -122,6 +122,10 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				trace('$key => $data');
 				dispatch(GlobalState(key,data));
 			},
+			storeData:function(id:String, action:DataAction)
+			{
+				dispatch(LiveDataAccess.storeData(id, action));
+			},
 			select:function(id:Int,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
 			{
 				trace('select:$id selectType:${selectType}');
@@ -135,7 +139,9 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			},		
 			storeContactsList:function (data:DbData)
 			{
+				//return null;
 				dispatch(DataAction.ContactsLoaded(data));
+				//dispatch(AppAction.Data(DataAction.ContactsLoaded(data)));
 			}
 		};
     }
@@ -143,14 +149,24 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	static function mapStateToProps(aState:AppState) 
 	{
 		//trace(aState.dataStore.contactData);
+		trace(Reflect.fields(aState));
 		if(aState.dataStore.contactData != null)
 		trace(aState.dataStore.contactData.keys().next());
+		if(aState.dataStore.contactsDbData != null)
+		trace(aState.dataStore.contactsDbData.dataRows[0]);
+		else 
+		{
+			trace(aState.dataStore);
+			trace(Reflect.fields(aState.dataStore));
+		}
+		trace(App.store.getState().dataStore.contactsDbData);
 		var bState =  {
 			dataStore:aState.dataStore,
 			user:aState.user,
 			//idLoaded:aState.dataStore.contactData.keys().next()
 		};
 		//trace(bState);
+		trace(bState.dataStore.contactData);
 		return bState;
 	}
 		

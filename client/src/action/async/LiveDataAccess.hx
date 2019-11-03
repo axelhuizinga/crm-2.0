@@ -38,6 +38,29 @@ class LiveDataAccess
 		
 	}
 
+	public static function storeData(id:String, action:DataAction) 
+	{
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+			if(id == null)
+				return null;
+			var aState:AppState = getState();
+			trace(aState.dataStore.contactData);
+			switch (id)
+			{
+				case 'Contacts':
+				switch(action)
+				{
+					case Restore:
+					return dispatch(DataAction.Restore);
+					default:
+					return null;					
+				}
+				default:
+				return null;
+			}
+		});
+	}
+
 	public static function select(props:LiveDataProps) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){

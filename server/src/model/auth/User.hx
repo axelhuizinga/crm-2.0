@@ -167,8 +167,11 @@ class User extends Model
 				
 				//trace(jwt);
 				//trace(JWT.extract(jwt));
-				Web.setCookie('user.jwt', jwt, Date.fromTime(d + 86400000));
 				//Web.setCookie('user.id', me.dbData.dataInfo['user_data'].id, Date.fromTime(d + 86400000));
+				Web.setCookie('user.jwt', jwt, Date.fromTime(d + 86400000));
+				Web.setCookie('user.id', dbData.dataInfo['id'], Date.fromTime(d + 86400000));
+				Web.setCookie('user.last_name', dbData.dataInfo['last_name'], Date.fromTime(d + 86400000));
+				Web.setCookie('user.first_name', dbData.dataInfo['first_name'], Date.fromTime(d + 86400000));
 				//me.dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(me.doSelect()[0]);
 				trace(Type.enumConstructor(uath));
 				dbData.dataInfo['change_pass_required'] = Std.string(Type.enumConstructor(uath) == 'PassChangeRequired');
@@ -186,24 +189,7 @@ class User extends Model
 	{	
 		trace(params);
 		//var me:User = new User(params);		
-		trace(params['id']);
-		/*var stmt:PDOStatement = S.dbh.prepare(
-			'SELECT last_login FROM ${S.db}.users WHERE id=:user_name',Syntax.array(null));
-		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':id': me.id})))
-		{
-			S.sendErrors(me.dbData,['${me.action}' => stmt.errorInfo()]);
-		}
-		if (stmt.rowCount()==0)
-		{
-			S.sendErrors(me.dbData,['${me.action}'=>'pass','sql'=>stmt.errorInfo]);
-		}
-		var res:Dynamic = stmt.fetch(PDO.FETCH_COLUMN,0);
-		trace(res);*/
-		/*var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(assoc);	
-		me.dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(assoc);		
-		me.dbData.dataInfo['id'] = res['id'];
-		me.dbData.dataInfo['mandator'] = res['mandator'];
-		me.dbData.dataInfo['last_login'] = res['last_login'];*/		
+		trace(params['id']);	
 		var expiryDate = Date.now().delta(31556926000);//1 year
 		Web.setCookie('user.jwt', '', expiryDate);
 		Web.setCookie('user.id', params['id'], expiryDate);
@@ -298,7 +284,7 @@ class User extends Model
 						false;
 					case Valid(payload):
 						// JWT VALID AND NOT OLDER THAN 11 h
-						saveRequest(id, params);
+						saveRequest(id, params);						
 						true;
 					default:
 						S.sendErrors(new DbData(), ['jwtError'=>jRes]);

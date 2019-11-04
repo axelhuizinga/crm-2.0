@@ -286,6 +286,7 @@ class UserAccess {
 						})));
 				}	
 				var uState:UserState = {};
+				trace(data.dataInfo);
 				for(k=>v in data.dataInfo.keyValueIterator())
 				{
 					switch (k)

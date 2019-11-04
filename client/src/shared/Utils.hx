@@ -12,6 +12,17 @@ import me.cunity.debug.Out;
 class Utils 
 {
 
+	public static function compare(ob1:Dynamic, ob2:Dynamic):Void {
+		var keys:Array<String> = Reflect.fields(ob1);
+		for(k in keys)
+		{
+			if(Reflect.field(ob1,k)!=Reflect.field(ob2,k))
+			{
+				trace('$k: ${Reflect.field(ob1,k)} != ${Reflect.field(ob2,k)}');
+			}
+		}
+	}
+
 	public static function keysList(ki:Iterator<Int>):Array<Int>
 	{
 		var l:Array<Int> = [];

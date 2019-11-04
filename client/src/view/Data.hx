@@ -37,6 +37,7 @@ import view.data.Deals;
 import view.data.Accounts;
 
 using state.CState;
+using shared.Utils;
 
 @:connect
 class Data extends ReactComponentOf<RouteTabProps,CompState>
@@ -83,6 +84,7 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 	override function shouldComponentUpdate(nextProps:RouteTabProps, nextState:CompState):Bool
 	{
 		trace('propsChanged:${nextProps!=props}');
+		//if(nextProps!=props)			props.compare(nextProps);
 		trace('stateChanged:${nextState!=state}');
 		if(nextState!=state || nextProps!=props)
 		{

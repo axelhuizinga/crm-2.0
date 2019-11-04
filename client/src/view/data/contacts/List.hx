@@ -155,6 +155,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 	}
 
 	public function restore() {
+		trace(Reflect.fields(props));
 		props.storeData('Contacts', DataAction.Restore);
 	}
 
@@ -178,10 +179,12 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		//
 		if(props.user != null)
 		trace('yeah: ${props.user.first_name}');
-		//dbData = FormApi.init(this, props);
+		trace(props.match.params.action);
 		if(props.match.params.action != null)
+		//dbData = FormApi.init(this, props);
 		{
-			var fun:Function = Reflect.field(this,props.match.params.action);
+			var fun:Function = Reflect.field(this,props.match.params.action);			
+			trace(Reflect.isFunction(fun));
 			if(Reflect.isFunction(fun))
 			{
 				Reflect.callMethod(this,fun,null);

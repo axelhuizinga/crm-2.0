@@ -18,9 +18,9 @@ class UserStore implements IReducer<UserAction, UserState>
 	implements IMiddleware<UserAction, AppState>
 {
 	public var initState:UserState = {
-		first_name:'',
-		last_name:'',
-		mandator: 1,
+		first_name:Cookie.get('user.first_name')==null?'':Cookie.get('user.first_name'),
+		last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
+		mandator: Cookie.get('user.mandator')==null?1:Std.parseInt(Cookie.get('user.mandator')),
 		id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
 		email:'',
 		pass:'',				

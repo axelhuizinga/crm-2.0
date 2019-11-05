@@ -69,7 +69,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			var baseUrl:String = props.match.path.split(':section')[0];
 			trace('redirecting to ${baseUrl}List/get');
 			props.history.push('${baseUrl}List/get');
-			//get(null);
+			get(null);
 		}		
 		trace(state.loading);
 	}
@@ -96,25 +96,25 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		{
 			offset = Std.int(props.limit * ev.page);
 		}
-		//var s:hxbit.Serializer = new hxbit.Serializer();		
-		//state.formApi.requests.push( 
+		var params:Dynamic = {
+			id:props.user.id,
+			jwt:props.user.jwt,
+			className:'data.Contacts',
+			action:'get',
+			filter:(props.match.params.id!=null?'id|${props.match.params.id}':'mandator|1'),
+			devIP:App.devIP,
+			limit:props.limit,
+			offset:offset>0?offset:0,
+			table:'contacts'
+		};
 		BinaryLoader.create(
 			'${App.config.api}', 
-			{
-				id:props.user.id,
-				jwt:props.user.jwt,
-				className:'data.Contacts',
-				action:'get',
-				filter:(props.match.params.id!=null?'id|${props.match.params.id}':'mandator|1'),
-				devIP:App.devIP,
-				limit:props.limit,
-				offset:offset>0?offset:0,
-				table:'contacts'
-			},
+			params,
 			function(data:DbData)
 			{			
 				//UserAccess.jwtCheck(data);
 				trace(data.dataInfo);
+				trace(data.dataParams);
 				trace(data.dataRows.length);
 				if(data.dataRows.length>0) 
 				{
@@ -155,8 +155,25 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 	}
 
 	public function restore() {
-		trace(Reflect.fields(props));
-		props.storeData('Contacts', DataAction.Restore);
+		trace(Reflect.fields(props.dataStore));
+		if(props.dataStore != null && props.dataStore.contactsDbData != null)
+		{
+			setState({
+			//props.parentComponent.setStateFromChild({props.match.params.id!=null?'id|${props.match.params.id}'
+				//rows:dRows,
+				dataTable:props.dataStore.contactsDbData.dataRows,
+				dataCount:Std.parseInt(props.dataStore.contactsDbData.dataInfo['count']),
+				pageCount: Math.ceil(Std.parseInt(props.dataStore.contactsDbData.dataInfo['count']) / props.limit)
+			});			
+		}
+		else 
+		{
+			props.history.push(
+				'${props.match.path.split(':section')[0]}List/get/${props.match.params.id!=null?props.match.params.id:''}'
+			);
+			get(null);			
+		}
+		//props.storeData('Contacts', DataAction.Restore);
 	}
 
 	public function selectionClear() {

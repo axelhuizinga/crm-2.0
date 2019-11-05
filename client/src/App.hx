@@ -90,7 +90,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 
 		var rootReducer = Redux.combineReducers(
 		{
-			//app:mapReducer(AppAction, appWare),
+			app:mapReducer(AppAction, appWare),
 			config: mapReducer(ConfigAction, new ConfigStore(config)),
 			dataStore: mapReducer(DataAction, new DataStore()),
 			locationState: mapReducer(LocationAction, new LocationStore(history)),

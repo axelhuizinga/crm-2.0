@@ -1,4 +1,6 @@
 package store;
+import action.async.UserAccess;
+import state.UserState;
 import action.DataAction;
 import react.ReactSharedInternals.Update;
 import App;
@@ -59,10 +61,10 @@ class AppStore
 				email:'',
 				pass:'',				
 				change_pass_required:false,
-				loggedIn:Cookie.get('user.jwt')!=null,
+				loggedIn:false,//Cookie.get('user.jwt')!=null && UserAccess.verify(),
 				last_login:null,
 				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
-				waiting: false
+				waiting: true
 			}
 		};
 

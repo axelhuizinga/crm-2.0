@@ -122,6 +122,23 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 		Browser.window.removeEventListener('beforeunload', sessionStore);
 	}
 
+	function storeParams(path:String, params:Dynamic):Map<String,Map<String,String>>
+	{
+		var pMap = [
+			for(f in Reflect.fields(params))
+				f => Reflect.field(params, f)
+		];
+		return [path=>pMap];
+	}
+
+	function restoreParams(m:Map<String,String>):Dynamic
+	{
+		var p:Dynamic = {};
+		for(k=>v in m.keyValueIterator())
+			Reflect.setField(p,k,v);
+		return p;
+	}
+
 	function initSession2()
 	{
 		Browser.window.addEventListener('beforeunload', sessionStore);

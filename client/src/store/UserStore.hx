@@ -25,10 +25,10 @@ class UserStore implements IReducer<UserAction, UserState>
 		email:'',
 		pass:'',				
 		change_pass_required:false,
-		loggedIn:Cookie.get('user.jwt')!=null,
+		loggedIn:false,//Cookie.get('user.jwt')!=null,
 		last_login:null,
 		jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
-		waiting: false
+		waiting: true
 	};
 	
 	public var store:StoreMethods<AppState>;
@@ -47,8 +47,8 @@ class UserStore implements IReducer<UserAction, UserState>
 					trace(err);
 					//if(err.id==state.user.id)
 					copy(state, {
-						loggedIn:false,
 						jwt:'',
+						loggedIn:false,
 						loginError:err.loginError, waiting:false});                       
 			case LoginComplete(uState):
 					//trace(uState.id + ':' + uState.loggedIn);

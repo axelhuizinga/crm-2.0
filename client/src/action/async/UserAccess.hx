@@ -286,7 +286,7 @@ class UserAccess {
 						})));
 				}	
 				var uState:UserState = {};
-				trace(data.dataInfo);
+				//trace(data.dataInfo);
 				for(k=>v in data.dataInfo.keyValueIterator())
 				{
 					switch (k)
@@ -299,9 +299,9 @@ class UserAccess {
 					}						
 				}
 				trace(state.user.jwt);
-				trace(copy(state,{user:uState}).user);
-				trace(uState);
+				//trace(copy(state,{user:uState}).user);
 				uState.waiting = false;
+				trace(uState);
 				return dispatch(User(LoginComplete(copy(state,{user:uState}).user)));			
 			});
 		});	

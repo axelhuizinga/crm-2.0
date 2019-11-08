@@ -1,5 +1,8 @@
 package view.data.contacts;
 import react.router.RouterMatch;
+import js.Browser;
+import js.html.NodeList;
+import js.html.TableRowElement;
 import action.DataAction;
 import state.AppState;
 import haxe.Constraints.Function;
@@ -70,6 +73,10 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			trace('redirecting to ${baseUrl}List/get');
 			props.history.push('${baseUrl}List/get');
 			get(null);
+		}
+		else 
+		{
+			//
 		}		
 		trace(state.loading);
 	}
@@ -164,6 +171,13 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				dataTable:props.dataStore.contactsDbData.dataRows,
 				dataCount:Std.parseInt(props.dataStore.contactsDbData.dataInfo['count']),
 				pageCount: Math.ceil(Std.parseInt(props.dataStore.contactsDbData.dataInfo['count']) / props.limit)
+			}, function (){
+				trace(state.dataTable);
+				props.history.push(
+					'${props.match.path.split(':section')[0]}List/get/${props.match.params.id!=null?props.match.params.id:''}'
+				);
+				//trace(props.history.)
+				//forceUpdate();
 			});			
 		}
 		else 
@@ -180,7 +194,20 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		var match:RouterMatch = copy(props.match);
 		match.params.action = 'get';
 		trace(state.dataTable.length);
-		props.select(0, null,match, UnselectAll);		 
+		props.select(0, null,match, UnselectAll);	
+		trace(formRef !=null);
+		if(formRef !=null)	 
+		{
+			var trs:NodeList = formRef.current.querySelectorAll('tr');				
+			trace(trs.length);
+			for(i in 0...trs.length){
+				var tre:TableRowElement = cast(trs.item(i), TableRowElement);
+				if(tre.classList.contains('is-selected')){
+					trace('unselect:${tre.dataset.id}');
+					tre.classList.remove('is-selected');
+				}
+			};
+		}
 	}
 		
 	override public function componentDidMount():Void 
@@ -197,7 +224,8 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		if(props.user != null)
 		trace('yeah: ${props.user.first_name}');
 		trace(props.match.params.action);
-		if(props.match.params.action != null)
+		state.formApi.doAction();
+/*		if(props.match.params.action != null)
 		//dbData = FormApi.init(this, props);
 		{
 			var fun:Function = Reflect.field(this,props.match.params.action);			
@@ -208,7 +236,7 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			}
 		}
 		else 
-			setState({loading: false});
+			setState({loading: false});*/
 	}
 	
 	function renderResults():ReactFragment

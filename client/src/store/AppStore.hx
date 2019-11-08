@@ -39,7 +39,7 @@ class AppStore
 	public function new() 
 	{
 		initState = {
-			app:{},
+			//app:{},
 			config:App.config,
 			dataStore: {},
 			//firstLoad:true,
@@ -74,7 +74,7 @@ class AppStore
 	public function reduce(state:AppState, action:AppAction):AppState
 	{
 		trace(Reflect.fields(state));
-		trace(action);
+		//trace(action);
 		return switch(action)
 		{
 			case ApplySubState(subState):

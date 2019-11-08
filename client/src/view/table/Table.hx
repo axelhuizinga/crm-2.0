@@ -481,8 +481,9 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		var firstSelectedRow = firstRowRef.current.parentElement.querySelector('[class="is-selected"]');
 		if(firstSelectedRow!=null)
 		{
+			//Browser.document.querySelector('[class="grid-container-inner"]').scrollTo(0,0);
 			trace(firstSelectedRow.offsetTop);
-			Browser.document.querySelector('[class="grid-container-inner"]').scrollTo(0,firstSelectedRow.offsetTop);
+			Browser.document.querySelector('[class="grid-container-inner"]').scrollTop = firstSelectedRow.offsetTop - 100;
 		}
 	}
 	

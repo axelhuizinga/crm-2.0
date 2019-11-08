@@ -97,7 +97,7 @@ class FormApi
 		{
 			var action = (comp.props.match.params.action != null?comp.props.match.params.action:defaultAction);
             trace('going 2 call ${Type.getClassName(Type.getClass(comp))} ${action}');
-			callMethod(action);
+			executeMethod(action);
 		}
 	}
 
@@ -196,15 +196,19 @@ class FormApi
 				return false;
 			}*/
 		}
+		return executeMethod(method);
+	}
+
+	function executeMethod(method:String, ?r:Array<Dynamic>) {
 		var fun:Function = Reflect.field(comp,method);
 		if(Reflect.isFunction(fun))
 		{
-			Reflect.callMethod(comp,fun,[e]);
+			Reflect.callMethod(comp,fun,r);
 			return true;
 		}
 		else 
 			trace('$method not found');
-		return false;
+		return false;		
 	}
 
 	public function getUrl(?action:String,?targetSection:String):String

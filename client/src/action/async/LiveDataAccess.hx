@@ -69,7 +69,8 @@ class LiveDataAccess
 			var aState:AppState = getState();
 			var tableRoot:Array<String> = FormApi.getTableRoot(props.match);			
 			trace(tableRoot);
-			trace(aState);
+			trace(Reflect.fields(aState));
+			//trace(aState);
 			var sData:IntMap<Map<String,Dynamic>> = null;
 			switch(tableRoot[1])
 			{

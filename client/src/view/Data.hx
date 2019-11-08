@@ -1,4 +1,6 @@
 package view;
+import haxe.Constraints.Function;
+import js.lib.Promise.PromiseHandler;
 import action.async.LocationAccess;
 import state.UserState;
 import react.ReactType;
@@ -29,7 +31,7 @@ import view.StatusBar;
 //import react.redux.form.Control.ControlProps;
 //import react.redux.form.Control;
 import redux.Redux;
-
+import redux.thunk.Thunk;
 //import Webpack.*;
 import state.AppState;
 import view.data.Contacts;
@@ -39,8 +41,14 @@ import view.data.Accounts;
 using state.CState;
 using shared.Utils;
 
+typedef  DataProps = 
+{
+	>RouteTabProps,
+	redirect:Function
+}
+
 @:connect
-class Data extends ReactComponentOf<RouteTabProps,CompState>
+class Data extends ReactComponentOf<DataProps,CompState>
 {
 	//static var user = {first_name:'dummy'};
 	var mounted:Bool = false;
@@ -65,7 +73,7 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 		/*trace(props.history.location);
 		trace(props.location);
 		trace(props.match);*/
-		internalRedirect();
+		//internalRedirect();
 		//if(path != props.location.pathname)
 		//props.history.push(path);
 		//trace(mounted);
@@ -81,7 +89,7 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 		trace(info);
 	}		
 	
-	override function shouldComponentUpdate(nextProps:RouteTabProps, nextState:CompState):Bool
+	override function shouldComponentUpdate(nextProps:DataProps, nextState:CompState):Bool
 	{
 		trace('propsChanged:${nextProps!=props}');
 		//if(nextProps!=props)			props.compare(nextProps);
@@ -95,15 +103,19 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 		return nextProps!=props;
 	}
 	
-	/*static function mapDispatchToProps(dispatch:Dispatch):Dynamic
+	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
     {
 		
         return {
-			setThemeColor: function() dispatch(AppAction.SetTheme('violet'))//,
+			redirect: function(path:String,props:DataProps) return dispatch(LocationAccess.redirect(
+				['/Data/Contacts/:section?/:action?/:id?',
+				'/Data/Deals/:section?/:action?/:id?',
+				'/Data/Accounts/:section?/:action?/:id?'],path,props))
+			//setThemeColor: function() dispatch(AppAction.SetTheme('violet'))//,
 			//initChildren: function() dispatch()
 		};
     }
-
+	/*
 	static function mapStateToProps(aState:AppState) {
 		var uState:UserProps = aState.user;
 		trace(uState.first_name);
@@ -157,15 +169,31 @@ class Data extends ReactComponentOf<RouteTabProps,CompState>
 	function internalRedirect(path:String = '/Data/Contacts/List/get')
 	{
 		trace('${props.location.pathname} $path');
-		//trace(props.match);
+		//trace(props.match);Action<TReturn>(cb:Dispatch->(Void->TState)->TReturn);
+		if(props.location.pathname != path)
+		{
+		/*	props.history.push(path);
+			return null;
+		}
+		var thunk:Dynamic = null;*/
 		if(path != props.location.pathname)
-		App.store.dispatch(
+			props.redirect(path, props);
+		
+		//App.store.dispatch(thunk);
+		/*App.store.dispatch(
 			LocationAccess.redirect(
 				['/Data/Contacts/:section?/:action?/:id?',
 				'/Data/Deals/:section?/:action?/:id?',
-				'/Data/Accounts/:section?/:action?/:id?'],path,props));
+				'/Data/Accounts/:section?/:action?/:id?'],path,props);/*.then(
+					function(d:Dynamic){
+						trace('ff $d');
+					},
+					function(d:Dynamic){
+						trace('rejected:$d');
+					}
+				);*/
 		//props.history.push(path);
-		return null;
+		}
 	}
 	
 	/*function TabLink(rprops)

@@ -7,6 +7,7 @@ import App;
 import action.AppAction;
 import haxe.Http;
 import haxe.Json;
+import haxe.Constraints.Function;
 import haxe.ds.StringMap;
 import js.Browser;
 import js.Cookie;
@@ -80,6 +81,7 @@ class AppStore
 			case ApplySubState(subState):
 				copy(state,subState);
 			case Data(dataAction):
+				trace(dataAction);
 				switch (dataAction)
 				{
 					case ContactsLoaded(data):
@@ -127,12 +129,15 @@ class AppStore
 			case Data(action):
 				//store.dispatch(action);		
 				next();
+			//case Thunk.Action(f):
+				//store.dispatch(action);
 			case Status(action):	
 				store.dispatch(action);
 			case User(action):
 				store.dispatch(action);
 			//default: next();
 			default: 
+				//store.dispatch(action);
 				next();
 				//store.dispatch(action);
 		}

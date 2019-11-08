@@ -56,7 +56,7 @@ using Lambda;
 class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
-		{label:'Liste',action:'restore',section: 'List'},		
+		{label:'Schließen',action:'restore',section: 'List'},		
 		{label:'Speichern + Schließen',action:'updateAndClose'},
 		{label:'Speichern',action:'update'},
 		{label:'Neu', action:'insert'},
@@ -106,7 +106,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				trace(actualState);
 			});	
 		}
-		else if(initialState.id!=null && props.dataStore.contactData == null){			
+		else if(initialState.id!=null && (props.dataStore.contactData == null || !props.dataStore.contactData.exists(initialState.id))){			
 			//actualState = copy(initialState);
 			trace(actualState);
 			trace('no data - redirect');

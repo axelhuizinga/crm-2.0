@@ -195,19 +195,18 @@ class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		match.params.action = 'get';
 		trace(state.dataTable.length);
 		props.select(0, null,match, UnselectAll);	
-		trace(formRef !=null);
-		if(formRef !=null)	 
-		{
-			var trs:NodeList = formRef.current.querySelectorAll('tr');				
-			trace(trs.length);
-			for(i in 0...trs.length){
-				var tre:TableRowElement = cast(trs.item(i), TableRowElement);
-				if(tre.classList.contains('is-selected')){
-					trace('unselect:${tre.dataset.id}');
-					tre.classList.remove('is-selected');
-				}
-			};
-		}
+		//trace(formRef !=null);
+
+		var trs:NodeList = Browser.document.querySelectorAll('.tabComponentForm tr');				
+		trace(trs.length);
+		for(i in 0...trs.length){
+			var tre:TableRowElement = cast(trs.item(i), TableRowElement);
+			if(tre.classList.contains('is-selected')){
+				trace('unselect:${tre.dataset.id}');
+				tre.classList.remove('is-selected');
+			}
+		};
+		Browser.document.querySelector('[class="grid-container-inner"]').scrollTop = 0;
 	}
 		
 	override public function componentDidMount():Void 

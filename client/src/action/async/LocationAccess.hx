@@ -12,16 +12,18 @@ class LocationAccess
 	public static function redirect(routes:Array<String>,to:String,props:RouteRenderProps) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			//trace(props.location);			
+			trace(props.location.pathname);			
+			trace(to);
 			var match:react.router.RouterMatch = null;
 			for(route in routes)
 			{
 				match = matchPath(props.location.pathname,{
+				//match = matchPath(to,{
 					path:route,
 					exact:true,
 					strict:false
 				});
-				//trace('$route $match');	
+				trace('$route => $match');	
 				if(match!=null)
 				{
 					return null;

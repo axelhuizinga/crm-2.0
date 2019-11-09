@@ -16,8 +16,8 @@ class Observer{
 				try{
 					if(property=='co_field')
 					{
-					trace('$value ${Reflect.getProperty(receiver, property)}');
-					trace('$value ${Reflect.getProperty(target, property)}');
+						trace('$value ${Reflect.getProperty(receiver, property)}');
+						trace('$value ${Reflect.getProperty(target, property)}');
 					}
 
 					//trace(target);

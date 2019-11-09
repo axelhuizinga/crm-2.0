@@ -66,8 +66,12 @@ class ContactsModel
 		'first_name'=>{label:'Vorname', flexGrow:0},
 		'last_name'=>{label:'Name', flexGrow:0},
 		'email'=>{label:'Email'},
-		'phone_number'=>{label:'Telefon'},		
-		'company_name'=>{label: 'Firmenname', flexGrow:1},
+		'phone_number'=>{label:'Telefon'},				
+		'address'=>{label: 'Straße'},		
+		'address_2'=>{label: 'Hausnummer'},		
+		'co_field'=>{label: 'Adresszusatz', flexGrow:1},
+		'postal_code'=>{label: 'PLZ'},
+		'city'=>{label: 'Ort'},
 		'state' => {label:'Aktiv', className: 'tCenter',
 			cellFormat:function(v:String) 
 			{

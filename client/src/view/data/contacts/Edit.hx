@@ -102,7 +102,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			trace(actualState);		
 			//OK we got the data
 			actualState = view.shared.io.Observer.run(actualState, function(newState){
-				//actualState = newState;
+				actualState = newState;
 				trace(actualState);
 			});	
 		}

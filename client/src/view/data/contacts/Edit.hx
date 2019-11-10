@@ -99,12 +99,15 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		{
 			initialState = loadContactData(initialState.id);
 			//actualState = copy(initialState);
-			trace(actualState);		
+			//select(props.data['id'], 
+					//[Std.int(props.data['id'])=>props.data], props.parentComponent.props.match);
+			trace(actualState);	
+			//props.select(initialState.id,[initialState.id => initialState], props.match);
 			//OK we got the data
-			actualState = view.shared.io.Observer.run(actualState, function(newState){
+		/*	actualState = view.shared.io.Observer.run(actualState, function(newState){
 				actualState = newState;
 				trace(actualState);
-			});	
+			});	*/
 		}
 		else if(initialState.id!=null && (props.dataStore.contactData == null || !props.dataStore.contactData.exists(initialState.id))){			
 			//actualState = copy(initialState);
@@ -173,6 +176,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				actualState = newState;
 			trace(actualState);
 		});
+		//props.select(initialState.id,[initialState.id => initialState], props.match);
 		return c;
 	}
 	
@@ -320,14 +324,17 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				];	
 			case 'update':
 				Reflect.deleteField(aState,'creation_date');
+				trace('creation_date: ${aState.creation_date} ${state.initialState.creation_date}');
+				var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialState.id);
+				trace(initiallyLoaded);
 				for(f in fieldNames)
 				{
 					//KEEP FIELDS WITH VALUES CHANGED
 					//trace('$f =>${Reflect.field(aState,f)}<=');
-					if(Reflect.field(aState,f)==Reflect.field(state.initialState,f))
+					if(Reflect.field(aState,f)==initiallyLoaded[f])
 						Reflect.deleteField(aState,f);
 					else 
-						trace('$f:${Reflect.field(aState,f)}==${Reflect.field(state.initialState,f)}<<');
+						trace('$f:${Reflect.field(aState,f)}==${initiallyLoaded[f]}<<');
 				}
 				trace(aState);
 				

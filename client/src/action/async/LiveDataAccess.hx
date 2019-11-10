@@ -71,6 +71,7 @@ class LiveDataAccess
 			trace(tableRoot);
 			trace(Reflect.fields(aState));
 			//trace(aState);
+			trace(props.data);
 			var sData:IntMap<Map<String,Dynamic>> = null;
 			switch(tableRoot[1])
 			{
@@ -98,23 +99,27 @@ class LiveDataAccess
 
 	static function selectType(id:Dynamic,data:IntMap<Map<String,Dynamic>>,sData:IntMap<Map<String,Dynamic>>, sT:SelectType):IntMap<Map<String,Dynamic>>
 	{
-		switch(sT)
+		return switch(sT)
 		{
 			case All:
 				sData = new IntMap();
 				for(k=>v in data.keyValueIterator())
 					sData.set(k,v);
+				sData;
 			case One:
 				sData.set(id,data.get(id));
+				sData;
 			case Unselect:
 				sData.remove(id);
+				sData;
 			case UnselectAll:
 				sData = new IntMap();
 			default:
+				trace(data);
 				sData = new IntMap();
 				sData.set(id,data.get(id));
-		}
-		return sData;
+				sData;
+		}	
 	}
 
 }

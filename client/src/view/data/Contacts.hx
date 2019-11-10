@@ -126,7 +126,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
 			},
-			select:function(id:Int,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
+			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
 			{
 				trace('select:$id selectType:${selectType}');
 				//dispatch(DataAction.CreateSelect(id,data,match));

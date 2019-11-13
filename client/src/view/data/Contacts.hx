@@ -63,12 +63,12 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
 	
-	public static var initialState:Contact=
+	public static var initialState:Contact;/*=
 	{
 		id:0,
 		edited_by: 0,
 		mandator: 0
-	};
+	};*/
 
 	public function new(props) 
 	{

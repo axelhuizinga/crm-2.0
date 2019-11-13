@@ -165,7 +165,8 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		trace('loading:$id');
 		if(id == null)
 			return null;
-		var c:Contact = {edited_by: props.user.id,mandator: 0};
+		var c:Contact = new Contact({edited_by: props.user.id,mandator: 0});
+		//{edited_by: props.user.id,mandator: 0};
 		var data = props.dataStore.contactData.get(id);
 		trace(data);
 		for(k=>v in data.keyValueIterator())

@@ -1,8 +1,48 @@
 package model;
+
+typedef ContactProps = {
+	?id:Int,
+	?mandator:Int,
+	?creation_date:String,
+	?state:String,
+	?use_email:Bool,
+	?company_name:String,
+	?co_field:String,
+	?phone_code:String,
+	?phone_number:String,
+	?fax:String,
+	?title:String,
+	?title_pro:String,
+	?first_name:String,
+	?last_name:String,
+	?address:String,
+	?address_2:String,
+	?city:String,
+	?postal_code:String,
+	?country_code:String,
+	?gender:String,
+	?date_of_birth:String,
+	?mobile:String,
+	?email:String,
+	?comments:String,
+	?edited_by:Int,
+	?merged:Array<Int>,
+	?last_locktime:String,
+	?owner:Int
+};
+
 class Contact extends ORM
 {
+		public function new(props:ContactProps) {
+		super(props);
+		for(f in Reflect.fields(props))
+		{
+			Reflect.setField(this, f, Reflect.field(props, f));
+		}
+	}
+
 	//{"type":"bigint","default":"null","attnum":"1"}
-	public var id(get,set):Int;
+	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
 	function get_id():Int{
@@ -11,7 +51,7 @@ class Contact extends ORM
 
 	function set_id(x:Int):Int{
 
-		modified(this,id);
+		modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -23,10 +63,12 @@ class Contact extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		id = 'null';
 		return id;
-	}//{"type":"bigint","default":"0","attnum":"2"}
-	public var mandator(get,set):Int;
+	}
+
+	//{"type":"bigint","default":"0","attnum":"2"}
+	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
 	function get_mandator():Int{
@@ -35,7 +77,7 @@ class Contact extends ORM
 
 	function set_mandator(x:Int):Int{
 
-		modified(this,mandator);
+		modified('mandator');
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 
@@ -47,10 +89,12 @@ class Contact extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = 0;
+		mandator = '0';
 		return mandator;
-	}//{"type":"timestamp(0) without time zone","default":"CURRENT_TIMESTAMP","attnum":"3"}
-	public var creation_date(get,set):String;
+	}
+
+	//{"type":"timestamp(0) without time zone","default":"CURRENT_TIMESTAMP","attnum":"3"}
+	@:isVar public var creation_date(get,set):String;
 	var initial_creation_date:String;
 	
 	function get_creation_date():String{
@@ -59,7 +103,7 @@ class Contact extends ORM
 
 	function set_creation_date(x:String):String{
 
-		modified(this,creation_date);
+		modified('creation_date');
 		creation_date = x;
 		if(initial_creation_date == null)
 			initial_creation_date = creation_date; 
@@ -71,10 +115,12 @@ class Contact extends ORM
 	}
 
 	public function clear_creation_date():String{
-		creation_date = CURRENT_TIMESTAMP;
+		creation_date = 'CURRENT_TIMESTAMP';
 		return creation_date;
-	}//{"type":"character varying(64)","default":"'contact'","attnum":"4"}
-	public var state(get,set):String;
+	}
+
+	//{"type":"character varying(64)","default":"'contact'","attnum":"4"}
+	@:isVar public var state(get,set):String;
 	var initial_state:String;
 	
 	function get_state():String{
@@ -83,7 +129,7 @@ class Contact extends ORM
 
 	function set_state(x:String):String{
 
-		modified(this,state);
+		modified('state');
 		state = x;
 		if(initial_state == null)
 			initial_state = state; 
@@ -95,34 +141,38 @@ class Contact extends ORM
 	}
 
 	public function clear_state():String{
-		state = 'contact';
+		state = ''contact'';
 		return state;
-	}//{"type":"boolean","default":"false","attnum":"5"}
-	public var use_email(get,set):String;
-	var initial_use_email:String;
-	
-	function get_use_email():String{
-			return use_email;
 	}
 
-	function set_use_email(x:String):String{
+	//{"type":"boolean","default":"false","attnum":"5"}
+	@:isVar public var use_email(get,set):Bool;
+	var initial_use_email:Bool;
+	
+	function get_use_email():Bool{
+		return use_email;
+	}
 
-		modified(this,use_email);
+	function set_use_email(x:Bool):Bool{
+
+		modified('use_email');
 		use_email = x;
 		if(initial_use_email == null)
 			initial_use_email = use_email; 
 		return use_email;
 	}
 
-	public function reset_use_email():String{
+	public function reset_use_email():Bool{
 		return initial_use_email;
 	}
 
-	public function clear_use_email():String{
-		use_email = false;
+	public function clear_use_email():Bool{
+		use_email = 'false';
 		return use_email;
-	}//{"type":"character varying(64)","default":"''","attnum":"6"}
-	public var company_name(get,set):String;
+	}
+
+	//{"type":"character varying(64)","default":"''","attnum":"6"}
+	@:isVar public var company_name(get,set):String;
 	var initial_company_name:String;
 	
 	function get_company_name():String{
@@ -131,7 +181,7 @@ class Contact extends ORM
 
 	function set_company_name(x:String):String{
 
-		modified(this,company_name);
+		modified('company_name');
 		company_name = x;
 		if(initial_company_name == null)
 			initial_company_name = company_name; 
@@ -143,10 +193,12 @@ class Contact extends ORM
 	}
 
 	public function clear_company_name():String{
-		company_name = '';
+		company_name = '''';
 		return company_name;
-	}//{"type":"character varying(100)","default":"''","attnum":"7"}
-	public var co_field(get,set):String;
+	}
+
+	//{"type":"character varying(100)","default":"''","attnum":"7"}
+	@:isVar public var co_field(get,set):String;
 	var initial_co_field:String;
 	
 	function get_co_field():String{
@@ -155,7 +207,7 @@ class Contact extends ORM
 
 	function set_co_field(x:String):String{
 
-		modified(this,co_field);
+		modified('co_field');
 		co_field = x;
 		if(initial_co_field == null)
 			initial_co_field = co_field; 
@@ -167,10 +219,12 @@ class Contact extends ORM
 	}
 
 	public function clear_co_field():String{
-		co_field = '';
+		co_field = '''';
 		return co_field;
-	}//{"type":"character varying(10)","default":"49","attnum":"8"}
-	public var phone_code(get,set):String;
+	}
+
+	//{"type":"character varying(10)","default":"49","attnum":"8"}
+	@:isVar public var phone_code(get,set):String;
 	var initial_phone_code:String;
 	
 	function get_phone_code():String{
@@ -179,7 +233,7 @@ class Contact extends ORM
 
 	function set_phone_code(x:String):String{
 
-		modified(this,phone_code);
+		modified('phone_code');
 		phone_code = x;
 		if(initial_phone_code == null)
 			initial_phone_code = phone_code; 
@@ -191,10 +245,12 @@ class Contact extends ORM
 	}
 
 	public function clear_phone_code():String{
-		phone_code = 49;
+		phone_code = '49';
 		return phone_code;
-	}//{"type":"character varying(18)","default":"''","attnum":"9"}
-	public var phone_number(get,set):String;
+	}
+
+	//{"type":"character varying(18)","default":"''","attnum":"9"}
+	@:isVar public var phone_number(get,set):String;
 	var initial_phone_number:String;
 	
 	function get_phone_number():String{
@@ -203,7 +259,7 @@ class Contact extends ORM
 
 	function set_phone_number(x:String):String{
 
-		modified(this,phone_number);
+		modified('phone_number');
 		phone_number = x;
 		if(initial_phone_number == null)
 			initial_phone_number = phone_number; 
@@ -215,10 +271,12 @@ class Contact extends ORM
 	}
 
 	public function clear_phone_number():String{
-		phone_number = '';
+		phone_number = '''';
 		return phone_number;
-	}//{"type":"character varying(18)","default":"''","attnum":"10"}
-	public var fax(get,set):String;
+	}
+
+	//{"type":"character varying(18)","default":"''","attnum":"10"}
+	@:isVar public var fax(get,set):String;
 	var initial_fax:String;
 	
 	function get_fax():String{
@@ -227,7 +285,7 @@ class Contact extends ORM
 
 	function set_fax(x:String):String{
 
-		modified(this,fax);
+		modified('fax');
 		fax = x;
 		if(initial_fax == null)
 			initial_fax = fax; 
@@ -239,10 +297,12 @@ class Contact extends ORM
 	}
 
 	public function clear_fax():String{
-		fax = '';
+		fax = '''';
 		return fax;
-	}//{"type":"character varying(64)","default":"''","attnum":"11"}
-	public var title(get,set):String;
+	}
+
+	//{"type":"character varying(64)","default":"''","attnum":"11"}
+	@:isVar public var title(get,set):String;
 	var initial_title:String;
 	
 	function get_title():String{
@@ -251,7 +311,7 @@ class Contact extends ORM
 
 	function set_title(x:String):String{
 
-		modified(this,title);
+		modified('title');
 		title = x;
 		if(initial_title == null)
 			initial_title = title; 
@@ -263,10 +323,12 @@ class Contact extends ORM
 	}
 
 	public function clear_title():String{
-		title = '';
+		title = '''';
 		return title;
-	}//{"type":"character varying(64)","default":"''","attnum":"12"}
-	public var title_pro(get,set):String;
+	}
+
+	//{"type":"character varying(64)","default":"''","attnum":"12"}
+	@:isVar public var title_pro(get,set):String;
 	var initial_title_pro:String;
 	
 	function get_title_pro():String{
@@ -275,7 +337,7 @@ class Contact extends ORM
 
 	function set_title_pro(x:String):String{
 
-		modified(this,title_pro);
+		modified('title_pro');
 		title_pro = x;
 		if(initial_title_pro == null)
 			initial_title_pro = title_pro; 
@@ -287,10 +349,12 @@ class Contact extends ORM
 	}
 
 	public function clear_title_pro():String{
-		title_pro = '';
+		title_pro = '''';
 		return title_pro;
-	}//{"type":"character varying(32)","default":"''","attnum":"13"}
-	public var first_name(get,set):String;
+	}
+
+	//{"type":"character varying(32)","default":"''","attnum":"13"}
+	@:isVar public var first_name(get,set):String;
 	var initial_first_name:String;
 	
 	function get_first_name():String{
@@ -299,7 +363,7 @@ class Contact extends ORM
 
 	function set_first_name(x:String):String{
 
-		modified(this,first_name);
+		modified('first_name');
 		first_name = x;
 		if(initial_first_name == null)
 			initial_first_name = first_name; 
@@ -311,10 +375,12 @@ class Contact extends ORM
 	}
 
 	public function clear_first_name():String{
-		first_name = '';
+		first_name = '''';
 		return first_name;
-	}//{"type":"character varying(32)","default":"''","attnum":"14"}
-	public var last_name(get,set):String;
+	}
+
+	//{"type":"character varying(32)","default":"''","attnum":"14"}
+	@:isVar public var last_name(get,set):String;
 	var initial_last_name:String;
 	
 	function get_last_name():String{
@@ -323,7 +389,7 @@ class Contact extends ORM
 
 	function set_last_name(x:String):String{
 
-		modified(this,last_name);
+		modified('last_name');
 		last_name = x;
 		if(initial_last_name == null)
 			initial_last_name = last_name; 
@@ -335,10 +401,12 @@ class Contact extends ORM
 	}
 
 	public function clear_last_name():String{
-		last_name = '';
+		last_name = '''';
 		return last_name;
-	}//{"type":"character varying(64)","default":"''","attnum":"15"}
-	public var address(get,set):String;
+	}
+
+	//{"type":"character varying(64)","default":"''","attnum":"15"}
+	@:isVar public var address(get,set):String;
 	var initial_address:String;
 	
 	function get_address():String{
@@ -347,7 +415,7 @@ class Contact extends ORM
 
 	function set_address(x:String):String{
 
-		modified(this,address);
+		modified('address');
 		address = x;
 		if(initial_address == null)
 			initial_address = address; 
@@ -359,10 +427,12 @@ class Contact extends ORM
 	}
 
 	public function clear_address():String{
-		address = '';
+		address = '''';
 		return address;
-	}//{"type":"character varying(64)","default":"''","attnum":"16"}
-	public var address_2(get,set):String;
+	}
+
+	//{"type":"character varying(64)","default":"''","attnum":"16"}
+	@:isVar public var address_2(get,set):String;
 	var initial_address_2:String;
 	
 	function get_address_2():String{
@@ -371,7 +441,7 @@ class Contact extends ORM
 
 	function set_address_2(x:String):String{
 
-		modified(this,address_2);
+		modified('address_2');
 		address_2 = x;
 		if(initial_address_2 == null)
 			initial_address_2 = address_2; 
@@ -383,10 +453,12 @@ class Contact extends ORM
 	}
 
 	public function clear_address_2():String{
-		address_2 = '';
+		address_2 = '''';
 		return address_2;
-	}//{"type":"character varying(50)","default":"''","attnum":"17"}
-	public var city(get,set):String;
+	}
+
+	//{"type":"character varying(50)","default":"''","attnum":"17"}
+	@:isVar public var city(get,set):String;
 	var initial_city:String;
 	
 	function get_city():String{
@@ -395,7 +467,7 @@ class Contact extends ORM
 
 	function set_city(x:String):String{
 
-		modified(this,city);
+		modified('city');
 		city = x;
 		if(initial_city == null)
 			initial_city = city; 
@@ -407,10 +479,12 @@ class Contact extends ORM
 	}
 
 	public function clear_city():String{
-		city = '';
+		city = '''';
 		return city;
-	}//{"type":"character varying(10)","default":"''","attnum":"18"}
-	public var postal_code(get,set):String;
+	}
+
+	//{"type":"character varying(10)","default":"''","attnum":"18"}
+	@:isVar public var postal_code(get,set):String;
 	var initial_postal_code:String;
 	
 	function get_postal_code():String{
@@ -419,7 +493,7 @@ class Contact extends ORM
 
 	function set_postal_code(x:String):String{
 
-		modified(this,postal_code);
+		modified('postal_code');
 		postal_code = x;
 		if(initial_postal_code == null)
 			initial_postal_code = postal_code; 
@@ -431,10 +505,12 @@ class Contact extends ORM
 	}
 
 	public function clear_postal_code():String{
-		postal_code = '';
+		postal_code = '''';
 		return postal_code;
-	}//{"type":"character varying(3)","default":"''","attnum":"19"}
-	public var country_code(get,set):String;
+	}
+
+	//{"type":"character varying(3)","default":"''","attnum":"19"}
+	@:isVar public var country_code(get,set):String;
 	var initial_country_code:String;
 	
 	function get_country_code():String{
@@ -443,7 +519,7 @@ class Contact extends ORM
 
 	function set_country_code(x:String):String{
 
-		modified(this,country_code);
+		modified('country_code');
 		country_code = x;
 		if(initial_country_code == null)
 			initial_country_code = country_code; 
@@ -455,10 +531,12 @@ class Contact extends ORM
 	}
 
 	public function clear_country_code():String{
-		country_code = '';
+		country_code = '''';
 		return country_code;
-	}//{"type":"contacts_gender","default":"''","attnum":"20"}
-	public var gender(get,set):String;
+	}
+
+	//{"type":"contacts_gender","default":"''","attnum":"20"}
+	@:isVar public var gender(get,set):String;
 	var initial_gender:String;
 	
 	function get_gender():String{
@@ -467,7 +545,7 @@ class Contact extends ORM
 
 	function set_gender(x:String):String{
 
-		modified(this,gender);
+		modified('gender');
 		gender = x;
 		if(initial_gender == null)
 			initial_gender = gender; 
@@ -479,10 +557,12 @@ class Contact extends ORM
 	}
 
 	public function clear_gender():String{
-		gender = '';
+		gender = '''';
 		return gender;
-	}//{"type":"date","default":"null","attnum":"21"}
-	public var date_of_birth(get,set):String;
+	}
+
+	//{"type":"date","default":"","attnum":"21"}
+	@:isVar public var date_of_birth(get,set):String;
 	var initial_date_of_birth:String;
 	
 	function get_date_of_birth():String{
@@ -491,7 +571,7 @@ class Contact extends ORM
 
 	function set_date_of_birth(x:String):String{
 
-		modified(this,date_of_birth);
+		modified('date_of_birth');
 		date_of_birth = x;
 		if(initial_date_of_birth == null)
 			initial_date_of_birth = date_of_birth; 
@@ -503,10 +583,12 @@ class Contact extends ORM
 	}
 
 	public function clear_date_of_birth():String{
-		date_of_birth = null;
+		date_of_birth = '';
 		return date_of_birth;
-	}//{"type":"character varying(19)","default":"''","attnum":"22"}
-	public var mobile(get,set):String;
+	}
+
+	//{"type":"character varying(19)","default":"''","attnum":"22"}
+	@:isVar public var mobile(get,set):String;
 	var initial_mobile:String;
 	
 	function get_mobile():String{
@@ -515,7 +597,7 @@ class Contact extends ORM
 
 	function set_mobile(x:String):String{
 
-		modified(this,mobile);
+		modified('mobile');
 		mobile = x;
 		if(initial_mobile == null)
 			initial_mobile = mobile; 
@@ -527,10 +609,12 @@ class Contact extends ORM
 	}
 
 	public function clear_mobile():String{
-		mobile = '';
+		mobile = '''';
 		return mobile;
-	}//{"type":"character varying(64)","default":"''","attnum":"23"}
-	public var email(get,set):String;
+	}
+
+	//{"type":"character varying(64)","default":"''","attnum":"23"}
+	@:isVar public var email(get,set):String;
 	var initial_email:String;
 	
 	function get_email():String{
@@ -539,7 +623,7 @@ class Contact extends ORM
 
 	function set_email(x:String):String{
 
-		modified(this,email);
+		modified('email');
 		email = x;
 		if(initial_email == null)
 			initial_email = email; 
@@ -551,10 +635,12 @@ class Contact extends ORM
 	}
 
 	public function clear_email():String{
-		email = '';
+		email = '''';
 		return email;
-	}//{"type":"character varying(4096)","default":"''","attnum":"24"}
-	public var comments(get,set):String;
+	}
+
+	//{"type":"character varying(4096)","default":"''","attnum":"24"}
+	@:isVar public var comments(get,set):String;
 	var initial_comments:String;
 	
 	function get_comments():String{
@@ -563,7 +649,7 @@ class Contact extends ORM
 
 	function set_comments(x:String):String{
 
-		modified(this,comments);
+		modified('comments');
 		comments = x;
 		if(initial_comments == null)
 			initial_comments = comments; 
@@ -575,10 +661,12 @@ class Contact extends ORM
 	}
 
 	public function clear_comments():String{
-		comments = '';
+		comments = '''';
 		return comments;
-	}//{"type":"bigint","default":"","attnum":"25"}
-	public var edited_by(get,set):Int;
+	}
+
+	//{"type":"bigint","default":"0","attnum":"25"}
+	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
 	function get_edited_by():Int{
@@ -587,7 +675,7 @@ class Contact extends ORM
 
 	function set_edited_by(x:Int):Int{
 
-		modified(this,edited_by);
+		modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -599,34 +687,38 @@ class Contact extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = ;
+		edited_by = '0';
 		return edited_by;
-	}//{"type":"bigint[]","default":"","attnum":"26"}
-	public var merged(get,set):String;
-	var initial_merged:String;
-	
-	function get_merged():String{
-			return merged;
 	}
 
-	function set_merged(x:String):String{
+	//{"type":"bigint[]","default":"{}","attnum":"26"}
+	@:isVar public var merged(get,set):Array<Int>;
+	var initial_merged:Array<Int>;
+	
+	function get_merged():Array<Int>{
+		return merged;
+	}
 
-		modified(this,merged);
+	function set_merged(x:Array<Int>):Array<Int>{
+
+		modified('merged');
 		merged = x;
 		if(initial_merged == null)
 			initial_merged = merged; 
 		return merged;
 	}
 
-	public function reset_merged():String{
+	public function reset_merged():Array<Int>{
 		return initial_merged;
 	}
 
-	public function clear_merged():String{
-		merged = ;
+	public function clear_merged():Array<Int>{
+		merged = '{}';
 		return merged;
-	}//{"type":"timestamp(0) without time zone","default":"CURRENT_TIMESTAMP","attnum":"27"}
-	public var last_locktime(get,set):String;
+	}
+
+	//{"type":"timestamp(0) without time zone","default":"CURRENT_TIMESTAMP","attnum":"27"}
+	@:isVar public var last_locktime(get,set):String;
 	var initial_last_locktime:String;
 	
 	function get_last_locktime():String{
@@ -635,7 +727,7 @@ class Contact extends ORM
 
 	function set_last_locktime(x:String):String{
 
-		modified(this,last_locktime);
+		modified('last_locktime');
 		last_locktime = x;
 		if(initial_last_locktime == null)
 			initial_last_locktime = last_locktime; 
@@ -647,7 +739,33 @@ class Contact extends ORM
 	}
 
 	public function clear_last_locktime():String{
-		last_locktime = CURRENT_TIMESTAMP;
+		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
+	}
+
+	//{"type":"bigint","default":0,"attnum":"28"}
+	@:isVar public var owner(get,set):Int;
+	var initial_owner:Int;
+	
+	function get_owner():Int{
+		return owner;
+	}
+
+	function set_owner(x:Int):Int{
+
+		modified('owner');
+		owner = x;
+		if(initial_owner == null)
+			initial_owner = owner; 
+		return owner;
+	}
+
+	public function reset_owner():Int{
+		return initial_owner;
+	}
+
+	public function clear_owner():Int{
+		owner = '0';
+		return owner;
 	}
 }

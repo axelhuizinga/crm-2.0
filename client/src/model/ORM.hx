@@ -5,14 +5,14 @@ using Lambda;
 class ORM {
 	
 	public var fieldsModified:Array<String>;
-	var edited_by:Int;
+	//var edited_by:Int;
 	static var fieldNames:Array<String>;
-	var mandator:Int;
+	//var mandator:Int;
 
 	public function new(props:Dynamic) {
 		fieldsModified = new Array();
-		edited_by = props.user.id;
-		mandator = props.mandator;
+		//edited_by = props.user.id;
+		//mandator = props.mandator;
 	}
 
 	public function modified(?attName:String):Bool {

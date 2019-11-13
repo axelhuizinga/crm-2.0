@@ -1,4 +1,5 @@
 package view.data.accounts;
+import hxbit.NetworkHost.NetworkClient;
 import haxe.Json;
 import js.lib.Promise;
 import haxe.ds.IntMap;
@@ -66,11 +67,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		trace(props.match.params);
-		initialState = {
+		initialState = new Contact({
 			id:null,//2000328,
 			edited_by: props.user.id,
 			mandator: props.user.mandator
-		};	
+		});	
 
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
@@ -140,7 +141,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace('loading:$id');
 		if(id == null)
 			return null;
-		var c:Contact = {edited_by: props.user.id,mandator: 0};
+		var c:Contact = new Contact({edited_by: props.user.id,mandator: 0});
 		var data = props.dataStore.contactData.get(id);
 		trace(data);
 		for(k=>v in data.keyValueIterator())

@@ -1,8 +1,26 @@
 package model;
+
+typedef RoleProps = {
+	?id:Int,
+	?name:String,
+	?description:String,
+	?permissions:String,
+	?edited_by:Int,
+	?mandator:Int
+};
+
 class Role extends ORM
 {
+		public function new(props:RoleProps) {
+		super(props);
+		for(f in Reflect.fields(props))
+		{
+			Reflect.setField(this, f, Reflect.field(props, f));
+		}
+	}
+
 	//{"type":"bigint","default":"null","attnum":"1"}
-	public var id(get,set):Int;
+	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
 	function get_id():Int{
@@ -11,7 +29,7 @@ class Role extends ORM
 
 	function set_id(x:Int):Int{
 
-		modified(this,id);
+		modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -23,10 +41,12 @@ class Role extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		id = 'null';
 		return id;
-	}//{"type":"character varying(64)","default":"","attnum":"2"}
-	public var name(get,set):String;
+	}
+
+	//{"type":"character varying(64)","default":"","attnum":"2"}
+	@:isVar public var name(get,set):String;
 	var initial_name:String;
 	
 	function get_name():String{
@@ -35,7 +55,7 @@ class Role extends ORM
 
 	function set_name(x:String):String{
 
-		modified(this,name);
+		modified('name');
 		name = x;
 		if(initial_name == null)
 			initial_name = name; 
@@ -47,10 +67,12 @@ class Role extends ORM
 	}
 
 	public function clear_name():String{
-		name = ;
+		name = '';
 		return name;
-	}//{"type":"character varying(2048)","default":"''","attnum":"3"}
-	public var description(get,set):String;
+	}
+
+	//{"type":"character varying(2048)","default":"''","attnum":"3"}
+	@:isVar public var description(get,set):String;
 	var initial_description:String;
 	
 	function get_description():String{
@@ -59,7 +81,7 @@ class Role extends ORM
 
 	function set_description(x:String):String{
 
-		modified(this,description);
+		modified('description');
 		description = x;
 		if(initial_description == null)
 			initial_description = description; 
@@ -71,10 +93,12 @@ class Role extends ORM
 	}
 
 	public function clear_description():String{
-		description = '';
+		description = '''';
 		return description;
-	}//{"type":"jsonb","default":"'{\"users\": [], \"groups\": [], \"routes\": []}'","attnum":"4"}
-	public var permissions(get,set):String;
+	}
+
+	//{"type":"jsonb","default":"'{\"users\": [], \"groups\": [], \"routes\": []}'","attnum":"4"}
+	@:isVar public var permissions(get,set):String;
 	var initial_permissions:String;
 	
 	function get_permissions():String{
@@ -83,7 +107,7 @@ class Role extends ORM
 
 	function set_permissions(x:String):String{
 
-		modified(this,permissions);
+		modified('permissions');
 		permissions = x;
 		if(initial_permissions == null)
 			initial_permissions = permissions; 
@@ -95,10 +119,12 @@ class Role extends ORM
 	}
 
 	public function clear_permissions():String{
-		permissions = '{"users": [], "groups": [], "routes": []}';
+		permissions = ''{"users": [], "groups": [], "routes": []}'';
 		return permissions;
-	}//{"type":"bigint","default":"","attnum":"5"}
-	public var edited_by(get,set):Int;
+	}
+
+	//{"type":"bigint","default":0,"attnum":"5"}
+	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
 	function get_edited_by():Int{
@@ -107,7 +133,7 @@ class Role extends ORM
 
 	function set_edited_by(x:Int):Int{
 
-		modified(this,edited_by);
+		modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -119,10 +145,12 @@ class Role extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = ;
+		edited_by = '0';
 		return edited_by;
-	}//{"type":"bigint","default":"","attnum":"6"}
-	public var mandator(get,set):Int;
+	}
+
+	//{"type":"bigint","default":0,"attnum":"6"}
+	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
 	function get_mandator():Int{
@@ -131,7 +159,7 @@ class Role extends ORM
 
 	function set_mandator(x:Int):Int{
 
-		modified(this,mandator);
+		modified('mandator');
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 
@@ -143,7 +171,7 @@ class Role extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = ;
+		mandator = '0';
 		return mandator;
 	}
 }

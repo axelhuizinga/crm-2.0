@@ -169,16 +169,31 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		//{edited_by: props.user.id,mandator: 0};
 		var data = props.dataStore.contactData.get(id);
 		trace(data);
+		
+		//var m:Array<String> = Type.getInstanceFields(Type.getClass(c));//Reflect.fields(c);
+		//trace(m.toString());
+
+
 		for(k=>v in data.keyValueIterator())
 		{
-			Reflect.setField(c,k, v);
+			try{
+				//trace('$k:$v');
+				Reflect.setField(c,k, v);
+				}
+			catch(ex:Dynamic)
+			{
+				trace(ex);
+			}		
 		}
-		actualState = view.shared.io.Observer.run(c, function(newState){
+		trace(c.creation_date);
+		actualState = initialState = c.copy(data);
+		trace(initialState);		
+		/*actualState = view.shared.io.Observer.run(initialState, function(newState){
 				actualState = newState;
 			trace(actualState);
-		});
+		});*/
 		//props.select(initialState.id,[initialState.id => initialState], props.match);
-		return c;
+		return initialState;
 	}
 	
 	/*static function mapStateToProps(aState:AppState) 
@@ -325,20 +340,22 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				];	
 			case 'update':
 				Reflect.deleteField(aState,'creation_date');
-				trace('creation_date: ${aState.creation_date} ${state.initialState.creation_date}');
-				var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialState.id);
-				trace(initiallyLoaded);
+				trace('${initialState.id} :: creation_date: ${aState.creation_date} ${state.initialState.creation_date}');
+				//var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialState.id);
+				trace(initialState);
 				for(f in fieldNames)
 				{
 					//KEEP FIELDS WITH VALUES CHANGED
 					//trace('$f =>${Reflect.field(aState,f)}<=');
-					if(Reflect.field(aState,f)==initiallyLoaded[f])
+					
+					//if(Reflect.field(aState,f)==initiallyLoaded[f])
+					if(Reflect.field(aState,f)==Reflect.field(initialState,f))
 						Reflect.deleteField(aState,f);
 					else 
-						trace('$f:${Reflect.field(aState,f)}==${initiallyLoaded[f]}<<');
+						trace('$f:${Reflect.field(aState,f)}==${Reflect.field(initialState,f)}<<');
 				}
 				trace(aState);
-				
+				trace(initialState);
 				if(Reflect.fields(aState).length==0)
 				{
 					//TODO: NOCHANGE ACTION
@@ -347,9 +364,10 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				dbaProps.dataSource = [
 					"contacts" => [
 						"data" => aState,
-						"filter" => 'id|${state.initialState.id}'
+						"filter" => 'id|${initialState.id}'
 					]
 				];
+				trace(dbaProps.dataSource["contacts"]["filter"]);
 		}
 		App.store.dispatch(DBAccess.execute(dbaProps));
 

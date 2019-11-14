@@ -13,6 +13,7 @@ typedef ProductProps = {
 
 class Product extends ORM
 {
+	public static var varNames:String = 'id,name,description,value,attributes,mandator,active,edited_by';
 		public function new(props:ProductProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -43,11 +44,11 @@ class Product extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
-	//{"type":"character varying(1024)","default":"","attnum":"2"}
+	//{"type":"character varying(1024)","default":"''","attnum":"2"}
 	@:isVar public var name(get,set):String;
 	var initial_name:String;
 	
@@ -73,7 +74,7 @@ class Product extends ORM
 		return name;
 	}
 
-	//{"type":"character varying(4096)","default":"","attnum":"3"}
+	//{"type":"character varying(4096)","default":"''","attnum":"3"}
 	@:isVar public var description(get,set):String;
 	var initial_description:String;
 	
@@ -99,7 +100,7 @@ class Product extends ORM
 		return description;
 	}
 
-	//{"type":"numeric(10,2)","default":"","attnum":"4"}
+	//{"type":"numeric(10,2)","default":"''","attnum":"4"}
 	@:isVar public var value(get,set):String;
 	var initial_value:String;
 	
@@ -147,11 +148,11 @@ class Product extends ORM
 	}
 
 	public function clear_attributes():String{
-		attributes = ''{}'';
+		attributes = '{}';
 		return attributes;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"6"}
+	//{"type":"bigint","default":"null","attnum":"6"}
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -173,7 +174,7 @@ class Product extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = '0';
+		mandator = null;
 		return mandator;
 	}
 
@@ -199,11 +200,11 @@ class Product extends ORM
 	}
 
 	public function clear_active():Bool{
-		active = '1';
+		active = 1;
 		return active;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"8"}
+	//{"type":"bigint","default":"null","attnum":"8"}
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -225,7 +226,7 @@ class Product extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = '0';
+		edited_by = null;
 		return edited_by;
 	}
 }

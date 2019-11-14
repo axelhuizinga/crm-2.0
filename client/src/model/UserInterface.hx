@@ -14,6 +14,7 @@ typedef UserInterfaceProps = {
 
 class UserInterface extends ORM
 {
+	public static var varNames:String = 'id,key,content,classPath,component,edited_by,updated_at,locale,mandator';
 		public function new(props:UserInterfaceProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -44,11 +45,11 @@ class UserInterface extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
-	//{"type":"character varying(64)","default":"","attnum":"2"}
+	//{"type":"character varying(64)","default":"''","attnum":"2"}
 	@:isVar public var key(get,set):String;
 	var initial_key:String;
 	
@@ -74,7 +75,7 @@ class UserInterface extends ORM
 		return key;
 	}
 
-	//{"type":"character varying(64)","default":"","attnum":"3"}
+	//{"type":"character varying(64)","default":"''","attnum":"3"}
 	@:isVar public var content(get,set):String;
 	var initial_content:String;
 	
@@ -100,7 +101,7 @@ class UserInterface extends ORM
 		return content;
 	}
 
-	//{"type":"character varying(512)","default":"","attnum":"4"}
+	//{"type":"character varying(512)","default":"''","attnum":"4"}
 	@:isVar public var classPath(get,set):String;
 	var initial_classPath:String;
 	
@@ -126,7 +127,7 @@ class UserInterface extends ORM
 		return classPath;
 	}
 
-	//{"type":"character varying(64)","default":"","attnum":"5"}
+	//{"type":"character varying(64)","default":"''","attnum":"5"}
 	@:isVar public var component(get,set):String;
 	var initial_component:String;
 	
@@ -152,7 +153,7 @@ class UserInterface extends ORM
 		return component;
 	}
 
-	//{"type":"integer","default":"","attnum":"6"}
+	//{"type":"integer","default":"''","attnum":"6"}
 	@:isVar public var edited_by(get,set):String;
 	var initial_edited_by:String;
 	
@@ -178,7 +179,7 @@ class UserInterface extends ORM
 		return edited_by;
 	}
 
-	//{"type":"timestamp without time zone","default":"","attnum":"7"}
+	//{"type":"timestamp without time zone","default":"'null'","attnum":"7"}
 	@:isVar public var updated_at(get,set):String;
 	var initial_updated_at:String;
 	
@@ -200,11 +201,11 @@ class UserInterface extends ORM
 	}
 
 	public function clear_updated_at():String{
-		updated_at = '';
+		updated_at = 'null';
 		return updated_at;
 	}
 
-	//{"type":"character varying(8)","default":"","attnum":"8"}
+	//{"type":"character varying(8)","default":"''","attnum":"8"}
 	@:isVar public var locale(get,set):String;
 	var initial_locale:String;
 	
@@ -230,7 +231,7 @@ class UserInterface extends ORM
 		return locale;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"9"}
+	//{"type":"bigint","default":"null","attnum":"9"}
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -252,7 +253,7 @@ class UserInterface extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = '0';
+		mandator = null;
 		return mandator;
 	}
 }

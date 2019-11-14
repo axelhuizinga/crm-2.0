@@ -16,6 +16,7 @@ typedef TableFieldProps = {
 
 class TableField extends ORM
 {
+	public static var varNames:String = 'id,table_name,mandator,field_name,readonly,element,any,required,use_as_index,admin_only,field_type';
 		public function new(props:TableFieldProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -46,7 +47,7 @@ class TableField extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
@@ -72,11 +73,11 @@ class TableField extends ORM
 	}
 
 	public function clear_table_name():String{
-		table_name = '''';
+		table_name = '';
 		return table_name;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"3"}
+	//{"type":"bigint","default":"null","attnum":"3"}
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -98,7 +99,7 @@ class TableField extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = '0';
+		mandator = null;
 		return mandator;
 	}
 
@@ -124,7 +125,7 @@ class TableField extends ORM
 	}
 
 	public function clear_field_name():String{
-		field_name = '''';
+		field_name = '';
 		return field_name;
 	}
 
@@ -150,7 +151,7 @@ class TableField extends ORM
 	}
 
 	public function clear_readonly():Bool{
-		readonly = 'false';
+		readonly = false;
 		return readonly;
 	}
 
@@ -176,7 +177,7 @@ class TableField extends ORM
 	}
 
 	public function clear_element():String{
-		element = ''Input'';
+		element = 'Input';
 		return element;
 	}
 
@@ -202,7 +203,7 @@ class TableField extends ORM
 	}
 
 	public function clear_any():String{
-		any = ''{}'';
+		any = '{}';
 		return any;
 	}
 
@@ -228,7 +229,7 @@ class TableField extends ORM
 	}
 
 	public function clear_required():Bool{
-		required = 'false';
+		required = false;
 		return required;
 	}
 
@@ -254,7 +255,7 @@ class TableField extends ORM
 	}
 
 	public function clear_use_as_index():Bool{
-		use_as_index = 'false';
+		use_as_index = false;
 		return use_as_index;
 	}
 
@@ -280,11 +281,11 @@ class TableField extends ORM
 	}
 
 	public function clear_admin_only():Bool{
-		admin_only = 'false';
+		admin_only = false;
 		return admin_only;
 	}
 
-	//{"type":"data_type","default":"","attnum":"11"}
+	//{"type":"data_type","default":"'null'","attnum":"11"}
 	@:isVar public var field_type(get,set):String;
 	var initial_field_type:String;
 	
@@ -306,7 +307,7 @@ class TableField extends ORM
 	}
 
 	public function clear_field_type():String{
-		field_type = '';
+		field_type = 'null';
 		return field_type;
 	}
 }

@@ -36,6 +36,7 @@ typedef StatementProps = {
 
 class Statement extends ORM
 {
+	public static var varNames:String = 'a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,aa,processed,id,edited_by,mandator';
 		public function new(props:StatementProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -44,7 +45,7 @@ class Statement extends ORM
 		}
 	}
 
-	//{"type":"bigint","default":0,"attnum":"1"}
+	//{"type":"bigint","default":"null","attnum":"1"}
 	@:isVar public var a(get,set):Int;
 	var initial_a:Int;
 	
@@ -66,11 +67,11 @@ class Statement extends ORM
 	}
 
 	public function clear_a():Int{
-		a = '0';
+		a = null;
 		return a;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"2"}
+	//{"type":"bigint","default":"null","attnum":"2"}
 	@:isVar public var b(get,set):Int;
 	var initial_b:Int;
 	
@@ -92,11 +93,11 @@ class Statement extends ORM
 	}
 
 	public function clear_b():Int{
-		b = '0';
+		b = null;
 		return b;
 	}
 
-	//{"type":"date","default":"","attnum":"3"}
+	//{"type":"date","default":"'null'","attnum":"3"}
 	@:isVar public var c(get,set):String;
 	var initial_c:String;
 	
@@ -118,11 +119,11 @@ class Statement extends ORM
 	}
 
 	public function clear_c():String{
-		c = '';
+		c = 'null';
 		return c;
 	}
 
-	//{"type":"date","default":"","attnum":"4"}
+	//{"type":"date","default":"'null'","attnum":"4"}
 	@:isVar public var d(get,set):String;
 	var initial_d:String;
 	
@@ -144,11 +145,11 @@ class Statement extends ORM
 	}
 
 	public function clear_d():String{
-		d = '';
+		d = 'null';
 		return d;
 	}
 
-	//{"type":"double precision","default":"","attnum":"5"}
+	//{"type":"double precision","default":"''","attnum":"5"}
 	@:isVar public var e(get,set):String;
 	var initial_e:String;
 	
@@ -196,11 +197,11 @@ class Statement extends ORM
 	}
 
 	public function clear_f():String{
-		f = '''';
+		f = '';
 		return f;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"7"}
+	//{"type":"bigint","default":"null","attnum":"7"}
 	@:isVar public var g(get,set):Int;
 	var initial_g:Int;
 	
@@ -222,7 +223,7 @@ class Statement extends ORM
 	}
 
 	public function clear_g():Int{
-		g = '0';
+		g = null;
 		return g;
 	}
 
@@ -248,7 +249,7 @@ class Statement extends ORM
 	}
 
 	public function clear_h():String{
-		h = '''';
+		h = '';
 		return h;
 	}
 
@@ -274,7 +275,7 @@ class Statement extends ORM
 	}
 
 	public function clear_i():String{
-		i = '''';
+		i = '';
 		return i;
 	}
 
@@ -300,7 +301,7 @@ class Statement extends ORM
 	}
 
 	public function clear_j():String{
-		j = '''';
+		j = '';
 		return j;
 	}
 
@@ -326,7 +327,7 @@ class Statement extends ORM
 	}
 
 	public function clear_k():String{
-		k = '''';
+		k = '';
 		return k;
 	}
 
@@ -352,7 +353,7 @@ class Statement extends ORM
 	}
 
 	public function clear_l():String{
-		l = '''';
+		l = '';
 		return l;
 	}
 
@@ -378,7 +379,7 @@ class Statement extends ORM
 	}
 
 	public function clear_m():String{
-		m = '''';
+		m = '';
 		return m;
 	}
 
@@ -404,7 +405,7 @@ class Statement extends ORM
 	}
 
 	public function clear_n():String{
-		n = '''';
+		n = '';
 		return n;
 	}
 
@@ -430,7 +431,7 @@ class Statement extends ORM
 	}
 
 	public function clear_o():String{
-		o = '''';
+		o = '';
 		return o;
 	}
 
@@ -456,7 +457,7 @@ class Statement extends ORM
 	}
 
 	public function clear_p():String{
-		p = '''';
+		p = '';
 		return p;
 	}
 
@@ -482,7 +483,7 @@ class Statement extends ORM
 	}
 
 	public function clear_q():String{
-		q = '''';
+		q = '';
 		return q;
 	}
 
@@ -508,7 +509,7 @@ class Statement extends ORM
 	}
 
 	public function clear_r():String{
-		r = '''';
+		r = '';
 		return r;
 	}
 
@@ -534,7 +535,7 @@ class Statement extends ORM
 	}
 
 	public function clear_s():String{
-		s = '''';
+		s = '';
 		return s;
 	}
 
@@ -560,7 +561,7 @@ class Statement extends ORM
 	}
 
 	public function clear_t():String{
-		t = '''';
+		t = '';
 		return t;
 	}
 
@@ -586,7 +587,7 @@ class Statement extends ORM
 	}
 
 	public function clear_u():String{
-		u = '''';
+		u = '';
 		return u;
 	}
 
@@ -612,7 +613,7 @@ class Statement extends ORM
 	}
 
 	public function clear_v():String{
-		v = '''';
+		v = '';
 		return v;
 	}
 
@@ -638,7 +639,7 @@ class Statement extends ORM
 	}
 
 	public function clear_w():String{
-		w = '''';
+		w = '';
 		return w;
 	}
 
@@ -664,7 +665,7 @@ class Statement extends ORM
 	}
 
 	public function clear_x():String{
-		x = '''';
+		x = '';
 		return x;
 	}
 
@@ -690,7 +691,7 @@ class Statement extends ORM
 	}
 
 	public function clear_y():String{
-		y = '''';
+		y = '';
 		return y;
 	}
 
@@ -716,11 +717,11 @@ class Statement extends ORM
 	}
 
 	public function clear_z():String{
-		z = '''';
+		z = '';
 		return z;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"27"}
+	//{"type":"bigint","default":"null","attnum":"27"}
 	@:isVar public var aa(get,set):Int;
 	var initial_aa:Int;
 	
@@ -742,7 +743,7 @@ class Statement extends ORM
 	}
 
 	public function clear_aa():Int{
-		aa = '0';
+		aa = null;
 		return aa;
 	}
 
@@ -768,7 +769,7 @@ class Statement extends ORM
 	}
 
 	public function clear_processed():Int{
-		processed = ''0'';
+		processed = '0';
 		return processed;
 	}
 
@@ -794,11 +795,11 @@ class Statement extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"30"}
+	//{"type":"bigint","default":"null","attnum":"30"}
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -820,7 +821,7 @@ class Statement extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = '0';
+		edited_by = null;
 		return edited_by;
 	}
 
@@ -846,7 +847,7 @@ class Statement extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = 'nextval('statements_man_seq'';
+		mandator = nextval('statements_man_seq';
 		return mandator;
 	}
 }

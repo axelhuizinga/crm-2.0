@@ -13,6 +13,7 @@ typedef MandatorProps = {
 
 class Mandator extends ORM
 {
+	public static var varNames:String = 'id,contact,name,description,any,edited_by,parent,last_locktime';
 		public function new(props:MandatorProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -43,11 +44,11 @@ class Mandator extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"2"}
+	//{"type":"bigint","default":"null","attnum":"2"}
 	@:isVar public var contact(get,set):Int;
 	var initial_contact:Int;
 	
@@ -69,11 +70,11 @@ class Mandator extends ORM
 	}
 
 	public function clear_contact():Int{
-		contact = '0';
+		contact = null;
 		return contact;
 	}
 
-	//{"type":"character varying(64)","default":"","attnum":"3"}
+	//{"type":"character varying(64)","default":"''","attnum":"3"}
 	@:isVar public var name(get,set):String;
 	var initial_name:String;
 	
@@ -99,7 +100,7 @@ class Mandator extends ORM
 		return name;
 	}
 
-	//{"type":"character varying(4096)","default":"","attnum":"4"}
+	//{"type":"character varying(4096)","default":"''","attnum":"4"}
 	@:isVar public var description(get,set):String;
 	var initial_description:String;
 	
@@ -147,11 +148,11 @@ class Mandator extends ORM
 	}
 
 	public function clear_any():String{
-		any = ''{}'';
+		any = '{}';
 		return any;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"6"}
+	//{"type":"bigint","default":"null","attnum":"6"}
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -173,11 +174,11 @@ class Mandator extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = '0';
+		edited_by = null;
 		return edited_by;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"7"}
+	//{"type":"bigint","default":"null","attnum":"7"}
 	@:isVar public var parent(get,set):Int;
 	var initial_parent:Int;
 	
@@ -199,11 +200,11 @@ class Mandator extends ORM
 	}
 
 	public function clear_parent():Int{
-		parent = '0';
+		parent = null;
 		return parent;
 	}
 
-	//{"type":"timestamp without time zone","default":"CURRENT_TIMESTAMP","attnum":"8"}
+	//{"type":"timestamp without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"8"}
 	@:isVar public var last_locktime(get,set):String;
 	var initial_last_locktime:String;
 	

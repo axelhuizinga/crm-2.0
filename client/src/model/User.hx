@@ -22,6 +22,7 @@ typedef UserProps = {
 
 class User extends ORM
 {
+	public static var varNames:String = 'id,contact,last_login,password,user_name,active,edited_by,editing,settings,external,user_group,change_pass_required,online,last_request_time,request,mandator,last_locktime';
 		public function new(props:UserProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -52,7 +53,7 @@ class User extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
@@ -78,11 +79,11 @@ class User extends ORM
 	}
 
 	public function clear_contact():Int{
-		contact = '0';
+		contact = 0;
 		return contact;
 	}
 
-	//{"type":"timestamp(0) without time zone","default":"","attnum":"3"}
+	//{"type":"timestamp(0) without time zone","default":"'null'","attnum":"3"}
 	@:isVar public var last_login(get,set):String;
 	var initial_last_login:String;
 	
@@ -104,11 +105,11 @@ class User extends ORM
 	}
 
 	public function clear_last_login():String{
-		last_login = '';
+		last_login = 'null';
 		return last_login;
 	}
 
-	//{"type":"character varying(512)","default":"","attnum":"4"}
+	//{"type":"character varying(512)","default":"''","attnum":"4"}
 	@:isVar public var password(get,set):String;
 	var initial_password:String;
 	
@@ -134,7 +135,7 @@ class User extends ORM
 		return password;
 	}
 
-	//{"type":"character varying(64)","default":"","attnum":"5"}
+	//{"type":"character varying(64)","default":"''","attnum":"5"}
 	@:isVar public var user_name(get,set):String;
 	var initial_user_name:String;
 	
@@ -182,11 +183,11 @@ class User extends ORM
 	}
 
 	public function clear_active():Bool{
-		active = 'true';
+		active = true;
 		return active;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"7"}
+	//{"type":"bigint","default":"null","attnum":"7"}
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -208,7 +209,7 @@ class User extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = '0';
+		edited_by = null;
 		return edited_by;
 	}
 
@@ -234,7 +235,7 @@ class User extends ORM
 	}
 
 	public function clear_editing():String{
-		editing = ''{}'';
+		editing = '{}';
 		return editing;
 	}
 
@@ -260,7 +261,7 @@ class User extends ORM
 	}
 
 	public function clear_settings():String{
-		settings = ''{}'';
+		settings = '{}';
 		return settings;
 	}
 
@@ -286,11 +287,11 @@ class User extends ORM
 	}
 
 	public function clear_external():String{
-		external = ''{}'';
+		external = '{}';
 		return external;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"11"}
+	//{"type":"bigint","default":"null","attnum":"11"}
 	@:isVar public var user_group(get,set):Int;
 	var initial_user_group:Int;
 	
@@ -312,7 +313,7 @@ class User extends ORM
 	}
 
 	public function clear_user_group():Int{
-		user_group = '0';
+		user_group = null;
 		return user_group;
 	}
 
@@ -338,7 +339,7 @@ class User extends ORM
 	}
 
 	public function clear_change_pass_required():Bool{
-		change_pass_required = 'false';
+		change_pass_required = false;
 		return change_pass_required;
 	}
 
@@ -364,11 +365,11 @@ class User extends ORM
 	}
 
 	public function clear_online():Bool{
-		online = 'false';
+		online = false;
 		return online;
 	}
 
-	//{"type":"timestamp without time zone","default":"","attnum":"14"}
+	//{"type":"timestamp without time zone","default":"'null'","attnum":"14"}
 	@:isVar public var last_request_time(get,set):String;
 	var initial_last_request_time:String;
 	
@@ -390,7 +391,7 @@ class User extends ORM
 	}
 
 	public function clear_last_request_time():String{
-		last_request_time = '';
+		last_request_time = 'null';
 		return last_request_time;
 	}
 
@@ -416,7 +417,7 @@ class User extends ORM
 	}
 
 	public function clear_request():String{
-		request = '''';
+		request = '';
 		return request;
 	}
 
@@ -442,11 +443,11 @@ class User extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = '0';
+		mandator = 0;
 		return mandator;
 	}
 
-	//{"type":"timestamp(0) without time zone","default":"CURRENT_TIMESTAMP","attnum":"17"}
+	//{"type":"timestamp(0) without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"17"}
 	@:isVar public var last_locktime(get,set):String;
 	var initial_last_locktime:String;
 	

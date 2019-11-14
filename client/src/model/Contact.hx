@@ -33,6 +33,7 @@ typedef ContactProps = {
 
 class Contact extends ORM
 {
+	public static var varNames:String = 'id,mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner';
 		public function new(props:ContactProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -63,7 +64,7 @@ class Contact extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
@@ -89,11 +90,11 @@ class Contact extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = '0';
+		mandator = 0;
 		return mandator;
 	}
 
-	//{"type":"timestamp(0) without time zone","default":"CURRENT_TIMESTAMP","attnum":"3"}
+	//{"type":"timestamp(0) without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"3"}
 	@:isVar public var creation_date(get,set):String;
 	var initial_creation_date:String;
 	
@@ -141,7 +142,7 @@ class Contact extends ORM
 	}
 
 	public function clear_state():String{
-		state = ''contact'';
+		state = 'contact';
 		return state;
 	}
 
@@ -167,7 +168,7 @@ class Contact extends ORM
 	}
 
 	public function clear_use_email():Bool{
-		use_email = 'false';
+		use_email = false;
 		return use_email;
 	}
 
@@ -193,7 +194,7 @@ class Contact extends ORM
 	}
 
 	public function clear_company_name():String{
-		company_name = '''';
+		company_name = '';
 		return company_name;
 	}
 
@@ -219,11 +220,11 @@ class Contact extends ORM
 	}
 
 	public function clear_co_field():String{
-		co_field = '''';
+		co_field = '';
 		return co_field;
 	}
 
-	//{"type":"character varying(10)","default":"49","attnum":"8"}
+	//{"type":"character varying(10)","default":"'49'","attnum":"8"}
 	@:isVar public var phone_code(get,set):String;
 	var initial_phone_code:String;
 	
@@ -271,7 +272,7 @@ class Contact extends ORM
 	}
 
 	public function clear_phone_number():String{
-		phone_number = '''';
+		phone_number = '';
 		return phone_number;
 	}
 
@@ -297,7 +298,7 @@ class Contact extends ORM
 	}
 
 	public function clear_fax():String{
-		fax = '''';
+		fax = '';
 		return fax;
 	}
 
@@ -323,7 +324,7 @@ class Contact extends ORM
 	}
 
 	public function clear_title():String{
-		title = '''';
+		title = '';
 		return title;
 	}
 
@@ -349,7 +350,7 @@ class Contact extends ORM
 	}
 
 	public function clear_title_pro():String{
-		title_pro = '''';
+		title_pro = '';
 		return title_pro;
 	}
 
@@ -375,7 +376,7 @@ class Contact extends ORM
 	}
 
 	public function clear_first_name():String{
-		first_name = '''';
+		first_name = '';
 		return first_name;
 	}
 
@@ -401,7 +402,7 @@ class Contact extends ORM
 	}
 
 	public function clear_last_name():String{
-		last_name = '''';
+		last_name = '';
 		return last_name;
 	}
 
@@ -427,7 +428,7 @@ class Contact extends ORM
 	}
 
 	public function clear_address():String{
-		address = '''';
+		address = '';
 		return address;
 	}
 
@@ -453,7 +454,7 @@ class Contact extends ORM
 	}
 
 	public function clear_address_2():String{
-		address_2 = '''';
+		address_2 = '';
 		return address_2;
 	}
 
@@ -479,7 +480,7 @@ class Contact extends ORM
 	}
 
 	public function clear_city():String{
-		city = '''';
+		city = '';
 		return city;
 	}
 
@@ -505,7 +506,7 @@ class Contact extends ORM
 	}
 
 	public function clear_postal_code():String{
-		postal_code = '''';
+		postal_code = '';
 		return postal_code;
 	}
 
@@ -531,16 +532,16 @@ class Contact extends ORM
 	}
 
 	public function clear_country_code():String{
-		country_code = '''';
+		country_code = '';
 		return country_code;
 	}
 
-	//{"type":"contacts_gender","default":"''","attnum":"20"}
+	//{"type":"character varying(64)","default":"''","attnum":"20"}
 	@:isVar public var gender(get,set):String;
 	var initial_gender:String;
 	
 	function get_gender():String{
-			return gender;
+		return gender;
 	}
 
 	function set_gender(x:String):String{
@@ -557,11 +558,11 @@ class Contact extends ORM
 	}
 
 	public function clear_gender():String{
-		gender = '''';
+		gender = '';
 		return gender;
 	}
 
-	//{"type":"date","default":"","attnum":"21"}
+	//{"type":"date","default":"'null'","attnum":"21"}
 	@:isVar public var date_of_birth(get,set):String;
 	var initial_date_of_birth:String;
 	
@@ -583,7 +584,7 @@ class Contact extends ORM
 	}
 
 	public function clear_date_of_birth():String{
-		date_of_birth = '';
+		date_of_birth = 'null';
 		return date_of_birth;
 	}
 
@@ -609,7 +610,7 @@ class Contact extends ORM
 	}
 
 	public function clear_mobile():String{
-		mobile = '''';
+		mobile = '';
 		return mobile;
 	}
 
@@ -635,7 +636,7 @@ class Contact extends ORM
 	}
 
 	public function clear_email():String{
-		email = '''';
+		email = '';
 		return email;
 	}
 
@@ -661,7 +662,7 @@ class Contact extends ORM
 	}
 
 	public function clear_comments():String{
-		comments = '''';
+		comments = '';
 		return comments;
 	}
 
@@ -687,11 +688,11 @@ class Contact extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = '0';
+		edited_by = 0;
 		return edited_by;
 	}
 
-	//{"type":"bigint[]","default":"{}","attnum":"26"}
+	//{"type":"bigint[]","default":"[]","attnum":"26"}
 	@:isVar public var merged(get,set):Array<Int>;
 	var initial_merged:Array<Int>;
 	
@@ -713,11 +714,11 @@ class Contact extends ORM
 	}
 
 	public function clear_merged():Array<Int>{
-		merged = '{}';
+		merged = [];
 		return merged;
 	}
 
-	//{"type":"timestamp(0) without time zone","default":"CURRENT_TIMESTAMP","attnum":"27"}
+	//{"type":"timestamp(0) without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"27"}
 	@:isVar public var last_locktime(get,set):String;
 	var initial_last_locktime:String;
 	
@@ -743,7 +744,7 @@ class Contact extends ORM
 		return last_locktime;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"28"}
+	//{"type":"bigint","default":"null","attnum":"28"}
 	@:isVar public var owner(get,set):Int;
 	var initial_owner:Int;
 	
@@ -765,7 +766,7 @@ class Contact extends ORM
 	}
 
 	public function clear_owner():Int{
-		owner = '0';
+		owner = null;
 		return owner;
 	}
 }

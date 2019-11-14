@@ -11,6 +11,7 @@ typedef RoleProps = {
 
 class Role extends ORM
 {
+	public static var varNames:String = 'id,name,description,permissions,edited_by,mandator';
 		public function new(props:RoleProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -41,11 +42,11 @@ class Role extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
-	//{"type":"character varying(64)","default":"","attnum":"2"}
+	//{"type":"character varying(64)","default":"''","attnum":"2"}
 	@:isVar public var name(get,set):String;
 	var initial_name:String;
 	
@@ -93,7 +94,7 @@ class Role extends ORM
 	}
 
 	public function clear_description():String{
-		description = '''';
+		description = '';
 		return description;
 	}
 
@@ -119,11 +120,11 @@ class Role extends ORM
 	}
 
 	public function clear_permissions():String{
-		permissions = ''{"users": [], "groups": [], "routes": []}'';
+		permissions = '{"users": [], "groups": [], "routes": []}';
 		return permissions;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"5"}
+	//{"type":"bigint","default":"null","attnum":"5"}
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -145,11 +146,11 @@ class Role extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = '0';
+		edited_by = null;
 		return edited_by;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"6"}
+	//{"type":"bigint","default":"null","attnum":"6"}
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -171,7 +172,7 @@ class Role extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = '0';
+		mandator = null;
 		return mandator;
 	}
 }

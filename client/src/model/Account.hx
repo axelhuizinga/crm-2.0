@@ -18,6 +18,7 @@ typedef AccountProps = {
 
 class Account extends ORM
 {
+	public static var varNames:String = 'id,contact,bank_name,bic,account,blz,iban,creditor,sign_date,state,creation_date,edited_by,last_locktime';
 		public function new(props:AccountProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -48,11 +49,11 @@ class Account extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"2"}
+	//{"type":"bigint","default":"null","attnum":"2"}
 	@:isVar public var contact(get,set):Int;
 	var initial_contact:Int;
 	
@@ -74,11 +75,11 @@ class Account extends ORM
 	}
 
 	public function clear_contact():Int{
-		contact = '0';
+		contact = null;
 		return contact;
 	}
 
-	//{"type":"character varying(64)","default":"","attnum":"4"}
+	//{"type":"character varying(64)","default":"''","attnum":"4"}
 	@:isVar public var bank_name(get,set):String;
 	var initial_bank_name:String;
 	
@@ -126,7 +127,7 @@ class Account extends ORM
 	}
 
 	public function clear_bic():String{
-		bic = '''';
+		bic = '';
 		return bic;
 	}
 
@@ -152,7 +153,7 @@ class Account extends ORM
 	}
 
 	public function clear_account():String{
-		account = '''';
+		account = '';
 		return account;
 	}
 
@@ -178,11 +179,11 @@ class Account extends ORM
 	}
 
 	public function clear_blz():String{
-		blz = '''';
+		blz = '';
 		return blz;
 	}
 
-	//{"type":"character varying(32)","default":"","attnum":"8"}
+	//{"type":"character varying(32)","default":"''","attnum":"8"}
 	@:isVar public var iban(get,set):String;
 	var initial_iban:String;
 	
@@ -208,7 +209,7 @@ class Account extends ORM
 		return iban;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"9"}
+	//{"type":"bigint","default":"null","attnum":"9"}
 	@:isVar public var creditor(get,set):Int;
 	var initial_creditor:Int;
 	
@@ -230,11 +231,11 @@ class Account extends ORM
 	}
 
 	public function clear_creditor():Int{
-		creditor = '0';
+		creditor = null;
 		return creditor;
 	}
 
-	//{"type":"date","default":"","attnum":"10"}
+	//{"type":"date","default":"'null'","attnum":"10"}
 	@:isVar public var sign_date(get,set):String;
 	var initial_sign_date:String;
 	
@@ -256,7 +257,7 @@ class Account extends ORM
 	}
 
 	public function clear_sign_date():String{
-		sign_date = '';
+		sign_date = 'null';
 		return sign_date;
 	}
 
@@ -282,11 +283,11 @@ class Account extends ORM
 	}
 
 	public function clear_state():String{
-		state = ''new'';
+		state = 'new';
 		return state;
 	}
 
-	//{"type":"timestamp without time zone","default":"CURRENT_TIMESTAMP","attnum":"12"}
+	//{"type":"timestamp without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"12"}
 	@:isVar public var creation_date(get,set):String;
 	var initial_creation_date:String;
 	
@@ -312,7 +313,7 @@ class Account extends ORM
 		return creation_date;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"13"}
+	//{"type":"bigint","default":"null","attnum":"13"}
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -334,11 +335,11 @@ class Account extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = '0';
+		edited_by = null;
 		return edited_by;
 	}
 
-	//{"type":"timestamp(0) without time zone","default":"CURRENT_TIMESTAMP","attnum":"14"}
+	//{"type":"timestamp(0) without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"14"}
 	@:isVar public var last_locktime(get,set):String;
 	var initial_last_locktime:String;
 	

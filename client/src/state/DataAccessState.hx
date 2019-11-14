@@ -14,7 +14,8 @@ typedef DataSource =
     ?pass:String,
 }
 
-typedef DataAccessState = 
+typedef 
+DataAccessState = 
 {
 	?contactsDbData:DbData,
 	?contactActData:IntMap<Map<String,Dynamic>>,

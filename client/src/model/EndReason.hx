@@ -9,6 +9,7 @@ typedef EndReasonProps = {
 
 class EndReason extends ORM
 {
+	public static var varNames:String = 'id,reason,edited_by,mandator';
 		public function new(props:EndReasonProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -39,11 +40,11 @@ class EndReason extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
-	//{"type":"character varying(64)","default":"","attnum":"2"}
+	//{"type":"character varying(64)","default":"''","attnum":"2"}
 	@:isVar public var reason(get,set):String;
 	var initial_reason:String;
 	
@@ -69,7 +70,7 @@ class EndReason extends ORM
 		return reason;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"3"}
+	//{"type":"bigint","default":"null","attnum":"3"}
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -91,11 +92,11 @@ class EndReason extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = '0';
+		edited_by = null;
 		return edited_by;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"4"}
+	//{"type":"bigint","default":"null","attnum":"4"}
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -117,7 +118,7 @@ class EndReason extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = '0';
+		mandator = null;
 		return mandator;
 	}
 }

@@ -11,6 +11,7 @@ typedef ActivityProps = {
 
 class Activity extends ORM
 {
+	public static var varNames:String = 'id,table,title,active,edited_by,activated_at';
 		public function new(props:ActivityProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -41,11 +42,11 @@ class Activity extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
-	//{"type":"character varying(64)","default":"","attnum":"2"}
+	//{"type":"character varying(64)","default":"''","attnum":"2"}
 	@:isVar public var table(get,set):String;
 	var initial_table:String;
 	
@@ -71,7 +72,7 @@ class Activity extends ORM
 		return table;
 	}
 
-	//{"type":"character varying(2048)","default":"","attnum":"3"}
+	//{"type":"character varying(2048)","default":"''","attnum":"3"}
 	@:isVar public var title(get,set):String;
 	var initial_title:String;
 	
@@ -119,11 +120,11 @@ class Activity extends ORM
 	}
 
 	public function clear_active():Bool{
-		active = '1';
+		active = 1;
 		return active;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"5"}
+	//{"type":"bigint","default":"null","attnum":"5"}
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -145,11 +146,11 @@ class Activity extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = '0';
+		edited_by = null;
 		return edited_by;
 	}
 
-	//{"type":"timestamp(3) without time zone","default":"(CURRENT_TIMESTAMP)","attnum":"6"}
+	//{"type":"timestamp(3) without time zone","default":"'(CURRENT_TIMESTAMP)'","attnum":"6"}
 	@:isVar public var activated_at(get,set):String;
 	var initial_activated_at:String;
 	

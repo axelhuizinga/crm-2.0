@@ -10,7 +10,8 @@ class Observer{
 	public static function run(obj:Dynamic, cb:Dynamic->Void):Dynamic{
 		handler = {
 			get: function (target, property:String, receiver:Dynamic):Any{
-					return Reflect.getProperty(target, property);
+				trace(property);
+				return Reflect.getProperty(target, property);
 			},
 			set: function (target, property:String, value, receiver:Dynamic):Bool{
 				try{

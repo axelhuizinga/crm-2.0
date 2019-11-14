@@ -27,6 +27,7 @@ typedef DealProps = {
 
 class Deal extends ORM
 {
+	public static var varNames:String = 'id,contact,creation_date,account,target_account,start_day,start_date,cycle,amount,product,agent,project,status,pay_method,end_date,end_reason,repeat_date,edited_by,mandator,old_active,cycle_start_date,last_locktime';
 		public function new(props:DealProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -57,11 +58,11 @@ class Deal extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"2"}
+	//{"type":"bigint","default":"null","attnum":"2"}
 	@:isVar public var contact(get,set):Int;
 	var initial_contact:Int;
 	
@@ -83,11 +84,11 @@ class Deal extends ORM
 	}
 
 	public function clear_contact():Int{
-		contact = '0';
+		contact = null;
 		return contact;
 	}
 
-	//{"type":"timestamp(0) without time zone","default":"CURRENT_TIMESTAMP","attnum":"3"}
+	//{"type":"timestamp(0) without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"3"}
 	@:isVar public var creation_date(get,set):String;
 	var initial_creation_date:String;
 	
@@ -113,7 +114,7 @@ class Deal extends ORM
 		return creation_date;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"4"}
+	//{"type":"bigint","default":"null","attnum":"4"}
 	@:isVar public var account(get,set):Int;
 	var initial_account:Int;
 	
@@ -135,11 +136,11 @@ class Deal extends ORM
 	}
 
 	public function clear_account():Int{
-		account = '0';
+		account = null;
 		return account;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"5"}
+	//{"type":"bigint","default":"null","attnum":"5"}
 	@:isVar public var target_account(get,set):Int;
 	var initial_target_account:Int;
 	
@@ -161,7 +162,7 @@ class Deal extends ORM
 	}
 
 	public function clear_target_account():Int{
-		target_account = '0';
+		target_account = null;
 		return target_account;
 	}
 
@@ -187,11 +188,11 @@ class Deal extends ORM
 	}
 
 	public function clear_start_day():String{
-		start_day = ''1'';
+		start_day = '1';
 		return start_day;
 	}
 
-	//{"type":"date","default":"","attnum":"7"}
+	//{"type":"date","default":"'null'","attnum":"7"}
 	@:isVar public var start_date(get,set):String;
 	var initial_start_date:String;
 	
@@ -213,11 +214,11 @@ class Deal extends ORM
 	}
 
 	public function clear_start_date():String{
-		start_date = '';
+		start_date = 'null';
 		return start_date;
 	}
 
-	//{"type":"deals_cycle","default":"","attnum":"8"}
+	//{"type":"deals_cycle","default":"''","attnum":"8"}
 	@:isVar public var cycle(get,set):String;
 	var initial_cycle:String;
 	
@@ -243,7 +244,7 @@ class Deal extends ORM
 		return cycle;
 	}
 
-	//{"type":"numeric(10,2)","default":"","attnum":"9"}
+	//{"type":"numeric(10,2)","default":"''","attnum":"9"}
 	@:isVar public var amount(get,set):String;
 	var initial_amount:String;
 	
@@ -269,7 +270,7 @@ class Deal extends ORM
 		return amount;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"10"}
+	//{"type":"bigint","default":"null","attnum":"10"}
 	@:isVar public var product(get,set):Int;
 	var initial_product:Int;
 	
@@ -291,11 +292,11 @@ class Deal extends ORM
 	}
 
 	public function clear_product():Int{
-		product = '0';
+		product = null;
 		return product;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"11"}
+	//{"type":"bigint","default":"null","attnum":"11"}
 	@:isVar public var agent(get,set):Int;
 	var initial_agent:Int;
 	
@@ -317,11 +318,11 @@ class Deal extends ORM
 	}
 
 	public function clear_agent():Int{
-		agent = '0';
+		agent = null;
 		return agent;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"12"}
+	//{"type":"bigint","default":"null","attnum":"12"}
 	@:isVar public var project(get,set):Int;
 	var initial_project:Int;
 	
@@ -343,7 +344,7 @@ class Deal extends ORM
 	}
 
 	public function clear_project():Int{
-		project = '0';
+		project = null;
 		return project;
 	}
 
@@ -369,7 +370,7 @@ class Deal extends ORM
 	}
 
 	public function clear_status():String{
-		status = ''active'';
+		status = 'active';
 		return status;
 	}
 
@@ -395,11 +396,11 @@ class Deal extends ORM
 	}
 
 	public function clear_pay_method():String{
-		pay_method = ''debit'';
+		pay_method = 'debit';
 		return pay_method;
 	}
 
-	//{"type":"date","default":"","attnum":"15"}
+	//{"type":"date","default":"'null'","attnum":"15"}
 	@:isVar public var end_date(get,set):String;
 	var initial_end_date:String;
 	
@@ -421,11 +422,11 @@ class Deal extends ORM
 	}
 
 	public function clear_end_date():String{
-		end_date = '';
+		end_date = 'null';
 		return end_date;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"16"}
+	//{"type":"bigint","default":"null","attnum":"16"}
 	@:isVar public var end_reason(get,set):Int;
 	var initial_end_reason:Int;
 	
@@ -447,11 +448,11 @@ class Deal extends ORM
 	}
 
 	public function clear_end_reason():Int{
-		end_reason = '0';
+		end_reason = null;
 		return end_reason;
 	}
 
-	//{"type":"date","default":"","attnum":"17"}
+	//{"type":"date","default":"'null'","attnum":"17"}
 	@:isVar public var repeat_date(get,set):String;
 	var initial_repeat_date:String;
 	
@@ -473,11 +474,11 @@ class Deal extends ORM
 	}
 
 	public function clear_repeat_date():String{
-		repeat_date = '';
+		repeat_date = 'null';
 		return repeat_date;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"18"}
+	//{"type":"bigint","default":"null","attnum":"18"}
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -499,11 +500,11 @@ class Deal extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = '0';
+		edited_by = null;
 		return edited_by;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"19"}
+	//{"type":"bigint","default":"null","attnum":"19"}
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -525,7 +526,7 @@ class Deal extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = '0';
+		mandator = null;
 		return mandator;
 	}
 
@@ -551,11 +552,11 @@ class Deal extends ORM
 	}
 
 	public function clear_old_active():Bool{
-		old_active = '1';
+		old_active = 1;
 		return old_active;
 	}
 
-	//{"type":"date","default":"","attnum":"21"}
+	//{"type":"date","default":"'null'","attnum":"21"}
 	@:isVar public var cycle_start_date(get,set):String;
 	var initial_cycle_start_date:String;
 	
@@ -577,11 +578,11 @@ class Deal extends ORM
 	}
 
 	public function clear_cycle_start_date():String{
-		cycle_start_date = '';
+		cycle_start_date = 'null';
 		return cycle_start_date;
 	}
 
-	//{"type":"timestamp(0) without time zone","default":"CURRENT_TIMESTAMP","attnum":"22"}
+	//{"type":"timestamp(0) without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"22"}
 	@:isVar public var last_locktime(get,set):String;
 	var initial_last_locktime:String;
 	

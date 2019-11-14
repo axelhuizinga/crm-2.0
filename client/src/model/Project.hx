@@ -13,6 +13,7 @@ typedef ProjectProps = {
 
 class Project extends ORM
 {
+	public static var varNames:String = 'id,mandator,name,description,edited_by,provision_percent,cancellation_liable,target_account';
 		public function new(props:ProjectProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -43,11 +44,11 @@ class Project extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"2"}
+	//{"type":"bigint","default":"null","attnum":"2"}
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -69,11 +70,11 @@ class Project extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = '0';
+		mandator = null;
 		return mandator;
 	}
 
-	//{"type":"character varying(64)","default":"","attnum":"3"}
+	//{"type":"character varying(64)","default":"''","attnum":"3"}
 	@:isVar public var name(get,set):String;
 	var initial_name:String;
 	
@@ -99,7 +100,7 @@ class Project extends ORM
 		return name;
 	}
 
-	//{"type":"character varying(4096)","default":"","attnum":"4"}
+	//{"type":"character varying(4096)","default":"''","attnum":"4"}
 	@:isVar public var description(get,set):String;
 	var initial_description:String;
 	
@@ -125,7 +126,7 @@ class Project extends ORM
 		return description;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"5"}
+	//{"type":"bigint","default":"null","attnum":"5"}
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -147,11 +148,11 @@ class Project extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = '0';
+		edited_by = null;
 		return edited_by;
 	}
 
-	//{"type":"double precision","default":"(0.0)","attnum":"6"}
+	//{"type":"double precision","default":"'(0.0)'","attnum":"6"}
 	@:isVar public var provision_percent(get,set):String;
 	var initial_provision_percent:String;
 	
@@ -177,7 +178,7 @@ class Project extends ORM
 		return provision_percent;
 	}
 
-	//{"type":"integer","default":"0","attnum":"7"}
+	//{"type":"integer","default":"'0'","attnum":"7"}
 	@:isVar public var cancellation_liable(get,set):String;
 	var initial_cancellation_liable:String;
 	
@@ -225,7 +226,7 @@ class Project extends ORM
 	}
 
 	public function clear_target_account():Int{
-		target_account = '0';
+		target_account = 0;
 		return target_account;
 	}
 }

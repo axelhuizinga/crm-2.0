@@ -11,6 +11,7 @@ typedef UserGroupProps = {
 
 class UserGroup extends ORM
 {
+	public static var varNames:String = 'id,name,description,can,mandator,edited_by';
 		public function new(props:UserGroupProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -41,11 +42,11 @@ class UserGroup extends ORM
 	}
 
 	public function clear_id():Int{
-		id = 'null';
+		id = null;
 		return id;
 	}
 
-	//{"type":"character varying(64)","default":"","attnum":"2"}
+	//{"type":"character varying(64)","default":"''","attnum":"2"}
 	@:isVar public var name(get,set):String;
 	var initial_name:String;
 	
@@ -71,7 +72,7 @@ class UserGroup extends ORM
 		return name;
 	}
 
-	//{"type":"character varying(1024)","default":"","attnum":"3"}
+	//{"type":"character varying(1024)","default":"''","attnum":"3"}
 	@:isVar public var description(get,set):String;
 	var initial_description:String;
 	
@@ -119,11 +120,11 @@ class UserGroup extends ORM
 	}
 
 	public function clear_can():String{
-		can = ''{}'';
+		can = '{}';
 		return can;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"5"}
+	//{"type":"bigint","default":"null","attnum":"5"}
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -145,11 +146,11 @@ class UserGroup extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = '0';
+		mandator = null;
 		return mandator;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"6"}
+	//{"type":"bigint","default":"null","attnum":"6"}
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -171,7 +172,7 @@ class UserGroup extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = '0';
+		edited_by = null;
 		return edited_by;
 	}
 }

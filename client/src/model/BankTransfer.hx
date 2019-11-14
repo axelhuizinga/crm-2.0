@@ -39,6 +39,7 @@ typedef BankTransferProps = {
 
 class BankTransfer extends ORM
 {
+	public static var varNames:String = 'ag_name,ag_konto_or_iban,ag_blz_or_bic,zahlpfl_name,zahlpfl_name2,zahlpfl_strasse,zahlpfl_name_ort,zahlpfl_name_kto_or_iban,zahlpfl_name_blz_or_bic,betrag,currency,zahlart,termin,vwz1,vwz2,vwz3,vwz4,vwz5,vwz6,vwz7,vwz8,vwz9,ba_id,tracking_status,anforderungs_datum,rueck_datum,cycle,ref_id,mandat_id,mandat_datum,ag_creditor_id,sequenz,super_ag_name,edited_by';
 		public function new(props:BankTransferProps) {
 		super(props);
 		for(f in Reflect.fields(props))
@@ -47,7 +48,7 @@ class BankTransfer extends ORM
 		}
 	}
 
-	//{"type":"character varying(64)","default":"","attnum":"1"}
+	//{"type":"character varying(64)","default":"''","attnum":"1"}
 	@:isVar public var ag_name(get,set):String;
 	var initial_ag_name:String;
 	
@@ -73,7 +74,7 @@ class BankTransfer extends ORM
 		return ag_name;
 	}
 
-	//{"type":"character varying(18)","default":"","attnum":"2"}
+	//{"type":"character varying(18)","default":"''","attnum":"2"}
 	@:isVar public var ag_konto_or_iban(get,set):String;
 	var initial_ag_konto_or_iban:String;
 	
@@ -99,7 +100,7 @@ class BankTransfer extends ORM
 		return ag_konto_or_iban;
 	}
 
-	//{"type":"character varying(11)","default":"","attnum":"3"}
+	//{"type":"character varying(11)","default":"''","attnum":"3"}
 	@:isVar public var ag_blz_or_bic(get,set):String;
 	var initial_ag_blz_or_bic:String;
 	
@@ -125,7 +126,7 @@ class BankTransfer extends ORM
 		return ag_blz_or_bic;
 	}
 
-	//{"type":"character varying(21)","default":"","attnum":"4"}
+	//{"type":"character varying(21)","default":"''","attnum":"4"}
 	@:isVar public var zahlpfl_name(get,set):String;
 	var initial_zahlpfl_name:String;
 	
@@ -173,11 +174,11 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_zahlpfl_name2():String{
-		zahlpfl_name2 = '''';
+		zahlpfl_name2 = '';
 		return zahlpfl_name2;
 	}
 
-	//{"type":"character varying(32)","default":"","attnum":"6"}
+	//{"type":"character varying(32)","default":"''","attnum":"6"}
 	@:isVar public var zahlpfl_strasse(get,set):String;
 	var initial_zahlpfl_strasse:String;
 	
@@ -203,7 +204,7 @@ class BankTransfer extends ORM
 		return zahlpfl_strasse;
 	}
 
-	//{"type":"character varying(32)","default":"","attnum":"7"}
+	//{"type":"character varying(32)","default":"''","attnum":"7"}
 	@:isVar public var zahlpfl_name_ort(get,set):String;
 	var initial_zahlpfl_name_ort:String;
 	
@@ -229,7 +230,7 @@ class BankTransfer extends ORM
 		return zahlpfl_name_ort;
 	}
 
-	//{"type":"character varying(22)","default":"","attnum":"8"}
+	//{"type":"character varying(22)","default":"''","attnum":"8"}
 	@:isVar public var zahlpfl_name_kto_or_iban(get,set):String;
 	var initial_zahlpfl_name_kto_or_iban:String;
 	
@@ -277,11 +278,11 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_zahlpfl_name_blz_or_bic():String{
-		zahlpfl_name_blz_or_bic = '''';
+		zahlpfl_name_blz_or_bic = '';
 		return zahlpfl_name_blz_or_bic;
 	}
 
-	//{"type":"double precision","default":"","attnum":"10"}
+	//{"type":"double precision","default":"''","attnum":"10"}
 	@:isVar public var betrag(get,set):String;
 	var initial_betrag:String;
 	
@@ -329,7 +330,7 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_currency():String{
-		currency = ''€'';
+		currency = '€';
 		return currency;
 	}
 
@@ -355,11 +356,11 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_zahlart():String{
-		zahlart = ''BASIS'';
+		zahlart = 'BASIS';
 		return zahlart;
 	}
 
-	//{"type":"date","default":"","attnum":"13"}
+	//{"type":"date","default":"'null'","attnum":"13"}
 	@:isVar public var termin(get,set):String;
 	var initial_termin:String;
 	
@@ -381,7 +382,7 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_termin():String{
-		termin = '';
+		termin = 'null';
 		return termin;
 	}
 
@@ -407,7 +408,7 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_vwz1():String{
-		vwz1 = '''';
+		vwz1 = '';
 		return vwz1;
 	}
 
@@ -433,7 +434,7 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_vwz2():String{
-		vwz2 = '''';
+		vwz2 = '';
 		return vwz2;
 	}
 
@@ -459,7 +460,7 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_vwz3():String{
-		vwz3 = '''';
+		vwz3 = '';
 		return vwz3;
 	}
 
@@ -485,7 +486,7 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_vwz4():String{
-		vwz4 = '''';
+		vwz4 = '';
 		return vwz4;
 	}
 
@@ -511,7 +512,7 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_vwz5():String{
-		vwz5 = '''';
+		vwz5 = '';
 		return vwz5;
 	}
 
@@ -537,7 +538,7 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_vwz6():String{
-		vwz6 = '''';
+		vwz6 = '';
 		return vwz6;
 	}
 
@@ -563,7 +564,7 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_vwz7():String{
-		vwz7 = '''';
+		vwz7 = '';
 		return vwz7;
 	}
 
@@ -589,7 +590,7 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_vwz8():String{
-		vwz8 = '''';
+		vwz8 = '';
 		return vwz8;
 	}
 
@@ -615,7 +616,7 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_vwz9():String{
-		vwz9 = '''';
+		vwz9 = '';
 		return vwz9;
 	}
 
@@ -641,7 +642,7 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_ba_id():Int{
-		ba_id = 'nextval('bank_transfers_buchungsanforderungid_seq'';
+		ba_id = nextval('bank_transfers_buchungsanforderungid_seq';
 		return ba_id;
 	}
 
@@ -667,11 +668,11 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_tracking_status():String{
-		tracking_status = ''neu'';
+		tracking_status = 'neu';
 		return tracking_status;
 	}
 
-	//{"type":"date","default":"","attnum":"25"}
+	//{"type":"date","default":"'null'","attnum":"25"}
 	@:isVar public var anforderungs_datum(get,set):String;
 	var initial_anforderungs_datum:String;
 	
@@ -693,11 +694,11 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_anforderungs_datum():String{
-		anforderungs_datum = '';
+		anforderungs_datum = 'null';
 		return anforderungs_datum;
 	}
 
-	//{"type":"date","default":"","attnum":"26"}
+	//{"type":"date","default":"'null'","attnum":"26"}
 	@:isVar public var rueck_datum(get,set):String;
 	var initial_rueck_datum:String;
 	
@@ -719,11 +720,11 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_rueck_datum():String{
-		rueck_datum = '';
+		rueck_datum = 'null';
 		return rueck_datum;
 	}
 
-	//{"type":"character varying(32)","default":"","attnum":"27"}
+	//{"type":"character varying(32)","default":"''","attnum":"27"}
 	@:isVar public var cycle(get,set):String;
 	var initial_cycle:String;
 	
@@ -749,7 +750,7 @@ class BankTransfer extends ORM
 		return cycle;
 	}
 
-	//{"type":"character varying(32)","default":"","attnum":"28"}
+	//{"type":"character varying(32)","default":"''","attnum":"28"}
 	@:isVar public var ref_id(get,set):String;
 	var initial_ref_id:String;
 	
@@ -775,7 +776,7 @@ class BankTransfer extends ORM
 		return ref_id;
 	}
 
-	//{"type":"character varying(11)","default":"","attnum":"29"}
+	//{"type":"character varying(11)","default":"''","attnum":"29"}
 	@:isVar public var mandat_id(get,set):String;
 	var initial_mandat_id:String;
 	
@@ -801,7 +802,7 @@ class BankTransfer extends ORM
 		return mandat_id;
 	}
 
-	//{"type":"date","default":"","attnum":"30"}
+	//{"type":"date","default":"'null'","attnum":"30"}
 	@:isVar public var mandat_datum(get,set):String;
 	var initial_mandat_datum:String;
 	
@@ -823,11 +824,11 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_mandat_datum():String{
-		mandat_datum = '';
+		mandat_datum = 'null';
 		return mandat_datum;
 	}
 
-	//{"type":"character varying(18)","default":"","attnum":"31"}
+	//{"type":"character varying(18)","default":"''","attnum":"31"}
 	@:isVar public var ag_creditor_id(get,set):String;
 	var initial_ag_creditor_id:String;
 	
@@ -853,7 +854,7 @@ class BankTransfer extends ORM
 		return ag_creditor_id;
 	}
 
-	//{"type":"character varying(4)","default":"","attnum":"32"}
+	//{"type":"character varying(4)","default":"''","attnum":"32"}
 	@:isVar public var sequenz(get,set):String;
 	var initial_sequenz:String;
 	
@@ -879,7 +880,7 @@ class BankTransfer extends ORM
 		return sequenz;
 	}
 
-	//{"type":"character varying(32)","default":"","attnum":"33"}
+	//{"type":"character varying(32)","default":"''","attnum":"33"}
 	@:isVar public var super_ag_name(get,set):String;
 	var initial_super_ag_name:String;
 	
@@ -905,7 +906,7 @@ class BankTransfer extends ORM
 		return super_ag_name;
 	}
 
-	//{"type":"bigint","default":0,"attnum":"34"}
+	//{"type":"bigint","default":"null","attnum":"34"}
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -927,7 +928,7 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_edited_by():Int{
-		edited_by = '0';
+		edited_by = null;
 		return edited_by;
 	}
 }

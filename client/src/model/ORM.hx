@@ -5,7 +5,7 @@ using Lambda;
 
 class ORM {
 	
-	public var fieldsModified:Array<String>;
+	var fieldsModified:Array<String>;
 	//var edited_by:Int;
 	static var fieldNames:Array<String>;
 	//var mandator:Int;
@@ -37,8 +37,9 @@ class ORM {
 	}
 
 	public function modified(?attName:String):Bool {
-		if(attName==null)
-			return fieldsModified.filter(function(p:String)return fieldsModified.has(p)).length>0;
+		if(attName==null)			
+			return fieldsModified.length>0;
+			//return fieldsModified.filter(function(p:String)return fieldsModified.has(p)).length>0;
 		if(!fieldsModified.has(attName))
 			fieldsModified.push(attName);
 		return true;

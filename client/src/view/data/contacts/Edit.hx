@@ -62,7 +62,8 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		{label:'Neu', action:'insert'},
 		{label:'Löschen',action:'delete'}
 	];
-	
+
+	var contact:Contact;
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
 
@@ -165,28 +166,23 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		trace('loading:$id');
 		if(id == null)
 			return null;
-		var c:Contact = new Contact({edited_by: props.user.id,mandator: 0});
+		contact = new Contact({edited_by: props.user.id,mandator: 0});
 		//{edited_by: props.user.id,mandator: 0};
 		var data = props.dataStore.contactData.get(id);
-		trace(data);
-		
-		//var m:Array<String> = Type.getInstanceFields(Type.getClass(c));//Reflect.fields(c);
-		//trace(m.toString());
-
-
+		trace(data);	
 		for(k=>v in data.keyValueIterator())
 		{
 			try{
 				//trace('$k:$v');
-				Reflect.setField(c,k, v);
+				Reflect.setProperty(contact,k, v);
 				}
 			catch(ex:Dynamic)
 			{
 				trace(ex);
 			}		
 		}
-		trace(c.creation_date);
-		actualState = initialState = c.copy(data);
+		trace(contact.creation_date);
+		actualState = initialState = contact.copy(data);
 		trace(initialState);		
 		/*actualState = view.shared.io.Observer.run(initialState, function(newState){
 				actualState = newState;
@@ -349,16 +345,17 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 					//trace('$f =>${Reflect.field(aState,f)}<=');
 					
 					//if(Reflect.field(aState,f)==initiallyLoaded[f])
-					if(Reflect.field(aState,f)==Reflect.field(initialState,f))
-						Reflect.deleteField(aState,f);
-					else 
+					if(Reflect.field(aState,f)!=Reflect.field(initialState,f))
+					{
 						trace('$f:${Reflect.field(aState,f)}==${Reflect.field(initialState,f)}<<');
+						Reflect.setProperty(contact, f, Reflect.field(aState,f));
+					}						
 				}
 				trace(aState);
 				trace(initialState);
-				if(Reflect.fields(aState).length==0)
+				if(!contact.modified())
 				{
-					//TODO: NOCHANGE ACTION
+					//TODO: NOCHANGE ACTION => Display Feedback nothing to save
 					return;
 				}
 				dbaProps.dataSource = [
@@ -450,7 +447,6 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				case 'save':
 					mI.disabled = state.clean;
 				default:
-
 			}			
 		}
 		return sideMenu;

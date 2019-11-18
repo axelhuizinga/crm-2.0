@@ -20,18 +20,20 @@ typedef UserProps = {
 	?last_locktime:String
 };
 
+@:rtti
 class User extends ORM
 {
-	public static var varNames:String = 'id,contact,last_login,password,user_name,active,edited_by,editing,settings,external,user_group,change_pass_required,online,last_request_time,request,mandator,last_locktime';
-		public function new(props:UserProps) {
+
+	public function new(props:UserProps) {
 		super(props);
+		propertyNames = 'id,contact,last_login,password,user_name,active,edited_by,editing,settings,external,user_group,change_pass_required,online,last_request_time,request,mandator,last_locktime'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
 		}
-	}
-
-	//{"type":"bigint","default":"null","attnum":"1"}
+	}	
+		
+	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
@@ -40,8 +42,8 @@ class User extends ORM
 	}
 
 	function set_id(x:Int):Int{
-
-		modified('id');
+		if(id != null)
+			modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -56,8 +58,8 @@ class User extends ORM
 		id = null;
 		return id;
 	}
-
-	//{"type":"bigint","default":"0","attnum":"2"}
+		
+	@dataType("bigint")
 	@:isVar public var contact(get,set):Int;
 	var initial_contact:Int;
 	
@@ -66,8 +68,8 @@ class User extends ORM
 	}
 
 	function set_contact(x:Int):Int{
-
-		modified('contact');
+		if(contact != null)
+			modified('contact');
 		contact = x;
 		if(initial_contact == null)
 			initial_contact = contact; 
@@ -82,8 +84,8 @@ class User extends ORM
 		contact = 0;
 		return contact;
 	}
-
-	//{"type":"timestamp(0) without time zone","default":"'null'","attnum":"3"}
+		
+	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_login(get,set):String;
 	var initial_last_login:String;
 	
@@ -92,8 +94,8 @@ class User extends ORM
 	}
 
 	function set_last_login(x:String):String{
-
-		modified('last_login');
+		if(last_login != null)
+			modified('last_login');
 		last_login = x;
 		if(initial_last_login == null)
 			initial_last_login = last_login; 
@@ -108,8 +110,8 @@ class User extends ORM
 		last_login = 'null';
 		return last_login;
 	}
-
-	//{"type":"character varying(512)","default":"''","attnum":"4"}
+		
+	@dataType("character varying(512)")
 	@:isVar public var password(get,set):String;
 	var initial_password:String;
 	
@@ -118,8 +120,8 @@ class User extends ORM
 	}
 
 	function set_password(x:String):String{
-
-		modified('password');
+		if(password != null)
+			modified('password');
 		password = x;
 		if(initial_password == null)
 			initial_password = password; 
@@ -134,8 +136,8 @@ class User extends ORM
 		password = '';
 		return password;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"5"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var user_name(get,set):String;
 	var initial_user_name:String;
 	
@@ -144,8 +146,8 @@ class User extends ORM
 	}
 
 	function set_user_name(x:String):String{
-
-		modified('user_name');
+		if(user_name != null)
+			modified('user_name');
 		user_name = x;
 		if(initial_user_name == null)
 			initial_user_name = user_name; 
@@ -160,8 +162,8 @@ class User extends ORM
 		user_name = '';
 		return user_name;
 	}
-
-	//{"type":"boolean","default":"true","attnum":"6"}
+		
+	@dataType("boolean")
 	@:isVar public var active(get,set):Bool;
 	var initial_active:Bool;
 	
@@ -170,8 +172,8 @@ class User extends ORM
 	}
 
 	function set_active(x:Bool):Bool{
-
-		modified('active');
+		if(active != null)
+			modified('active');
 		active = x;
 		if(initial_active == null)
 			initial_active = active; 
@@ -186,8 +188,8 @@ class User extends ORM
 		active = true;
 		return active;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"7"}
+		
+	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -196,8 +198,8 @@ class User extends ORM
 	}
 
 	function set_edited_by(x:Int):Int{
-
-		modified('edited_by');
+		if(edited_by != null)
+			modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -212,8 +214,8 @@ class User extends ORM
 		edited_by = null;
 		return edited_by;
 	}
-
-	//{"type":"jsonb","default":"'{}'","attnum":"8"}
+		
+	@dataType("jsonb")
 	@:isVar public var editing(get,set):String;
 	var initial_editing:String;
 	
@@ -222,8 +224,8 @@ class User extends ORM
 	}
 
 	function set_editing(x:String):String{
-
-		modified('editing');
+		if(editing != null)
+			modified('editing');
 		editing = x;
 		if(initial_editing == null)
 			initial_editing = editing; 
@@ -238,8 +240,8 @@ class User extends ORM
 		editing = '{}';
 		return editing;
 	}
-
-	//{"type":"jsonb","default":"'{}'","attnum":"9"}
+		
+	@dataType("jsonb")
 	@:isVar public var settings(get,set):String;
 	var initial_settings:String;
 	
@@ -248,8 +250,8 @@ class User extends ORM
 	}
 
 	function set_settings(x:String):String{
-
-		modified('settings');
+		if(settings != null)
+			modified('settings');
 		settings = x;
 		if(initial_settings == null)
 			initial_settings = settings; 
@@ -264,8 +266,8 @@ class User extends ORM
 		settings = '{}';
 		return settings;
 	}
-
-	//{"type":"jsonb","default":"'{}'","attnum":"10"}
+		
+	@dataType("jsonb")
 	@:isVar public var external(get,set):String;
 	var initial_external:String;
 	
@@ -274,8 +276,8 @@ class User extends ORM
 	}
 
 	function set_external(x:String):String{
-
-		modified('external');
+		if(external != null)
+			modified('external');
 		external = x;
 		if(initial_external == null)
 			initial_external = external; 
@@ -290,8 +292,8 @@ class User extends ORM
 		external = '{}';
 		return external;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"11"}
+		
+	@dataType("bigint")
 	@:isVar public var user_group(get,set):Int;
 	var initial_user_group:Int;
 	
@@ -300,8 +302,8 @@ class User extends ORM
 	}
 
 	function set_user_group(x:Int):Int{
-
-		modified('user_group');
+		if(user_group != null)
+			modified('user_group');
 		user_group = x;
 		if(initial_user_group == null)
 			initial_user_group = user_group; 
@@ -316,8 +318,8 @@ class User extends ORM
 		user_group = null;
 		return user_group;
 	}
-
-	//{"type":"boolean","default":"false","attnum":"12"}
+		
+	@dataType("boolean")
 	@:isVar public var change_pass_required(get,set):Bool;
 	var initial_change_pass_required:Bool;
 	
@@ -326,8 +328,8 @@ class User extends ORM
 	}
 
 	function set_change_pass_required(x:Bool):Bool{
-
-		modified('change_pass_required');
+		if(change_pass_required != null)
+			modified('change_pass_required');
 		change_pass_required = x;
 		if(initial_change_pass_required == null)
 			initial_change_pass_required = change_pass_required; 
@@ -342,8 +344,8 @@ class User extends ORM
 		change_pass_required = false;
 		return change_pass_required;
 	}
-
-	//{"type":"boolean","default":"false","attnum":"13"}
+		
+	@dataType("boolean")
 	@:isVar public var online(get,set):Bool;
 	var initial_online:Bool;
 	
@@ -352,8 +354,8 @@ class User extends ORM
 	}
 
 	function set_online(x:Bool):Bool{
-
-		modified('online');
+		if(online != null)
+			modified('online');
 		online = x;
 		if(initial_online == null)
 			initial_online = online; 
@@ -368,8 +370,8 @@ class User extends ORM
 		online = false;
 		return online;
 	}
-
-	//{"type":"timestamp without time zone","default":"'null'","attnum":"14"}
+		
+	@dataType("timestamp without time zone")
 	@:isVar public var last_request_time(get,set):String;
 	var initial_last_request_time:String;
 	
@@ -378,8 +380,8 @@ class User extends ORM
 	}
 
 	function set_last_request_time(x:String):String{
-
-		modified('last_request_time');
+		if(last_request_time != null)
+			modified('last_request_time');
 		last_request_time = x;
 		if(initial_last_request_time == null)
 			initial_last_request_time = last_request_time; 
@@ -394,8 +396,8 @@ class User extends ORM
 		last_request_time = 'null';
 		return last_request_time;
 	}
-
-	//{"type":"character varying(4096)","default":"''","attnum":"15"}
+		
+	@dataType("character varying(4096)")
 	@:isVar public var request(get,set):String;
 	var initial_request:String;
 	
@@ -404,8 +406,8 @@ class User extends ORM
 	}
 
 	function set_request(x:String):String{
-
-		modified('request');
+		if(request != null)
+			modified('request');
 		request = x;
 		if(initial_request == null)
 			initial_request = request; 
@@ -420,8 +422,8 @@ class User extends ORM
 		request = '';
 		return request;
 	}
-
-	//{"type":"bigint","default":"0","attnum":"16"}
+		
+	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -430,8 +432,8 @@ class User extends ORM
 	}
 
 	function set_mandator(x:Int):Int{
-
-		modified('mandator');
+		if(mandator != null)
+			modified('mandator');
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 
@@ -446,8 +448,8 @@ class User extends ORM
 		mandator = 0;
 		return mandator;
 	}
-
-	//{"type":"timestamp(0) without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"17"}
+		
+	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_locktime(get,set):String;
 	var initial_last_locktime:String;
 	
@@ -456,8 +458,8 @@ class User extends ORM
 	}
 
 	function set_last_locktime(x:String):String{
-
-		modified('last_locktime');
+		if(last_locktime != null)
+			modified('last_locktime');
 		last_locktime = x;
 		if(initial_last_locktime == null)
 			initial_last_locktime = last_locktime; 
@@ -472,4 +474,5 @@ class User extends ORM
 		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
 	}
+	
 }

@@ -12,18 +12,20 @@ typedef UserInterfaceProps = {
 	?mandator:Int
 };
 
+@:rtti
 class UserInterface extends ORM
 {
-	public static var varNames:String = 'id,key,content,classPath,component,edited_by,updated_at,locale,mandator';
-		public function new(props:UserInterfaceProps) {
+
+	public function new(props:UserInterfaceProps) {
 		super(props);
+		propertyNames = 'id,key,content,classPath,component,edited_by,updated_at,locale,mandator'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
 		}
-	}
-
-	//{"type":"bigint","default":"null","attnum":"1"}
+	}	
+		
+	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
@@ -32,8 +34,8 @@ class UserInterface extends ORM
 	}
 
 	function set_id(x:Int):Int{
-
-		modified('id');
+		if(id != null)
+			modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -48,8 +50,8 @@ class UserInterface extends ORM
 		id = null;
 		return id;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"2"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var key(get,set):String;
 	var initial_key:String;
 	
@@ -58,8 +60,8 @@ class UserInterface extends ORM
 	}
 
 	function set_key(x:String):String{
-
-		modified('key');
+		if(key != null)
+			modified('key');
 		key = x;
 		if(initial_key == null)
 			initial_key = key; 
@@ -74,8 +76,8 @@ class UserInterface extends ORM
 		key = '';
 		return key;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"3"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var content(get,set):String;
 	var initial_content:String;
 	
@@ -84,8 +86,8 @@ class UserInterface extends ORM
 	}
 
 	function set_content(x:String):String{
-
-		modified('content');
+		if(content != null)
+			modified('content');
 		content = x;
 		if(initial_content == null)
 			initial_content = content; 
@@ -100,8 +102,8 @@ class UserInterface extends ORM
 		content = '';
 		return content;
 	}
-
-	//{"type":"character varying(512)","default":"''","attnum":"4"}
+		
+	@dataType("character varying(512)")
 	@:isVar public var classPath(get,set):String;
 	var initial_classPath:String;
 	
@@ -110,8 +112,8 @@ class UserInterface extends ORM
 	}
 
 	function set_classPath(x:String):String{
-
-		modified('classPath');
+		if(classPath != null)
+			modified('classPath');
 		classPath = x;
 		if(initial_classPath == null)
 			initial_classPath = classPath; 
@@ -126,8 +128,8 @@ class UserInterface extends ORM
 		classPath = '';
 		return classPath;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"5"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var component(get,set):String;
 	var initial_component:String;
 	
@@ -136,8 +138,8 @@ class UserInterface extends ORM
 	}
 
 	function set_component(x:String):String{
-
-		modified('component');
+		if(component != null)
+			modified('component');
 		component = x;
 		if(initial_component == null)
 			initial_component = component; 
@@ -152,8 +154,8 @@ class UserInterface extends ORM
 		component = '';
 		return component;
 	}
-
-	//{"type":"integer","default":"''","attnum":"6"}
+		
+	@dataType("integer")
 	@:isVar public var edited_by(get,set):String;
 	var initial_edited_by:String;
 	
@@ -162,8 +164,8 @@ class UserInterface extends ORM
 	}
 
 	function set_edited_by(x:String):String{
-
-		modified('edited_by');
+		if(edited_by != null)
+			modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -178,8 +180,8 @@ class UserInterface extends ORM
 		edited_by = '';
 		return edited_by;
 	}
-
-	//{"type":"timestamp without time zone","default":"'null'","attnum":"7"}
+		
+	@dataType("timestamp without time zone")
 	@:isVar public var updated_at(get,set):String;
 	var initial_updated_at:String;
 	
@@ -188,8 +190,8 @@ class UserInterface extends ORM
 	}
 
 	function set_updated_at(x:String):String{
-
-		modified('updated_at');
+		if(updated_at != null)
+			modified('updated_at');
 		updated_at = x;
 		if(initial_updated_at == null)
 			initial_updated_at = updated_at; 
@@ -204,8 +206,8 @@ class UserInterface extends ORM
 		updated_at = 'null';
 		return updated_at;
 	}
-
-	//{"type":"character varying(8)","default":"''","attnum":"8"}
+		
+	@dataType("character varying(8)")
 	@:isVar public var locale(get,set):String;
 	var initial_locale:String;
 	
@@ -214,8 +216,8 @@ class UserInterface extends ORM
 	}
 
 	function set_locale(x:String):String{
-
-		modified('locale');
+		if(locale != null)
+			modified('locale');
 		locale = x;
 		if(initial_locale == null)
 			initial_locale = locale; 
@@ -230,8 +232,8 @@ class UserInterface extends ORM
 		locale = '';
 		return locale;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"9"}
+		
+	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -240,8 +242,8 @@ class UserInterface extends ORM
 	}
 
 	function set_mandator(x:Int):Int{
-
-		modified('mandator');
+		if(mandator != null)
+			modified('mandator');
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 
@@ -256,4 +258,5 @@ class UserInterface extends ORM
 		mandator = null;
 		return mandator;
 	}
+	
 }

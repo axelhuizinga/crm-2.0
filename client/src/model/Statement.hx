@@ -34,18 +34,20 @@ typedef StatementProps = {
 	?mandator:Int
 };
 
+@:rtti
 class Statement extends ORM
 {
-	public static var varNames:String = 'a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,aa,processed,id,edited_by,mandator';
-		public function new(props:StatementProps) {
+
+	public function new(props:StatementProps) {
 		super(props);
+		propertyNames = 'a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,aa,processed,id,edited_by,mandator'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
 		}
-	}
-
-	//{"type":"bigint","default":"null","attnum":"1"}
+	}	
+		
+	@dataType("bigint")
 	@:isVar public var a(get,set):Int;
 	var initial_a:Int;
 	
@@ -54,8 +56,8 @@ class Statement extends ORM
 	}
 
 	function set_a(x:Int):Int{
-
-		modified('a');
+		if(a != null)
+			modified('a');
 		a = x;
 		if(initial_a == null)
 			initial_a = a; 
@@ -70,8 +72,8 @@ class Statement extends ORM
 		a = null;
 		return a;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"2"}
+		
+	@dataType("bigint")
 	@:isVar public var b(get,set):Int;
 	var initial_b:Int;
 	
@@ -80,8 +82,8 @@ class Statement extends ORM
 	}
 
 	function set_b(x:Int):Int{
-
-		modified('b');
+		if(b != null)
+			modified('b');
 		b = x;
 		if(initial_b == null)
 			initial_b = b; 
@@ -96,8 +98,8 @@ class Statement extends ORM
 		b = null;
 		return b;
 	}
-
-	//{"type":"date","default":"'null'","attnum":"3"}
+		
+	@dataType("date")
 	@:isVar public var c(get,set):String;
 	var initial_c:String;
 	
@@ -106,8 +108,8 @@ class Statement extends ORM
 	}
 
 	function set_c(x:String):String{
-
-		modified('c');
+		if(c != null)
+			modified('c');
 		c = x;
 		if(initial_c == null)
 			initial_c = c; 
@@ -122,8 +124,8 @@ class Statement extends ORM
 		c = 'null';
 		return c;
 	}
-
-	//{"type":"date","default":"'null'","attnum":"4"}
+		
+	@dataType("date")
 	@:isVar public var d(get,set):String;
 	var initial_d:String;
 	
@@ -132,8 +134,8 @@ class Statement extends ORM
 	}
 
 	function set_d(x:String):String{
-
-		modified('d');
+		if(d != null)
+			modified('d');
 		d = x;
 		if(initial_d == null)
 			initial_d = d; 
@@ -148,8 +150,8 @@ class Statement extends ORM
 		d = 'null';
 		return d;
 	}
-
-	//{"type":"double precision","default":"''","attnum":"5"}
+		
+	@dataType("double precision")
 	@:isVar public var e(get,set):String;
 	var initial_e:String;
 	
@@ -158,8 +160,8 @@ class Statement extends ORM
 	}
 
 	function set_e(x:String):String{
-
-		modified('e');
+		if(e != null)
+			modified('e');
 		e = x;
 		if(initial_e == null)
 			initial_e = e; 
@@ -174,8 +176,8 @@ class Statement extends ORM
 		e = '';
 		return e;
 	}
-
-	//{"type":"character varying(3)","default":"''","attnum":"6"}
+		
+	@dataType("character varying(3)")
 	@:isVar public var f(get,set):String;
 	var initial_f:String;
 	
@@ -184,8 +186,8 @@ class Statement extends ORM
 	}
 
 	function set_f(x:String):String{
-
-		modified('f');
+		if(f != null)
+			modified('f');
 		f = x;
 		if(initial_f == null)
 			initial_f = f; 
@@ -200,8 +202,8 @@ class Statement extends ORM
 		f = '';
 		return f;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"7"}
+		
+	@dataType("bigint")
 	@:isVar public var g(get,set):Int;
 	var initial_g:Int;
 	
@@ -210,8 +212,8 @@ class Statement extends ORM
 	}
 
 	function set_g(x:Int):Int{
-
-		modified('g');
+		if(g != null)
+			modified('g');
 		g = x;
 		if(initial_g == null)
 			initial_g = g; 
@@ -226,8 +228,8 @@ class Statement extends ORM
 		g = null;
 		return g;
 	}
-
-	//{"type":"character varying(160)","default":"''","attnum":"8"}
+		
+	@dataType("character varying(160)")
 	@:isVar public var h(get,set):String;
 	var initial_h:String;
 	
@@ -236,8 +238,8 @@ class Statement extends ORM
 	}
 
 	function set_h(x:String):String{
-
-		modified('h');
+		if(h != null)
+			modified('h');
 		h = x;
 		if(initial_h == null)
 			initial_h = h; 
@@ -252,8 +254,8 @@ class Statement extends ORM
 		h = '';
 		return h;
 	}
-
-	//{"type":"character varying(160)","default":"''","attnum":"9"}
+		
+	@dataType("character varying(160)")
 	@:isVar public var i(get,set):String;
 	var initial_i:String;
 	
@@ -262,8 +264,8 @@ class Statement extends ORM
 	}
 
 	function set_i(x:String):String{
-
-		modified('i');
+		if(i != null)
+			modified('i');
 		i = x;
 		if(initial_i == null)
 			initial_i = i; 
@@ -278,8 +280,8 @@ class Statement extends ORM
 		i = '';
 		return i;
 	}
-
-	//{"type":"character varying(160)","default":"''","attnum":"10"}
+		
+	@dataType("character varying(160)")
 	@:isVar public var j(get,set):String;
 	var initial_j:String;
 	
@@ -288,8 +290,8 @@ class Statement extends ORM
 	}
 
 	function set_j(x:String):String{
-
-		modified('j');
+		if(j != null)
+			modified('j');
 		j = x;
 		if(initial_j == null)
 			initial_j = j; 
@@ -304,8 +306,8 @@ class Statement extends ORM
 		j = '';
 		return j;
 	}
-
-	//{"type":"character varying(160)","default":"''","attnum":"11"}
+		
+	@dataType("character varying(160)")
 	@:isVar public var k(get,set):String;
 	var initial_k:String;
 	
@@ -314,8 +316,8 @@ class Statement extends ORM
 	}
 
 	function set_k(x:String):String{
-
-		modified('k');
+		if(k != null)
+			modified('k');
 		k = x;
 		if(initial_k == null)
 			initial_k = k; 
@@ -330,8 +332,8 @@ class Statement extends ORM
 		k = '';
 		return k;
 	}
-
-	//{"type":"character varying(160)","default":"''","attnum":"12"}
+		
+	@dataType("character varying(160)")
 	@:isVar public var l(get,set):String;
 	var initial_l:String;
 	
@@ -340,8 +342,8 @@ class Statement extends ORM
 	}
 
 	function set_l(x:String):String{
-
-		modified('l');
+		if(l != null)
+			modified('l');
 		l = x;
 		if(initial_l == null)
 			initial_l = l; 
@@ -356,8 +358,8 @@ class Statement extends ORM
 		l = '';
 		return l;
 	}
-
-	//{"type":"character varying(160)","default":"''","attnum":"13"}
+		
+	@dataType("character varying(160)")
 	@:isVar public var m(get,set):String;
 	var initial_m:String;
 	
@@ -366,8 +368,8 @@ class Statement extends ORM
 	}
 
 	function set_m(x:String):String{
-
-		modified('m');
+		if(m != null)
+			modified('m');
 		m = x;
 		if(initial_m == null)
 			initial_m = m; 
@@ -382,8 +384,8 @@ class Statement extends ORM
 		m = '';
 		return m;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"14"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var n(get,set):String;
 	var initial_n:String;
 	
@@ -392,8 +394,8 @@ class Statement extends ORM
 	}
 
 	function set_n(x:String):String{
-
-		modified('n');
+		if(n != null)
+			modified('n');
 		n = x;
 		if(initial_n == null)
 			initial_n = n; 
@@ -408,8 +410,8 @@ class Statement extends ORM
 		n = '';
 		return n;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"15"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var o(get,set):String;
 	var initial_o:String;
 	
@@ -418,8 +420,8 @@ class Statement extends ORM
 	}
 
 	function set_o(x:String):String{
-
-		modified('o');
+		if(o != null)
+			modified('o');
 		o = x;
 		if(initial_o == null)
 			initial_o = o; 
@@ -434,8 +436,8 @@ class Statement extends ORM
 		o = '';
 		return o;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"16"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var p(get,set):String;
 	var initial_p:String;
 	
@@ -444,8 +446,8 @@ class Statement extends ORM
 	}
 
 	function set_p(x:String):String{
-
-		modified('p');
+		if(p != null)
+			modified('p');
 		p = x;
 		if(initial_p == null)
 			initial_p = p; 
@@ -460,8 +462,8 @@ class Statement extends ORM
 		p = '';
 		return p;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"17"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var q(get,set):String;
 	var initial_q:String;
 	
@@ -470,8 +472,8 @@ class Statement extends ORM
 	}
 
 	function set_q(x:String):String{
-
-		modified('q');
+		if(q != null)
+			modified('q');
 		q = x;
 		if(initial_q == null)
 			initial_q = q; 
@@ -486,8 +488,8 @@ class Statement extends ORM
 		q = '';
 		return q;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"18"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var r(get,set):String;
 	var initial_r:String;
 	
@@ -496,8 +498,8 @@ class Statement extends ORM
 	}
 
 	function set_r(x:String):String{
-
-		modified('r');
+		if(r != null)
+			modified('r');
 		r = x;
 		if(initial_r == null)
 			initial_r = r; 
@@ -512,8 +514,8 @@ class Statement extends ORM
 		r = '';
 		return r;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"19"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var s(get,set):String;
 	var initial_s:String;
 	
@@ -522,8 +524,8 @@ class Statement extends ORM
 	}
 
 	function set_s(x:String):String{
-
-		modified('s');
+		if(s != null)
+			modified('s');
 		s = x;
 		if(initial_s == null)
 			initial_s = s; 
@@ -538,8 +540,8 @@ class Statement extends ORM
 		s = '';
 		return s;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"20"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var t(get,set):String;
 	var initial_t:String;
 	
@@ -548,8 +550,8 @@ class Statement extends ORM
 	}
 
 	function set_t(x:String):String{
-
-		modified('t');
+		if(t != null)
+			modified('t');
 		t = x;
 		if(initial_t == null)
 			initial_t = t; 
@@ -564,8 +566,8 @@ class Statement extends ORM
 		t = '';
 		return t;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"21"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var u(get,set):String;
 	var initial_u:String;
 	
@@ -574,8 +576,8 @@ class Statement extends ORM
 	}
 
 	function set_u(x:String):String{
-
-		modified('u');
+		if(u != null)
+			modified('u');
 		u = x;
 		if(initial_u == null)
 			initial_u = u; 
@@ -590,8 +592,8 @@ class Statement extends ORM
 		u = '';
 		return u;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"22"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var v(get,set):String;
 	var initial_v:String;
 	
@@ -600,8 +602,8 @@ class Statement extends ORM
 	}
 
 	function set_v(x:String):String{
-
-		modified('v');
+		if(v != null)
+			modified('v');
 		v = x;
 		if(initial_v == null)
 			initial_v = v; 
@@ -616,8 +618,8 @@ class Statement extends ORM
 		v = '';
 		return v;
 	}
-
-	//{"type":"character varying(28)","default":"''","attnum":"23"}
+		
+	@dataType("character varying(28)")
 	@:isVar public var w(get,set):String;
 	var initial_w:String;
 	
@@ -626,8 +628,8 @@ class Statement extends ORM
 	}
 
 	function set_w(x:String):String{
-
-		modified('w');
+		if(w != null)
+			modified('w');
 		w = x;
 		if(initial_w == null)
 			initial_w = w; 
@@ -642,8 +644,8 @@ class Statement extends ORM
 		w = '';
 		return w;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"24"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var x(get,set):String;
 	var initial_x:String;
 	
@@ -652,8 +654,8 @@ class Statement extends ORM
 	}
 
 	function set_x(x:String):String{
-
-		modified('x');
+		if(x != null)
+			modified('x');
 		x = x;
 		if(initial_x == null)
 			initial_x = x; 
@@ -668,8 +670,8 @@ class Statement extends ORM
 		x = '';
 		return x;
 	}
-
-	//{"type":"character varying(11)","default":"''","attnum":"25"}
+		
+	@dataType("character varying(11)")
 	@:isVar public var y(get,set):String;
 	var initial_y:String;
 	
@@ -678,8 +680,8 @@ class Statement extends ORM
 	}
 
 	function set_y(x:String):String{
-
-		modified('y');
+		if(y != null)
+			modified('y');
 		y = x;
 		if(initial_y == null)
 			initial_y = y; 
@@ -694,8 +696,8 @@ class Statement extends ORM
 		y = '';
 		return y;
 	}
-
-	//{"type":"character varying(22)","default":"''","attnum":"26"}
+		
+	@dataType("character varying(22)")
 	@:isVar public var z(get,set):String;
 	var initial_z:String;
 	
@@ -704,8 +706,8 @@ class Statement extends ORM
 	}
 
 	function set_z(x:String):String{
-
-		modified('z');
+		if(z != null)
+			modified('z');
 		z = x;
 		if(initial_z == null)
 			initial_z = z; 
@@ -720,8 +722,8 @@ class Statement extends ORM
 		z = '';
 		return z;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"27"}
+		
+	@dataType("bigint")
 	@:isVar public var aa(get,set):Int;
 	var initial_aa:Int;
 	
@@ -730,8 +732,8 @@ class Statement extends ORM
 	}
 
 	function set_aa(x:Int):Int{
-
-		modified('aa');
+		if(aa != null)
+			modified('aa');
 		aa = x;
 		if(initial_aa == null)
 			initial_aa = aa; 
@@ -746,8 +748,8 @@ class Statement extends ORM
 		aa = null;
 		return aa;
 	}
-
-	//{"type":"smallint","default":"'0'","attnum":"28"}
+		
+	@dataType("smallint")
 	@:isVar public var processed(get,set):Int;
 	var initial_processed:Int;
 	
@@ -756,8 +758,8 @@ class Statement extends ORM
 	}
 
 	function set_processed(x:Int):Int{
-
-		modified('processed');
+		if(processed != null)
+			modified('processed');
 		processed = x;
 		if(initial_processed == null)
 			initial_processed = processed; 
@@ -772,8 +774,8 @@ class Statement extends ORM
 		processed = '0';
 		return processed;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"29"}
+		
+	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
@@ -782,8 +784,8 @@ class Statement extends ORM
 	}
 
 	function set_id(x:Int):Int{
-
-		modified('id');
+		if(id != null)
+			modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -798,8 +800,8 @@ class Statement extends ORM
 		id = null;
 		return id;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"30"}
+		
+	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -808,8 +810,8 @@ class Statement extends ORM
 	}
 
 	function set_edited_by(x:Int):Int{
-
-		modified('edited_by');
+		if(edited_by != null)
+			modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -824,8 +826,8 @@ class Statement extends ORM
 		edited_by = null;
 		return edited_by;
 	}
-
-	//{"type":"bigint","default":"nextval('statements_man_seq'","attnum":"31"}
+		
+	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -834,8 +836,8 @@ class Statement extends ORM
 	}
 
 	function set_mandator(x:Int):Int{
-
-		modified('mandator');
+		if(mandator != null)
+			modified('mandator');
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 
@@ -850,4 +852,5 @@ class Statement extends ORM
 		mandator = nextval('statements_man_seq';
 		return mandator;
 	}
+	
 }

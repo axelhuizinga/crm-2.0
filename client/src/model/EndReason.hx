@@ -7,18 +7,20 @@ typedef EndReasonProps = {
 	?mandator:Int
 };
 
+@:rtti
 class EndReason extends ORM
 {
-	public static var varNames:String = 'id,reason,edited_by,mandator';
-		public function new(props:EndReasonProps) {
+
+	public function new(props:EndReasonProps) {
 		super(props);
+		propertyNames = 'id,reason,edited_by,mandator'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
 		}
-	}
-
-	//{"type":"bigint","default":"null","attnum":"1"}
+	}	
+		
+	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
@@ -27,8 +29,8 @@ class EndReason extends ORM
 	}
 
 	function set_id(x:Int):Int{
-
-		modified('id');
+		if(id != null)
+			modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -43,8 +45,8 @@ class EndReason extends ORM
 		id = null;
 		return id;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"2"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var reason(get,set):String;
 	var initial_reason:String;
 	
@@ -53,8 +55,8 @@ class EndReason extends ORM
 	}
 
 	function set_reason(x:String):String{
-
-		modified('reason');
+		if(reason != null)
+			modified('reason');
 		reason = x;
 		if(initial_reason == null)
 			initial_reason = reason; 
@@ -69,8 +71,8 @@ class EndReason extends ORM
 		reason = '';
 		return reason;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"3"}
+		
+	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -79,8 +81,8 @@ class EndReason extends ORM
 	}
 
 	function set_edited_by(x:Int):Int{
-
-		modified('edited_by');
+		if(edited_by != null)
+			modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -95,8 +97,8 @@ class EndReason extends ORM
 		edited_by = null;
 		return edited_by;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"4"}
+		
+	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -105,8 +107,8 @@ class EndReason extends ORM
 	}
 
 	function set_mandator(x:Int):Int{
-
-		modified('mandator');
+		if(mandator != null)
+			modified('mandator');
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 
@@ -121,4 +123,5 @@ class EndReason extends ORM
 		mandator = null;
 		return mandator;
 	}
+	
 }

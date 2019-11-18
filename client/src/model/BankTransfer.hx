@@ -37,18 +37,20 @@ typedef BankTransferProps = {
 	?edited_by:Int
 };
 
+@:rtti
 class BankTransfer extends ORM
 {
-	public static var varNames:String = 'ag_name,ag_konto_or_iban,ag_blz_or_bic,zahlpfl_name,zahlpfl_name2,zahlpfl_strasse,zahlpfl_name_ort,zahlpfl_name_kto_or_iban,zahlpfl_name_blz_or_bic,betrag,currency,zahlart,termin,vwz1,vwz2,vwz3,vwz4,vwz5,vwz6,vwz7,vwz8,vwz9,ba_id,tracking_status,anforderungs_datum,rueck_datum,cycle,ref_id,mandat_id,mandat_datum,ag_creditor_id,sequenz,super_ag_name,edited_by';
-		public function new(props:BankTransferProps) {
+
+	public function new(props:BankTransferProps) {
 		super(props);
+		propertyNames = 'ag_name,ag_konto_or_iban,ag_blz_or_bic,zahlpfl_name,zahlpfl_name2,zahlpfl_strasse,zahlpfl_name_ort,zahlpfl_name_kto_or_iban,zahlpfl_name_blz_or_bic,betrag,currency,zahlart,termin,vwz1,vwz2,vwz3,vwz4,vwz5,vwz6,vwz7,vwz8,vwz9,ba_id,tracking_status,anforderungs_datum,rueck_datum,cycle,ref_id,mandat_id,mandat_datum,ag_creditor_id,sequenz,super_ag_name,edited_by'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
 		}
-	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"1"}
+	}	
+		
+	@dataType("character varying(64)")
 	@:isVar public var ag_name(get,set):String;
 	var initial_ag_name:String;
 	
@@ -57,8 +59,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_ag_name(x:String):String{
-
-		modified('ag_name');
+		if(ag_name != null)
+			modified('ag_name');
 		ag_name = x;
 		if(initial_ag_name == null)
 			initial_ag_name = ag_name; 
@@ -73,8 +75,8 @@ class BankTransfer extends ORM
 		ag_name = '';
 		return ag_name;
 	}
-
-	//{"type":"character varying(18)","default":"''","attnum":"2"}
+		
+	@dataType("character varying(18)")
 	@:isVar public var ag_konto_or_iban(get,set):String;
 	var initial_ag_konto_or_iban:String;
 	
@@ -83,8 +85,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_ag_konto_or_iban(x:String):String{
-
-		modified('ag_konto_or_iban');
+		if(ag_konto_or_iban != null)
+			modified('ag_konto_or_iban');
 		ag_konto_or_iban = x;
 		if(initial_ag_konto_or_iban == null)
 			initial_ag_konto_or_iban = ag_konto_or_iban; 
@@ -99,8 +101,8 @@ class BankTransfer extends ORM
 		ag_konto_or_iban = '';
 		return ag_konto_or_iban;
 	}
-
-	//{"type":"character varying(11)","default":"''","attnum":"3"}
+		
+	@dataType("character varying(11)")
 	@:isVar public var ag_blz_or_bic(get,set):String;
 	var initial_ag_blz_or_bic:String;
 	
@@ -109,8 +111,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_ag_blz_or_bic(x:String):String{
-
-		modified('ag_blz_or_bic');
+		if(ag_blz_or_bic != null)
+			modified('ag_blz_or_bic');
 		ag_blz_or_bic = x;
 		if(initial_ag_blz_or_bic == null)
 			initial_ag_blz_or_bic = ag_blz_or_bic; 
@@ -125,8 +127,8 @@ class BankTransfer extends ORM
 		ag_blz_or_bic = '';
 		return ag_blz_or_bic;
 	}
-
-	//{"type":"character varying(21)","default":"''","attnum":"4"}
+		
+	@dataType("character varying(21)")
 	@:isVar public var zahlpfl_name(get,set):String;
 	var initial_zahlpfl_name:String;
 	
@@ -135,8 +137,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_zahlpfl_name(x:String):String{
-
-		modified('zahlpfl_name');
+		if(zahlpfl_name != null)
+			modified('zahlpfl_name');
 		zahlpfl_name = x;
 		if(initial_zahlpfl_name == null)
 			initial_zahlpfl_name = zahlpfl_name; 
@@ -151,8 +153,8 @@ class BankTransfer extends ORM
 		zahlpfl_name = '';
 		return zahlpfl_name;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"5"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var zahlpfl_name2(get,set):String;
 	var initial_zahlpfl_name2:String;
 	
@@ -161,8 +163,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_zahlpfl_name2(x:String):String{
-
-		modified('zahlpfl_name2');
+		if(zahlpfl_name2 != null)
+			modified('zahlpfl_name2');
 		zahlpfl_name2 = x;
 		if(initial_zahlpfl_name2 == null)
 			initial_zahlpfl_name2 = zahlpfl_name2; 
@@ -177,8 +179,8 @@ class BankTransfer extends ORM
 		zahlpfl_name2 = '';
 		return zahlpfl_name2;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"6"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var zahlpfl_strasse(get,set):String;
 	var initial_zahlpfl_strasse:String;
 	
@@ -187,8 +189,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_zahlpfl_strasse(x:String):String{
-
-		modified('zahlpfl_strasse');
+		if(zahlpfl_strasse != null)
+			modified('zahlpfl_strasse');
 		zahlpfl_strasse = x;
 		if(initial_zahlpfl_strasse == null)
 			initial_zahlpfl_strasse = zahlpfl_strasse; 
@@ -203,8 +205,8 @@ class BankTransfer extends ORM
 		zahlpfl_strasse = '';
 		return zahlpfl_strasse;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"7"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var zahlpfl_name_ort(get,set):String;
 	var initial_zahlpfl_name_ort:String;
 	
@@ -213,8 +215,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_zahlpfl_name_ort(x:String):String{
-
-		modified('zahlpfl_name_ort');
+		if(zahlpfl_name_ort != null)
+			modified('zahlpfl_name_ort');
 		zahlpfl_name_ort = x;
 		if(initial_zahlpfl_name_ort == null)
 			initial_zahlpfl_name_ort = zahlpfl_name_ort; 
@@ -229,8 +231,8 @@ class BankTransfer extends ORM
 		zahlpfl_name_ort = '';
 		return zahlpfl_name_ort;
 	}
-
-	//{"type":"character varying(22)","default":"''","attnum":"8"}
+		
+	@dataType("character varying(22)")
 	@:isVar public var zahlpfl_name_kto_or_iban(get,set):String;
 	var initial_zahlpfl_name_kto_or_iban:String;
 	
@@ -239,8 +241,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_zahlpfl_name_kto_or_iban(x:String):String{
-
-		modified('zahlpfl_name_kto_or_iban');
+		if(zahlpfl_name_kto_or_iban != null)
+			modified('zahlpfl_name_kto_or_iban');
 		zahlpfl_name_kto_or_iban = x;
 		if(initial_zahlpfl_name_kto_or_iban == null)
 			initial_zahlpfl_name_kto_or_iban = zahlpfl_name_kto_or_iban; 
@@ -255,8 +257,8 @@ class BankTransfer extends ORM
 		zahlpfl_name_kto_or_iban = '';
 		return zahlpfl_name_kto_or_iban;
 	}
-
-	//{"type":"character varying(11)","default":"''","attnum":"9"}
+		
+	@dataType("character varying(11)")
 	@:isVar public var zahlpfl_name_blz_or_bic(get,set):String;
 	var initial_zahlpfl_name_blz_or_bic:String;
 	
@@ -265,8 +267,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_zahlpfl_name_blz_or_bic(x:String):String{
-
-		modified('zahlpfl_name_blz_or_bic');
+		if(zahlpfl_name_blz_or_bic != null)
+			modified('zahlpfl_name_blz_or_bic');
 		zahlpfl_name_blz_or_bic = x;
 		if(initial_zahlpfl_name_blz_or_bic == null)
 			initial_zahlpfl_name_blz_or_bic = zahlpfl_name_blz_or_bic; 
@@ -281,8 +283,8 @@ class BankTransfer extends ORM
 		zahlpfl_name_blz_or_bic = '';
 		return zahlpfl_name_blz_or_bic;
 	}
-
-	//{"type":"double precision","default":"''","attnum":"10"}
+		
+	@dataType("double precision")
 	@:isVar public var betrag(get,set):String;
 	var initial_betrag:String;
 	
@@ -291,8 +293,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_betrag(x:String):String{
-
-		modified('betrag');
+		if(betrag != null)
+			modified('betrag');
 		betrag = x;
 		if(initial_betrag == null)
 			initial_betrag = betrag; 
@@ -307,8 +309,8 @@ class BankTransfer extends ORM
 		betrag = '';
 		return betrag;
 	}
-
-	//{"type":"character varying(32)","default":"'\u20ac'","attnum":"11"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var currency(get,set):String;
 	var initial_currency:String;
 	
@@ -317,8 +319,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_currency(x:String):String{
-
-		modified('currency');
+		if(currency != null)
+			modified('currency');
 		currency = x;
 		if(initial_currency == null)
 			initial_currency = currency; 
@@ -333,8 +335,8 @@ class BankTransfer extends ORM
 		currency = '€';
 		return currency;
 	}
-
-	//{"type":"character varying(5)","default":"'BASIS'","attnum":"12"}
+		
+	@dataType("character varying(5)")
 	@:isVar public var zahlart(get,set):String;
 	var initial_zahlart:String;
 	
@@ -343,8 +345,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_zahlart(x:String):String{
-
-		modified('zahlart');
+		if(zahlart != null)
+			modified('zahlart');
 		zahlart = x;
 		if(initial_zahlart == null)
 			initial_zahlart = zahlart; 
@@ -359,8 +361,8 @@ class BankTransfer extends ORM
 		zahlart = 'BASIS';
 		return zahlart;
 	}
-
-	//{"type":"date","default":"'null'","attnum":"13"}
+		
+	@dataType("date")
 	@:isVar public var termin(get,set):String;
 	var initial_termin:String;
 	
@@ -369,8 +371,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_termin(x:String):String{
-
-		modified('termin');
+		if(termin != null)
+			modified('termin');
 		termin = x;
 		if(initial_termin == null)
 			initial_termin = termin; 
@@ -385,8 +387,8 @@ class BankTransfer extends ORM
 		termin = 'null';
 		return termin;
 	}
-
-	//{"type":"character varying(22)","default":"''","attnum":"14"}
+		
+	@dataType("character varying(22)")
 	@:isVar public var vwz1(get,set):String;
 	var initial_vwz1:String;
 	
@@ -395,8 +397,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_vwz1(x:String):String{
-
-		modified('vwz1');
+		if(vwz1 != null)
+			modified('vwz1');
 		vwz1 = x;
 		if(initial_vwz1 == null)
 			initial_vwz1 = vwz1; 
@@ -411,8 +413,8 @@ class BankTransfer extends ORM
 		vwz1 = '';
 		return vwz1;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"15"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var vwz2(get,set):String;
 	var initial_vwz2:String;
 	
@@ -421,8 +423,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_vwz2(x:String):String{
-
-		modified('vwz2');
+		if(vwz2 != null)
+			modified('vwz2');
 		vwz2 = x;
 		if(initial_vwz2 == null)
 			initial_vwz2 = vwz2; 
@@ -437,8 +439,8 @@ class BankTransfer extends ORM
 		vwz2 = '';
 		return vwz2;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"16"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var vwz3(get,set):String;
 	var initial_vwz3:String;
 	
@@ -447,8 +449,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_vwz3(x:String):String{
-
-		modified('vwz3');
+		if(vwz3 != null)
+			modified('vwz3');
 		vwz3 = x;
 		if(initial_vwz3 == null)
 			initial_vwz3 = vwz3; 
@@ -463,8 +465,8 @@ class BankTransfer extends ORM
 		vwz3 = '';
 		return vwz3;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"17"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var vwz4(get,set):String;
 	var initial_vwz4:String;
 	
@@ -473,8 +475,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_vwz4(x:String):String{
-
-		modified('vwz4');
+		if(vwz4 != null)
+			modified('vwz4');
 		vwz4 = x;
 		if(initial_vwz4 == null)
 			initial_vwz4 = vwz4; 
@@ -489,8 +491,8 @@ class BankTransfer extends ORM
 		vwz4 = '';
 		return vwz4;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"18"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var vwz5(get,set):String;
 	var initial_vwz5:String;
 	
@@ -499,8 +501,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_vwz5(x:String):String{
-
-		modified('vwz5');
+		if(vwz5 != null)
+			modified('vwz5');
 		vwz5 = x;
 		if(initial_vwz5 == null)
 			initial_vwz5 = vwz5; 
@@ -515,8 +517,8 @@ class BankTransfer extends ORM
 		vwz5 = '';
 		return vwz5;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"19"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var vwz6(get,set):String;
 	var initial_vwz6:String;
 	
@@ -525,8 +527,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_vwz6(x:String):String{
-
-		modified('vwz6');
+		if(vwz6 != null)
+			modified('vwz6');
 		vwz6 = x;
 		if(initial_vwz6 == null)
 			initial_vwz6 = vwz6; 
@@ -541,8 +543,8 @@ class BankTransfer extends ORM
 		vwz6 = '';
 		return vwz6;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"20"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var vwz7(get,set):String;
 	var initial_vwz7:String;
 	
@@ -551,8 +553,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_vwz7(x:String):String{
-
-		modified('vwz7');
+		if(vwz7 != null)
+			modified('vwz7');
 		vwz7 = x;
 		if(initial_vwz7 == null)
 			initial_vwz7 = vwz7; 
@@ -567,8 +569,8 @@ class BankTransfer extends ORM
 		vwz7 = '';
 		return vwz7;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"21"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var vwz8(get,set):String;
 	var initial_vwz8:String;
 	
@@ -577,8 +579,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_vwz8(x:String):String{
-
-		modified('vwz8');
+		if(vwz8 != null)
+			modified('vwz8');
 		vwz8 = x;
 		if(initial_vwz8 == null)
 			initial_vwz8 = vwz8; 
@@ -593,8 +595,8 @@ class BankTransfer extends ORM
 		vwz8 = '';
 		return vwz8;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"22"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var vwz9(get,set):String;
 	var initial_vwz9:String;
 	
@@ -603,8 +605,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_vwz9(x:String):String{
-
-		modified('vwz9');
+		if(vwz9 != null)
+			modified('vwz9');
 		vwz9 = x;
 		if(initial_vwz9 == null)
 			initial_vwz9 = vwz9; 
@@ -619,8 +621,8 @@ class BankTransfer extends ORM
 		vwz9 = '';
 		return vwz9;
 	}
-
-	//{"type":"bigint","default":"nextval('bank_transfers_buchungsanforderungid_seq'","attnum":"23"}
+		
+	@dataType("bigint")
 	@:isVar public var ba_id(get,set):Int;
 	var initial_ba_id:Int;
 	
@@ -629,8 +631,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_ba_id(x:Int):Int{
-
-		modified('ba_id');
+		if(ba_id != null)
+			modified('ba_id');
 		ba_id = x;
 		if(initial_ba_id == null)
 			initial_ba_id = ba_id; 
@@ -645,8 +647,8 @@ class BankTransfer extends ORM
 		ba_id = nextval('bank_transfers_buchungsanforderungid_seq';
 		return ba_id;
 	}
-
-	//{"type":"bank_transfers_tracking_status","default":"'neu'","attnum":"24"}
+		
+	@dataType("bank_transfers_tracking_status")
 	@:isVar public var tracking_status(get,set):String;
 	var initial_tracking_status:String;
 	
@@ -655,8 +657,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_tracking_status(x:String):String{
-
-		modified('tracking_status');
+		if(tracking_status != null)
+			modified('tracking_status');
 		tracking_status = x;
 		if(initial_tracking_status == null)
 			initial_tracking_status = tracking_status; 
@@ -671,8 +673,8 @@ class BankTransfer extends ORM
 		tracking_status = 'neu';
 		return tracking_status;
 	}
-
-	//{"type":"date","default":"'null'","attnum":"25"}
+		
+	@dataType("date")
 	@:isVar public var anforderungs_datum(get,set):String;
 	var initial_anforderungs_datum:String;
 	
@@ -681,8 +683,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_anforderungs_datum(x:String):String{
-
-		modified('anforderungs_datum');
+		if(anforderungs_datum != null)
+			modified('anforderungs_datum');
 		anforderungs_datum = x;
 		if(initial_anforderungs_datum == null)
 			initial_anforderungs_datum = anforderungs_datum; 
@@ -697,8 +699,8 @@ class BankTransfer extends ORM
 		anforderungs_datum = 'null';
 		return anforderungs_datum;
 	}
-
-	//{"type":"date","default":"'null'","attnum":"26"}
+		
+	@dataType("date")
 	@:isVar public var rueck_datum(get,set):String;
 	var initial_rueck_datum:String;
 	
@@ -707,8 +709,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_rueck_datum(x:String):String{
-
-		modified('rueck_datum');
+		if(rueck_datum != null)
+			modified('rueck_datum');
 		rueck_datum = x;
 		if(initial_rueck_datum == null)
 			initial_rueck_datum = rueck_datum; 
@@ -723,8 +725,8 @@ class BankTransfer extends ORM
 		rueck_datum = 'null';
 		return rueck_datum;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"27"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var cycle(get,set):String;
 	var initial_cycle:String;
 	
@@ -733,8 +735,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_cycle(x:String):String{
-
-		modified('cycle');
+		if(cycle != null)
+			modified('cycle');
 		cycle = x;
 		if(initial_cycle == null)
 			initial_cycle = cycle; 
@@ -749,8 +751,8 @@ class BankTransfer extends ORM
 		cycle = '';
 		return cycle;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"28"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var ref_id(get,set):String;
 	var initial_ref_id:String;
 	
@@ -759,8 +761,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_ref_id(x:String):String{
-
-		modified('ref_id');
+		if(ref_id != null)
+			modified('ref_id');
 		ref_id = x;
 		if(initial_ref_id == null)
 			initial_ref_id = ref_id; 
@@ -775,8 +777,8 @@ class BankTransfer extends ORM
 		ref_id = '';
 		return ref_id;
 	}
-
-	//{"type":"character varying(11)","default":"''","attnum":"29"}
+		
+	@dataType("character varying(11)")
 	@:isVar public var mandat_id(get,set):String;
 	var initial_mandat_id:String;
 	
@@ -785,8 +787,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_mandat_id(x:String):String{
-
-		modified('mandat_id');
+		if(mandat_id != null)
+			modified('mandat_id');
 		mandat_id = x;
 		if(initial_mandat_id == null)
 			initial_mandat_id = mandat_id; 
@@ -801,8 +803,8 @@ class BankTransfer extends ORM
 		mandat_id = '';
 		return mandat_id;
 	}
-
-	//{"type":"date","default":"'null'","attnum":"30"}
+		
+	@dataType("date")
 	@:isVar public var mandat_datum(get,set):String;
 	var initial_mandat_datum:String;
 	
@@ -811,8 +813,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_mandat_datum(x:String):String{
-
-		modified('mandat_datum');
+		if(mandat_datum != null)
+			modified('mandat_datum');
 		mandat_datum = x;
 		if(initial_mandat_datum == null)
 			initial_mandat_datum = mandat_datum; 
@@ -827,8 +829,8 @@ class BankTransfer extends ORM
 		mandat_datum = 'null';
 		return mandat_datum;
 	}
-
-	//{"type":"character varying(18)","default":"''","attnum":"31"}
+		
+	@dataType("character varying(18)")
 	@:isVar public var ag_creditor_id(get,set):String;
 	var initial_ag_creditor_id:String;
 	
@@ -837,8 +839,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_ag_creditor_id(x:String):String{
-
-		modified('ag_creditor_id');
+		if(ag_creditor_id != null)
+			modified('ag_creditor_id');
 		ag_creditor_id = x;
 		if(initial_ag_creditor_id == null)
 			initial_ag_creditor_id = ag_creditor_id; 
@@ -853,8 +855,8 @@ class BankTransfer extends ORM
 		ag_creditor_id = '';
 		return ag_creditor_id;
 	}
-
-	//{"type":"character varying(4)","default":"''","attnum":"32"}
+		
+	@dataType("character varying(4)")
 	@:isVar public var sequenz(get,set):String;
 	var initial_sequenz:String;
 	
@@ -863,8 +865,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_sequenz(x:String):String{
-
-		modified('sequenz');
+		if(sequenz != null)
+			modified('sequenz');
 		sequenz = x;
 		if(initial_sequenz == null)
 			initial_sequenz = sequenz; 
@@ -879,8 +881,8 @@ class BankTransfer extends ORM
 		sequenz = '';
 		return sequenz;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"33"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var super_ag_name(get,set):String;
 	var initial_super_ag_name:String;
 	
@@ -889,8 +891,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_super_ag_name(x:String):String{
-
-		modified('super_ag_name');
+		if(super_ag_name != null)
+			modified('super_ag_name');
 		super_ag_name = x;
 		if(initial_super_ag_name == null)
 			initial_super_ag_name = super_ag_name; 
@@ -905,8 +907,8 @@ class BankTransfer extends ORM
 		super_ag_name = '';
 		return super_ag_name;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"34"}
+		
+	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -915,8 +917,8 @@ class BankTransfer extends ORM
 	}
 
 	function set_edited_by(x:Int):Int{
-
-		modified('edited_by');
+		if(edited_by != null)
+			modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -931,4 +933,5 @@ class BankTransfer extends ORM
 		edited_by = null;
 		return edited_by;
 	}
+	
 }

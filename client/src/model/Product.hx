@@ -11,18 +11,20 @@ typedef ProductProps = {
 	?edited_by:Int
 };
 
+@:rtti
 class Product extends ORM
 {
-	public static var varNames:String = 'id,name,description,value,attributes,mandator,active,edited_by';
-		public function new(props:ProductProps) {
+
+	public function new(props:ProductProps) {
 		super(props);
+		propertyNames = 'id,name,description,value,attributes,mandator,active,edited_by'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
 		}
-	}
-
-	//{"type":"bigint","default":"null","attnum":"1"}
+	}	
+		
+	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
@@ -31,8 +33,8 @@ class Product extends ORM
 	}
 
 	function set_id(x:Int):Int{
-
-		modified('id');
+		if(id != null)
+			modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -47,8 +49,8 @@ class Product extends ORM
 		id = null;
 		return id;
 	}
-
-	//{"type":"character varying(1024)","default":"''","attnum":"2"}
+		
+	@dataType("character varying(1024)")
 	@:isVar public var name(get,set):String;
 	var initial_name:String;
 	
@@ -57,8 +59,8 @@ class Product extends ORM
 	}
 
 	function set_name(x:String):String{
-
-		modified('name');
+		if(name != null)
+			modified('name');
 		name = x;
 		if(initial_name == null)
 			initial_name = name; 
@@ -73,8 +75,8 @@ class Product extends ORM
 		name = '';
 		return name;
 	}
-
-	//{"type":"character varying(4096)","default":"''","attnum":"3"}
+		
+	@dataType("character varying(4096)")
 	@:isVar public var description(get,set):String;
 	var initial_description:String;
 	
@@ -83,8 +85,8 @@ class Product extends ORM
 	}
 
 	function set_description(x:String):String{
-
-		modified('description');
+		if(description != null)
+			modified('description');
 		description = x;
 		if(initial_description == null)
 			initial_description = description; 
@@ -99,8 +101,8 @@ class Product extends ORM
 		description = '';
 		return description;
 	}
-
-	//{"type":"numeric(10,2)","default":"''","attnum":"4"}
+		
+	@dataType("numeric(10,2)")
 	@:isVar public var value(get,set):String;
 	var initial_value:String;
 	
@@ -109,8 +111,8 @@ class Product extends ORM
 	}
 
 	function set_value(x:String):String{
-
-		modified('value');
+		if(value != null)
+			modified('value');
 		value = x;
 		if(initial_value == null)
 			initial_value = value; 
@@ -125,8 +127,8 @@ class Product extends ORM
 		value = '';
 		return value;
 	}
-
-	//{"type":"jsonb","default":"'{}'","attnum":"5"}
+		
+	@dataType("jsonb")
 	@:isVar public var attributes(get,set):String;
 	var initial_attributes:String;
 	
@@ -135,8 +137,8 @@ class Product extends ORM
 	}
 
 	function set_attributes(x:String):String{
-
-		modified('attributes');
+		if(attributes != null)
+			modified('attributes');
 		attributes = x;
 		if(initial_attributes == null)
 			initial_attributes = attributes; 
@@ -151,8 +153,8 @@ class Product extends ORM
 		attributes = '{}';
 		return attributes;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"6"}
+		
+	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -161,8 +163,8 @@ class Product extends ORM
 	}
 
 	function set_mandator(x:Int):Int{
-
-		modified('mandator');
+		if(mandator != null)
+			modified('mandator');
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 
@@ -177,8 +179,8 @@ class Product extends ORM
 		mandator = null;
 		return mandator;
 	}
-
-	//{"type":"boolean","default":true,"attnum":"7"}
+		
+	@dataType("boolean")
 	@:isVar public var active(get,set):Bool;
 	var initial_active:Bool;
 	
@@ -187,8 +189,8 @@ class Product extends ORM
 	}
 
 	function set_active(x:Bool):Bool{
-
-		modified('active');
+		if(active != null)
+			modified('active');
 		active = x;
 		if(initial_active == null)
 			initial_active = active; 
@@ -203,8 +205,8 @@ class Product extends ORM
 		active = 1;
 		return active;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"8"}
+		
+	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -213,8 +215,8 @@ class Product extends ORM
 	}
 
 	function set_edited_by(x:Int):Int{
-
-		modified('edited_by');
+		if(edited_by != null)
+			modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -229,4 +231,5 @@ class Product extends ORM
 		edited_by = null;
 		return edited_by;
 	}
+	
 }

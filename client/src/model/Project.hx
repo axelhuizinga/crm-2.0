@@ -11,18 +11,20 @@ typedef ProjectProps = {
 	?target_account:Int
 };
 
+@:rtti
 class Project extends ORM
 {
-	public static var varNames:String = 'id,mandator,name,description,edited_by,provision_percent,cancellation_liable,target_account';
-		public function new(props:ProjectProps) {
+
+	public function new(props:ProjectProps) {
 		super(props);
+		propertyNames = 'id,mandator,name,description,edited_by,provision_percent,cancellation_liable,target_account'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
 		}
-	}
-
-	//{"type":"bigint","default":"null","attnum":"1"}
+	}	
+		
+	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
@@ -31,8 +33,8 @@ class Project extends ORM
 	}
 
 	function set_id(x:Int):Int{
-
-		modified('id');
+		if(id != null)
+			modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -47,8 +49,8 @@ class Project extends ORM
 		id = null;
 		return id;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"2"}
+		
+	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -57,8 +59,8 @@ class Project extends ORM
 	}
 
 	function set_mandator(x:Int):Int{
-
-		modified('mandator');
+		if(mandator != null)
+			modified('mandator');
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 
@@ -73,8 +75,8 @@ class Project extends ORM
 		mandator = null;
 		return mandator;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"3"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var name(get,set):String;
 	var initial_name:String;
 	
@@ -83,8 +85,8 @@ class Project extends ORM
 	}
 
 	function set_name(x:String):String{
-
-		modified('name');
+		if(name != null)
+			modified('name');
 		name = x;
 		if(initial_name == null)
 			initial_name = name; 
@@ -99,8 +101,8 @@ class Project extends ORM
 		name = '';
 		return name;
 	}
-
-	//{"type":"character varying(4096)","default":"''","attnum":"4"}
+		
+	@dataType("character varying(4096)")
 	@:isVar public var description(get,set):String;
 	var initial_description:String;
 	
@@ -109,8 +111,8 @@ class Project extends ORM
 	}
 
 	function set_description(x:String):String{
-
-		modified('description');
+		if(description != null)
+			modified('description');
 		description = x;
 		if(initial_description == null)
 			initial_description = description; 
@@ -125,8 +127,8 @@ class Project extends ORM
 		description = '';
 		return description;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"5"}
+		
+	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -135,8 +137,8 @@ class Project extends ORM
 	}
 
 	function set_edited_by(x:Int):Int{
-
-		modified('edited_by');
+		if(edited_by != null)
+			modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -151,8 +153,8 @@ class Project extends ORM
 		edited_by = null;
 		return edited_by;
 	}
-
-	//{"type":"double precision","default":"'(0.0)'","attnum":"6"}
+		
+	@dataType("double precision")
 	@:isVar public var provision_percent(get,set):String;
 	var initial_provision_percent:String;
 	
@@ -161,8 +163,8 @@ class Project extends ORM
 	}
 
 	function set_provision_percent(x:String):String{
-
-		modified('provision_percent');
+		if(provision_percent != null)
+			modified('provision_percent');
 		provision_percent = x;
 		if(initial_provision_percent == null)
 			initial_provision_percent = provision_percent; 
@@ -177,8 +179,8 @@ class Project extends ORM
 		provision_percent = '(0.0)';
 		return provision_percent;
 	}
-
-	//{"type":"integer","default":"'0'","attnum":"7"}
+		
+	@dataType("integer")
 	@:isVar public var cancellation_liable(get,set):String;
 	var initial_cancellation_liable:String;
 	
@@ -187,8 +189,8 @@ class Project extends ORM
 	}
 
 	function set_cancellation_liable(x:String):String{
-
-		modified('cancellation_liable');
+		if(cancellation_liable != null)
+			modified('cancellation_liable');
 		cancellation_liable = x;
 		if(initial_cancellation_liable == null)
 			initial_cancellation_liable = cancellation_liable; 
@@ -203,8 +205,8 @@ class Project extends ORM
 		cancellation_liable = '0';
 		return cancellation_liable;
 	}
-
-	//{"type":"bigint","default":"0","attnum":"8"}
+		
+	@dataType("bigint")
 	@:isVar public var target_account(get,set):Int;
 	var initial_target_account:Int;
 	
@@ -213,8 +215,8 @@ class Project extends ORM
 	}
 
 	function set_target_account(x:Int):Int{
-
-		modified('target_account');
+		if(target_account != null)
+			modified('target_account');
 		target_account = x;
 		if(initial_target_account == null)
 			initial_target_account = target_account; 
@@ -229,4 +231,5 @@ class Project extends ORM
 		target_account = 0;
 		return target_account;
 	}
+	
 }

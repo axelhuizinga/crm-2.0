@@ -14,18 +14,20 @@ typedef TableFieldProps = {
 	?field_type:String
 };
 
+@:rtti
 class TableField extends ORM
 {
-	public static var varNames:String = 'id,table_name,mandator,field_name,readonly,element,any,required,use_as_index,admin_only,field_type';
-		public function new(props:TableFieldProps) {
+
+	public function new(props:TableFieldProps) {
 		super(props);
+		propertyNames = 'id,table_name,mandator,field_name,readonly,element,any,required,use_as_index,admin_only,field_type'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
 		}
-	}
-
-	//{"type":"bigint","default":"null","attnum":"1"}
+	}	
+		
+	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
@@ -34,8 +36,8 @@ class TableField extends ORM
 	}
 
 	function set_id(x:Int):Int{
-
-		modified('id');
+		if(id != null)
+			modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -50,8 +52,8 @@ class TableField extends ORM
 		id = null;
 		return id;
 	}
-
-	//{"type":"character varying","default":"''","attnum":"2"}
+		
+	@dataType("character varying")
 	@:isVar public var table_name(get,set):String;
 	var initial_table_name:String;
 	
@@ -60,8 +62,8 @@ class TableField extends ORM
 	}
 
 	function set_table_name(x:String):String{
-
-		modified('table_name');
+		if(table_name != null)
+			modified('table_name');
 		table_name = x;
 		if(initial_table_name == null)
 			initial_table_name = table_name; 
@@ -76,8 +78,8 @@ class TableField extends ORM
 		table_name = '';
 		return table_name;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"3"}
+		
+	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -86,8 +88,8 @@ class TableField extends ORM
 	}
 
 	function set_mandator(x:Int):Int{
-
-		modified('mandator');
+		if(mandator != null)
+			modified('mandator');
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 
@@ -102,8 +104,8 @@ class TableField extends ORM
 		mandator = null;
 		return mandator;
 	}
-
-	//{"type":"character varying","default":"''","attnum":"4"}
+		
+	@dataType("character varying")
 	@:isVar public var field_name(get,set):String;
 	var initial_field_name:String;
 	
@@ -112,8 +114,8 @@ class TableField extends ORM
 	}
 
 	function set_field_name(x:String):String{
-
-		modified('field_name');
+		if(field_name != null)
+			modified('field_name');
 		field_name = x;
 		if(initial_field_name == null)
 			initial_field_name = field_name; 
@@ -128,8 +130,8 @@ class TableField extends ORM
 		field_name = '';
 		return field_name;
 	}
-
-	//{"type":"boolean","default":"false","attnum":"5"}
+		
+	@dataType("boolean")
 	@:isVar public var readonly(get,set):Bool;
 	var initial_readonly:Bool;
 	
@@ -138,8 +140,8 @@ class TableField extends ORM
 	}
 
 	function set_readonly(x:Bool):Bool{
-
-		modified('readonly');
+		if(readonly != null)
+			modified('readonly');
 		readonly = x;
 		if(initial_readonly == null)
 			initial_readonly = readonly; 
@@ -154,8 +156,8 @@ class TableField extends ORM
 		readonly = false;
 		return readonly;
 	}
-
-	//{"type":"element","default":"'Input'","attnum":"6"}
+		
+	@dataType("element")
 	@:isVar public var element(get,set):String;
 	var initial_element:String;
 	
@@ -164,8 +166,8 @@ class TableField extends ORM
 	}
 
 	function set_element(x:String):String{
-
-		modified('element');
+		if(element != null)
+			modified('element');
 		element = x;
 		if(initial_element == null)
 			initial_element = element; 
@@ -180,8 +182,8 @@ class TableField extends ORM
 		element = 'Input';
 		return element;
 	}
-
-	//{"type":"jsonb","default":"'{}'","attnum":"7"}
+		
+	@dataType("jsonb")
 	@:isVar public var any(get,set):String;
 	var initial_any:String;
 	
@@ -190,8 +192,8 @@ class TableField extends ORM
 	}
 
 	function set_any(x:String):String{
-
-		modified('any');
+		if(any != null)
+			modified('any');
 		any = x;
 		if(initial_any == null)
 			initial_any = any; 
@@ -206,8 +208,8 @@ class TableField extends ORM
 		any = '{}';
 		return any;
 	}
-
-	//{"type":"boolean","default":"false","attnum":"8"}
+		
+	@dataType("boolean")
 	@:isVar public var required(get,set):Bool;
 	var initial_required:Bool;
 	
@@ -216,8 +218,8 @@ class TableField extends ORM
 	}
 
 	function set_required(x:Bool):Bool{
-
-		modified('required');
+		if(required != null)
+			modified('required');
 		required = x;
 		if(initial_required == null)
 			initial_required = required; 
@@ -232,8 +234,8 @@ class TableField extends ORM
 		required = false;
 		return required;
 	}
-
-	//{"type":"boolean","default":"false","attnum":"9"}
+		
+	@dataType("boolean")
 	@:isVar public var use_as_index(get,set):Bool;
 	var initial_use_as_index:Bool;
 	
@@ -242,8 +244,8 @@ class TableField extends ORM
 	}
 
 	function set_use_as_index(x:Bool):Bool{
-
-		modified('use_as_index');
+		if(use_as_index != null)
+			modified('use_as_index');
 		use_as_index = x;
 		if(initial_use_as_index == null)
 			initial_use_as_index = use_as_index; 
@@ -258,8 +260,8 @@ class TableField extends ORM
 		use_as_index = false;
 		return use_as_index;
 	}
-
-	//{"type":"boolean","default":"false","attnum":"10"}
+		
+	@dataType("boolean")
 	@:isVar public var admin_only(get,set):Bool;
 	var initial_admin_only:Bool;
 	
@@ -268,8 +270,8 @@ class TableField extends ORM
 	}
 
 	function set_admin_only(x:Bool):Bool{
-
-		modified('admin_only');
+		if(admin_only != null)
+			modified('admin_only');
 		admin_only = x;
 		if(initial_admin_only == null)
 			initial_admin_only = admin_only; 
@@ -284,8 +286,8 @@ class TableField extends ORM
 		admin_only = false;
 		return admin_only;
 	}
-
-	//{"type":"data_type","default":"'null'","attnum":"11"}
+		
+	@dataType("data_type")
 	@:isVar public var field_type(get,set):String;
 	var initial_field_type:String;
 	
@@ -294,8 +296,8 @@ class TableField extends ORM
 	}
 
 	function set_field_type(x:String):String{
-
-		modified('field_type');
+		if(field_type != null)
+			modified('field_type');
 		field_type = x;
 		if(initial_field_type == null)
 			initial_field_type = field_type; 
@@ -310,4 +312,5 @@ class TableField extends ORM
 		field_type = 'null';
 		return field_type;
 	}
+	
 }

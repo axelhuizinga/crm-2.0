@@ -25,18 +25,20 @@ typedef DealProps = {
 	?last_locktime:String
 };
 
+@:rtti
 class Deal extends ORM
 {
-	public static var varNames:String = 'id,contact,creation_date,account,target_account,start_day,start_date,cycle,amount,product,agent,project,status,pay_method,end_date,end_reason,repeat_date,edited_by,mandator,old_active,cycle_start_date,last_locktime';
-		public function new(props:DealProps) {
+
+	public function new(props:DealProps) {
 		super(props);
+		propertyNames = 'id,contact,creation_date,account,target_account,start_day,start_date,cycle,amount,product,agent,project,status,pay_method,end_date,end_reason,repeat_date,edited_by,mandator,old_active,cycle_start_date,last_locktime'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
 		}
-	}
-
-	//{"type":"bigint","default":"null","attnum":"1"}
+	}	
+		
+	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
@@ -45,8 +47,8 @@ class Deal extends ORM
 	}
 
 	function set_id(x:Int):Int{
-
-		modified('id');
+		if(id != null)
+			modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -61,8 +63,8 @@ class Deal extends ORM
 		id = null;
 		return id;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"2"}
+		
+	@dataType("bigint")
 	@:isVar public var contact(get,set):Int;
 	var initial_contact:Int;
 	
@@ -71,8 +73,8 @@ class Deal extends ORM
 	}
 
 	function set_contact(x:Int):Int{
-
-		modified('contact');
+		if(contact != null)
+			modified('contact');
 		contact = x;
 		if(initial_contact == null)
 			initial_contact = contact; 
@@ -87,8 +89,8 @@ class Deal extends ORM
 		contact = null;
 		return contact;
 	}
-
-	//{"type":"timestamp(0) without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"3"}
+		
+	@dataType("timestamp(0) without time zone")
 	@:isVar public var creation_date(get,set):String;
 	var initial_creation_date:String;
 	
@@ -97,8 +99,8 @@ class Deal extends ORM
 	}
 
 	function set_creation_date(x:String):String{
-
-		modified('creation_date');
+		if(creation_date != null)
+			modified('creation_date');
 		creation_date = x;
 		if(initial_creation_date == null)
 			initial_creation_date = creation_date; 
@@ -113,8 +115,8 @@ class Deal extends ORM
 		creation_date = 'CURRENT_TIMESTAMP';
 		return creation_date;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"4"}
+		
+	@dataType("bigint")
 	@:isVar public var account(get,set):Int;
 	var initial_account:Int;
 	
@@ -123,8 +125,8 @@ class Deal extends ORM
 	}
 
 	function set_account(x:Int):Int{
-
-		modified('account');
+		if(account != null)
+			modified('account');
 		account = x;
 		if(initial_account == null)
 			initial_account = account; 
@@ -139,8 +141,8 @@ class Deal extends ORM
 		account = null;
 		return account;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"5"}
+		
+	@dataType("bigint")
 	@:isVar public var target_account(get,set):Int;
 	var initial_target_account:Int;
 	
@@ -149,8 +151,8 @@ class Deal extends ORM
 	}
 
 	function set_target_account(x:Int):Int{
-
-		modified('target_account');
+		if(target_account != null)
+			modified('target_account');
 		target_account = x;
 		if(initial_target_account == null)
 			initial_target_account = target_account; 
@@ -165,8 +167,8 @@ class Deal extends ORM
 		target_account = null;
 		return target_account;
 	}
-
-	//{"type":"character varying(2)","default":"'1'","attnum":"6"}
+		
+	@dataType("character varying(2)")
 	@:isVar public var start_day(get,set):String;
 	var initial_start_day:String;
 	
@@ -175,8 +177,8 @@ class Deal extends ORM
 	}
 
 	function set_start_day(x:String):String{
-
-		modified('start_day');
+		if(start_day != null)
+			modified('start_day');
 		start_day = x;
 		if(initial_start_day == null)
 			initial_start_day = start_day; 
@@ -191,8 +193,8 @@ class Deal extends ORM
 		start_day = '1';
 		return start_day;
 	}
-
-	//{"type":"date","default":"'null'","attnum":"7"}
+		
+	@dataType("date")
 	@:isVar public var start_date(get,set):String;
 	var initial_start_date:String;
 	
@@ -201,8 +203,8 @@ class Deal extends ORM
 	}
 
 	function set_start_date(x:String):String{
-
-		modified('start_date');
+		if(start_date != null)
+			modified('start_date');
 		start_date = x;
 		if(initial_start_date == null)
 			initial_start_date = start_date; 
@@ -217,8 +219,8 @@ class Deal extends ORM
 		start_date = 'null';
 		return start_date;
 	}
-
-	//{"type":"deals_cycle","default":"''","attnum":"8"}
+		
+	@dataType("deals_cycle")
 	@:isVar public var cycle(get,set):String;
 	var initial_cycle:String;
 	
@@ -227,8 +229,8 @@ class Deal extends ORM
 	}
 
 	function set_cycle(x:String):String{
-
-		modified('cycle');
+		if(cycle != null)
+			modified('cycle');
 		cycle = x;
 		if(initial_cycle == null)
 			initial_cycle = cycle; 
@@ -243,8 +245,8 @@ class Deal extends ORM
 		cycle = '';
 		return cycle;
 	}
-
-	//{"type":"numeric(10,2)","default":"''","attnum":"9"}
+		
+	@dataType("numeric(10,2)")
 	@:isVar public var amount(get,set):String;
 	var initial_amount:String;
 	
@@ -253,8 +255,8 @@ class Deal extends ORM
 	}
 
 	function set_amount(x:String):String{
-
-		modified('amount');
+		if(amount != null)
+			modified('amount');
 		amount = x;
 		if(initial_amount == null)
 			initial_amount = amount; 
@@ -269,8 +271,8 @@ class Deal extends ORM
 		amount = '';
 		return amount;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"10"}
+		
+	@dataType("bigint")
 	@:isVar public var product(get,set):Int;
 	var initial_product:Int;
 	
@@ -279,8 +281,8 @@ class Deal extends ORM
 	}
 
 	function set_product(x:Int):Int{
-
-		modified('product');
+		if(product != null)
+			modified('product');
 		product = x;
 		if(initial_product == null)
 			initial_product = product; 
@@ -295,8 +297,8 @@ class Deal extends ORM
 		product = null;
 		return product;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"11"}
+		
+	@dataType("bigint")
 	@:isVar public var agent(get,set):Int;
 	var initial_agent:Int;
 	
@@ -305,8 +307,8 @@ class Deal extends ORM
 	}
 
 	function set_agent(x:Int):Int{
-
-		modified('agent');
+		if(agent != null)
+			modified('agent');
 		agent = x;
 		if(initial_agent == null)
 			initial_agent = agent; 
@@ -321,8 +323,8 @@ class Deal extends ORM
 		agent = null;
 		return agent;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"12"}
+		
+	@dataType("bigint")
 	@:isVar public var project(get,set):Int;
 	var initial_project:Int;
 	
@@ -331,8 +333,8 @@ class Deal extends ORM
 	}
 
 	function set_project(x:Int):Int{
-
-		modified('project');
+		if(project != null)
+			modified('project');
 		project = x;
 		if(initial_project == null)
 			initial_project = project; 
@@ -347,8 +349,8 @@ class Deal extends ORM
 		project = null;
 		return project;
 	}
-
-	//{"type":"character varying(64)","default":"'active'","attnum":"13"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var status(get,set):String;
 	var initial_status:String;
 	
@@ -357,8 +359,8 @@ class Deal extends ORM
 	}
 
 	function set_status(x:String):String{
-
-		modified('status');
+		if(status != null)
+			modified('status');
 		status = x;
 		if(initial_status == null)
 			initial_status = status; 
@@ -373,8 +375,8 @@ class Deal extends ORM
 		status = 'active';
 		return status;
 	}
-
-	//{"type":"character varying(64)","default":"'debit'","attnum":"14"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var pay_method(get,set):String;
 	var initial_pay_method:String;
 	
@@ -383,8 +385,8 @@ class Deal extends ORM
 	}
 
 	function set_pay_method(x:String):String{
-
-		modified('pay_method');
+		if(pay_method != null)
+			modified('pay_method');
 		pay_method = x;
 		if(initial_pay_method == null)
 			initial_pay_method = pay_method; 
@@ -399,8 +401,8 @@ class Deal extends ORM
 		pay_method = 'debit';
 		return pay_method;
 	}
-
-	//{"type":"date","default":"'null'","attnum":"15"}
+		
+	@dataType("date")
 	@:isVar public var end_date(get,set):String;
 	var initial_end_date:String;
 	
@@ -409,8 +411,8 @@ class Deal extends ORM
 	}
 
 	function set_end_date(x:String):String{
-
-		modified('end_date');
+		if(end_date != null)
+			modified('end_date');
 		end_date = x;
 		if(initial_end_date == null)
 			initial_end_date = end_date; 
@@ -425,8 +427,8 @@ class Deal extends ORM
 		end_date = 'null';
 		return end_date;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"16"}
+		
+	@dataType("bigint")
 	@:isVar public var end_reason(get,set):Int;
 	var initial_end_reason:Int;
 	
@@ -435,8 +437,8 @@ class Deal extends ORM
 	}
 
 	function set_end_reason(x:Int):Int{
-
-		modified('end_reason');
+		if(end_reason != null)
+			modified('end_reason');
 		end_reason = x;
 		if(initial_end_reason == null)
 			initial_end_reason = end_reason; 
@@ -451,8 +453,8 @@ class Deal extends ORM
 		end_reason = null;
 		return end_reason;
 	}
-
-	//{"type":"date","default":"'null'","attnum":"17"}
+		
+	@dataType("date")
 	@:isVar public var repeat_date(get,set):String;
 	var initial_repeat_date:String;
 	
@@ -461,8 +463,8 @@ class Deal extends ORM
 	}
 
 	function set_repeat_date(x:String):String{
-
-		modified('repeat_date');
+		if(repeat_date != null)
+			modified('repeat_date');
 		repeat_date = x;
 		if(initial_repeat_date == null)
 			initial_repeat_date = repeat_date; 
@@ -477,8 +479,8 @@ class Deal extends ORM
 		repeat_date = 'null';
 		return repeat_date;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"18"}
+		
+	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -487,8 +489,8 @@ class Deal extends ORM
 	}
 
 	function set_edited_by(x:Int):Int{
-
-		modified('edited_by');
+		if(edited_by != null)
+			modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -503,8 +505,8 @@ class Deal extends ORM
 		edited_by = null;
 		return edited_by;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"19"}
+		
+	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -513,8 +515,8 @@ class Deal extends ORM
 	}
 
 	function set_mandator(x:Int):Int{
-
-		modified('mandator');
+		if(mandator != null)
+			modified('mandator');
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 
@@ -529,8 +531,8 @@ class Deal extends ORM
 		mandator = null;
 		return mandator;
 	}
-
-	//{"type":"boolean","default":true,"attnum":"20"}
+		
+	@dataType("boolean")
 	@:isVar public var old_active(get,set):Bool;
 	var initial_old_active:Bool;
 	
@@ -539,8 +541,8 @@ class Deal extends ORM
 	}
 
 	function set_old_active(x:Bool):Bool{
-
-		modified('old_active');
+		if(old_active != null)
+			modified('old_active');
 		old_active = x;
 		if(initial_old_active == null)
 			initial_old_active = old_active; 
@@ -555,8 +557,8 @@ class Deal extends ORM
 		old_active = 1;
 		return old_active;
 	}
-
-	//{"type":"date","default":"'null'","attnum":"21"}
+		
+	@dataType("date")
 	@:isVar public var cycle_start_date(get,set):String;
 	var initial_cycle_start_date:String;
 	
@@ -565,8 +567,8 @@ class Deal extends ORM
 	}
 
 	function set_cycle_start_date(x:String):String{
-
-		modified('cycle_start_date');
+		if(cycle_start_date != null)
+			modified('cycle_start_date');
 		cycle_start_date = x;
 		if(initial_cycle_start_date == null)
 			initial_cycle_start_date = cycle_start_date; 
@@ -581,8 +583,8 @@ class Deal extends ORM
 		cycle_start_date = 'null';
 		return cycle_start_date;
 	}
-
-	//{"type":"timestamp(0) without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"22"}
+		
+	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_locktime(get,set):String;
 	var initial_last_locktime:String;
 	
@@ -591,8 +593,8 @@ class Deal extends ORM
 	}
 
 	function set_last_locktime(x:String):String{
-
-		modified('last_locktime');
+		if(last_locktime != null)
+			modified('last_locktime');
 		last_locktime = x;
 		if(initial_last_locktime == null)
 			initial_last_locktime = last_locktime; 
@@ -607,4 +609,5 @@ class Deal extends ORM
 		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
 	}
+	
 }

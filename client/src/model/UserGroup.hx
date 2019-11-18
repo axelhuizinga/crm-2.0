@@ -9,18 +9,20 @@ typedef UserGroupProps = {
 	?edited_by:Int
 };
 
+@:rtti
 class UserGroup extends ORM
 {
-	public static var varNames:String = 'id,name,description,can,mandator,edited_by';
-		public function new(props:UserGroupProps) {
+
+	public function new(props:UserGroupProps) {
 		super(props);
+		propertyNames = 'id,name,description,can,mandator,edited_by'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
 		}
-	}
-
-	//{"type":"bigint","default":"null","attnum":"1"}
+	}	
+		
+	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
@@ -29,8 +31,8 @@ class UserGroup extends ORM
 	}
 
 	function set_id(x:Int):Int{
-
-		modified('id');
+		if(id != null)
+			modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -45,8 +47,8 @@ class UserGroup extends ORM
 		id = null;
 		return id;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"2"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var name(get,set):String;
 	var initial_name:String;
 	
@@ -55,8 +57,8 @@ class UserGroup extends ORM
 	}
 
 	function set_name(x:String):String{
-
-		modified('name');
+		if(name != null)
+			modified('name');
 		name = x;
 		if(initial_name == null)
 			initial_name = name; 
@@ -71,8 +73,8 @@ class UserGroup extends ORM
 		name = '';
 		return name;
 	}
-
-	//{"type":"character varying(1024)","default":"''","attnum":"3"}
+		
+	@dataType("character varying(1024)")
 	@:isVar public var description(get,set):String;
 	var initial_description:String;
 	
@@ -81,8 +83,8 @@ class UserGroup extends ORM
 	}
 
 	function set_description(x:String):String{
-
-		modified('description');
+		if(description != null)
+			modified('description');
 		description = x;
 		if(initial_description == null)
 			initial_description = description; 
@@ -97,8 +99,8 @@ class UserGroup extends ORM
 		description = '';
 		return description;
 	}
-
-	//{"type":"jsonb","default":"'{}'","attnum":"4"}
+		
+	@dataType("jsonb")
 	@:isVar public var can(get,set):String;
 	var initial_can:String;
 	
@@ -107,8 +109,8 @@ class UserGroup extends ORM
 	}
 
 	function set_can(x:String):String{
-
-		modified('can');
+		if(can != null)
+			modified('can');
 		can = x;
 		if(initial_can == null)
 			initial_can = can; 
@@ -123,8 +125,8 @@ class UserGroup extends ORM
 		can = '{}';
 		return can;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"5"}
+		
+	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -133,8 +135,8 @@ class UserGroup extends ORM
 	}
 
 	function set_mandator(x:Int):Int{
-
-		modified('mandator');
+		if(mandator != null)
+			modified('mandator');
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 
@@ -149,8 +151,8 @@ class UserGroup extends ORM
 		mandator = null;
 		return mandator;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"6"}
+		
+	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -159,8 +161,8 @@ class UserGroup extends ORM
 	}
 
 	function set_edited_by(x:Int):Int{
-
-		modified('edited_by');
+		if(edited_by != null)
+			modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -175,4 +177,5 @@ class UserGroup extends ORM
 		edited_by = null;
 		return edited_by;
 	}
+	
 }

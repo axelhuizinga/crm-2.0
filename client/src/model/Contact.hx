@@ -31,18 +31,20 @@ typedef ContactProps = {
 	?owner:Int
 };
 
+@:rtti
 class Contact extends ORM
 {
-	public static var varNames:String = 'id,mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner';
-		public function new(props:ContactProps) {
+
+	public function new(props:ContactProps) {
 		super(props);
+		propertyNames = 'id,mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
 		}
-	}
-
-	//{"type":"bigint","default":"null","attnum":"1"}
+	}	
+		
+	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
@@ -51,8 +53,8 @@ class Contact extends ORM
 	}
 
 	function set_id(x:Int):Int{
-
-		modified('id');
+		if(id != null)
+			modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -67,8 +69,8 @@ class Contact extends ORM
 		id = null;
 		return id;
 	}
-
-	//{"type":"bigint","default":"0","attnum":"2"}
+		
+	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
 	var initial_mandator:Int;
 	
@@ -77,8 +79,8 @@ class Contact extends ORM
 	}
 
 	function set_mandator(x:Int):Int{
-
-		modified('mandator');
+		if(mandator != null)
+			modified('mandator');
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 
@@ -93,8 +95,8 @@ class Contact extends ORM
 		mandator = 0;
 		return mandator;
 	}
-
-	//{"type":"timestamp(0) without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"3"}
+		
+	@dataType("timestamp(0) without time zone")
 	@:isVar public var creation_date(get,set):String;
 	var initial_creation_date:String;
 	
@@ -103,8 +105,8 @@ class Contact extends ORM
 	}
 
 	function set_creation_date(x:String):String{
-
-		modified('creation_date');
+		if(creation_date != null)
+			modified('creation_date');
 		creation_date = x;
 		if(initial_creation_date == null)
 			initial_creation_date = creation_date; 
@@ -119,8 +121,8 @@ class Contact extends ORM
 		creation_date = 'CURRENT_TIMESTAMP';
 		return creation_date;
 	}
-
-	//{"type":"character varying(64)","default":"'contact'","attnum":"4"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var state(get,set):String;
 	var initial_state:String;
 	
@@ -129,8 +131,8 @@ class Contact extends ORM
 	}
 
 	function set_state(x:String):String{
-
-		modified('state');
+		if(state != null)
+			modified('state');
 		state = x;
 		if(initial_state == null)
 			initial_state = state; 
@@ -145,8 +147,8 @@ class Contact extends ORM
 		state = 'contact';
 		return state;
 	}
-
-	//{"type":"boolean","default":"false","attnum":"5"}
+		
+	@dataType("boolean")
 	@:isVar public var use_email(get,set):Bool;
 	var initial_use_email:Bool;
 	
@@ -155,8 +157,8 @@ class Contact extends ORM
 	}
 
 	function set_use_email(x:Bool):Bool{
-
-		modified('use_email');
+		if(use_email != null)
+			modified('use_email');
 		use_email = x;
 		if(initial_use_email == null)
 			initial_use_email = use_email; 
@@ -171,8 +173,8 @@ class Contact extends ORM
 		use_email = false;
 		return use_email;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"6"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var company_name(get,set):String;
 	var initial_company_name:String;
 	
@@ -181,8 +183,8 @@ class Contact extends ORM
 	}
 
 	function set_company_name(x:String):String{
-
-		modified('company_name');
+		if(company_name != null)
+			modified('company_name');
 		company_name = x;
 		if(initial_company_name == null)
 			initial_company_name = company_name; 
@@ -197,8 +199,8 @@ class Contact extends ORM
 		company_name = '';
 		return company_name;
 	}
-
-	//{"type":"character varying(100)","default":"''","attnum":"7"}
+		
+	@dataType("character varying(100)")
 	@:isVar public var co_field(get,set):String;
 	var initial_co_field:String;
 	
@@ -207,8 +209,8 @@ class Contact extends ORM
 	}
 
 	function set_co_field(x:String):String{
-
-		modified('co_field');
+		if(co_field != null)
+			modified('co_field');
 		co_field = x;
 		if(initial_co_field == null)
 			initial_co_field = co_field; 
@@ -223,8 +225,8 @@ class Contact extends ORM
 		co_field = '';
 		return co_field;
 	}
-
-	//{"type":"character varying(10)","default":"'49'","attnum":"8"}
+		
+	@dataType("character varying(10)")
 	@:isVar public var phone_code(get,set):String;
 	var initial_phone_code:String;
 	
@@ -233,8 +235,8 @@ class Contact extends ORM
 	}
 
 	function set_phone_code(x:String):String{
-
-		modified('phone_code');
+		if(phone_code != null)
+			modified('phone_code');
 		phone_code = x;
 		if(initial_phone_code == null)
 			initial_phone_code = phone_code; 
@@ -249,8 +251,8 @@ class Contact extends ORM
 		phone_code = '49';
 		return phone_code;
 	}
-
-	//{"type":"character varying(18)","default":"''","attnum":"9"}
+		
+	@dataType("character varying(18)")
 	@:isVar public var phone_number(get,set):String;
 	var initial_phone_number:String;
 	
@@ -259,8 +261,8 @@ class Contact extends ORM
 	}
 
 	function set_phone_number(x:String):String{
-
-		modified('phone_number');
+		if(phone_number != null)
+			modified('phone_number');
 		phone_number = x;
 		if(initial_phone_number == null)
 			initial_phone_number = phone_number; 
@@ -275,8 +277,8 @@ class Contact extends ORM
 		phone_number = '';
 		return phone_number;
 	}
-
-	//{"type":"character varying(18)","default":"''","attnum":"10"}
+		
+	@dataType("character varying(18)")
 	@:isVar public var fax(get,set):String;
 	var initial_fax:String;
 	
@@ -285,8 +287,8 @@ class Contact extends ORM
 	}
 
 	function set_fax(x:String):String{
-
-		modified('fax');
+		if(fax != null)
+			modified('fax');
 		fax = x;
 		if(initial_fax == null)
 			initial_fax = fax; 
@@ -301,8 +303,8 @@ class Contact extends ORM
 		fax = '';
 		return fax;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"11"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var title(get,set):String;
 	var initial_title:String;
 	
@@ -311,8 +313,8 @@ class Contact extends ORM
 	}
 
 	function set_title(x:String):String{
-
-		modified('title');
+		if(title != null)
+			modified('title');
 		title = x;
 		if(initial_title == null)
 			initial_title = title; 
@@ -327,8 +329,8 @@ class Contact extends ORM
 		title = '';
 		return title;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"12"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var title_pro(get,set):String;
 	var initial_title_pro:String;
 	
@@ -337,8 +339,8 @@ class Contact extends ORM
 	}
 
 	function set_title_pro(x:String):String{
-
-		modified('title_pro');
+		if(title_pro != null)
+			modified('title_pro');
 		title_pro = x;
 		if(initial_title_pro == null)
 			initial_title_pro = title_pro; 
@@ -353,8 +355,8 @@ class Contact extends ORM
 		title_pro = '';
 		return title_pro;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"13"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var first_name(get,set):String;
 	var initial_first_name:String;
 	
@@ -363,8 +365,8 @@ class Contact extends ORM
 	}
 
 	function set_first_name(x:String):String{
-
-		modified('first_name');
+		if(first_name != null)
+			modified('first_name');
 		first_name = x;
 		if(initial_first_name == null)
 			initial_first_name = first_name; 
@@ -379,8 +381,8 @@ class Contact extends ORM
 		first_name = '';
 		return first_name;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"14"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var last_name(get,set):String;
 	var initial_last_name:String;
 	
@@ -389,8 +391,8 @@ class Contact extends ORM
 	}
 
 	function set_last_name(x:String):String{
-
-		modified('last_name');
+		if(last_name != null)
+			modified('last_name');
 		last_name = x;
 		if(initial_last_name == null)
 			initial_last_name = last_name; 
@@ -405,8 +407,8 @@ class Contact extends ORM
 		last_name = '';
 		return last_name;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"15"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var address(get,set):String;
 	var initial_address:String;
 	
@@ -415,8 +417,8 @@ class Contact extends ORM
 	}
 
 	function set_address(x:String):String{
-
-		modified('address');
+		if(address != null)
+			modified('address');
 		address = x;
 		if(initial_address == null)
 			initial_address = address; 
@@ -431,8 +433,8 @@ class Contact extends ORM
 		address = '';
 		return address;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"16"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var address_2(get,set):String;
 	var initial_address_2:String;
 	
@@ -441,8 +443,8 @@ class Contact extends ORM
 	}
 
 	function set_address_2(x:String):String{
-
-		modified('address_2');
+		if(address_2 != null)
+			modified('address_2');
 		address_2 = x;
 		if(initial_address_2 == null)
 			initial_address_2 = address_2; 
@@ -457,8 +459,8 @@ class Contact extends ORM
 		address_2 = '';
 		return address_2;
 	}
-
-	//{"type":"character varying(50)","default":"''","attnum":"17"}
+		
+	@dataType("character varying(50)")
 	@:isVar public var city(get,set):String;
 	var initial_city:String;
 	
@@ -467,8 +469,8 @@ class Contact extends ORM
 	}
 
 	function set_city(x:String):String{
-
-		modified('city');
+		if(city != null)
+			modified('city');
 		city = x;
 		if(initial_city == null)
 			initial_city = city; 
@@ -483,8 +485,8 @@ class Contact extends ORM
 		city = '';
 		return city;
 	}
-
-	//{"type":"character varying(10)","default":"''","attnum":"18"}
+		
+	@dataType("character varying(10)")
 	@:isVar public var postal_code(get,set):String;
 	var initial_postal_code:String;
 	
@@ -493,8 +495,8 @@ class Contact extends ORM
 	}
 
 	function set_postal_code(x:String):String{
-
-		modified('postal_code');
+		if(postal_code != null)
+			modified('postal_code');
 		postal_code = x;
 		if(initial_postal_code == null)
 			initial_postal_code = postal_code; 
@@ -509,8 +511,8 @@ class Contact extends ORM
 		postal_code = '';
 		return postal_code;
 	}
-
-	//{"type":"character varying(3)","default":"''","attnum":"19"}
+		
+	@dataType("character varying(3)")
 	@:isVar public var country_code(get,set):String;
 	var initial_country_code:String;
 	
@@ -519,8 +521,8 @@ class Contact extends ORM
 	}
 
 	function set_country_code(x:String):String{
-
-		modified('country_code');
+		if(country_code != null)
+			modified('country_code');
 		country_code = x;
 		if(initial_country_code == null)
 			initial_country_code = country_code; 
@@ -535,8 +537,8 @@ class Contact extends ORM
 		country_code = '';
 		return country_code;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"20"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var gender(get,set):String;
 	var initial_gender:String;
 	
@@ -545,8 +547,8 @@ class Contact extends ORM
 	}
 
 	function set_gender(x:String):String{
-
-		modified('gender');
+		if(gender != null)
+			modified('gender');
 		gender = x;
 		if(initial_gender == null)
 			initial_gender = gender; 
@@ -561,8 +563,8 @@ class Contact extends ORM
 		gender = '';
 		return gender;
 	}
-
-	//{"type":"date","default":"'null'","attnum":"21"}
+		
+	@dataType("date")
 	@:isVar public var date_of_birth(get,set):String;
 	var initial_date_of_birth:String;
 	
@@ -571,8 +573,8 @@ class Contact extends ORM
 	}
 
 	function set_date_of_birth(x:String):String{
-
-		modified('date_of_birth');
+		if(date_of_birth != null)
+			modified('date_of_birth');
 		date_of_birth = x;
 		if(initial_date_of_birth == null)
 			initial_date_of_birth = date_of_birth; 
@@ -587,8 +589,8 @@ class Contact extends ORM
 		date_of_birth = 'null';
 		return date_of_birth;
 	}
-
-	//{"type":"character varying(19)","default":"''","attnum":"22"}
+		
+	@dataType("character varying(19)")
 	@:isVar public var mobile(get,set):String;
 	var initial_mobile:String;
 	
@@ -597,8 +599,8 @@ class Contact extends ORM
 	}
 
 	function set_mobile(x:String):String{
-
-		modified('mobile');
+		if(mobile != null)
+			modified('mobile');
 		mobile = x;
 		if(initial_mobile == null)
 			initial_mobile = mobile; 
@@ -613,8 +615,8 @@ class Contact extends ORM
 		mobile = '';
 		return mobile;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"23"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var email(get,set):String;
 	var initial_email:String;
 	
@@ -623,8 +625,8 @@ class Contact extends ORM
 	}
 
 	function set_email(x:String):String{
-
-		modified('email');
+		if(email != null)
+			modified('email');
 		email = x;
 		if(initial_email == null)
 			initial_email = email; 
@@ -639,8 +641,8 @@ class Contact extends ORM
 		email = '';
 		return email;
 	}
-
-	//{"type":"character varying(4096)","default":"''","attnum":"24"}
+		
+	@dataType("character varying(4096)")
 	@:isVar public var comments(get,set):String;
 	var initial_comments:String;
 	
@@ -649,8 +651,8 @@ class Contact extends ORM
 	}
 
 	function set_comments(x:String):String{
-
-		modified('comments');
+		if(comments != null)
+			modified('comments');
 		comments = x;
 		if(initial_comments == null)
 			initial_comments = comments; 
@@ -665,8 +667,8 @@ class Contact extends ORM
 		comments = '';
 		return comments;
 	}
-
-	//{"type":"bigint","default":"0","attnum":"25"}
+		
+	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -675,8 +677,8 @@ class Contact extends ORM
 	}
 
 	function set_edited_by(x:Int):Int{
-
-		modified('edited_by');
+		if(edited_by != null)
+			modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -691,8 +693,8 @@ class Contact extends ORM
 		edited_by = 0;
 		return edited_by;
 	}
-
-	//{"type":"bigint[]","default":"[]","attnum":"26"}
+		
+	@dataType("bigint[]")
 	@:isVar public var merged(get,set):Array<Int>;
 	var initial_merged:Array<Int>;
 	
@@ -701,8 +703,8 @@ class Contact extends ORM
 	}
 
 	function set_merged(x:Array<Int>):Array<Int>{
-
-		modified('merged');
+		if(merged != null)
+			modified('merged');
 		merged = x;
 		if(initial_merged == null)
 			initial_merged = merged; 
@@ -717,8 +719,8 @@ class Contact extends ORM
 		merged = [];
 		return merged;
 	}
-
-	//{"type":"timestamp(0) without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"27"}
+		
+	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_locktime(get,set):String;
 	var initial_last_locktime:String;
 	
@@ -727,8 +729,8 @@ class Contact extends ORM
 	}
 
 	function set_last_locktime(x:String):String{
-
-		modified('last_locktime');
+		if(last_locktime != null)
+			modified('last_locktime');
 		last_locktime = x;
 		if(initial_last_locktime == null)
 			initial_last_locktime = last_locktime; 
@@ -743,8 +745,8 @@ class Contact extends ORM
 		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"28"}
+		
+	@dataType("bigint")
 	@:isVar public var owner(get,set):Int;
 	var initial_owner:Int;
 	
@@ -753,8 +755,8 @@ class Contact extends ORM
 	}
 
 	function set_owner(x:Int):Int{
-
-		modified('owner');
+		if(owner != null)
+			modified('owner');
 		owner = x;
 		if(initial_owner == null)
 			initial_owner = owner; 
@@ -769,4 +771,5 @@ class Contact extends ORM
 		owner = null;
 		return owner;
 	}
+	
 }

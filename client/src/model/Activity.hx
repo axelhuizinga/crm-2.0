@@ -9,18 +9,20 @@ typedef ActivityProps = {
 	?activated_at:String
 };
 
+@:rtti
 class Activity extends ORM
 {
-	public static var varNames:String = 'id,table,title,active,edited_by,activated_at';
-		public function new(props:ActivityProps) {
+
+	public function new(props:ActivityProps) {
 		super(props);
+		propertyNames = 'id,table,title,active,edited_by,activated_at'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
 		}
-	}
-
-	//{"type":"bigint","default":"null","attnum":"1"}
+	}	
+		
+	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
@@ -29,8 +31,8 @@ class Activity extends ORM
 	}
 
 	function set_id(x:Int):Int{
-
-		modified('id');
+		if(id != null)
+			modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -45,8 +47,8 @@ class Activity extends ORM
 		id = null;
 		return id;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"2"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var table(get,set):String;
 	var initial_table:String;
 	
@@ -55,8 +57,8 @@ class Activity extends ORM
 	}
 
 	function set_table(x:String):String{
-
-		modified('table');
+		if(table != null)
+			modified('table');
 		table = x;
 		if(initial_table == null)
 			initial_table = table; 
@@ -71,8 +73,8 @@ class Activity extends ORM
 		table = '';
 		return table;
 	}
-
-	//{"type":"character varying(2048)","default":"''","attnum":"3"}
+		
+	@dataType("character varying(2048)")
 	@:isVar public var title(get,set):String;
 	var initial_title:String;
 	
@@ -81,8 +83,8 @@ class Activity extends ORM
 	}
 
 	function set_title(x:String):String{
-
-		modified('title');
+		if(title != null)
+			modified('title');
 		title = x;
 		if(initial_title == null)
 			initial_title = title; 
@@ -97,8 +99,8 @@ class Activity extends ORM
 		title = '';
 		return title;
 	}
-
-	//{"type":"boolean","default":true,"attnum":"4"}
+		
+	@dataType("boolean")
 	@:isVar public var active(get,set):Bool;
 	var initial_active:Bool;
 	
@@ -107,8 +109,8 @@ class Activity extends ORM
 	}
 
 	function set_active(x:Bool):Bool{
-
-		modified('active');
+		if(active != null)
+			modified('active');
 		active = x;
 		if(initial_active == null)
 			initial_active = active; 
@@ -123,8 +125,8 @@ class Activity extends ORM
 		active = 1;
 		return active;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"5"}
+		
+	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -133,8 +135,8 @@ class Activity extends ORM
 	}
 
 	function set_edited_by(x:Int):Int{
-
-		modified('edited_by');
+		if(edited_by != null)
+			modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -149,8 +151,8 @@ class Activity extends ORM
 		edited_by = null;
 		return edited_by;
 	}
-
-	//{"type":"timestamp(3) without time zone","default":"'(CURRENT_TIMESTAMP)'","attnum":"6"}
+		
+	@dataType("timestamp(3) without time zone")
 	@:isVar public var activated_at(get,set):String;
 	var initial_activated_at:String;
 	
@@ -159,8 +161,8 @@ class Activity extends ORM
 	}
 
 	function set_activated_at(x:String):String{
-
-		modified('activated_at');
+		if(activated_at != null)
+			modified('activated_at');
 		activated_at = x;
 		if(initial_activated_at == null)
 			initial_activated_at = activated_at; 
@@ -175,4 +177,5 @@ class Activity extends ORM
 		activated_at = '(CURRENT_TIMESTAMP)';
 		return activated_at;
 	}
+	
 }

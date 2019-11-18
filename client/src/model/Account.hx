@@ -16,18 +16,20 @@ typedef AccountProps = {
 	?last_locktime:String
 };
 
+@:rtti
 class Account extends ORM
 {
-	public static var varNames:String = 'id,contact,bank_name,bic,account,blz,iban,creditor,sign_date,state,creation_date,edited_by,last_locktime';
-		public function new(props:AccountProps) {
+
+	public function new(props:AccountProps) {
 		super(props);
+		propertyNames = 'id,contact,bank_name,bic,account,blz,iban,creditor,sign_date,state,creation_date,edited_by,last_locktime'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
 		}
-	}
-
-	//{"type":"bigint","default":"null","attnum":"1"}
+	}	
+		
+	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
 	var initial_id:Int;
 	
@@ -36,8 +38,8 @@ class Account extends ORM
 	}
 
 	function set_id(x:Int):Int{
-
-		modified('id');
+		if(id != null)
+			modified('id');
 		id = x;
 		if(initial_id == null)
 			initial_id = id; 
@@ -52,8 +54,8 @@ class Account extends ORM
 		id = null;
 		return id;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"2"}
+		
+	@dataType("bigint")
 	@:isVar public var contact(get,set):Int;
 	var initial_contact:Int;
 	
@@ -62,8 +64,8 @@ class Account extends ORM
 	}
 
 	function set_contact(x:Int):Int{
-
-		modified('contact');
+		if(contact != null)
+			modified('contact');
 		contact = x;
 		if(initial_contact == null)
 			initial_contact = contact; 
@@ -78,8 +80,8 @@ class Account extends ORM
 		contact = null;
 		return contact;
 	}
-
-	//{"type":"character varying(64)","default":"''","attnum":"4"}
+		
+	@dataType("character varying(64)")
 	@:isVar public var bank_name(get,set):String;
 	var initial_bank_name:String;
 	
@@ -88,8 +90,8 @@ class Account extends ORM
 	}
 
 	function set_bank_name(x:String):String{
-
-		modified('bank_name');
+		if(bank_name != null)
+			modified('bank_name');
 		bank_name = x;
 		if(initial_bank_name == null)
 			initial_bank_name = bank_name; 
@@ -104,8 +106,8 @@ class Account extends ORM
 		bank_name = '';
 		return bank_name;
 	}
-
-	//{"type":"character varying(11)","default":"''","attnum":"5"}
+		
+	@dataType("character varying(11)")
 	@:isVar public var bic(get,set):String;
 	var initial_bic:String;
 	
@@ -114,8 +116,8 @@ class Account extends ORM
 	}
 
 	function set_bic(x:String):String{
-
-		modified('bic');
+		if(bic != null)
+			modified('bic');
 		bic = x;
 		if(initial_bic == null)
 			initial_bic = bic; 
@@ -130,8 +132,8 @@ class Account extends ORM
 		bic = '';
 		return bic;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"6"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var account(get,set):String;
 	var initial_account:String;
 	
@@ -140,8 +142,8 @@ class Account extends ORM
 	}
 
 	function set_account(x:String):String{
-
-		modified('account');
+		if(account != null)
+			modified('account');
 		account = x;
 		if(initial_account == null)
 			initial_account = account; 
@@ -156,8 +158,8 @@ class Account extends ORM
 		account = '';
 		return account;
 	}
-
-	//{"type":"character varying(12)","default":"''","attnum":"7"}
+		
+	@dataType("character varying(12)")
 	@:isVar public var blz(get,set):String;
 	var initial_blz:String;
 	
@@ -166,8 +168,8 @@ class Account extends ORM
 	}
 
 	function set_blz(x:String):String{
-
-		modified('blz');
+		if(blz != null)
+			modified('blz');
 		blz = x;
 		if(initial_blz == null)
 			initial_blz = blz; 
@@ -182,8 +184,8 @@ class Account extends ORM
 		blz = '';
 		return blz;
 	}
-
-	//{"type":"character varying(32)","default":"''","attnum":"8"}
+		
+	@dataType("character varying(32)")
 	@:isVar public var iban(get,set):String;
 	var initial_iban:String;
 	
@@ -192,8 +194,8 @@ class Account extends ORM
 	}
 
 	function set_iban(x:String):String{
-
-		modified('iban');
+		if(iban != null)
+			modified('iban');
 		iban = x;
 		if(initial_iban == null)
 			initial_iban = iban; 
@@ -208,8 +210,8 @@ class Account extends ORM
 		iban = '';
 		return iban;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"9"}
+		
+	@dataType("bigint")
 	@:isVar public var creditor(get,set):Int;
 	var initial_creditor:Int;
 	
@@ -218,8 +220,8 @@ class Account extends ORM
 	}
 
 	function set_creditor(x:Int):Int{
-
-		modified('creditor');
+		if(creditor != null)
+			modified('creditor');
 		creditor = x;
 		if(initial_creditor == null)
 			initial_creditor = creditor; 
@@ -234,8 +236,8 @@ class Account extends ORM
 		creditor = null;
 		return creditor;
 	}
-
-	//{"type":"date","default":"'null'","attnum":"10"}
+		
+	@dataType("date")
 	@:isVar public var sign_date(get,set):String;
 	var initial_sign_date:String;
 	
@@ -244,8 +246,8 @@ class Account extends ORM
 	}
 
 	function set_sign_date(x:String):String{
-
-		modified('sign_date');
+		if(sign_date != null)
+			modified('sign_date');
 		sign_date = x;
 		if(initial_sign_date == null)
 			initial_sign_date = sign_date; 
@@ -260,8 +262,8 @@ class Account extends ORM
 		sign_date = 'null';
 		return sign_date;
 	}
-
-	//{"type":"accounts_state","default":"'new'","attnum":"11"}
+		
+	@dataType("accounts_state")
 	@:isVar public var state(get,set):String;
 	var initial_state:String;
 	
@@ -270,8 +272,8 @@ class Account extends ORM
 	}
 
 	function set_state(x:String):String{
-
-		modified('state');
+		if(state != null)
+			modified('state');
 		state = x;
 		if(initial_state == null)
 			initial_state = state; 
@@ -286,8 +288,8 @@ class Account extends ORM
 		state = 'new';
 		return state;
 	}
-
-	//{"type":"timestamp without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"12"}
+		
+	@dataType("timestamp without time zone")
 	@:isVar public var creation_date(get,set):String;
 	var initial_creation_date:String;
 	
@@ -296,8 +298,8 @@ class Account extends ORM
 	}
 
 	function set_creation_date(x:String):String{
-
-		modified('creation_date');
+		if(creation_date != null)
+			modified('creation_date');
 		creation_date = x;
 		if(initial_creation_date == null)
 			initial_creation_date = creation_date; 
@@ -312,8 +314,8 @@ class Account extends ORM
 		creation_date = 'CURRENT_TIMESTAMP';
 		return creation_date;
 	}
-
-	//{"type":"bigint","default":"null","attnum":"13"}
+		
+	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
 	var initial_edited_by:Int;
 	
@@ -322,8 +324,8 @@ class Account extends ORM
 	}
 
 	function set_edited_by(x:Int):Int{
-
-		modified('edited_by');
+		if(edited_by != null)
+			modified('edited_by');
 		edited_by = x;
 		if(initial_edited_by == null)
 			initial_edited_by = edited_by; 
@@ -338,8 +340,8 @@ class Account extends ORM
 		edited_by = null;
 		return edited_by;
 	}
-
-	//{"type":"timestamp(0) without time zone","default":"'CURRENT_TIMESTAMP'","attnum":"14"}
+		
+	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_locktime(get,set):String;
 	var initial_last_locktime:String;
 	
@@ -348,8 +350,8 @@ class Account extends ORM
 	}
 
 	function set_last_locktime(x:String):String{
-
-		modified('last_locktime');
+		if(last_locktime != null)
+			modified('last_locktime');
 		last_locktime = x;
 		if(initial_last_locktime == null)
 			initial_last_locktime = last_locktime; 
@@ -364,4 +366,5 @@ class Account extends ORM
 		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
 	}
+	
 }

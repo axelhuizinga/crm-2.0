@@ -38,6 +38,13 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 	var formRef:ReactRef<FormElement>;
 	var fieldNames:Array<String>;
 
+	public function compareStates() {
+		for(f in Reflect.fields(initialState))
+		{
+			trace('$f:${Reflect.field(actualState,f)}<==>${Reflect.field(initialState,f)}<');
+		}
+	}
+
 	public function doChange(name,value) {
 		trace('$name: $value');
 		if(name!=null && name!='')

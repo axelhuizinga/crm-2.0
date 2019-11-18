@@ -1,4 +1,5 @@
 package action.async;
+import haxe.Unserializer;
 import action.AppAction;
 import action.StatusAction;
 import js.html.Blob;
@@ -108,7 +109,7 @@ class DBAccess
 	}
 
 	public static function execute(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
-	{trace(props);
+	{	//trace(props);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(props);
 			//trace(getState());
@@ -138,7 +139,12 @@ class DBAccess
 			params,
 			function(data:DbData)
 			{				
-				trace(data);
+				//trace(data);
+				if(data.dataErrors != null)
+					trace(data.dataErrors);
+				if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
+					trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
+
 				if(data.dataErrors.exists('loginError'))
 				{
 					return dispatch(User(LoginError({loginError: data.dataErrors.get('loginError')})));

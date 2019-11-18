@@ -1,4 +1,5 @@
 package view.data.contacts;
+import haxe.rtti.Rtti;
 import js.html.DOMStringMap;
 import haxe.Json;
 import js.lib.Promise;
@@ -166,7 +167,10 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		trace('loading:$id');
 		if(id == null)
 			return null;
-		contact = new Contact({edited_by: props.user.id,mandator: 0});
+		actualState = {edited_by: props.user.id,mandator: props.user.mandator};
+		contact = new Contact(actualState);
+		trace('Rtti:' + Rtti.getRtti(Contact).fields[0].meta);
+		contact.initFields();		
 		//{edited_by: props.user.id,mandator: 0};
 		var data = props.dataStore.contactData.get(id);
 		trace(data);	
@@ -181,9 +185,11 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				trace(ex);
 			}		
 		}
-		trace(contact.creation_date);
-		actualState = initialState = contact.copy(data);
-		trace(initialState);		
+		trace(contact.fieldsModified);
+		initialState = contact.copy(data, actualState);
+		compareStates();	
+		//trace(actualState);	
+		//trace(initialState);	
 		/*actualState = view.shared.io.Observer.run(initialState, function(newState){
 				actualState = newState;
 			trace(actualState);
@@ -293,16 +299,16 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			}
 		}
 		//setState({actualState: actualState});
-		
-		trace(initialState);
-		trace(actualState);
+		compareStates();
+		//trace(initialState);
+		//trace(actualState);
 		update(actualState);
 	}
 
 
 	function update(aState:Dynamic)
 	{
-		trace(Reflect.fields(aState));
+		//trace(Reflect.fields(aState));
 		var dbaProps:DBAccessProps = 
 		{
 			action:'update',
@@ -320,8 +326,8 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 					if(Reflect.field(aState,f)=='')
 						Reflect.deleteField(aState,f);
 				}
-				Reflect.deleteField(aState,'id');
-				Reflect.deleteField(aState,'creation_date');				
+				//Reflect.deleteField(aState,'id');
+				//Reflect.deleteField(aState,'creation_date');				
 				dbaProps.dataSource = [
 					"contacts" => [
 						"data" => aState,
@@ -335,29 +341,28 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 					]
 				];	
 			case 'update':
-				Reflect.deleteField(aState,'creation_date');
+				//Reflect.deleteField(aState,'creation_date');
 				trace('${initialState.id} :: creation_date: ${aState.creation_date} ${state.initialState.creation_date}');
 				//var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialState.id);
-				trace(initialState);
+				trace(contact.modified());
 				for(f in fieldNames)
 				{
-					//KEEP FIELDS WITH VALUES CHANGED
-					//trace('$f =>${Reflect.field(aState,f)}<=');
-					
-					//if(Reflect.field(aState,f)==initiallyLoaded[f])
+					//UPDATE FIELDS WITH VALUES CHANGED
 					if(Reflect.field(aState,f)!=Reflect.field(initialState,f))
 					{
 						trace('$f:${Reflect.field(aState,f)}==${Reflect.field(initialState,f)}<<');
 						Reflect.setProperty(contact, f, Reflect.field(aState,f));
 					}						
 				}
-				trace(aState);
-				trace(initialState);
+				//trace(aState);
+				//trace(initialState);
 				if(!contact.modified())
 				{
 					//TODO: NOCHANGE ACTION => Display Feedback nothing to save
+					trace('nothing modified');
 					return;
 				}
+
 				dbaProps.dataSource = [
 					"contacts" => [
 						"data" => aState,

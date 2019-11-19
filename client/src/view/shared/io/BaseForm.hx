@@ -49,6 +49,7 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 		trace('$name: $value');
 		if(name!=null && name!='')
 		Reflect.setField(actualState,name,value);
+		
 		//setState({initialState:actualState});
 	}
 

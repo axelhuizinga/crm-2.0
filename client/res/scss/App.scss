@@ -432,6 +432,7 @@ input::-moz-focus-inner {
 	flex-grow:1;
 	margin:0.8rem 0 0 0.8rem;	
 	min-height: 0;
+	overflow-x: auto;
 }
 .tabComponentForm table,
 .tabComponentForm caption

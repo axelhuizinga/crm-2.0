@@ -72,7 +72,7 @@ class ContactsModel
 		'co_field'=>{label: 'Adresszusatz', flexGrow:1},
 		'postal_code'=>{label: 'PLZ'},
 		'city'=>{label: 'Ort'},
-		'state' => {label:'Aktiv', className: 'tCenter',
+		'state' => {label:'Status', className: 'tCenter',
 			cellFormat:function(v:String) 
 			{
 				var uState = (v=='active'?'user':'user-slash');

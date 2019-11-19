@@ -500,12 +500,12 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)//,snapshot:Dynamic
 	{
 		trace(headerUpdated + ':' + tHeadRef); 
-
+		trace(prevProps);
 		if (tHeadRef != null)
 		{
-			if (headerUpdated)
-				return;
-			
+			//if (headerUpdated)
+				//return;
+			layOut();
 			//showDims(tHeadRef);
 			//nodeDims(fixedHeader.current);
 		}

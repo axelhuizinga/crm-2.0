@@ -1,4 +1,5 @@
 package model;
+import haxe.Constraints.Function;
 import haxe.rtti.CType.ClassField;
 import haxe.rtti.CType.Classdef;
 import haxe.rtti.Rtti.getRtti;
@@ -9,12 +10,17 @@ using Lambda;
 class ORM {
 	
 	public var fieldsModified(default,null):Array<String>;
+	public var fieldFormat:Map<String, Function>;
 	public var propertyNames:Array<String>;
 	//static var fieldNames:Array<String>;
 	//var mandator:Int;
 
 	public function new(props:Dynamic) {
 		fieldsModified = new Array();
+		for(f in propertyNames)
+		{
+			Reflect.setProperty(this, f, Reflect.field(props, f));
+		}		
 		//edited_by = props.user.id;
 		//mandator = props.mandator;
 	}
@@ -38,14 +44,24 @@ class ORM {
 		return t;
 	}
 
+	public function store() {
+		var data:Dynamic = {};
+		for(f in fieldsModified)
+		{
+			//TODO: ADD FORMAT SWITCH BEFORE ADDING DATA TO STORAGE
+			Reflect.setField(data, f, Reflect.field(this, f));
+		}
+		return data;
+	}
+
 	public function initFields() {
 		//var pNames:Array<String> = propertyNames.split(',');
 		var me:Dynamic = Type.getClass(this);
 		var rtti:Classdef = getRtti(me);
 		var rttiFields:Array<haxe.rtti.CType.ClassField> = rtti.fields;
-		trace(rttiFields[0]);
+		//trace(rttiFields[0]);
 		trace(propertyNames);
-		
+		var dTypes:Array<String> = [];
 		for(fld in rttiFields)
 		//for(fi in 0...rttiFields.length)
 		{
@@ -53,11 +69,16 @@ class ORM {
 			//trace(fld.name);
 			if(propertyNames.has(fld.name))
 			{
-				trace('${fld.name}:${fld.type} ${fld.meta[0].params}');
+				//trace('${fld.name}:${fld.type} ${fld.meta[0].params}');
+				if(!dTypes.has(fld.meta[0].params[0]))
+				{
+					dTypes.push(fld.meta[0].params[0]);
+				}
 				//trace(fld.type);//HAXE TYPE
 				//trace(fld.meta[0].params);//DB FIELD DATATYPE
 			}
 		}
+		trace(dTypes);
 	}
 
 	public function modified(?attName:String):Bool {

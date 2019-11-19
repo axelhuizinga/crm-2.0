@@ -89,13 +89,13 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		dataAccess = ContactsModel.dataAccess;
 		initFieldNames(dataAccess['update'].view.keys());
 		dataDisplay = ContactsModel.dataDisplay;
-		trace('...' + Reflect.fields(props));
+		//trace('...' + Reflect.fields(props));
 		formRef = React.createRef();
 		if(props.match.params.id!=null)
 			initialState.id = Std.parseInt(props.match.params.id);
 		
-		trace(props.dataStore.contactActData);
-		trace(props.dataStore.contactData);
+		if(props.dataStore.contactData != null)
+		trace(props.dataStore.contactData.keys().next());
 		// FOR NOW IGNORE THE dataStore and Observer
 		if(initialState.id!=null && props.dataStore.contactData != null && props.dataStore.contactData.exists(initialState.id))
 		{
@@ -103,7 +103,8 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			//actualState = copy(initialState);
 			//select(props.data['id'], 
 					//[Std.int(props.data['id'])=>props.data], props.parentComponent.props.match);
-			trace(actualState);	
+			trace(actualState.creation_date);	
+			trace(contact.fieldsModified);
 			//props.select(initialState.id,[initialState.id => initialState], props.match);
 			//OK we got the data
 		/*	actualState = view.shared.io.Observer.run(actualState, function(newState){
@@ -168,9 +169,8 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		if(id == null)
 			return null;
 		actualState = {edited_by: props.user.id,mandator: props.user.mandator};
-		contact = new Contact(actualState);
-		trace('Rtti:' + Rtti.getRtti(Contact).fields[0].meta);
-		contact.initFields();		
+
+		//contact.initFields();		
 		//{edited_by: props.user.id,mandator: 0};
 		var data = props.dataStore.contactData.get(id);
 		trace(data);	
@@ -178,14 +178,18 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		{
 			try{
 				//trace('$k:$v');
-				Reflect.setProperty(contact,k, v);
+				Reflect.setField(actualState,k, v);
 				}
 			catch(ex:Dynamic)
 			{
 				trace(ex);
 			}		
 		}
-		trace(contact.fieldsModified);
+		contact = new Contact(actualState);
+		trace(actualState);
+		//trace('Rtti:' + Rtti.getRtti(Contact).fields[0].meta);
+		trace(contact.fieldsModified);		
+		trace('contact.fieldsModified:' + contact.fieldsModified);
 		initialState = contact.copy(data, actualState);
 		compareStates();	
 		//trace(actualState);	
@@ -331,7 +335,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				dbaProps.dataSource = [
 					"contacts" => [
 						"data" => aState,
-						"fields" => Reflect.fields(aState).join(',')
+						"fields" => contact.fieldsModified
 					]
 				];
 			case 'delete'|'get':
@@ -344,7 +348,8 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				//Reflect.deleteField(aState,'creation_date');
 				trace('${initialState.id} :: creation_date: ${aState.creation_date} ${state.initialState.creation_date}');
 				//var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialState.id);
-				trace(contact.modified());
+				//trace();
+				trace(contact.modified() + ':${contact.fieldsModified}');
 				for(f in fieldNames)
 				{
 					//UPDATE FIELDS WITH VALUES CHANGED
@@ -365,7 +370,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 
 				dbaProps.dataSource = [
 					"contacts" => [
-						"data" => aState,
+						"data" => contact.store(),
 						"filter" => 'id|${initialState.id}'
 					]
 				];
@@ -385,8 +390,8 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{
 			case 'update':
-				trace(state.handleSubmit);
-				trace(actualState);
+				//trace(state.handleSubmit);
+				//trace(actualState);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 				];*/

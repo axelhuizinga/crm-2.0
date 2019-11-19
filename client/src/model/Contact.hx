@@ -36,12 +36,9 @@ class Contact extends ORM
 {
 
 	public function new(props:ContactProps) {
-		super(props);
 		propertyNames = 'id,mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner'.split(',');
-		for(f in Reflect.fields(props))
-		{
-			Reflect.setField(this, f, Reflect.field(props, f));
-		}
+		super(props);
+
 	}	
 		
 	@dataType("bigint")
@@ -80,7 +77,11 @@ class Contact extends ORM
 
 	function set_mandator(x:Int):Int{
 		if(mandator != null)
+		{
+			trace(mandator);
 			modified('mandator');
+		}
+		trace(x);
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 

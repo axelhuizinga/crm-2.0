@@ -99,7 +99,7 @@ class FormBuilder {
 					//trace(field);//disabled=${field.disabled} required=${field.required}
 					var checked = switch(value)
 					{
-						case "TRUE"|true|"on":
+						case "TRUE"|true|"on"|"1":
 							true;
 						default:
 							false;
@@ -111,7 +111,8 @@ class FormBuilder {
 					);
 				case Select:
 				renderElement(
-					jsx('<select name=${name} onChange=${onChange}  defaultValue=${value} key=${ki++} multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
+					jsx('<select name=${name} onChange=${onChange}  defaultValue=${value} key=${ki++} 
+						multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
 					ki++, field.label
 				);
 				case FormInputElement.DateTimePicker:
@@ -202,15 +203,16 @@ class FormBuilder {
 		switch (ev.target.type)
 		{
 			case 'checkbox':
-				//trace('${ev.target.name}:${ev.target.checked?true:false}');
+				trace('${ev.target.name}:${ev.target.checked?true:false}');
 				//trace('doChange:${Reflect.isFunction(Reflect.field(comp,'doChange'))}');
 				comp.doChange(ev.target.name, switch(ev.target.checked)
-					{
-						case "TRUE"|true|"on":
-							true;
-						default:
-							false;
-					});
+				{
+					case "TRUE"|true|"on"|"1":
+						true;
+					default:
+						false;
+				});
+				comp.forceUpdate();
 			case 'select-multiple'|'select-one':
 				//trace (ev.target.selectedOptions.length);
 			default:

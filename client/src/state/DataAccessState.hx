@@ -11,11 +11,11 @@ typedef DataSource =
     ?port:Int,
     ?url:String,
     ?user:String,
-    ?pass:String,
+    ?pass:String, 
 }
 
 typedef 
-DataAccessState = 
+DataAccessState =  
 {
 	?contactsDbData:DbData,
 	?contactActData:IntMap<Map<String,Dynamic>>,

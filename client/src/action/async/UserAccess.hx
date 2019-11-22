@@ -67,6 +67,53 @@ class UserAccess {
 			return null;
 		});
 	}
+
+	public static function resetPassword(props:UserState) 
+	{
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState)
+		{
+			if (props.user_name == '') 
+				return dispatch(
+					User(LoginError({user_name:props.user_name, loginError:'Benutzername eingeben!'})));
+			
+			var uState:UserState = getState().user;
+			BinaryLoader.create(
+				'${App.config.api}', 
+				{				
+					id:uState.id, 
+					jwt:uState.jwt,
+					className:'auth.User',
+					action:'changePassword',
+					new_pass:props.new_pass,
+					pass:props.pass,
+					devIP:App.devIP
+				},
+				function(data:DbData)
+				{
+					//UserAccess.jwtCheck(data);
+					trace(Reflect.fields(data));
+					trace(data);
+					if (data.dataErrors.keys().hasNext())
+					{
+						trace(data.dataErrors.toString());
+						return dispatch(User(LoginError({loginError: data.dataErrors.iterator().next()})));
+					}
+					if (data.dataInfo['changePassword'] == 'OK')
+					{
+						trace(uState);						
+						uState.new_pass = '';
+						uState.pass = '';
+						uState.change_pass_required = false;
+						return dispatch(User(LoginComplete(uState)));
+					}
+					else trace(data.dataErrors);		
+					return null;		
+				}
+			);	
+			return null;
+		});
+	}
+
 	public static function jwtCheck(data:DbData) 
 	{
 		if (data.dataErrors.keys().hasNext())

@@ -1,5 +1,6 @@
 package view;
 
+import js.html.Image;
 import js.html.InputElement;
 import js.html.InputEvent;
 import js.html.XMLHttpRequest;
@@ -40,7 +41,8 @@ typedef LoginProps =
 @:connect
 class LoginForm extends ReactComponentOf<LoginProps, UserState>
 {
-	
+	var submitValue:String;
+
 	public function new(?props:LoginProps)
 	{
 		super(props);
@@ -50,7 +52,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			trace(props.match.path + ':' + props.match.url);	
 		}
 		trace(props);
-		state = {user_name:'',pass:'',new_pass_confirm: '', new_pass: ''};
+		state = {user_name:'',pass:'',new_pass_confirm: '', new_pass: '',waiting:true};
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
@@ -58,12 +60,21 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			submitLogin: function(lState:UserState) return dispatch(
 				lState.new_pass != null ?
 				UserAccess.changePassword(lState):
-				UserAccess.doLogin(lState))
+				UserAccess.doLogin(lState)),
+			resetPW: function (lState:UserState) return dispatch(UserAccess.resetPassword(lState))
 		};
 	}
 
 	override public function componentDidMount():Void 
 	{
+		var img = new Image();
+		//setState({waiting:true});
+		img.onload = function(){
+			trace(state);
+			setState({waiting:false});
+			trace('ok');
+		}
+		img.src = "img/schutzengelwerk-logo.png";
 		trace(state);
 	}
 	
@@ -73,9 +84,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		{
 			var uState = aState.user;
 
-			trace(uState);
-			//trace(aState.config);
-			
+			trace(uState);		
 			return {
 				api:App.config.api,
 				change_pass_required:uState.change_pass_required,
@@ -114,9 +123,14 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		trace(this.state);
 	}
 	
-	dynamic function handleSubmit(e:InputEvent)
+	function handleSubmit(e:InputEvent)
 	{
 		e.preventDefault();
+		trace(submitValue);
+		if(submitValue == 'resetPW')
+		{
+			return;
+		}
 		//trace(state); //return;
 		//this.setState({waiting:true});
 		//props.dispatch(AppAction.Login("{user_name:state.user_name,pass:state.pass}"));
@@ -130,16 +144,23 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		//trace(props.dispatch(AppAction.LoginReq(state)));
 	}	
 
+	function resetPW(_)
+	{
+		trace('OK');
+	}
+
 	override public function render()
 	{
 		trace(Reflect.fields(props));
-		trace(state.new_pass);
+		
+		trace(props.loginError);
+		trace(state.waiting);
 		var style = 
 		{
 			maxWidth:'32rem'
 		};
 		
-		if (props.waiting)
+		if (state.waiting)
 		{
 			return jsx('
 			<section className="hero is-alt is-fullheight">
@@ -171,7 +192,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 									<label className="fa userIcon" forhtml="login_user_name">
 											<span className="hidden">User ID</span>
 									</label>
-									<input id="login_user_name" name="user_name" 
+									<input id="login_user_name" name="user_name" disabled="disabled" 
 									className=${errorStyle("user_name") + "form-input"}  
 									placeholder="User ID" value=${state.user_name} onChange={handleChange} />
 							</div>
@@ -189,7 +210,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 							</div>							
 							<div className="formField">
 									<input type="submit" style=${{width:'100%'}} value="Login" />
-							</div>
+							</div>						
 						</form>
 					</div>
 				</div>
@@ -227,13 +248,17 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 						<div className="formField">
 								<input type="submit" style=${{width:'100%'}} value="Login" />
 						</div>
+						<div className="formField" style=${{display: (props.loginError == null? 'none':'flex')}}>
+								<input  onClick=${function()this.submitValue='resetPW'} type="submit" 
+								value="Passwort vergessen?" name="resetPW" />
+						</div>							
 				  	</form>
 				</div>
 			</div>
 		  </div>
 		</section>		
 		');
-	}//autoComplete="new-pass"
+	}//autoComplete="new-pass"style=${{width:'100%', border:'none',cursor:'pointer'}}
 	
 	function errorStyle(name:String):String
 	{

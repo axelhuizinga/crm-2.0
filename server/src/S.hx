@@ -242,8 +242,8 @@ class S
 			}
 		}
 		//trace('done at ${Sys.time()-ts} ms');
-		trace(dbData.dataErrors);
-		//trace(dbData);
+		//trace(dbData.dataErrors);
+		trace(dbData);
 		return sendbytes(s.serialize(dbData));
 	}
 	

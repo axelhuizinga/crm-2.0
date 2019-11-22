@@ -7,8 +7,8 @@ typedef User =
 	contact:Int,
 	//{"name":"last_login","type":"timestamp(0) without time zone","default":"","attnum":"3","required":false}
 	?last_login:String,
-	//{"name":"password","type":"character varying(512)","default":"","attnum":"4","required":false}
-	?password:String,
+	//{"name":"pin","type":"character varying(512)","default":"","attnum":"4","required":false}
+	?pin:String,
 	//{"name":"user_name","type":"character varying(64)","default":"","attnum":"5","required":true}
 	user_name:String,
 	//{"name":"active","type":"boolean","default":"true","attnum":"6","required":false}
@@ -32,5 +32,7 @@ typedef User =
 	//{"name":"request","type":"character varying(4096)","default":"''::character varying","attnum":"15","required":false}
 	?request:String,
 	//{"name":"mandator","type":"bigint","default":"0","attnum":"16","required":true}
-	mandator:Int
+	mandator:Int,
+	//{"name":"phash","type":"character varying(64)","default":"''::character varying","attnum":"17","required":false}
+	?phash:String
 }

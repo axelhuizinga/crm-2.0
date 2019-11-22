@@ -94,6 +94,54 @@ class User extends Model
 		return null;
 	}
 	
+	static function userEmail(param:Map<String,Dynamic>):String
+	{
+		var dbData:DbData = new DbData();
+		var sql:String = 'SELECT user_name FROM ${S.db}.users WHERE user_name=:user_name AND active=TRUE';
+		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
+		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}'})))
+		{			
+			trace(stmt.errorInfo());
+			S.sendErrors(dbData,['${param['action']}' => Std.string(stmt.errorInfo())]);
+			return '';
+		}
+		if(stmt.rowCount()>0)
+		{
+			//ACTIVE USER EXISTS - CHECK EMAIL
+			sql = 'SELECT email, first_name, last_name, last_login, us.id FROM ${S.db}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name';
+			stmt = S.dbh.prepare(sql,Syntax.array(null));
+			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject(
+				{':user_name': param.get('user_name')}
+				)))
+			{
+				S.sendErrors(dbData,['${param['action']}' => stmt.errorInfo()]);
+			}
+			if (stmt.rowCount()==0)
+			{
+				S.sendErrors(dbData,['user'=>'user ${param['user_name']} not found!']);
+				return '';
+			}
+			// USER AUTHORIZED
+			var assoc:Dynamic = stmt.fetch(PDO.FETCH_ASSOC);
+			var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(assoc);	
+			//dbData.dataInfo['id'] = res['id'];
+			//dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(assoc);		
+			dbData.dataInfo = res;		
+			//dbData.dataInfo['mandator'] = res['mandator'];
+			//dbData.dataInfo['last_login'] = res['last_login'];
+			//dbData.dataInfo['loggedIn'] = 'true';
+			trace(res['user_name']+':'+res['email']);	
+			//S.sendInfo(dbData);
+			return res['email'];
+		}
+		else
+		{
+			trace(stmt.rowCount+':$sql');
+			S.sendErrors(dbData,['${param['action']}'=>'user_name']);
+			return '';                          
+		}
+	}
+	
 	static function userIsAuthorized(param:Map<String,Dynamic>):UserAuth
 	{
 		var dbData:DbData = new DbData();
@@ -107,9 +155,9 @@ class User extends Model
 		if(stmt.rowCount()>0)
 		{
 			//ACTIVE USER EXISTS
-			trace('SELECT change_pass_required, first_name, last_name, last_login, us.id, us.mandator FROM ${S.db}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name AND password=crypt (:password,password)');
+			trace('SELECT change_pass_required, first_name, last_name, last_login, us.id, us.mandator FROM ${S.db}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name AND phash=crypt (:password,phash)');
 			stmt = S.dbh.prepare(
-				'SELECT change_pass_required, first_name, last_name, last_login, us.id, us.mandator FROM ${S.db}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name AND password=crypt(:password,password)',Syntax.array(null));
+				'SELECT change_pass_required, first_name, last_name, last_login, us.id, us.mandator FROM ${S.db}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name AND phash=crypt(:password,phash)',Syntax.array(null));
 			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${param.get('user_name')}',':password':'${param.get('pass')}'})))
 			{
 				S.sendErrors(dbData,['${param['action']}' => stmt.errorInfo()]);
@@ -121,15 +169,15 @@ class User extends Model
 			}
 			// USER AUTHORIZED
 			var assoc:Dynamic = stmt.fetch(PDO.FETCH_ASSOC);
-			var res:Map<String,String> = Lib.hashOfAssociativeArray(assoc);	
+			var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(assoc);	
 			//dbData.dataInfo['id'] = res['id'];
 			//dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(assoc);		
 			dbData.dataInfo = res;		
 			//dbData.dataInfo['mandator'] = res['mandator'];
 			//dbData.dataInfo['last_login'] = res['last_login'];
 			dbData.dataInfo['loggedIn'] = 'true';
-			trace(res['user_name']);
-			trace('change_pass_required'+(res['change_pass_required']=='1' || res['change_pass_required']=='true'?'Y':'N'));
+			trace(res['user_name']+':'+res['change_pass_required']);
+			trace('change_pass_required'+(res['change_pass_required']==true || res['change_pass_required']=='true'?'Y':'N'));
 			// UPDATE LAST_LOGIN
 			var rTime:String = DateTools.format(Date.now(), "'%Y-%m-%d %H:%M:%S'");//,request=?
 			var update:PDOStatement = S.dbh.prepare('UPDATE users SET last_login=${rTime} WHERE id=:id',Syntax.array(null));
@@ -137,7 +185,7 @@ class User extends Model
 			trace(update.errorCode());
 			trace(update.errorInfo());
 			//UPDATE DONE			
-			if (res['change_pass_required']=='1' || res['change_pass_required']=='true')
+			if (res['change_pass_required']==true || res['change_pass_required']=='true')
 				return UserAuth.PassChangeRequired(dbData);
 			return UserAuth.AuthOK(dbData);			
 		}
@@ -177,7 +225,7 @@ class User extends Model
 				dbData.dataInfo['change_pass_required'] = Std.string(Type.enumConstructor(uath) == 'PassChangeRequired');
 				//me.dbData.dataInfo['user_data'].id = jwt;
 				dbData.dataInfo['jwt'] = jwt;
-				//trace(me.dbData);
+				//trace(dbData);
 				S.sendInfo(dbData);
 				return true;
 			default:
@@ -210,9 +258,9 @@ class User extends Model
 		
 		if (verify(param))
 		{
-			trace('UPDATE ${S.db}.users SET password=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id ');
+			trace('UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id ');
 			var stmt:PDOStatement = S.dbh.prepare(
-				'UPDATE ${S.db}.users SET password=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id ',Syntax.array(null));
+				'UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id ',Syntax.array(null));
 			if ( !Model.paramExecute(stmt, Lib.associativeArrayOfObject(
 				{':id': '${param.get('id')}',':new_password':'${param.get('new_pass')}'})))
 			{
@@ -226,6 +274,40 @@ class User extends Model
 		dbData.dataInfo['changePassword'] = 'OK';
 		S.sendInfo(dbData);
 		return true;
+	}
+
+	public static function resetPassword(param:Map<String,Dynamic>) {
+		var address = userEmail(param);
+		final email = {
+			subject: 'Subject',
+			from: {address: 'admin@pitverwaltung.de', displayName: "crm-2.0 SCHUTZENGELWERK"},
+			to: [address],
+			content: {
+				text: 'hello',
+				html: '<font color="orange">hello</font>'
+			},
+			//attachments: ['image.png']
+		}
+		smtpmailer.SmtpMailer.connect({
+			host: 'pitverwaltung.de',
+			port: 587,
+			auth: {
+				username: 'admin',
+				password: 'XbkvugE'
+			}
+		}).next(mailer ->
+		mailer.send(email).next(
+			_ -> mailer.close()
+		)
+		).handle(function(res) {
+			switch res {
+				case Success(_):
+					trace('Email sent!');
+				case Failure(e): {
+					trace('Something went wrong: '+e);
+				}
+			}
+		});		
 	}
 	
 	public function save():Bool
@@ -307,6 +389,7 @@ class User extends Model
 
 enum UserAuth{
 	AuthOK(dbData:DbData);
+	AuthNoEmail;
 	PassChangeRequired(dbData:DbData);
 	NotOK;
 }

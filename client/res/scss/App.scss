@@ -360,6 +360,7 @@ input::-moz-focus-inner {
 	padding:$ePad;
 	background-color:$buttonSun;
 	border-color:$cell-border;
+	cursor: pointer;
 }
 .flatpickr-calendar
 {

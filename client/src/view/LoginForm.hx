@@ -1,5 +1,7 @@
 package view;
 
+import react.ReactComponent.ReactFragment;
+import react.ReactType;
 import js.html.Image;
 import js.html.InputElement;
 import js.html.InputEvent;
@@ -13,20 +15,24 @@ import redux.Redux;
 import action.async.UserAccess;
 import view.shared.RouteTabProps;
 
+using shared.Utils;
+using StringTools;
+
 typedef LoginProps =
 {
 	>RouteTabProps,
-	submitLogin:UserState->Dispatch,
+	?submitLogin:UserState->Dispatch,
 	//user:UserState,
-	api:String,
-	change_pass_required:Bool,
+	api:String,	
+	?change_pass_required:Bool,
+	?reset_password:Bool,
 	pass:String,
 	new_pass:String,
-	jwt:String,
+	?jwt:String,
 	loggedIn:Bool,
-	loginError:String,
-	last_login:String,
-	first_name:String,
+	?loginError:String,
+	?last_login:Date,
+	//?first_name:String,
 	user_name:String,
 	redirectAfterLogin:String,
 	waiting:Bool
@@ -56,6 +62,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
+		trace('ok');
 		return {
 			submitLogin: function(lState:UserState) return dispatch(
 				lState.new_pass != null ?
@@ -80,24 +87,44 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	
 	static function mapStateToProps() {
 
-		return function(aState:AppState) 
+		return function(aState:AppState):LoginProps
 		{
 			var uState = aState.user;
-
+			trace(aState.locationState.redirectAfterLogin);
 			trace(uState);		
+			if(aState.locationState.redirectAfterLogin != null && aState.locationState.redirectAfterLogin.startsWith('/ResetPassword'))
+			{
+				var param:Map<String,Dynamic> = aState.locationState.redirectAfterLogin.argList(
+					['action','user_name','oPath']
+				);
+				return{
+					api:App.config.api,
+					change_pass_required:false,
+					pass:uState.pass,
+					new_pass:(uState.new_pass!=null?uState.new_pass:''),
+					jwt:uState.jwt,
+					//mandator:uState.mandator,
+					loggedIn:false,
+					user_name:param.get('user_name'),
+					redirectAfterLogin:param.get('oPath'),
+					user:null,
+					waiting:false
+				};
+			}
 			return {
 				api:App.config.api,
 				change_pass_required:uState.change_pass_required,
 				pass:uState.pass,
 				new_pass:(uState.new_pass!=null?uState.new_pass:''),
 				jwt:uState.jwt,
-				mandator:uState.mandator,
+				//mandator:uState.mandator,
 				loggedIn:uState.loggedIn,
 				loginError:uState.loginError,
 				last_login:uState.last_login,
-				first_name:uState.first_name,
+				//first_name:uState.first_name,
+				user:uState,
 				user_name:uState.user_name,
-				redirectAfterLogin:aState.redirectAfterLogin,
+				redirectAfterLogin:aState.locationState.redirectAfterLogin,
 				waiting:uState.waiting
 			};
 		};
@@ -149,6 +176,105 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		trace('OK');
 	}
 
+	public function  renderForm():ReactFragment
+	{		
+		trace(props.redirectAfterLogin);
+		if(props.redirectAfterLogin != null && props.redirectAfterLogin.startsWith('/ResetPassword'))
+		{
+			return jsx('
+					<form name="form" onSubmit={handleSubmit} className="login" >
+						<input  name="pass" type="hidden" value=${props.pass} />														
+						<div className="formField">
+							<h3>Bitte neues Passwort eintragen!</h3>
+						</div>
+						<div className="formField">
+								<label className="fa userIcon" forhtml="login_user_name">
+										<span className="hidden">User ID</span>
+								</label>
+								<input id="login_user_name" name="user_name" disabled="disabled" 
+								className=${errorStyle("user_name") + "form-input"}  
+								placeholder="User ID" value=${state.user_name} onChange={handleChange} />
+						</div>
+						<div className="formField">
+								<label className="fa lockIcon" forhtml="pw">
+										<span className="hidden">Password</span>
+								</label>
+								<input  className=${errorStyle("new_pass") + "form-input"} name="new_pass" type="password" placeholder="New Password" value=${state.new_pass} onChange=${handleChange} />
+						</div>
+						<div className="formField">
+								<label className="fa lockIcon" forhtml="pw">
+										<span className="hidden">Password</span>
+								</label>
+								<input  className=${errorStyle("new_pass_confirm") + "form-input"} name="new_pass_confirm" type="password" placeholder="Confirm New Password" value=${state.new_pass_confirm} onChange=${handleChange} />
+						</div>							
+						<div className="formField">
+								<input type="submit" style=${{width:'100%'}} value="Login" />
+						</div>
+					</form>'
+				);
+		}
+
+		if(props.change_pass_required)
+		{
+			return jsx('
+					<form name="form" onSubmit={handleSubmit} className="login" >
+						<input  name="pass" type="hidden" value=${props.pass} />														
+						<div className="formField">
+							<h3>Bitte neues Passwort eintragen!</h3>
+						</div>
+						<div className="formField">
+								<label className="fa userIcon" forhtml="login_user_name">
+										<span className="hidden">User ID</span>
+								</label>
+								<input id="login_user_name" name="user_name" disabled="disabled" 
+								className=${errorStyle("user_name") + "form-input"}  
+								placeholder="User ID" value=${state.user_name} onChange={handleChange} />
+						</div>
+						<div className="formField">
+								<label className="fa lockIcon" forhtml="pw">
+										<span className="hidden">Password</span>
+								</label>
+								<input  className=${errorStyle("new_pass") + "form-input"} name="new_pass" type="password" placeholder="New Password" value=${state.new_pass} onChange=${handleChange} />
+						</div>
+						<div className="formField">
+								<label className="fa lockIcon" forhtml="pw">
+										<span className="hidden">Password</span>
+								</label>
+								<input  className=${errorStyle("new_pass_confirm") + "form-input"} name="new_pass_confirm" type="password" placeholder="Confirm New Password" value=${state.new_pass_confirm} onChange=${handleChange} />
+						</div>							
+						<div className="formField">
+								<input type="submit" style=${{width:'100%'}} value="Login" />
+						</div>
+					</form>'
+				);
+		}		
+		return jsx('
+				  	<form name="form" onSubmit={handleSubmit} className="login" >
+						<div className="formField">
+								<label className="fa userIcon" forhtml="login_user_name">
+										<span className="hidden">User ID</span>
+								</label>
+								<input id="login_user_name" name="user_name" 
+								className=${errorStyle("user_name") + "form-input"}  
+								placeholder="User ID" value=${state.user_name} onChange=${handleChange} />
+						</div>
+						<div className="formField">
+								<label className="fa lockIcon" forhtml="pw">
+										<span className="hidden">Password</span>
+								</label>
+								<input id="pw" className=${errorStyle("pass") + "form-input"} name="pass" type="password" placeholder="Password" value=${state.pass} onChange=${handleChange} />
+						</div>
+						<div className="formField">
+								<input type="submit" style=${{width:'100%'}} value="Login" />
+						</div>
+						<div className="formField" style=${{display: (props.loginError == null? 'none':'flex')}}>
+								<input type="submit" value="Passwort vergessen?" name="resetPW"  onClick=${function(){this.submitValue="resetPW";}}/>
+						</div>
+					</form>
+		');
+		return null;
+	}
+
 	override public function render()
 	{
 		trace(Reflect.fields(props));
@@ -170,9 +296,8 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			</section> 
 			');		
 		}
-		if(props.change_pass_required)
-		{
-			return jsx('
+
+		return jsx('
 			<section className="hero is-alt is-fullheight">
 			<div className="formContainer">
 				<div className="formBox is-rounded" style=${style}>
@@ -182,83 +307,14 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 					crm 2.0
 					</h2>
 					</div> 
-					<div className="form2">
-						<form name="form" onSubmit={handleSubmit} className="login" >
-							<input  name="pass" type="hidden" value=${props.pass} />														
-							<div className="formField">
-								<h3>Bitte neues Passwort eintragen!</h3>
-							</div>
-							<div className="formField">
-									<label className="fa userIcon" forhtml="login_user_name">
-											<span className="hidden">User ID</span>
-									</label>
-									<input id="login_user_name" name="user_name" disabled="disabled" 
-									className=${errorStyle("user_name") + "form-input"}  
-									placeholder="User ID" value=${state.user_name} onChange={handleChange} />
-							</div>
-							<div className="formField">
-									<label className="fa lockIcon" forhtml="pw">
-											<span className="hidden">Password</span>
-									</label>
-									<input  className=${errorStyle("new_pass") + "form-input"} name="new_pass" type="password" placeholder="New Password" value=${state.new_pass} onChange=${handleChange} />
-							</div>
-							<div className="formField">
-									<label className="fa lockIcon" forhtml="pw">
-											<span className="hidden">Password</span>
-									</label>
-									<input  className=${errorStyle("new_pass_confirm") + "form-input"} name="new_pass_confirm" type="password" placeholder="Confirm New Password" value=${state.new_pass_confirm} onChange=${handleChange} />
-							</div>							
-							<div className="formField">
-									<input type="submit" style=${{width:'100%'}} value="Login" />
-							</div>						
-						</form>
+					<div className="form2">						
+						${renderForm()}						
 					</div>
 				</div>
 			</div>
 			</section>		
-			');
-		}
-		
-		return jsx('
-		<section className="hero is-alt is-fullheight">
-		  <div className="formContainer">
-			<div className="formBox is-rounded" style=${style}>
-				<div className="logo">
-				<img src="img/schutzengelwerk-logo.png" style=${{width:'100%'}}/>
-				  <h2 className="overlaySubTitle">				  
-				  crm 2.0
-				  </h2>
-				</div> 
-				<div className="form2">
-				  	<form name="form" onSubmit={handleSubmit} className="login" >
-						<div className="formField">
-								<label className="fa userIcon" forhtml="login_user_name">
-										<span className="hidden">User ID</span>
-								</label>
-								<input id="login_user_name" name="user_name" 
-								className=${errorStyle("user_name") + "form-input"}  
-								placeholder="User ID" value=${state.user_name} onChange=${handleChange} />
-						</div>
-						<div className="formField">
-								<label className="fa lockIcon" forhtml="pw">
-										<span className="hidden">Password</span>
-								</label>
-								<input id="pw" className=${errorStyle("pass") + "form-input"} name="pass" type="password" placeholder="Password" value=${state.pass} onChange=${handleChange} />
-						</div>
-						<div className="formField">
-								<input type="submit" style=${{width:'100%'}} value="Login" />
-						</div>
-						<div className="formField" style=${{display: (props.loginError == null? 'none':'flex')}}>
-								<input  onClick=${function()this.submitValue='resetPW'} type="submit" 
-								value="Passwort vergessen?" name="resetPW" />
-						</div>							
-				  	</form>
-				</div>
-			</div>
-		  </div>
-		</section>		
 		');
-	}//autoComplete="new-pass"style=${{width:'100%', border:'none',cursor:'pointer'}}
+	}
 	
 	function errorStyle(name:String):String
 	{

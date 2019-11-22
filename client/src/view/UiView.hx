@@ -76,8 +76,9 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	//static var _me:UiView;
 
 	static function mapStateToProps(aState:AppState):UIProps
-	{
-		trace(aState.user.id);
+	{		
+		//trace(aState.user.id);
+		trace(aState);
 		return {
 			user:aState.user
 		};

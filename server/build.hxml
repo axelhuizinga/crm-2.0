@@ -3,7 +3,7 @@
 -lib random
 -lib tjson
 -lib hxbit
--lib smtpmailer
+#-lib smtpmailer
 
 -cp /opt/src/lib
 -cp lib

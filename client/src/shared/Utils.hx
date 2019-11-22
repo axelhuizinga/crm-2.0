@@ -32,6 +32,20 @@ class Utils
 		}
 		return l;
 	}
+
+	public static function argList(path:String, keys:Array<String>,del:String='/'):Map<String,Dynamic> {
+		var segments:Array<String> = path.split(del);
+		var key:String = null;
+		var lastKey:String = keys.pop();
+		var s:Dynamic = null;
+		return[
+			while(null != (s = segments.shift()))
+				if(null == (key = keys.shift()))
+					lastKey => (segments.length>0? del+s+segments.join(del):s)			
+					//(segments.length>0?lastKey + '_' +  Std.string(++lki):lastKey) => s			
+					
+		];
+	}
 	
 	public static function extend(obj1: Dynamic, obj2: Dynamic): Dynamic {
 		

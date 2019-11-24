@@ -10,7 +10,7 @@ import state.AppState;
 import state.UserState;
 import react.ReactComponent.ReactComponentOf;
 import react.ReactMacro.jsx;
-import react.ReactUtil;
+import react.ReactUtil.copy;
 import redux.Redux;
 import action.async.UserAccess;
 import view.shared.RouteTabProps;
@@ -18,18 +18,23 @@ import view.shared.RouteTabProps;
 using shared.Utils;
 using StringTools;
 
+
 typedef LoginProps =
 {
-	>RouteTabProps,
+	//>RouteTabProps,
+	
+	?getEmail:UserState->Dispatch,
 	?submitLogin:UserState->Dispatch,
+	?loginTask:LoginTask,
 	//user:UserState,
 	api:String,	
 	?change_pass_required:Bool,
-	?reset_password:Bool,
+	?reset_password:Bool,	
+	?email:String,
 	pass:String,
 	new_pass:String,
 	?jwt:String,
-	loggedIn:Bool,
+	loggedIn:Bool,	
 	?loginError:String,
 	?last_login:Date,
 	//?first_name:String,
@@ -43,7 +48,7 @@ typedef LoginProps =
  * @author axel@cunity.me
  */
 
-//@:expose('default')
+
 @:connect
 class LoginForm extends ReactComponentOf<LoginProps, UserState>
 {
@@ -53,23 +58,35 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	{
 		super(props);
 		trace(Reflect.fields(props));
-		if (props.match != null)
+		/*if (props.match != null)
 		{
 			trace(props.match.path + ':' + props.match.url);	
-		}
+		}*/
 		trace(props);
+		submitValue = '';
 		state = {user_name:'',pass:'',new_pass_confirm: '', new_pass: '',waiting:true};
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		trace('ok');
 		return {
+			getEmail: function(lState:UserState) return dispatch(UserAccess.resetPassword(lState)),
 			submitLogin: function(lState:UserState) return dispatch(
 				lState.new_pass != null ?
 				UserAccess.changePassword(lState):
 				UserAccess.doLogin(lState)),
 			resetPW: function (lState:UserState) return dispatch(UserAccess.resetPassword(lState))
 		};
+	}
+
+	override public function shouldComponentUpdate(nextProps:LoginProps, nextState:UserState) {
+		trace('propsChanged:${nextProps!=props}');
+		trace('stateChanged:${nextState!=state}');
+		if(nextState!=state)
+		{
+			state.compare(nextState);
+		}
+		return true;
 	}
 
 	override public function componentDidMount():Void 
@@ -97,7 +114,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 				var param:Map<String,Dynamic> = aState.locationState.redirectAfterLogin.argList(
 					['action','user_name','oPath']
 				);
-				return{
+				return {
 					api:App.config.api,
 					change_pass_required:false,
 					pass:uState.pass,
@@ -107,7 +124,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 					loggedIn:false,
 					user_name:param.get('user_name'),
 					redirectAfterLogin:param.get('oPath'),
-					user:null,
+					//user:null,
 					waiting:false
 				};
 			}
@@ -122,7 +139,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 				loginError:uState.loginError,
 				last_login:uState.last_login,
 				//first_name:uState.first_name,
-				user:uState,
+				//user:uState,
 				user_name:uState.user_name,
 				redirectAfterLogin:aState.locationState.redirectAfterLogin,
 				waiting:uState.waiting
@@ -153,22 +170,24 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	function handleSubmit(e:InputEvent)
 	{
 		e.preventDefault();
-		trace(submitValue);
-		if(submitValue == 'resetPW')
+		trace(props.loginTask);
+		switch (props.loginTask)
 		{
-			return;
-		}
-		//trace(state); //return;
-		//this.setState({waiting:true});
-		//props.dispatch(AppAction.Login("{user_name:state.user_name,pass:state.pass}"));
-		//trace(props.dispatch);
-		props.submitLogin(
-			props.change_pass_required?
-			{user_name:state.user_name, new_pass:state.new_pass,pass:props.pass, jwt:''}:
-			{user_name:state.user_name, pass:state.pass, jwt:''});
-		//trace(_dispatch == App.store.dispatch);
-		//trace(App.store.dispatch(UserAction.loginReq(state)));
-		//trace(props.dispatch(AppAction.LoginReq(state)));
+			case LoginTask.ResetPassword:
+				trace('Reset Password requested');
+				trace(props);
+				if(props.email=='')
+				{
+					props.getEmail(props.id)
+				}
+				return false;
+			default:
+			props.submitLogin(
+				props.change_pass_required?
+				{user_name:state.user_name, new_pass:state.new_pass,pass:props.pass, jwt:''}:
+				{user_name:state.user_name, pass:state.pass, jwt:''});			 	
+		} 
+		return true;
 	}	
 
 	function resetPW(_)
@@ -248,6 +267,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 					</form>'
 				);
 		}		
+
 		return jsx('
 				  	<form name="form" onSubmit={handleSubmit} className="login" >
 						<div className="formField">
@@ -268,7 +288,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								<input type="submit" style=${{width:'100%'}} value="Login" />
 						</div>
 						<div className="formField" style=${{display: (props.loginError == null? 'none':'flex')}}>
-								<input type="submit" value="Passwort vergessen?" name="resetPW"  onClick=${function(){this.submitValue="resetPW";}}/>
+								<input type="submit" value="Passwort vergessen?"/>
 						</div>
 					</form>
 		');

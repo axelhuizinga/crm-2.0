@@ -1,17 +1,24 @@
 package state;
 
+enum abstract LoginTask(String) {
+	var ChangePassword;
+	var CheckEmail;
+	var ResetPassword;
+}
+
 typedef UserState =
 {
 	?change_pass_required:Bool,
 	?contact:Int,
+	?email:String,
 	?external:Dynamic,
 	?first_name:String,
 	?last_name:String,
-	?email:String,
 	?active:Bool,
 	?loggedIn:Bool,
 	?last_login:Date,
 	?loginError:Dynamic,
+	?loginTask:LoginTask,
 	?mandator:Int,
 	?jwt:String,
 	?pass:String,

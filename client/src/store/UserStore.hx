@@ -22,7 +22,7 @@ class UserStore implements IReducer<UserAction, UserState>
 		last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
 		mandator: Cookie.get('user.mandator')==null?1:Std.parseInt(Cookie.get('user.mandator')),
 		id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
-		email:'',
+		email:Cookie.get('user.email')==null?'':Cookie.get('user.email'),
 		pass:'',				
 		change_pass_required:false,
 		loggedIn:false,//Cookie.get('user.jwt')!=null,
@@ -49,6 +49,7 @@ class UserStore implements IReducer<UserAction, UserState>
 					copy(state, {
 						jwt:'',
 						loggedIn:false,
+						loginTask:LoginTask.ResetPassword,
 						loginError:err.loginError, waiting:false});                       
 			case LoginComplete(uState):
 					//trace(uState.id + ':' + uState.loggedIn);

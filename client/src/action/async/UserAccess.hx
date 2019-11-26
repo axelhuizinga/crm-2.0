@@ -1,5 +1,6 @@
 package action.async;
 
+import js.html.svg.Point;
 import action.AppAction;
 import action.UserAction;
 import haxe.http.HttpJs;
@@ -70,9 +71,10 @@ class UserAccess {
 
 	public static function resetPassword(props:UserState) 
 	{
+		trace(props);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState)
 		{
-			if (props.user_name == '') 
+			if (props.user_name == ''|| props.mandator==null) 
 				return dispatch(
 					User(LoginError({user_name:props.user_name, loginError:'Benutzername eingeben!'})));
 			
@@ -80,12 +82,10 @@ class UserAccess {
 			BinaryLoader.create(
 				'${App.config.api}', 
 				{				
-					id:uState.id, 
-					jwt:uState.jwt,
+					user_name:props.user_name, 
+					mandator:props.mandator,
 					className:'auth.User',
-					action:'changePassword',
-					new_pass:props.new_pass,
-					pass:props.pass,
+					action:'resetPassword',
 					devIP:App.devIP
 				},
 				function(data:DbData)
@@ -98,13 +98,12 @@ class UserAccess {
 						trace(data.dataErrors.toString());
 						return dispatch(User(LoginError({loginError: data.dataErrors.iterator().next()})));
 					}
-					if (data.dataInfo['changePassword'] == 'OK')
+					if (data.dataInfo['resetPassword'] == 'OK')
 					{
 						trace(uState);						
-						uState.new_pass = '';
-						uState.pass = '';
-						uState.change_pass_required = false;
-						return dispatch(User(LoginComplete(uState)));
+						uState.email = data.dataInfo['email'];
+						uState.new_pass_confirm = data.dataInfo['pin'];
+						return dispatch(User(LoginRequired(uState)));
 					}
 					else trace(data.dataErrors);		
 					return null;		

@@ -1,5 +1,6 @@
 package view;
 
+import action.UserAction;
 import react.ReactComponent.ReactFragment;
 import react.ReactType;
 import js.html.Image;
@@ -8,6 +9,7 @@ import js.html.InputEvent;
 import js.html.XMLHttpRequest;
 import state.AppState;
 import state.UserState;
+import react.Partial;
 import react.ReactComponent.ReactComponentOf;
 import react.ReactMacro.jsx;
 import react.ReactUtil.copy;
@@ -23,10 +25,11 @@ typedef LoginProps =
 {
 	//>RouteTabProps,
 	
-	?getEmail:UserState->Dispatch,
-	?submitLogin:UserState->Dispatch,
 	?loginTask:LoginTask,
-	//user:UserState,
+	?resetPassword:UserState->Dispatch,
+	?stateChange:UserState->Dispatch,
+	?submitLogin:UserState->Dispatch,
+	user:UserState,
 	api:String,	
 	?change_pass_required:Bool,
 	?reset_password:Bool,	
@@ -64,18 +67,18 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		}*/
 		trace(props);
 		submitValue = '';
-		state = {user_name:'',pass:'',new_pass_confirm: '', new_pass: '',waiting:true};
+		state = props.user;//{user_name:'',pass:'',new_pass_confirm: '', new_pass: '',waiting:true};
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		trace('ok');
 		return {
-			getEmail: function(lState:UserState) return dispatch(UserAccess.resetPassword(lState)),
 			submitLogin: function(lState:UserState) return dispatch(
 				lState.new_pass != null ?
 				UserAccess.changePassword(lState):
 				UserAccess.doLogin(lState)),
-			resetPW: function (lState:UserState) return dispatch(UserAccess.resetPassword(lState))
+			resetPassword: function (lState:UserState) return dispatch(UserAccess.resetPassword(lState)),
+			stateChange: function (lState:UserState) return dispatch(UserAction.LoginChange(lState))
 		};
 	}
 
@@ -85,6 +88,11 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		if(nextState!=state)
 		{
 			state.compare(nextState);
+		}
+		if(nextProps!=props)
+		{
+			//props.compare(nextProps);
+			props.user.compare(nextProps.user);
 		}
 		return true;
 	}
@@ -104,7 +112,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	
 	static function mapStateToProps() {
 
-		return function(aState:AppState):LoginProps
+		return function(aState:AppState):Partial<LoginProps>
 		{
 			var uState = aState.user;
 			trace(aState.locationState.redirectAfterLogin);
@@ -129,21 +137,8 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 				};
 			}
 			return {
-				api:App.config.api,
-				change_pass_required:uState.change_pass_required,
-				pass:uState.pass,
-				new_pass:(uState.new_pass!=null?uState.new_pass:''),
-				jwt:uState.jwt,
-				//mandator:uState.mandator,
-				loggedIn:uState.loggedIn,
-				loginError:uState.loginError,
-				last_login:uState.last_login,
-				//first_name:uState.first_name,
-				//user:uState,
-				user_name:uState.user_name,
-				redirectAfterLogin:aState.locationState.redirectAfterLogin,
-				waiting:uState.waiting
-			};
+				user:uState,
+				redirectAfterLogin:aState.locationState.redirectAfterLogin			};
 		};
 	}	
 	
@@ -153,56 +148,59 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		var t:InputElement = cast e.target;
 		trace(t.name);
 		trace(t.value);
-		if(t.name == 'new_pass'&& t.value==props.pass)
+		if(t.name == 'new_pass' && t.value==props.user.pass)
 		{
 			t.value='';
 		}
 		//t.className = 'input';
 		Reflect.setField(s, t.name, t.value);
+		props.stateChange(copy(state,s));
 		//trace(props.dispatch + '==' + App.store.dispatch);
 		//trace(props.dispatch == App.store.dispatch);
 		//App.store.dispatch(AppAction.LoginChange(s));
 		//TODO: PUT INTO Global State to avoid rerender
-		this.setState(s);
+		//this.setState(s);
 		trace(this.state);
 	}
 	
 	function handleSubmit(e:InputEvent)
 	{
 		e.preventDefault();
-		trace(props.loginTask);
-		switch (props.loginTask)
+		trace(props.user);
+		trace(state);
+		switch (props.user.loginTask)
 		{
 			case LoginTask.ResetPassword:
 				trace('Reset Password requested');
 				trace(props);
-				if(props.email=='')
-				{
-					props.getEmail(props.id)
-				}
+				props.resetPassword(props.user);
 				return false;
 			default:
 			props.submitLogin(
 				props.change_pass_required?
-				{user_name:state.user_name, new_pass:state.new_pass,pass:props.pass, jwt:''}:
-				{user_name:state.user_name, pass:state.pass, jwt:''});			 	
+				{user_name:props.user.user_name, new_pass:props.user.new_pass,pass:props.user.pass, jwt:''}:
+				{user_name:props.user.user_name, pass:props.user.pass, jwt:''});			 	
 		} 
 		return true;
 	}	
 
-	function resetPW(_)
+	function resetPassword(_)
 	{
 		trace('OK');
 	}
 
 	public function  renderForm():ReactFragment
 	{		
+		
 		trace(props.redirectAfterLogin);
-		if(props.redirectAfterLogin != null && props.redirectAfterLogin.startsWith('/ResetPassword'))
+		trace(props.user);
+		
+		//if(props.redirectAfterLogin != null && props.redirectAfterLogin.startsWith('/ResetPassword'))
+		if(props.user.loginTask == ResetPassword)
 		{
 			return jsx('
 					<form name="form" onSubmit={handleSubmit} className="login" >
-						<input  name="pass" type="hidden" value=${props.pass} />														
+						<input  name="pass" type="hidden" value=${props.user.pass} />														
 						<div className="formField">
 							<h3>Bitte neues Passwort eintragen!</h3>
 						</div>
@@ -212,7 +210,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								</label>
 								<input id="login_user_name" name="user_name" disabled="disabled" 
 								className=${errorStyle("user_name") + "form-input"}  
-								placeholder="User ID" value=${state.user_name} onChange={handleChange} />
+								placeholder="User ID" value=${props.user.user_name} onChange={handleChange} />
 						</div>
 						<div className="formField">
 								<label className="fa lockIcon" forhtml="pw">
@@ -237,7 +235,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		{
 			return jsx('
 					<form name="form" onSubmit={handleSubmit} className="login" >
-						<input  name="pass" type="hidden" value=${props.pass} />														
+						<input  name="pass" type="hidden" value=${state.pass} />														
 						<div className="formField">
 							<h3>Bitte neues Passwort eintragen!</h3>
 						</div>
@@ -282,12 +280,12 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								<label className="fa lockIcon" forhtml="pw">
 										<span className="hidden">Password</span>
 								</label>
-								<input id="pw" className=${errorStyle("pass") + "form-input"} name="pass" type="password" placeholder="Password" value=${state.pass} onChange=${handleChange} />
+								<input id="pw" className=${errorStyle("pass") + "form-input"} name="pass" value=${props.user.pass} type="password" placeholder="Password" onChange=${handleChange} />
 						</div>
 						<div className="formField">
 								<input type="submit" style=${{width:'100%'}} value="Login" />
 						</div>
-						<div className="formField" style=${{display: (props.loginError == null? 'none':'flex')}}>
+						<div className="formField" style=${{display: (props.user.loginTask == ResetPassword? 'flex':'none')}}>
 								<input type="submit" value="Passwort vergessen?"/>
 						</div>
 					</form>

@@ -23,7 +23,7 @@ import state.CState;
 import state.AppState;
 import state.StatusState;
 import Webpack.*;
-
+using StringTools;
 /**
  * ...
  * @author axel@cunity.me
@@ -37,8 +37,9 @@ class AppStore
 		
 	public var store:StoreMethods<AppState>;
 	
-	public function new() 
+	public function new(uStore:UserStore) 
 	{
+		//var user = new UserStore();
 		initState = {
 			//app:{},
 			config:App.config,
@@ -54,7 +55,7 @@ class AppStore
 				date:Date.now(),
 				user:null
 			},
-			user:{
+			user:uStore.initState/*{
 				first_name:'',
 				last_name:'',
 				mandator: 1,
@@ -63,12 +64,13 @@ class AppStore
 				pass:'',				
 				change_pass_required:false,
 				loggedIn:false,//Cookie.get('user.jwt')!=null && UserAccess.verify(),
+				loginTask: (Browser.location.pathname.startsWith('/ResetPassword')?LoginTask.ResetPassword:LoginTask.Login),
 				last_login:null,
 				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
 				waiting: true
-			}
+			}*/
 		};
-
+		trace(store);
 		trace('redirectAfterLogin: ${initState.redirectAfterLogin}');
 	}
 	

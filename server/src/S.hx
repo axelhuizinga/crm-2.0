@@ -135,6 +135,12 @@ class S
 			//trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
 		}
 
+		if(action == 'resetPassword')
+		{
+			User.resetPassword(params);
+			exit(response);
+		}
+
 		var jwt:String = params.get('jwt');
 		//var id:String = params.get('id');
 		trace(jwt.length +':' + (jwt != null));
@@ -147,7 +153,6 @@ class S
 	
 		User.login(params);		
 		exit(response);
-
 	}
 	
 	public static function add2Response(ob:Response, doExit:Bool = false)
@@ -219,6 +224,7 @@ class S
 	 	trace('${pos.fileName}::${pos.lineNumber}');
 		if(dbData==null)
 			dbData = new DbData();
+		//trace(dbData);
 		var s:Serializer = new Serializer();
 		if (err != null)
 		{
@@ -243,7 +249,7 @@ class S
 		}
 		//trace('done at ${Sys.time()-ts} ms');
 		//trace(dbData.dataErrors);
-		trace(dbData);
+		//trace(dbData);
 		return sendbytes(s.serialize(dbData));
 	}
 	

@@ -1,5 +1,6 @@
 package store;
 
+import js.Browser;
 import action.async.UserAccess;
 import action.UserAction;
 import js.Cookie;
@@ -9,38 +10,45 @@ import redux.IMiddleware;
 import redux.StoreMethods;
 import state.AppState;
 import state.UserState;
+using StringTools;
 /**
  * ...
  * @author axel@cunity.me
  */
 
 class UserStore implements IReducer<UserAction, UserState>
-	implements IMiddleware<UserAction, AppState>
+	implements IMiddleware<UserAction, UserState>
 {
-	public var initState:UserState = {
-		first_name:Cookie.get('user.first_name')==null?'':Cookie.get('user.first_name'),
-		last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
-		mandator: Cookie.get('user.mandator')==null?1:Std.parseInt(Cookie.get('user.mandator')),
-		id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
-		email:Cookie.get('user.email')==null?'':Cookie.get('user.email'),
-		pass:'',				
-		change_pass_required:false,
-		loggedIn:false,//Cookie.get('user.jwt')!=null,
-		last_login:null,
-		jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
-		waiting: true
-	};
+	public var initState:UserState;
 	
-	public var store:StoreMethods<AppState>;
+	public var store:StoreMethods<UserState>;
 	
-	public function new() {}
+	public function new() {
+		initState = {
+			first_name:Cookie.get('user.first_name')==null?'':Cookie.get('user.first_name'),
+			id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
+			last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
+			mandator: Cookie.get('user.mandator')==null?1:Std.parseInt(Cookie.get('user.mandator')),
+			user_name:Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name'),
+			email:Cookie.get('user.email')==null?'':Cookie.get('user.email'),
+			pass:'',				
+			change_pass_required:false,
+			loggedIn:false,//Cookie.get('user.jwt')!=null,
+			loginTask: (Browser.location.pathname.startsWith('/ResetPassword')?LoginTask.ResetPassword:LoginTask.Login),
+			last_login:null,
+			jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
+			waiting: true
+		};
+		trace(initState);
+		trace(store);
+	}
 	
 	public function reduce(state:UserState, action:UserAction):UserState
 	{
 		//trace(action);
 		return switch(action)
 		{
-			case LoginRequired(uState):
+			case LoginChange(uState)|LoginRequired(uState):
 					trace(uState);
 					copy(state, uState);                             
 			case LoginError(err):

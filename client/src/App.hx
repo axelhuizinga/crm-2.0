@@ -85,8 +85,10 @@ class App  extends ReactComponentOf<AppProps, AppState>
 
 	private function initStore(history:History):Store<AppState>
 	{
-		var appWare = new AppStore();
-		var user = new UserStore();
+		var userStore = new UserStore();
+		trace(Reflect.fields(userStore));
+		var appWare = new AppStore(userStore);
+		//var user = appWare.store.getState().user;//new UserStore();
 
 		var rootReducer = Redux.combineReducers(
 		{
@@ -95,16 +97,16 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			dataStore: mapReducer(DataAction, new DataStore()),
 			locationState: mapReducer(LocationAction, new LocationStore(history)),
 			status: mapReducer(StatusAction, new StatusStore()),
-			user: mapReducer(UserAction, user)
+			user: mapReducer(UserAction, userStore)
 		});
-		var dataStore:DataAccessState = loadFromLocalStorage();
-		trace(dataStore);		
+		//var dataStore:DataAccessState = loadFromLocalStorage();
+		//trace(dataStore);		
 		//return createStore(rootReducer, {dataStore:loadFromLocalStorage()},  
 		return createStore(rootReducer, null,  
 		Redux.applyMiddleware(
 			mapMiddleware(Thunk, new ThunkMiddleware()),
 			mapMiddleware(AppAction, appWare),
-			mapMiddleware(UserAction, user)
+			mapMiddleware(UserAction, userStore)
 			)
 		);
 	}

@@ -161,7 +161,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 			// WE NEED TO LOGIN FIRST
 			trace(props.user);
 			//return null;
-			return jsx('<$LoginForm {...props.user}/>');
+			return jsx('<$LoginForm user=${props.user}/>');
 		}
 		else
 		{			

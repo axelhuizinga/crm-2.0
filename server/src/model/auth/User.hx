@@ -29,6 +29,7 @@ using Util;
 	?id:Int,
 	?ip:String,
 	?mandator:Int,
+	?user_name:String,
 	?validUntil:Int
  }
 
@@ -146,16 +147,14 @@ class User extends Model
 
 	public static function resetPassword(param:Map<String,Dynamic>):Bool {
 		var dbData:DbData = new DbData();
-		var d:Float = DateTools.delta(Date.now(), DateTools.minutes(15)).getTime();
+		//TODO: configure valid time span of token
+		var d:Float = DateTools.delta(Date.now(), DateTools.minutes(8)).getTime();
 		param.set('email',userEmail(param));
-		/**
-		 * 				var	jwt = ;
-		 */
 		param.set('jwt',JWT.sign({
-						user_name:param['user_name'],
-						validUntil:d,
-						mandator:param['mandator']
-					}, S.secret));
+			user_name:param['user_name'],
+			validUntil:d,
+			mandator:param['mandator']
+		}, S.secret));
 		sendMail(param);
 		dbData.dataInfo = [
 			'email' => param.get('email'),
@@ -236,11 +235,11 @@ class User extends Model
 				var d:Float = DateTools.delta(Date.now(), DateTools.hours(11)).getTime();
 				trace(d + ':' + Date.fromTime(d));
 				var	jwt = JWT.sign({
-						id:dbData.dataInfo['id'],
-						validUntil:d,
-						ip: Web.getClientIP(),
-						mandator:dbData.dataInfo['mandator']
-					}, S.secret);						
+					id:dbData.dataInfo['id'],
+					validUntil:d,
+					ip: Web.getClientIP(),
+					mandator:dbData.dataInfo['mandator']
+				}, S.secret);						
 				
 				//trace(jwt);
 				//trace(JWT.extract(jwt));
@@ -287,11 +286,16 @@ class User extends Model
 		
 		if (verify(param))
 		{
-			trace('UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id ');
-			var stmt:PDOStatement = S.dbh.prepare(
-				'UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id ',Syntax.array(null));
+			var sql = (param.get('id')!='null'?
+				'UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id':
+				'UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE user_name=:user_name AND mandator=:mandator');
+			trace(sql);
+			var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 			if ( !Model.paramExecute(stmt, Lib.associativeArrayOfObject(
-				{':id': '${param.get('id')}',':new_password':'${param.get('new_pass')}'})))
+				 (param.get('id')!='null'?				 
+				 {':id': param.get('id'),':new_password':param.get('new_pass')}:
+				 {':new_password':param.get('new_pass'),':user_name': param.get('user_name'),':mandator': param.get('mandator')}
+			))))
 			{
 				S.sendErrors(dbData,['changePassword' => stmt.errorInfo()]);
 			}
@@ -308,9 +312,11 @@ class User extends Model
 	public static function sendMail(param:Map<String,Dynamic>) {
 		var address = userEmail(param);
 		trace(address);
-		var jwt:String = param.get('jwt');
+		var jwt:String = param.get('jwt');		
+		var original_path:String = param.get('original_path');
 		var user_name:String = param.get('user_name');
 		var host:String = Syntax.code("$_SERVER['SERVER_NAME']");
+		host = '192.168.178.20:9000';
 		var header = comment(unindent, format) 
 		/*Content-type: text/html; charset=utf-8
 From: SCHUTZENGELWERK crm-2.0 <admin@pitverwaltung.de>
@@ -324,20 +330,21 @@ X-Mailer: HaxeMail
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Nanyuki Optical Fibre Network</title>
+<title>Neues Passwort</title>
 
 <style>
 html,body{
 	height:100%;
 	width:100%;
-	overflow:hidden;
 	display:flex;
 	margin:0px;
 	padding:0px;
 }
 	div{
 		text-align:center;
-		overflow:auto;
+		width:60%;
+		height:40%;
+		margin:auto;		
 	}
 	.center{
 	        display: flex;
@@ -346,7 +353,6 @@ html,body{
         flex-direction: column;
         text-align: center;
         min-height: 200px;
-	width:100%;
         background-color: rgba(33, 33, 33, .3);
         align-items: center;
 	}
@@ -354,7 +360,7 @@ html,body{
 </head>
 <body>
 	<div class="center">
-		<a href="https://$host/ResetPassword/$jwt/$user_name">Passwort Ändern</span>
+		<a href="https://$host/ChangePassword/$jwt/$user_name$original_path">Passwort Ändern</span>
 	</div>
 </body>
 </html>
@@ -402,11 +408,37 @@ html,body{
 	public static function verify(?params:Map<String,Dynamic>):Bool
 	{
 		var jwt:String = params.get('jwt');
-		var id:Int = Std.parseInt(params.get('id'));		
-		trace(jwt);
+		var id:Int = Std.parseInt(params.get('id'));	
+		var now:Float = Date.now().getTime();	
+		trace('$now:$jwt');
 		try{
 			var userInfo:UserInfo = JWT.extract(jwt);
-			var now:Float = Date.now().getTime();
+			trace(userInfo);
+			
+			if(userInfo.id==null && userInfo.user_name == params.get('user_name') && (userInfo.validUntil - Date.now().getTime()) > 0)
+			{
+				//PASSWORD RESET?
+				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
+				trace(jRes);
+				return switch(jRes)				
+				{
+					case Invalid(payload):
+						trace(payload);
+						// JWT INVALID
+						saveRequest(id, params);
+						S.sendErrors(new DbData(), ['jwtError'=>payload]);
+						false;
+					case Valid(payload):
+						// JWT VALID AND NOT OLDER THAN...
+						saveRequest(id, params);	
+						params.set('mandator',userInfo.mandator);
+						true;
+					default:
+						S.sendErrors(new DbData(), ['jwtError'=>params]);
+						false;
+				}
+
+			}
 			//trace('$id==${userInfo.id}::${userInfo.ip}::${Web.getClientIP()}:' + Date.fromTime(userInfo.validUntil) + ':${userInfo.validUntil} - $now:' + cast( userInfo.validUntil - now) + (userInfo.validUntil - Date.now().getTime()) > 0?'Y':'N');
 			
 			//trace(':'+(id == userInfo.id));
@@ -421,20 +453,20 @@ html,body{
 				{
 					case Invalid(payload):
 						trace(payload);
-						// JWT VALID AND NOT OLDER THAN 11 h
+						// JWT INVALID
 						saveRequest(id, params);
-						S.sendErrors(new DbData(), ['jwtError'=>jRes]);
+						S.sendErrors(new DbData(), ['jwtError'=>payload]);
 						false;
 					case Valid(payload):
 						// JWT VALID AND NOT OLDER THAN 11 h
 						saveRequest(id, params);						
 						true;
 					default:
-						S.sendErrors(new DbData(), ['jwtError'=>jRes]);
+						S.sendErrors(new DbData(), ['jwtError'=>params]);
 						false;
 				}
 			}
-			S.sendErrors(new DbData(), ['jwtError'=>'JWT invalid!']);		
+			S.sendErrors(new DbData(), ['jwtError'=>params]);		
 			return false;
 		}
 		catch (ex:Dynamic)

@@ -49,7 +49,7 @@ class AppStore
 			//themeColor: 'green',
 			//locale: 'de',			
 			//routeHistory: new Array(),
-			redirectAfterLogin: (Browser.location.pathname=='/'?'DashBoard':Browser.location.pathname), 
+			redirectAfterLogin: (Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname), 
 			status: {
 				text: Browser.location.pathname,
 				date:Date.now(),

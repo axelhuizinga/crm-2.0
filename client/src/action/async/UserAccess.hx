@@ -25,9 +25,10 @@ class UserAccess {
 
 	public static function changePassword(props:UserState) 
 	{
+		trace(props);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState)
 		{
-			if (props.pass == '' || props.new_pass == '' || props.user_name == '') 
+			if (props.jwt == '' || props.new_pass == '' || props.user_name == '') 
 				return dispatch(
 					User(LoginError({user_name:props.user_name, loginError:'Neues Passwort eingeben!'})));
 			
@@ -41,6 +42,7 @@ class UserAccess {
 					action:'changePassword',
 					new_pass:props.new_pass,
 					pass:props.pass,
+					user_name:props.user_name,
 					devIP:App.devIP
 				},
 				function(data:DbData)
@@ -77,8 +79,7 @@ class UserAccess {
 			if (props.user_name == ''|| props.mandator==null) 
 				return dispatch(
 					User(LoginError({user_name:props.user_name, loginError:'Benutzername eingeben!'})));
-			
-			var uState:UserState = getState().user;
+			var appState:AppState = getState();
 			BinaryLoader.create(
 				'${App.config.api}', 
 				{				
@@ -86,6 +87,7 @@ class UserAccess {
 					mandator:props.mandator,
 					className:'auth.User',
 					action:'resetPassword',
+					original_path:appState.locationState.redirectAfterLogin,
 					devIP:App.devIP
 				},
 				function(data:DbData)
@@ -100,10 +102,11 @@ class UserAccess {
 					}
 					if (data.dataInfo['resetPassword'] == 'OK')
 					{
-						trace(uState);						
-						uState.email = data.dataInfo['email'];
-						uState.new_pass_confirm = data.dataInfo['pin'];
-						return dispatch(User(LoginRequired(uState)));
+						trace(appState.user);						
+						appState.user.email = data.dataInfo['email'];
+						//appState.user.new_pass_confirm = data.dataInfo['pin'];
+						appState.user.loginTask = Login;
+						return dispatch(User(LoginRequired(appState.user)));
 					}
 					else trace(data.dataErrors);		
 					return null;		
@@ -339,6 +342,7 @@ class UserAccess {
 					{
 						case 'change_pass_required'|'loggedIn':
 							Reflect.setField(uState, k, v=='true');
+							trace('$k: ${v=='true'?'Y':'N'} =>  ${v?'Y':'N'}');
 						default:
 							Reflect.setField(uState, k, v);
 

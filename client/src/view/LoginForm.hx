@@ -1,5 +1,7 @@
 package view;
 
+import haxe.Timer;
+import js.html.audio.WaveShaperOptions;
 import action.UserAction;
 import react.ReactComponent.ReactFragment;
 import react.ReactType;
@@ -25,13 +27,13 @@ typedef LoginProps =
 {
 	//>RouteTabProps,
 	
-	?loginTask:LoginTask,
+	//?loginTask:LoginTask,
 	?resetPassword:UserState->Dispatch,
 	?stateChange:UserState->Dispatch,
 	?submitLogin:UserState->Dispatch,
 	user:UserState,
-	api:String,	
-	?change_pass_required:Bool,
+	//api:String,	
+	/*?change_pass_required:Bool,
 	?reset_password:Bool,	
 	?email:String,
 	pass:String,
@@ -41,9 +43,9 @@ typedef LoginProps =
 	?loginError:String,
 	?last_login:Date,
 	//?first_name:String,
-	user_name:String,
+	user_name:String,*/
 	redirectAfterLogin:String,
-	waiting:Bool
+	//waiting:Bool
 }
 
 /**
@@ -59,20 +61,17 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 
 	public function new(?props:LoginProps)
 	{
-		super(props);
 		trace(Reflect.fields(props));
-		/*if (props.match != null)
-		{
-			trace(props.match.path + ':' + props.match.url);	
-		}*/
+		super(props);
 		trace(props);
 		submitValue = '';
-		state = props.user;//{user_name:'',pass:'',new_pass_confirm: '', new_pass: '',waiting:true};
+		state = copy(props.user,{waiting:true});//{user_name:'',pass:'',new_pass_confirm: '', new_pass: '',waiting:true};
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		trace('ok');
 		return {
+			dispatch:dispatch,
 			submitLogin: function(lState:UserState) return dispatch(
 				lState.new_pass != null ?
 				UserAccess.changePassword(lState):
@@ -103,7 +102,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		//setState({waiting:true});
 		img.onload = function(){
 			trace(state);
-			setState({waiting:false});
+			Timer.delay(function() setState({waiting:false}),500);
 			trace('ok');
 		}
 		img.src = "img/schutzengelwerk-logo.png";
@@ -117,28 +116,23 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			var uState = aState.user;
 			trace(aState.locationState.redirectAfterLogin);
 			trace(uState);		
-			if(aState.locationState.redirectAfterLogin != null && aState.locationState.redirectAfterLogin.startsWith('/ResetPassword'))
+			if(aState.locationState.redirectAfterLogin != null && aState.locationState.redirectAfterLogin.startsWith('/ChangePassword'))
 			{
 				var param:Map<String,Dynamic> = aState.locationState.redirectAfterLogin.argList(
-					['action','user_name','oPath']
+					['action','jwt','user_name','opath']
 				);
+				trace(param);
+				
 				return {
-					api:App.config.api,
-					change_pass_required:false,
-					pass:uState.pass,
-					new_pass:(uState.new_pass!=null?uState.new_pass:''),
-					jwt:uState.jwt,
-					//mandator:uState.mandator,
-					loggedIn:false,
-					user_name:param.get('user_name'),
-					redirectAfterLogin:param.get('oPath'),
-					//user:null,
-					waiting:false
+					user:copy(uState,{
+						user_name:param.get('user_name')}),
+					redirectAfterLogin:param.get('oPath')
 				};
 			}
 			return {
 				user:uState,
-				redirectAfterLogin:aState.locationState.redirectAfterLogin			};
+				redirectAfterLogin:aState.locationState.redirectAfterLogin			
+			};
 		};
 	}	
 	
@@ -154,7 +148,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		}
 		//t.className = 'input';
 		Reflect.setField(s, t.name, t.value);
-		props.stateChange(copy(state,s));
+		props.stateChange(copy(props.user,s));
 		//trace(props.dispatch + '==' + App.store.dispatch);
 		//trace(props.dispatch == App.store.dispatch);
 		//App.store.dispatch(AppAction.LoginChange(s));
@@ -175,10 +169,12 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 				trace(props);
 				props.resetPassword(props.user);
 				return false;
+			case LoginTask.ChangePassword:
+				props.submitLogin({user_name:props.user.user_name, new_pass:props.user.new_pass,pass:props.user.pass, jwt:props.user.jwt});
 			default:
 			props.submitLogin(
-				props.change_pass_required?
-				{user_name:props.user.user_name, new_pass:props.user.new_pass,pass:props.user.pass, jwt:''}:
+				props.user.change_pass_required?
+				{user_name:props.user.user_name, new_pass:props.user.new_pass,pass:props.user.pass, jwt:props.user.jwt}:
 				{user_name:props.user.user_name, pass:props.user.pass, jwt:''});			 	
 		} 
 		return true;
@@ -196,7 +192,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		trace(props.user);
 		
 		//if(props.redirectAfterLogin != null && props.redirectAfterLogin.startsWith('/ResetPassword'))
-		if(props.user.loginTask == ResetPassword)
+		if(props.user.loginTask == ChangePassword)
 		{
 			return jsx('
 					<form name="form" onSubmit={handleSubmit} className="login" >
@@ -225,13 +221,13 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								<input  className=${errorStyle("new_pass_confirm") + "form-input"} name="new_pass_confirm" type="password" placeholder="Confirm New Password" value=${state.new_pass_confirm} onChange=${handleChange} />
 						</div>							
 						<div className="formField">
-								<input type="submit" style=${{width:'100%'}} value="Login" />
+								<input type="submit" style=${{width:'100%'}} value="Absenden" />
 						</div>
 					</form>'
 				);
 		}
 
-		if(props.change_pass_required)
+		if(props.user.change_pass_required)
 		{
 			return jsx('
 					<form name="form" onSubmit={handleSubmit} className="login" >
@@ -274,7 +270,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								</label>
 								<input id="login_user_name" name="user_name" 
 								className=${errorStyle("user_name") + "form-input"}  
-								placeholder="User ID" value=${state.user_name} onChange=${handleChange} />
+								placeholder="User ID" value=${props.user.user_name} onChange=${handleChange} />
 						</div>
 						<div className="formField">
 								<label className="fa lockIcon" forhtml="pw">
@@ -297,7 +293,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	{
 		trace(Reflect.fields(props));
 		
-		trace(props.loginError);
+		trace(props.user.loginError);
 		trace(state.waiting);
 		var style = 
 		{
@@ -339,15 +335,15 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		var eStyle = switch(name)
 		{
 			case "pass":
-				var res = props.loginError == "pass"?"error ":"";
+				var res = props.user.loginError == "pass"?"error ":"";
 				trace(res);
 				res;
 				
 			case "user_name":
-				props.loginError == "user_name"?"error ":"";
+				props.user.loginError == "user_name"?"error ":"";
 			
 			case "new_pass_confirm":
-				state.new_pass != state.new_pass_confirm?"error ":"";
+				props.user.new_pass != props.user.new_pass_confirm?"error ":"";
 
 			default:
 				'';

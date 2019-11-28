@@ -11,6 +11,7 @@ import redux.StoreMethods;
 import state.AppState;
 import state.UserState;
 using StringTools;
+using shared.Utils;
 /**
  * ...
  * @author axel@cunity.me
@@ -24,6 +25,27 @@ class UserStore implements IReducer<UserAction, UserState>
 	public var store:StoreMethods<UserState>;
 	
 	public function new() {
+		if(Browser.location.pathname.startsWith('/ChangePassword')){
+			var param:Map<String,Dynamic> = Browser.location.pathname.argList(
+					['action','jwt','user_name','opath']
+				);
+			initState = {
+				first_name:Cookie.get('user.first_name')==null?'':Cookie.get('user.first_name'),
+				id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
+				last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
+				mandator: Cookie.get('user.mandator')==null?1:Std.parseInt(Cookie.get('user.mandator')),
+				user_name:param.get('user_name'),
+				email:Cookie.get('user.email')==null?'':Cookie.get('user.email'),
+				pass:'',				
+				change_pass_required:false,
+				loggedIn:false,//Cookie.get('user.jwt')!=null,
+				loginTask: LoginTask.ChangePassword,
+				last_login:null,
+				jwt:param.get('jwt'),
+				waiting: true
+			};
+		}
+		else		
 		initState = {
 			first_name:Cookie.get('user.first_name')==null?'':Cookie.get('user.first_name'),
 			id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
@@ -34,7 +56,7 @@ class UserStore implements IReducer<UserAction, UserState>
 			pass:'',				
 			change_pass_required:false,
 			loggedIn:false,//Cookie.get('user.jwt')!=null,
-			loginTask: (Browser.location.pathname.startsWith('/ResetPassword')?LoginTask.ResetPassword:LoginTask.Login),
+			loginTask: LoginTask.Login,
 			last_login:null,
 			jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
 			waiting: true

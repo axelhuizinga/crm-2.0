@@ -19,7 +19,7 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 			history:history,
 			location:null,
 			lastModified:Date.now(),
-			redirectAfterLogin: (Browser.location.pathname=='/'?'DashBoard':Browser.location.pathname)
+			redirectAfterLogin: (Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname)
 		};	
 	}
 

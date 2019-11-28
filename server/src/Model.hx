@@ -137,7 +137,9 @@ class Model
 	
 	static function paramExecute(stmt:PDOStatement, ?values:NativeArray):Bool
 	{
-		S.saveLog(values);
+		//S.saveLog(values);
+		trace(values);
+
 		if (!stmt.execute(values))
 		{
 			trace(stmt.errorInfo());

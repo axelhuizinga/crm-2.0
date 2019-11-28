@@ -74,7 +74,8 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	//static var rvirt = js.Lib.require('react-virtualized/styles.css');	
 	//static var flat = js.Lib.require('flatpickr/dist/themes/light.css');	
 	public static var sprintf:Function = Webpack.require('sprintf-js').sprintf;
-
+	//public static var useBrowserContextCommunication:Dynamic = Webpack.require('react-window-communication-hook');
+	//public static var useState:Dynamic = Webpack.require('react').useState;
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
 	public static var onResizeComponents:List<Dynamic> = new List();
 	public static var maxLoginAttempts:Int = 3;
@@ -92,7 +93,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 
 		var rootReducer = Redux.combineReducers(
 		{
-			//0app:mapReducer(AppAction, appWare),
+			app:mapReducer(AppAction, appWare),
 			config: mapReducer(ConfigAction, new ConfigStore(config)),
 			dataStore: mapReducer(DataAction, new DataStore()),
 			locationState: mapReducer(LocationAction, new LocationStore(history)),
@@ -139,7 +140,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//trace(history);
 		store.dispatch(Location(InitHistory(history,
 		{
-			pathname:store.getState().redirectAfterLogin,
+			pathname:store.getState().locationState.redirectAfterLogin,
 			search:'',
 			hash:'',
 			key:'',
@@ -160,12 +161,19 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		});
 	}	
 
+	/*public static function WinCom() {
+
+		var uBCC:Dynamic = useBrowserContextCommunication('appGlobal');
+		trace(uBCC);		
+		return null;
+	}*/
+
   	public function new(?props:AppProps) 
 	{
 		super(props);
 		//globalState = new Map();
 		untyped flatpickr.localize(German);
-		ReactIntl.addLocaleData({locale:'de'});
+		//ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
 		var ti:Timer = null;
 		store = initStore(BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}));
@@ -174,6 +182,8 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//trace(state);
 		tul = startHistoryListener(store, state.locationState.history);
 		//store.subscribe(saveToLocalStorage);
+		//var uBCC:Dynamic = react.WinCom.useBrowserContextCommunication('appGlobal');
+
 
 		Browser.window.onresize = function()
 		{

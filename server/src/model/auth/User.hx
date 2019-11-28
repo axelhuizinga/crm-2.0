@@ -284,8 +284,8 @@ class User extends Model
 			S.sendInfo(dbData);
 		}
 		
-		if (verify(param))
-		{
+	//	if (verify(param))
+		//{
 			var sql = (param.get('id')!='null'?
 				'UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id':
 				'UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE user_name=:user_name AND mandator=:mandator');
@@ -303,7 +303,10 @@ class User extends Model
 			{
 				S.sendErrors(dbData,['changePassword'=>'Benutzer nicht gefunden!']);
 			}
-		}		
+		//}		
+		var userInfo:UserInfo = JWT.extract(param.get('jwt'));
+		trace(userInfo);				
+		dbData.dataInfo['opath'] = userInfo.opath;
 		dbData.dataInfo['changePassword'] = 'OK';
 		S.sendInfo(dbData);
 		return true;

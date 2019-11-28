@@ -32,15 +32,17 @@ class UserAccess {
 				return dispatch(
 					User(LoginError({user_name:props.user_name, loginError:'Neues Passwort eingeben!'})));
 			
-			var uState:UserState = getState().user;
+			var aState:AppState = getState();
+			trace('${aState.redirectAfterLogin} == ${aState.locationState.redirectAfterLogin}');
 			BinaryLoader.create(
 				'${App.config.api}', 
 				{				
-					id:uState.id, 
-					jwt:uState.jwt,
+					id:aState.user.id, 
+					jwt:aState.user.jwt,
 					className:'auth.User',
 					action:'changePassword',
 					new_pass:props.new_pass,
+					original_path:aState.redirectAfterLogin,
 					pass:props.pass,
 					user_name:props.user_name,
 					devIP:App.devIP
@@ -57,11 +59,12 @@ class UserAccess {
 					}
 					if (data.dataInfo['changePassword'] == 'OK')
 					{
-						trace(uState);						
-						uState.new_pass = '';
-						uState.pass = '';
-						uState.change_pass_required = false;
-						return dispatch(User(LoginComplete(uState)));
+						trace(aState.user);			
+						aState.user.loginTask = Login;
+						aState.user.new_pass = '';
+						aState.user.pass = '';
+						aState.user.change_pass_required = false;
+						return dispatch(User(LoginComplete(aState.user)));
 					}
 					else trace(data.dataErrors);		
 					return null;		
@@ -80,6 +83,8 @@ class UserAccess {
 				return dispatch(
 					User(LoginError({user_name:props.user_name, loginError:'Benutzername eingeben!'})));
 			var appState:AppState = getState();
+			trace(Reflect.fields(appState));
+			trace('${appState.redirectAfterLogin} == ${appState.locationState.redirectAfterLogin}');
 			BinaryLoader.create(
 				'${App.config.api}', 
 				{				
@@ -87,7 +92,7 @@ class UserAccess {
 					mandator:props.mandator,
 					className:'auth.User',
 					action:'resetPassword',
-					original_path:appState.locationState.redirectAfterLogin,
+					original_path:appState.app.redirectAfterLogin,
 					devIP:App.devIP
 				},
 				function(data:DbData)

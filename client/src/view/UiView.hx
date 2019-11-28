@@ -222,7 +222,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	
 	function renderRedirect(p:Dynamic)
 	{
-		trace(App.store.getState().redirectAfterLogin);
+		trace(App.store.getState().locationState.redirectAfterLogin);
 		//return null;
 		return jsx('<RedirectBox {...p} to=${App.store.getState().locationState.redirectAfterLogin}/>');
 	}

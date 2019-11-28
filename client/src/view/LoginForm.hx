@@ -1,5 +1,6 @@
 package view;
 
+import js.html.Event;
 import haxe.Timer;
 import js.html.audio.WaveShaperOptions;
 import action.UserAction;
@@ -58,6 +59,8 @@ typedef LoginProps =
 class LoginForm extends ReactComponentOf<LoginProps, UserState>
 {
 	var submitValue:String;
+	static var uBCC:Dynamic;
+	static var uBState:Dynamic;
 
 	public function new(?props:LoginProps)
 	{
@@ -67,6 +70,28 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		submitValue = '';
 		state = copy(props.user,{waiting:true});//{user_name:'',pass:'',new_pass_confirm: '', new_pass: '',waiting:true};
 	}
+
+	/*static function doTry(ev:Event):Dynamic {
+		ev.preventDefault();
+		uBCC[1]('logout');
+		uBState[1]('logout');
+		trace(uBCC[0]);
+		trace(uBState[0]);
+
+		return false;
+	}
+
+	static public function WinCom() {
+
+		uBCC = App.useBrowserContextCommunication('channel');
+		trace(uBCC);		
+		uBState = App.useState('login');
+		trace(uBState);			
+		//uBState[1]('logout');
+		return jsx('<div>
+		<span onClick=${doTry} >${uBState[0]}</span>
+		</div>');
+	}*/
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		trace('ok');
@@ -106,7 +131,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			trace('ok');
 		}
 		img.src = "img/schutzengelwerk-logo.png";
-		trace(state);
+		trace(props.redirectAfterLogin);
 	}
 	
 	static function mapStateToProps() {
@@ -114,11 +139,14 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		return function(aState:AppState):Partial<LoginProps>
 		{
 			var uState = aState.user;
-			trace(aState.locationState.redirectAfterLogin);
+			trace(aState.app.redirectAfterLogin);
 			trace(uState);		
-			if(aState.locationState.redirectAfterLogin != null && aState.locationState.redirectAfterLogin.startsWith('/ChangePassword'))
+			if(uState.loginTask == LoginTask.ChangePassword)
+			//if(aState.locationState.redirectAfterLogin != null && aState.locationState.redirectAfterLogin.startsWith('/ChangePassword'))
 			{
-				var param:Map<String,Dynamic> = aState.locationState.redirectAfterLogin.argList(
+				var rAL:String = aState.app.redirectAfterLogin;
+				trace(rAL);
+				var param:Map<String,Dynamic> = rAL.argList(
 					['action','jwt','user_name','opath']
 				);
 				trace(param);
@@ -126,12 +154,12 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 				return {
 					user:copy(uState,{
 						user_name:param.get('user_name')}),
-					redirectAfterLogin:param.get('oPath')
+					redirectAfterLogin:param.get('opath')
 				};
 			}
 			return {
 				user:uState,
-				redirectAfterLogin:aState.locationState.redirectAfterLogin			
+				redirectAfterLogin:aState.app.redirectAfterLogin
 			};
 		};
 	}	
@@ -160,7 +188,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	function handleSubmit(e:InputEvent)
 	{
 		e.preventDefault();
-		trace(props.user);
+		trace(props);
 		trace(state);
 		switch (props.user.loginTask)
 		{

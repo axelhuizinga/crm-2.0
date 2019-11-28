@@ -24,6 +24,7 @@ import state.AppState;
 import state.StatusState;
 import Webpack.*;
 using StringTools;
+using shared.Utils;
 /**
  * ...
  * @author axel@cunity.me
@@ -42,16 +43,26 @@ class AppStore
 		//var user = new UserStore();
 		initState = {
 			//app:{},
-			config:App.config,
-			dataStore: {},
+			//config:App.config,
+			//dataStore: {},
 			//firstLoad:true,
-			formStates: new Map(),
+			//formStates: new Map(),
 			//themeColor: 'green',
 			//locale: 'de',			
 			//routeHistory: new Array(),
-			redirectAfterLogin: (Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname), 
+			
+			//redirectAfterLogin: (Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname), 
+			redirectAfterLogin: switch(Browser.location.pathname.startsWith('/ChangePassword'))
+			{
+				default:
+					(Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname);
+				case true:
+					var args:Map<String,Dynamic> = Browser.location.pathname.argList(['action','jwt','user_name','opath']);
+					trace(args);
+					args.get('opath');
+			}, 
 			status: {
-				text: Browser.location.pathname,
+				text: '',//Browser.location.pathname,
 				date:Date.now(),
 				user:null
 			},

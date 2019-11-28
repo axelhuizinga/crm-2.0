@@ -92,6 +92,7 @@ class UserStore implements IReducer<UserAction, UserState>
 						jwt:uState.jwt,
 						loginError: null,
 						loggedIn: true,
+						loginTask:uState.loginTask,
 						pass:uState.pass,
 						waiting:false
 					});                                             

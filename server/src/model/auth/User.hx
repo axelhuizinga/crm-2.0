@@ -286,13 +286,13 @@ class User extends Model
 		
 	//	if (verify(param))
 		//{
-			var sql = (param.get('id')!='null'?
+			var sql = (param.get('id')!='undefined'&&param.get('id')!=null?
 				'UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id':
 				'UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE user_name=:user_name AND mandator=:mandator');
 			trace(sql);
 			var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 			if ( !Model.paramExecute(stmt, Lib.associativeArrayOfObject(
-				 (param.get('id')!='null'?				 
+				 (param.get('id')!='undefined'&&param.get('id')!=null?				 
 				 {':id': param.get('id'),':new_password':param.get('new_pass')}:
 				 {':new_password':param.get('new_pass'),':user_name': param.get('user_name'),':mandator': param.get('mandator')}
 			))))
@@ -306,8 +306,10 @@ class User extends Model
 		//}		
 		var userInfo:UserInfo = JWT.extract(param.get('jwt'));
 		trace(userInfo);				
-		dbData.dataInfo['opath'] = userInfo.opath;
+		//dbData.dataInfo['opath'] = userInfo.opath;
 		dbData.dataInfo['changePassword'] = 'OK';
+		param.set('pass', param.get('new_pass'));
+		return login(param);
 		S.sendInfo(dbData);
 		return true;
 	}
@@ -319,7 +321,8 @@ class User extends Model
 		var original_path:String = param.get('original_path');
 		var user_name:String = param.get('user_name');
 		var host:String = Syntax.code("$_SERVER['SERVER_NAME']");
-		host = '192.168.178.20:9000';
+		if(param.get('dev'))
+			host = '192.168.178.20:9000';
 		var header = comment(unindent, format) 
 		/*Content-type: text/html; charset=utf-8
 From: SCHUTZENGELWERK crm-2.0 <admin@pitverwaltung.de>

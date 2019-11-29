@@ -31,8 +31,8 @@ class UserStore implements IReducer<UserAction, UserState>
 				);
 			initState = {
 				first_name:Cookie.get('user.first_name')==null?'':Cookie.get('user.first_name'),
-				id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
-				last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
+				//id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
+				//last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
 				mandator: Cookie.get('user.mandator')==null?1:Std.parseInt(Cookie.get('user.mandator')),
 				user_name:param.get('user_name'),
 				email:Cookie.get('user.email')==null?'':Cookie.get('user.email'),
@@ -42,7 +42,7 @@ class UserStore implements IReducer<UserAction, UserState>
 				loginTask: LoginTask.ChangePassword,
 				last_login:null,
 				jwt:param.get('jwt'),
-				waiting: true
+				waiting: false
 			};
 		}
 		else		

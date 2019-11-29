@@ -96,7 +96,7 @@ class S
 		//trace(ini);
 		ts = Sys.time();
 		last_request_time = Date.fromTime(ts);
-		var now:String = DateTools.format(last_request_time, "%d.%m.%y %H:%M:%S");		
+		var now:String = DateTools.format(Date.now(), "%d.%m.%y %H:%M:%S");		
 		trace(last_request_time.toString() + ' == $now' );		
 		//trace(vD['syncApi']);
 		var viciDial = Lib.hashOfAssociativeArray(vD);

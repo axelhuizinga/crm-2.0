@@ -9,8 +9,23 @@ import state.AppState;
 
 class LocationAccess 
 {
-	public static function redirect(routes:Array<String>,to:String,props:RouteRenderProps) 
+	public static function redirect(routes:Array<String>,to:String,?props:RouteRenderProps) 
 	{
+		if(props==null)
+		{
+			return Thunk.Action(function (dispatch:Dispatch, getState:Void->AppState)
+			{
+				//getState().locationState.history.push(to);
+				trace('Redirecting to $to');
+				return dispatch(LocationChange({
+					pathname:to,
+					search: '',
+					hash: '',
+					key:null,
+					state:null
+				}));
+			});
+		}
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(props.location.pathname);			
 			trace(to);

@@ -33,7 +33,7 @@ class UserAccess {
 					User(LoginError({user_name:props.user_name, loginError:'Neues Passwort eingeben!'})));
 			
 			var aState:AppState = getState();
-			trace('${aState.redirectAfterLogin} == ${aState.locationState.redirectAfterLogin}');
+			trace('${aState.app.redirectAfterLogin} == ${aState.locationState.redirectAfterLogin}');
 			BinaryLoader.create(
 				'${App.config.api}', 
 				{				
@@ -42,7 +42,7 @@ class UserAccess {
 					className:'auth.User',
 					action:'changePassword',
 					new_pass:props.new_pass,
-					original_path:aState.redirectAfterLogin,
+					original_path:aState.app.redirectAfterLogin,
 					pass:props.pass,
 					user_name:props.user_name,
 					devIP:App.devIP
@@ -57,13 +57,21 @@ class UserAccess {
 						trace(data.dataErrors.toString());
 						return dispatch(User(LoginError({loginError: data.dataErrors.iterator().next()})));
 					}
-					if (data.dataInfo['changePassword'] == 'OK')
+					if (data.dataInfo['loggedIn'])
 					{
 						trace(aState.user);			
-						aState.user.loginTask = Login;
 						aState.user.new_pass = '';
+						aState.user.loginTask = Login;
+						aState.user.first_name = data.dataInfo['first_name'];
+						aState.user.last_name = data.dataInfo['last_name'];
+						aState.user.last_login = data.dataInfo['last_login'];
+						aState.user.id = data.dataInfo['id'];
+						aState.user.jwt = data.dataInfo['jwt'];
 						aState.user.pass = '';
-						aState.user.change_pass_required = false;
+						aState.user.change_pass_required = false;						
+						//return dispatch(LocationAccess.redirect([], aState.app.redirectAfterLogin));
+						Cookie.set('user.id', Std.string(aState.user.id), null, '/');
+						Cookie.set('user.jwt',aState.user.jwt, null, '/');						
 						return dispatch(User(LoginComplete(aState.user)));
 					}
 					else trace(data.dataErrors);		
@@ -110,7 +118,7 @@ class UserAccess {
 						trace(appState.user);						
 						appState.user.email = data.dataInfo['email'];
 						//appState.user.new_pass_confirm = data.dataInfo['pin'];
-						appState.user.loginTask = Login;
+						appState.user.loginTask = CheckEmail;
 						return dispatch(User(LoginRequired(appState.user)));
 					}
 					else trace(data.dataErrors);		
@@ -142,7 +150,7 @@ class UserAccess {
 			if (props.pass == '' && props.new_pass == '' || props.user_name == '') 
 				return dispatch(User(LoginError({user_name:props.user_name, loginError:'Passwort und user_name eintragen!'})));
 			//var spin:Dynamic = dispatch(AppAction.AppWait);
-			//trace(spin);
+			trace(App.maxLoginAttempts);
 			var bL:XMLHttpRequest = null;
 			if(App.maxLoginAttempts-->0)
 			bL = BinaryLoader.create(

@@ -64,7 +64,8 @@ typedef UIProps =
 
 typedef UIState =
 {
-	?hasError:Bool
+	?hasError:Bool,
+	?rFlag:Int
 }
 
 @:connect
@@ -165,7 +166,19 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		}
 		else
 		{			
-			//trace('render Router ' + browserHistory.location.pathname);
+			trace('render Router ' + browserHistory.location.pathname);
+			trace('render Router ' + App.store.getState().locationState.history.location.pathname);
+			trace(App.store.getState());
+			if(browserHistory.location.pathname!=App.store.getState().app.redirectAfterLogin)
+			{
+				trace('Redirect to: ${App.store.getState().app.redirectAfterLogin}');
+				 browserHistory.push(App.store.getState().app.redirectAfterLogin);
+				 setState({rFlag:state.rFlag+1});
+			/*	return jsx('<$Router history=${browserHistory} >
+					<Redirect to=${App.store.getState().app.redirectAfterLogin}/>
+				</$Router>'
+				); */
+			}
 			return
 			#if debug 
 				jsx('
@@ -220,10 +233,10 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		
 	}
 	
-	function renderRedirect(p:Dynamic)
+	function renderRedirect(?p:Dynamic)
 	{
 		trace(App.store.getState().locationState.redirectAfterLogin);
 		//return null;
-		return jsx('<RedirectBox {...p} to=${App.store.getState().locationState.redirectAfterLogin}/>');
+		return jsx('<RedirectBox to=${p==null?App.store.getState().app.redirectAfterLogin:p.to}/>');
 	}
 }

@@ -152,9 +152,8 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 				trace(param);
 				
 				return {
-					user:copy(uState,{
-						user_name:param.get('user_name')}),
-					redirectAfterLogin:param.get('opath')
+					user:uState,
+					redirectAfterLogin:aState.app.redirectAfterLogin
 				};
 			}
 			return {
@@ -190,6 +189,12 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		e.preventDefault();
 		trace(props);
 		trace(state);
+		trace(submitValue);
+		if(submitValue=='Login')
+		{
+			props.submitLogin({user_name:props.user.user_name, pass:props.user.pass, jwt:''});		
+			return true;	
+		}
 		switch (props.user.loginTask)
 		{
 			case LoginTask.ResetPassword:
@@ -220,6 +225,18 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		trace(props.user);
 		
 		//if(props.redirectAfterLogin != null && props.redirectAfterLogin.startsWith('/ResetPassword'))
+		
+		if(props.user.loginTask == CheckEmail)
+		return jsx('
+				  	<form name="form" onSubmit={handleSubmit} className="login" >
+						<div className="formField">
+							<img className="center" src="img/emblem-mail.png"/>
+						</div>
+						<div className="formField">
+							<span className="center">${props.user.email} hat eine neue Nachricht!</span>
+						</div>
+					</form>
+		');
 		if(props.user.loginTask == ChangePassword)
 		{
 			return jsx('
@@ -259,7 +276,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		{
 			return jsx('
 					<form name="form" onSubmit={handleSubmit} className="login" >
-						<input  name="pass" type="hidden" value=${state.pass} />														
+						<input  name="pass" type="hidden" value=${props.user.pass} />														
 						<div className="formField">
 							<h3>Bitte neues Passwort eintragen!</h3>
 						</div>
@@ -269,13 +286,13 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								</label>
 								<input id="login_user_name" name="user_name" disabled="disabled" 
 								className=${errorStyle("user_name") + "form-input"}  
-								placeholder="User ID" value=${state.user_name} onChange={handleChange} />
+								placeholder="User ID" value=${props.user.user_name} onChange={handleChange} />
 						</div>
 						<div className="formField">
 								<label className="fa lockIcon" forhtml="pw">
 										<span className="hidden">Password</span>
 								</label>
-								<input  className=${errorStyle("new_pass") + "form-input"} name="new_pass" type="password" placeholder="New Password" value=${state.new_pass} onChange=${handleChange} />
+								<input  className=${errorStyle("new_pass") + "form-input"} name="new_pass" type="password" placeholder="New Password" value=${props.user.new_pass} onChange=${handleChange} />
 						</div>
 						<div className="formField">
 								<label className="fa lockIcon" forhtml="pw">
@@ -307,9 +324,10 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								<input id="pw" className=${errorStyle("pass") + "form-input"} name="pass" value=${props.user.pass} type="password" placeholder="Password" onChange=${handleChange} />
 						</div>
 						<div className="formField">
-								<input type="submit" style=${{width:'100%'}} value="Login" />
+								<input type="submit" style=${{width:'100%'}} value="Login" onClick=${function(){submitValue='Login';return true;}}/>
 						</div>
-						<div className="formField" style=${{display: (props.user.loginTask == ResetPassword? 'flex':'none')}}>
+						<div className="formField" style=${{display: (props.user.loginTask == ResetPassword? 'flex':'none')}} 
+						 onClick=${function(){submitValue='ResetPassword';return true;}}>
 								<input type="submit" value="Passwort vergessen?"/>
 						</div>
 					</form>

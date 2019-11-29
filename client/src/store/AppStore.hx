@@ -138,14 +138,14 @@ class AppStore
 				trace(status);
 				//Out.dumpStack(CallStack.callStack());ReduxAction
 				//store.dispatch(StatusAction.Status(status));
-				next();*/
+				next();
 			case Data(action):
 				//store.dispatch(action);		
 				next();
 			//case Thunk.Action(f):
 				//store.dispatch(action);
 			case Status(action):	
-				store.dispatch(action);
+				store.dispatch(action);*/
 			case User(action):
 				store.dispatch(action);
 			//default: next();

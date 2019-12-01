@@ -32,7 +32,7 @@ class UserStore implements IReducer<UserAction, UserState>
 			initState = {
 				first_name:Cookie.get('user.first_name')==null?'':Cookie.get('user.first_name'),
 				//id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
-				//last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
+				last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
 				mandator: Cookie.get('user.mandator')==null?1:Std.parseInt(Cookie.get('user.mandator')),
 				user_name:param.get('user_name'),
 				email:Cookie.get('user.email')==null?'':Cookie.get('user.email'),
@@ -90,6 +90,7 @@ class UserStore implements IReducer<UserAction, UserState>
 						last_name:uState.last_name,	
 						id:uState.id,
 						jwt:uState.jwt,
+						last_login:uState.last_login,
 						loginError: null,
 						loggedIn: true,
 						loginTask:uState.loginTask,
@@ -123,6 +124,9 @@ class UserStore implements IReducer<UserAction, UserState>
 			//store.dispatch(UserAction.LoginRequired(state));
 			//next();
 			//
+			case LoginComplete(uState):
+				//save user session locally
+				next();
 			default: 
 			next();
 		}

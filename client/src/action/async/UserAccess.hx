@@ -194,7 +194,10 @@ class UserAccess {
 				}
 				//var uState:UserState = data.dataInfo['user_data'];
 				Cookie.set('user.id', Std.string(uState.id), null, '/');
+				Cookie.set('user.first_name',uState.first_name, null, '/');
+				Cookie.set('user.last_name',uState.last_name, null, '/');
 				Cookie.set('user.jwt',uState.jwt, null, '/');
+
 				trace(Cookie.get('user.jwt'));
 				uState.loggedIn = true;
 				if(uState.change_pass_required)

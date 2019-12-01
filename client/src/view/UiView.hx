@@ -79,7 +79,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	static function mapStateToProps(aState:AppState):UIProps
 	{		
 		//trace(aState.user.id);
-		trace(aState);
+		trace(Reflect.fields(aState));
 		return {
 			user:aState.user
 		};
@@ -168,7 +168,8 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		{			
 			trace('render Router ' + browserHistory.location.pathname);
 			trace('render Router ' + App.store.getState().locationState.history.location.pathname);
-			trace(App.store.getState());
+			//trace(App.store.getState());
+			trace(App.store.getState().locationState.history == browserHistory);
 			if(browserHistory.location.pathname!=App.store.getState().app.redirectAfterLogin)
 			{
 				trace('Redirect to: ${App.store.getState().app.redirectAfterLogin}');

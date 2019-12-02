@@ -46,9 +46,9 @@ class Mandator extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		trace('id primary key cannot be empty');
 		return id;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var contact(get,set):Int;
@@ -74,7 +74,7 @@ class Mandator extends ORM
 	public function clear_contact():Int{
 		contact = null;
 		return contact;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var name(get,set):String;
@@ -100,7 +100,7 @@ class Mandator extends ORM
 	public function clear_name():String{
 		name = '';
 		return name;
-	}
+	}	
 		
 	@dataType("character varying(4096)")
 	@:isVar public var description(get,set):String;
@@ -126,7 +126,7 @@ class Mandator extends ORM
 	public function clear_description():String{
 		description = '';
 		return description;
-	}
+	}	
 		
 	@dataType("jsonb")
 	@:isVar public var any(get,set):String;
@@ -152,7 +152,7 @@ class Mandator extends ORM
 	public function clear_any():String{
 		any = '{}';
 		return any;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
@@ -178,7 +178,7 @@ class Mandator extends ORM
 	public function clear_edited_by():Int{
 		edited_by = null;
 		return edited_by;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var parent(get,set):Int;
@@ -204,7 +204,7 @@ class Mandator extends ORM
 	public function clear_parent():Int{
 		parent = null;
 		return parent;
-	}
+	}	
 		
 	@dataType("timestamp without time zone")
 	@:isVar public var last_locktime(get,set):String;
@@ -230,6 +230,6 @@ class Mandator extends ORM
 	public function clear_last_locktime():String{
 		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
-	}
+	}	
 	
 }

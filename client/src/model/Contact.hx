@@ -36,9 +36,12 @@ class Contact extends ORM
 {
 
 	public function new(props:ContactProps) {
-		propertyNames = 'id,mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner'.split(',');
 		super(props);
-
+		propertyNames = 'id,mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner'.split(',');
+		for(f in Reflect.fields(props))
+		{
+			Reflect.setField(this, f, Reflect.field(props, f));
+		}
 	}	
 		
 	@dataType("bigint")
@@ -63,9 +66,9 @@ class Contact extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		trace('id primary key cannot be empty');
 		return id;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
@@ -77,11 +80,7 @@ class Contact extends ORM
 
 	function set_mandator(x:Int):Int{
 		if(mandator != null)
-		{
-			trace(mandator);
 			modified('mandator');
-		}
-		trace(x);
 		mandator = x;
 		if(initial_mandator == null)
 			initial_mandator = mandator; 
@@ -95,7 +94,7 @@ class Contact extends ORM
 	public function clear_mandator():Int{
 		mandator = 0;
 		return mandator;
-	}
+	}	
 		
 	@dataType("timestamp(0) without time zone")
 	@:isVar public var creation_date(get,set):String;
@@ -121,7 +120,7 @@ class Contact extends ORM
 	public function clear_creation_date():String{
 		creation_date = 'CURRENT_TIMESTAMP';
 		return creation_date;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var state(get,set):String;
@@ -147,7 +146,7 @@ class Contact extends ORM
 	public function clear_state():String{
 		state = 'contact';
 		return state;
-	}
+	}	
 		
 	@dataType("boolean")
 	@:isVar public var use_email(get,set):Bool;
@@ -173,7 +172,7 @@ class Contact extends ORM
 	public function clear_use_email():Bool{
 		use_email = false;
 		return use_email;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var company_name(get,set):String;
@@ -199,7 +198,7 @@ class Contact extends ORM
 	public function clear_company_name():String{
 		company_name = '';
 		return company_name;
-	}
+	}	
 		
 	@dataType("character varying(100)")
 	@:isVar public var co_field(get,set):String;
@@ -225,7 +224,7 @@ class Contact extends ORM
 	public function clear_co_field():String{
 		co_field = '';
 		return co_field;
-	}
+	}	
 		
 	@dataType("character varying(10)")
 	@:isVar public var phone_code(get,set):String;
@@ -251,7 +250,7 @@ class Contact extends ORM
 	public function clear_phone_code():String{
 		phone_code = '49';
 		return phone_code;
-	}
+	}	
 		
 	@dataType("character varying(18)")
 	@:isVar public var phone_number(get,set):String;
@@ -277,7 +276,7 @@ class Contact extends ORM
 	public function clear_phone_number():String{
 		phone_number = '';
 		return phone_number;
-	}
+	}	
 		
 	@dataType("character varying(18)")
 	@:isVar public var fax(get,set):String;
@@ -303,7 +302,7 @@ class Contact extends ORM
 	public function clear_fax():String{
 		fax = '';
 		return fax;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var title(get,set):String;
@@ -329,7 +328,7 @@ class Contact extends ORM
 	public function clear_title():String{
 		title = '';
 		return title;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var title_pro(get,set):String;
@@ -355,7 +354,7 @@ class Contact extends ORM
 	public function clear_title_pro():String{
 		title_pro = '';
 		return title_pro;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var first_name(get,set):String;
@@ -381,7 +380,7 @@ class Contact extends ORM
 	public function clear_first_name():String{
 		first_name = '';
 		return first_name;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var last_name(get,set):String;
@@ -407,7 +406,7 @@ class Contact extends ORM
 	public function clear_last_name():String{
 		last_name = '';
 		return last_name;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var address(get,set):String;
@@ -433,7 +432,7 @@ class Contact extends ORM
 	public function clear_address():String{
 		address = '';
 		return address;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var address_2(get,set):String;
@@ -459,7 +458,7 @@ class Contact extends ORM
 	public function clear_address_2():String{
 		address_2 = '';
 		return address_2;
-	}
+	}	
 		
 	@dataType("character varying(50)")
 	@:isVar public var city(get,set):String;
@@ -485,7 +484,7 @@ class Contact extends ORM
 	public function clear_city():String{
 		city = '';
 		return city;
-	}
+	}	
 		
 	@dataType("character varying(10)")
 	@:isVar public var postal_code(get,set):String;
@@ -511,7 +510,7 @@ class Contact extends ORM
 	public function clear_postal_code():String{
 		postal_code = '';
 		return postal_code;
-	}
+	}	
 		
 	@dataType("character varying(3)")
 	@:isVar public var country_code(get,set):String;
@@ -537,7 +536,7 @@ class Contact extends ORM
 	public function clear_country_code():String{
 		country_code = '';
 		return country_code;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var gender(get,set):String;
@@ -563,7 +562,7 @@ class Contact extends ORM
 	public function clear_gender():String{
 		gender = '';
 		return gender;
-	}
+	}	
 		
 	@dataType("date")
 	@:isVar public var date_of_birth(get,set):String;
@@ -589,7 +588,7 @@ class Contact extends ORM
 	public function clear_date_of_birth():String{
 		date_of_birth = 'null';
 		return date_of_birth;
-	}
+	}	
 		
 	@dataType("character varying(19)")
 	@:isVar public var mobile(get,set):String;
@@ -615,7 +614,7 @@ class Contact extends ORM
 	public function clear_mobile():String{
 		mobile = '';
 		return mobile;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var email(get,set):String;
@@ -641,7 +640,7 @@ class Contact extends ORM
 	public function clear_email():String{
 		email = '';
 		return email;
-	}
+	}	
 		
 	@dataType("character varying(4096)")
 	@:isVar public var comments(get,set):String;
@@ -667,7 +666,7 @@ class Contact extends ORM
 	public function clear_comments():String{
 		comments = '';
 		return comments;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
@@ -693,7 +692,7 @@ class Contact extends ORM
 	public function clear_edited_by():Int{
 		edited_by = 0;
 		return edited_by;
-	}
+	}	
 		
 	@dataType("bigint[]")
 	@:isVar public var merged(get,set):Array<Int>;
@@ -719,7 +718,7 @@ class Contact extends ORM
 	public function clear_merged():Array<Int>{
 		merged = [];
 		return merged;
-	}
+	}	
 		
 	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_locktime(get,set):String;
@@ -745,7 +744,7 @@ class Contact extends ORM
 	public function clear_last_locktime():String{
 		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var owner(get,set):Int;
@@ -771,6 +770,6 @@ class Contact extends ORM
 	public function clear_owner():Int{
 		owner = null;
 		return owner;
-	}
+	}	
 	
 }

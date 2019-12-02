@@ -55,6 +55,22 @@ class SyncExternal extends Model
 		S.sendErrors(dbData,['syncAll'=>'OK']);
 	}
 
+	public function syncBankTransferRequests():Void
+    {
+		var res:NativeArray = fetchAll('SELECT * FROM `buchungs_anforderungen`',S.syncDbh,'syncBankTransferRequests',PDO.FETCH_NUM);
+		trace(res);
+		if(res != null)
+		{
+			//sendRows(res);
+			var updated:Int = syncUserIds(res);
+			S.sendInfo(dbData,['syncUserDetail'=>'DONE $updated']);
+		}
+			
+		else 
+			S.sendInfo(dbData,['syncUserDetail'=>'no results???']);
+		trace('done');
+    }
+
     public function syncUserDetails(?user:Dynamic):Void
     {
 		var res:NativeArray = fetchAll('SELECT user, full_name, active FROM asterisk.vicidial_users 

@@ -47,9 +47,9 @@ class UserInterface extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		trace('id primary key cannot be empty');
 		return id;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var key(get,set):String;
@@ -75,7 +75,7 @@ class UserInterface extends ORM
 	public function clear_key():String{
 		key = '';
 		return key;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var content(get,set):String;
@@ -101,7 +101,7 @@ class UserInterface extends ORM
 	public function clear_content():String{
 		content = '';
 		return content;
-	}
+	}	
 		
 	@dataType("character varying(512)")
 	@:isVar public var classPath(get,set):String;
@@ -127,7 +127,7 @@ class UserInterface extends ORM
 	public function clear_classPath():String{
 		classPath = '';
 		return classPath;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var component(get,set):String;
@@ -153,7 +153,7 @@ class UserInterface extends ORM
 	public function clear_component():String{
 		component = '';
 		return component;
-	}
+	}	
 		
 	@dataType("integer")
 	@:isVar public var edited_by(get,set):String;
@@ -179,7 +179,7 @@ class UserInterface extends ORM
 	public function clear_edited_by():String{
 		edited_by = '';
 		return edited_by;
-	}
+	}	
 		
 	@dataType("timestamp without time zone")
 	@:isVar public var updated_at(get,set):String;
@@ -205,7 +205,7 @@ class UserInterface extends ORM
 	public function clear_updated_at():String{
 		updated_at = 'null';
 		return updated_at;
-	}
+	}	
 		
 	@dataType("character varying(8)")
 	@:isVar public var locale(get,set):String;
@@ -231,7 +231,7 @@ class UserInterface extends ORM
 	public function clear_locale():String{
 		locale = '';
 		return locale;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
@@ -257,6 +257,6 @@ class UserInterface extends ORM
 	public function clear_mandator():Int{
 		mandator = null;
 		return mandator;
-	}
+	}	
 	
 }

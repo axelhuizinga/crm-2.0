@@ -51,9 +51,9 @@ class Account extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		trace('id primary key cannot be empty');
 		return id;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var contact(get,set):Int;
@@ -79,7 +79,7 @@ class Account extends ORM
 	public function clear_contact():Int{
 		contact = null;
 		return contact;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var bank_name(get,set):String;
@@ -105,7 +105,7 @@ class Account extends ORM
 	public function clear_bank_name():String{
 		bank_name = '';
 		return bank_name;
-	}
+	}	
 		
 	@dataType("character varying(11)")
 	@:isVar public var bic(get,set):String;
@@ -131,7 +131,7 @@ class Account extends ORM
 	public function clear_bic():String{
 		bic = '';
 		return bic;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var account(get,set):String;
@@ -157,7 +157,7 @@ class Account extends ORM
 	public function clear_account():String{
 		account = '';
 		return account;
-	}
+	}	
 		
 	@dataType("character varying(12)")
 	@:isVar public var blz(get,set):String;
@@ -183,7 +183,7 @@ class Account extends ORM
 	public function clear_blz():String{
 		blz = '';
 		return blz;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var iban(get,set):String;
@@ -209,7 +209,7 @@ class Account extends ORM
 	public function clear_iban():String{
 		iban = '';
 		return iban;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var creditor(get,set):Int;
@@ -235,7 +235,7 @@ class Account extends ORM
 	public function clear_creditor():Int{
 		creditor = null;
 		return creditor;
-	}
+	}	
 		
 	@dataType("date")
 	@:isVar public var sign_date(get,set):String;
@@ -261,7 +261,7 @@ class Account extends ORM
 	public function clear_sign_date():String{
 		sign_date = 'null';
 		return sign_date;
-	}
+	}	
 		
 	@dataType("accounts_state")
 	@:isVar public var state(get,set):String;
@@ -287,7 +287,7 @@ class Account extends ORM
 	public function clear_state():String{
 		state = 'new';
 		return state;
-	}
+	}	
 		
 	@dataType("timestamp without time zone")
 	@:isVar public var creation_date(get,set):String;
@@ -313,7 +313,7 @@ class Account extends ORM
 	public function clear_creation_date():String{
 		creation_date = 'CURRENT_TIMESTAMP';
 		return creation_date;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
@@ -339,7 +339,7 @@ class Account extends ORM
 	public function clear_edited_by():Int{
 		edited_by = null;
 		return edited_by;
-	}
+	}	
 		
 	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_locktime(get,set):String;
@@ -365,6 +365,6 @@ class Account extends ORM
 	public function clear_last_locktime():String{
 		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
-	}
+	}	
 	
 }

@@ -44,9 +44,9 @@ class Role extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		trace('id primary key cannot be empty');
 		return id;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var name(get,set):String;
@@ -72,7 +72,7 @@ class Role extends ORM
 	public function clear_name():String{
 		name = '';
 		return name;
-	}
+	}	
 		
 	@dataType("character varying(2048)")
 	@:isVar public var description(get,set):String;
@@ -98,7 +98,7 @@ class Role extends ORM
 	public function clear_description():String{
 		description = '';
 		return description;
-	}
+	}	
 		
 	@dataType("jsonb")
 	@:isVar public var permissions(get,set):String;
@@ -124,7 +124,7 @@ class Role extends ORM
 	public function clear_permissions():String{
 		permissions = '{"users": [], "groups": [], "routes": []}';
 		return permissions;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
@@ -150,7 +150,7 @@ class Role extends ORM
 	public function clear_edited_by():Int{
 		edited_by = null;
 		return edited_by;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
@@ -176,6 +176,6 @@ class Role extends ORM
 	public function clear_mandator():Int{
 		mandator = null;
 		return mandator;
-	}
+	}	
 	
 }

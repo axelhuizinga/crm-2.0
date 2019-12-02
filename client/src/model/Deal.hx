@@ -60,9 +60,9 @@ class Deal extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		trace('id primary key cannot be empty');
 		return id;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var contact(get,set):Int;
@@ -88,7 +88,7 @@ class Deal extends ORM
 	public function clear_contact():Int{
 		contact = null;
 		return contact;
-	}
+	}	
 		
 	@dataType("timestamp(0) without time zone")
 	@:isVar public var creation_date(get,set):String;
@@ -114,7 +114,7 @@ class Deal extends ORM
 	public function clear_creation_date():String{
 		creation_date = 'CURRENT_TIMESTAMP';
 		return creation_date;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var account(get,set):Int;
@@ -140,7 +140,7 @@ class Deal extends ORM
 	public function clear_account():Int{
 		account = null;
 		return account;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var target_account(get,set):Int;
@@ -166,7 +166,7 @@ class Deal extends ORM
 	public function clear_target_account():Int{
 		target_account = null;
 		return target_account;
-	}
+	}	
 		
 	@dataType("character varying(2)")
 	@:isVar public var start_day(get,set):String;
@@ -192,7 +192,7 @@ class Deal extends ORM
 	public function clear_start_day():String{
 		start_day = '1';
 		return start_day;
-	}
+	}	
 		
 	@dataType("date")
 	@:isVar public var start_date(get,set):String;
@@ -218,7 +218,7 @@ class Deal extends ORM
 	public function clear_start_date():String{
 		start_date = 'null';
 		return start_date;
-	}
+	}	
 		
 	@dataType("deals_cycle")
 	@:isVar public var cycle(get,set):String;
@@ -244,7 +244,7 @@ class Deal extends ORM
 	public function clear_cycle():String{
 		cycle = '';
 		return cycle;
-	}
+	}	
 		
 	@dataType("numeric(10,2)")
 	@:isVar public var amount(get,set):String;
@@ -270,7 +270,7 @@ class Deal extends ORM
 	public function clear_amount():String{
 		amount = '';
 		return amount;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var product(get,set):Int;
@@ -296,7 +296,7 @@ class Deal extends ORM
 	public function clear_product():Int{
 		product = null;
 		return product;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var agent(get,set):Int;
@@ -322,7 +322,7 @@ class Deal extends ORM
 	public function clear_agent():Int{
 		agent = null;
 		return agent;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var project(get,set):Int;
@@ -348,7 +348,7 @@ class Deal extends ORM
 	public function clear_project():Int{
 		project = null;
 		return project;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var status(get,set):String;
@@ -374,7 +374,7 @@ class Deal extends ORM
 	public function clear_status():String{
 		status = 'active';
 		return status;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var pay_method(get,set):String;
@@ -400,7 +400,7 @@ class Deal extends ORM
 	public function clear_pay_method():String{
 		pay_method = 'debit';
 		return pay_method;
-	}
+	}	
 		
 	@dataType("date")
 	@:isVar public var end_date(get,set):String;
@@ -426,7 +426,7 @@ class Deal extends ORM
 	public function clear_end_date():String{
 		end_date = 'null';
 		return end_date;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var end_reason(get,set):Int;
@@ -452,7 +452,7 @@ class Deal extends ORM
 	public function clear_end_reason():Int{
 		end_reason = null;
 		return end_reason;
-	}
+	}	
 		
 	@dataType("date")
 	@:isVar public var repeat_date(get,set):String;
@@ -478,7 +478,7 @@ class Deal extends ORM
 	public function clear_repeat_date():String{
 		repeat_date = 'null';
 		return repeat_date;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
@@ -504,7 +504,7 @@ class Deal extends ORM
 	public function clear_edited_by():Int{
 		edited_by = null;
 		return edited_by;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
@@ -530,7 +530,7 @@ class Deal extends ORM
 	public function clear_mandator():Int{
 		mandator = null;
 		return mandator;
-	}
+	}	
 		
 	@dataType("boolean")
 	@:isVar public var old_active(get,set):Bool;
@@ -556,7 +556,7 @@ class Deal extends ORM
 	public function clear_old_active():Bool{
 		old_active = 1;
 		return old_active;
-	}
+	}	
 		
 	@dataType("date")
 	@:isVar public var cycle_start_date(get,set):String;
@@ -582,7 +582,7 @@ class Deal extends ORM
 	public function clear_cycle_start_date():String{
 		cycle_start_date = 'null';
 		return cycle_start_date;
-	}
+	}	
 		
 	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_locktime(get,set):String;
@@ -608,6 +608,6 @@ class Deal extends ORM
 	public function clear_last_locktime():String{
 		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
-	}
+	}	
 	
 }

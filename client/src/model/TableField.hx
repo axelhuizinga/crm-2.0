@@ -49,9 +49,9 @@ class TableField extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		trace('id primary key cannot be empty');
 		return id;
-	}
+	}	
 		
 	@dataType("character varying")
 	@:isVar public var table_name(get,set):String;
@@ -77,7 +77,7 @@ class TableField extends ORM
 	public function clear_table_name():String{
 		table_name = '';
 		return table_name;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
@@ -103,7 +103,7 @@ class TableField extends ORM
 	public function clear_mandator():Int{
 		mandator = null;
 		return mandator;
-	}
+	}	
 		
 	@dataType("character varying")
 	@:isVar public var field_name(get,set):String;
@@ -129,7 +129,7 @@ class TableField extends ORM
 	public function clear_field_name():String{
 		field_name = '';
 		return field_name;
-	}
+	}	
 		
 	@dataType("boolean")
 	@:isVar public var readonly(get,set):Bool;
@@ -155,7 +155,7 @@ class TableField extends ORM
 	public function clear_readonly():Bool{
 		readonly = false;
 		return readonly;
-	}
+	}	
 		
 	@dataType("element")
 	@:isVar public var element(get,set):String;
@@ -181,7 +181,7 @@ class TableField extends ORM
 	public function clear_element():String{
 		element = 'Input';
 		return element;
-	}
+	}	
 		
 	@dataType("jsonb")
 	@:isVar public var any(get,set):String;
@@ -207,7 +207,7 @@ class TableField extends ORM
 	public function clear_any():String{
 		any = '{}';
 		return any;
-	}
+	}	
 		
 	@dataType("boolean")
 	@:isVar public var required(get,set):Bool;
@@ -233,7 +233,7 @@ class TableField extends ORM
 	public function clear_required():Bool{
 		required = false;
 		return required;
-	}
+	}	
 		
 	@dataType("boolean")
 	@:isVar public var use_as_index(get,set):Bool;
@@ -259,7 +259,7 @@ class TableField extends ORM
 	public function clear_use_as_index():Bool{
 		use_as_index = false;
 		return use_as_index;
-	}
+	}	
 		
 	@dataType("boolean")
 	@:isVar public var admin_only(get,set):Bool;
@@ -285,7 +285,7 @@ class TableField extends ORM
 	public function clear_admin_only():Bool{
 		admin_only = false;
 		return admin_only;
-	}
+	}	
 		
 	@dataType("data_type")
 	@:isVar public var field_type(get,set):String;
@@ -311,6 +311,6 @@ class TableField extends ORM
 	public function clear_field_type():String{
 		field_type = 'null';
 		return field_type;
-	}
+	}	
 	
 }

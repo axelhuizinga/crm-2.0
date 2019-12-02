@@ -49,6 +49,42 @@ class Util
 		}
 	}
 
+	public static function bindClientDataNum(table:String, stmt:PDOStatement, row:NativeArray, dbData:DbData)
+	{
+		var meta:Map<String, NativeArray> = S.columnsMeta(table);
+		//trace(meta);
+		var i:Int = 0;
+		for(k => v in meta.keyValueIterator())
+		{
+			//if(k=='id')
+				//continue;
+			
+			var pdoType:Int = v['pdo_type'];
+			
+			if(row[i]==null||row[i].indexOf('0000-00-00')==0||row[i]=='')
+			//if(row[i]==null||row[i]=='')
+			{				
+				//trace (v['native_type']);
+				switch (v['native_type'])
+				{
+					case 'date'|'datetime'|'timestamp':
+					pdoType = PDO.PARAM_NULL;
+					case 'text'|'varchar':
+					row[i] = '';
+					case 'int8':
+					row[i] = 0;
+				}
+			}
+			//trace('$k => $pdoType:${row[i]}');
+			if(!stmt.bindValue(':$k',row[i], pdoType))//row[i]==null?1:
+			{
+				//trace('$k => $v');
+				S.sendErrors(dbData,['bindValue'=>'${row[i]}:$pdoType']);
+			}		
+			i++;
+		}
+	}
+
 	/**
 	 * Convert NativeArray to Map
 	 * @param row NativeArray
@@ -63,6 +99,14 @@ class Util
 		return[
 			for(k in keys)
 				k => row[k]
+		];
+	}
+
+	public static function map2fieldsNum(row:NativeArray,keys:Array<String>):Map<String,Dynamic> {
+		var i:Int = 0;
+		return[
+			for(k in keys)
+				k => row[i++]
 		];
 	}
 

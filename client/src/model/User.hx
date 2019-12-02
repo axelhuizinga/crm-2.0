@@ -17,7 +17,8 @@ typedef UserProps = {
 	?last_request_time:String,
 	?request:String,
 	?mandator:Int,
-	?last_locktime:String
+	?last_locktime:String,
+	?phash:String
 };
 
 @:rtti
@@ -26,7 +27,7 @@ class User extends ORM
 
 	public function new(props:UserProps) {
 		super(props);
-		propertyNames = 'id,contact,last_login,password,user_name,active,edited_by,editing,settings,external,user_group,change_pass_required,online,last_request_time,request,mandator,last_locktime'.split(',');
+		propertyNames = 'id,contact,last_login,password,user_name,active,edited_by,editing,settings,external,user_group,change_pass_required,online,last_request_time,request,mandator,last_locktime,phash'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
@@ -55,9 +56,9 @@ class User extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		trace('id primary key cannot be empty');
 		return id;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var contact(get,set):Int;
@@ -83,7 +84,7 @@ class User extends ORM
 	public function clear_contact():Int{
 		contact = 0;
 		return contact;
-	}
+	}	
 		
 	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_login(get,set):String;
@@ -109,7 +110,7 @@ class User extends ORM
 	public function clear_last_login():String{
 		last_login = 'null';
 		return last_login;
-	}
+	}	
 		
 	@dataType("character varying(512)")
 	@:isVar public var password(get,set):String;
@@ -135,7 +136,7 @@ class User extends ORM
 	public function clear_password():String{
 		password = '';
 		return password;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var user_name(get,set):String;
@@ -161,7 +162,7 @@ class User extends ORM
 	public function clear_user_name():String{
 		user_name = '';
 		return user_name;
-	}
+	}	
 		
 	@dataType("boolean")
 	@:isVar public var active(get,set):Bool;
@@ -187,7 +188,7 @@ class User extends ORM
 	public function clear_active():Bool{
 		active = true;
 		return active;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
@@ -213,7 +214,7 @@ class User extends ORM
 	public function clear_edited_by():Int{
 		edited_by = null;
 		return edited_by;
-	}
+	}	
 		
 	@dataType("jsonb")
 	@:isVar public var editing(get,set):String;
@@ -239,7 +240,7 @@ class User extends ORM
 	public function clear_editing():String{
 		editing = '{}';
 		return editing;
-	}
+	}	
 		
 	@dataType("jsonb")
 	@:isVar public var settings(get,set):String;
@@ -265,7 +266,7 @@ class User extends ORM
 	public function clear_settings():String{
 		settings = '{}';
 		return settings;
-	}
+	}	
 		
 	@dataType("jsonb")
 	@:isVar public var external(get,set):String;
@@ -291,7 +292,7 @@ class User extends ORM
 	public function clear_external():String{
 		external = '{}';
 		return external;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var user_group(get,set):Int;
@@ -317,7 +318,7 @@ class User extends ORM
 	public function clear_user_group():Int{
 		user_group = null;
 		return user_group;
-	}
+	}	
 		
 	@dataType("boolean")
 	@:isVar public var change_pass_required(get,set):Bool;
@@ -343,7 +344,7 @@ class User extends ORM
 	public function clear_change_pass_required():Bool{
 		change_pass_required = false;
 		return change_pass_required;
-	}
+	}	
 		
 	@dataType("boolean")
 	@:isVar public var online(get,set):Bool;
@@ -369,7 +370,7 @@ class User extends ORM
 	public function clear_online():Bool{
 		online = false;
 		return online;
-	}
+	}	
 		
 	@dataType("timestamp without time zone")
 	@:isVar public var last_request_time(get,set):String;
@@ -395,7 +396,7 @@ class User extends ORM
 	public function clear_last_request_time():String{
 		last_request_time = 'null';
 		return last_request_time;
-	}
+	}	
 		
 	@dataType("character varying(4096)")
 	@:isVar public var request(get,set):String;
@@ -421,7 +422,7 @@ class User extends ORM
 	public function clear_request():String{
 		request = '';
 		return request;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
@@ -447,7 +448,7 @@ class User extends ORM
 	public function clear_mandator():Int{
 		mandator = 0;
 		return mandator;
-	}
+	}	
 		
 	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_locktime(get,set):String;
@@ -473,6 +474,32 @@ class User extends ORM
 	public function clear_last_locktime():String{
 		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
+	}	
+		
+	@dataType("character varying(64)")
+	@:isVar public var phash(get,set):String;
+	var initial_phash:String;
+	
+	function get_phash():String{
+		return phash;
 	}
+
+	function set_phash(x:String):String{
+		if(phash != null)
+			modified('phash');
+		phash = x;
+		if(initial_phash == null)
+			initial_phash = phash; 
+		return phash;
+	}
+
+	public function reset_phash():String{
+		return initial_phash;
+	}
+
+	public function clear_phash():String{
+		phash = 'password';
+		return phash;
+	}	
 	
 }

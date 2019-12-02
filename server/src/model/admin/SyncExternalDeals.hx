@@ -12,8 +12,7 @@ class SyncExternalDeals {
 	static var dKeys:Array<String> =  S.tableFields('deals');
 
 	public static function importDeals(dbh:PDO, dbData:DbData, deals:NativeArray):Void 
-	{
-		
+	{		
 		var dealsRows:Int = Syntax.code("count({0})",deals);
 		trace('dealsRows:$dealsRows');
 		var dD:Map<String,Dynamic> = Util.map2fields(deals[0], dKeys);

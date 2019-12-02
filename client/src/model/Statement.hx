@@ -71,7 +71,7 @@ class Statement extends ORM
 	public function clear_a():Int{
 		a = null;
 		return a;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var b(get,set):Int;
@@ -97,7 +97,7 @@ class Statement extends ORM
 	public function clear_b():Int{
 		b = null;
 		return b;
-	}
+	}	
 		
 	@dataType("date")
 	@:isVar public var c(get,set):String;
@@ -123,7 +123,7 @@ class Statement extends ORM
 	public function clear_c():String{
 		c = 'null';
 		return c;
-	}
+	}	
 		
 	@dataType("date")
 	@:isVar public var d(get,set):String;
@@ -149,7 +149,7 @@ class Statement extends ORM
 	public function clear_d():String{
 		d = 'null';
 		return d;
-	}
+	}	
 		
 	@dataType("double precision")
 	@:isVar public var e(get,set):String;
@@ -175,7 +175,7 @@ class Statement extends ORM
 	public function clear_e():String{
 		e = '';
 		return e;
-	}
+	}	
 		
 	@dataType("character varying(3)")
 	@:isVar public var f(get,set):String;
@@ -201,7 +201,7 @@ class Statement extends ORM
 	public function clear_f():String{
 		f = '';
 		return f;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var g(get,set):Int;
@@ -227,7 +227,7 @@ class Statement extends ORM
 	public function clear_g():Int{
 		g = null;
 		return g;
-	}
+	}	
 		
 	@dataType("character varying(160)")
 	@:isVar public var h(get,set):String;
@@ -253,7 +253,7 @@ class Statement extends ORM
 	public function clear_h():String{
 		h = '';
 		return h;
-	}
+	}	
 		
 	@dataType("character varying(160)")
 	@:isVar public var i(get,set):String;
@@ -279,7 +279,7 @@ class Statement extends ORM
 	public function clear_i():String{
 		i = '';
 		return i;
-	}
+	}	
 		
 	@dataType("character varying(160)")
 	@:isVar public var j(get,set):String;
@@ -305,7 +305,7 @@ class Statement extends ORM
 	public function clear_j():String{
 		j = '';
 		return j;
-	}
+	}	
 		
 	@dataType("character varying(160)")
 	@:isVar public var k(get,set):String;
@@ -331,7 +331,7 @@ class Statement extends ORM
 	public function clear_k():String{
 		k = '';
 		return k;
-	}
+	}	
 		
 	@dataType("character varying(160)")
 	@:isVar public var l(get,set):String;
@@ -357,7 +357,7 @@ class Statement extends ORM
 	public function clear_l():String{
 		l = '';
 		return l;
-	}
+	}	
 		
 	@dataType("character varying(160)")
 	@:isVar public var m(get,set):String;
@@ -383,7 +383,7 @@ class Statement extends ORM
 	public function clear_m():String{
 		m = '';
 		return m;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var n(get,set):String;
@@ -409,7 +409,7 @@ class Statement extends ORM
 	public function clear_n():String{
 		n = '';
 		return n;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var o(get,set):String;
@@ -435,7 +435,7 @@ class Statement extends ORM
 	public function clear_o():String{
 		o = '';
 		return o;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var p(get,set):String;
@@ -461,7 +461,7 @@ class Statement extends ORM
 	public function clear_p():String{
 		p = '';
 		return p;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var q(get,set):String;
@@ -487,7 +487,7 @@ class Statement extends ORM
 	public function clear_q():String{
 		q = '';
 		return q;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var r(get,set):String;
@@ -513,7 +513,7 @@ class Statement extends ORM
 	public function clear_r():String{
 		r = '';
 		return r;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var s(get,set):String;
@@ -539,7 +539,7 @@ class Statement extends ORM
 	public function clear_s():String{
 		s = '';
 		return s;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var t(get,set):String;
@@ -565,7 +565,7 @@ class Statement extends ORM
 	public function clear_t():String{
 		t = '';
 		return t;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var u(get,set):String;
@@ -591,7 +591,7 @@ class Statement extends ORM
 	public function clear_u():String{
 		u = '';
 		return u;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var v(get,set):String;
@@ -617,7 +617,7 @@ class Statement extends ORM
 	public function clear_v():String{
 		v = '';
 		return v;
-	}
+	}	
 		
 	@dataType("character varying(28)")
 	@:isVar public var w(get,set):String;
@@ -643,7 +643,7 @@ class Statement extends ORM
 	public function clear_w():String{
 		w = '';
 		return w;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var x(get,set):String;
@@ -669,7 +669,7 @@ class Statement extends ORM
 	public function clear_x():String{
 		x = '';
 		return x;
-	}
+	}	
 		
 	@dataType("character varying(11)")
 	@:isVar public var y(get,set):String;
@@ -695,7 +695,7 @@ class Statement extends ORM
 	public function clear_y():String{
 		y = '';
 		return y;
-	}
+	}	
 		
 	@dataType("character varying(22)")
 	@:isVar public var z(get,set):String;
@@ -721,7 +721,7 @@ class Statement extends ORM
 	public function clear_z():String{
 		z = '';
 		return z;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var aa(get,set):Int;
@@ -747,7 +747,7 @@ class Statement extends ORM
 	public function clear_aa():Int{
 		aa = null;
 		return aa;
-	}
+	}	
 		
 	@dataType("smallint")
 	@:isVar public var processed(get,set):Int;
@@ -773,7 +773,7 @@ class Statement extends ORM
 	public function clear_processed():Int{
 		processed = '0';
 		return processed;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
@@ -797,9 +797,9 @@ class Statement extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		trace('id primary key cannot be empty');
 		return id;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
@@ -825,7 +825,7 @@ class Statement extends ORM
 	public function clear_edited_by():Int{
 		edited_by = null;
 		return edited_by;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
@@ -849,8 +849,8 @@ class Statement extends ORM
 	}
 
 	public function clear_mandator():Int{
-		mandator = nextval('statements_man_seq';
+		mandator = null;
 		return mandator;
-	}
+	}	
 	
 }

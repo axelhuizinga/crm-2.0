@@ -46,9 +46,9 @@ class Product extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		trace('id primary key cannot be empty');
 		return id;
-	}
+	}	
 		
 	@dataType("character varying(1024)")
 	@:isVar public var name(get,set):String;
@@ -74,7 +74,7 @@ class Product extends ORM
 	public function clear_name():String{
 		name = '';
 		return name;
-	}
+	}	
 		
 	@dataType("character varying(4096)")
 	@:isVar public var description(get,set):String;
@@ -100,7 +100,7 @@ class Product extends ORM
 	public function clear_description():String{
 		description = '';
 		return description;
-	}
+	}	
 		
 	@dataType("numeric(10,2)")
 	@:isVar public var value(get,set):String;
@@ -126,7 +126,7 @@ class Product extends ORM
 	public function clear_value():String{
 		value = '';
 		return value;
-	}
+	}	
 		
 	@dataType("jsonb")
 	@:isVar public var attributes(get,set):String;
@@ -152,7 +152,7 @@ class Product extends ORM
 	public function clear_attributes():String{
 		attributes = '{}';
 		return attributes;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
@@ -178,7 +178,7 @@ class Product extends ORM
 	public function clear_mandator():Int{
 		mandator = null;
 		return mandator;
-	}
+	}	
 		
 	@dataType("boolean")
 	@:isVar public var active(get,set):Bool;
@@ -204,7 +204,7 @@ class Product extends ORM
 	public function clear_active():Bool{
 		active = 1;
 		return active;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
@@ -230,6 +230,6 @@ class Product extends ORM
 	public function clear_edited_by():Int{
 		edited_by = null;
 		return edited_by;
-	}
+	}	
 	
 }

@@ -44,9 +44,9 @@ class Activity extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		trace('id primary key cannot be empty');
 		return id;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var table(get,set):String;
@@ -72,7 +72,7 @@ class Activity extends ORM
 	public function clear_table():String{
 		table = '';
 		return table;
-	}
+	}	
 		
 	@dataType("character varying(2048)")
 	@:isVar public var title(get,set):String;
@@ -98,7 +98,7 @@ class Activity extends ORM
 	public function clear_title():String{
 		title = '';
 		return title;
-	}
+	}	
 		
 	@dataType("boolean")
 	@:isVar public var active(get,set):Bool;
@@ -124,7 +124,7 @@ class Activity extends ORM
 	public function clear_active():Bool{
 		active = 1;
 		return active;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
@@ -150,7 +150,7 @@ class Activity extends ORM
 	public function clear_edited_by():Int{
 		edited_by = null;
 		return edited_by;
-	}
+	}	
 		
 	@dataType("timestamp(3) without time zone")
 	@:isVar public var activated_at(get,set):String;
@@ -176,6 +176,6 @@ class Activity extends ORM
 	public function clear_activated_at():String{
 		activated_at = '(CURRENT_TIMESTAMP)';
 		return activated_at;
-	}
+	}	
 	
 }

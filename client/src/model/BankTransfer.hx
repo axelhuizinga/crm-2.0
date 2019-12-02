@@ -33,8 +33,7 @@ typedef BankTransferProps = {
 	?mandat_datum:String,
 	?ag_creditor_id:String,
 	?sequenz:String,
-	?super_ag_name:String,
-	?edited_by:Int
+	?super_ag_name:String
 };
 
 @:rtti
@@ -43,7 +42,7 @@ class BankTransfer extends ORM
 
 	public function new(props:BankTransferProps) {
 		super(props);
-		propertyNames = 'ag_name,ag_konto_or_iban,ag_blz_or_bic,zahlpfl_name,zahlpfl_name2,zahlpfl_strasse,zahlpfl_name_ort,zahlpfl_name_kto_or_iban,zahlpfl_name_blz_or_bic,betrag,currency,zahlart,termin,vwz1,vwz2,vwz3,vwz4,vwz5,vwz6,vwz7,vwz8,vwz9,ba_id,tracking_status,anforderungs_datum,rueck_datum,cycle,ref_id,mandat_id,mandat_datum,ag_creditor_id,sequenz,super_ag_name,edited_by'.split(',');
+		propertyNames = 'ag_name,ag_konto_or_iban,ag_blz_or_bic,zahlpfl_name,zahlpfl_name2,zahlpfl_strasse,zahlpfl_name_ort,zahlpfl_name_kto_or_iban,zahlpfl_name_blz_or_bic,betrag,currency,zahlart,termin,vwz1,vwz2,vwz3,vwz4,vwz5,vwz6,vwz7,vwz8,vwz9,ba_id,tracking_status,anforderungs_datum,rueck_datum,cycle,ref_id,mandat_id,mandat_datum,ag_creditor_id,sequenz,super_ag_name'.split(',');
 		for(f in Reflect.fields(props))
 		{
 			Reflect.setField(this, f, Reflect.field(props, f));
@@ -74,7 +73,7 @@ class BankTransfer extends ORM
 	public function clear_ag_name():String{
 		ag_name = '';
 		return ag_name;
-	}
+	}	
 		
 	@dataType("character varying(18)")
 	@:isVar public var ag_konto_or_iban(get,set):String;
@@ -100,7 +99,7 @@ class BankTransfer extends ORM
 	public function clear_ag_konto_or_iban():String{
 		ag_konto_or_iban = '';
 		return ag_konto_or_iban;
-	}
+	}	
 		
 	@dataType("character varying(11)")
 	@:isVar public var ag_blz_or_bic(get,set):String;
@@ -126,7 +125,7 @@ class BankTransfer extends ORM
 	public function clear_ag_blz_or_bic():String{
 		ag_blz_or_bic = '';
 		return ag_blz_or_bic;
-	}
+	}	
 		
 	@dataType("character varying(21)")
 	@:isVar public var zahlpfl_name(get,set):String;
@@ -152,7 +151,7 @@ class BankTransfer extends ORM
 	public function clear_zahlpfl_name():String{
 		zahlpfl_name = '';
 		return zahlpfl_name;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var zahlpfl_name2(get,set):String;
@@ -178,7 +177,7 @@ class BankTransfer extends ORM
 	public function clear_zahlpfl_name2():String{
 		zahlpfl_name2 = '';
 		return zahlpfl_name2;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var zahlpfl_strasse(get,set):String;
@@ -204,7 +203,7 @@ class BankTransfer extends ORM
 	public function clear_zahlpfl_strasse():String{
 		zahlpfl_strasse = '';
 		return zahlpfl_strasse;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var zahlpfl_name_ort(get,set):String;
@@ -230,7 +229,7 @@ class BankTransfer extends ORM
 	public function clear_zahlpfl_name_ort():String{
 		zahlpfl_name_ort = '';
 		return zahlpfl_name_ort;
-	}
+	}	
 		
 	@dataType("character varying(22)")
 	@:isVar public var zahlpfl_name_kto_or_iban(get,set):String;
@@ -256,7 +255,7 @@ class BankTransfer extends ORM
 	public function clear_zahlpfl_name_kto_or_iban():String{
 		zahlpfl_name_kto_or_iban = '';
 		return zahlpfl_name_kto_or_iban;
-	}
+	}	
 		
 	@dataType("character varying(11)")
 	@:isVar public var zahlpfl_name_blz_or_bic(get,set):String;
@@ -282,7 +281,7 @@ class BankTransfer extends ORM
 	public function clear_zahlpfl_name_blz_or_bic():String{
 		zahlpfl_name_blz_or_bic = '';
 		return zahlpfl_name_blz_or_bic;
-	}
+	}	
 		
 	@dataType("double precision")
 	@:isVar public var betrag(get,set):String;
@@ -308,7 +307,7 @@ class BankTransfer extends ORM
 	public function clear_betrag():String{
 		betrag = '';
 		return betrag;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var currency(get,set):String;
@@ -334,7 +333,7 @@ class BankTransfer extends ORM
 	public function clear_currency():String{
 		currency = '€';
 		return currency;
-	}
+	}	
 		
 	@dataType("character varying(5)")
 	@:isVar public var zahlart(get,set):String;
@@ -360,7 +359,7 @@ class BankTransfer extends ORM
 	public function clear_zahlart():String{
 		zahlart = 'BASIS';
 		return zahlart;
-	}
+	}	
 		
 	@dataType("date")
 	@:isVar public var termin(get,set):String;
@@ -386,7 +385,7 @@ class BankTransfer extends ORM
 	public function clear_termin():String{
 		termin = 'null';
 		return termin;
-	}
+	}	
 		
 	@dataType("character varying(22)")
 	@:isVar public var vwz1(get,set):String;
@@ -412,7 +411,7 @@ class BankTransfer extends ORM
 	public function clear_vwz1():String{
 		vwz1 = '';
 		return vwz1;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var vwz2(get,set):String;
@@ -438,7 +437,7 @@ class BankTransfer extends ORM
 	public function clear_vwz2():String{
 		vwz2 = '';
 		return vwz2;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var vwz3(get,set):String;
@@ -464,7 +463,7 @@ class BankTransfer extends ORM
 	public function clear_vwz3():String{
 		vwz3 = '';
 		return vwz3;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var vwz4(get,set):String;
@@ -490,7 +489,7 @@ class BankTransfer extends ORM
 	public function clear_vwz4():String{
 		vwz4 = '';
 		return vwz4;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var vwz5(get,set):String;
@@ -516,7 +515,7 @@ class BankTransfer extends ORM
 	public function clear_vwz5():String{
 		vwz5 = '';
 		return vwz5;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var vwz6(get,set):String;
@@ -542,7 +541,7 @@ class BankTransfer extends ORM
 	public function clear_vwz6():String{
 		vwz6 = '';
 		return vwz6;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var vwz7(get,set):String;
@@ -568,7 +567,7 @@ class BankTransfer extends ORM
 	public function clear_vwz7():String{
 		vwz7 = '';
 		return vwz7;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var vwz8(get,set):String;
@@ -594,7 +593,7 @@ class BankTransfer extends ORM
 	public function clear_vwz8():String{
 		vwz8 = '';
 		return vwz8;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var vwz9(get,set):String;
@@ -620,7 +619,7 @@ class BankTransfer extends ORM
 	public function clear_vwz9():String{
 		vwz9 = '';
 		return vwz9;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var ba_id(get,set):Int;
@@ -644,9 +643,9 @@ class BankTransfer extends ORM
 	}
 
 	public function clear_ba_id():Int{
-		ba_id = nextval('bank_transfers_buchungsanforderungid_seq';
+		trace('ba_id primary key cannot be empty');
 		return ba_id;
-	}
+	}	
 		
 	@dataType("bank_transfers_tracking_status")
 	@:isVar public var tracking_status(get,set):String;
@@ -672,7 +671,7 @@ class BankTransfer extends ORM
 	public function clear_tracking_status():String{
 		tracking_status = 'neu';
 		return tracking_status;
-	}
+	}	
 		
 	@dataType("date")
 	@:isVar public var anforderungs_datum(get,set):String;
@@ -698,7 +697,7 @@ class BankTransfer extends ORM
 	public function clear_anforderungs_datum():String{
 		anforderungs_datum = 'null';
 		return anforderungs_datum;
-	}
+	}	
 		
 	@dataType("date")
 	@:isVar public var rueck_datum(get,set):String;
@@ -724,7 +723,7 @@ class BankTransfer extends ORM
 	public function clear_rueck_datum():String{
 		rueck_datum = 'null';
 		return rueck_datum;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var cycle(get,set):String;
@@ -750,7 +749,7 @@ class BankTransfer extends ORM
 	public function clear_cycle():String{
 		cycle = '';
 		return cycle;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var ref_id(get,set):String;
@@ -776,7 +775,7 @@ class BankTransfer extends ORM
 	public function clear_ref_id():String{
 		ref_id = '';
 		return ref_id;
-	}
+	}	
 		
 	@dataType("character varying(11)")
 	@:isVar public var mandat_id(get,set):String;
@@ -802,7 +801,7 @@ class BankTransfer extends ORM
 	public function clear_mandat_id():String{
 		mandat_id = '';
 		return mandat_id;
-	}
+	}	
 		
 	@dataType("date")
 	@:isVar public var mandat_datum(get,set):String;
@@ -828,7 +827,7 @@ class BankTransfer extends ORM
 	public function clear_mandat_datum():String{
 		mandat_datum = 'null';
 		return mandat_datum;
-	}
+	}	
 		
 	@dataType("character varying(18)")
 	@:isVar public var ag_creditor_id(get,set):String;
@@ -854,7 +853,7 @@ class BankTransfer extends ORM
 	public function clear_ag_creditor_id():String{
 		ag_creditor_id = '';
 		return ag_creditor_id;
-	}
+	}	
 		
 	@dataType("character varying(4)")
 	@:isVar public var sequenz(get,set):String;
@@ -880,7 +879,7 @@ class BankTransfer extends ORM
 	public function clear_sequenz():String{
 		sequenz = '';
 		return sequenz;
-	}
+	}	
 		
 	@dataType("character varying(32)")
 	@:isVar public var super_ag_name(get,set):String;
@@ -906,32 +905,6 @@ class BankTransfer extends ORM
 	public function clear_super_ag_name():String{
 		super_ag_name = '';
 		return super_ag_name;
-	}
-		
-	@dataType("bigint")
-	@:isVar public var edited_by(get,set):Int;
-	var initial_edited_by:Int;
-	
-	function get_edited_by():Int{
-		return edited_by;
-	}
-
-	function set_edited_by(x:Int):Int{
-		if(edited_by != null)
-			modified('edited_by');
-		edited_by = x;
-		if(initial_edited_by == null)
-			initial_edited_by = edited_by; 
-		return edited_by;
-	}
-
-	public function reset_edited_by():Int{
-		return initial_edited_by;
-	}
-
-	public function clear_edited_by():Int{
-		edited_by = null;
-		return edited_by;
-	}
+	}	
 	
 }

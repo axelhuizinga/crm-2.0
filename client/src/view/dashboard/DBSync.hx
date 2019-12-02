@@ -30,7 +30,9 @@ class DBSync extends BaseForm
 
 	public static var menuItems:Array<SMItem> = [		
 		{label:'BenutzerDaten ',action:'showUserList'},
+		
 		{label:'BenutzerDaten Abgleich',action:'syncUserList'},
+		{label:'BuchungsDaten Abgleich',action:'importAllBookingRequests'},
 		{label:'Stammdaten Import ',action:'importAll'},
 		{label:'Abschlüsse Import ',action:'importDeals'},
 		{label:'Konten Import ',action:'importAccounts'},
@@ -168,6 +170,30 @@ class DBSync extends BaseForm
 			action:'syncAll'
 		}));
 	}
+
+		public function importAllBookingRequests(_):Void
+	{
+		trace(props.user.first_name);
+		App.store.dispatch(action.async.LivePBXSync.syncAll({
+			limit:50000,
+			maxImport:500000,
+			user:props.user,
+			offset:100000,
+			table:'bank_transfers',
+			className:'admin.SyncExternalBookings',
+			action:'syncAll'
+		}));
+	}
+
+	public function importBookingRequests() {
+		App.store.dispatch(LivePBXSync.importBookingRequests({
+			limit: 25000,
+			offset:0,
+			className: 'admin.SyncExternalBookings',
+			action: 'syncBookingRequests',
+			user:props.user
+		}));
+	}	
 
 	public function importDeals() {
 		App.store.dispatch(LivePBXSync.mergeContacts({

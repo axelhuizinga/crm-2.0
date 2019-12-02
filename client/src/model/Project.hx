@@ -46,9 +46,9 @@ class Project extends ORM
 	}
 
 	public function clear_id():Int{
-		id = null;
+		trace('id primary key cannot be empty');
 		return id;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
@@ -74,7 +74,7 @@ class Project extends ORM
 	public function clear_mandator():Int{
 		mandator = null;
 		return mandator;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var name(get,set):String;
@@ -100,7 +100,7 @@ class Project extends ORM
 	public function clear_name():String{
 		name = '';
 		return name;
-	}
+	}	
 		
 	@dataType("character varying(4096)")
 	@:isVar public var description(get,set):String;
@@ -126,7 +126,7 @@ class Project extends ORM
 	public function clear_description():String{
 		description = '';
 		return description;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
@@ -152,7 +152,7 @@ class Project extends ORM
 	public function clear_edited_by():Int{
 		edited_by = null;
 		return edited_by;
-	}
+	}	
 		
 	@dataType("double precision")
 	@:isVar public var provision_percent(get,set):String;
@@ -178,7 +178,7 @@ class Project extends ORM
 	public function clear_provision_percent():String{
 		provision_percent = '(0.0)';
 		return provision_percent;
-	}
+	}	
 		
 	@dataType("integer")
 	@:isVar public var cancellation_liable(get,set):String;
@@ -204,7 +204,7 @@ class Project extends ORM
 	public function clear_cancellation_liable():String{
 		cancellation_liable = '0';
 		return cancellation_liable;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var target_account(get,set):Int;
@@ -230,6 +230,6 @@ class Project extends ORM
 	public function clear_target_account():Int{
 		target_account = 0;
 		return target_account;
-	}
+	}	
 	
 }

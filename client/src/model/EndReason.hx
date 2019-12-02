@@ -44,7 +44,7 @@ class EndReason extends ORM
 	public function clear_id():Int{
 		id = null;
 		return id;
-	}
+	}	
 		
 	@dataType("character varying(64)")
 	@:isVar public var reason(get,set):String;
@@ -70,7 +70,7 @@ class EndReason extends ORM
 	public function clear_reason():String{
 		reason = '';
 		return reason;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
@@ -96,7 +96,7 @@ class EndReason extends ORM
 	public function clear_edited_by():Int{
 		edited_by = null;
 		return edited_by;
-	}
+	}	
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
@@ -122,6 +122,6 @@ class EndReason extends ORM
 	public function clear_mandator():Int{
 		mandator = null;
 		return mandator;
-	}
+	}	
 	
 }

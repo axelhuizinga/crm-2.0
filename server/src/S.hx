@@ -19,6 +19,7 @@ import model.data.Contacts;
 import model.admin.CreateHistoryTrigger;
 import model.admin.CreateUsers;
 import model.admin.SyncExternal;
+import model.admin.SyncExternalBookings;
 import model.admin.SyncExternalClients;
 import model.roles.Users;
 import model.tools.DB;
@@ -451,6 +452,32 @@ class S
 			trace(S.dbh.errorInfo());
 			Sys.exit(0);
 		}		
+		if (true || stmt.rowCount() == 1)
+		{
+			var colNames:Array<String> = tableFields(table, db);
+			var i = 0;
+			return [
+				for(c in colNames)			
+					c => stmt.getColumnMeta(i++)
+			];
+		}
+		trace(sql);
+		return null;
+	}
+
+	public static function columnsMeta1(table:String, db:String = 'crm'): Map<String,NativeArray>
+	{
+		var sql:String = comment(unindent,format) /*
+		select * 
+		from $table limit 1;
+		*/;
+		var stmt:PDOStatement = S.dbh.query(sql);
+		if (S.dbh.errorCode() != '00000')
+		{
+			trace(S.dbh.errorCode());
+			trace(S.dbh.errorInfo());
+			Sys.exit(0);
+		}		
 		if (stmt.rowCount() == 1)
 		{
 			var colNames:Array<String> = tableFields(table, db);
@@ -460,6 +487,7 @@ class S
 					c => stmt.getColumnMeta(i++)
 			];
 		}
+		trace(sql);
 		return null;
 	}
 		

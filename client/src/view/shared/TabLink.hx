@@ -18,12 +18,12 @@ class TabLink extends ReactComponentOfProps<TabLinkProps>
 {
 	override function render()
 	{
-		//trace(Reflect.fields(props));
+		//trace(Reflect.fields(props));+ '/List/get'
 		//trace(untyped props.staticContext);
 		//trace('${props.to} ${props.location.pathname}');
 		return jsx('
 		<li className=${props.location.pathname.indexOf(props.to) == 0 ?"is-active":""}>
-		<$NavLink to=${props.to + '/List/get'}>${props.children}</$NavLink></li>
+		<$NavLink to=${props.to}>${props.children}</$NavLink></li>
 		');		
 	}
 }

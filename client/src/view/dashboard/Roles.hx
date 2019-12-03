@@ -1,13 +1,9 @@
 package view.dashboard;
 
+import loader.AjaxLoader;
 import action.async.UserAccess;
-//import gigatables_react.Reactables.ReactableSettings;
 import haxe.Serializer;
 import haxe.ds.StringMap;
-//import haxe.Json;
-//import haxe.http.HttpJs;
-//import haxe.io.Bytes;
-import loader.AjaxLoader;
 import state.AppState;
 import react.ReactComponent.ReactFragment;
 import react.ReactComponent;
@@ -15,7 +11,6 @@ import shared.DbData;
 
 import loader.BinaryLoader;
 import view.table.Table;
-//import react.ReactComponent.ReactComponentOfProps;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
@@ -147,39 +142,6 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 		
 		trace(state.loading);
 		
-		//props.formApi.requests.push(
-		/*	BinaryLoader.create(
-			'${App.config.api}', 
-			{
-				id:props.user.id,
-				jwt:props.user.jwt,
-				className:'roles.Users',
-				action:'list',
-				filter:'active|TRUE',
-				dataSource:Serializer.run([
-					"users" => ["alias" => 'us',
-						"fields" => 'id,last_login'],
-					"user_groups" => [
-						"alias" => 'ug', 
-						"fields" => 'name', 
-						"jCond"=>'ug.id=us.user_group'],
-					"contacts" => [
-						"alias" => 'co', 
-						"fields" => 'first_name,last_name,email', 
-						"jCond"=>'contact=co.id']
-				]),
-				devIP:App.devIP
-			},
-			function(data:DbData)
-			{
-				UserAccess.jwtCheck(data);
-				trace(Reflect.fields(data));
-				//trace(data);
-				trace(data.dataRows[0]);
-				setState({dataTable:data.dataRows, loading:false});					
-				//setState({data:['userList'=>data.dataRows], loading:false});					
-			}
-		);*///TODO: move to thunked accessor
 	}
 	
 	/*override public function componentWillUnmount()

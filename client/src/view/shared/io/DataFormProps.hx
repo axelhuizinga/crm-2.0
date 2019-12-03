@@ -17,6 +17,7 @@ typedef DataFormProps =
 	>ChildrenRouteProps,
 	?dataStore:state.DataAccessState,
     ?formApi:FormApi,
+	?filter:String,
 	?fullWidth:Bool,	
 	?limit:Int,
 	?parentComponent:Dynamic,

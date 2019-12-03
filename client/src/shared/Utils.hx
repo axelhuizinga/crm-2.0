@@ -5,6 +5,7 @@ package shared;
  * @author axel@cunity.me
  */
 
+import react.ReactDOM;
 import haxe.ds.StringMap;
 import me.cunity.debug.Out;
 
@@ -123,5 +124,21 @@ class Utils
 	public static function errorStatus(status:String):String
 	{
 		return '<span className="error">$status</span>';
+	}
+
+	public static function keyMax(d:Array<Dynamic>, key:String):Float 
+	{
+		var res:Float = 0;
+		if(d.length==0)
+			return res;
+		trace(Type.typeof(d[0]));
+		for(el in d)
+		{
+			//trace('$key: ${el.get(key)}');
+			var v:Float = Std.parseFloat(el.get(key));
+			if(!Math.isNaN(v) && v>res)
+				res = v;
+		}
+		return res;
 	}
 }

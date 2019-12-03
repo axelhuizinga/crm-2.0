@@ -28,7 +28,7 @@ import loader.BinaryLoader;
 import view.table.Table;
 import model.Contact;
 
-class List extends BaseForm//ReactComponentOf<DataFormProps,FormState>
+class List extends BaseForm
 {
 	public static var menuItems:Array<SMItem> = [
 		//{label:'Anzeigen',action:'get'},

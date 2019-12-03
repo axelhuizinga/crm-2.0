@@ -440,10 +440,10 @@ class Model
 	 * @param pos 
 	 */
 
-	public function fetchAll(sql:String,dbh:PDO,req:String='', mode:Int=2,//PDO.FETCH_ASSOC
+	public function fetchAll(sql:String,dbh:PDO,req:String='', mode:Int=2,//PDO.FETCH_ASSOC,
 		?pos:PosInfos):NativeArray
 	{
-        var stmt:PDOStatement = S.syncDbh.query(sql);
+        var stmt:PDOStatement = dbh.query(sql);
 		if(untyped stmt==false)
 		{
 			trace(sql);
@@ -847,7 +847,8 @@ class Model
 		{
 			joinSql = buildJoin();
 		}			
-		if(param.exists('filter'))
+		trace('filter:${param.get('filter')}<');
+		if(param.exists('filter')&&param.get('filter')!='')
 			filterSql += buildCond(param.get('filter'));
 		Reflect.callMethod(this, Reflect.field(this,action), [param]);
 	}

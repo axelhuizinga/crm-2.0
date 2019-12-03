@@ -413,7 +413,7 @@ class BankTransfer extends ORM
 		return vwz1;
 	}	
 		
-	@dataType("character varying(64)")
+	@dataType("character varying(256)")
 	@:isVar public var vwz2(get,set):String;
 	var initial_vwz2:String;
 	

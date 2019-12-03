@@ -22,6 +22,7 @@ import model.admin.SyncExternal;
 import model.admin.SyncExternalBookings;
 import model.admin.SyncExternalClients;
 import model.roles.Users;
+import model.stats.History;
 import model.tools.DB;
 import Model.MData;
 import Model.RData;

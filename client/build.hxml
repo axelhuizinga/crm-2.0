@@ -5,8 +5,7 @@
 -lib react-next
 -lib react-router-4
 -lib redux
-#-lib redux-connect
-#-lib redux-thunk
+-lib d3-extern
 -lib CommentString
 -lib reselect
 -lib event-types 

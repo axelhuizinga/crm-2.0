@@ -5,29 +5,38 @@ import state.AppState;
 import react.ReactComponent;
 import react.ReactDateTimeClock;
 import react.ReactMacro.jsx;
-import redux.Redux.Dispatch;
+import react.router.Route;
+import react.router.RouterMatch;
+import react.router.Redirect;
 import react.Partial;
 import react.router.Route.RouteRenderProps;
-import view.LoginForm;
+import react.router.Switch;
+import react.router.NavLink;
+import view.shared.io.FormApi;
+import view.shared.DataProps;
 import view.shared.RouteTabProps;
+import view.shared.CompState;
+import view.shared.TabLink;
+import view.stats.History;
+import view.stats.Performance;
+import view.stats.Preview;
 
-
-import Webpack.*;
-
-
-//@:expose('default')
 @:connect
-class Reports extends ReactComponentOfProps<RouteTabProps>
-	
+class Reports extends ReactComponentOf<DataProps,CompState>	
 {
 	var mounted:Bool = false;
 	
-	public function new(?props:Dynamic, context:Dynamic)
+	public function new(?props:DataProps, context:Dynamic)
 	{
 		trace(context);
 		super(props);
 		//this.state = App.store.getState();
 		//trace(this.state);
+		if (props.match.url == '/Reports' && props.match.isExact)
+		{
+			trace('pushing2: /Reports/History');
+			props.history.push('/Reports/History/Chart/get');
+		}		
 	}
 	
 	override public function componentDidMount():Void 
@@ -49,22 +58,11 @@ class Reports extends ReactComponentOfProps<RouteTabProps>
 
 		return function(aState:state.AppState) 
 		{
-			var uState = aState.user;
-
-			//trace(uState);
-			
+			trace(Reflect.fields(aState));
 			return {
 				appConfig:aState.config,
-				redirectAfterLogin:aState.redirectAfterLogin,
-				user:uState/*
-				id:uState.id,
-				pass:uState.pass,
-				jwt:uState.jwt,
-				loggedIn:uState.loggedIn,
-				loginError:uState.loginError,
-				last_login:uState.last_login,
-				first_name:uState.first_name,
-				waiting:uState.waiting*/
+				//redirectAfterLogin:aState.redirectAfterLogin,
+				user:aState.user
 			};
 		};
 	}	
@@ -72,9 +70,21 @@ class Reports extends ReactComponentOfProps<RouteTabProps>
     override function render() {
         return jsx('
 		<>
-            <div className="tabComponent">
-				...
-            </div>
+            <div className="tabNav2" >
+				<$Tabs className="is-boxed" >
+					<$TabLink to="/Reports/History" ${...props} >Entwicklung</$TabLink>
+					<$TabLink to="/Reports/Performance" ${...props} >Leistung</$TabLink>
+					<$TabLink to="/Reports/Preview" ${...props} >Vorschau</$TabLink>
+				</$Tabs>
+			</div>
+            <div className="tabContent2" >
+			<$Switch>
+				<$Route path="/Reports/History/:section?/:action?/:id?"  ${...props} component={History}/>
+				<$Route path="/Reports/Performance/:section?/:action?/:id?"  ${...props} component={Performance}/>
+				<$Route path="/Reports/Preview/:section?/:action?/:id?"   ${...props} component={Preview}/>	
+				
+            </$Switch>
+			</div>
 			<StatusBar {...props}/>
         </>
         ');

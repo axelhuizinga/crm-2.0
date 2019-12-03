@@ -8,6 +8,7 @@
     "clean-css": "4.1.11",
     "core-js": "3",
     "css-loader": "2.0.2",
+    "d3": "^5.14.2",
     "flatpickr": "^4.6.3",
     "font-awesome": "^4.7.0",
     "prop-types": "15.6.2",

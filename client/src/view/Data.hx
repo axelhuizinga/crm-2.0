@@ -23,6 +23,7 @@ import react.router.Redirect;
 import react.router.Switch;
 import react.router.NavLink;
 import view.shared.io.FormApi;
+import view.shared.DataProps;
 import view.shared.RouteTabProps;
 import view.shared.CompState;
 import view.shared.TabLink;
@@ -41,11 +42,6 @@ import view.data.Accounts;
 using state.CState;
 using shared.Utils;
 
-typedef  DataProps = 
-{
-	>RouteTabProps,
-	redirect:Function
-}
 
 @:connect
 class Data extends ReactComponentOf<DataProps,CompState>

@@ -39,12 +39,8 @@ class Statement extends ORM
 {
 
 	public function new(props:StatementProps) {
-		super(props);
 		propertyNames = 'a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,aa,processed,id,edited_by,mandator'.split(',');
-		for(f in Reflect.fields(props))
-		{
-			Reflect.setField(this, f, Reflect.field(props, f));
-		}
+		super(props);
 	}	
 		
 	@dataType("bigint")

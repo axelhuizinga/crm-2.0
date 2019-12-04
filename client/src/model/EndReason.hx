@@ -12,12 +12,8 @@ class EndReason extends ORM
 {
 
 	public function new(props:EndReasonProps) {
-		super(props);
 		propertyNames = 'id,reason,edited_by,mandator'.split(',');
-		for(f in Reflect.fields(props))
-		{
-			Reflect.setField(this, f, Reflect.field(props, f));
-		}
+		super(props);
 	}	
 		
 	@dataType("bigint")

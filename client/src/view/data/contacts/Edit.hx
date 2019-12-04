@@ -1,4 +1,6 @@
 package view.data.contacts;
+import haxe.CallStack;
+import me.cunity.debug.Out;
 import haxe.rtti.Rtti;
 import js.html.DOMStringMap;
 import haxe.Json;
@@ -72,7 +74,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		trace(props.match.params);
-		initialState = {
+		state = initialState = {
 			id:null,//2000328,
 			edited_by: props.user.id,
 			mandator: props.user.mandator
@@ -96,9 +98,11 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		
 		if(props.dataStore.contactData != null)
 		trace(props.dataStore.contactData.keys().next());
+		//Out.dumpStack(CallStack.callStack());
 		// FOR NOW IGNORE THE dataStore and Observer
 		if(initialState.id!=null && props.dataStore.contactData != null && props.dataStore.contactData.exists(initialState.id))
 		{
+			actualState = {edited_by: props.user.id,mandator: props.user.mandator};
 			initialState = loadContactData(initialState.id);
 			//actualState = copy(initialState);
 			//select(props.data['id'], 
@@ -167,8 +171,8 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 	{
 		trace('loading:$id');
 		if(id == null)
-			return null;
-		actualState = {edited_by: props.user.id,mandator: props.user.mandator};
+			return initialState;
+		//actualState = {edited_by: props.user.id,mandator: props.user.mandator};
 
 		//contact.initFields();		
 		//{edited_by: props.user.id,mandator: 0};
@@ -185,12 +189,15 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				trace(ex);
 			}		
 		}
+		
 		contact = new Contact(actualState);
+		//contact = actualState;
 		trace(actualState);
 		//trace('Rtti:' + Rtti.getRtti(Contact).fields[0].meta);
 		trace(contact.fieldsModified);		
-		trace('contact.fieldsModified:' + contact.fieldsModified);
+		trace('contact.fieldsModified:' + contact.fieldsModified);		
 		initialState = contact.copy(data, actualState);
+		//initialState = copy(actualState);
 		compareStates();	
 		//trace(actualState);	
 		//trace(initialState);	

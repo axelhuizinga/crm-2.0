@@ -88,7 +88,7 @@ class AppStore
 	public function reduce(state:AppState, action:AppAction):AppState
 	{
 		trace(Reflect.fields(state));
-		//trace(action);
+		trace(action);
 		return switch(action)
 		{
 			case ApplySubState(subState):

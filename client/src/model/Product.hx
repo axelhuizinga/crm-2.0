@@ -16,12 +16,8 @@ class Product extends ORM
 {
 
 	public function new(props:ProductProps) {
-		super(props);
 		propertyNames = 'id,name,description,value,attributes,mandator,active,edited_by'.split(',');
-		for(f in Reflect.fields(props))
-		{
-			Reflect.setField(this, f, Reflect.field(props, f));
-		}
+		super(props);
 	}	
 		
 	@dataType("bigint")

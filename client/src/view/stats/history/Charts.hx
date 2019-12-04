@@ -1,5 +1,8 @@
 package view.stats.history;
 
+import js.html.MouseEvent;
+import js.d3.time.Time;
+import js.d3.locale.TimeFormat;
 import js.Browser;
 import js.html.Element;
 import shared.Utils;
@@ -8,6 +11,7 @@ import react.React.*;
 import react.ReactRef;
 import js.d3.selection.Selection;
 import js.d3.D3;
+import js.d3.D3.time;
 import view.shared.io.FormApi;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
@@ -225,8 +229,21 @@ class Charts extends BaseForm
 
 	function draw() {
 		trace(chartBox.outerHTML);		
-		var cW:Int = chartBox.parentElement.offsetWidth-10;
-		var cH:Int = chartBox.parentElement.offsetHeight-10;
+		var cW:Int = chartBox.offsetWidth-1;
+		var cH:Int = chartBox.offsetHeight-1;
+		//var formatTime = D3.time.format;//("%b %Y");//TimeFormat.iso(
+		var months = 'Jan,Feb,Mar,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez'.split(',');
+		var formatDate = function(dd:Dynamic){			
+			//trace(dd);
+			//var d:Date = Date.fromString(d.date);
+			var d = dd.get('date').split('-');
+			//trace(dd);
+			//return 'hi';
+			//trace('${months[Std.parseInt(d[1])-1]} ${d[0]}');
+			
+			return '${months[Std.parseInt(d[1])-1]} ${d[0]}';
+			//return '${months[dd.getUTCMonth()]} ${DateTools.format(dd, '%Y')}';
+		};
 		var maxSum:Float = Utils.keyMax(state.dataTable,'sum');
 		var maxCount:Int = Math.round(Utils.keyMax(state.dataTable, 'count'));
 		var cRatio:Float = cH/maxCount;
@@ -234,14 +251,32 @@ class Charts extends BaseForm
 		trace('$maxCount => $maxSum $cW: $cRatio $sRatio ${state.dataTable.length}');
 		if(svg!=null)
 			return;
+		var div = D3.select(".tabComponentForm").append("div")	
+			.attr("class", "tooltip")				
+			.style("opacity", 0);
 		svg = D3.select('.chartBox').append('svg').attr('width',cW).attr('height', cH);
 
 		//{var h = Std.parseFloat(d.get('sum'))*sRatio;trace(h);return h;}
 		if(state.dataTable != null && state.dataTable.length>0)
 		{
-			var iW:Float = cW/state.dataTable.length;
-			svg.selectAll("rect").data(state.dataTable).enter().append("rect").attr('x', function(d:Dynamic,i:Int)return i*iW)
-			.attr('y',function(d:Dynamic,i:Int)return cH - sRatio * Std.parseFloat(d.get('sum'))).attr('width',iW-2).attr('height',function(d:Dynamic,i:Int)return Std.parseFloat(d.get('sum'))*sRatio).attr("fill", "green");
+			var iW:Float = Math.floor(cW/state.dataTable.length);
+			svg.selectAll("rect").data(state.dataTable).enter().append("rect").attr('x', function(d:Dynamic,i:Int)return Math.floor(i*iW))
+			.attr('y',function(d:Dynamic,i:Int)return Math.floor(cH - sRatio * Std.parseFloat(d.get('sum')))).attr('width',iW-2)
+			.attr('height',function(d:Dynamic,i:Int)return Math.floor(Std.parseFloat(d.get('sum'))*sRatio)).attr("class", "gblue")
+			.on("mouseover", function(d) {		
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            div.html(formatDate(d) + "<br/>"  + Std.parseInt(d.get('sum')) + '€<br>${d.get('count')} Spenden')	
+                .style("left", (cast D3.event).pageX + "px")	
+                .style("top", ((cast D3.event).pageY - 28) + "px");
+            })					
+        .on("mouseout", function(d) {		
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
+			//.attr('title',function(d:Dynamic, i:Int) return formatDate(d));
 		}
 			
 	}

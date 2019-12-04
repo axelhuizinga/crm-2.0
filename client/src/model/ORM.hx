@@ -7,6 +7,7 @@ import js.lib.RegExp;
 import react.ReactUtil.copy;
 using Lambda;
 
+@:keep
 class ORM {
 	
 	public var fieldsModified(default,null):Array<String>;

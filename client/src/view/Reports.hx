@@ -35,7 +35,7 @@ class Reports extends ReactComponentOf<DataProps,CompState>
 		if (props.match.url == '/Reports' && props.match.isExact)
 		{
 			trace('pushing2: /Reports/History');
-			props.history.push('/Reports/History/Chart/get');
+			props.history.push('/Reports/History/Charts/get');
 		}		
 	}
 	

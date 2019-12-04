@@ -26,12 +26,8 @@ class User extends ORM
 {
 
 	public function new(props:UserProps) {
-		super(props);
 		propertyNames = 'id,contact,last_login,password,user_name,active,edited_by,editing,settings,external,user_group,change_pass_required,online,last_request_time,request,mandator,last_locktime,phash'.split(',');
-		for(f in Reflect.fields(props))
-		{
-			Reflect.setField(this, f, Reflect.field(props, f));
-		}
+		super(props);
 	}	
 		
 	@dataType("bigint")

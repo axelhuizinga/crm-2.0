@@ -16,12 +16,8 @@ class Project extends ORM
 {
 
 	public function new(props:ProjectProps) {
-		super(props);
 		propertyNames = 'id,mandator,name,description,edited_by,provision_percent,cancellation_liable,target_account'.split(',');
-		for(f in Reflect.fields(props))
-		{
-			Reflect.setField(this, f, Reflect.field(props, f));
-		}
+		super(props);
 	}	
 		
 	@dataType("bigint")

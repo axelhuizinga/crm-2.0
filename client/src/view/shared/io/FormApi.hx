@@ -161,6 +161,7 @@ class FormApi
 	
 	public function itemHandler(e:Event)
 	{
+		e.preventDefault();
 		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
 		var dataSet:DOMStringMap = cast(e.target, ButtonElement).dataset;
 		//trace(dataSet);

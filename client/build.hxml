@@ -1,5 +1,4 @@
 -lib haxe-loader
-#:git:https://github.com/axelhuizinga/webpack-haxe-loader.git
 -lib history
 -lib hxbit
 -lib react-next
@@ -11,8 +10,6 @@
 -lib event-types 
 -lib js-object
 -lib tink_core
-#-lib tink_hxx
-#-lib deep_equal
 
 -cp /opt/src/lib
 -cp lib

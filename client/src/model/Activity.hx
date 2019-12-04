@@ -14,12 +14,8 @@ class Activity extends ORM
 {
 
 	public function new(props:ActivityProps) {
-		super(props);
 		propertyNames = 'id,table,title,active,edited_by,activated_at'.split(',');
-		for(f in Reflect.fields(props))
-		{
-			Reflect.setField(this, f, Reflect.field(props, f));
-		}
+		super(props);
 	}	
 		
 	@dataType("bigint")

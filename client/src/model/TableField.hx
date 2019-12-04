@@ -19,12 +19,8 @@ class TableField extends ORM
 {
 
 	public function new(props:TableFieldProps) {
-		super(props);
 		propertyNames = 'id,table_name,mandator,field_name,readonly,element,any,required,use_as_index,admin_only,field_type'.split(',');
-		for(f in Reflect.fields(props))
-		{
-			Reflect.setField(this, f, Reflect.field(props, f));
-		}
+		super(props);
 	}	
 		
 	@dataType("bigint")

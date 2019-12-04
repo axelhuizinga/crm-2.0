@@ -17,12 +17,8 @@ class UserInterface extends ORM
 {
 
 	public function new(props:UserInterfaceProps) {
-		super(props);
 		propertyNames = 'id,key,content,classPath,component,edited_by,updated_at,locale,mandator'.split(',');
-		for(f in Reflect.fields(props))
-		{
-			Reflect.setField(this, f, Reflect.field(props, f));
-		}
+		super(props);
 	}	
 		
 	@dataType("bigint")

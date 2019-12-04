@@ -41,12 +41,8 @@ class BankTransfer extends ORM
 {
 
 	public function new(props:BankTransferProps) {
-		super(props);
 		propertyNames = 'ag_name,ag_konto_or_iban,ag_blz_or_bic,zahlpfl_name,zahlpfl_name2,zahlpfl_strasse,zahlpfl_name_ort,zahlpfl_name_kto_or_iban,zahlpfl_name_blz_or_bic,betrag,currency,zahlart,termin,vwz1,vwz2,vwz3,vwz4,vwz5,vwz6,vwz7,vwz8,vwz9,ba_id,tracking_status,anforderungs_datum,rueck_datum,cycle,ref_id,mandat_id,mandat_datum,ag_creditor_id,sequenz,super_ag_name'.split(',');
-		for(f in Reflect.fields(props))
-		{
-			Reflect.setField(this, f, Reflect.field(props, f));
-		}
+		super(props);
 	}	
 		
 	@dataType("character varying(64)")
@@ -75,7 +71,7 @@ class BankTransfer extends ORM
 		return ag_name;
 	}	
 		
-	@dataType("character varying(18)")
+	@dataType("character varying(32)")
 	@:isVar public var ag_konto_or_iban(get,set):String;
 	var initial_ag_konto_or_iban:String;
 	
@@ -829,7 +825,7 @@ class BankTransfer extends ORM
 		return mandat_datum;
 	}	
 		
-	@dataType("character varying(18)")
+	@dataType("character varying(32)")
 	@:isVar public var ag_creditor_id(get,set):String;
 	var initial_ag_creditor_id:String;
 	

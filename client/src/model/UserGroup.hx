@@ -14,12 +14,8 @@ class UserGroup extends ORM
 {
 
 	public function new(props:UserGroupProps) {
-		super(props);
 		propertyNames = 'id,name,description,can,mandator,edited_by'.split(',');
-		for(f in Reflect.fields(props))
-		{
-			Reflect.setField(this, f, Reflect.field(props, f));
-		}
+		super(props);
 	}	
 		
 	@dataType("bigint")

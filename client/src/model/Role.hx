@@ -14,12 +14,8 @@ class Role extends ORM
 {
 
 	public function new(props:RoleProps) {
-		super(props);
 		propertyNames = 'id,name,description,permissions,edited_by,mandator'.split(',');
-		for(f in Reflect.fields(props))
-		{
-			Reflect.setField(this, f, Reflect.field(props, f));
-		}
+		super(props);
 	}	
 		
 	@dataType("bigint")

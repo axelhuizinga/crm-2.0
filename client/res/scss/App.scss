@@ -911,3 +911,32 @@ form td, form caption
 	width:auto;
 	margin-left: 1rem;;
 }
+/*** D3 CHARTS ***/
+
+div.tooltip {	
+    position: fixed;			
+    text-align: center;			
+   /* width: 80px;					
+    height: 48px;		*/			
+    padding: 0.8rem;				
+    font: 12px sans-serif;		
+    background: rgb(235, 224, 69);	
+    border: 0px;		
+    border-radius: 8px;			
+	pointer-events: none;	
+	white-space: nowrap;		
+}
+
+.chartBox
+{
+	margin:2rem;
+	display: flex;
+	flex-grow: 1;
+}
+$lightGradient:linear-gradient(0deg $darkBlue, $paleBlue);
+.gblue
+{
+	/*background-image: $lightGradient;*/
+	fill: $logoBlue;
+	
+}

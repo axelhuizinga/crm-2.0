@@ -16,12 +16,8 @@ class Mandator extends ORM
 {
 
 	public function new(props:MandatorProps) {
-		super(props);
 		propertyNames = 'id,contact,name,description,any,edited_by,parent,last_locktime'.split(',');
-		for(f in Reflect.fields(props))
-		{
-			Reflect.setField(this, f, Reflect.field(props, f));
-		}
+		super(props);
 	}	
 		
 	@dataType("bigint")

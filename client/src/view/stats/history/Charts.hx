@@ -255,8 +255,28 @@ class Charts extends BaseForm
 			.attr("class", "tooltip")				
 			.style("opacity", 0);
 		svg = D3.select('.chartBox').append('svg').attr('width',cW).attr('height', cH);
+		var svgDefs = svg.append('defs');
 
-		//{var h = Std.parseFloat(d.get('sum'))*sRatio;trace(h);return h;}
+		var mainGradient = svgDefs.append('linearGradient')			
+			.attr('x1', '0')
+			.attr('y1', '100%')
+			.attr('x2', '0')
+			.attr('y2', '0')
+			.attr('id', 'mainGradient');
+
+		// Create the stops of the main gradient. Each stop will be assigned
+		// a class to style the stop using CSS.
+		mainGradient.append('stop')
+			.attr('class', 'stop-bottom')
+			.attr('offset', '0');
+
+		mainGradient.append('stop')
+			.attr('class', 'stop-top')
+			.attr('offset', '1');
+	
+		mainGradient.attr('gradientUnits', 'userSpaceOnUse');
+			//.attr("gradientTransform", "rotate(270)");
+		//{var h = Std.parseFloat(d.get('sum'))*sRatio;trace(h);return h;}.attr("gradientTransform", "rotate(" + d3.select("#range1").property("value")+")");
 		if(state.dataTable != null && state.dataTable.length>0)
 		{
 			var iW:Float = Math.floor(cW/state.dataTable.length);

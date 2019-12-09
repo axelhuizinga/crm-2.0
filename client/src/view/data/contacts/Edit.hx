@@ -275,7 +275,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		/*{
 			//trace('$name => $el');
 			//trace(el.value);
-		});		*/
+		});		
 		var doc:Document = Browser.window.document;
 
 		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
@@ -312,14 +312,50 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		//setState({actualState: actualState});
 		compareStates();
 		//trace(initialState);
-		//trace(actualState);
-		update(actualState);
+		//trace(actualState);*/
+		update();
 	}
 
 
-	function update(aState:Dynamic)
+	function update()
 	{
 		//trace(Reflect.fields(aState));
+		var doc:Document = Browser.window.document;
+
+		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
+		var elements:HTMLCollection = formElement.elements;
+		for(k in dataAccess['update'].view.keys())
+		{
+			if(k=='id')
+				continue;
+			try 
+			{
+				var item:Dynamic = elements.namedItem(k);
+				//trace('$k => ${item.type}:' + item.value);
+				Reflect.setField(actualState, item.name, switch (item.type)
+				{
+					//case DateControl|DateTimrControl:
+
+					case 'checkbox':
+					//trace('${item.name}:${item.checked?true:false}');
+					item.checked?1:0;
+					case 'select-multiple'|'select-one':
+					var sOpts:HTMLOptionsCollection = item.selectedOptions;
+					//trace (sOpts.length);
+					sOpts.length>1 ? [for(o in 0...sOpts.length)sOpts[o].value ].join('|'):item.value;
+					default:
+					//trace('${item.name}:${item.value}');
+					item.value;
+				});			
+			}
+			catch(ex:Dynamic)
+			{
+				trace(ex);
+			}
+		}
+		//setState({actualState: actualState});
+		compareStates();
+		var aState:Dynamic = copy(actualState);
 		var dbaProps:DBAccessProps = 
 		{
 			action:'update',

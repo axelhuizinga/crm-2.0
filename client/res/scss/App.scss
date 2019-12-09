@@ -929,14 +929,20 @@ div.tooltip {
 
 .chartBox
 {
-	margin:2rem;
+	margin:8rem;
 	display: flex;
 	flex-grow: 1;
 }
 $lightGradient:linear-gradient(0deg $darkBlue, $paleBlue);
+.stop-bottom{
+	stop-color: $darkBlue;
+}
+.stop-top{
+	stop-color: $paleBlue;
+}
 .gblue
 {
-	/*background-image: $lightGradient;*/
-	fill: $logoBlue;
-	
+	/*background-image: $lightGradient;
+	fill: $logoBlue;*/
+	fill: url(#mainGradient);
 }

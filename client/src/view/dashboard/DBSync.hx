@@ -176,7 +176,7 @@ class DBSync extends BaseForm
 		trace(props.user.first_name);
 		App.store.dispatch(action.async.LivePBXSync.syncAll({
 			limit:50000,
-			maxImport:500000,
+			maxImport:50000,
 			user:props.user,
 			offset:100000,
 			table:'bank_transfers',

@@ -54,8 +54,9 @@ class Data extends ReactComponentOf<DataProps,CompState>
 	{
 		state = {hasError:false,mounted:false};
 		//trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} user:${props.user}');
-		super(props);
+		super(props);		
 		trace(props.match);
+		trace(props.store);
 		if (props.match.url == '/Data' && props.match.isExact)
 		{
 			trace('pushing2: /Data/Contacts/List/get');

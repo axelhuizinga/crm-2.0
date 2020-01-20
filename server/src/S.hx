@@ -131,7 +131,7 @@ class S
 		if(action.indexOf('sync')==0)
 		{
 			//CONNECT DIALER DB	
-			//trace('PDO.ATTR_PERSISTENT:${PDO.ATTR_PERSISTENT}');
+			trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM');
 			syncDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM',
 				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
 			//trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 

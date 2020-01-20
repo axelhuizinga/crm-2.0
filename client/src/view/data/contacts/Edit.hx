@@ -419,7 +419,8 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				];
 				trace(dbaProps.dataSource["contacts"]["filter"]);
 		}
-		App.store.dispatch(DBAccess.execute(dbaProps));
+		props.store.dispatch(DBAccess.execute(dbaProps));
+		//App.store.dispatch(DBAccess.execute(dbaProps).then(function(d:Dynamic)trace(d)));
 
 		//props.parentComponent.props.edit(dbaProps);
 	}

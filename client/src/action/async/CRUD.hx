@@ -17,7 +17,7 @@ import redux.thunk.Thunk;
 import shared.DbData;
 import loader.BinaryLoader;
 import view.shared.OneOf;
-using action.async.DBAccessProps;
+import DBAccessProps;
 using shared.Utils;
 /**
  * ...
@@ -35,7 +35,7 @@ class DBAccess
 		
 	}
 
-	public static function get(props:DBAccessProps) 
+	public static function read(props:DBAccessProps) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			//trace(getState());
@@ -109,7 +109,7 @@ class DBAccess
 		});
 	}
 
-	public static function execute(props:DBAccessProps) 
+	public static function update(props:DBAccessProps) 
 	{	//trace(props);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
 			trace(props);

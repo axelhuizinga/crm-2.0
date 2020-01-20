@@ -34,9 +34,17 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 	var dataAccess:DataAccess;	
 	var actualState:Dynamic;	
 	var initialState:Dynamic;
+	var formApi:FormApi;
+	var formBuilder:FormBuilder;
 	var formFields:DataView;
 	var formRef:ReactRef<FormElement>;
 	var fieldNames:Array<String>;
+
+	/*public function new(props:DataFormProps) {
+		super(props);
+		formApi = new FormApi(this, init.sideMenu),
+			formBuilder:new FormBuilder(comp),		
+	}*/
 
 	public function compareStates() {
 		for(f in Reflect.fields(initialState))

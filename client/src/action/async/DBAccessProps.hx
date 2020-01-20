@@ -14,4 +14,4 @@ typedef DBAccessProps =
 	?offset:Int,
 	?table:String,
 	?user:UserState
-}
+};

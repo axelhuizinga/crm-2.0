@@ -1,5 +1,6 @@
 package view.stats.history;
 
+import js.html.svg.StopElement;
 import js.html.MouseEvent;
 import js.d3.time.Time;
 import js.d3.locale.TimeFormat;
@@ -228,7 +229,7 @@ class Charts extends BaseForm
 	}
 
 	function draw() {
-		trace(chartBox.outerHTML);		
+		//trace(chartBox.outerHTML);		
 		var cW:Int = chartBox.offsetWidth-1;
 		var cH:Int = chartBox.offsetHeight-1;
 		//var formatTime = D3.time.format;//("%b %Y");//TimeFormat.iso(
@@ -248,7 +249,7 @@ class Charts extends BaseForm
 		var maxCount:Int = Math.round(Utils.keyMax(state.dataTable, 'count'));
 		var cRatio:Float = cH/maxCount;
 		var sRatio:Float = cH/maxSum;
-		trace('$maxCount => $maxSum $cW: $cRatio $sRatio ${state.dataTable.length}');
+		trace('$maxCount => $maxSum $cW: $cRatio $sRatio ${state.dataTable.length} svg: ${svg!=null?svg:null}');
 		if(svg!=null)
 			return;
 		var div = D3.select(".tabComponentForm").append("div")	
@@ -262,7 +263,8 @@ class Charts extends BaseForm
 			.attr('y1', '100%')
 			.attr('x2', '0')
 			.attr('y2', '0')
-			.attr('id', 'mainGradient');
+			.attr('id', 'mainGradient')
+			.attr('gradientUnits', 'userSpaceOnUse');
 
 		// Create the stops of the main gradient. Each stop will be assigned
 		// a class to style the stop using CSS.
@@ -273,9 +275,11 @@ class Charts extends BaseForm
 		mainGradient.append('stop')
 			.attr('class', 'stop-top')
 			.attr('offset', '1');
-	
-		mainGradient.attr('gradientUnits', 'userSpaceOnUse');
-			//.attr("gradientTransform", "rotate(270)");
+
+		var stop1:StopElement = untyped mainGradient.selectAll('stop').node();
+		trace(stop1.classList.value);
+		trace(stop1.nextElementSibling.classList.value);
+		//.attr("gradientTransform", "rotate(270)");
 		//{var h = Std.parseFloat(d.get('sum'))*sRatio;trace(h);return h;}.attr("gradientTransform", "rotate(" + d3.select("#range1").property("value")+")");
 		if(state.dataTable != null && state.dataTable.length>0)
 		{

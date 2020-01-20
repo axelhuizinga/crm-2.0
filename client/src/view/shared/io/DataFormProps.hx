@@ -5,10 +5,12 @@ import haxe.Constraints.Function;
 import haxe.ds.IntMap;
 import react.ReactComponent;
 import react.ReactComponent.ReactFragment;
+import state.AppState;
 import state.FormState;
 import react.router.RouterMatch;
 import react.router.Route;
 import redux.Redux.Dispatch;
+import redux.Store;
 import shared.DbData;
 import state.UserState;
 
@@ -25,6 +27,7 @@ typedef DataFormProps =
 	?setStateFromChild:FormState->Void,
 	?setFormState:FormState->Void,
 	?sideMenu:SMenuProps,
+	?store:Store<AppState>,
 	?storeContactsList:DbData->Void,
 	?storeData:String->DataAction->Void,
 	?storeFormChange:String->FormState->Void,

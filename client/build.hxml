@@ -15,7 +15,7 @@
 -cp lib
 -cp src
 
--js ../httpdocs/app.js
+-js ../httpdocs/js/app.js
 -dce std
 #--no-traces
 #-D eval-stack

@@ -1,5 +1,8 @@
 package view.stats.history;
 
+import js.d3.color.LAB;
+import js.d3.color.HSL;
+import eventtypes.electron.InAppPurchaseEventType;
 import js.html.svg.StopElement;
 import js.html.MouseEvent;
 import js.d3.time.Time;
@@ -229,9 +232,11 @@ class Charts extends BaseForm
 	}
 
 	function draw() {
-		//trace(chartBox.outerHTML);		
+		//trace(chartBox.outerHTML);	
 		var cW:Int = chartBox.offsetWidth-1;
 		var cH:Int = chartBox.offsetHeight-1;
+		var lH:Int = cH*0.064>24?Math.round(cH*0.064):24;
+		cH -= lH;
 		//var formatTime = D3.time.format;//("%b %Y");//TimeFormat.iso(
 		var months = 'Jan,Feb,Mar,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez'.split(',');
 		var formatDate = function(dd:Dynamic){			
@@ -255,7 +260,7 @@ class Charts extends BaseForm
 		var div = D3.select(".tabComponentForm").append("div")	
 			.attr("class", "tooltip")				
 			.style("opacity", 0);
-		svg = D3.select('.chartBox').append('svg').attr('width',cW).attr('height', cH);
+		svg = D3.select('.chartBox').append('svg').attr('width',cW).attr('height', cH+lH);
 		var svgDefs = svg.append('defs');
 
 		var mainGradient = svgDefs.append('linearGradient')			
@@ -283,10 +288,14 @@ class Charts extends BaseForm
 		//{var h = Std.parseFloat(d.get('sum'))*sRatio;trace(h);return h;}.attr("gradientTransform", "rotate(" + d3.select("#range1").property("value")+")");
 		if(state.dataTable != null && state.dataTable.length>0)
 		{
-			var iW:Float = Math.floor(cW/state.dataTable.length);
-			svg.selectAll("rect").data(state.dataTable).enter().append("rect").attr('x', function(d:Dynamic,i:Int)return Math.floor(i*iW))
-			.attr('y',function(d:Dynamic,i:Int)return Math.floor(cH - sRatio * Std.parseFloat(d.get('sum')))).attr('width',iW-2)
-			.attr('height',function(d:Dynamic,i:Int)return Math.floor(Std.parseFloat(d.get('sum'))*sRatio)).attr("class", "gblue")
+			trace(state.dataTable[0]);
+			var iW:Int = Math.floor(cW/state.dataTable.length)-2;
+			var iX:Float = cW/state.dataTable.length;
+			trace(svg);
+			svg.selectAll(null).data(state.dataTable).enter().append("rect")
+				.attr('x', function(d:Dynamic,i:Int)return i*(iX))
+			.attr('y',function(d:Dynamic,i:Int)return Math.floor(cH - sRatio * Std.parseFloat(d.get('sum')))).attr('width',iW)
+			.attr('height',function(d:Dynamic,i:Int)return Math.ceil(Std.parseFloat(d.get('sum'))*sRatio)).attr("class", "gblue")
 			.on("mouseover", function(d) {		
             div.transition()		
                 .duration(200)		
@@ -295,14 +304,54 @@ class Charts extends BaseForm
                 .style("left", (cast D3.event).pageX + "px")	
                 .style("top", ((cast D3.event).pageY - 28) + "px");
             })					
-        .on("mouseout", function(d) {		
-            div.transition()		
-                .duration(500)		
-                .style("opacity", 0);	
-        });
+			.on("mouseout", function(d) {		
+				div.transition()		
+					.duration(500)		
+					.style("opacity", 0);	
+			});
 			//.attr('title',function(d:Dynamic, i:Int) return formatDate(d));
+			drawLegend(cH, lH, cW, iW, iX);
 		}
 			
+	}
+
+	function drawLegend(top:Int,h:Int,lW:Int, iW:Int, iX:Float) {
+		trace(svg);//data(state.dataTable).enter().
+		trace('top:$top height:$h width:$lW');
+		var legend:Selection = svg.append("g").attr('x', 0)
+		.attr('transform','translate(0 '+top+')')
+		.attr('id','legend')
+		.attr('width',lW)
+		.attr('height',h)
+		.style("fill", 'rgba(0,0,0,0)');
+		var years:Array<String> = state.dataTable.map(function (d) return d.get('date').split('-')[0]);
+		//trace(years);
+		var actYear:String = years[0];
+		var yearX:Float = 0.0;
+		var i:Int = 0;
+		for (iYear in years){
+			trace('$i $iYear');
+			if(actYear != iYear)
+			{
+				legend.append('rect')
+				.attr('y', 2)
+				.attr('shape-rendering',"crispEdges")
+				.attr('x', yearX)
+				.attr('width', (i*iX)-3)
+				.attr('height', h-4)
+				.attr('fill', 'rgba(0,0,0,0)')
+				.attr('stroke', '#666')
+				.attr('stroke-width', '1');
+				legend.append('text').text(actYear)
+				.attr('stroke', '#333')
+				.attr('y', h/2)
+				.attr('x', yearX + ((i*iX)-3)*.5);
+				actYear = iYear;	
+				yearX = i*iX;		
+			}
+			i++;
+		};
+		
 	}
 	
 	function renderResults():ReactFragment

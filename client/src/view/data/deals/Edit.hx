@@ -9,7 +9,7 @@ import shared.DbData;
 import shared.DBMetaData;
 import view.shared.FormField;
 import state.FormState;
-import view.data.deals.model.Deals;
+import model.deals.DealsModel;
 import view.shared.SMItem;
 import view.shared.SMenuProps;
 import view.shared.io.FormApi;
@@ -58,7 +58,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		dataDisplay = Deals.dataDisplay;
+		dataDisplay = DealsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
 		trace(state.loading);

@@ -1,4 +1,4 @@
-package view.data.contacts;
+package view.data.qc;
 import react.router.RouterMatch;
 import js.Browser;
 import js.html.NodeList;
@@ -33,7 +33,7 @@ class List extends BaseForm
 	public static var menuItems:Array<SMItem> = [
 		//{label:'Anzeigen',action:'get'},
 		{label:'Bearbeiten',action:'update',section: 'Edit'},
-		{label:'Neu', action:'insert',section: 'Edit'},		
+	//	{label:'Neu', action:'insert',section: 'Edit'},		
 		{label:'Löschen',action:'delete'},
 		{label:'Auswahl aufheben',action:'selectionClear'},
 	//	{label:'Auswahl umkehren',action:'selectionInvert'},
@@ -109,7 +109,7 @@ class List extends BaseForm
 			jwt:props.user.jwt,
 			className:'data.Contacts',
 			action:'get',
-			filter:(props.match.params.id!=null?'id|${props.match.params.id}':'mandator|1'),
+			filter:(props.match.params.id!=null?'id|${props.match.params.id}':'mandator|1,'),
 			devIP:App.devIP,
 			limit:props.limit,
 			offset:offset>0?offset:0,

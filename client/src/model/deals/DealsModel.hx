@@ -1,4 +1,4 @@
-package view.data.deals.model;
+package model.deals;
 
 import react.ReactMacro.jsx;
 
@@ -9,7 +9,7 @@ import view.table.Table.DataState;
  * @author axel@cunity.me
  */
 
-class Deals
+class DealsModel
 {
 	public static var listColumns:Map<String,DataColumn> = [
 		'first_name'=>{label:'Vorname', flexGrow:0},

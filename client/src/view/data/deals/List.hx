@@ -1,5 +1,6 @@
 package view.data.deals;
 
+import model.deals.DealsModel;
 import state.AppState;
 import haxe.Constraints.Function;
 import me.cunity.debug.Out;
@@ -9,7 +10,7 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import shared.DbData;
 import shared.DBMetaData;
-import view.data.deals.model.Deals;
+//import view.data.deals.model.Deals;
 import view.shared.FormField;
 import state.FormState;
 import view.shared.SMItem;
@@ -37,7 +38,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		dataDisplay = Deals.dataDisplay;
+		dataDisplay = DealsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
 		trace(state.loading);

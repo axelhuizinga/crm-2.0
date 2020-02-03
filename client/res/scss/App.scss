@@ -932,6 +932,11 @@ div.tooltip {
 	margin:8rem;
 	display: flex;
 	flex-grow: 1;
+	font-family: Linotte-SemiBold;
+	shape-rendering: crispEdges;
+}
+.chartBox text{
+	alignment-baseline:central
 }
 $lightGradient:linear-gradient(0deg $darkBlue, $paleBlue);
 .stop-bottom{

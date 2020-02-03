@@ -64,13 +64,13 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 		return jsx('
 		<>
 			<TabLink to="/DashBoard" ${...props}>DashBoard</TabLink> 
-			<TabLink to="/Data" ${...props}>Daten</TabLink>
-			<TabLink to="/Qc" ${...props}>QC</TabLink>
+			<TabLink to="/Data" ${...props}>Daten</TabLink>			
 			<TabLink to="/Accounting" ${...props}>Buchhaltung</TabLink>
 			<TabLink to="/Reports" ${...props}>Berichte</TabLink>
 			<i className = "icon abs-right fa fa-sign-out"  title = "Abmelden"  onClick=${logOut}
 			style={{margin:".8rem .5rem",fontSize:"1.7rem", cursor:"pointer", color:"#801111"}}></i>
 		</>
 		');
+		//<TabLink to="/Qc" ${...props}>QC</TabLink>
 	}
 }

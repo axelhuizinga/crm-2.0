@@ -55,7 +55,7 @@ using  shared.Utils;
  */
 
 @:connect
-class Contacts extends ReactComponentOf<DataFormProps,FormState>
+class QC extends ReactComponentOf<DataFormProps,FormState>
 {
 	
 	var dataDisplay:Map<String,DataState>;

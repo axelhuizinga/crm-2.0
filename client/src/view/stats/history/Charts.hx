@@ -296,11 +296,12 @@ class Charts extends BaseForm
 				.attr('x', function(d:Dynamic,i:Int)return i*(iX))
 			.attr('y',function(d:Dynamic,i:Int)return Math.floor(cH - sRatio * Std.parseFloat(d.get('sum')))).attr('width',iW)
 			.attr('height',function(d:Dynamic,i:Int)return Math.ceil(Std.parseFloat(d.get('sum'))*sRatio)).attr("class", "gblue")
-			.on("mouseover", function(d) {		
+			.on("mouseover", function(d) {	
+				var avg = App.sprintf('%.2f',Std.parseInt(d.get('sum'))/Std.parseInt(d.get('count')));
             div.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
-            div.html(formatDate(d) + "<br/>"  + Std.parseInt(d.get('sum')) + '€<br>${d.get('count')} Spenden')	
+			div.html(formatDate(d) + "<br/>"  + Std.parseInt(d.get('sum')) + '€<br>${d.get('count')} Spenden' + '<br>$avg €/Spende')
                 .style("left", (cast D3.event).pageX + "px")	
                 .style("top", ((cast D3.event).pageY - 28) + "px");
             })					
@@ -329,29 +330,61 @@ class Charts extends BaseForm
 		var actYear:String = years[0];
 		var yearX:Float = 0.0;
 		var i:Int = 0;
+		var iYear:String = '';
 		for (iYear in years){
-			trace('$i $iYear');
+			//trace('$i $iYear');
 			if(actYear != iYear)
 			{
-				legend.append('rect')
+				var svg:Selection = legend.append('svg')
+				.attr('y', 0)
+				.attr('x', yearX)				
+				.attr('width', (i*iX)-3-yearX)				
+				.attr('height', h)
+				.attr('viewBox', '0 0 ${(i*iX)-2-yearX} $h');
+				svg.append('rect')				
+				.attr('x', 0.5)
 				.attr('y', 2)
-				.attr('shape-rendering',"crispEdges")
-				.attr('x', yearX)
-				.attr('width', (i*iX)-3)
+				.attr('width', (i*iX)-3-yearX)
 				.attr('height', h-4)
-				.attr('fill', 'rgba(0,0,0,0)')
-				.attr('stroke', '#666')
-				.attr('stroke-width', '1');
-				legend.append('text').text(actYear)
-				.attr('stroke', '#333')
-				.attr('y', h/2)
-				.attr('x', yearX + ((i*iX)-3)*.5);
+				.attr('fill', '#fff');
+				//.attr('stroke', '#666')
+				//.attr('stroke-width', '1');
+				svg.append('text').text(actYear)
+				.attr('text-anchor',"middle")
+				.attr('fill', '#33a')
+				.attr('y', '64%')
+				.attr('x', '50%')
+				.style('alignment-baseline','central');
 				actYear = iYear;	
 				yearX = i*iX;		
 			}
 			i++;
 		};
-		
+		if(actYear != iYear)
+		{
+			var svg:Selection = legend.append('svg')
+			.attr('y', 0)
+			.attr('x', yearX)				
+			.attr('width', (i*iX)-3-yearX)				
+			.attr('height', h)
+			.attr('viewBox', '0 0 ${(i*iX)-2-yearX} $h');
+			svg.append('rect')				
+			.attr('x', 0.5)
+			.attr('y', 2)
+			.attr('width', (i*iX)-3-yearX)
+			.attr('height', h-4)
+			.attr('fill', '#fff');
+			//.attr('stroke', '#666')
+			//.attr('stroke-width', '1');
+			svg.append('text').text(actYear)
+			.attr('y', '64%')
+			.attr('text-anchor',"middle")
+			.attr('fill', '#33a')
+			.attr('x', '50%')
+			.style('alignment-baseline','central');
+			actYear = iYear;	
+			yearX = i*iX;		
+		}
 	}
 	
 	function renderResults():ReactFragment

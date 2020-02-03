@@ -38,7 +38,7 @@ import state.AppState;
 import view.data.Contacts;
 import view.data.Deals;
 import view.data.Accounts;
-
+import view.data.QC;
 using state.CState;
 using shared.Utils;
 
@@ -139,8 +139,9 @@ class Data extends ReactComponentOf<DataProps,CompState>
 			<div className="tabNav2" >
 				<$Tabs className="is-boxed" >
 					<$TabLink to="/Data/Contacts" ${...props} >Kontakte</$TabLink>
-					<$TabLink to="/Data/Deals" ${...props} >Aufträge</$TabLink>
+					<$TabLink to="/Data/Deals" ${...props} >Aufträge</$TabLink>					
 					<$TabLink to="/Data/Accounts" ${...props} >Konten</$TabLink>
+					<$TabLink to="/Data/QC" ${...props} >QC</$TabLink>
 				</$Tabs>
 			</div>
             <div className="tabContent2" >
@@ -148,7 +149,7 @@ class Data extends ReactComponentOf<DataProps,CompState>
 				<$Route path="/Data/Contacts/:section?/:action?/:id?"  ${...props} component={Contacts}/>
 				<$Route path="/Data/Deals/:section?/:action?/:id?"  ${...props} component={Deals}/>
 				<$Route path="/Data/Accounts/:section?/:action?/:id?"   ${...props} component={Accounts}/>	
-				
+				<$Route path="/Data/QC/:section?/:action?/:id?"  ${...props} component={QC}/>
             </$Switch>
 			</div>
 			<$StatusBar ${...props}/>

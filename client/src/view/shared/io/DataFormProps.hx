@@ -1,8 +1,10 @@
 package view.shared.io;
 import action.DataAction;
+import action.async.DBAccessProps;
 import view.shared.io.FormApi;
 import haxe.Constraints.Function;
 import haxe.ds.IntMap;
+import js.lib.Promise;
 import react.ReactComponent;
 import react.ReactComponent.ReactFragment;
 import state.AppState;
@@ -22,6 +24,7 @@ typedef DataFormProps =
 	?filter:String,
 	?fullWidth:Bool,	
 	?limit:Int,
+	?load:DBAccessProps->Promise<Bool>,
 	?parentComponent:Dynamic,
 	?select:Function, // Int->IntMap<Map<String,Dynamic>>->RouterMatch->SelectType,
 	?setStateFromChild:FormState->Void,

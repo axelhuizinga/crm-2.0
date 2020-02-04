@@ -17,7 +17,7 @@ import redux.thunk.Thunk;
 import shared.DbData;
 import loader.BinaryLoader;
 import view.shared.OneOf;
-import DBAccessProps;
+import action.async.DBAccessProps;
 using shared.Utils;
 /**
  * ...
@@ -25,7 +25,7 @@ using shared.Utils;
  */
 
 
-class DBAccess
+class CRUD
 {
 	public static function create() {
 		
@@ -73,10 +73,7 @@ class DBAccess
 							if(!data.dataErrors.keys().hasNext())
 							{
 								trace(data.dataRows);
-								/*dispatch(AppAction.Data(SelectContacts([
-									for(row in data.dataRows)
-										Std.parseInt(row['id']) => row
-								])));//.then(function()trace('yeah'));*/
+
 								dispatch(Status(Update({text:switch ('${props.className}.${props.action}')
 								{
 									case "data.Contacts.get":

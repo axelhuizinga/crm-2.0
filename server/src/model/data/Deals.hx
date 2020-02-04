@@ -1,4 +1,5 @@
 package model.data;
+import Model;
 
 class Deals extends Model
 {
@@ -6,20 +7,15 @@ class Deals extends Model
 	{
 		//table = 'contacts';
 		super(param);
+		go();
 	}
-	
-	public static function _create(param:Map<String,String>):Contacts
-	{
-		trace(param);
-		var self:Contacts = new Contacts(param);		
 
-		if(action==null)
-		{
-			return self;
-		}
-		//trace(param);
-		Reflect.callMethod(self, Reflect.field(self,action), [param]);
-		return self;
-	}
+	function go():Void {
+		trace(action);
+		switch(action){
+			case _:
+				run();
+		}		
+	}	
 	
 }

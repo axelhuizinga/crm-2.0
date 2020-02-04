@@ -1,8 +1,12 @@
 package view.data.deals;
 
+import redux.Redux.Dispatch;
+import js.lib.Promise;
+import action.async.CRUD;
 import model.deals.DealsModel;
 import state.AppState;
 import haxe.Constraints.Function;
+import haxe.ds.IntMap;
 import me.cunity.debug.Out;
 import react.ReactComponent;
 import react.ReactEvent;
@@ -21,6 +25,7 @@ import view.shared.io.DataAccess;
 import loader.BinaryLoader;
 import view.table.Table;
 
+@:connect
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
@@ -35,15 +40,62 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
+
 	public function new(props) 
 	{
 		super(props);
 		dataDisplay = DealsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
+		//state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
+		//trace(state.loading);
+		state =  App.initEState({
+			dataTable:[],
+			loading:false,
+			dealsData:new IntMap(),			
+			selectedRows:[],
+			sideMenu:FormApi.initSideMenu2( this,
+				{
+					dataClassPath:'data.Deals',
+					label:'Liste',
+					section: 'List',
+					items: menuItems
+				}					
+				,{	
+					section: props.match.params.section==null? 'List':props.match.params.section, 
+					sameWidth: true
+				}),
+			values:new Map<String,Dynamic>()
+		},this);
+		if(props.match.params.section==null||props.match.params.action==null)
+		{
+			//var sData = App.store.getState().dataStore.contactData;			
+			var baseUrl:String = props.match.path.split(':section')[0];
+			trace('redirecting to ${baseUrl}List/get');
+			props.history.push('${baseUrl}List/get');
+			get(null);
+		}
+		else 
+		{
+			//
+			trace(props.match.params);
+		}		
 		trace(state.loading);
 	}
 	
+    static function mapDispatchToProps(dispatch:Dispatch) {
+        return {
+            load: function(param) return dispatch(CRUD.read({
+				className:'data.Deals',
+				action:'get',
+				filter:param.filter,
+				limit:param.limit,
+				offset:param.offset,
+				table:'deals',
+				user:param.user
+			}))
+        };
+	}
+		
 	static function mapStateToProps(aState:AppState) 
 	{
 		return {
@@ -57,17 +109,28 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
-	public function get(ev:ReactEvent):Void
+	public function get(ev:Dynamic):Void
 	{
-		trace('hi :)');
-		//return;
-		//dbMetaData = new  DBMetaData();
-		//dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
-		//trace(dbMetaData.dataFields.get(111));
-		var s:hxbit.Serializer = new hxbit.Serializer();
-		
-		//return;
-		state.formApi.requests.push( null);
+		trace('hi $ev');
+		var offset:Int = 0;
+		if(ev != null && ev.page!=null)
+		{
+			offset = Std.int(props.limit * ev.page);
+		}		
+		var p:Promise<Bool> = props.load(
+			{
+				className:'data.Deals',
+				action:'get',
+				filter:(props.match.params.id!=null?'id|${props.match.params.id}':'mandator|1'),
+				limit:props.limit,
+				offset:offset>0?offset:0,
+				table:'deals',
+				user:props.user
+			}
+		);
+		p.then(function(po:Dynamic){
+			trace(po); 
+		});
 	}
 	
 	public function edit(ev:ReactEvent):Void

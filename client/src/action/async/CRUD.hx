@@ -14,8 +14,9 @@ import js.html.XMLHttpRequest;
 
 import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
-import shared.DbData;
 import loader.BinaryLoader;
+import shared.DbData;
+import shared.DbDataTools;
 import view.shared.OneOf;
 import action.async.DBAccessProps;
 using shared.Utils;
@@ -39,6 +40,7 @@ class CRUD
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			//trace(getState());
+			var dbData:DbData = DbDataTools.create();
 			trace(props);
 			return new Promise(function(resolve, reject){
 				if (!props.user.loggedIn)
@@ -50,7 +52,8 @@ class CRUD
 						user_name:props.user.user_name
 					})));
 					trace('LoginError');
-					resolve(false);
+					dbData.dataErrors = ['LoginError'=>'Du musst dich neu anmelden!'];
+					resolve(dbData);
 				}
 				var bl:XMLHttpRequest = BinaryLoader.create(
 					'${App.config.api}', 
@@ -72,21 +75,22 @@ class CRUD
 						{
 							if(!data.dataErrors.keys().hasNext())
 							{
-								trace(data.dataRows);
+								trace(data.dataRows[0]);
 
-								dispatch(Status(Update({text:switch ('${props.className}.${props.action}')
+								/*dispatch(Status(Update({text:switch ('${props.className}.${props.action}')
 								{
 									case "data.Contacts.get":
-										resolve(true);
+										resolve(dbData);
 										'Kontakt ${props.filter.substr(3)} geladen';
 									case "data.Contacts.update":
-										resolve(true);
+										resolve(dbData);
 										'Kontakt ${props.filter.substr(3)} wurde gespeichert';
 									default:
-										resolve(false);
+										resolve(null);
 										"Unbekannter Vorgang";
 
-								}})));
+								}})));*/
+								resolve(data);
 							}
 							else 
 							{
@@ -96,7 +100,7 @@ class CRUD
 										className:'error',
 										text:'${data.dataErrors.get(props.action)}',
 									})));
-									resolve(false);
+								resolve(dbData);
 							}				
 						}
 						else
@@ -115,6 +119,7 @@ class CRUD
 	{	//trace(props);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
 			trace(props);
+			var dbData:DbData = DbDataTools.create();
 			//trace(getState());
 			return new Promise(function(resolve, reject){
 				if (!props.user.loggedIn)
@@ -126,7 +131,7 @@ class CRUD
 						user_name:props.user.user_name
 					})));
 					trace('LoginError');
-					resolve(false);
+					resolve(null);
 				}	
 				var params:Dynamic = {				
 					id:props.user.id,
@@ -153,7 +158,7 @@ class CRUD
 						if(data.dataErrors.exists('loginError'))
 						{
 							dispatch(User(LoginError({loginError: data.dataErrors.get('loginError')})));
-							resolve(false);
+							resolve(null);
 						}
 						else{
 
@@ -170,11 +175,11 @@ class CRUD
 									}
 								}
 							)));
-							resolve(true);
+							resolve(dbData);
 						}
 					}
 				);
-				//resolve(true);
+				//resolve(dbData);
 			});	
 		});
 			

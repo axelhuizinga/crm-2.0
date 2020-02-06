@@ -440,7 +440,8 @@ html,body{
 						params.set('mandator',userInfo.mandator);
 						true;
 					default:
-						S.sendErrors(new DbData(), ['jwtError'=>params]);
+						S.sendErrors(new DbData(), 
+							['jwtError'=>'${DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")}<${DateTools.format(now,"%d.%m.%y %H:%M:%S")}']);
 						false;
 				}
 

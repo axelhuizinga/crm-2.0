@@ -46,10 +46,10 @@ class SyncExternalBookings extends Model{
 			param['offset'] = '0';
 		if(param['limit']==null)			
 			param['limit'] = '1000';
-		if(Std.parseInt(param['offset'])+Std.parseInt(param['limit'])>Std.parseInt(param['maxImport']))
+		/*if(Std.parseInt(param['offset'])+Std.parseInt(param['limit'])>Std.parseInt(param['maxImport']))
 		{
 			param['limit'] = Std.string(Std.parseInt(param['maxImport']) - Std.parseInt(param['offset']));
-		}
+		}*/
 		trace(param);
 		syncBookingRequests(S.dbh, getCrmData());
 		S.sendErrors(dbData,['syncAll'=>'NOTOK']);

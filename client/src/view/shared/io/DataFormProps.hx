@@ -24,7 +24,7 @@ typedef DataFormProps =
 	?filter:String,
 	?fullWidth:Bool,	
 	?limit:Int,
-	?load:DBAccessProps->Promise<Bool>,
+	?load:DBAccessProps->Promise<DbData>,
 	?parentComponent:Dynamic,
 	?select:Function, // Int->IntMap<Map<String,Dynamic>>->RouterMatch->SelectType,
 	?setStateFromChild:FormState->Void,

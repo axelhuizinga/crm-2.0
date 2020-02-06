@@ -594,7 +594,7 @@ class FormApi
 	function closeWait():Void
 	{
 		comp.setState({loading:false});
-		trace('Done waiting')
+		trace('Done waiting');
 	}
 
 	public function renderWait()

@@ -1,5 +1,6 @@
 package view.data.deals;
 
+import view.shared.io.BaseForm;
 import redux.Redux.Dispatch;
 import js.lib.Promise;
 import action.async.CRUD;
@@ -26,7 +27,7 @@ import loader.BinaryLoader;
 import view.table.Table;
 
 @:connect
-class List extends ReactComponentOf<DataFormProps,FormState>
+class List extends BaseForm
 {
 	public static var menuItems:Array<SMItem> = [
 		{label:'Anzeigen',action:'get'},
@@ -35,9 +36,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Neu', action:'insert'},
 		{label:'Löschen',action:'delete'}
 	];
-	
-	var dataDisplay:Map<String,DataState>;
-	var dataAccess:DataAccess;	
+		
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
 
@@ -113,11 +112,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace('hi $ev');
 		var offset:Int = 0;
+		setState({loading:true});
 		if(ev != null && ev.page!=null)
 		{
 			offset = Std.int(props.limit * ev.page);
 		}		
-		var p:Promise<Bool> = props.load(
+		var p:Promise<DbData> = props.load(
 			{
 				className:'data.Deals',
 				action:'get',
@@ -128,8 +128,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				user:props.user
 			}
 		);
-		p.then(function(po:Dynamic){
-			trace(po); 
+		p.then(function(data:DbData){
+			trace(data.dataRows.length); 
+			setState({loading:false, dataTable:data.dataRows});
 		});
 	}
 	
@@ -198,8 +199,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'get':
 				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["contactList"]} 
+					<Table id="fieldsList" data=${state.dataTable} 
+					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${renderPager} parentComponent=${this}
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'update':

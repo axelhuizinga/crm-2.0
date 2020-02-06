@@ -27,6 +27,6 @@ class DealsModel
 	];
 
 	public static var dataDisplay:Map<String,DataState> = [
-		'get' => {columns:listColumns}
+		'dealsList' => {columns:listColumns}
 	];	
 }

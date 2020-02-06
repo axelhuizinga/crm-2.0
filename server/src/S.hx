@@ -101,7 +101,8 @@ class S
 		ts = Sys.time();
 		last_request_time = Date.fromTime(ts);
 		var now:String = DateTools.format(Date.now(), "%d.%m.%y %H:%M:%S");		
-		trace(last_request_time.toString() + ' == $now' );		
+		//trace(last_request_time.toString() + ' == $now' );		
+		trace(DateTools.format(last_request_time, "%d.%m.%y %H:%M:%S") + ' == $now' );		
 		//trace(vD['syncApi']);
 		var viciDial = Lib.hashOfAssociativeArray(vD);
 		//trace(viciDial['url']);

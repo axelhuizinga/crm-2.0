@@ -31,7 +31,7 @@ typedef DataFormProps =
 	?setFormState:FormState->Void,
 	?sideMenu:SMenuProps,
 	?store:Store<AppState>,
-	?storeContactsList:DbData->Void,
+	//?storeContactsList:DbData->Void,
 	?storeData:String->DataAction->Void,
 	?storeFormChange:String->FormState->Void,
 	?render:FormState->ReactFragment,

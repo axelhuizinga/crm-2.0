@@ -11,6 +11,30 @@ import view.table.Table.DataState;
 
 class DealsModel
 {
+	/**
+	 * 	?id:Int,
+	?contact:Int,
+	?creation_date:String,
+	?account:Int,
+	?target_account:Int,
+	?start_day:String,
+	?start_date:String,
+	?cycle:String,
+	?amount:String,
+	?product:Int,
+	?agent:Int,
+	?project:Int,
+	?status:String,
+	?pay_method:String,
+	?end_date:String,
+	?end_reason:Int,
+	?repeat_date:String,
+	?edited_by:Int,
+	?mandator:Int,
+	?old_active:Bool,
+	?cycle_start_date:String,
+	?last_locktime:String
+	 */
 	public static var listColumns:Map<String,DataColumn> = [
 		'first_name'=>{label:'Vorname', flexGrow:0},
 		'last_name'=>{label:'Name', flexGrow:0},

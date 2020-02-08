@@ -77,7 +77,11 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			//SET DEFAULT SECTION
 			trace('reme');
 			var baseUrl:String = props.match.path.split(':section')[0];
-			props.history.push('${baseUrl}List/get');
+			if(props.dataStore.contactData.iterator().hasNext())
+			{
+				trace(props.dataStore.contactData.keys().keysList());
+			}
+			props.history.push('${baseUrl}List/get${props.dataStore.contactData.iterator().hasNext()?'/'+props.dataStore.contactData.keys().keysList():''}');
 		}		
 		
 		state =  App.initEState({
@@ -118,17 +122,6 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				trace('select:$id selectType:${selectType}');
 				//dispatch(DataAction.CreateSelect(id,data,match));
 				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
-			},
-			//setStateFromChild(cState:FormState)
-			storeActData:function (data:IntMap<Map<String,Dynamic>>)
-			{
-				dispatch(DataAction.SelectActContacts(data));
-			},		
-			storeContactsList:function (data:DbData)
-			{
-				//return null;
-				dispatch(DataAction.ContactsLoaded(data));
-				//dispatch(AppAction.Data(DataAction.ContactsLoaded(data)));
 			}
 		};
     }
@@ -171,7 +164,6 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);					
 		trace(props.match.params.action);	
-		trace(props.storeContactsList);	
 		return switch(props.match.params.section)
 		{
 			case "List":

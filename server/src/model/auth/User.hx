@@ -322,9 +322,11 @@ class User extends Model
 		var user_name:String = param.get('user_name');
 		var host:String = Syntax.code("$_SERVER['SERVER_NAME']");
 		if(param.get('dev'))
-			host = '192.168.178.20:9000';
-		var header = comment(unindent, format) 
-		/*Content-type: text/html; charset=utf-8
+		{
+			host = '192.168.178.20:9000';			
+		}
+		var header = comment(unindent, format) /*
+Content-type: text/html; charset=utf-8
 From: SCHUTZENGELWERK crm-2.0 <admin@pitverwaltung.de>
 X-Mailer: HaxeMail
 */;
@@ -441,7 +443,7 @@ html,body{
 						true;
 					default:
 						S.sendErrors(new DbData(), 
-							['jwtError'=>'${DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")}<${DateTools.format(now,"%d.%m.%y %H:%M:%S")}']);
+							['jwtError'=>'${DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")}<${DateTools.format(Date.fromTime(now),"%d.%m.%y %H:%M:%S")}']);
 						false;
 				}
 

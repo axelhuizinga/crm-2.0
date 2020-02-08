@@ -171,7 +171,6 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);					
 		trace(props.match.params.action);	
-		trace(props.storeContactsList);	
 		return switch(props.match.params.section)
 		{
 			case "List":

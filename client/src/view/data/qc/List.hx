@@ -136,11 +136,11 @@ class List extends BaseForm
 								Reflect.setField(rO, k , v);
 							dRows.push(rO);						
 						}*/
-						trace(props.storeContactsList);
+						//trace(props.storeContactsList);
 						//trace(props.parentComponent.storeContactsList);
 						
-						if(props.storeContactsList !=null)
-						props.storeContactsList(data);
+						//if(props.storeContactsList !=null)
+						//props.storeContactsList(data);
 						setState({
 						//props.parentComponent.setStateFromChild({
 							//rows:dRows,

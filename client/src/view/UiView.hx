@@ -89,7 +89,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		trace(Reflect.fields(props));
         super(props);
 		state = {hasError:false};
-		browserHistory = App.store.getState().locationState.history;// BrowserHistory.create({basename:"/"});
+		browserHistory = App.store.getState().locationStore.history;// BrowserHistory.create({basename:"/"});
 		//ApplicationStore.startHistoryListener(App.store, browserHistory);
 		//trace(this.props.user.state.last_name);
 		mounted = false;
@@ -167,9 +167,9 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		else
 		{			
 			trace('render Router ' + browserHistory.location.pathname);
-			trace('render Router ' + App.store.getState().locationState.history.location.pathname);
+			trace('render Router ' + App.store.getState().locationStore.history.location.pathname);
 			//trace(App.store.getState());
-			trace(App.store.getState().locationState.history == browserHistory);
+			trace(App.store.getState().locationStore.history == browserHistory);
 			if(browserHistory.location.pathname!=App.store.getState().app.redirectAfterLogin)
 			{
 				trace('Redirect to: ${App.store.getState().app.redirectAfterLogin}');
@@ -237,7 +237,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	
 	function renderRedirect(?p:Dynamic)
 	{
-		trace(App.store.getState().locationState.redirectAfterLogin);
+		trace(App.store.getState().locationStore.redirectAfterLogin);
 		//return null;
 		return jsx('<RedirectBox to=${p==null?App.store.getState().app.redirectAfterLogin:p.to}/>');
 	}

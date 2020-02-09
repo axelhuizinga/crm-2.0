@@ -72,6 +72,9 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		trace(props.match.params);
+		state =  App.initEState({
+			dataTable:[],loading:false,contactData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
+		},this);		
 		if(props.match.params.section==null)
 		{
 			//SET DEFAULT SECTION
@@ -84,9 +87,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			props.history.push('${baseUrl}List/get${props.dataStore.contactData.iterator().hasNext()?'/'+props.dataStore.contactData.keys().keysList():''}');
 		}		
 		
-		state =  App.initEState({
-			dataTable:[],loading:false,contactData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
-		},this);
+
 		//trace(state.contactData);
 		//trace(state.loading);		
 	}

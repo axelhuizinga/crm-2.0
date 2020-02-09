@@ -500,7 +500,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)//,snapshot:Dynamic
 	{
 		trace(headerUpdated + ':' + tHeadRef); 
-		trace(prevProps);
+		//trace(prevProps);
 		if (tHeadRef != null)
 		{
 			//if (headerUpdated)

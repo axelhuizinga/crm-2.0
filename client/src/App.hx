@@ -89,24 +89,26 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		var userStore = new UserStore();
 		trace(Reflect.fields(userStore));
 		var appWare = new AppStore(userStore);
-		//var user = appWare.store.getState().user;//new UserStore();
+		var locationStore =  new LocationStore(history);
 
 		var rootReducer = Redux.combineReducers(
 		{
 			app:mapReducer(AppAction, appWare),
 			config: mapReducer(ConfigAction, new ConfigStore(config)),
 			dataStore: mapReducer(DataAction, new DataStore()),
-			locationState: mapReducer(LocationAction, new LocationStore(history)),
+			locationStore: mapReducer(LocationAction,locationStore),
 			status: mapReducer(StatusAction, new StatusStore()),
 			user: mapReducer(UserAction, userStore)
 		});
 		//var dataStore:DataAccessState = loadFromLocalStorage();
 		//trace(dataStore);		
+		trace(rootReducer); 
 		//return createStore(rootReducer, {dataStore:loadFromLocalStorage()},  
 		return createStore(rootReducer, null,  
 		Redux.applyMiddleware(
 			mapMiddleware(Thunk, new ThunkMiddleware()),
 			mapMiddleware(AppAction, appWare),
+			mapMiddleware(LocationAction, locationStore),
 			mapMiddleware(UserAction, userStore)
 			)
 		);
@@ -138,14 +140,14 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	static function startHistoryListener(store:Store<AppState>, history:History):TUnlisten
 	{
 		//trace(history);
-		store.dispatch(Location(InitHistory(history,
+		store.dispatch(Location(InitHistory(history/*,
 		{
-			pathname:store.getState().locationState.redirectAfterLogin,
+			pathname:store.getState().locationStore.redirectAfterLogin,
 			search:'',
 			hash:'',
 			key:'',
 			state:{}
-		})));
+		}*/)));
 	
 		return history.listen( function(location:Location, action:history.Action){
 			trace(location.pathname);			
@@ -166,7 +168,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		state = store.getState();
 		trace(Reflect.fields(state));
 		//trace(state);
-		tul = startHistoryListener(store, state.locationState.history);
+		tul = startHistoryListener(store, state.locationStore.history);
 		//store.subscribe(saveToLocalStorage);
 		//var uBCC:Dynamic = react.WinCom.useBrowserContextCommunication('appGlobal');
 

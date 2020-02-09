@@ -13,7 +13,7 @@ typedef AppState =
 	?config:ConfigState,
 	?formStates:Map<String, FormState>,
 	?dataStore:DataAccessState,
-	?locationState:LocationState,
+	?locationStore:LocationState,
 	?redirectAfterLogin:String,
 	?status:StatusState,
 	?user:UserState

@@ -217,7 +217,8 @@ class FormApi
 		var match:RouterMatch = comp.props.match;
 		var baseUrl:String = match.path.split(':section')[0];		
 		var section = match.params.section;
-		var id:String = (match.params.id==null||action=='insert'?'':'/${match.params.id}');
+		//var id:String = (match.params.id==null||action=='insert'?'':'/${match.params.id}');
+		var id:String = (comp.props.location.hash==''||action=='insert'?'':'/${comp.props.location.hash.substr(1)}');
 		return '${baseUrl}${targetSection==null?section:targetSection}/${action}${id}';
 	}
 

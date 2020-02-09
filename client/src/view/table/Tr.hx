@@ -1,5 +1,7 @@
 package view.table;
 
+import js.html.Location;
+import js.html.History;
 import js.html.Element;
 import js.Browser;
 import haxe.macro.Expr.Catch;
@@ -68,9 +70,17 @@ class Tr extends ReactComponentOfProps<TrProps>
 		//state = {cells:[], selected:match.params.id !=null && match.params.id.indexOf(id)>-1?true:false};	
 		selected = false;
 		if(match.params.id !=null && match.params.id.indexOf(id)>-1)
+		//if(match.location.hash !=null && match.params.id.indexOf(id)>-1)
 		{
 			select({select:true});
 		}
+		//var loc:Location = props.parentComponent.props.location;
+		//if(loc.hash != '')
+		//{
+			//trace('id:$id ${loc.hash}');
+		if(props.parentComponent.props.location.hash.indexOf(id)>-1)
+			select({select:true});
+		//}
 	}
 
 	override function componentDidMount()//,snapshot:Dynamic
@@ -138,8 +148,8 @@ class Tr extends ReactComponentOfProps<TrProps>
 			//trace(props.data);setFormState
 			ref = props.firstTableRow;
 		}
-		else selected = props.parentComponent.props.match.params.id !=null && props.parentComponent.props.match.params.id.indexOf(id)>-1;		
-
+		//else selected = props.parentComponent.props.match.params.id !=null && props.parentComponent.props.match.params.id.indexOf(id)>-1;		
+		else selected = props.parentComponent.props.location.hash.indexOf(id)>-1;
 		var cl:String =  selected ? 'is-selected' : '';
 		
 		//trace('$id == ${props.parentComponent.props.match.id} class:$cl');

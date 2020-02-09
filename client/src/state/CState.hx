@@ -20,7 +20,7 @@ class CState
 	public static function confirmTransition(message:String, callback:Bool->Void)
 	{
 		trace(message);
-		if (store.getState().locationState.location.pathname == '/')
+		if (store.getState().locationStore.location.pathname == '/')
 		{
 			return callback(true);
 		}
@@ -68,9 +68,9 @@ class CState
 		CState.store = store;
 		return;
 		var state:AppState = store.getState();
-		var unblock = state.locationState.history.block(blockTransition);
+		var unblock = state.locationStore.history.block(blockTransition);
 		trace(unblock);
-		state.locationState.history.listen(CState.historyChange);
+		state.locationStore.history.listen(CState.historyChange);
 	}
 
 }

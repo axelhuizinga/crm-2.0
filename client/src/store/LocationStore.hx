@@ -6,13 +6,17 @@ import js.Browser;
 import js.html.BroadcastChannel;
 import action.LocationAction;
 import react.ReactUtil.copy;
-import state.LocationState;
 import redux.IReducer;
+import redux.IMiddleware;
 import redux.StoreMethods;
+import state.AppState;
+import state.LocationState;
 
 class LocationStore implements IReducer<LocationAction,LocationState> 
+	implements IMiddleware<LocationAction,AppState> 
 {
 	public var initState:LocationState;
+	public var store:StoreMethods<AppState>;
 
 	public function new(history:History) 
 	{
@@ -27,15 +31,16 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 
 	public function reduce(state:LocationState, action:LocationAction):LocationState
 	{
-		if(state.location !=null)
-		trace(state.location.pathname);
+		trace(state.history.location);
+		trace(state.location);
+		if(store != null)
+		trace(Reflect.fields(store));
 		return switch(action)
 		{
-			case InitHistory(history, location):
+			case InitHistory(history):
 				trace(state);
 				copy(state, {
-					history:history,
-					location:location
+					history:history
 				});
 			case LocationChange(location):
 				trace(location.pathname);
@@ -45,16 +50,22 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 		}
 	}
 
-	public function middleware(store:StoreMethods<LocationState>, action:LocationAction, next:Void -> Dynamic):Dynamic
+	public function middleware(action:LocationAction, next:Void -> Dynamic):Dynamic
 	{
 		trace(action);
-		var history = store.getState().history;//App._app.state.locationState.history;
+		trace(Reflect.fields(store.getState()));
+		
+		var history = store.getState().locationStore.history;//App._app.state.locationState.history;
+		//var history = App._app.state.locationStore.history;
 		return switch(action)
 		{
-			case LocationChange(location):
+			/*case LocationChange(location):
 				trace(location.pathname);
 				history.push(location.pathname);
 				{};
+			case Pop(url, state):
+				history.push(url, state);
+				{};				
 			case Push(url, state):
 				history.push(url, state);
 				{};
@@ -69,7 +80,7 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 				{};
 			case Forward:
 				history.goForward();
-				{};
+				{};*/
 			default:
 				next();
 		}

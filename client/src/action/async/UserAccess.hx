@@ -33,7 +33,7 @@ class UserAccess {
 					User(LoginError({user_name:props.user_name, loginError:'Neues Passwort eingeben!'})));
 			
 			var aState:AppState = getState();
-			trace('${aState.app.redirectAfterLogin} == ${aState.locationState.redirectAfterLogin}');
+			trace('${aState.app.redirectAfterLogin} == ${aState.locationStore.redirectAfterLogin}');
 			BinaryLoader.create(
 				'${App.config.api}', 
 				{				
@@ -92,7 +92,7 @@ class UserAccess {
 					User(LoginError({user_name:props.user_name, loginError:'Benutzername eingeben!'})));
 			var appState:AppState = getState();
 			trace(Reflect.fields(appState));
-			trace('${appState.redirectAfterLogin} == ${appState.locationState.redirectAfterLogin}');
+			trace('${appState.redirectAfterLogin} == ${appState.locationStore.redirectAfterLogin}');
 			BinaryLoader.create(
 				'${App.config.api}', 
 				{				

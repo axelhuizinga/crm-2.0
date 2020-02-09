@@ -146,6 +146,8 @@ class AppStore
 				//store.dispatch(action);
 			case Status(action):	
 				store.dispatch(action);*/
+			case Location(action):
+				store.dispatch(action);
 			case User(action):
 				store.dispatch(action);
 			//default: next();

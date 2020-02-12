@@ -474,8 +474,8 @@ html,body{
 						S.sendErrors(new DbData(), ['jwtError'=>params]);
 						false;
 				}
-			}
-			S.sendErrors(new DbData(), ['jwtError'=>params]);		
+			}// expired - TODO: configure error messages
+			S.sendInfo(new DbData(), ['jwtExpired'=>'Das Login war nur bis ${DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")} gültig - bitte neu anmelden!']);		
 			return false;
 		}
 		catch (ex:Dynamic)

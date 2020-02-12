@@ -14,7 +14,7 @@ typedef AppState =
 	?formStates:Map<String, FormState>,
 	?dataStore:DataAccessState,
 	?locationStore:LocationState,
-	?redirectAfterLogin:String,
+	//?redirectAfterLogin:String,
 	?status:StatusState,
 	?user:UserState
 };

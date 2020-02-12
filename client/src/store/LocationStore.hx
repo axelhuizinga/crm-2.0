@@ -12,6 +12,9 @@ import redux.StoreMethods;
 import state.AppState;
 import state.LocationState;
 
+using StringTools;
+using  shared.Utils;
+
 class LocationStore implements IReducer<LocationAction,LocationState> 
 	implements IMiddleware<LocationAction,AppState> 
 {
@@ -22,9 +25,16 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 	{
 		initState = {
 			history:history,
-			location:null,
 			lastModified:Date.now(),
-			redirectAfterLogin: '/'//App.store.getState().redirectAfterLogin
+			redirectAfterLogin: switch(Browser.location.pathname.startsWith('/ChangePassword'))
+			{
+				default:
+					(Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname);
+				case true:
+					var args:Map<String,Dynamic> = Browser.location.pathname.argList(['action','jwt','user_name','opath']);
+					trace(args);
+					args.get('opath');
+			}
 			// (Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname)
 		};	
 	}
@@ -32,7 +42,6 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 	public function reduce(state:LocationState, action:LocationAction):LocationState
 	{
 		trace(state.history.location);
-		trace(state.location);
 		if(store != null)
 		trace(Reflect.fields(store));
 		return switch(action)

@@ -176,8 +176,15 @@ class FormApi
 		trace('>>$targetSection<< ${comp.props.match.params.section}');
 		if(targetSection !=null && targetSection != comp.props.match.params.section)
 		{
-			trace(targetSection);
-			comp.props.history.push(getUrl(eTarget.dataset.action,targetSection));
+			trace('$targetSection.$method');
+			trace(comp.props.location.state);
+			if(method=='restore' && comp.props.location.state!=null&&comp.props.location.state.activeContactUrl!=null)
+			{
+				trace('goBack');
+				comp.props.history.goBack();
+				return true;
+			}
+			comp.props.history.push(getUrl(eTarget.dataset.action,targetSection),comp.props.location.state);
 			return true;
 		}
 		if(targetSection !=null)
@@ -218,6 +225,7 @@ class FormApi
 		var baseUrl:String = match.path.split(':section')[0];		
 		var section = match.params.section;
 		//var id:String = (match.params.id==null||action=='insert'?'':'/${match.params.id}');
+		trace(comp.props.location);
 		var id:String = (comp.props.location.hash==''||action=='insert'?'':'/${comp.props.location.hash.substr(1)}');
 		return '${baseUrl}${targetSection==null?section:targetSection}/${action}${id}';
 	}

@@ -20,7 +20,7 @@ class CState
 	public static function confirmTransition(message:String, callback:Bool->Void)
 	{
 		trace(message);
-		if (store.getState().locationStore.location.pathname == '/')
+		if (store.getState().locationStore.history.location.pathname == '/')
 		{
 			return callback(true);
 		}

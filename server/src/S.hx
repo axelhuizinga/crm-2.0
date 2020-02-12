@@ -99,7 +99,7 @@ class S
 		var vD:NativeArray = ini['vicidial'];
 		//trace(ini);
 		ts = Sys.time();
-		last_request_time = Date.fromTime(ts);
+		last_request_time = Date.fromTime(ts/1000);
 		var now:String = DateTools.format(Date.now(), "%d.%m.%y %H:%M:%S");		
 		//trace(last_request_time.toString() + ' == $now' );		
 		trace(DateTools.format(last_request_time, "%d.%m.%y %H:%M:%S") + ' == $now' );		

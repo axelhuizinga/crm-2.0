@@ -97,7 +97,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 		
 		return {
 			appConfig:aState.config,
-			redirectAfterLogin:aState.redirectAfterLogin,
+			redirectAfterLogin:aState.locationStore.redirectAfterLogin,
 			user:uState/*
 			id:uState.id,
 			pass:uState.pass,

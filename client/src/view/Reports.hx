@@ -61,7 +61,7 @@ class Reports extends ReactComponentOf<DataProps,CompState>
 			trace(Reflect.fields(aState));
 			return {
 				appConfig:aState.config,
-				//redirectAfterLogin:aState.redirectAfterLogin,
+				//redirectAfterLogin:aState.locationStore.redirectAfterLogin,
 				user:aState.user
 			};
 		};

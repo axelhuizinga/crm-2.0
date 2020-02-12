@@ -71,16 +71,24 @@ class UserStore implements IReducer<UserAction, UserState>
 		return switch(action)
 		{
 			case LoginChange(uState)|LoginRequired(uState):
-					trace(uState);
-					copy(state, uState);                             
+				trace(uState);
+				copy(state, uState);                             					
 			case LoginError(err):
-					trace(err);
-					//if(err.id==state.user.id)
-					copy(state, {
-						jwt:'',
-						loggedIn:false,
-						loginTask:LoginTask.ResetPassword,
-						loginError:err.loginError, waiting:false});                       
+				trace(err);
+				//if(err.id==state.user.id)
+				copy(state, {
+					jwt:'',
+					loggedIn:false,
+					loginTask:LoginTask.ResetPassword,
+					loginError:err.loginError, waiting:false});   
+			case LoginExpired(uState):
+				copy(state, {
+					jwt:'',
+					loggedIn:false,
+					loginTask:LoginTask.Login,
+					loginError:uState.loginError,
+					waiting:false});  
+	                    
 			case LoginComplete(uState):
 					//trace(uState.id + ':' + uState.loggedIn);
 					trace(uState);

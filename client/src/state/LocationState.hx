@@ -9,7 +9,6 @@ import history.Location;
 typedef LocationState =
 {
 	history:History,
-	location:Location,
 	?lastModified:Date,
 	?redirectAfterLogin:String
 }

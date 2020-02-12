@@ -120,7 +120,7 @@ class Data extends ReactComponentOf<DataProps,CompState>
 		
 		return {
 			appConfig:aState.config,
-			redirectAfterLogin:aState.redirectAfterLogin,
+			redirectAfterLogin:aState.locationStore.redirectAfterLogin,
 			user:uState
 		};		
 	}		*/
@@ -139,8 +139,20 @@ class Data extends ReactComponentOf<DataProps,CompState>
 			<div className="tabNav2" >
 				<$Tabs className="is-boxed" >
 					<$TabLink to="/Data/Contacts" ${...props} >Kontakte</$TabLink>
-					<$TabLink to="/Data/Deals" ${...props} >Aufträge</$TabLink>					
-					<$TabLink to="/Data/Accounts" ${...props} >Konten</$TabLink>
+					<$TabLink to=${{
+						key:props.location.key,
+						hash:props.location.hash,
+						pathname:"/Data/Deals",
+						search:'',
+						state:props.location.state
+					}} ${...props} >Aufträge</$TabLink>					
+					<$TabLink to=${{
+						key:props.location.key,
+						hash:props.location.hash,
+						pathname:"/Data/Accounts",
+						search:'',
+						state:props.location.state
+					}} ${...props} >Konten</$TabLink>
 					<$TabLink to="/Data/QC" ${...props} >QC</$TabLink>
 				</$Tabs>
 			</div>

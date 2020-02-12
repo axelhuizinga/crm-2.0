@@ -52,15 +52,7 @@ class AppStore
 			//routeHistory: new Array(),
 			
 			//redirectAfterLogin: (Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname), 
-			redirectAfterLogin: switch(Browser.location.pathname.startsWith('/ChangePassword'))
-			{
-				default:
-					(Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname);
-				case true:
-					var args:Map<String,Dynamic> = Browser.location.pathname.argList(['action','jwt','user_name','opath']);
-					trace(args);
-					args.get('opath');
-			}, 
+			 
 			status: {
 				text: '',//Browser.location.pathname,
 				date:Date.now(),
@@ -82,7 +74,6 @@ class AppStore
 			}*/
 		};
 		trace(store);
-		trace('redirectAfterLogin: ${initState.redirectAfterLogin}');
 	}
 	
 	public function reduce(state:AppState, action:AppAction):AppState

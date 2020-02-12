@@ -71,7 +71,7 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 				last_login:uState.last_login,
 				first_name:uState.first_name,
 				id:uState.id,*/
-				redirectAfterLogin:aState.redirectAfterLogin
+				redirectAfterLogin:aState.locationStore.redirectAfterLogin
 			};
 		};
 	}	

@@ -170,13 +170,13 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 			trace('render Router ' + App.store.getState().locationStore.history.location.pathname);
 			//trace(App.store.getState());
 			trace(App.store.getState().locationStore.history == browserHistory);
-			if(browserHistory.location.pathname!=App.store.getState().app.redirectAfterLogin)
+			if(browserHistory.location.pathname!=App.store.getState().locationStore.redirectAfterLogin)
 			{
-				trace('Redirect to: ${App.store.getState().app.redirectAfterLogin}');
-				 browserHistory.push(App.store.getState().app.redirectAfterLogin);
+				trace('Redirect to: ${App.store.getState().locationStore.redirectAfterLogin}');
+				 browserHistory.push(App.store.getState().locationStore.redirectAfterLogin);
 				 setState({rFlag:state.rFlag+1});
 			/*	return jsx('<$Router history=${browserHistory} >
-					<Redirect to=${App.store.getState().app.redirectAfterLogin}/>
+					<Redirect to=${App.store.getState().locationStore.redirectAfterLogin}/>
 				</$Router>'
 				); */
 			}
@@ -239,6 +239,6 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	{
 		trace(App.store.getState().locationStore.redirectAfterLogin);
 		//return null;
-		return jsx('<RedirectBox to=${p==null?App.store.getState().app.redirectAfterLogin:p.to}/>');
+		return jsx('<RedirectBox to=${p==null?App.store.getState().locationStore.redirectAfterLogin:p.to}/>');
 	}
 }

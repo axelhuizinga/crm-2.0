@@ -98,7 +98,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	
 	static function mapStateToProps(state:AppState) 
 	{
-		trace(state.app.user.first_name);
+		trace(state.user.first_name);
 		trace(Reflect.fields(state));
 		trace(state.status);
 		//setState({status:state.statusBar.status})
@@ -106,7 +106,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 			/*date:state.statusBar.date,*/
 			//userList:state.userList,
 			className:state.status.className==null?'':state.status.className,
-			user:state.app.user,
+			user:state.user,
 			text: state.status.text//state.history.location.pathname
 		};
 		//};

@@ -139,12 +139,12 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		return function(aState:AppState):Partial<LoginProps>
 		{
 			var uState = aState.user;
-			trace(aState.app.redirectAfterLogin);
+			trace(aState.locationStore.redirectAfterLogin);
 			trace(uState);		
 			if(uState.loginTask == LoginTask.ChangePassword)
 			//if(aState.locationState.redirectAfterLogin != null && aState.locationState.redirectAfterLogin.startsWith('/ChangePassword'))
 			{
-				var rAL:String = aState.app.redirectAfterLogin;
+				var rAL:String = aState.locationStore.redirectAfterLogin;
 				trace(rAL);
 				var param:Map<String,Dynamic> = rAL.argList(
 					['action','jwt','user_name','opath']
@@ -153,12 +153,12 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 				
 				return {
 					user:uState,
-					redirectAfterLogin:aState.app.redirectAfterLogin
+					redirectAfterLogin:aState.locationStore.redirectAfterLogin
 				};
 			}
 			return {
 				user:uState,
-				redirectAfterLogin:aState.app.redirectAfterLogin
+				redirectAfterLogin:aState.locationStore.redirectAfterLogin
 			};
 		};
 	}	

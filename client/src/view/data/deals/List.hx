@@ -65,9 +65,9 @@ class List extends BaseForm
 				}),
 			values:new Map<String,Dynamic>()
 		},this);
-		if(props.match.params.section==null||props.match.params.action==null)
+		if(props.match.params.action==null)
 		{
-			//var sData = App.store.getState().dataStore.contactData;			
+			//var sData = App.store.getState().dataStore.contactData;	props.match.params.section==null||		
 			var baseUrl:String = props.match.path.split(':section')[0];
 			trace('redirecting to ${baseUrl}List/get');
 			props.history.push('${baseUrl}List/get');
@@ -117,6 +117,7 @@ class List extends BaseForm
 		{
 			offset = Std.int(props.limit * ev.page);
 		}		
+		var contact = (props.location.state.contact);
 		var p:Promise<DbData> = props.load(
 			{
 				className:'data.Deals',

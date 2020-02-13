@@ -152,6 +152,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	var visibleColumns:Int;
 	var headerUpdated:Bool;
 	var _timer:Timer;
+	var _trace:Bool;
 	var trs:Array<Tr>;
 	
 	public function new(?props:TableProps)
@@ -160,21 +161,22 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		headerUpdated = false;
 		fieldNames = [];
 		trs = [];
+		_trace = false;
 		if(props.dataState!=null)
 		for (k in props.dataState.columns.keys())
 		{
-			//trace(k);
+			//if(_trace) trace(k);
 			fieldNames.push(k);
 		}	
-		trace(fieldNames);
+		if(_trace) trace(fieldNames);
 		state = {selectedRows:[]};
 	}
 	
 	override public function render():ReactFragment
 	{
 		if(props.data != null)
-		trace(props.data.length);
-		trace(props.className);
+		if(_trace) trace(props.data.length);
+		if(_trace) trace(props.className);
 		if (props.data == null || props.data.length == 0)
 		{
 			return state.loading ? jsx('
@@ -185,7 +187,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			</section>
 			'): null;					
 		}		
-		//trace(props.data);
+		//if(_trace) trace(props.data);
 		tableRef = React.createRef();
 		fixedHeader = React.createRef();
 		tHeadRef = React.createRef();
@@ -229,14 +231,14 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	{
 		if(props.dataState==null)
 			return null;
-		//trace(props.dataState.columns.keys());
+		//if(_trace) trace(props.dataState.columns.keys());
 		var headerRow:Array<ReactFragment> = [];
 		for (field in props.dataState.columns.keys())
 		{
 			var hC:DataColumn = props.dataState.columns.get(field);
 			if (hC.show == false)
 				continue;
-			//trace(hC);
+			//if(_trace) trace(hC);
 			headerRow.push(jsx('	
 			<th key={field}>
 				<div  className={"th-box " + (hC.headerClassName != null? hC.headerClassName :hC.className)}>
@@ -245,7 +247,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			</th>
 			'));
 		}
-		trace(headerRow.length);
+		if(_trace) trace(headerRow.length);
 		return headerRow;
 	}	
 	
@@ -253,7 +255,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	{
 		if(props.dataState==null)
 			return null;
-		//trace(props.dataState.columns.keys());
+		//if(_trace) trace(props.dataState.columns.keys());
 		var headerRow:Array<ReactFragment> = [];
 		for (field in props.dataState.columns.keys())
 		{
@@ -292,14 +294,14 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			jsx('<$Tr key=${dR.get("id")} columns=${props.dataState.columns} data=${dR} firstTableRow=${fRRef} fieldNames=${fieldNames} row=${row++} parentComponent=${props.parentComponent}/>')
 			);//
 		}
-		trace(dRs.length);
+		if(_trace) trace(dRs.length);
 		return dRs;
 	}
 	
 	public function select(mEv:MouseEvent, tr:Tr)
 	{
-		trace(mEv.altKey);
-		trace(mEv.currentTarget);
+		if(_trace) trace(mEv.altKey);
+		if(_trace) trace(mEv.currentTarget);
 		var htRow:TableRowElement = cast(mEv.currentTarget, TableRowElement);
 		var rows:HTMLCollection = htRow.parentElement.children;
 		if (mEv.altKey)
@@ -325,8 +327,8 @@ class Table extends ReactComponentOf<TableProps, TableState>
 
 	/*public function select2(mEv:MouseEvent)
 	{
-		trace(mEv.altKey);
-		trace(mEv.currentTarget);
+		if(_trace) trace(mEv.altKey);
+		if(_trace) trace(mEv.currentTarget);
 		var htRow:TableRowElement = cast(mEv.currentTarget, TableRowElement);
 		var rows:HTMLCollection = htRow.parentElement.children;
 		if (mEv.altKey)
@@ -357,7 +359,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		for (i in 0...tEl.children.length)
 		{
 			var row:TableRowElement = cast tEl.children.item(i);
-			trace(row.cells.item(altGroupPos).nodeValue + '==' + groupName);
+			if(_trace) trace(row.cells.item(altGroupPos).nodeValue + '==' + groupName);
 			if(row.cells.item(altGroupPos).textContent==groupName)
 				row.classList.toggle('is-selected');
 		}
@@ -371,7 +373,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		for (i in 0...tEl.children.length)
 		{
 			var row:TableRowElement = cast tEl.children.item(i);
-			trace(row.cells.item(altGroupPos).nodeValue + '==' + groupName);
+			if(_trace) trace(row.cells.item(altGroupPos).nodeValue + '==' + groupName);
 			if(row.cells.item(altGroupPos).textContent==groupName)
 				row.classList.toggle('is-selected');
 		}
@@ -395,11 +397,11 @@ class Table extends ReactComponentOf<TableProps, TableState>
 
 	public function layOut():Void
 	{
-		trace('firstCall: $headerUpdated $tHeadRef: ${tHeadRef != null && tHeadRef.current != null}');
+		if(_trace) trace('firstCall: $headerUpdated $tHeadRef: ${tHeadRef != null && tHeadRef.current != null}');
 		//return;
 		if(tHeadRef == null || tHeadRef.current == null)
 		{
-			trace('$tHeadRef: ${tHeadRef != null && tHeadRef.current != null}');
+			if(_trace) trace('$tHeadRef: ${tHeadRef != null && tHeadRef.current != null}');
 			if(_timer != null)
 				return;
 			var _max = 13;
@@ -407,7 +409,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			{
 				if(_max--<0)
 					return -1;
-				trace(_max);
+				if(_trace) trace(_max);
 				return tHeadRef != null && tHeadRef.current != null;
 			}, layOut);
 			return;
@@ -421,19 +423,19 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		var hasScrollbar:Bool = tableRef.current.parentElement.offsetHeight < (tableRef.current.parentElement.offsetHeight-tHeadRef.current.offsetHeight);
 		var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - (hasScrollbar?scrollBarWidth:0);
 		freeWidth = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth;
-		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} parentElement.offsetWidth: ${tableRef.current.parentElement.offsetWidth} ');
-		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
-		trace('firstRowRef.current.offsetWidth:${firstRowRef.current.offsetWidth} scrollBarWidth:$scrollBarWidth');
+		//if(_trace) trace('table.offsetWidth: ${tableRef.current.offsetWidth} parentElement.offsetWidth: ${tableRef.current.parentElement.offsetWidth} ');
+		//if(_trace) trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
+		if(_trace) trace('firstRowRef.current.offsetWidth:${firstRowRef.current.offsetWidth} scrollBarWidth:$scrollBarWidth');
 		tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
 		//tableRef.current.style.marginTop = '-'+(tHeadRef.current.offsetHeight) + 'px';
 		//tableRef.current.parentElement.style.marginBottom = '-'+(tHeadRef.current.offsetHeight-10) + 'px';
 
 		//tableRef.current.parentElement.querySelector('.pagination').style.marginRight = scrollBarWidth + 'px';
-		//trace(tableRef.current.parentElement.querySelector('.pagination'));
-		//trace(tableRef.current.parentElement.querySelector('.pagination').style.marginRight);
+		//if(_trace) trace(tableRef.current.parentElement.querySelector('.pagination'));
+		//if(_trace) trace(tableRef.current.parentElement.querySelector('.pagination').style.marginRight);
 		//tHeadRef.current.style.visibility = "collapse";						
-		//trace(tableRef.current.offsetHeight);
-		//trace(tHeadRef.current.nodeName + ':' + tHeadRef.current.style.visibility);						
+		//if(_trace) trace(tableRef.current.offsetHeight);
+		//if(_trace) trace(tHeadRef.current.nodeName + ':' + tHeadRef.current.style.visibility);						
 		var i:Int = 0;
 		var grow:Array<Int> = [];
 		if (props.fullWidth)
@@ -444,7 +446,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 				if (cGrow != null)
 				{
 					grow[i] = Std.parseInt(cGrow);
-					//trace(grow[i]);
+					//if(_trace) trace(grow[i]);
 				}
 				i++;
 			}		
@@ -454,13 +456,13 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			if (growSum > 0)
 			{
 				var growUnit:Float = Math.ceil(freeWidth / growSum);
-				//trace(growSum);		
+				//if(_trace) trace(growSum);		
 				for (i in 0...grow.length)
 				{
 					if (grow[i] != null && grow[i] !=0)
 					{
-						//trace(grow[i] * growUnit + firstRowRef.current.children.item(i).offsetWidth);
-						//trace('$i ${grow[i]} * $growUnit + ${firstRowRef.current.children.item(i).offsetWidth}');
+						//if(_trace) trace(grow[i] * growUnit + firstRowRef.current.children.item(i).offsetWidth);
+						//if(_trace) trace('$i ${grow[i]} * $growUnit + ${firstRowRef.current.children.item(i).offsetWidth}');
 						firstRowRef.current.children.item(i).setAttribute(
 							'width', Std.string(grow[i] * growUnit + firstRowRef.current.children.item(i).offsetWidth) + 'px'
 						);
@@ -472,17 +474,17 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		for (cell in tHeadRef.current.children)
 		{
 			var w:Int = cell.offsetWidth;
-			//trace(w +':' + cell.clientWidth);
+			//if(_trace) trace(w +':' + cell.clientWidth);
 			var fixedHeaderCell = cast(fixedHeader.current.childNodes[i],Element);
 			fixedHeaderCell.setAttribute('style', 'width:${i==0?w+1:w}px');
 			i++;
 		}
-		//trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
+		//if(_trace) trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
 		var firstSelectedRow = firstRowRef.current.parentElement.querySelector('[class="is-selected"]');
 		if(firstSelectedRow!=null)
 		{
 			//Browser.document.querySelector('[class="grid-container-inner"]').scrollTo(0,0);
-			trace(firstSelectedRow.offsetTop);
+			if(_trace) trace(firstSelectedRow.offsetTop);
 			Browser.document.querySelector('[class="grid-container-inner"]').scrollTop = firstSelectedRow.offsetTop - 100;
 		}
 	}
@@ -492,15 +494,15 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		//App.onResizeComponents.add(this);//TODO: IMPLEMENT LISTENER
 		Browser.window.requestAnimationFrame(function (t:Float)
 		{
-			trace(t);
+			if(_trace) trace(t);
 			layOut();
 		});
 	}
 
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)//,snapshot:Dynamic
 	{
-		trace(headerUpdated + ':' + tHeadRef); 
-		//trace(prevProps);
+		if(_trace) trace(headerUpdated + ':' + tHeadRef); 
+		//if(_trace) trace(prevProps);
 		if (tHeadRef != null)
 		{
 			//if (headerUpdated)
@@ -513,7 +515,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 
 	override public function componentWillUnmount():Void 
 	{
-		trace('leaving...');
+		if(_trace) trace('leaving...');
 		if(_timer != null)
 			_timer.stop();
 		//App.onResizeComponents.remove(this);//TODO: Implement Listener
@@ -521,8 +523,8 @@ class Table extends ReactComponentOf<TableProps, TableState>
 
 	override function shouldComponentUpdate(nextProps, nextState):Bool
 	{
-    	//trace(nextProps);
-    	//trace(nextState);
+    	//if(_trace) trace(nextProps);
+    	//if(_trace) trace(nextState);
 		return true;
 	}
 	
@@ -533,10 +535,10 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		var cells:Array<TableCellElement> = (ref.current != null? ref.current.cells : ref.cells);
 		for (cell in cells)
 		{
-			trace(untyped cell.getBoundingClientRect().toJSON());
+			if(_trace) trace(untyped cell.getBoundingClientRect().toJSON());
 			s += cell.getBoundingClientRect().width;
 		}
-		trace(' sum:$s');
+		if(_trace) trace(' sum:$s');
 	}
 
 	function nodeDims(n:Node)
@@ -547,11 +549,11 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		for (cell in cells)
 		{
 			var dRect:DOMRect = untyped cast(cell, Element).getBoundingClientRect().toJSON();
-			trace(dRect);
+			if(_trace) trace(dRect);
 			//Out.dumpObject(cast(cell, Element).getBoundingClientRect());
 			s += cast(cell, Element).getBoundingClientRect().width;
 		}
-		trace(' sum:$s');
+		if(_trace) trace(' sum:$s');
 	}
 	
 

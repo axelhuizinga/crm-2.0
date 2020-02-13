@@ -11,7 +11,7 @@ typedef DBAccessProps =
 	?action:String,	
 	?pages:Int,
 	?className:String,
-	?filter:String,
+	?filter:Dynamic,
 	?dataSource:Map<String,Map<String,Dynamic>>,
 	?limit:Int,
 	?maxImport:Int,

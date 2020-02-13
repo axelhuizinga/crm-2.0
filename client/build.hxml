@@ -2,6 +2,7 @@
 -lib history
 -lib hxbit
 -lib react-next
+-lib react-types
 -lib react-router-4
 -lib redux
 -lib d3-extern

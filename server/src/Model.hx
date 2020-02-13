@@ -192,6 +192,67 @@ class Model
 					trace(jParts[1]);
 					if(jParts[0].indexOf('.')>-1)
 					{
+						var keys = jParts[0].split('.');
+						if(keys.length>2)
+						{
+							S.sendErrors(dbData,['invalidJoinCond'=>jCond]);
+						}
+						if(keys.length==2){
+							jCond = '${quoteIdent(keys[0])}.${keys[1]}=${jParts[1]}';
+						}
+					}
+					else {
+						var keys = jParts[1].split('.');
+						//trace(keys);
+						if(keys.length>2)
+						{
+							S.sendErrors(dbData,['invalidJoinCond'=>jCond]);
+						}
+						if(keys.length==2){
+							jCond = '${jParts[0]}=${quoteIdent(keys[0])}.${keys[1]}';
+						}						
+					}
+				}
+				var jType:String = switch(tRel.get('jType'))
+				{
+					case JoinType.LEFT:
+						'LEFT';
+					case JoinType.RIGHT:
+						'RIGHT';
+					default:
+						'INNER';
+				}
+				sqlBf.add('$jType JOIN ${quoteIdent(table)} $alias ON $jCond ');		
+			}
+			else
+			{// FIRST TABLE
+				sqlBf.add('${quoteIdent(table)} $alias ');
+			}
+		}
+		joinSql = sqlBf.toString();
+		return joinSql;
+	}
+
+	public function buildJoin1():String
+	{
+		if (joinSql != null)
+			return joinSql;
+		var sqlBf:StringBuf = new StringBuf();				
+		for (table in tableNames)
+		{
+			var tRel:Map<String,Dynamic> = dataSource.get(table);
+			var alias:String = (tRel.exists('alias')? quoteIdent(tRel.get('alias')):'');
+			var jCond:String = tRel.exists('jCond') ? tRel.get('jCond'):null;
+			if (jCond != null)
+			{
+				if(~/\./.match(jCond))
+				{
+					var jParts = jCond.split('=');					
+					trace(jParts.join('='));
+					trace(jParts[0]);
+					trace(jParts[1]);
+					if(jParts[0].indexOf('.')>-1)
+					{
 						var dots = jParts[0].split('.');
 						if(dots.length>2)
 						{
@@ -231,8 +292,7 @@ class Model
 		}
 		joinSql = sqlBf.toString();
 		return joinSql;
-	}
-	
+	}	
 	public function doSelect():NativeArray
 	{	
 		var sqlBf:StringBuf = new StringBuf();
@@ -577,7 +637,8 @@ class Model
 		return execute(sqlBf.toString());
 	}
 	
-	public function buildCond(filter:String):String
+	
+	public function buildCond1(filter:String):String
 	{
 		if (filter == null)		
 		{
@@ -654,6 +715,80 @@ class Model
 		return filterSql;
 	}
 
+	public function buildCond(filter:Dynamic):String
+	{
+		if (filter == null)		
+		{
+			return filterSql;			
+		}
+		var filters:Array<String> = Reflect.fields(filter);
+		var	fBuf:StringBuf = new StringBuf();
+		var first:Bool = true;
+		filterValues = new Array();
+		for (key in filters)
+		{			
+			var keys = key.split('.');
+			if(keys.length>2)
+			{
+				S.sendErrors(dbData,['invalidFilter'=>S.errorInfo(key)]);
+			}
+
+			var values:Array<String> = Reflect.field(filter, key);			
+			var how:String = values.shift();
+			if (first)
+				fBuf.add(' WHERE ' );
+			else
+				fBuf.add(' AND ');
+			first = false;			
+
+			if(keys.length==2)
+			{
+				fBuf.add('${quoteIdent(keys[0])}.${quoteIdent(keys[1])}');
+			}			
+			else //no alias
+				fBuf.add(quoteIdent(key));
+			switch(how.toUpperCase())
+			{
+				case 'BETWEEN':
+					if (!(values.length == 2) && values.foreach(function(s:String) return s.any2bool()))
+						S.exit( {error:'BETWEEN needs 2 values - got only:' + values.join(',')});
+					
+					fBuf.add(' BETWEEN ? AND ?');
+					filterValues.push([keys[0], values[0]]);
+					filterValues.push([keys[0], values[1]]);
+				case 'IN':					
+					fBuf.add(' IN(');
+					fBuf.add( values.map(function(s:String) { 
+						filterValues.push([keys[0], values.shift()]);
+						return '?'; 
+						} ).join(','));							
+					fBuf.add(')');
+				case 'LIKE':					
+					fBuf.add(' LIKE ?');
+					filterValues.push([keys[0], values[0]]);
+				case _:
+					if (~/^(<|>)/.match(values[0]))
+					{
+						var eR:EReg = ~/^(<|>)/;
+						eR.match(values[0]);
+						var val = Std.parseFloat(eR.matchedRight());
+						fBuf.add(eR.matched(0) + '?');
+						filterValues.push([keys[0],val]);
+						continue;
+					}
+					//PLAIN VALUES
+					if( values[0] == 'NULL' )
+						fBuf.add(" IS NULL");
+					else {
+						fBuf.add(" = ?");
+						filterValues.push([keys[0],values[0]]);	
+					}			
+			}			
+		}
+		filterSql = fBuf.toString();
+		return filterSql;
+	}
+			
 	public function buildGroup(groupParam:String, sqlBf:StringBuf):Bool
 	{
 		//TODO: HANDLE expr|position

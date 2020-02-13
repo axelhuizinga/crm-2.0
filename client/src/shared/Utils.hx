@@ -53,7 +53,8 @@ class Utils
 	public static function extend(obj1: Dynamic, obj2: Dynamic): Dynamic {
 		
 		var keys = Reflect.fields(obj2);
-		
+		if(obj1 == null)
+			obj1 = {};
 		for (k in keys) {
 			var value: Dynamic = Reflect.field(obj2, k);
 			Reflect.setField(obj1, k, value);

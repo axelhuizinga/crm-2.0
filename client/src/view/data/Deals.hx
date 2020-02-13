@@ -104,7 +104,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		if (props.match.params.section == null)
 		{
 			var basePath:String = props.match.url;
-			props.history.push('$basePath/List/get');
+			props.history.push('$basePath/List/get', props.location);
 			trace(props.history.location.pathname);
 			trace('redirecting to $basePath/List/get');
 		}		

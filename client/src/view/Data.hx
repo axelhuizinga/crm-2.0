@@ -50,16 +50,20 @@ class Data extends ReactComponentOf<DataProps,CompState>
 	var mounted:Bool = false;
 	var rendered:Bool = false;
 	var renderCount:Int = 0;
+	var _trace:Bool;
+	static  var _strace:Bool;
+
 	public function new(?props:Dynamic)
 	{
 		state = {hasError:false,mounted:false};
-		//trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} user:${props.user}');
-		super(props);		
-		trace(props.match);
-		trace(props.store);
+		//if(_trace) trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} user:${props.user}');
+		super(props);	
+		_strace = _trace = false;	
+		if(_trace) trace(props.match);
+		if(_trace) trace(props.store);
 		if (props.match.url == '/Data' && props.match.isExact)
 		{
-			trace('pushing2: /Data/Contacts/List/get');
+			if(_trace) trace('pushing2: /Data/Contacts/List/get');
 			props.history.push('/Data/Contacts/List/get');
 		}
 	}
@@ -67,14 +71,14 @@ class Data extends ReactComponentOf<DataProps,CompState>
 	override public function componentDidMount():Void 
 	{
 		mounted = true;
-		/*trace(props.history.location);
-		trace(props.location);
-		trace(props.match);*/
+		/*if(_trace) trace(props.history.location);
+		if(_trace) trace(props.location);
+		if(_trace) trace(props.match);*/
 		//internalRedirect();
 		//if(path != props.location.pathname)
 		//props.history.push(path);
-		//trace(mounted);
-		//trace(props.history.listen);
+		//if(_trace) trace(mounted);
+		//if(_trace) trace(props.history.listen);
 		//this.addComponent();
 	}
 	
@@ -82,15 +86,15 @@ class Data extends ReactComponentOf<DataProps,CompState>
 		// Display fallback UI
 		if(mounted)
 		this.setState({ hasError: true });
-		trace(error);
-		trace(info);
+		if(_trace) trace(error);
+		if(_trace) trace(info);
 	}		
 	
 	override function shouldComponentUpdate(nextProps:DataProps, nextState:CompState):Bool
 	{
-		trace('propsChanged:${nextProps!=props}');
+		if(_trace) trace('propsChanged:${nextProps!=props}');
 		//if(nextProps!=props)			props.compare(nextProps);
-		trace('stateChanged:${nextState!=state}');
+		if(_trace) trace('stateChanged:${nextState!=state}');
 		if(nextState!=state || nextProps!=props)
 		{
 			//internalRedirect();
@@ -115,8 +119,8 @@ class Data extends ReactComponentOf<DataProps,CompState>
 	/*
 	static function mapStateToProps(aState:AppState) {
 		var uState:UserProps = aState.user;
-		trace(uState.first_name);
-		//trace(' ${aState.locationState.history.location.pathname + (aState.compState.exists('contacts') && aState.compState.get('contacts').isMounted ? "Y":"N")}');
+		if(_trace) trace(uState.first_name);
+		//if(_trace) trace(' ${aState.locationState.history.location.pathname + (aState.compState.exists('contacts') && aState.compState.get('contacts').isMounted ? "Y":"N")}');
 		
 		return {
 			appConfig:aState.config,
@@ -127,13 +131,13 @@ class Data extends ReactComponentOf<DataProps,CompState>
 	
     override function render() 
 	{	
-		//trace(this.state);
-		//trace(props.history.location.pathname);
-		//trace(props.user);
+		//if(_trace) trace(this.state);
+		//if(_trace) trace(props.history.location.pathname);
+		//if(_trace) trace(props.user);
 		if (state.hasError)
 			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');
-		trace(Reflect.fields(props));
-		trace(Reflect.fields(state));
+		if(_trace) trace(Reflect.fields(props));
+		if(_trace) trace(Reflect.fields(state));
 		return jsx('
 		<>
 			<div className="tabNav2" >
@@ -141,17 +145,17 @@ class Data extends ReactComponentOf<DataProps,CompState>
 					<$TabLink to="/Data/Contacts" ${...props} >Kontakte</$TabLink>
 					<$TabLink to=${{
 						key:props.location.key,
-						hash:props.location.hash,
+						hash:'',
 						pathname:"/Data/Deals",
 						search:'',
-						state:props.location.state
+						state:props.location.state.extend({contact:props.location.hash})
 					}} ${...props} >Aufträge</$TabLink>					
 					<$TabLink to=${{
 						key:props.location.key,
 						hash:props.location.hash,
 						pathname:"/Data/Accounts",
 						search:'',
-						state:props.location.state
+						state:props.location.state.extend({contact:props.location.hash})
 					}} ${...props} >Konten</$TabLink>
 					<$TabLink to="/Data/QC" ${...props} >QC</$TabLink>
 				</$Tabs>
@@ -171,15 +175,15 @@ class Data extends ReactComponentOf<DataProps,CompState>
 //<$Route >${internalRedirect()}</$Route>
 	function renderComponent(props:RouteRenderProps):ReactElement
 	{
-		trace(props.location);
-		trace(props.match);
+		if(_trace) trace(props.location);
+		if(_trace) trace(props.match);
 		return null;
 	}
 	
 	function internalRedirect(path:String = '/Data/Contacts/List/get')
 	{
-		trace('${props.location.pathname} $path');
-		//trace(props.match);Action<TReturn>(cb:Dispatch->(Void->TState)->TReturn);
+		if(_trace) trace('${props.location.pathname} $path');
+		//if(_trace) trace(props.match);Action<TReturn>(cb:Dispatch->(Void->TState)->TReturn);
 		if(props.location.pathname != path)
 		{
 		/*	props.history.push(path);
@@ -189,32 +193,7 @@ class Data extends ReactComponentOf<DataProps,CompState>
 		if(path != props.location.pathname)
 			props.redirect(path, props);
 		
-		//App.store.dispatch(thunk);
-		/*App.store.dispatch(
-			LocationAccess.redirect(
-				['/Data/Contacts/:section?/:action?/:id?',
-				'/Data/Deals/:section?/:action?/:id?',
-				'/Data/Accounts/:section?/:action?/:id?'],path,props);/*.then(
-					function(d:Dynamic){
-						trace('ff $d');
-					},
-					function(d:Dynamic){
-						trace('rejected:$d');
-					}
-				);*/
-		//props.history.push(path);
 		}
 	}
 	
-	/*function TabLink(rprops)
-	{
-		trace(Reflect.fields(rprops));
-		trace('${rprops.to} ${rprops.location.pathname}');
-		var match:RouterMatch = rprops.match;
-		var baseUrl:String = match.path.split(':section')[0];
-		return jsx('
-		<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}>
-		<NavLink to=${rprops.to}/List/find/${match.params.id==null?"":match.params.id}>${rprops.children}</NavLink></li>
-		');
-	}*/
 }

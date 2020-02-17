@@ -36,23 +36,18 @@ class Deal extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
-	var initial_id:Int;
+	var id_initialized:Bool;
 	
 	function get_id():Int{
 		return id;
 	}
 
-	function set_id(x:Int):Int{
-		if(id != null)
+	function set_id(id:Int):Int{
+		if(id_initialized)
 			modified('id');
-		id = x;
-		if(initial_id == null)
-			initial_id = id; 
+		this.id = id;
+		id_initialized = true; 
 		return id;
-	}
-
-	public function reset_id():Int{
-		return initial_id;
 	}
 
 	public function clear_id():Int{
@@ -62,23 +57,18 @@ class Deal extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var contact(get,set):Int;
-	var initial_contact:Int;
+	var contact_initialized:Bool;
 	
 	function get_contact():Int{
 		return contact;
 	}
 
-	function set_contact(x:Int):Int{
-		if(contact != null)
+	function set_contact(contact:Int):Int{
+		if(contact_initialized)
 			modified('contact');
-		contact = x;
-		if(initial_contact == null)
-			initial_contact = contact; 
+		this.contact = contact;
+		contact_initialized = true; 
 		return contact;
-	}
-
-	public function reset_contact():Int{
-		return initial_contact;
 	}
 
 	public function clear_contact():Int{
@@ -88,23 +78,18 @@ class Deal extends ORM
 		
 	@dataType("timestamp(0) without time zone")
 	@:isVar public var creation_date(get,set):String;
-	var initial_creation_date:String;
+	var creation_date_initialized:Bool;
 	
 	function get_creation_date():String{
 			return creation_date;
 	}
 
-	function set_creation_date(x:String):String{
-		if(creation_date != null)
+	function set_creation_date(creation_date:String):String{
+		if(creation_date_initialized)
 			modified('creation_date');
-		creation_date = x;
-		if(initial_creation_date == null)
-			initial_creation_date = creation_date; 
+		this.creation_date = creation_date;
+		creation_date_initialized = true; 
 		return creation_date;
-	}
-
-	public function reset_creation_date():String{
-		return initial_creation_date;
 	}
 
 	public function clear_creation_date():String{
@@ -114,23 +99,18 @@ class Deal extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var account(get,set):Int;
-	var initial_account:Int;
+	var account_initialized:Bool;
 	
 	function get_account():Int{
 		return account;
 	}
 
-	function set_account(x:Int):Int{
-		if(account != null)
+	function set_account(account:Int):Int{
+		if(account_initialized)
 			modified('account');
-		account = x;
-		if(initial_account == null)
-			initial_account = account; 
+		this.account = account;
+		account_initialized = true; 
 		return account;
-	}
-
-	public function reset_account():Int{
-		return initial_account;
 	}
 
 	public function clear_account():Int{
@@ -140,23 +120,18 @@ class Deal extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var target_account(get,set):Int;
-	var initial_target_account:Int;
+	var target_account_initialized:Bool;
 	
 	function get_target_account():Int{
 		return target_account;
 	}
 
-	function set_target_account(x:Int):Int{
-		if(target_account != null)
+	function set_target_account(target_account:Int):Int{
+		if(target_account_initialized)
 			modified('target_account');
-		target_account = x;
-		if(initial_target_account == null)
-			initial_target_account = target_account; 
+		this.target_account = target_account;
+		target_account_initialized = true; 
 		return target_account;
-	}
-
-	public function reset_target_account():Int{
-		return initial_target_account;
 	}
 
 	public function clear_target_account():Int{
@@ -166,23 +141,18 @@ class Deal extends ORM
 		
 	@dataType("character varying(2)")
 	@:isVar public var start_day(get,set):String;
-	var initial_start_day:String;
+	var start_day_initialized:Bool;
 	
 	function get_start_day():String{
 		return start_day;
 	}
 
-	function set_start_day(x:String):String{
-		if(start_day != null)
+	function set_start_day(start_day:String):String{
+		if(start_day_initialized)
 			modified('start_day');
-		start_day = x;
-		if(initial_start_day == null)
-			initial_start_day = start_day; 
+		this.start_day = start_day;
+		start_day_initialized = true; 
 		return start_day;
-	}
-
-	public function reset_start_day():String{
-		return initial_start_day;
 	}
 
 	public function clear_start_day():String{
@@ -192,23 +162,18 @@ class Deal extends ORM
 		
 	@dataType("date")
 	@:isVar public var start_date(get,set):String;
-	var initial_start_date:String;
+	var start_date_initialized:Bool;
 	
 	function get_start_date():String{
 			return start_date;
 	}
 
-	function set_start_date(x:String):String{
-		if(start_date != null)
+	function set_start_date(start_date:String):String{
+		if(start_date_initialized)
 			modified('start_date');
-		start_date = x;
-		if(initial_start_date == null)
-			initial_start_date = start_date; 
+		this.start_date = start_date;
+		start_date_initialized = true; 
 		return start_date;
-	}
-
-	public function reset_start_date():String{
-		return initial_start_date;
 	}
 
 	public function clear_start_date():String{
@@ -218,23 +183,18 @@ class Deal extends ORM
 		
 	@dataType("deals_cycle")
 	@:isVar public var cycle(get,set):String;
-	var initial_cycle:String;
+	var cycle_initialized:Bool;
 	
 	function get_cycle():String{
 			return cycle;
 	}
 
-	function set_cycle(x:String):String{
-		if(cycle != null)
+	function set_cycle(cycle:String):String{
+		if(cycle_initialized)
 			modified('cycle');
-		cycle = x;
-		if(initial_cycle == null)
-			initial_cycle = cycle; 
+		this.cycle = cycle;
+		cycle_initialized = true; 
 		return cycle;
-	}
-
-	public function reset_cycle():String{
-		return initial_cycle;
 	}
 
 	public function clear_cycle():String{
@@ -244,23 +204,18 @@ class Deal extends ORM
 		
 	@dataType("numeric(10,2)")
 	@:isVar public var amount(get,set):String;
-	var initial_amount:String;
+	var amount_initialized:Bool;
 	
 	function get_amount():String{
 			return amount;
 	}
 
-	function set_amount(x:String):String{
-		if(amount != null)
+	function set_amount(amount:String):String{
+		if(amount_initialized)
 			modified('amount');
-		amount = x;
-		if(initial_amount == null)
-			initial_amount = amount; 
+		this.amount = amount;
+		amount_initialized = true; 
 		return amount;
-	}
-
-	public function reset_amount():String{
-		return initial_amount;
 	}
 
 	public function clear_amount():String{
@@ -270,23 +225,18 @@ class Deal extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var product(get,set):Int;
-	var initial_product:Int;
+	var product_initialized:Bool;
 	
 	function get_product():Int{
 		return product;
 	}
 
-	function set_product(x:Int):Int{
-		if(product != null)
+	function set_product(product:Int):Int{
+		if(product_initialized)
 			modified('product');
-		product = x;
-		if(initial_product == null)
-			initial_product = product; 
+		this.product = product;
+		product_initialized = true; 
 		return product;
-	}
-
-	public function reset_product():Int{
-		return initial_product;
 	}
 
 	public function clear_product():Int{
@@ -296,23 +246,18 @@ class Deal extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var agent(get,set):Int;
-	var initial_agent:Int;
+	var agent_initialized:Bool;
 	
 	function get_agent():Int{
 		return agent;
 	}
 
-	function set_agent(x:Int):Int{
-		if(agent != null)
+	function set_agent(agent:Int):Int{
+		if(agent_initialized)
 			modified('agent');
-		agent = x;
-		if(initial_agent == null)
-			initial_agent = agent; 
+		this.agent = agent;
+		agent_initialized = true; 
 		return agent;
-	}
-
-	public function reset_agent():Int{
-		return initial_agent;
 	}
 
 	public function clear_agent():Int{
@@ -322,23 +267,18 @@ class Deal extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var project(get,set):Int;
-	var initial_project:Int;
+	var project_initialized:Bool;
 	
 	function get_project():Int{
 		return project;
 	}
 
-	function set_project(x:Int):Int{
-		if(project != null)
+	function set_project(project:Int):Int{
+		if(project_initialized)
 			modified('project');
-		project = x;
-		if(initial_project == null)
-			initial_project = project; 
+		this.project = project;
+		project_initialized = true; 
 		return project;
-	}
-
-	public function reset_project():Int{
-		return initial_project;
 	}
 
 	public function clear_project():Int{
@@ -348,23 +288,18 @@ class Deal extends ORM
 		
 	@dataType("character varying(64)")
 	@:isVar public var status(get,set):String;
-	var initial_status:String;
+	var status_initialized:Bool;
 	
 	function get_status():String{
 		return status;
 	}
 
-	function set_status(x:String):String{
-		if(status != null)
+	function set_status(status:String):String{
+		if(status_initialized)
 			modified('status');
-		status = x;
-		if(initial_status == null)
-			initial_status = status; 
+		this.status = status;
+		status_initialized = true; 
 		return status;
-	}
-
-	public function reset_status():String{
-		return initial_status;
 	}
 
 	public function clear_status():String{
@@ -374,23 +309,18 @@ class Deal extends ORM
 		
 	@dataType("character varying(64)")
 	@:isVar public var pay_method(get,set):String;
-	var initial_pay_method:String;
+	var pay_method_initialized:Bool;
 	
 	function get_pay_method():String{
 		return pay_method;
 	}
 
-	function set_pay_method(x:String):String{
-		if(pay_method != null)
+	function set_pay_method(pay_method:String):String{
+		if(pay_method_initialized)
 			modified('pay_method');
-		pay_method = x;
-		if(initial_pay_method == null)
-			initial_pay_method = pay_method; 
+		this.pay_method = pay_method;
+		pay_method_initialized = true; 
 		return pay_method;
-	}
-
-	public function reset_pay_method():String{
-		return initial_pay_method;
 	}
 
 	public function clear_pay_method():String{
@@ -400,23 +330,18 @@ class Deal extends ORM
 		
 	@dataType("date")
 	@:isVar public var end_date(get,set):String;
-	var initial_end_date:String;
+	var end_date_initialized:Bool;
 	
 	function get_end_date():String{
 			return end_date;
 	}
 
-	function set_end_date(x:String):String{
-		if(end_date != null)
+	function set_end_date(end_date:String):String{
+		if(end_date_initialized)
 			modified('end_date');
-		end_date = x;
-		if(initial_end_date == null)
-			initial_end_date = end_date; 
+		this.end_date = end_date;
+		end_date_initialized = true; 
 		return end_date;
-	}
-
-	public function reset_end_date():String{
-		return initial_end_date;
 	}
 
 	public function clear_end_date():String{
@@ -426,23 +351,18 @@ class Deal extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var end_reason(get,set):Int;
-	var initial_end_reason:Int;
+	var end_reason_initialized:Bool;
 	
 	function get_end_reason():Int{
 		return end_reason;
 	}
 
-	function set_end_reason(x:Int):Int{
-		if(end_reason != null)
+	function set_end_reason(end_reason:Int):Int{
+		if(end_reason_initialized)
 			modified('end_reason');
-		end_reason = x;
-		if(initial_end_reason == null)
-			initial_end_reason = end_reason; 
+		this.end_reason = end_reason;
+		end_reason_initialized = true; 
 		return end_reason;
-	}
-
-	public function reset_end_reason():Int{
-		return initial_end_reason;
 	}
 
 	public function clear_end_reason():Int{
@@ -452,23 +372,18 @@ class Deal extends ORM
 		
 	@dataType("date")
 	@:isVar public var repeat_date(get,set):String;
-	var initial_repeat_date:String;
+	var repeat_date_initialized:Bool;
 	
 	function get_repeat_date():String{
 			return repeat_date;
 	}
 
-	function set_repeat_date(x:String):String{
-		if(repeat_date != null)
+	function set_repeat_date(repeat_date:String):String{
+		if(repeat_date_initialized)
 			modified('repeat_date');
-		repeat_date = x;
-		if(initial_repeat_date == null)
-			initial_repeat_date = repeat_date; 
+		this.repeat_date = repeat_date;
+		repeat_date_initialized = true; 
 		return repeat_date;
-	}
-
-	public function reset_repeat_date():String{
-		return initial_repeat_date;
 	}
 
 	public function clear_repeat_date():String{
@@ -478,23 +393,18 @@ class Deal extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
-	var initial_edited_by:Int;
+	var edited_by_initialized:Bool;
 	
 	function get_edited_by():Int{
 		return edited_by;
 	}
 
-	function set_edited_by(x:Int):Int{
-		if(edited_by != null)
+	function set_edited_by(edited_by:Int):Int{
+		if(edited_by_initialized)
 			modified('edited_by');
-		edited_by = x;
-		if(initial_edited_by == null)
-			initial_edited_by = edited_by; 
+		this.edited_by = edited_by;
+		edited_by_initialized = true; 
 		return edited_by;
-	}
-
-	public function reset_edited_by():Int{
-		return initial_edited_by;
 	}
 
 	public function clear_edited_by():Int{
@@ -504,23 +414,18 @@ class Deal extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
-	var initial_mandator:Int;
+	var mandator_initialized:Bool;
 	
 	function get_mandator():Int{
 		return mandator;
 	}
 
-	function set_mandator(x:Int):Int{
-		if(mandator != null)
+	function set_mandator(mandator:Int):Int{
+		if(mandator_initialized)
 			modified('mandator');
-		mandator = x;
-		if(initial_mandator == null)
-			initial_mandator = mandator; 
+		this.mandator = mandator;
+		mandator_initialized = true; 
 		return mandator;
-	}
-
-	public function reset_mandator():Int{
-		return initial_mandator;
 	}
 
 	public function clear_mandator():Int{
@@ -530,23 +435,18 @@ class Deal extends ORM
 		
 	@dataType("boolean")
 	@:isVar public var old_active(get,set):Bool;
-	var initial_old_active:Bool;
+	var old_active_initialized:Bool;
 	
 	function get_old_active():Bool{
 		return old_active;
 	}
 
-	function set_old_active(x:Bool):Bool{
-		if(old_active != null)
+	function set_old_active(old_active:Bool):Bool{
+		if(old_active_initialized)
 			modified('old_active');
-		old_active = x;
-		if(initial_old_active == null)
-			initial_old_active = old_active; 
+		this.old_active = old_active;
+		old_active_initialized = true; 
 		return old_active;
-	}
-
-	public function reset_old_active():Bool{
-		return initial_old_active;
 	}
 
 	public function clear_old_active():Bool{
@@ -556,23 +456,18 @@ class Deal extends ORM
 		
 	@dataType("date")
 	@:isVar public var cycle_start_date(get,set):String;
-	var initial_cycle_start_date:String;
+	var cycle_start_date_initialized:Bool;
 	
 	function get_cycle_start_date():String{
 			return cycle_start_date;
 	}
 
-	function set_cycle_start_date(x:String):String{
-		if(cycle_start_date != null)
+	function set_cycle_start_date(cycle_start_date:String):String{
+		if(cycle_start_date_initialized)
 			modified('cycle_start_date');
-		cycle_start_date = x;
-		if(initial_cycle_start_date == null)
-			initial_cycle_start_date = cycle_start_date; 
+		this.cycle_start_date = cycle_start_date;
+		cycle_start_date_initialized = true; 
 		return cycle_start_date;
-	}
-
-	public function reset_cycle_start_date():String{
-		return initial_cycle_start_date;
 	}
 
 	public function clear_cycle_start_date():String{
@@ -582,23 +477,18 @@ class Deal extends ORM
 		
 	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_locktime(get,set):String;
-	var initial_last_locktime:String;
+	var last_locktime_initialized:Bool;
 	
 	function get_last_locktime():String{
 			return last_locktime;
 	}
 
-	function set_last_locktime(x:String):String{
-		if(last_locktime != null)
+	function set_last_locktime(last_locktime:String):String{
+		if(last_locktime_initialized)
 			modified('last_locktime');
-		last_locktime = x;
-		if(initial_last_locktime == null)
-			initial_last_locktime = last_locktime; 
+		this.last_locktime = last_locktime;
+		last_locktime_initialized = true; 
 		return last_locktime;
-	}
-
-	public function reset_last_locktime():String{
-		return initial_last_locktime;
 	}
 
 	public function clear_last_locktime():String{

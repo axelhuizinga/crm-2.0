@@ -25,23 +25,18 @@ class TableField extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
-	var initial_id:Int;
+	var id_initialized:Bool;
 	
 	function get_id():Int{
 		return id;
 	}
 
-	function set_id(x:Int):Int{
-		if(id != null)
+	function set_id(id:Int):Int{
+		if(id_initialized)
 			modified('id');
-		id = x;
-		if(initial_id == null)
-			initial_id = id; 
+		this.id = id;
+		id_initialized = true; 
 		return id;
-	}
-
-	public function reset_id():Int{
-		return initial_id;
 	}
 
 	public function clear_id():Int{
@@ -51,23 +46,18 @@ class TableField extends ORM
 		
 	@dataType("character varying")
 	@:isVar public var table_name(get,set):String;
-	var initial_table_name:String;
+	var table_name_initialized:Bool;
 	
 	function get_table_name():String{
 		return table_name;
 	}
 
-	function set_table_name(x:String):String{
-		if(table_name != null)
+	function set_table_name(table_name:String):String{
+		if(table_name_initialized)
 			modified('table_name');
-		table_name = x;
-		if(initial_table_name == null)
-			initial_table_name = table_name; 
+		this.table_name = table_name;
+		table_name_initialized = true; 
 		return table_name;
-	}
-
-	public function reset_table_name():String{
-		return initial_table_name;
 	}
 
 	public function clear_table_name():String{
@@ -77,23 +67,18 @@ class TableField extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
-	var initial_mandator:Int;
+	var mandator_initialized:Bool;
 	
 	function get_mandator():Int{
 		return mandator;
 	}
 
-	function set_mandator(x:Int):Int{
-		if(mandator != null)
+	function set_mandator(mandator:Int):Int{
+		if(mandator_initialized)
 			modified('mandator');
-		mandator = x;
-		if(initial_mandator == null)
-			initial_mandator = mandator; 
+		this.mandator = mandator;
+		mandator_initialized = true; 
 		return mandator;
-	}
-
-	public function reset_mandator():Int{
-		return initial_mandator;
 	}
 
 	public function clear_mandator():Int{
@@ -103,23 +88,18 @@ class TableField extends ORM
 		
 	@dataType("character varying")
 	@:isVar public var field_name(get,set):String;
-	var initial_field_name:String;
+	var field_name_initialized:Bool;
 	
 	function get_field_name():String{
 		return field_name;
 	}
 
-	function set_field_name(x:String):String{
-		if(field_name != null)
+	function set_field_name(field_name:String):String{
+		if(field_name_initialized)
 			modified('field_name');
-		field_name = x;
-		if(initial_field_name == null)
-			initial_field_name = field_name; 
+		this.field_name = field_name;
+		field_name_initialized = true; 
 		return field_name;
-	}
-
-	public function reset_field_name():String{
-		return initial_field_name;
 	}
 
 	public function clear_field_name():String{
@@ -129,23 +109,18 @@ class TableField extends ORM
 		
 	@dataType("boolean")
 	@:isVar public var readonly(get,set):Bool;
-	var initial_readonly:Bool;
+	var readonly_initialized:Bool;
 	
 	function get_readonly():Bool{
 		return readonly;
 	}
 
-	function set_readonly(x:Bool):Bool{
-		if(readonly != null)
+	function set_readonly(readonly:Bool):Bool{
+		if(readonly_initialized)
 			modified('readonly');
-		readonly = x;
-		if(initial_readonly == null)
-			initial_readonly = readonly; 
+		this.readonly = readonly;
+		readonly_initialized = true; 
 		return readonly;
-	}
-
-	public function reset_readonly():Bool{
-		return initial_readonly;
 	}
 
 	public function clear_readonly():Bool{
@@ -155,23 +130,18 @@ class TableField extends ORM
 		
 	@dataType("element")
 	@:isVar public var element(get,set):String;
-	var initial_element:String;
+	var element_initialized:Bool;
 	
 	function get_element():String{
 			return element;
 	}
 
-	function set_element(x:String):String{
-		if(element != null)
+	function set_element(element:String):String{
+		if(element_initialized)
 			modified('element');
-		element = x;
-		if(initial_element == null)
-			initial_element = element; 
+		this.element = element;
+		element_initialized = true; 
 		return element;
-	}
-
-	public function reset_element():String{
-		return initial_element;
 	}
 
 	public function clear_element():String{
@@ -181,23 +151,18 @@ class TableField extends ORM
 		
 	@dataType("jsonb")
 	@:isVar public var any(get,set):String;
-	var initial_any:String;
+	var any_initialized:Bool;
 	
 	function get_any():String{
 			return any;
 	}
 
-	function set_any(x:String):String{
-		if(any != null)
+	function set_any(any:String):String{
+		if(any_initialized)
 			modified('any');
-		any = x;
-		if(initial_any == null)
-			initial_any = any; 
+		this.any = any;
+		any_initialized = true; 
 		return any;
-	}
-
-	public function reset_any():String{
-		return initial_any;
 	}
 
 	public function clear_any():String{
@@ -207,23 +172,18 @@ class TableField extends ORM
 		
 	@dataType("boolean")
 	@:isVar public var required(get,set):Bool;
-	var initial_required:Bool;
+	var required_initialized:Bool;
 	
 	function get_required():Bool{
 		return required;
 	}
 
-	function set_required(x:Bool):Bool{
-		if(required != null)
+	function set_required(required:Bool):Bool{
+		if(required_initialized)
 			modified('required');
-		required = x;
-		if(initial_required == null)
-			initial_required = required; 
+		this.required = required;
+		required_initialized = true; 
 		return required;
-	}
-
-	public function reset_required():Bool{
-		return initial_required;
 	}
 
 	public function clear_required():Bool{
@@ -233,23 +193,18 @@ class TableField extends ORM
 		
 	@dataType("boolean")
 	@:isVar public var use_as_index(get,set):Bool;
-	var initial_use_as_index:Bool;
+	var use_as_index_initialized:Bool;
 	
 	function get_use_as_index():Bool{
 		return use_as_index;
 	}
 
-	function set_use_as_index(x:Bool):Bool{
-		if(use_as_index != null)
+	function set_use_as_index(use_as_index:Bool):Bool{
+		if(use_as_index_initialized)
 			modified('use_as_index');
-		use_as_index = x;
-		if(initial_use_as_index == null)
-			initial_use_as_index = use_as_index; 
+		this.use_as_index = use_as_index;
+		use_as_index_initialized = true; 
 		return use_as_index;
-	}
-
-	public function reset_use_as_index():Bool{
-		return initial_use_as_index;
 	}
 
 	public function clear_use_as_index():Bool{
@@ -259,23 +214,18 @@ class TableField extends ORM
 		
 	@dataType("boolean")
 	@:isVar public var admin_only(get,set):Bool;
-	var initial_admin_only:Bool;
+	var admin_only_initialized:Bool;
 	
 	function get_admin_only():Bool{
 		return admin_only;
 	}
 
-	function set_admin_only(x:Bool):Bool{
-		if(admin_only != null)
+	function set_admin_only(admin_only:Bool):Bool{
+		if(admin_only_initialized)
 			modified('admin_only');
-		admin_only = x;
-		if(initial_admin_only == null)
-			initial_admin_only = admin_only; 
+		this.admin_only = admin_only;
+		admin_only_initialized = true; 
 		return admin_only;
-	}
-
-	public function reset_admin_only():Bool{
-		return initial_admin_only;
 	}
 
 	public function clear_admin_only():Bool{
@@ -285,23 +235,18 @@ class TableField extends ORM
 		
 	@dataType("data_type")
 	@:isVar public var field_type(get,set):String;
-	var initial_field_type:String;
+	var field_type_initialized:Bool;
 	
 	function get_field_type():String{
 			return field_type;
 	}
 
-	function set_field_type(x:String):String{
-		if(field_type != null)
+	function set_field_type(field_type:String):String{
+		if(field_type_initialized)
 			modified('field_type');
-		field_type = x;
-		if(initial_field_type == null)
-			initial_field_type = field_type; 
+		this.field_type = field_type;
+		field_type_initialized = true; 
 		return field_type;
-	}
-
-	public function reset_field_type():String{
-		return initial_field_type;
 	}
 
 	public function clear_field_type():String{

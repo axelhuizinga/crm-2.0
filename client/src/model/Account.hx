@@ -27,23 +27,18 @@ class Account extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
-	var initial_id:Int;
+	var id_initialized:Bool;
 	
 	function get_id():Int{
 		return id;
 	}
 
-	function set_id(x:Int):Int{
-		if(id != null)
+	function set_id(id:Int):Int{
+		if(id_initialized)
 			modified('id');
-		id = x;
-		if(initial_id == null)
-			initial_id = id; 
+		this.id = id;
+		id_initialized = true; 
 		return id;
-	}
-
-	public function reset_id():Int{
-		return initial_id;
 	}
 
 	public function clear_id():Int{
@@ -53,23 +48,18 @@ class Account extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var contact(get,set):Int;
-	var initial_contact:Int;
+	var contact_initialized:Bool;
 	
 	function get_contact():Int{
 		return contact;
 	}
 
-	function set_contact(x:Int):Int{
-		if(contact != null)
+	function set_contact(contact:Int):Int{
+		if(contact_initialized)
 			modified('contact');
-		contact = x;
-		if(initial_contact == null)
-			initial_contact = contact; 
+		this.contact = contact;
+		contact_initialized = true; 
 		return contact;
-	}
-
-	public function reset_contact():Int{
-		return initial_contact;
 	}
 
 	public function clear_contact():Int{
@@ -79,23 +69,18 @@ class Account extends ORM
 		
 	@dataType("character varying(64)")
 	@:isVar public var bank_name(get,set):String;
-	var initial_bank_name:String;
+	var bank_name_initialized:Bool;
 	
 	function get_bank_name():String{
 		return bank_name;
 	}
 
-	function set_bank_name(x:String):String{
-		if(bank_name != null)
+	function set_bank_name(bank_name:String):String{
+		if(bank_name_initialized)
 			modified('bank_name');
-		bank_name = x;
-		if(initial_bank_name == null)
-			initial_bank_name = bank_name; 
+		this.bank_name = bank_name;
+		bank_name_initialized = true; 
 		return bank_name;
-	}
-
-	public function reset_bank_name():String{
-		return initial_bank_name;
 	}
 
 	public function clear_bank_name():String{
@@ -105,23 +90,18 @@ class Account extends ORM
 		
 	@dataType("character varying(11)")
 	@:isVar public var bic(get,set):String;
-	var initial_bic:String;
+	var bic_initialized:Bool;
 	
 	function get_bic():String{
 		return bic;
 	}
 
-	function set_bic(x:String):String{
-		if(bic != null)
+	function set_bic(bic:String):String{
+		if(bic_initialized)
 			modified('bic');
-		bic = x;
-		if(initial_bic == null)
-			initial_bic = bic; 
+		this.bic = bic;
+		bic_initialized = true; 
 		return bic;
-	}
-
-	public function reset_bic():String{
-		return initial_bic;
 	}
 
 	public function clear_bic():String{
@@ -131,23 +111,18 @@ class Account extends ORM
 		
 	@dataType("character varying(32)")
 	@:isVar public var account(get,set):String;
-	var initial_account:String;
+	var account_initialized:Bool;
 	
 	function get_account():String{
 		return account;
 	}
 
-	function set_account(x:String):String{
-		if(account != null)
+	function set_account(account:String):String{
+		if(account_initialized)
 			modified('account');
-		account = x;
-		if(initial_account == null)
-			initial_account = account; 
+		this.account = account;
+		account_initialized = true; 
 		return account;
-	}
-
-	public function reset_account():String{
-		return initial_account;
 	}
 
 	public function clear_account():String{
@@ -157,23 +132,18 @@ class Account extends ORM
 		
 	@dataType("character varying(12)")
 	@:isVar public var blz(get,set):String;
-	var initial_blz:String;
+	var blz_initialized:Bool;
 	
 	function get_blz():String{
 		return blz;
 	}
 
-	function set_blz(x:String):String{
-		if(blz != null)
+	function set_blz(blz:String):String{
+		if(blz_initialized)
 			modified('blz');
-		blz = x;
-		if(initial_blz == null)
-			initial_blz = blz; 
+		this.blz = blz;
+		blz_initialized = true; 
 		return blz;
-	}
-
-	public function reset_blz():String{
-		return initial_blz;
 	}
 
 	public function clear_blz():String{
@@ -183,23 +153,18 @@ class Account extends ORM
 		
 	@dataType("character varying(32)")
 	@:isVar public var iban(get,set):String;
-	var initial_iban:String;
+	var iban_initialized:Bool;
 	
 	function get_iban():String{
 		return iban;
 	}
 
-	function set_iban(x:String):String{
-		if(iban != null)
+	function set_iban(iban:String):String{
+		if(iban_initialized)
 			modified('iban');
-		iban = x;
-		if(initial_iban == null)
-			initial_iban = iban; 
+		this.iban = iban;
+		iban_initialized = true; 
 		return iban;
-	}
-
-	public function reset_iban():String{
-		return initial_iban;
 	}
 
 	public function clear_iban():String{
@@ -209,23 +174,18 @@ class Account extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var creditor(get,set):Int;
-	var initial_creditor:Int;
+	var creditor_initialized:Bool;
 	
 	function get_creditor():Int{
 		return creditor;
 	}
 
-	function set_creditor(x:Int):Int{
-		if(creditor != null)
+	function set_creditor(creditor:Int):Int{
+		if(creditor_initialized)
 			modified('creditor');
-		creditor = x;
-		if(initial_creditor == null)
-			initial_creditor = creditor; 
+		this.creditor = creditor;
+		creditor_initialized = true; 
 		return creditor;
-	}
-
-	public function reset_creditor():Int{
-		return initial_creditor;
 	}
 
 	public function clear_creditor():Int{
@@ -235,23 +195,18 @@ class Account extends ORM
 		
 	@dataType("date")
 	@:isVar public var sign_date(get,set):String;
-	var initial_sign_date:String;
+	var sign_date_initialized:Bool;
 	
 	function get_sign_date():String{
 			return sign_date;
 	}
 
-	function set_sign_date(x:String):String{
-		if(sign_date != null)
+	function set_sign_date(sign_date:String):String{
+		if(sign_date_initialized)
 			modified('sign_date');
-		sign_date = x;
-		if(initial_sign_date == null)
-			initial_sign_date = sign_date; 
+		this.sign_date = sign_date;
+		sign_date_initialized = true; 
 		return sign_date;
-	}
-
-	public function reset_sign_date():String{
-		return initial_sign_date;
 	}
 
 	public function clear_sign_date():String{
@@ -261,23 +216,18 @@ class Account extends ORM
 		
 	@dataType("accounts_state")
 	@:isVar public var state(get,set):String;
-	var initial_state:String;
+	var state_initialized:Bool;
 	
 	function get_state():String{
 			return state;
 	}
 
-	function set_state(x:String):String{
-		if(state != null)
+	function set_state(state:String):String{
+		if(state_initialized)
 			modified('state');
-		state = x;
-		if(initial_state == null)
-			initial_state = state; 
+		this.state = state;
+		state_initialized = true; 
 		return state;
-	}
-
-	public function reset_state():String{
-		return initial_state;
 	}
 
 	public function clear_state():String{
@@ -287,23 +237,18 @@ class Account extends ORM
 		
 	@dataType("timestamp without time zone")
 	@:isVar public var creation_date(get,set):String;
-	var initial_creation_date:String;
+	var creation_date_initialized:Bool;
 	
 	function get_creation_date():String{
 			return creation_date;
 	}
 
-	function set_creation_date(x:String):String{
-		if(creation_date != null)
+	function set_creation_date(creation_date:String):String{
+		if(creation_date_initialized)
 			modified('creation_date');
-		creation_date = x;
-		if(initial_creation_date == null)
-			initial_creation_date = creation_date; 
+		this.creation_date = creation_date;
+		creation_date_initialized = true; 
 		return creation_date;
-	}
-
-	public function reset_creation_date():String{
-		return initial_creation_date;
 	}
 
 	public function clear_creation_date():String{
@@ -313,23 +258,18 @@ class Account extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
-	var initial_edited_by:Int;
+	var edited_by_initialized:Bool;
 	
 	function get_edited_by():Int{
 		return edited_by;
 	}
 
-	function set_edited_by(x:Int):Int{
-		if(edited_by != null)
+	function set_edited_by(edited_by:Int):Int{
+		if(edited_by_initialized)
 			modified('edited_by');
-		edited_by = x;
-		if(initial_edited_by == null)
-			initial_edited_by = edited_by; 
+		this.edited_by = edited_by;
+		edited_by_initialized = true; 
 		return edited_by;
-	}
-
-	public function reset_edited_by():Int{
-		return initial_edited_by;
 	}
 
 	public function clear_edited_by():Int{
@@ -339,23 +279,18 @@ class Account extends ORM
 		
 	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_locktime(get,set):String;
-	var initial_last_locktime:String;
+	var last_locktime_initialized:Bool;
 	
 	function get_last_locktime():String{
 			return last_locktime;
 	}
 
-	function set_last_locktime(x:String):String{
-		if(last_locktime != null)
+	function set_last_locktime(last_locktime:String):String{
+		if(last_locktime_initialized)
 			modified('last_locktime');
-		last_locktime = x;
-		if(initial_last_locktime == null)
-			initial_last_locktime = last_locktime; 
+		this.last_locktime = last_locktime;
+		last_locktime_initialized = true; 
 		return last_locktime;
-	}
-
-	public function reset_last_locktime():String{
-		return initial_last_locktime;
 	}
 
 	public function clear_last_locktime():String{

@@ -32,23 +32,18 @@ class User extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
-	var initial_id:Int;
+	var id_initialized:Bool;
 	
 	function get_id():Int{
 		return id;
 	}
 
-	function set_id(x:Int):Int{
-		if(id != null)
+	function set_id(id:Int):Int{
+		if(id_initialized)
 			modified('id');
-		id = x;
-		if(initial_id == null)
-			initial_id = id; 
+		this.id = id;
+		id_initialized = true; 
 		return id;
-	}
-
-	public function reset_id():Int{
-		return initial_id;
 	}
 
 	public function clear_id():Int{
@@ -58,23 +53,18 @@ class User extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var contact(get,set):Int;
-	var initial_contact:Int;
+	var contact_initialized:Bool;
 	
 	function get_contact():Int{
 		return contact;
 	}
 
-	function set_contact(x:Int):Int{
-		if(contact != null)
+	function set_contact(contact:Int):Int{
+		if(contact_initialized)
 			modified('contact');
-		contact = x;
-		if(initial_contact == null)
-			initial_contact = contact; 
+		this.contact = contact;
+		contact_initialized = true; 
 		return contact;
-	}
-
-	public function reset_contact():Int{
-		return initial_contact;
 	}
 
 	public function clear_contact():Int{
@@ -84,23 +74,18 @@ class User extends ORM
 		
 	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_login(get,set):String;
-	var initial_last_login:String;
+	var last_login_initialized:Bool;
 	
 	function get_last_login():String{
 			return last_login;
 	}
 
-	function set_last_login(x:String):String{
-		if(last_login != null)
+	function set_last_login(last_login:String):String{
+		if(last_login_initialized)
 			modified('last_login');
-		last_login = x;
-		if(initial_last_login == null)
-			initial_last_login = last_login; 
+		this.last_login = last_login;
+		last_login_initialized = true; 
 		return last_login;
-	}
-
-	public function reset_last_login():String{
-		return initial_last_login;
 	}
 
 	public function clear_last_login():String{
@@ -110,23 +95,18 @@ class User extends ORM
 		
 	@dataType("character varying(512)")
 	@:isVar public var password(get,set):String;
-	var initial_password:String;
+	var password_initialized:Bool;
 	
 	function get_password():String{
 		return password;
 	}
 
-	function set_password(x:String):String{
-		if(password != null)
+	function set_password(password:String):String{
+		if(password_initialized)
 			modified('password');
-		password = x;
-		if(initial_password == null)
-			initial_password = password; 
+		this.password = password;
+		password_initialized = true; 
 		return password;
-	}
-
-	public function reset_password():String{
-		return initial_password;
 	}
 
 	public function clear_password():String{
@@ -136,23 +116,18 @@ class User extends ORM
 		
 	@dataType("character varying(64)")
 	@:isVar public var user_name(get,set):String;
-	var initial_user_name:String;
+	var user_name_initialized:Bool;
 	
 	function get_user_name():String{
 		return user_name;
 	}
 
-	function set_user_name(x:String):String{
-		if(user_name != null)
+	function set_user_name(user_name:String):String{
+		if(user_name_initialized)
 			modified('user_name');
-		user_name = x;
-		if(initial_user_name == null)
-			initial_user_name = user_name; 
+		this.user_name = user_name;
+		user_name_initialized = true; 
 		return user_name;
-	}
-
-	public function reset_user_name():String{
-		return initial_user_name;
 	}
 
 	public function clear_user_name():String{
@@ -162,23 +137,18 @@ class User extends ORM
 		
 	@dataType("boolean")
 	@:isVar public var active(get,set):Bool;
-	var initial_active:Bool;
+	var active_initialized:Bool;
 	
 	function get_active():Bool{
 		return active;
 	}
 
-	function set_active(x:Bool):Bool{
-		if(active != null)
+	function set_active(active:Bool):Bool{
+		if(active_initialized)
 			modified('active');
-		active = x;
-		if(initial_active == null)
-			initial_active = active; 
+		this.active = active;
+		active_initialized = true; 
 		return active;
-	}
-
-	public function reset_active():Bool{
-		return initial_active;
 	}
 
 	public function clear_active():Bool{
@@ -188,23 +158,18 @@ class User extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
-	var initial_edited_by:Int;
+	var edited_by_initialized:Bool;
 	
 	function get_edited_by():Int{
 		return edited_by;
 	}
 
-	function set_edited_by(x:Int):Int{
-		if(edited_by != null)
+	function set_edited_by(edited_by:Int):Int{
+		if(edited_by_initialized)
 			modified('edited_by');
-		edited_by = x;
-		if(initial_edited_by == null)
-			initial_edited_by = edited_by; 
+		this.edited_by = edited_by;
+		edited_by_initialized = true; 
 		return edited_by;
-	}
-
-	public function reset_edited_by():Int{
-		return initial_edited_by;
 	}
 
 	public function clear_edited_by():Int{
@@ -214,23 +179,18 @@ class User extends ORM
 		
 	@dataType("jsonb")
 	@:isVar public var editing(get,set):String;
-	var initial_editing:String;
+	var editing_initialized:Bool;
 	
 	function get_editing():String{
 			return editing;
 	}
 
-	function set_editing(x:String):String{
-		if(editing != null)
+	function set_editing(editing:String):String{
+		if(editing_initialized)
 			modified('editing');
-		editing = x;
-		if(initial_editing == null)
-			initial_editing = editing; 
+		this.editing = editing;
+		editing_initialized = true; 
 		return editing;
-	}
-
-	public function reset_editing():String{
-		return initial_editing;
 	}
 
 	public function clear_editing():String{
@@ -240,23 +200,18 @@ class User extends ORM
 		
 	@dataType("jsonb")
 	@:isVar public var settings(get,set):String;
-	var initial_settings:String;
+	var settings_initialized:Bool;
 	
 	function get_settings():String{
 			return settings;
 	}
 
-	function set_settings(x:String):String{
-		if(settings != null)
+	function set_settings(settings:String):String{
+		if(settings_initialized)
 			modified('settings');
-		settings = x;
-		if(initial_settings == null)
-			initial_settings = settings; 
+		this.settings = settings;
+		settings_initialized = true; 
 		return settings;
-	}
-
-	public function reset_settings():String{
-		return initial_settings;
 	}
 
 	public function clear_settings():String{
@@ -266,23 +221,18 @@ class User extends ORM
 		
 	@dataType("jsonb")
 	@:isVar public var external(get,set):String;
-	var initial_external:String;
+	var external_initialized:Bool;
 	
 	function get_external():String{
 			return external;
 	}
 
-	function set_external(x:String):String{
-		if(external != null)
+	function set_external(external:String):String{
+		if(external_initialized)
 			modified('external');
-		external = x;
-		if(initial_external == null)
-			initial_external = external; 
+		this.external = external;
+		external_initialized = true; 
 		return external;
-	}
-
-	public function reset_external():String{
-		return initial_external;
 	}
 
 	public function clear_external():String{
@@ -292,23 +242,18 @@ class User extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var user_group(get,set):Int;
-	var initial_user_group:Int;
+	var user_group_initialized:Bool;
 	
 	function get_user_group():Int{
 		return user_group;
 	}
 
-	function set_user_group(x:Int):Int{
-		if(user_group != null)
+	function set_user_group(user_group:Int):Int{
+		if(user_group_initialized)
 			modified('user_group');
-		user_group = x;
-		if(initial_user_group == null)
-			initial_user_group = user_group; 
+		this.user_group = user_group;
+		user_group_initialized = true; 
 		return user_group;
-	}
-
-	public function reset_user_group():Int{
-		return initial_user_group;
 	}
 
 	public function clear_user_group():Int{
@@ -318,23 +263,18 @@ class User extends ORM
 		
 	@dataType("boolean")
 	@:isVar public var change_pass_required(get,set):Bool;
-	var initial_change_pass_required:Bool;
+	var change_pass_required_initialized:Bool;
 	
 	function get_change_pass_required():Bool{
 		return change_pass_required;
 	}
 
-	function set_change_pass_required(x:Bool):Bool{
-		if(change_pass_required != null)
+	function set_change_pass_required(change_pass_required:Bool):Bool{
+		if(change_pass_required_initialized)
 			modified('change_pass_required');
-		change_pass_required = x;
-		if(initial_change_pass_required == null)
-			initial_change_pass_required = change_pass_required; 
+		this.change_pass_required = change_pass_required;
+		change_pass_required_initialized = true; 
 		return change_pass_required;
-	}
-
-	public function reset_change_pass_required():Bool{
-		return initial_change_pass_required;
 	}
 
 	public function clear_change_pass_required():Bool{
@@ -344,23 +284,18 @@ class User extends ORM
 		
 	@dataType("boolean")
 	@:isVar public var online(get,set):Bool;
-	var initial_online:Bool;
+	var online_initialized:Bool;
 	
 	function get_online():Bool{
 		return online;
 	}
 
-	function set_online(x:Bool):Bool{
-		if(online != null)
+	function set_online(online:Bool):Bool{
+		if(online_initialized)
 			modified('online');
-		online = x;
-		if(initial_online == null)
-			initial_online = online; 
+		this.online = online;
+		online_initialized = true; 
 		return online;
-	}
-
-	public function reset_online():Bool{
-		return initial_online;
 	}
 
 	public function clear_online():Bool{
@@ -370,23 +305,18 @@ class User extends ORM
 		
 	@dataType("timestamp without time zone")
 	@:isVar public var last_request_time(get,set):String;
-	var initial_last_request_time:String;
+	var last_request_time_initialized:Bool;
 	
 	function get_last_request_time():String{
 			return last_request_time;
 	}
 
-	function set_last_request_time(x:String):String{
-		if(last_request_time != null)
+	function set_last_request_time(last_request_time:String):String{
+		if(last_request_time_initialized)
 			modified('last_request_time');
-		last_request_time = x;
-		if(initial_last_request_time == null)
-			initial_last_request_time = last_request_time; 
+		this.last_request_time = last_request_time;
+		last_request_time_initialized = true; 
 		return last_request_time;
-	}
-
-	public function reset_last_request_time():String{
-		return initial_last_request_time;
 	}
 
 	public function clear_last_request_time():String{
@@ -396,23 +326,18 @@ class User extends ORM
 		
 	@dataType("character varying(4096)")
 	@:isVar public var request(get,set):String;
-	var initial_request:String;
+	var request_initialized:Bool;
 	
 	function get_request():String{
 		return request;
 	}
 
-	function set_request(x:String):String{
-		if(request != null)
+	function set_request(request:String):String{
+		if(request_initialized)
 			modified('request');
-		request = x;
-		if(initial_request == null)
-			initial_request = request; 
+		this.request = request;
+		request_initialized = true; 
 		return request;
-	}
-
-	public function reset_request():String{
-		return initial_request;
 	}
 
 	public function clear_request():String{
@@ -422,23 +347,18 @@ class User extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
-	var initial_mandator:Int;
+	var mandator_initialized:Bool;
 	
 	function get_mandator():Int{
 		return mandator;
 	}
 
-	function set_mandator(x:Int):Int{
-		if(mandator != null)
+	function set_mandator(mandator:Int):Int{
+		if(mandator_initialized)
 			modified('mandator');
-		mandator = x;
-		if(initial_mandator == null)
-			initial_mandator = mandator; 
+		this.mandator = mandator;
+		mandator_initialized = true; 
 		return mandator;
-	}
-
-	public function reset_mandator():Int{
-		return initial_mandator;
 	}
 
 	public function clear_mandator():Int{
@@ -448,23 +368,18 @@ class User extends ORM
 		
 	@dataType("timestamp(0) without time zone")
 	@:isVar public var last_locktime(get,set):String;
-	var initial_last_locktime:String;
+	var last_locktime_initialized:Bool;
 	
 	function get_last_locktime():String{
 			return last_locktime;
 	}
 
-	function set_last_locktime(x:String):String{
-		if(last_locktime != null)
+	function set_last_locktime(last_locktime:String):String{
+		if(last_locktime_initialized)
 			modified('last_locktime');
-		last_locktime = x;
-		if(initial_last_locktime == null)
-			initial_last_locktime = last_locktime; 
+		this.last_locktime = last_locktime;
+		last_locktime_initialized = true; 
 		return last_locktime;
-	}
-
-	public function reset_last_locktime():String{
-		return initial_last_locktime;
 	}
 
 	public function clear_last_locktime():String{
@@ -474,23 +389,18 @@ class User extends ORM
 		
 	@dataType("character varying(64)")
 	@:isVar public var phash(get,set):String;
-	var initial_phash:String;
+	var phash_initialized:Bool;
 	
 	function get_phash():String{
 		return phash;
 	}
 
-	function set_phash(x:String):String{
-		if(phash != null)
+	function set_phash(phash:String):String{
+		if(phash_initialized)
 			modified('phash');
-		phash = x;
-		if(initial_phash == null)
-			initial_phash = phash; 
+		this.phash = phash;
+		phash_initialized = true; 
 		return phash;
-	}
-
-	public function reset_phash():String{
-		return initial_phash;
 	}
 
 	public function clear_phash():String{

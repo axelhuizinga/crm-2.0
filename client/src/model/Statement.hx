@@ -45,23 +45,18 @@ class Statement extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var a(get,set):Int;
-	var initial_a:Int;
+	var a_initialized:Bool;
 	
 	function get_a():Int{
 		return a;
 	}
 
-	function set_a(x:Int):Int{
-		if(a != null)
+	function set_a(a:Int):Int{
+		if(a_initialized)
 			modified('a');
-		a = x;
-		if(initial_a == null)
-			initial_a = a; 
+		this.a = a;
+		a_initialized = true; 
 		return a;
-	}
-
-	public function reset_a():Int{
-		return initial_a;
 	}
 
 	public function clear_a():Int{
@@ -71,23 +66,18 @@ class Statement extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var b(get,set):Int;
-	var initial_b:Int;
+	var b_initialized:Bool;
 	
 	function get_b():Int{
 		return b;
 	}
 
-	function set_b(x:Int):Int{
-		if(b != null)
+	function set_b(b:Int):Int{
+		if(b_initialized)
 			modified('b');
-		b = x;
-		if(initial_b == null)
-			initial_b = b; 
+		this.b = b;
+		b_initialized = true; 
 		return b;
-	}
-
-	public function reset_b():Int{
-		return initial_b;
 	}
 
 	public function clear_b():Int{
@@ -97,23 +87,18 @@ class Statement extends ORM
 		
 	@dataType("date")
 	@:isVar public var c(get,set):String;
-	var initial_c:String;
+	var c_initialized:Bool;
 	
 	function get_c():String{
 			return c;
 	}
 
-	function set_c(x:String):String{
-		if(c != null)
+	function set_c(c:String):String{
+		if(c_initialized)
 			modified('c');
-		c = x;
-		if(initial_c == null)
-			initial_c = c; 
+		this.c = c;
+		c_initialized = true; 
 		return c;
-	}
-
-	public function reset_c():String{
-		return initial_c;
 	}
 
 	public function clear_c():String{
@@ -123,23 +108,18 @@ class Statement extends ORM
 		
 	@dataType("date")
 	@:isVar public var d(get,set):String;
-	var initial_d:String;
+	var d_initialized:Bool;
 	
 	function get_d():String{
 			return d;
 	}
 
-	function set_d(x:String):String{
-		if(d != null)
+	function set_d(d:String):String{
+		if(d_initialized)
 			modified('d');
-		d = x;
-		if(initial_d == null)
-			initial_d = d; 
+		this.d = d;
+		d_initialized = true; 
 		return d;
-	}
-
-	public function reset_d():String{
-		return initial_d;
 	}
 
 	public function clear_d():String{
@@ -149,23 +129,18 @@ class Statement extends ORM
 		
 	@dataType("double precision")
 	@:isVar public var e(get,set):String;
-	var initial_e:String;
+	var e_initialized:Bool;
 	
 	function get_e():String{
 			return e;
 	}
 
-	function set_e(x:String):String{
-		if(e != null)
+	function set_e(e:String):String{
+		if(e_initialized)
 			modified('e');
-		e = x;
-		if(initial_e == null)
-			initial_e = e; 
+		this.e = e;
+		e_initialized = true; 
 		return e;
-	}
-
-	public function reset_e():String{
-		return initial_e;
 	}
 
 	public function clear_e():String{
@@ -175,23 +150,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(3)")
 	@:isVar public var f(get,set):String;
-	var initial_f:String;
+	var f_initialized:Bool;
 	
 	function get_f():String{
 		return f;
 	}
 
-	function set_f(x:String):String{
-		if(f != null)
+	function set_f(f:String):String{
+		if(f_initialized)
 			modified('f');
-		f = x;
-		if(initial_f == null)
-			initial_f = f; 
+		this.f = f;
+		f_initialized = true; 
 		return f;
-	}
-
-	public function reset_f():String{
-		return initial_f;
 	}
 
 	public function clear_f():String{
@@ -201,23 +171,18 @@ class Statement extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var g(get,set):Int;
-	var initial_g:Int;
+	var g_initialized:Bool;
 	
 	function get_g():Int{
 		return g;
 	}
 
-	function set_g(x:Int):Int{
-		if(g != null)
+	function set_g(g:Int):Int{
+		if(g_initialized)
 			modified('g');
-		g = x;
-		if(initial_g == null)
-			initial_g = g; 
+		this.g = g;
+		g_initialized = true; 
 		return g;
-	}
-
-	public function reset_g():Int{
-		return initial_g;
 	}
 
 	public function clear_g():Int{
@@ -227,23 +192,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(160)")
 	@:isVar public var h(get,set):String;
-	var initial_h:String;
+	var h_initialized:Bool;
 	
 	function get_h():String{
 		return h;
 	}
 
-	function set_h(x:String):String{
-		if(h != null)
+	function set_h(h:String):String{
+		if(h_initialized)
 			modified('h');
-		h = x;
-		if(initial_h == null)
-			initial_h = h; 
+		this.h = h;
+		h_initialized = true; 
 		return h;
-	}
-
-	public function reset_h():String{
-		return initial_h;
 	}
 
 	public function clear_h():String{
@@ -253,23 +213,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(160)")
 	@:isVar public var i(get,set):String;
-	var initial_i:String;
+	var i_initialized:Bool;
 	
 	function get_i():String{
 		return i;
 	}
 
-	function set_i(x:String):String{
-		if(i != null)
+	function set_i(i:String):String{
+		if(i_initialized)
 			modified('i');
-		i = x;
-		if(initial_i == null)
-			initial_i = i; 
+		this.i = i;
+		i_initialized = true; 
 		return i;
-	}
-
-	public function reset_i():String{
-		return initial_i;
 	}
 
 	public function clear_i():String{
@@ -279,23 +234,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(160)")
 	@:isVar public var j(get,set):String;
-	var initial_j:String;
+	var j_initialized:Bool;
 	
 	function get_j():String{
 		return j;
 	}
 
-	function set_j(x:String):String{
-		if(j != null)
+	function set_j(j:String):String{
+		if(j_initialized)
 			modified('j');
-		j = x;
-		if(initial_j == null)
-			initial_j = j; 
+		this.j = j;
+		j_initialized = true; 
 		return j;
-	}
-
-	public function reset_j():String{
-		return initial_j;
 	}
 
 	public function clear_j():String{
@@ -305,23 +255,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(160)")
 	@:isVar public var k(get,set):String;
-	var initial_k:String;
+	var k_initialized:Bool;
 	
 	function get_k():String{
 		return k;
 	}
 
-	function set_k(x:String):String{
-		if(k != null)
+	function set_k(k:String):String{
+		if(k_initialized)
 			modified('k');
-		k = x;
-		if(initial_k == null)
-			initial_k = k; 
+		this.k = k;
+		k_initialized = true; 
 		return k;
-	}
-
-	public function reset_k():String{
-		return initial_k;
 	}
 
 	public function clear_k():String{
@@ -331,23 +276,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(160)")
 	@:isVar public var l(get,set):String;
-	var initial_l:String;
+	var l_initialized:Bool;
 	
 	function get_l():String{
 		return l;
 	}
 
-	function set_l(x:String):String{
-		if(l != null)
+	function set_l(l:String):String{
+		if(l_initialized)
 			modified('l');
-		l = x;
-		if(initial_l == null)
-			initial_l = l; 
+		this.l = l;
+		l_initialized = true; 
 		return l;
-	}
-
-	public function reset_l():String{
-		return initial_l;
 	}
 
 	public function clear_l():String{
@@ -357,23 +297,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(160)")
 	@:isVar public var m(get,set):String;
-	var initial_m:String;
+	var m_initialized:Bool;
 	
 	function get_m():String{
 		return m;
 	}
 
-	function set_m(x:String):String{
-		if(m != null)
+	function set_m(m:String):String{
+		if(m_initialized)
 			modified('m');
-		m = x;
-		if(initial_m == null)
-			initial_m = m; 
+		this.m = m;
+		m_initialized = true; 
 		return m;
-	}
-
-	public function reset_m():String{
-		return initial_m;
 	}
 
 	public function clear_m():String{
@@ -383,23 +318,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(32)")
 	@:isVar public var n(get,set):String;
-	var initial_n:String;
+	var n_initialized:Bool;
 	
 	function get_n():String{
 		return n;
 	}
 
-	function set_n(x:String):String{
-		if(n != null)
+	function set_n(n:String):String{
+		if(n_initialized)
 			modified('n');
-		n = x;
-		if(initial_n == null)
-			initial_n = n; 
+		this.n = n;
+		n_initialized = true; 
 		return n;
-	}
-
-	public function reset_n():String{
-		return initial_n;
 	}
 
 	public function clear_n():String{
@@ -409,23 +339,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(32)")
 	@:isVar public var o(get,set):String;
-	var initial_o:String;
+	var o_initialized:Bool;
 	
 	function get_o():String{
 		return o;
 	}
 
-	function set_o(x:String):String{
-		if(o != null)
+	function set_o(o:String):String{
+		if(o_initialized)
 			modified('o');
-		o = x;
-		if(initial_o == null)
-			initial_o = o; 
+		this.o = o;
+		o_initialized = true; 
 		return o;
-	}
-
-	public function reset_o():String{
-		return initial_o;
 	}
 
 	public function clear_o():String{
@@ -435,23 +360,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(32)")
 	@:isVar public var p(get,set):String;
-	var initial_p:String;
+	var p_initialized:Bool;
 	
 	function get_p():String{
 		return p;
 	}
 
-	function set_p(x:String):String{
-		if(p != null)
+	function set_p(p:String):String{
+		if(p_initialized)
 			modified('p');
-		p = x;
-		if(initial_p == null)
-			initial_p = p; 
+		this.p = p;
+		p_initialized = true; 
 		return p;
-	}
-
-	public function reset_p():String{
-		return initial_p;
 	}
 
 	public function clear_p():String{
@@ -461,23 +381,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(64)")
 	@:isVar public var q(get,set):String;
-	var initial_q:String;
+	var q_initialized:Bool;
 	
 	function get_q():String{
 		return q;
 	}
 
-	function set_q(x:String):String{
-		if(q != null)
+	function set_q(q:String):String{
+		if(q_initialized)
 			modified('q');
-		q = x;
-		if(initial_q == null)
-			initial_q = q; 
+		this.q = q;
+		q_initialized = true; 
 		return q;
-	}
-
-	public function reset_q():String{
-		return initial_q;
 	}
 
 	public function clear_q():String{
@@ -487,23 +402,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(32)")
 	@:isVar public var r(get,set):String;
-	var initial_r:String;
+	var r_initialized:Bool;
 	
 	function get_r():String{
 		return r;
 	}
 
-	function set_r(x:String):String{
-		if(r != null)
+	function set_r(r:String):String{
+		if(r_initialized)
 			modified('r');
-		r = x;
-		if(initial_r == null)
-			initial_r = r; 
+		this.r = r;
+		r_initialized = true; 
 		return r;
-	}
-
-	public function reset_r():String{
-		return initial_r;
 	}
 
 	public function clear_r():String{
@@ -513,23 +423,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(32)")
 	@:isVar public var s(get,set):String;
-	var initial_s:String;
+	var s_initialized:Bool;
 	
 	function get_s():String{
 		return s;
 	}
 
-	function set_s(x:String):String{
-		if(s != null)
+	function set_s(s:String):String{
+		if(s_initialized)
 			modified('s');
-		s = x;
-		if(initial_s == null)
-			initial_s = s; 
+		this.s = s;
+		s_initialized = true; 
 		return s;
-	}
-
-	public function reset_s():String{
-		return initial_s;
 	}
 
 	public function clear_s():String{
@@ -539,23 +444,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(32)")
 	@:isVar public var t(get,set):String;
-	var initial_t:String;
+	var t_initialized:Bool;
 	
 	function get_t():String{
 		return t;
 	}
 
-	function set_t(x:String):String{
-		if(t != null)
+	function set_t(t:String):String{
+		if(t_initialized)
 			modified('t');
-		t = x;
-		if(initial_t == null)
-			initial_t = t; 
+		this.t = t;
+		t_initialized = true; 
 		return t;
-	}
-
-	public function reset_t():String{
-		return initial_t;
 	}
 
 	public function clear_t():String{
@@ -565,23 +465,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(32)")
 	@:isVar public var u(get,set):String;
-	var initial_u:String;
+	var u_initialized:Bool;
 	
 	function get_u():String{
 		return u;
 	}
 
-	function set_u(x:String):String{
-		if(u != null)
+	function set_u(u:String):String{
+		if(u_initialized)
 			modified('u');
-		u = x;
-		if(initial_u == null)
-			initial_u = u; 
+		this.u = u;
+		u_initialized = true; 
 		return u;
-	}
-
-	public function reset_u():String{
-		return initial_u;
 	}
 
 	public function clear_u():String{
@@ -591,23 +486,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(32)")
 	@:isVar public var v(get,set):String;
-	var initial_v:String;
+	var v_initialized:Bool;
 	
 	function get_v():String{
 		return v;
 	}
 
-	function set_v(x:String):String{
-		if(v != null)
+	function set_v(v:String):String{
+		if(v_initialized)
 			modified('v');
-		v = x;
-		if(initial_v == null)
-			initial_v = v; 
+		this.v = v;
+		v_initialized = true; 
 		return v;
-	}
-
-	public function reset_v():String{
-		return initial_v;
 	}
 
 	public function clear_v():String{
@@ -617,23 +507,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(28)")
 	@:isVar public var w(get,set):String;
-	var initial_w:String;
+	var w_initialized:Bool;
 	
 	function get_w():String{
 		return w;
 	}
 
-	function set_w(x:String):String{
-		if(w != null)
+	function set_w(w:String):String{
+		if(w_initialized)
 			modified('w');
-		w = x;
-		if(initial_w == null)
-			initial_w = w; 
+		this.w = w;
+		w_initialized = true; 
 		return w;
-	}
-
-	public function reset_w():String{
-		return initial_w;
 	}
 
 	public function clear_w():String{
@@ -643,23 +528,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(32)")
 	@:isVar public var x(get,set):String;
-	var initial_x:String;
+	var x_initialized:Bool;
 	
 	function get_x():String{
 		return x;
 	}
 
 	function set_x(x:String):String{
-		if(x != null)
+		if(x_initialized)
 			modified('x');
-		x = x;
-		if(initial_x == null)
-			initial_x = x; 
+		this.x = x;
+		x_initialized = true; 
 		return x;
-	}
-
-	public function reset_x():String{
-		return initial_x;
 	}
 
 	public function clear_x():String{
@@ -669,23 +549,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(11)")
 	@:isVar public var y(get,set):String;
-	var initial_y:String;
+	var y_initialized:Bool;
 	
 	function get_y():String{
 		return y;
 	}
 
-	function set_y(x:String):String{
-		if(y != null)
+	function set_y(y:String):String{
+		if(y_initialized)
 			modified('y');
-		y = x;
-		if(initial_y == null)
-			initial_y = y; 
+		this.y = y;
+		y_initialized = true; 
 		return y;
-	}
-
-	public function reset_y():String{
-		return initial_y;
 	}
 
 	public function clear_y():String{
@@ -695,23 +570,18 @@ class Statement extends ORM
 		
 	@dataType("character varying(22)")
 	@:isVar public var z(get,set):String;
-	var initial_z:String;
+	var z_initialized:Bool;
 	
 	function get_z():String{
 		return z;
 	}
 
-	function set_z(x:String):String{
-		if(z != null)
+	function set_z(z:String):String{
+		if(z_initialized)
 			modified('z');
-		z = x;
-		if(initial_z == null)
-			initial_z = z; 
+		this.z = z;
+		z_initialized = true; 
 		return z;
-	}
-
-	public function reset_z():String{
-		return initial_z;
 	}
 
 	public function clear_z():String{
@@ -721,23 +591,18 @@ class Statement extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var aa(get,set):Int;
-	var initial_aa:Int;
+	var aa_initialized:Bool;
 	
 	function get_aa():Int{
 		return aa;
 	}
 
-	function set_aa(x:Int):Int{
-		if(aa != null)
+	function set_aa(aa:Int):Int{
+		if(aa_initialized)
 			modified('aa');
-		aa = x;
-		if(initial_aa == null)
-			initial_aa = aa; 
+		this.aa = aa;
+		aa_initialized = true; 
 		return aa;
-	}
-
-	public function reset_aa():Int{
-		return initial_aa;
 	}
 
 	public function clear_aa():Int{
@@ -747,23 +612,18 @@ class Statement extends ORM
 		
 	@dataType("smallint")
 	@:isVar public var processed(get,set):Int;
-	var initial_processed:Int;
+	var processed_initialized:Bool;
 	
 	function get_processed():Int{
 		return processed;
 	}
 
-	function set_processed(x:Int):Int{
-		if(processed != null)
+	function set_processed(processed:Int):Int{
+		if(processed_initialized)
 			modified('processed');
-		processed = x;
-		if(initial_processed == null)
-			initial_processed = processed; 
+		this.processed = processed;
+		processed_initialized = true; 
 		return processed;
-	}
-
-	public function reset_processed():Int{
-		return initial_processed;
 	}
 
 	public function clear_processed():Int{
@@ -773,23 +633,18 @@ class Statement extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
-	var initial_id:Int;
+	var id_initialized:Bool;
 	
 	function get_id():Int{
 		return id;
 	}
 
-	function set_id(x:Int):Int{
-		if(id != null)
+	function set_id(id:Int):Int{
+		if(id_initialized)
 			modified('id');
-		id = x;
-		if(initial_id == null)
-			initial_id = id; 
+		this.id = id;
+		id_initialized = true; 
 		return id;
-	}
-
-	public function reset_id():Int{
-		return initial_id;
 	}
 
 	public function clear_id():Int{
@@ -799,23 +654,18 @@ class Statement extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
-	var initial_edited_by:Int;
+	var edited_by_initialized:Bool;
 	
 	function get_edited_by():Int{
 		return edited_by;
 	}
 
-	function set_edited_by(x:Int):Int{
-		if(edited_by != null)
+	function set_edited_by(edited_by:Int):Int{
+		if(edited_by_initialized)
 			modified('edited_by');
-		edited_by = x;
-		if(initial_edited_by == null)
-			initial_edited_by = edited_by; 
+		this.edited_by = edited_by;
+		edited_by_initialized = true; 
 		return edited_by;
-	}
-
-	public function reset_edited_by():Int{
-		return initial_edited_by;
 	}
 
 	public function clear_edited_by():Int{
@@ -825,23 +675,18 @@ class Statement extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
-	var initial_mandator:Int;
+	var mandator_initialized:Bool;
 	
 	function get_mandator():Int{
 		return mandator;
 	}
 
-	function set_mandator(x:Int):Int{
-		if(mandator != null)
+	function set_mandator(mandator:Int):Int{
+		if(mandator_initialized)
 			modified('mandator');
-		mandator = x;
-		if(initial_mandator == null)
-			initial_mandator = mandator; 
+		this.mandator = mandator;
+		mandator_initialized = true; 
 		return mandator;
-	}
-
-	public function reset_mandator():Int{
-		return initial_mandator;
 	}
 
 	public function clear_mandator():Int{

@@ -30,7 +30,7 @@ typedef DataFormProps =
 	?setStateFromChild:FormState->Void,
 	?setFormState:FormState->Void,
 	?sideMenu:SMenuProps,
-	?store:Store<AppState>,
+	//?store:Store<AppState>,
 	//?storeContactsList:DbData->Void,
 	?storeData:String->DataAction->Void,
 	?storeFormChange:String->FormState->Void,

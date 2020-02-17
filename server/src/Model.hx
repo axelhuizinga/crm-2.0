@@ -100,7 +100,7 @@ class Model
 	var dParam:DbData;
 	var dataSource:Map<String,Map<String,Dynamic>>;// EACH KEY IS A TABLE NAME
 	var dataSourceSql:String;
-	var param:Map<String, String>;
+	var param:Map<String, Dynamic>;
 	
 	public static function dispatch(param:Map<String,Dynamic>):Void
 	{

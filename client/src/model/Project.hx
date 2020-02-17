@@ -22,23 +22,18 @@ class Project extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
-	var initial_id:Int;
+	var id_initialized:Bool;
 	
 	function get_id():Int{
 		return id;
 	}
 
-	function set_id(x:Int):Int{
-		if(id != null)
+	function set_id(id:Int):Int{
+		if(id_initialized)
 			modified('id');
-		id = x;
-		if(initial_id == null)
-			initial_id = id; 
+		this.id = id;
+		id_initialized = true; 
 		return id;
-	}
-
-	public function reset_id():Int{
-		return initial_id;
 	}
 
 	public function clear_id():Int{
@@ -48,23 +43,18 @@ class Project extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
-	var initial_mandator:Int;
+	var mandator_initialized:Bool;
 	
 	function get_mandator():Int{
 		return mandator;
 	}
 
-	function set_mandator(x:Int):Int{
-		if(mandator != null)
+	function set_mandator(mandator:Int):Int{
+		if(mandator_initialized)
 			modified('mandator');
-		mandator = x;
-		if(initial_mandator == null)
-			initial_mandator = mandator; 
+		this.mandator = mandator;
+		mandator_initialized = true; 
 		return mandator;
-	}
-
-	public function reset_mandator():Int{
-		return initial_mandator;
 	}
 
 	public function clear_mandator():Int{
@@ -74,23 +64,18 @@ class Project extends ORM
 		
 	@dataType("character varying(64)")
 	@:isVar public var name(get,set):String;
-	var initial_name:String;
+	var name_initialized:Bool;
 	
 	function get_name():String{
 		return name;
 	}
 
-	function set_name(x:String):String{
-		if(name != null)
+	function set_name(name:String):String{
+		if(name_initialized)
 			modified('name');
-		name = x;
-		if(initial_name == null)
-			initial_name = name; 
+		this.name = name;
+		name_initialized = true; 
 		return name;
-	}
-
-	public function reset_name():String{
-		return initial_name;
 	}
 
 	public function clear_name():String{
@@ -100,23 +85,18 @@ class Project extends ORM
 		
 	@dataType("character varying(4096)")
 	@:isVar public var description(get,set):String;
-	var initial_description:String;
+	var description_initialized:Bool;
 	
 	function get_description():String{
 		return description;
 	}
 
-	function set_description(x:String):String{
-		if(description != null)
+	function set_description(description:String):String{
+		if(description_initialized)
 			modified('description');
-		description = x;
-		if(initial_description == null)
-			initial_description = description; 
+		this.description = description;
+		description_initialized = true; 
 		return description;
-	}
-
-	public function reset_description():String{
-		return initial_description;
 	}
 
 	public function clear_description():String{
@@ -126,23 +106,18 @@ class Project extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
-	var initial_edited_by:Int;
+	var edited_by_initialized:Bool;
 	
 	function get_edited_by():Int{
 		return edited_by;
 	}
 
-	function set_edited_by(x:Int):Int{
-		if(edited_by != null)
+	function set_edited_by(edited_by:Int):Int{
+		if(edited_by_initialized)
 			modified('edited_by');
-		edited_by = x;
-		if(initial_edited_by == null)
-			initial_edited_by = edited_by; 
+		this.edited_by = edited_by;
+		edited_by_initialized = true; 
 		return edited_by;
-	}
-
-	public function reset_edited_by():Int{
-		return initial_edited_by;
 	}
 
 	public function clear_edited_by():Int{
@@ -152,23 +127,18 @@ class Project extends ORM
 		
 	@dataType("double precision")
 	@:isVar public var provision_percent(get,set):String;
-	var initial_provision_percent:String;
+	var provision_percent_initialized:Bool;
 	
 	function get_provision_percent():String{
 			return provision_percent;
 	}
 
-	function set_provision_percent(x:String):String{
-		if(provision_percent != null)
+	function set_provision_percent(provision_percent:String):String{
+		if(provision_percent_initialized)
 			modified('provision_percent');
-		provision_percent = x;
-		if(initial_provision_percent == null)
-			initial_provision_percent = provision_percent; 
+		this.provision_percent = provision_percent;
+		provision_percent_initialized = true; 
 		return provision_percent;
-	}
-
-	public function reset_provision_percent():String{
-		return initial_provision_percent;
 	}
 
 	public function clear_provision_percent():String{
@@ -178,23 +148,18 @@ class Project extends ORM
 		
 	@dataType("integer")
 	@:isVar public var cancellation_liable(get,set):String;
-	var initial_cancellation_liable:String;
+	var cancellation_liable_initialized:Bool;
 	
 	function get_cancellation_liable():String{
 			return cancellation_liable;
 	}
 
-	function set_cancellation_liable(x:String):String{
-		if(cancellation_liable != null)
+	function set_cancellation_liable(cancellation_liable:String):String{
+		if(cancellation_liable_initialized)
 			modified('cancellation_liable');
-		cancellation_liable = x;
-		if(initial_cancellation_liable == null)
-			initial_cancellation_liable = cancellation_liable; 
+		this.cancellation_liable = cancellation_liable;
+		cancellation_liable_initialized = true; 
 		return cancellation_liable;
-	}
-
-	public function reset_cancellation_liable():String{
-		return initial_cancellation_liable;
 	}
 
 	public function clear_cancellation_liable():String{
@@ -204,23 +169,18 @@ class Project extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var target_account(get,set):Int;
-	var initial_target_account:Int;
+	var target_account_initialized:Bool;
 	
 	function get_target_account():Int{
 		return target_account;
 	}
 
-	function set_target_account(x:Int):Int{
-		if(target_account != null)
+	function set_target_account(target_account:Int):Int{
+		if(target_account_initialized)
 			modified('target_account');
-		target_account = x;
-		if(initial_target_account == null)
-			initial_target_account = target_account; 
+		this.target_account = target_account;
+		target_account_initialized = true; 
 		return target_account;
-	}
-
-	public function reset_target_account():Int{
-		return initial_target_account;
 	}
 
 	public function clear_target_account():Int{

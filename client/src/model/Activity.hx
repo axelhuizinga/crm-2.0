@@ -20,23 +20,18 @@ class Activity extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
-	var initial_id:Int;
+	var id_initialized:Bool;
 	
 	function get_id():Int{
 		return id;
 	}
 
-	function set_id(x:Int):Int{
-		if(id != null)
+	function set_id(id:Int):Int{
+		if(id_initialized)
 			modified('id');
-		id = x;
-		if(initial_id == null)
-			initial_id = id; 
+		this.id = id;
+		id_initialized = true; 
 		return id;
-	}
-
-	public function reset_id():Int{
-		return initial_id;
 	}
 
 	public function clear_id():Int{
@@ -46,23 +41,18 @@ class Activity extends ORM
 		
 	@dataType("character varying(64)")
 	@:isVar public var table(get,set):String;
-	var initial_table:String;
+	var table_initialized:Bool;
 	
 	function get_table():String{
 		return table;
 	}
 
-	function set_table(x:String):String{
-		if(table != null)
+	function set_table(table:String):String{
+		if(table_initialized)
 			modified('table');
-		table = x;
-		if(initial_table == null)
-			initial_table = table; 
+		this.table = table;
+		table_initialized = true; 
 		return table;
-	}
-
-	public function reset_table():String{
-		return initial_table;
 	}
 
 	public function clear_table():String{
@@ -72,23 +62,18 @@ class Activity extends ORM
 		
 	@dataType("character varying(2048)")
 	@:isVar public var title(get,set):String;
-	var initial_title:String;
+	var title_initialized:Bool;
 	
 	function get_title():String{
 		return title;
 	}
 
-	function set_title(x:String):String{
-		if(title != null)
+	function set_title(title:String):String{
+		if(title_initialized)
 			modified('title');
-		title = x;
-		if(initial_title == null)
-			initial_title = title; 
+		this.title = title;
+		title_initialized = true; 
 		return title;
-	}
-
-	public function reset_title():String{
-		return initial_title;
 	}
 
 	public function clear_title():String{
@@ -98,23 +83,18 @@ class Activity extends ORM
 		
 	@dataType("boolean")
 	@:isVar public var active(get,set):Bool;
-	var initial_active:Bool;
+	var active_initialized:Bool;
 	
 	function get_active():Bool{
 		return active;
 	}
 
-	function set_active(x:Bool):Bool{
-		if(active != null)
+	function set_active(active:Bool):Bool{
+		if(active_initialized)
 			modified('active');
-		active = x;
-		if(initial_active == null)
-			initial_active = active; 
+		this.active = active;
+		active_initialized = true; 
 		return active;
-	}
-
-	public function reset_active():Bool{
-		return initial_active;
 	}
 
 	public function clear_active():Bool{
@@ -124,23 +104,18 @@ class Activity extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
-	var initial_edited_by:Int;
+	var edited_by_initialized:Bool;
 	
 	function get_edited_by():Int{
 		return edited_by;
 	}
 
-	function set_edited_by(x:Int):Int{
-		if(edited_by != null)
+	function set_edited_by(edited_by:Int):Int{
+		if(edited_by_initialized)
 			modified('edited_by');
-		edited_by = x;
-		if(initial_edited_by == null)
-			initial_edited_by = edited_by; 
+		this.edited_by = edited_by;
+		edited_by_initialized = true; 
 		return edited_by;
-	}
-
-	public function reset_edited_by():Int{
-		return initial_edited_by;
 	}
 
 	public function clear_edited_by():Int{
@@ -150,23 +125,18 @@ class Activity extends ORM
 		
 	@dataType("timestamp(3) without time zone")
 	@:isVar public var activated_at(get,set):String;
-	var initial_activated_at:String;
+	var activated_at_initialized:Bool;
 	
 	function get_activated_at():String{
 			return activated_at;
 	}
 
-	function set_activated_at(x:String):String{
-		if(activated_at != null)
+	function set_activated_at(activated_at:String):String{
+		if(activated_at_initialized)
 			modified('activated_at');
-		activated_at = x;
-		if(initial_activated_at == null)
-			initial_activated_at = activated_at; 
+		this.activated_at = activated_at;
+		activated_at_initialized = true; 
 		return activated_at;
-	}
-
-	public function reset_activated_at():String{
-		return initial_activated_at;
 	}
 
 	public function clear_activated_at():String{

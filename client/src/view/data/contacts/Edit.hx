@@ -354,7 +354,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			}
 		}
 		//setState({actualState: actualState});
-		compareStates();
+		//compareStates();
 		var aState:Dynamic = copy(actualState);
 		var dbaProps:DBAccessProps = 
 		{
@@ -384,7 +384,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			case 'delete'|'get':
 				dbaProps.dataSource = [
 					"contacts" => [
-						"filter" => 'id|${state.initialState.id}'
+						"filter" => {id:state.initialState.id}
 					]
 				];	
 			case 'update':
@@ -400,6 +400,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 					{
 						trace('$f:${Reflect.field(aState,f)}==${Reflect.field(initialState,f)}<<');
 						Reflect.setProperty(contact, f, Reflect.field(aState,f));
+						contact.modified(f);
 					}						
 				}
 				//trace(aState);
@@ -414,15 +415,12 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				dbaProps.dataSource = [
 					"contacts" => [
 						"data" => contact.store(),
-						"filter" => 'id|${initialState.id}'
+						"filter" => {id:initialState.id}
 					]
 				];
 				trace(dbaProps.dataSource["contacts"]["filter"]);
 		}
-		props.store.dispatch(DBAccess.execute(dbaProps));
-		//App.store.dispatch(DBAccess.execute(dbaProps).then(function(d:Dynamic)trace(d)));
-
-		//props.parentComponent.props.edit(dbaProps);
+		App.store.dispatch(DBAccess.execute(dbaProps));
 	}
 
 	function renderResults():ReactFragment

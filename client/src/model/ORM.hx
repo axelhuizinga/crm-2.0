@@ -45,7 +45,7 @@ class ORM {
 		return t;
 	}
 
-	public function store() {
+	public function store():Dynamic {
 		var data:Dynamic = {};
 		for(f in fieldsModified)
 		{
@@ -85,9 +85,21 @@ class ORM {
 	public function modified(?attName:String):Bool {
 		if(attName==null)			
 			return fieldsModified.length>0;
-			//return fieldsModified.filter(function(p:String)return fieldsModified.has(p)).length>0;
+			//return fieldsModified.filter(function(p:String)return fieldsModified.has(p)).length>0;			
 		if(!fieldsModified.has(attName))
 			fieldsModified.push(attName);
 		return true;
+	}
+
+	public function reset(?attName:String):Int {
+		var r:Int = fieldsModified.length;
+		if(fieldsModified.length == 0)
+			return 0;
+		if(attName!=null)
+		{
+			return (fieldsModified.remove(attName)?1:0);
+		}
+		fieldsModified = new Array();
+		return r;
 	}
 }

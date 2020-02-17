@@ -20,23 +20,18 @@ class Role extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
-	var initial_id:Int;
+	var id_initialized:Bool;
 	
 	function get_id():Int{
 		return id;
 	}
 
-	function set_id(x:Int):Int{
-		if(id != null)
+	function set_id(id:Int):Int{
+		if(id_initialized)
 			modified('id');
-		id = x;
-		if(initial_id == null)
-			initial_id = id; 
+		this.id = id;
+		id_initialized = true; 
 		return id;
-	}
-
-	public function reset_id():Int{
-		return initial_id;
 	}
 
 	public function clear_id():Int{
@@ -46,23 +41,18 @@ class Role extends ORM
 		
 	@dataType("character varying(64)")
 	@:isVar public var name(get,set):String;
-	var initial_name:String;
+	var name_initialized:Bool;
 	
 	function get_name():String{
 		return name;
 	}
 
-	function set_name(x:String):String{
-		if(name != null)
+	function set_name(name:String):String{
+		if(name_initialized)
 			modified('name');
-		name = x;
-		if(initial_name == null)
-			initial_name = name; 
+		this.name = name;
+		name_initialized = true; 
 		return name;
-	}
-
-	public function reset_name():String{
-		return initial_name;
 	}
 
 	public function clear_name():String{
@@ -72,23 +62,18 @@ class Role extends ORM
 		
 	@dataType("character varying(2048)")
 	@:isVar public var description(get,set):String;
-	var initial_description:String;
+	var description_initialized:Bool;
 	
 	function get_description():String{
 		return description;
 	}
 
-	function set_description(x:String):String{
-		if(description != null)
+	function set_description(description:String):String{
+		if(description_initialized)
 			modified('description');
-		description = x;
-		if(initial_description == null)
-			initial_description = description; 
+		this.description = description;
+		description_initialized = true; 
 		return description;
-	}
-
-	public function reset_description():String{
-		return initial_description;
 	}
 
 	public function clear_description():String{
@@ -98,23 +83,18 @@ class Role extends ORM
 		
 	@dataType("jsonb")
 	@:isVar public var permissions(get,set):String;
-	var initial_permissions:String;
+	var permissions_initialized:Bool;
 	
 	function get_permissions():String{
 			return permissions;
 	}
 
-	function set_permissions(x:String):String{
-		if(permissions != null)
+	function set_permissions(permissions:String):String{
+		if(permissions_initialized)
 			modified('permissions');
-		permissions = x;
-		if(initial_permissions == null)
-			initial_permissions = permissions; 
+		this.permissions = permissions;
+		permissions_initialized = true; 
 		return permissions;
-	}
-
-	public function reset_permissions():String{
-		return initial_permissions;
 	}
 
 	public function clear_permissions():String{
@@ -124,23 +104,18 @@ class Role extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
-	var initial_edited_by:Int;
+	var edited_by_initialized:Bool;
 	
 	function get_edited_by():Int{
 		return edited_by;
 	}
 
-	function set_edited_by(x:Int):Int{
-		if(edited_by != null)
+	function set_edited_by(edited_by:Int):Int{
+		if(edited_by_initialized)
 			modified('edited_by');
-		edited_by = x;
-		if(initial_edited_by == null)
-			initial_edited_by = edited_by; 
+		this.edited_by = edited_by;
+		edited_by_initialized = true; 
 		return edited_by;
-	}
-
-	public function reset_edited_by():Int{
-		return initial_edited_by;
 	}
 
 	public function clear_edited_by():Int{
@@ -150,23 +125,18 @@ class Role extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
-	var initial_mandator:Int;
+	var mandator_initialized:Bool;
 	
 	function get_mandator():Int{
 		return mandator;
 	}
 
-	function set_mandator(x:Int):Int{
-		if(mandator != null)
+	function set_mandator(mandator:Int):Int{
+		if(mandator_initialized)
 			modified('mandator');
-		mandator = x;
-		if(initial_mandator == null)
-			initial_mandator = mandator; 
+		this.mandator = mandator;
+		mandator_initialized = true; 
 		return mandator;
-	}
-
-	public function reset_mandator():Int{
-		return initial_mandator;
 	}
 
 	public function clear_mandator():Int{

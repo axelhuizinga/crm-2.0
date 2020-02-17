@@ -23,23 +23,18 @@ class UserInterface extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
-	var initial_id:Int;
+	var id_initialized:Bool;
 	
 	function get_id():Int{
 		return id;
 	}
 
-	function set_id(x:Int):Int{
-		if(id != null)
+	function set_id(id:Int):Int{
+		if(id_initialized)
 			modified('id');
-		id = x;
-		if(initial_id == null)
-			initial_id = id; 
+		this.id = id;
+		id_initialized = true; 
 		return id;
-	}
-
-	public function reset_id():Int{
-		return initial_id;
 	}
 
 	public function clear_id():Int{
@@ -49,23 +44,18 @@ class UserInterface extends ORM
 		
 	@dataType("character varying(64)")
 	@:isVar public var key(get,set):String;
-	var initial_key:String;
+	var key_initialized:Bool;
 	
 	function get_key():String{
 		return key;
 	}
 
-	function set_key(x:String):String{
-		if(key != null)
+	function set_key(key:String):String{
+		if(key_initialized)
 			modified('key');
-		key = x;
-		if(initial_key == null)
-			initial_key = key; 
+		this.key = key;
+		key_initialized = true; 
 		return key;
-	}
-
-	public function reset_key():String{
-		return initial_key;
 	}
 
 	public function clear_key():String{
@@ -75,23 +65,18 @@ class UserInterface extends ORM
 		
 	@dataType("character varying(64)")
 	@:isVar public var content(get,set):String;
-	var initial_content:String;
+	var content_initialized:Bool;
 	
 	function get_content():String{
 		return content;
 	}
 
-	function set_content(x:String):String{
-		if(content != null)
+	function set_content(content:String):String{
+		if(content_initialized)
 			modified('content');
-		content = x;
-		if(initial_content == null)
-			initial_content = content; 
+		this.content = content;
+		content_initialized = true; 
 		return content;
-	}
-
-	public function reset_content():String{
-		return initial_content;
 	}
 
 	public function clear_content():String{
@@ -101,23 +86,18 @@ class UserInterface extends ORM
 		
 	@dataType("character varying(512)")
 	@:isVar public var classPath(get,set):String;
-	var initial_classPath:String;
+	var classPath_initialized:Bool;
 	
 	function get_classPath():String{
 		return classPath;
 	}
 
-	function set_classPath(x:String):String{
-		if(classPath != null)
+	function set_classPath(classPath:String):String{
+		if(classPath_initialized)
 			modified('classPath');
-		classPath = x;
-		if(initial_classPath == null)
-			initial_classPath = classPath; 
+		this.classPath = classPath;
+		classPath_initialized = true; 
 		return classPath;
-	}
-
-	public function reset_classPath():String{
-		return initial_classPath;
 	}
 
 	public function clear_classPath():String{
@@ -127,23 +107,18 @@ class UserInterface extends ORM
 		
 	@dataType("character varying(64)")
 	@:isVar public var component(get,set):String;
-	var initial_component:String;
+	var component_initialized:Bool;
 	
 	function get_component():String{
 		return component;
 	}
 
-	function set_component(x:String):String{
-		if(component != null)
+	function set_component(component:String):String{
+		if(component_initialized)
 			modified('component');
-		component = x;
-		if(initial_component == null)
-			initial_component = component; 
+		this.component = component;
+		component_initialized = true; 
 		return component;
-	}
-
-	public function reset_component():String{
-		return initial_component;
 	}
 
 	public function clear_component():String{
@@ -153,23 +128,18 @@ class UserInterface extends ORM
 		
 	@dataType("integer")
 	@:isVar public var edited_by(get,set):String;
-	var initial_edited_by:String;
+	var edited_by_initialized:Bool;
 	
 	function get_edited_by():String{
 			return edited_by;
 	}
 
-	function set_edited_by(x:String):String{
-		if(edited_by != null)
+	function set_edited_by(edited_by:String):String{
+		if(edited_by_initialized)
 			modified('edited_by');
-		edited_by = x;
-		if(initial_edited_by == null)
-			initial_edited_by = edited_by; 
+		this.edited_by = edited_by;
+		edited_by_initialized = true; 
 		return edited_by;
-	}
-
-	public function reset_edited_by():String{
-		return initial_edited_by;
 	}
 
 	public function clear_edited_by():String{
@@ -179,23 +149,18 @@ class UserInterface extends ORM
 		
 	@dataType("timestamp without time zone")
 	@:isVar public var updated_at(get,set):String;
-	var initial_updated_at:String;
+	var updated_at_initialized:Bool;
 	
 	function get_updated_at():String{
 			return updated_at;
 	}
 
-	function set_updated_at(x:String):String{
-		if(updated_at != null)
+	function set_updated_at(updated_at:String):String{
+		if(updated_at_initialized)
 			modified('updated_at');
-		updated_at = x;
-		if(initial_updated_at == null)
-			initial_updated_at = updated_at; 
+		this.updated_at = updated_at;
+		updated_at_initialized = true; 
 		return updated_at;
-	}
-
-	public function reset_updated_at():String{
-		return initial_updated_at;
 	}
 
 	public function clear_updated_at():String{
@@ -205,23 +170,18 @@ class UserInterface extends ORM
 		
 	@dataType("character varying(8)")
 	@:isVar public var locale(get,set):String;
-	var initial_locale:String;
+	var locale_initialized:Bool;
 	
 	function get_locale():String{
 		return locale;
 	}
 
-	function set_locale(x:String):String{
-		if(locale != null)
+	function set_locale(locale:String):String{
+		if(locale_initialized)
 			modified('locale');
-		locale = x;
-		if(initial_locale == null)
-			initial_locale = locale; 
+		this.locale = locale;
+		locale_initialized = true; 
 		return locale;
-	}
-
-	public function reset_locale():String{
-		return initial_locale;
 	}
 
 	public function clear_locale():String{
@@ -231,23 +191,18 @@ class UserInterface extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
-	var initial_mandator:Int;
+	var mandator_initialized:Bool;
 	
 	function get_mandator():Int{
 		return mandator;
 	}
 
-	function set_mandator(x:Int):Int{
-		if(mandator != null)
+	function set_mandator(mandator:Int):Int{
+		if(mandator_initialized)
 			modified('mandator');
-		mandator = x;
-		if(initial_mandator == null)
-			initial_mandator = mandator; 
+		this.mandator = mandator;
+		mandator_initialized = true; 
 		return mandator;
-	}
-
-	public function reset_mandator():Int{
-		return initial_mandator;
 	}
 
 	public function clear_mandator():Int{

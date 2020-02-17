@@ -22,23 +22,18 @@ class Product extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var id(get,set):Int;
-	var initial_id:Int;
+	var id_initialized:Bool;
 	
 	function get_id():Int{
 		return id;
 	}
 
-	function set_id(x:Int):Int{
-		if(id != null)
+	function set_id(id:Int):Int{
+		if(id_initialized)
 			modified('id');
-		id = x;
-		if(initial_id == null)
-			initial_id = id; 
+		this.id = id;
+		id_initialized = true; 
 		return id;
-	}
-
-	public function reset_id():Int{
-		return initial_id;
 	}
 
 	public function clear_id():Int{
@@ -48,23 +43,18 @@ class Product extends ORM
 		
 	@dataType("character varying(1024)")
 	@:isVar public var name(get,set):String;
-	var initial_name:String;
+	var name_initialized:Bool;
 	
 	function get_name():String{
 		return name;
 	}
 
-	function set_name(x:String):String{
-		if(name != null)
+	function set_name(name:String):String{
+		if(name_initialized)
 			modified('name');
-		name = x;
-		if(initial_name == null)
-			initial_name = name; 
+		this.name = name;
+		name_initialized = true; 
 		return name;
-	}
-
-	public function reset_name():String{
-		return initial_name;
 	}
 
 	public function clear_name():String{
@@ -74,23 +64,18 @@ class Product extends ORM
 		
 	@dataType("character varying(4096)")
 	@:isVar public var description(get,set):String;
-	var initial_description:String;
+	var description_initialized:Bool;
 	
 	function get_description():String{
 		return description;
 	}
 
-	function set_description(x:String):String{
-		if(description != null)
+	function set_description(description:String):String{
+		if(description_initialized)
 			modified('description');
-		description = x;
-		if(initial_description == null)
-			initial_description = description; 
+		this.description = description;
+		description_initialized = true; 
 		return description;
-	}
-
-	public function reset_description():String{
-		return initial_description;
 	}
 
 	public function clear_description():String{
@@ -100,23 +85,18 @@ class Product extends ORM
 		
 	@dataType("numeric(10,2)")
 	@:isVar public var value(get,set):String;
-	var initial_value:String;
+	var value_initialized:Bool;
 	
 	function get_value():String{
 			return value;
 	}
 
-	function set_value(x:String):String{
-		if(value != null)
+	function set_value(value:String):String{
+		if(value_initialized)
 			modified('value');
-		value = x;
-		if(initial_value == null)
-			initial_value = value; 
+		this.value = value;
+		value_initialized = true; 
 		return value;
-	}
-
-	public function reset_value():String{
-		return initial_value;
 	}
 
 	public function clear_value():String{
@@ -126,23 +106,18 @@ class Product extends ORM
 		
 	@dataType("jsonb")
 	@:isVar public var attributes(get,set):String;
-	var initial_attributes:String;
+	var attributes_initialized:Bool;
 	
 	function get_attributes():String{
 			return attributes;
 	}
 
-	function set_attributes(x:String):String{
-		if(attributes != null)
+	function set_attributes(attributes:String):String{
+		if(attributes_initialized)
 			modified('attributes');
-		attributes = x;
-		if(initial_attributes == null)
-			initial_attributes = attributes; 
+		this.attributes = attributes;
+		attributes_initialized = true; 
 		return attributes;
-	}
-
-	public function reset_attributes():String{
-		return initial_attributes;
 	}
 
 	public function clear_attributes():String{
@@ -152,23 +127,18 @@ class Product extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var mandator(get,set):Int;
-	var initial_mandator:Int;
+	var mandator_initialized:Bool;
 	
 	function get_mandator():Int{
 		return mandator;
 	}
 
-	function set_mandator(x:Int):Int{
-		if(mandator != null)
+	function set_mandator(mandator:Int):Int{
+		if(mandator_initialized)
 			modified('mandator');
-		mandator = x;
-		if(initial_mandator == null)
-			initial_mandator = mandator; 
+		this.mandator = mandator;
+		mandator_initialized = true; 
 		return mandator;
-	}
-
-	public function reset_mandator():Int{
-		return initial_mandator;
 	}
 
 	public function clear_mandator():Int{
@@ -178,23 +148,18 @@ class Product extends ORM
 		
 	@dataType("boolean")
 	@:isVar public var active(get,set):Bool;
-	var initial_active:Bool;
+	var active_initialized:Bool;
 	
 	function get_active():Bool{
 		return active;
 	}
 
-	function set_active(x:Bool):Bool{
-		if(active != null)
+	function set_active(active:Bool):Bool{
+		if(active_initialized)
 			modified('active');
-		active = x;
-		if(initial_active == null)
-			initial_active = active; 
+		this.active = active;
+		active_initialized = true; 
 		return active;
-	}
-
-	public function reset_active():Bool{
-		return initial_active;
 	}
 
 	public function clear_active():Bool{
@@ -204,23 +169,18 @@ class Product extends ORM
 		
 	@dataType("bigint")
 	@:isVar public var edited_by(get,set):Int;
-	var initial_edited_by:Int;
+	var edited_by_initialized:Bool;
 	
 	function get_edited_by():Int{
 		return edited_by;
 	}
 
-	function set_edited_by(x:Int):Int{
-		if(edited_by != null)
+	function set_edited_by(edited_by:Int):Int{
+		if(edited_by_initialized)
 			modified('edited_by');
-		edited_by = x;
-		if(initial_edited_by == null)
-			initial_edited_by = edited_by; 
+		this.edited_by = edited_by;
+		edited_by_initialized = true; 
 		return edited_by;
-	}
-
-	public function reset_edited_by():Int{
-		return initial_edited_by;
 	}
 
 	public function clear_edited_by():Int{

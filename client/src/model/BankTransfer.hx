@@ -1,4 +1,5 @@
 package model;
+import view.shared.io.DataAccess.DataView;
 
 typedef BankTransferProps = {
 	?ag_name:String,
@@ -40,9 +41,9 @@ typedef BankTransferProps = {
 class BankTransfer extends ORM
 {
 
-	public function new(props:BankTransferProps) {
+	public function new(props:BankTransferProps, view:DataView) {
 		propertyNames = 'ag_name,ag_konto_or_iban,ag_blz_or_bic,zahlpfl_name,zahlpfl_name2,zahlpfl_strasse,zahlpfl_name_ort,zahlpfl_name_kto_or_iban,zahlpfl_name_blz_or_bic,betrag,currency,zahlart,termin,vwz1,vwz2,vwz3,vwz4,vwz5,vwz6,vwz7,vwz8,vwz9,ba_id,tracking_status,anforderungs_datum,rueck_datum,cycle,ref_id,mandat_id,mandat_datum,ag_creditor_id,sequenz,super_ag_name'.split(',');
-		super(props);
+		super(props, view);
 	}	
 		
 	@dataType("character varying(64)")
@@ -56,13 +57,8 @@ class BankTransfer extends ORM
 	function set_ag_name(ag_name:String):String{
 		if(ag_name_initialized)
 			modified('ag_name');
-		this.ag_name = ag_name;
+		this.ag_name = ag_name ;
 		ag_name_initialized = true; 
-		return ag_name;
-	}
-
-	public function clear_ag_name():String{
-		ag_name = '';
 		return ag_name;
 	}	
 		
@@ -77,13 +73,8 @@ class BankTransfer extends ORM
 	function set_ag_konto_or_iban(ag_konto_or_iban:String):String{
 		if(ag_konto_or_iban_initialized)
 			modified('ag_konto_or_iban');
-		this.ag_konto_or_iban = ag_konto_or_iban;
+		this.ag_konto_or_iban = ag_konto_or_iban ;
 		ag_konto_or_iban_initialized = true; 
-		return ag_konto_or_iban;
-	}
-
-	public function clear_ag_konto_or_iban():String{
-		ag_konto_or_iban = '';
 		return ag_konto_or_iban;
 	}	
 		
@@ -98,13 +89,8 @@ class BankTransfer extends ORM
 	function set_ag_blz_or_bic(ag_blz_or_bic:String):String{
 		if(ag_blz_or_bic_initialized)
 			modified('ag_blz_or_bic');
-		this.ag_blz_or_bic = ag_blz_or_bic;
+		this.ag_blz_or_bic = ag_blz_or_bic ;
 		ag_blz_or_bic_initialized = true; 
-		return ag_blz_or_bic;
-	}
-
-	public function clear_ag_blz_or_bic():String{
-		ag_blz_or_bic = '';
 		return ag_blz_or_bic;
 	}	
 		
@@ -119,13 +105,8 @@ class BankTransfer extends ORM
 	function set_zahlpfl_name(zahlpfl_name:String):String{
 		if(zahlpfl_name_initialized)
 			modified('zahlpfl_name');
-		this.zahlpfl_name = zahlpfl_name;
+		this.zahlpfl_name = zahlpfl_name ;
 		zahlpfl_name_initialized = true; 
-		return zahlpfl_name;
-	}
-
-	public function clear_zahlpfl_name():String{
-		zahlpfl_name = '';
 		return zahlpfl_name;
 	}	
 		
@@ -140,13 +121,8 @@ class BankTransfer extends ORM
 	function set_zahlpfl_name2(zahlpfl_name2:String):String{
 		if(zahlpfl_name2_initialized)
 			modified('zahlpfl_name2');
-		this.zahlpfl_name2 = zahlpfl_name2;
+		this.zahlpfl_name2 = zahlpfl_name2 ;
 		zahlpfl_name2_initialized = true; 
-		return zahlpfl_name2;
-	}
-
-	public function clear_zahlpfl_name2():String{
-		zahlpfl_name2 = '';
 		return zahlpfl_name2;
 	}	
 		
@@ -161,13 +137,8 @@ class BankTransfer extends ORM
 	function set_zahlpfl_strasse(zahlpfl_strasse:String):String{
 		if(zahlpfl_strasse_initialized)
 			modified('zahlpfl_strasse');
-		this.zahlpfl_strasse = zahlpfl_strasse;
+		this.zahlpfl_strasse = zahlpfl_strasse ;
 		zahlpfl_strasse_initialized = true; 
-		return zahlpfl_strasse;
-	}
-
-	public function clear_zahlpfl_strasse():String{
-		zahlpfl_strasse = '';
 		return zahlpfl_strasse;
 	}	
 		
@@ -182,13 +153,8 @@ class BankTransfer extends ORM
 	function set_zahlpfl_name_ort(zahlpfl_name_ort:String):String{
 		if(zahlpfl_name_ort_initialized)
 			modified('zahlpfl_name_ort');
-		this.zahlpfl_name_ort = zahlpfl_name_ort;
+		this.zahlpfl_name_ort = zahlpfl_name_ort ;
 		zahlpfl_name_ort_initialized = true; 
-		return zahlpfl_name_ort;
-	}
-
-	public function clear_zahlpfl_name_ort():String{
-		zahlpfl_name_ort = '';
 		return zahlpfl_name_ort;
 	}	
 		
@@ -203,13 +169,8 @@ class BankTransfer extends ORM
 	function set_zahlpfl_name_kto_or_iban(zahlpfl_name_kto_or_iban:String):String{
 		if(zahlpfl_name_kto_or_iban_initialized)
 			modified('zahlpfl_name_kto_or_iban');
-		this.zahlpfl_name_kto_or_iban = zahlpfl_name_kto_or_iban;
+		this.zahlpfl_name_kto_or_iban = zahlpfl_name_kto_or_iban ;
 		zahlpfl_name_kto_or_iban_initialized = true; 
-		return zahlpfl_name_kto_or_iban;
-	}
-
-	public function clear_zahlpfl_name_kto_or_iban():String{
-		zahlpfl_name_kto_or_iban = '';
 		return zahlpfl_name_kto_or_iban;
 	}	
 		
@@ -224,13 +185,8 @@ class BankTransfer extends ORM
 	function set_zahlpfl_name_blz_or_bic(zahlpfl_name_blz_or_bic:String):String{
 		if(zahlpfl_name_blz_or_bic_initialized)
 			modified('zahlpfl_name_blz_or_bic');
-		this.zahlpfl_name_blz_or_bic = zahlpfl_name_blz_or_bic;
+		this.zahlpfl_name_blz_or_bic = zahlpfl_name_blz_or_bic ;
 		zahlpfl_name_blz_or_bic_initialized = true; 
-		return zahlpfl_name_blz_or_bic;
-	}
-
-	public function clear_zahlpfl_name_blz_or_bic():String{
-		zahlpfl_name_blz_or_bic = '';
 		return zahlpfl_name_blz_or_bic;
 	}	
 		
@@ -245,13 +201,8 @@ class BankTransfer extends ORM
 	function set_betrag(betrag:String):String{
 		if(betrag_initialized)
 			modified('betrag');
-		this.betrag = betrag;
+		this.betrag = betrag ;
 		betrag_initialized = true; 
-		return betrag;
-	}
-
-	public function clear_betrag():String{
-		betrag = '';
 		return betrag;
 	}	
 		
@@ -266,13 +217,8 @@ class BankTransfer extends ORM
 	function set_currency(currency:String):String{
 		if(currency_initialized)
 			modified('currency');
-		this.currency = currency;
+		this.currency = currency ;
 		currency_initialized = true; 
-		return currency;
-	}
-
-	public function clear_currency():String{
-		currency = '€';
 		return currency;
 	}	
 		
@@ -287,13 +233,8 @@ class BankTransfer extends ORM
 	function set_zahlart(zahlart:String):String{
 		if(zahlart_initialized)
 			modified('zahlart');
-		this.zahlart = zahlart;
+		this.zahlart = zahlart ;
 		zahlart_initialized = true; 
-		return zahlart;
-	}
-
-	public function clear_zahlart():String{
-		zahlart = 'BASIS';
 		return zahlart;
 	}	
 		
@@ -308,13 +249,8 @@ class BankTransfer extends ORM
 	function set_termin(termin:String):String{
 		if(termin_initialized)
 			modified('termin');
-		this.termin = termin;
+		this.termin = termin ;
 		termin_initialized = true; 
-		return termin;
-	}
-
-	public function clear_termin():String{
-		termin = 'null';
 		return termin;
 	}	
 		
@@ -329,13 +265,8 @@ class BankTransfer extends ORM
 	function set_vwz1(vwz1:String):String{
 		if(vwz1_initialized)
 			modified('vwz1');
-		this.vwz1 = vwz1;
+		this.vwz1 = vwz1 ;
 		vwz1_initialized = true; 
-		return vwz1;
-	}
-
-	public function clear_vwz1():String{
-		vwz1 = '';
 		return vwz1;
 	}	
 		
@@ -350,13 +281,8 @@ class BankTransfer extends ORM
 	function set_vwz2(vwz2:String):String{
 		if(vwz2_initialized)
 			modified('vwz2');
-		this.vwz2 = vwz2;
+		this.vwz2 = vwz2 ;
 		vwz2_initialized = true; 
-		return vwz2;
-	}
-
-	public function clear_vwz2():String{
-		vwz2 = '';
 		return vwz2;
 	}	
 		
@@ -371,13 +297,8 @@ class BankTransfer extends ORM
 	function set_vwz3(vwz3:String):String{
 		if(vwz3_initialized)
 			modified('vwz3');
-		this.vwz3 = vwz3;
+		this.vwz3 = vwz3 ;
 		vwz3_initialized = true; 
-		return vwz3;
-	}
-
-	public function clear_vwz3():String{
-		vwz3 = '';
 		return vwz3;
 	}	
 		
@@ -392,13 +313,8 @@ class BankTransfer extends ORM
 	function set_vwz4(vwz4:String):String{
 		if(vwz4_initialized)
 			modified('vwz4');
-		this.vwz4 = vwz4;
+		this.vwz4 = vwz4 ;
 		vwz4_initialized = true; 
-		return vwz4;
-	}
-
-	public function clear_vwz4():String{
-		vwz4 = '';
 		return vwz4;
 	}	
 		
@@ -413,13 +329,8 @@ class BankTransfer extends ORM
 	function set_vwz5(vwz5:String):String{
 		if(vwz5_initialized)
 			modified('vwz5');
-		this.vwz5 = vwz5;
+		this.vwz5 = vwz5 ;
 		vwz5_initialized = true; 
-		return vwz5;
-	}
-
-	public function clear_vwz5():String{
-		vwz5 = '';
 		return vwz5;
 	}	
 		
@@ -434,13 +345,8 @@ class BankTransfer extends ORM
 	function set_vwz6(vwz6:String):String{
 		if(vwz6_initialized)
 			modified('vwz6');
-		this.vwz6 = vwz6;
+		this.vwz6 = vwz6 ;
 		vwz6_initialized = true; 
-		return vwz6;
-	}
-
-	public function clear_vwz6():String{
-		vwz6 = '';
 		return vwz6;
 	}	
 		
@@ -455,13 +361,8 @@ class BankTransfer extends ORM
 	function set_vwz7(vwz7:String):String{
 		if(vwz7_initialized)
 			modified('vwz7');
-		this.vwz7 = vwz7;
+		this.vwz7 = vwz7 ;
 		vwz7_initialized = true; 
-		return vwz7;
-	}
-
-	public function clear_vwz7():String{
-		vwz7 = '';
 		return vwz7;
 	}	
 		
@@ -476,13 +377,8 @@ class BankTransfer extends ORM
 	function set_vwz8(vwz8:String):String{
 		if(vwz8_initialized)
 			modified('vwz8');
-		this.vwz8 = vwz8;
+		this.vwz8 = vwz8 ;
 		vwz8_initialized = true; 
-		return vwz8;
-	}
-
-	public function clear_vwz8():String{
-		vwz8 = '';
 		return vwz8;
 	}	
 		
@@ -497,13 +393,8 @@ class BankTransfer extends ORM
 	function set_vwz9(vwz9:String):String{
 		if(vwz9_initialized)
 			modified('vwz9');
-		this.vwz9 = vwz9;
+		this.vwz9 = vwz9 ;
 		vwz9_initialized = true; 
-		return vwz9;
-	}
-
-	public function clear_vwz9():String{
-		vwz9 = '';
 		return vwz9;
 	}	
 		
@@ -518,13 +409,8 @@ class BankTransfer extends ORM
 	function set_ba_id(ba_id:Int):Int{
 		if(ba_id_initialized)
 			modified('ba_id');
-		this.ba_id = ba_id;
+		this.ba_id = ba_id ;
 		ba_id_initialized = true; 
-		return ba_id;
-	}
-
-	public function clear_ba_id():Int{
-		trace('ba_id primary key cannot be empty');
 		return ba_id;
 	}	
 		
@@ -539,13 +425,8 @@ class BankTransfer extends ORM
 	function set_tracking_status(tracking_status:String):String{
 		if(tracking_status_initialized)
 			modified('tracking_status');
-		this.tracking_status = tracking_status;
+		this.tracking_status = tracking_status ;
 		tracking_status_initialized = true; 
-		return tracking_status;
-	}
-
-	public function clear_tracking_status():String{
-		tracking_status = 'neu';
 		return tracking_status;
 	}	
 		
@@ -560,13 +441,8 @@ class BankTransfer extends ORM
 	function set_anforderungs_datum(anforderungs_datum:String):String{
 		if(anforderungs_datum_initialized)
 			modified('anforderungs_datum');
-		this.anforderungs_datum = anforderungs_datum;
+		this.anforderungs_datum = anforderungs_datum ;
 		anforderungs_datum_initialized = true; 
-		return anforderungs_datum;
-	}
-
-	public function clear_anforderungs_datum():String{
-		anforderungs_datum = 'null';
 		return anforderungs_datum;
 	}	
 		
@@ -581,13 +457,8 @@ class BankTransfer extends ORM
 	function set_rueck_datum(rueck_datum:String):String{
 		if(rueck_datum_initialized)
 			modified('rueck_datum');
-		this.rueck_datum = rueck_datum;
+		this.rueck_datum = rueck_datum ;
 		rueck_datum_initialized = true; 
-		return rueck_datum;
-	}
-
-	public function clear_rueck_datum():String{
-		rueck_datum = 'null';
 		return rueck_datum;
 	}	
 		
@@ -602,13 +473,8 @@ class BankTransfer extends ORM
 	function set_cycle(cycle:String):String{
 		if(cycle_initialized)
 			modified('cycle');
-		this.cycle = cycle;
+		this.cycle = cycle ;
 		cycle_initialized = true; 
-		return cycle;
-	}
-
-	public function clear_cycle():String{
-		cycle = '';
 		return cycle;
 	}	
 		
@@ -623,13 +489,8 @@ class BankTransfer extends ORM
 	function set_ref_id(ref_id:String):String{
 		if(ref_id_initialized)
 			modified('ref_id');
-		this.ref_id = ref_id;
+		this.ref_id = ref_id ;
 		ref_id_initialized = true; 
-		return ref_id;
-	}
-
-	public function clear_ref_id():String{
-		ref_id = '';
 		return ref_id;
 	}	
 		
@@ -644,13 +505,8 @@ class BankTransfer extends ORM
 	function set_mandat_id(mandat_id:String):String{
 		if(mandat_id_initialized)
 			modified('mandat_id');
-		this.mandat_id = mandat_id;
+		this.mandat_id = mandat_id ;
 		mandat_id_initialized = true; 
-		return mandat_id;
-	}
-
-	public function clear_mandat_id():String{
-		mandat_id = '';
 		return mandat_id;
 	}	
 		
@@ -665,13 +521,8 @@ class BankTransfer extends ORM
 	function set_mandat_datum(mandat_datum:String):String{
 		if(mandat_datum_initialized)
 			modified('mandat_datum');
-		this.mandat_datum = mandat_datum;
+		this.mandat_datum = mandat_datum ;
 		mandat_datum_initialized = true; 
-		return mandat_datum;
-	}
-
-	public function clear_mandat_datum():String{
-		mandat_datum = 'null';
 		return mandat_datum;
 	}	
 		
@@ -686,13 +537,8 @@ class BankTransfer extends ORM
 	function set_ag_creditor_id(ag_creditor_id:String):String{
 		if(ag_creditor_id_initialized)
 			modified('ag_creditor_id');
-		this.ag_creditor_id = ag_creditor_id;
+		this.ag_creditor_id = ag_creditor_id ;
 		ag_creditor_id_initialized = true; 
-		return ag_creditor_id;
-	}
-
-	public function clear_ag_creditor_id():String{
-		ag_creditor_id = '';
 		return ag_creditor_id;
 	}	
 		
@@ -707,13 +553,8 @@ class BankTransfer extends ORM
 	function set_sequenz(sequenz:String):String{
 		if(sequenz_initialized)
 			modified('sequenz');
-		this.sequenz = sequenz;
+		this.sequenz = sequenz ;
 		sequenz_initialized = true; 
-		return sequenz;
-	}
-
-	public function clear_sequenz():String{
-		sequenz = '';
 		return sequenz;
 	}	
 		
@@ -728,13 +569,8 @@ class BankTransfer extends ORM
 	function set_super_ag_name(super_ag_name:String):String{
 		if(super_ag_name_initialized)
 			modified('super_ag_name');
-		this.super_ag_name = super_ag_name;
+		this.super_ag_name = super_ag_name ;
 		super_ag_name_initialized = true; 
-		return super_ag_name;
-	}
-
-	public function clear_super_ag_name():String{
-		super_ag_name = '';
 		return super_ag_name;
 	}	
 	

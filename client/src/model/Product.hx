@@ -1,4 +1,5 @@
 package model;
+import view.shared.io.DataAccess.DataView;
 
 typedef ProductProps = {
 	?id:Int,
@@ -15,9 +16,9 @@ typedef ProductProps = {
 class Product extends ORM
 {
 
-	public function new(props:ProductProps) {
+	public function new(props:ProductProps, view:DataView) {
 		propertyNames = 'id,name,description,value,attributes,mandator,active,edited_by'.split(',');
-		super(props);
+		super(props, view);
 	}	
 		
 	@dataType("bigint")
@@ -31,13 +32,8 @@ class Product extends ORM
 	function set_id(id:Int):Int{
 		if(id_initialized)
 			modified('id');
-		this.id = id;
+		this.id = id ;
 		id_initialized = true; 
-		return id;
-	}
-
-	public function clear_id():Int{
-		trace('id primary key cannot be empty');
 		return id;
 	}	
 		
@@ -52,13 +48,8 @@ class Product extends ORM
 	function set_name(name:String):String{
 		if(name_initialized)
 			modified('name');
-		this.name = name;
+		this.name = name ;
 		name_initialized = true; 
-		return name;
-	}
-
-	public function clear_name():String{
-		name = '';
 		return name;
 	}	
 		
@@ -73,13 +64,8 @@ class Product extends ORM
 	function set_description(description:String):String{
 		if(description_initialized)
 			modified('description');
-		this.description = description;
+		this.description = description ;
 		description_initialized = true; 
-		return description;
-	}
-
-	public function clear_description():String{
-		description = '';
 		return description;
 	}	
 		
@@ -94,13 +80,8 @@ class Product extends ORM
 	function set_value(value:String):String{
 		if(value_initialized)
 			modified('value');
-		this.value = value;
+		this.value = value ;
 		value_initialized = true; 
-		return value;
-	}
-
-	public function clear_value():String{
-		value = '';
 		return value;
 	}	
 		
@@ -115,13 +96,8 @@ class Product extends ORM
 	function set_attributes(attributes:String):String{
 		if(attributes_initialized)
 			modified('attributes');
-		this.attributes = attributes;
+		this.attributes = attributes ;
 		attributes_initialized = true; 
-		return attributes;
-	}
-
-	public function clear_attributes():String{
-		attributes = '{}';
 		return attributes;
 	}	
 		
@@ -136,13 +112,8 @@ class Product extends ORM
 	function set_mandator(mandator:Int):Int{
 		if(mandator_initialized)
 			modified('mandator');
-		this.mandator = mandator;
+		this.mandator = mandator ;
 		mandator_initialized = true; 
-		return mandator;
-	}
-
-	public function clear_mandator():Int{
-		mandator = null;
 		return mandator;
 	}	
 		
@@ -157,13 +128,8 @@ class Product extends ORM
 	function set_active(active:Bool):Bool{
 		if(active_initialized)
 			modified('active');
-		this.active = active;
+		this.active = active ;
 		active_initialized = true; 
-		return active;
-	}
-
-	public function clear_active():Bool{
-		active = 1;
 		return active;
 	}	
 		
@@ -178,13 +144,8 @@ class Product extends ORM
 	function set_edited_by(edited_by:Int):Int{
 		if(edited_by_initialized)
 			modified('edited_by');
-		this.edited_by = edited_by;
+		this.edited_by = edited_by ;
 		edited_by_initialized = true; 
-		return edited_by;
-	}
-
-	public function clear_edited_by():Int{
-		edited_by = null;
 		return edited_by;
 	}	
 	

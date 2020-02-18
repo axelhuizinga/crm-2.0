@@ -1,4 +1,5 @@
 package model;
+import view.shared.io.DataAccess.DataView;
 
 typedef UserGroupProps = {
 	?id:Int,
@@ -13,9 +14,9 @@ typedef UserGroupProps = {
 class UserGroup extends ORM
 {
 
-	public function new(props:UserGroupProps) {
+	public function new(props:UserGroupProps, view:DataView) {
 		propertyNames = 'id,name,description,can,mandator,edited_by'.split(',');
-		super(props);
+		super(props, view);
 	}	
 		
 	@dataType("bigint")
@@ -29,13 +30,8 @@ class UserGroup extends ORM
 	function set_id(id:Int):Int{
 		if(id_initialized)
 			modified('id');
-		this.id = id;
+		this.id = id ;
 		id_initialized = true; 
-		return id;
-	}
-
-	public function clear_id():Int{
-		trace('id primary key cannot be empty');
 		return id;
 	}	
 		
@@ -50,13 +46,8 @@ class UserGroup extends ORM
 	function set_name(name:String):String{
 		if(name_initialized)
 			modified('name');
-		this.name = name;
+		this.name = name ;
 		name_initialized = true; 
-		return name;
-	}
-
-	public function clear_name():String{
-		name = '';
 		return name;
 	}	
 		
@@ -71,13 +62,8 @@ class UserGroup extends ORM
 	function set_description(description:String):String{
 		if(description_initialized)
 			modified('description');
-		this.description = description;
+		this.description = description ;
 		description_initialized = true; 
-		return description;
-	}
-
-	public function clear_description():String{
-		description = '';
 		return description;
 	}	
 		
@@ -92,13 +78,8 @@ class UserGroup extends ORM
 	function set_can(can:String):String{
 		if(can_initialized)
 			modified('can');
-		this.can = can;
+		this.can = can ;
 		can_initialized = true; 
-		return can;
-	}
-
-	public function clear_can():String{
-		can = '{}';
 		return can;
 	}	
 		
@@ -113,13 +94,8 @@ class UserGroup extends ORM
 	function set_mandator(mandator:Int):Int{
 		if(mandator_initialized)
 			modified('mandator');
-		this.mandator = mandator;
+		this.mandator = mandator ;
 		mandator_initialized = true; 
-		return mandator;
-	}
-
-	public function clear_mandator():Int{
-		mandator = null;
 		return mandator;
 	}	
 		
@@ -134,13 +110,8 @@ class UserGroup extends ORM
 	function set_edited_by(edited_by:Int):Int{
 		if(edited_by_initialized)
 			modified('edited_by');
-		this.edited_by = edited_by;
+		this.edited_by = edited_by ;
 		edited_by_initialized = true; 
-		return edited_by;
-	}
-
-	public function clear_edited_by():Int{
-		edited_by = null;
 		return edited_by;
 	}	
 	

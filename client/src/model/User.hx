@@ -1,4 +1,5 @@
 package model;
+import view.shared.io.DataAccess.DataView;
 
 typedef UserProps = {
 	?id:Int,
@@ -25,9 +26,9 @@ typedef UserProps = {
 class User extends ORM
 {
 
-	public function new(props:UserProps) {
+	public function new(props:UserProps, view:DataView) {
 		propertyNames = 'id,contact,last_login,password,user_name,active,edited_by,editing,settings,external,user_group,change_pass_required,online,last_request_time,request,mandator,last_locktime,phash'.split(',');
-		super(props);
+		super(props, view);
 	}	
 		
 	@dataType("bigint")
@@ -41,13 +42,8 @@ class User extends ORM
 	function set_id(id:Int):Int{
 		if(id_initialized)
 			modified('id');
-		this.id = id;
+		this.id = id ;
 		id_initialized = true; 
-		return id;
-	}
-
-	public function clear_id():Int{
-		trace('id primary key cannot be empty');
 		return id;
 	}	
 		
@@ -62,13 +58,8 @@ class User extends ORM
 	function set_contact(contact:Int):Int{
 		if(contact_initialized)
 			modified('contact');
-		this.contact = contact;
+		this.contact = contact ;
 		contact_initialized = true; 
-		return contact;
-	}
-
-	public function clear_contact():Int{
-		contact = 0;
 		return contact;
 	}	
 		
@@ -83,13 +74,8 @@ class User extends ORM
 	function set_last_login(last_login:String):String{
 		if(last_login_initialized)
 			modified('last_login');
-		this.last_login = last_login;
+		this.last_login = last_login ;
 		last_login_initialized = true; 
-		return last_login;
-	}
-
-	public function clear_last_login():String{
-		last_login = 'null';
 		return last_login;
 	}	
 		
@@ -104,13 +90,8 @@ class User extends ORM
 	function set_password(password:String):String{
 		if(password_initialized)
 			modified('password');
-		this.password = password;
+		this.password = password ;
 		password_initialized = true; 
-		return password;
-	}
-
-	public function clear_password():String{
-		password = '';
 		return password;
 	}	
 		
@@ -125,13 +106,8 @@ class User extends ORM
 	function set_user_name(user_name:String):String{
 		if(user_name_initialized)
 			modified('user_name');
-		this.user_name = user_name;
+		this.user_name = user_name ;
 		user_name_initialized = true; 
-		return user_name;
-	}
-
-	public function clear_user_name():String{
-		user_name = '';
 		return user_name;
 	}	
 		
@@ -146,13 +122,8 @@ class User extends ORM
 	function set_active(active:Bool):Bool{
 		if(active_initialized)
 			modified('active');
-		this.active = active;
+		this.active = active ;
 		active_initialized = true; 
-		return active;
-	}
-
-	public function clear_active():Bool{
-		active = true;
 		return active;
 	}	
 		
@@ -167,13 +138,8 @@ class User extends ORM
 	function set_edited_by(edited_by:Int):Int{
 		if(edited_by_initialized)
 			modified('edited_by');
-		this.edited_by = edited_by;
+		this.edited_by = edited_by ;
 		edited_by_initialized = true; 
-		return edited_by;
-	}
-
-	public function clear_edited_by():Int{
-		edited_by = null;
 		return edited_by;
 	}	
 		
@@ -188,13 +154,8 @@ class User extends ORM
 	function set_editing(editing:String):String{
 		if(editing_initialized)
 			modified('editing');
-		this.editing = editing;
+		this.editing = editing ;
 		editing_initialized = true; 
-		return editing;
-	}
-
-	public function clear_editing():String{
-		editing = '{}';
 		return editing;
 	}	
 		
@@ -209,13 +170,8 @@ class User extends ORM
 	function set_settings(settings:String):String{
 		if(settings_initialized)
 			modified('settings');
-		this.settings = settings;
+		this.settings = settings ;
 		settings_initialized = true; 
-		return settings;
-	}
-
-	public function clear_settings():String{
-		settings = '{}';
 		return settings;
 	}	
 		
@@ -230,13 +186,8 @@ class User extends ORM
 	function set_external(external:String):String{
 		if(external_initialized)
 			modified('external');
-		this.external = external;
+		this.external = external ;
 		external_initialized = true; 
-		return external;
-	}
-
-	public function clear_external():String{
-		external = '{}';
 		return external;
 	}	
 		
@@ -251,13 +202,8 @@ class User extends ORM
 	function set_user_group(user_group:Int):Int{
 		if(user_group_initialized)
 			modified('user_group');
-		this.user_group = user_group;
+		this.user_group = user_group ;
 		user_group_initialized = true; 
-		return user_group;
-	}
-
-	public function clear_user_group():Int{
-		user_group = null;
 		return user_group;
 	}	
 		
@@ -272,13 +218,8 @@ class User extends ORM
 	function set_change_pass_required(change_pass_required:Bool):Bool{
 		if(change_pass_required_initialized)
 			modified('change_pass_required');
-		this.change_pass_required = change_pass_required;
+		this.change_pass_required = change_pass_required ;
 		change_pass_required_initialized = true; 
-		return change_pass_required;
-	}
-
-	public function clear_change_pass_required():Bool{
-		change_pass_required = false;
 		return change_pass_required;
 	}	
 		
@@ -293,13 +234,8 @@ class User extends ORM
 	function set_online(online:Bool):Bool{
 		if(online_initialized)
 			modified('online');
-		this.online = online;
+		this.online = online ;
 		online_initialized = true; 
-		return online;
-	}
-
-	public function clear_online():Bool{
-		online = false;
 		return online;
 	}	
 		
@@ -314,13 +250,8 @@ class User extends ORM
 	function set_last_request_time(last_request_time:String):String{
 		if(last_request_time_initialized)
 			modified('last_request_time');
-		this.last_request_time = last_request_time;
+		this.last_request_time = last_request_time ;
 		last_request_time_initialized = true; 
-		return last_request_time;
-	}
-
-	public function clear_last_request_time():String{
-		last_request_time = 'null';
 		return last_request_time;
 	}	
 		
@@ -335,13 +266,8 @@ class User extends ORM
 	function set_request(request:String):String{
 		if(request_initialized)
 			modified('request');
-		this.request = request;
+		this.request = request ;
 		request_initialized = true; 
-		return request;
-	}
-
-	public function clear_request():String{
-		request = '';
 		return request;
 	}	
 		
@@ -356,13 +282,8 @@ class User extends ORM
 	function set_mandator(mandator:Int):Int{
 		if(mandator_initialized)
 			modified('mandator');
-		this.mandator = mandator;
+		this.mandator = mandator ;
 		mandator_initialized = true; 
-		return mandator;
-	}
-
-	public function clear_mandator():Int{
-		mandator = 0;
 		return mandator;
 	}	
 		
@@ -377,13 +298,8 @@ class User extends ORM
 	function set_last_locktime(last_locktime:String):String{
 		if(last_locktime_initialized)
 			modified('last_locktime');
-		this.last_locktime = last_locktime;
+		this.last_locktime = last_locktime ;
 		last_locktime_initialized = true; 
-		return last_locktime;
-	}
-
-	public function clear_last_locktime():String{
-		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
 	}	
 		
@@ -398,13 +314,8 @@ class User extends ORM
 	function set_phash(phash:String):String{
 		if(phash_initialized)
 			modified('phash');
-		this.phash = phash;
+		this.phash = phash ;
 		phash_initialized = true; 
-		return phash;
-	}
-
-	public function clear_phash():String{
-		phash = 'password';
 		return phash;
 	}	
 	

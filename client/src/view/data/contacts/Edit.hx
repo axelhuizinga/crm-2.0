@@ -190,13 +190,13 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			}		
 		}
 		
-		contact = new Contact(actualState);
+		contact = new Contact(actualState, dataAccess['update'].view);
 		//contact = actualState;
 		trace(actualState);
 		//trace('Rtti:' + Rtti.getRtti(Contact).fields[0].meta);
 		trace(contact.fieldsModified);		
 		trace('contact.fieldsModified:' + contact.fieldsModified);		
-		initialState = contact.copy(data, actualState);
+		initialState = contact.load(data);
 		//initialState = copy(actualState);
 		compareStates();	
 		//trace(actualState);	

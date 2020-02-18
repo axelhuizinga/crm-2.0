@@ -1,4 +1,5 @@
 package model;
+import view.shared.io.DataAccess.DataView;
 
 typedef TableFieldProps = {
 	?id:Int,
@@ -18,9 +19,9 @@ typedef TableFieldProps = {
 class TableField extends ORM
 {
 
-	public function new(props:TableFieldProps) {
+	public function new(props:TableFieldProps, view:DataView) {
 		propertyNames = 'id,table_name,mandator,field_name,readonly,element,any,required,use_as_index,admin_only,field_type'.split(',');
-		super(props);
+		super(props, view);
 	}	
 		
 	@dataType("bigint")
@@ -34,13 +35,8 @@ class TableField extends ORM
 	function set_id(id:Int):Int{
 		if(id_initialized)
 			modified('id');
-		this.id = id;
+		this.id = id ;
 		id_initialized = true; 
-		return id;
-	}
-
-	public function clear_id():Int{
-		trace('id primary key cannot be empty');
 		return id;
 	}	
 		
@@ -55,13 +51,8 @@ class TableField extends ORM
 	function set_table_name(table_name:String):String{
 		if(table_name_initialized)
 			modified('table_name');
-		this.table_name = table_name;
+		this.table_name = table_name ;
 		table_name_initialized = true; 
-		return table_name;
-	}
-
-	public function clear_table_name():String{
-		table_name = '';
 		return table_name;
 	}	
 		
@@ -76,13 +67,8 @@ class TableField extends ORM
 	function set_mandator(mandator:Int):Int{
 		if(mandator_initialized)
 			modified('mandator');
-		this.mandator = mandator;
+		this.mandator = mandator ;
 		mandator_initialized = true; 
-		return mandator;
-	}
-
-	public function clear_mandator():Int{
-		mandator = null;
 		return mandator;
 	}	
 		
@@ -97,13 +83,8 @@ class TableField extends ORM
 	function set_field_name(field_name:String):String{
 		if(field_name_initialized)
 			modified('field_name');
-		this.field_name = field_name;
+		this.field_name = field_name ;
 		field_name_initialized = true; 
-		return field_name;
-	}
-
-	public function clear_field_name():String{
-		field_name = '';
 		return field_name;
 	}	
 		
@@ -118,13 +99,8 @@ class TableField extends ORM
 	function set_readonly(readonly:Bool):Bool{
 		if(readonly_initialized)
 			modified('readonly');
-		this.readonly = readonly;
+		this.readonly = readonly ;
 		readonly_initialized = true; 
-		return readonly;
-	}
-
-	public function clear_readonly():Bool{
-		readonly = false;
 		return readonly;
 	}	
 		
@@ -139,13 +115,8 @@ class TableField extends ORM
 	function set_element(element:String):String{
 		if(element_initialized)
 			modified('element');
-		this.element = element;
+		this.element = element ;
 		element_initialized = true; 
-		return element;
-	}
-
-	public function clear_element():String{
-		element = 'Input';
 		return element;
 	}	
 		
@@ -160,13 +131,8 @@ class TableField extends ORM
 	function set_any(any:String):String{
 		if(any_initialized)
 			modified('any');
-		this.any = any;
+		this.any = any ;
 		any_initialized = true; 
-		return any;
-	}
-
-	public function clear_any():String{
-		any = '{}';
 		return any;
 	}	
 		
@@ -181,13 +147,8 @@ class TableField extends ORM
 	function set_required(required:Bool):Bool{
 		if(required_initialized)
 			modified('required');
-		this.required = required;
+		this.required = required ;
 		required_initialized = true; 
-		return required;
-	}
-
-	public function clear_required():Bool{
-		required = false;
 		return required;
 	}	
 		
@@ -202,13 +163,8 @@ class TableField extends ORM
 	function set_use_as_index(use_as_index:Bool):Bool{
 		if(use_as_index_initialized)
 			modified('use_as_index');
-		this.use_as_index = use_as_index;
+		this.use_as_index = use_as_index ;
 		use_as_index_initialized = true; 
-		return use_as_index;
-	}
-
-	public function clear_use_as_index():Bool{
-		use_as_index = false;
 		return use_as_index;
 	}	
 		
@@ -223,13 +179,8 @@ class TableField extends ORM
 	function set_admin_only(admin_only:Bool):Bool{
 		if(admin_only_initialized)
 			modified('admin_only');
-		this.admin_only = admin_only;
+		this.admin_only = admin_only ;
 		admin_only_initialized = true; 
-		return admin_only;
-	}
-
-	public function clear_admin_only():Bool{
-		admin_only = false;
 		return admin_only;
 	}	
 		
@@ -244,13 +195,8 @@ class TableField extends ORM
 	function set_field_type(field_type:String):String{
 		if(field_type_initialized)
 			modified('field_type');
-		this.field_type = field_type;
+		this.field_type = field_type ;
 		field_type_initialized = true; 
-		return field_type;
-	}
-
-	public function clear_field_type():String{
-		field_type = 'null';
 		return field_type;
 	}	
 	

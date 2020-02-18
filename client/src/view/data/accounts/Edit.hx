@@ -67,11 +67,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		trace(props.match.params);
+		dataAccess = ContactsModel.dataAccess;
 		initialState = new Contact({
 			id:null,//2000328,
 			edited_by: props.user.id,
 			mandator: props.user.mandator
-		});	
+		}, dataAccess['update'].view);	
 
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
@@ -81,7 +82,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			props.history.push('${baseUrl}List/get');
 			return;
 		}		
-		dataAccess = ContactsModel.dataAccess;
 		fieldNames = new Array();
 		for(k in dataAccess['update'].view.keys())
 		{
@@ -141,7 +141,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace('loading:$id');
 		if(id == null)
 			return null;
-		var c:Contact = new Contact({edited_by: props.user.id,mandator: 0});
+		var c:Contact = new Contact({edited_by: props.user.id,mandator: 0}, dataAccess['update'].view);
 		var data = props.dataStore.contactData.get(id);
 		trace(data);
 		for(k=>v in data.keyValueIterator())

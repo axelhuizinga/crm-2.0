@@ -1,4 +1,5 @@
 package model;
+import view.shared.io.DataAccess.DataView;
 
 typedef ProjectProps = {
 	?id:Int,
@@ -15,9 +16,9 @@ typedef ProjectProps = {
 class Project extends ORM
 {
 
-	public function new(props:ProjectProps) {
+	public function new(props:ProjectProps, view:DataView) {
 		propertyNames = 'id,mandator,name,description,edited_by,provision_percent,cancellation_liable,target_account'.split(',');
-		super(props);
+		super(props, view);
 	}	
 		
 	@dataType("bigint")
@@ -31,13 +32,8 @@ class Project extends ORM
 	function set_id(id:Int):Int{
 		if(id_initialized)
 			modified('id');
-		this.id = id;
+		this.id = id ;
 		id_initialized = true; 
-		return id;
-	}
-
-	public function clear_id():Int{
-		trace('id primary key cannot be empty');
 		return id;
 	}	
 		
@@ -52,13 +48,8 @@ class Project extends ORM
 	function set_mandator(mandator:Int):Int{
 		if(mandator_initialized)
 			modified('mandator');
-		this.mandator = mandator;
+		this.mandator = mandator ;
 		mandator_initialized = true; 
-		return mandator;
-	}
-
-	public function clear_mandator():Int{
-		mandator = null;
 		return mandator;
 	}	
 		
@@ -73,13 +64,8 @@ class Project extends ORM
 	function set_name(name:String):String{
 		if(name_initialized)
 			modified('name');
-		this.name = name;
+		this.name = name ;
 		name_initialized = true; 
-		return name;
-	}
-
-	public function clear_name():String{
-		name = '';
 		return name;
 	}	
 		
@@ -94,13 +80,8 @@ class Project extends ORM
 	function set_description(description:String):String{
 		if(description_initialized)
 			modified('description');
-		this.description = description;
+		this.description = description ;
 		description_initialized = true; 
-		return description;
-	}
-
-	public function clear_description():String{
-		description = '';
 		return description;
 	}	
 		
@@ -115,13 +96,8 @@ class Project extends ORM
 	function set_edited_by(edited_by:Int):Int{
 		if(edited_by_initialized)
 			modified('edited_by');
-		this.edited_by = edited_by;
+		this.edited_by = edited_by ;
 		edited_by_initialized = true; 
-		return edited_by;
-	}
-
-	public function clear_edited_by():Int{
-		edited_by = null;
 		return edited_by;
 	}	
 		
@@ -136,13 +112,8 @@ class Project extends ORM
 	function set_provision_percent(provision_percent:String):String{
 		if(provision_percent_initialized)
 			modified('provision_percent');
-		this.provision_percent = provision_percent;
+		this.provision_percent = provision_percent ;
 		provision_percent_initialized = true; 
-		return provision_percent;
-	}
-
-	public function clear_provision_percent():String{
-		provision_percent = '(0.0)';
 		return provision_percent;
 	}	
 		
@@ -157,13 +128,8 @@ class Project extends ORM
 	function set_cancellation_liable(cancellation_liable:String):String{
 		if(cancellation_liable_initialized)
 			modified('cancellation_liable');
-		this.cancellation_liable = cancellation_liable;
+		this.cancellation_liable = cancellation_liable ;
 		cancellation_liable_initialized = true; 
-		return cancellation_liable;
-	}
-
-	public function clear_cancellation_liable():String{
-		cancellation_liable = '0';
 		return cancellation_liable;
 	}	
 		
@@ -178,13 +144,8 @@ class Project extends ORM
 	function set_target_account(target_account:Int):Int{
 		if(target_account_initialized)
 			modified('target_account');
-		this.target_account = target_account;
+		this.target_account = target_account ;
 		target_account_initialized = true; 
-		return target_account;
-	}
-
-	public function clear_target_account():Int{
-		target_account = 0;
 		return target_account;
 	}	
 	

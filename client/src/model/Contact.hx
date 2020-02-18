@@ -1,4 +1,6 @@
 package model;
+import haxe.rtti.Meta;
+import view.shared.io.DataAccess.DataView;
 
 typedef ContactProps = {
 	?id:Int,
@@ -35,9 +37,9 @@ typedef ContactProps = {
 class Contact extends ORM
 {
 
-	public function new(props:ContactProps) {
-		propertyNames = 'id,mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner'.split(',');
-		super(props);
+	public function new(props:ContactProps, view:DataView) {
+		//propertyNames = 'id,mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner'.split(',');
+		super(props, view);
 	}	
 		
 	@dataType("bigint")
@@ -51,13 +53,8 @@ class Contact extends ORM
 	function set_id(id:Int):Int{
 		if(id_initialized)
 			modified('id');
-		this.id = id;
+		this.id = id ;
 		id_initialized = true; 
-		return id;
-	}
-
-	public function clear_id():Int{
-		trace('id primary key cannot be empty');
 		return id;
 	}	
 		
@@ -72,13 +69,8 @@ class Contact extends ORM
 	function set_mandator(mandator:Int):Int{
 		if(mandator_initialized)
 			modified('mandator');
-		this.mandator = mandator;
+		this.mandator = mandator ;
 		mandator_initialized = true; 
-		return mandator;
-	}
-
-	public function clear_mandator():Int{
-		mandator = 0;
 		return mandator;
 	}	
 		
@@ -93,13 +85,8 @@ class Contact extends ORM
 	function set_creation_date(creation_date:String):String{
 		if(creation_date_initialized)
 			modified('creation_date');
-		this.creation_date = creation_date;
+		this.creation_date = creation_date ;
 		creation_date_initialized = true; 
-		return creation_date;
-	}
-
-	public function clear_creation_date():String{
-		creation_date = 'CURRENT_TIMESTAMP';
 		return creation_date;
 	}	
 		
@@ -114,13 +101,8 @@ class Contact extends ORM
 	function set_state(state:String):String{
 		if(state_initialized)
 			modified('state');
-		this.state = state;
+		this.state = state ;
 		state_initialized = true; 
-		return state;
-	}
-
-	public function clear_state():String{
-		state = 'contact';
 		return state;
 	}	
 		
@@ -135,13 +117,8 @@ class Contact extends ORM
 	function set_use_email(use_email:Bool):Bool{
 		if(use_email_initialized)
 			modified('use_email');
-		this.use_email = use_email;
+		this.use_email = use_email ;
 		use_email_initialized = true; 
-		return use_email;
-	}
-
-	public function clear_use_email():Bool{
-		use_email = false;
 		return use_email;
 	}	
 		
@@ -156,13 +133,8 @@ class Contact extends ORM
 	function set_company_name(company_name:String):String{
 		if(company_name_initialized)
 			modified('company_name');
-		this.company_name = company_name;
+		this.company_name = company_name ;
 		company_name_initialized = true; 
-		return company_name;
-	}
-
-	public function clear_company_name():String{
-		company_name = '';
 		return company_name;
 	}	
 		
@@ -177,13 +149,8 @@ class Contact extends ORM
 	function set_co_field(co_field:String):String{
 		if(co_field_initialized)
 			modified('co_field');
-		this.co_field = co_field;
+		this.co_field = co_field ;
 		co_field_initialized = true; 
-		return co_field;
-	}
-
-	public function clear_co_field():String{
-		co_field = '';
 		return co_field;
 	}	
 		
@@ -198,13 +165,8 @@ class Contact extends ORM
 	function set_phone_code(phone_code:String):String{
 		if(phone_code_initialized)
 			modified('phone_code');
-		this.phone_code = phone_code;
+		this.phone_code = phone_code ;
 		phone_code_initialized = true; 
-		return phone_code;
-	}
-
-	public function clear_phone_code():String{
-		phone_code = '49';
 		return phone_code;
 	}	
 		
@@ -219,13 +181,8 @@ class Contact extends ORM
 	function set_phone_number(phone_number:String):String{
 		if(phone_number_initialized)
 			modified('phone_number');
-		this.phone_number = phone_number;
+		this.phone_number = phone_number ;
 		phone_number_initialized = true; 
-		return phone_number;
-	}
-
-	public function clear_phone_number():String{
-		phone_number = '';
 		return phone_number;
 	}	
 		
@@ -240,13 +197,8 @@ class Contact extends ORM
 	function set_fax(fax:String):String{
 		if(fax_initialized)
 			modified('fax');
-		this.fax = fax;
+		this.fax = fax ;
 		fax_initialized = true; 
-		return fax;
-	}
-
-	public function clear_fax():String{
-		fax = '';
 		return fax;
 	}	
 		
@@ -261,13 +213,8 @@ class Contact extends ORM
 	function set_title(title:String):String{
 		if(title_initialized)
 			modified('title');
-		this.title = title;
+		this.title = title ;
 		title_initialized = true; 
-		return title;
-	}
-
-	public function clear_title():String{
-		title = '';
 		return title;
 	}	
 		
@@ -282,13 +229,8 @@ class Contact extends ORM
 	function set_title_pro(title_pro:String):String{
 		if(title_pro_initialized)
 			modified('title_pro');
-		this.title_pro = title_pro;
+		this.title_pro = title_pro ;
 		title_pro_initialized = true; 
-		return title_pro;
-	}
-
-	public function clear_title_pro():String{
-		title_pro = '';
 		return title_pro;
 	}	
 		
@@ -303,13 +245,8 @@ class Contact extends ORM
 	function set_first_name(first_name:String):String{
 		if(first_name_initialized)
 			modified('first_name');
-		this.first_name = first_name;
+		this.first_name = first_name ;
 		first_name_initialized = true; 
-		return first_name;
-	}
-
-	public function clear_first_name():String{
-		first_name = '';
 		return first_name;
 	}	
 		
@@ -324,13 +261,8 @@ class Contact extends ORM
 	function set_last_name(last_name:String):String{
 		if(last_name_initialized)
 			modified('last_name');
-		this.last_name = last_name;
+		this.last_name = last_name ;
 		last_name_initialized = true; 
-		return last_name;
-	}
-
-	public function clear_last_name():String{
-		last_name = '';
 		return last_name;
 	}	
 		
@@ -345,13 +277,8 @@ class Contact extends ORM
 	function set_address(address:String):String{
 		if(address_initialized)
 			modified('address');
-		this.address = address;
+		this.address = address ;
 		address_initialized = true; 
-		return address;
-	}
-
-	public function clear_address():String{
-		address = '';
 		return address;
 	}	
 		
@@ -366,13 +293,8 @@ class Contact extends ORM
 	function set_address_2(address_2:String):String{
 		if(address_2_initialized)
 			modified('address_2');
-		this.address_2 = address_2;
+		this.address_2 = address_2 ;
 		address_2_initialized = true; 
-		return address_2;
-	}
-
-	public function clear_address_2():String{
-		address_2 = '';
 		return address_2;
 	}	
 		
@@ -387,13 +309,8 @@ class Contact extends ORM
 	function set_city(city:String):String{
 		if(city_initialized)
 			modified('city');
-		this.city = city;
+		this.city = city ;
 		city_initialized = true; 
-		return city;
-	}
-
-	public function clear_city():String{
-		city = '';
 		return city;
 	}	
 		
@@ -408,13 +325,8 @@ class Contact extends ORM
 	function set_postal_code(postal_code:String):String{
 		if(postal_code_initialized)
 			modified('postal_code');
-		this.postal_code = postal_code;
+		this.postal_code = postal_code ;
 		postal_code_initialized = true; 
-		return postal_code;
-	}
-
-	public function clear_postal_code():String{
-		postal_code = '';
 		return postal_code;
 	}	
 		
@@ -429,13 +341,8 @@ class Contact extends ORM
 	function set_country_code(country_code:String):String{
 		if(country_code_initialized)
 			modified('country_code');
-		this.country_code = country_code;
+		this.country_code = country_code ;
 		country_code_initialized = true; 
-		return country_code;
-	}
-
-	public function clear_country_code():String{
-		country_code = '';
 		return country_code;
 	}	
 		
@@ -450,13 +357,8 @@ class Contact extends ORM
 	function set_gender(gender:String):String{
 		if(gender_initialized)
 			modified('gender');
-		this.gender = gender;
+		this.gender = gender ;
 		gender_initialized = true; 
-		return gender;
-	}
-
-	public function clear_gender():String{
-		gender = '';
 		return gender;
 	}	
 		
@@ -471,13 +373,8 @@ class Contact extends ORM
 	function set_date_of_birth(date_of_birth:String):String{
 		if(date_of_birth_initialized)
 			modified('date_of_birth');
-		this.date_of_birth = date_of_birth;
+		this.date_of_birth = date_of_birth ;
 		date_of_birth_initialized = true; 
-		return date_of_birth;
-	}
-
-	public function clear_date_of_birth():String{
-		date_of_birth = 'null';
 		return date_of_birth;
 	}	
 		
@@ -492,13 +389,8 @@ class Contact extends ORM
 	function set_mobile(mobile:String):String{
 		if(mobile_initialized)
 			modified('mobile');
-		this.mobile = mobile;
+		this.mobile = mobile ;
 		mobile_initialized = true; 
-		return mobile;
-	}
-
-	public function clear_mobile():String{
-		mobile = '';
 		return mobile;
 	}	
 		
@@ -513,13 +405,8 @@ class Contact extends ORM
 	function set_email(email:String):String{
 		if(email_initialized)
 			modified('email');
-		this.email = email;
+		this.email = email ;
 		email_initialized = true; 
-		return email;
-	}
-
-	public function clear_email():String{
-		email = '';
 		return email;
 	}	
 		
@@ -534,13 +421,8 @@ class Contact extends ORM
 	function set_comments(comments:String):String{
 		if(comments_initialized)
 			modified('comments');
-		this.comments = comments;
+		this.comments = comments ;
 		comments_initialized = true; 
-		return comments;
-	}
-
-	public function clear_comments():String{
-		comments = '';
 		return comments;
 	}	
 		
@@ -555,13 +437,8 @@ class Contact extends ORM
 	function set_edited_by(edited_by:Int):Int{
 		if(edited_by_initialized)
 			modified('edited_by');
-		this.edited_by = edited_by;
+		this.edited_by = edited_by ;
 		edited_by_initialized = true; 
-		return edited_by;
-	}
-
-	public function clear_edited_by():Int{
-		edited_by = 0;
 		return edited_by;
 	}	
 		
@@ -576,13 +453,8 @@ class Contact extends ORM
 	function set_merged(merged:Array<Int>):Array<Int>{
 		if(merged_initialized)
 			modified('merged');
-		this.merged = merged;
+		this.merged = merged ;
 		merged_initialized = true; 
-		return merged;
-	}
-
-	public function clear_merged():Array<Int>{
-		merged = [];
 		return merged;
 	}	
 		
@@ -597,13 +469,8 @@ class Contact extends ORM
 	function set_last_locktime(last_locktime:String):String{
 		if(last_locktime_initialized)
 			modified('last_locktime');
-		this.last_locktime = last_locktime;
+		this.last_locktime = last_locktime ;
 		last_locktime_initialized = true; 
-		return last_locktime;
-	}
-
-	public function clear_last_locktime():String{
-		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
 	}	
 		
@@ -618,13 +485,8 @@ class Contact extends ORM
 	function set_owner(owner:Int):Int{
 		if(owner_initialized)
 			modified('owner');
-		this.owner = owner;
+		this.owner = owner ;
 		owner_initialized = true; 
-		return owner;
-	}
-
-	public function clear_owner():Int{
-		owner = null;
 		return owner;
 	}	
 	

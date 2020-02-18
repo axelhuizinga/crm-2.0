@@ -1,4 +1,5 @@
 package model;
+import view.shared.io.DataAccess.DataView;
 
 typedef EndReasonProps = {
 	?id:Int,
@@ -11,9 +12,9 @@ typedef EndReasonProps = {
 class EndReason extends ORM
 {
 
-	public function new(props:EndReasonProps) {
+	public function new(props:EndReasonProps, view:DataView) {
 		propertyNames = 'id,reason,edited_by,mandator'.split(',');
-		super(props);
+		super(props, view);
 	}	
 		
 	@dataType("bigint")
@@ -27,13 +28,8 @@ class EndReason extends ORM
 	function set_id(id:Int):Int{
 		if(id_initialized)
 			modified('id');
-		this.id = id;
+		this.id = id ;
 		id_initialized = true; 
-		return id;
-	}
-
-	public function clear_id():Int{
-		id = null;
 		return id;
 	}	
 		
@@ -48,13 +44,8 @@ class EndReason extends ORM
 	function set_reason(reason:String):String{
 		if(reason_initialized)
 			modified('reason');
-		this.reason = reason;
+		this.reason = reason ;
 		reason_initialized = true; 
-		return reason;
-	}
-
-	public function clear_reason():String{
-		reason = '';
 		return reason;
 	}	
 		
@@ -69,13 +60,8 @@ class EndReason extends ORM
 	function set_edited_by(edited_by:Int):Int{
 		if(edited_by_initialized)
 			modified('edited_by');
-		this.edited_by = edited_by;
+		this.edited_by = edited_by ;
 		edited_by_initialized = true; 
-		return edited_by;
-	}
-
-	public function clear_edited_by():Int{
-		edited_by = null;
 		return edited_by;
 	}	
 		
@@ -90,13 +76,8 @@ class EndReason extends ORM
 	function set_mandator(mandator:Int):Int{
 		if(mandator_initialized)
 			modified('mandator');
-		this.mandator = mandator;
+		this.mandator = mandator ;
 		mandator_initialized = true; 
-		return mandator;
-	}
-
-	public function clear_mandator():Int{
-		mandator = null;
 		return mandator;
 	}	
 	

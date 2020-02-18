@@ -1,4 +1,6 @@
 package model;
+import haxe.rtti.Meta;
+import view.shared.io.DataAccess.DataView;
 import haxe.Constraints.Function;
 import haxe.rtti.CType.ClassField;
 import haxe.rtti.CType.Classdef;
@@ -13,20 +15,36 @@ class ORM {
 	public var fieldsModified(default,null):Array<String>;
 	public var fieldFormat:Map<String, Function>;
 	public var propertyNames:Array<String>;
+	var fields:Dynamic<Dynamic<Array<Dynamic>>>;
+	var view:DataView;
 	//static var fieldNames:Array<String>;
 	//var mandator:Int;
 
-	public function new(props:Dynamic) {
+	public function new(props:Dynamic, view:DataView) {
 		fieldsModified = new Array();
+		this.view = view;
+		fields = Meta.getFields(Type.getClass(this));
+		propertyNames = Reflect.fields(fields);
+		trace(fields);
 		for(f in propertyNames)
 		{
-			Reflect.setProperty(this, f, Reflect.field(props, f));
+			var nv:Dynamic = Reflect.field(props, f);
+			Reflect.setProperty(this, f, switch(Reflect.field(fields, f).dataType[0]){				
+				case('bigint[]'):
+					nv==null?[]:nv;
+				case _.indexOf('timestamp') => 0:
+					nv == null? '': nv;
+				case('date'):
+					nv == null? '': nv;
+				default:
+					nv;
+			});
 		}		
 		//edited_by = props.user.id;
 		//mandator = props.mandator;
 	}
 
-	public function copy(data:Map<String,Dynamic>, ?cState:Dynamic):Dynamic {
+	public function load(data:Map<String,Dynamic>):Dynamic {
 		var t:Dynamic = {};
 		var cls:Dynamic = Type.getClass(this);
 		
@@ -35,11 +53,12 @@ class ORM {
 		for(pName in propertyNames)
 		{
 			//trace('$pName:${Reflect.field(this, pName)}');
+
 			Reflect.setField(t, pName, Reflect.field(this, pName));
-			if(cState!=null)
+			/*if(cState!=null)
 			{
 				Reflect.setField(cState, pName, Reflect.field(this, pName));
-			}
+			}*/
 		}
 		//trace(cls.propertyNames);
 		return t;

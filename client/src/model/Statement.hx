@@ -1,4 +1,5 @@
 package model;
+import view.shared.io.DataAccess.DataView;
 
 typedef StatementProps = {
 	?a:Int,
@@ -38,9 +39,9 @@ typedef StatementProps = {
 class Statement extends ORM
 {
 
-	public function new(props:StatementProps) {
+	public function new(props:StatementProps, view:DataView) {
 		propertyNames = 'a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,aa,processed,id,edited_by,mandator'.split(',');
-		super(props);
+		super(props, view);
 	}	
 		
 	@dataType("bigint")
@@ -54,13 +55,8 @@ class Statement extends ORM
 	function set_a(a:Int):Int{
 		if(a_initialized)
 			modified('a');
-		this.a = a;
+		this.a = a ;
 		a_initialized = true; 
-		return a;
-	}
-
-	public function clear_a():Int{
-		a = null;
 		return a;
 	}	
 		
@@ -75,13 +71,8 @@ class Statement extends ORM
 	function set_b(b:Int):Int{
 		if(b_initialized)
 			modified('b');
-		this.b = b;
+		this.b = b ;
 		b_initialized = true; 
-		return b;
-	}
-
-	public function clear_b():Int{
-		b = null;
 		return b;
 	}	
 		
@@ -96,13 +87,8 @@ class Statement extends ORM
 	function set_c(c:String):String{
 		if(c_initialized)
 			modified('c');
-		this.c = c;
+		this.c = c ;
 		c_initialized = true; 
-		return c;
-	}
-
-	public function clear_c():String{
-		c = 'null';
 		return c;
 	}	
 		
@@ -117,13 +103,8 @@ class Statement extends ORM
 	function set_d(d:String):String{
 		if(d_initialized)
 			modified('d');
-		this.d = d;
+		this.d = d ;
 		d_initialized = true; 
-		return d;
-	}
-
-	public function clear_d():String{
-		d = 'null';
 		return d;
 	}	
 		
@@ -138,13 +119,8 @@ class Statement extends ORM
 	function set_e(e:String):String{
 		if(e_initialized)
 			modified('e');
-		this.e = e;
+		this.e = e ;
 		e_initialized = true; 
-		return e;
-	}
-
-	public function clear_e():String{
-		e = '';
 		return e;
 	}	
 		
@@ -159,13 +135,8 @@ class Statement extends ORM
 	function set_f(f:String):String{
 		if(f_initialized)
 			modified('f');
-		this.f = f;
+		this.f = f ;
 		f_initialized = true; 
-		return f;
-	}
-
-	public function clear_f():String{
-		f = '';
 		return f;
 	}	
 		
@@ -180,13 +151,8 @@ class Statement extends ORM
 	function set_g(g:Int):Int{
 		if(g_initialized)
 			modified('g');
-		this.g = g;
+		this.g = g ;
 		g_initialized = true; 
-		return g;
-	}
-
-	public function clear_g():Int{
-		g = null;
 		return g;
 	}	
 		
@@ -201,13 +167,8 @@ class Statement extends ORM
 	function set_h(h:String):String{
 		if(h_initialized)
 			modified('h');
-		this.h = h;
+		this.h = h ;
 		h_initialized = true; 
-		return h;
-	}
-
-	public function clear_h():String{
-		h = '';
 		return h;
 	}	
 		
@@ -222,13 +183,8 @@ class Statement extends ORM
 	function set_i(i:String):String{
 		if(i_initialized)
 			modified('i');
-		this.i = i;
+		this.i = i ;
 		i_initialized = true; 
-		return i;
-	}
-
-	public function clear_i():String{
-		i = '';
 		return i;
 	}	
 		
@@ -243,13 +199,8 @@ class Statement extends ORM
 	function set_j(j:String):String{
 		if(j_initialized)
 			modified('j');
-		this.j = j;
+		this.j = j ;
 		j_initialized = true; 
-		return j;
-	}
-
-	public function clear_j():String{
-		j = '';
 		return j;
 	}	
 		
@@ -264,13 +215,8 @@ class Statement extends ORM
 	function set_k(k:String):String{
 		if(k_initialized)
 			modified('k');
-		this.k = k;
+		this.k = k ;
 		k_initialized = true; 
-		return k;
-	}
-
-	public function clear_k():String{
-		k = '';
 		return k;
 	}	
 		
@@ -285,13 +231,8 @@ class Statement extends ORM
 	function set_l(l:String):String{
 		if(l_initialized)
 			modified('l');
-		this.l = l;
+		this.l = l ;
 		l_initialized = true; 
-		return l;
-	}
-
-	public function clear_l():String{
-		l = '';
 		return l;
 	}	
 		
@@ -306,13 +247,8 @@ class Statement extends ORM
 	function set_m(m:String):String{
 		if(m_initialized)
 			modified('m');
-		this.m = m;
+		this.m = m ;
 		m_initialized = true; 
-		return m;
-	}
-
-	public function clear_m():String{
-		m = '';
 		return m;
 	}	
 		
@@ -327,13 +263,8 @@ class Statement extends ORM
 	function set_n(n:String):String{
 		if(n_initialized)
 			modified('n');
-		this.n = n;
+		this.n = n ;
 		n_initialized = true; 
-		return n;
-	}
-
-	public function clear_n():String{
-		n = '';
 		return n;
 	}	
 		
@@ -348,13 +279,8 @@ class Statement extends ORM
 	function set_o(o:String):String{
 		if(o_initialized)
 			modified('o');
-		this.o = o;
+		this.o = o ;
 		o_initialized = true; 
-		return o;
-	}
-
-	public function clear_o():String{
-		o = '';
 		return o;
 	}	
 		
@@ -369,13 +295,8 @@ class Statement extends ORM
 	function set_p(p:String):String{
 		if(p_initialized)
 			modified('p');
-		this.p = p;
+		this.p = p ;
 		p_initialized = true; 
-		return p;
-	}
-
-	public function clear_p():String{
-		p = '';
 		return p;
 	}	
 		
@@ -390,13 +311,8 @@ class Statement extends ORM
 	function set_q(q:String):String{
 		if(q_initialized)
 			modified('q');
-		this.q = q;
+		this.q = q ;
 		q_initialized = true; 
-		return q;
-	}
-
-	public function clear_q():String{
-		q = '';
 		return q;
 	}	
 		
@@ -411,13 +327,8 @@ class Statement extends ORM
 	function set_r(r:String):String{
 		if(r_initialized)
 			modified('r');
-		this.r = r;
+		this.r = r ;
 		r_initialized = true; 
-		return r;
-	}
-
-	public function clear_r():String{
-		r = '';
 		return r;
 	}	
 		
@@ -432,13 +343,8 @@ class Statement extends ORM
 	function set_s(s:String):String{
 		if(s_initialized)
 			modified('s');
-		this.s = s;
+		this.s = s ;
 		s_initialized = true; 
-		return s;
-	}
-
-	public function clear_s():String{
-		s = '';
 		return s;
 	}	
 		
@@ -453,13 +359,8 @@ class Statement extends ORM
 	function set_t(t:String):String{
 		if(t_initialized)
 			modified('t');
-		this.t = t;
+		this.t = t ;
 		t_initialized = true; 
-		return t;
-	}
-
-	public function clear_t():String{
-		t = '';
 		return t;
 	}	
 		
@@ -474,13 +375,8 @@ class Statement extends ORM
 	function set_u(u:String):String{
 		if(u_initialized)
 			modified('u');
-		this.u = u;
+		this.u = u ;
 		u_initialized = true; 
-		return u;
-	}
-
-	public function clear_u():String{
-		u = '';
 		return u;
 	}	
 		
@@ -495,13 +391,8 @@ class Statement extends ORM
 	function set_v(v:String):String{
 		if(v_initialized)
 			modified('v');
-		this.v = v;
+		this.v = v ;
 		v_initialized = true; 
-		return v;
-	}
-
-	public function clear_v():String{
-		v = '';
 		return v;
 	}	
 		
@@ -516,13 +407,8 @@ class Statement extends ORM
 	function set_w(w:String):String{
 		if(w_initialized)
 			modified('w');
-		this.w = w;
+		this.w = w ;
 		w_initialized = true; 
-		return w;
-	}
-
-	public function clear_w():String{
-		w = '';
 		return w;
 	}	
 		
@@ -537,13 +423,8 @@ class Statement extends ORM
 	function set_x(x:String):String{
 		if(x_initialized)
 			modified('x');
-		this.x = x;
+		this.x = x ;
 		x_initialized = true; 
-		return x;
-	}
-
-	public function clear_x():String{
-		x = '';
 		return x;
 	}	
 		
@@ -558,13 +439,8 @@ class Statement extends ORM
 	function set_y(y:String):String{
 		if(y_initialized)
 			modified('y');
-		this.y = y;
+		this.y = y ;
 		y_initialized = true; 
-		return y;
-	}
-
-	public function clear_y():String{
-		y = '';
 		return y;
 	}	
 		
@@ -579,13 +455,8 @@ class Statement extends ORM
 	function set_z(z:String):String{
 		if(z_initialized)
 			modified('z');
-		this.z = z;
+		this.z = z ;
 		z_initialized = true; 
-		return z;
-	}
-
-	public function clear_z():String{
-		z = '';
 		return z;
 	}	
 		
@@ -600,13 +471,8 @@ class Statement extends ORM
 	function set_aa(aa:Int):Int{
 		if(aa_initialized)
 			modified('aa');
-		this.aa = aa;
+		this.aa = aa ;
 		aa_initialized = true; 
-		return aa;
-	}
-
-	public function clear_aa():Int{
-		aa = null;
 		return aa;
 	}	
 		
@@ -621,13 +487,8 @@ class Statement extends ORM
 	function set_processed(processed:Int):Int{
 		if(processed_initialized)
 			modified('processed');
-		this.processed = processed;
+		this.processed = processed ;
 		processed_initialized = true; 
-		return processed;
-	}
-
-	public function clear_processed():Int{
-		processed = '0';
 		return processed;
 	}	
 		
@@ -642,13 +503,8 @@ class Statement extends ORM
 	function set_id(id:Int):Int{
 		if(id_initialized)
 			modified('id');
-		this.id = id;
+		this.id = id ;
 		id_initialized = true; 
-		return id;
-	}
-
-	public function clear_id():Int{
-		trace('id primary key cannot be empty');
 		return id;
 	}	
 		
@@ -663,13 +519,8 @@ class Statement extends ORM
 	function set_edited_by(edited_by:Int):Int{
 		if(edited_by_initialized)
 			modified('edited_by');
-		this.edited_by = edited_by;
+		this.edited_by = edited_by ;
 		edited_by_initialized = true; 
-		return edited_by;
-	}
-
-	public function clear_edited_by():Int{
-		edited_by = null;
 		return edited_by;
 	}	
 		
@@ -684,13 +535,8 @@ class Statement extends ORM
 	function set_mandator(mandator:Int):Int{
 		if(mandator_initialized)
 			modified('mandator');
-		this.mandator = mandator;
+		this.mandator = mandator ;
 		mandator_initialized = true; 
-		return mandator;
-	}
-
-	public function clear_mandator():Int{
-		mandator = null;
 		return mandator;
 	}	
 	

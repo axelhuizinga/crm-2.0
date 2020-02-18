@@ -1,4 +1,5 @@
 package model;
+import view.shared.io.DataAccess.DataView;
 
 typedef AccountProps = {
 	?id:Int,
@@ -20,9 +21,9 @@ typedef AccountProps = {
 class Account extends ORM
 {
 
-	public function new(props:AccountProps) {
+	public function new(props:AccountProps, view:DataView) {
 		propertyNames = 'id,contact,bank_name,bic,account,blz,iban,creditor,sign_date,state,creation_date,edited_by,last_locktime'.split(',');
-		super(props);
+		super(props, view);
 	}	
 		
 	@dataType("bigint")
@@ -36,13 +37,8 @@ class Account extends ORM
 	function set_id(id:Int):Int{
 		if(id_initialized)
 			modified('id');
-		this.id = id;
+		this.id = id ;
 		id_initialized = true; 
-		return id;
-	}
-
-	public function clear_id():Int{
-		trace('id primary key cannot be empty');
 		return id;
 	}	
 		
@@ -57,13 +53,8 @@ class Account extends ORM
 	function set_contact(contact:Int):Int{
 		if(contact_initialized)
 			modified('contact');
-		this.contact = contact;
+		this.contact = contact ;
 		contact_initialized = true; 
-		return contact;
-	}
-
-	public function clear_contact():Int{
-		contact = null;
 		return contact;
 	}	
 		
@@ -78,13 +69,8 @@ class Account extends ORM
 	function set_bank_name(bank_name:String):String{
 		if(bank_name_initialized)
 			modified('bank_name');
-		this.bank_name = bank_name;
+		this.bank_name = bank_name ;
 		bank_name_initialized = true; 
-		return bank_name;
-	}
-
-	public function clear_bank_name():String{
-		bank_name = '';
 		return bank_name;
 	}	
 		
@@ -99,13 +85,8 @@ class Account extends ORM
 	function set_bic(bic:String):String{
 		if(bic_initialized)
 			modified('bic');
-		this.bic = bic;
+		this.bic = bic ;
 		bic_initialized = true; 
-		return bic;
-	}
-
-	public function clear_bic():String{
-		bic = '';
 		return bic;
 	}	
 		
@@ -120,13 +101,8 @@ class Account extends ORM
 	function set_account(account:String):String{
 		if(account_initialized)
 			modified('account');
-		this.account = account;
+		this.account = account ;
 		account_initialized = true; 
-		return account;
-	}
-
-	public function clear_account():String{
-		account = '';
 		return account;
 	}	
 		
@@ -141,13 +117,8 @@ class Account extends ORM
 	function set_blz(blz:String):String{
 		if(blz_initialized)
 			modified('blz');
-		this.blz = blz;
+		this.blz = blz ;
 		blz_initialized = true; 
-		return blz;
-	}
-
-	public function clear_blz():String{
-		blz = '';
 		return blz;
 	}	
 		
@@ -162,13 +133,8 @@ class Account extends ORM
 	function set_iban(iban:String):String{
 		if(iban_initialized)
 			modified('iban');
-		this.iban = iban;
+		this.iban = iban ;
 		iban_initialized = true; 
-		return iban;
-	}
-
-	public function clear_iban():String{
-		iban = '';
 		return iban;
 	}	
 		
@@ -183,13 +149,8 @@ class Account extends ORM
 	function set_creditor(creditor:Int):Int{
 		if(creditor_initialized)
 			modified('creditor');
-		this.creditor = creditor;
+		this.creditor = creditor ;
 		creditor_initialized = true; 
-		return creditor;
-	}
-
-	public function clear_creditor():Int{
-		creditor = null;
 		return creditor;
 	}	
 		
@@ -204,13 +165,8 @@ class Account extends ORM
 	function set_sign_date(sign_date:String):String{
 		if(sign_date_initialized)
 			modified('sign_date');
-		this.sign_date = sign_date;
+		this.sign_date = sign_date ;
 		sign_date_initialized = true; 
-		return sign_date;
-	}
-
-	public function clear_sign_date():String{
-		sign_date = 'null';
 		return sign_date;
 	}	
 		
@@ -225,13 +181,8 @@ class Account extends ORM
 	function set_state(state:String):String{
 		if(state_initialized)
 			modified('state');
-		this.state = state;
+		this.state = state ;
 		state_initialized = true; 
-		return state;
-	}
-
-	public function clear_state():String{
-		state = 'new';
 		return state;
 	}	
 		
@@ -246,13 +197,8 @@ class Account extends ORM
 	function set_creation_date(creation_date:String):String{
 		if(creation_date_initialized)
 			modified('creation_date');
-		this.creation_date = creation_date;
+		this.creation_date = creation_date ;
 		creation_date_initialized = true; 
-		return creation_date;
-	}
-
-	public function clear_creation_date():String{
-		creation_date = 'CURRENT_TIMESTAMP';
 		return creation_date;
 	}	
 		
@@ -267,13 +213,8 @@ class Account extends ORM
 	function set_edited_by(edited_by:Int):Int{
 		if(edited_by_initialized)
 			modified('edited_by');
-		this.edited_by = edited_by;
+		this.edited_by = edited_by ;
 		edited_by_initialized = true; 
-		return edited_by;
-	}
-
-	public function clear_edited_by():Int{
-		edited_by = null;
 		return edited_by;
 	}	
 		
@@ -288,13 +229,8 @@ class Account extends ORM
 	function set_last_locktime(last_locktime:String):String{
 		if(last_locktime_initialized)
 			modified('last_locktime');
-		this.last_locktime = last_locktime;
+		this.last_locktime = last_locktime ;
 		last_locktime_initialized = true; 
-		return last_locktime;
-	}
-
-	public function clear_last_locktime():String{
-		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
 	}	
 	

@@ -1,4 +1,5 @@
 package model;
+import view.shared.io.DataAccess.DataView;
 
 typedef ActivityProps = {
 	?id:Int,
@@ -13,9 +14,9 @@ typedef ActivityProps = {
 class Activity extends ORM
 {
 
-	public function new(props:ActivityProps) {
+	public function new(props:ActivityProps, view:DataView) {
 		propertyNames = 'id,table,title,active,edited_by,activated_at'.split(',');
-		super(props);
+		super(props, view);
 	}	
 		
 	@dataType("bigint")
@@ -29,13 +30,8 @@ class Activity extends ORM
 	function set_id(id:Int):Int{
 		if(id_initialized)
 			modified('id');
-		this.id = id;
+		this.id = id ;
 		id_initialized = true; 
-		return id;
-	}
-
-	public function clear_id():Int{
-		trace('id primary key cannot be empty');
 		return id;
 	}	
 		
@@ -50,13 +46,8 @@ class Activity extends ORM
 	function set_table(table:String):String{
 		if(table_initialized)
 			modified('table');
-		this.table = table;
+		this.table = table ;
 		table_initialized = true; 
-		return table;
-	}
-
-	public function clear_table():String{
-		table = '';
 		return table;
 	}	
 		
@@ -71,13 +62,8 @@ class Activity extends ORM
 	function set_title(title:String):String{
 		if(title_initialized)
 			modified('title');
-		this.title = title;
+		this.title = title ;
 		title_initialized = true; 
-		return title;
-	}
-
-	public function clear_title():String{
-		title = '';
 		return title;
 	}	
 		
@@ -92,13 +78,8 @@ class Activity extends ORM
 	function set_active(active:Bool):Bool{
 		if(active_initialized)
 			modified('active');
-		this.active = active;
+		this.active = active ;
 		active_initialized = true; 
-		return active;
-	}
-
-	public function clear_active():Bool{
-		active = 1;
 		return active;
 	}	
 		
@@ -113,13 +94,8 @@ class Activity extends ORM
 	function set_edited_by(edited_by:Int):Int{
 		if(edited_by_initialized)
 			modified('edited_by');
-		this.edited_by = edited_by;
+		this.edited_by = edited_by ;
 		edited_by_initialized = true; 
-		return edited_by;
-	}
-
-	public function clear_edited_by():Int{
-		edited_by = null;
 		return edited_by;
 	}	
 		
@@ -134,13 +110,8 @@ class Activity extends ORM
 	function set_activated_at(activated_at:String):String{
 		if(activated_at_initialized)
 			modified('activated_at');
-		this.activated_at = activated_at;
+		this.activated_at = activated_at ;
 		activated_at_initialized = true; 
-		return activated_at;
-	}
-
-	public function clear_activated_at():String{
-		activated_at = '(CURRENT_TIMESTAMP)';
 		return activated_at;
 	}	
 	

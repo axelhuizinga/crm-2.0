@@ -1,4 +1,5 @@
 package model;
+import view.shared.io.DataAccess.DataView;
 
 typedef MandatorProps = {
 	?id:Int,
@@ -15,9 +16,9 @@ typedef MandatorProps = {
 class Mandator extends ORM
 {
 
-	public function new(props:MandatorProps) {
+	public function new(props:MandatorProps, view:DataView) {
 		propertyNames = 'id,contact,name,description,any,edited_by,parent,last_locktime'.split(',');
-		super(props);
+		super(props, view);
 	}	
 		
 	@dataType("bigint")
@@ -31,13 +32,8 @@ class Mandator extends ORM
 	function set_id(id:Int):Int{
 		if(id_initialized)
 			modified('id');
-		this.id = id;
+		this.id = id ;
 		id_initialized = true; 
-		return id;
-	}
-
-	public function clear_id():Int{
-		trace('id primary key cannot be empty');
 		return id;
 	}	
 		
@@ -52,13 +48,8 @@ class Mandator extends ORM
 	function set_contact(contact:Int):Int{
 		if(contact_initialized)
 			modified('contact');
-		this.contact = contact;
+		this.contact = contact ;
 		contact_initialized = true; 
-		return contact;
-	}
-
-	public function clear_contact():Int{
-		contact = null;
 		return contact;
 	}	
 		
@@ -73,13 +64,8 @@ class Mandator extends ORM
 	function set_name(name:String):String{
 		if(name_initialized)
 			modified('name');
-		this.name = name;
+		this.name = name ;
 		name_initialized = true; 
-		return name;
-	}
-
-	public function clear_name():String{
-		name = '';
 		return name;
 	}	
 		
@@ -94,13 +80,8 @@ class Mandator extends ORM
 	function set_description(description:String):String{
 		if(description_initialized)
 			modified('description');
-		this.description = description;
+		this.description = description ;
 		description_initialized = true; 
-		return description;
-	}
-
-	public function clear_description():String{
-		description = '';
 		return description;
 	}	
 		
@@ -115,13 +96,8 @@ class Mandator extends ORM
 	function set_any(any:String):String{
 		if(any_initialized)
 			modified('any');
-		this.any = any;
+		this.any = any ;
 		any_initialized = true; 
-		return any;
-	}
-
-	public function clear_any():String{
-		any = '{}';
 		return any;
 	}	
 		
@@ -136,13 +112,8 @@ class Mandator extends ORM
 	function set_edited_by(edited_by:Int):Int{
 		if(edited_by_initialized)
 			modified('edited_by');
-		this.edited_by = edited_by;
+		this.edited_by = edited_by ;
 		edited_by_initialized = true; 
-		return edited_by;
-	}
-
-	public function clear_edited_by():Int{
-		edited_by = null;
 		return edited_by;
 	}	
 		
@@ -157,13 +128,8 @@ class Mandator extends ORM
 	function set_parent(parent:Int):Int{
 		if(parent_initialized)
 			modified('parent');
-		this.parent = parent;
+		this.parent = parent ;
 		parent_initialized = true; 
-		return parent;
-	}
-
-	public function clear_parent():Int{
-		parent = null;
 		return parent;
 	}	
 		
@@ -178,13 +144,8 @@ class Mandator extends ORM
 	function set_last_locktime(last_locktime:String):String{
 		if(last_locktime_initialized)
 			modified('last_locktime');
-		this.last_locktime = last_locktime;
+		this.last_locktime = last_locktime ;
 		last_locktime_initialized = true; 
-		return last_locktime;
-	}
-
-	public function clear_last_locktime():String{
-		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
 	}	
 	

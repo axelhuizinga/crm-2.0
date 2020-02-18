@@ -1,4 +1,5 @@
 package model;
+import view.shared.io.DataAccess.DataView;
 
 typedef UserInterfaceProps = {
 	?id:Int,
@@ -16,9 +17,9 @@ typedef UserInterfaceProps = {
 class UserInterface extends ORM
 {
 
-	public function new(props:UserInterfaceProps) {
+	public function new(props:UserInterfaceProps, view:DataView) {
 		propertyNames = 'id,key,content,classPath,component,edited_by,updated_at,locale,mandator'.split(',');
-		super(props);
+		super(props, view);
 	}	
 		
 	@dataType("bigint")
@@ -32,13 +33,8 @@ class UserInterface extends ORM
 	function set_id(id:Int):Int{
 		if(id_initialized)
 			modified('id');
-		this.id = id;
+		this.id = id ;
 		id_initialized = true; 
-		return id;
-	}
-
-	public function clear_id():Int{
-		trace('id primary key cannot be empty');
 		return id;
 	}	
 		
@@ -53,13 +49,8 @@ class UserInterface extends ORM
 	function set_key(key:String):String{
 		if(key_initialized)
 			modified('key');
-		this.key = key;
+		this.key = key ;
 		key_initialized = true; 
-		return key;
-	}
-
-	public function clear_key():String{
-		key = '';
 		return key;
 	}	
 		
@@ -74,13 +65,8 @@ class UserInterface extends ORM
 	function set_content(content:String):String{
 		if(content_initialized)
 			modified('content');
-		this.content = content;
+		this.content = content ;
 		content_initialized = true; 
-		return content;
-	}
-
-	public function clear_content():String{
-		content = '';
 		return content;
 	}	
 		
@@ -95,13 +81,8 @@ class UserInterface extends ORM
 	function set_classPath(classPath:String):String{
 		if(classPath_initialized)
 			modified('classPath');
-		this.classPath = classPath;
+		this.classPath = classPath ;
 		classPath_initialized = true; 
-		return classPath;
-	}
-
-	public function clear_classPath():String{
-		classPath = '';
 		return classPath;
 	}	
 		
@@ -116,13 +97,8 @@ class UserInterface extends ORM
 	function set_component(component:String):String{
 		if(component_initialized)
 			modified('component');
-		this.component = component;
+		this.component = component ;
 		component_initialized = true; 
-		return component;
-	}
-
-	public function clear_component():String{
-		component = '';
 		return component;
 	}	
 		
@@ -137,13 +113,8 @@ class UserInterface extends ORM
 	function set_edited_by(edited_by:String):String{
 		if(edited_by_initialized)
 			modified('edited_by');
-		this.edited_by = edited_by;
+		this.edited_by = edited_by ;
 		edited_by_initialized = true; 
-		return edited_by;
-	}
-
-	public function clear_edited_by():String{
-		edited_by = '';
 		return edited_by;
 	}	
 		
@@ -158,13 +129,8 @@ class UserInterface extends ORM
 	function set_updated_at(updated_at:String):String{
 		if(updated_at_initialized)
 			modified('updated_at');
-		this.updated_at = updated_at;
+		this.updated_at = updated_at ;
 		updated_at_initialized = true; 
-		return updated_at;
-	}
-
-	public function clear_updated_at():String{
-		updated_at = 'null';
 		return updated_at;
 	}	
 		
@@ -179,13 +145,8 @@ class UserInterface extends ORM
 	function set_locale(locale:String):String{
 		if(locale_initialized)
 			modified('locale');
-		this.locale = locale;
+		this.locale = locale ;
 		locale_initialized = true; 
-		return locale;
-	}
-
-	public function clear_locale():String{
-		locale = '';
 		return locale;
 	}	
 		
@@ -200,13 +161,8 @@ class UserInterface extends ORM
 	function set_mandator(mandator:Int):Int{
 		if(mandator_initialized)
 			modified('mandator');
-		this.mandator = mandator;
+		this.mandator = mandator ;
 		mandator_initialized = true; 
-		return mandator;
-	}
-
-	public function clear_mandator():Int{
-		mandator = null;
 		return mandator;
 	}	
 	

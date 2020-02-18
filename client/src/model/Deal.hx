@@ -1,4 +1,5 @@
 package model;
+import view.shared.io.DataAccess.DataView;
 
 typedef DealProps = {
 	?id:Int,
@@ -29,9 +30,9 @@ typedef DealProps = {
 class Deal extends ORM
 {
 
-	public function new(props:DealProps) {
+	public function new(props:DealProps, view:DataView) {
 		propertyNames = 'id,contact,creation_date,account,target_account,start_day,start_date,cycle,amount,product,agent,project,status,pay_method,end_date,end_reason,repeat_date,edited_by,mandator,old_active,cycle_start_date,last_locktime'.split(',');
-		super(props);
+		super(props, view);
 	}	
 		
 	@dataType("bigint")
@@ -45,13 +46,8 @@ class Deal extends ORM
 	function set_id(id:Int):Int{
 		if(id_initialized)
 			modified('id');
-		this.id = id;
+		this.id = id ;
 		id_initialized = true; 
-		return id;
-	}
-
-	public function clear_id():Int{
-		trace('id primary key cannot be empty');
 		return id;
 	}	
 		
@@ -66,13 +62,8 @@ class Deal extends ORM
 	function set_contact(contact:Int):Int{
 		if(contact_initialized)
 			modified('contact');
-		this.contact = contact;
+		this.contact = contact ;
 		contact_initialized = true; 
-		return contact;
-	}
-
-	public function clear_contact():Int{
-		contact = null;
 		return contact;
 	}	
 		
@@ -87,13 +78,8 @@ class Deal extends ORM
 	function set_creation_date(creation_date:String):String{
 		if(creation_date_initialized)
 			modified('creation_date');
-		this.creation_date = creation_date;
+		this.creation_date = creation_date ;
 		creation_date_initialized = true; 
-		return creation_date;
-	}
-
-	public function clear_creation_date():String{
-		creation_date = 'CURRENT_TIMESTAMP';
 		return creation_date;
 	}	
 		
@@ -108,13 +94,8 @@ class Deal extends ORM
 	function set_account(account:Int):Int{
 		if(account_initialized)
 			modified('account');
-		this.account = account;
+		this.account = account ;
 		account_initialized = true; 
-		return account;
-	}
-
-	public function clear_account():Int{
-		account = null;
 		return account;
 	}	
 		
@@ -129,13 +110,8 @@ class Deal extends ORM
 	function set_target_account(target_account:Int):Int{
 		if(target_account_initialized)
 			modified('target_account');
-		this.target_account = target_account;
+		this.target_account = target_account ;
 		target_account_initialized = true; 
-		return target_account;
-	}
-
-	public function clear_target_account():Int{
-		target_account = null;
 		return target_account;
 	}	
 		
@@ -150,13 +126,8 @@ class Deal extends ORM
 	function set_start_day(start_day:String):String{
 		if(start_day_initialized)
 			modified('start_day');
-		this.start_day = start_day;
+		this.start_day = start_day ;
 		start_day_initialized = true; 
-		return start_day;
-	}
-
-	public function clear_start_day():String{
-		start_day = '1';
 		return start_day;
 	}	
 		
@@ -171,13 +142,8 @@ class Deal extends ORM
 	function set_start_date(start_date:String):String{
 		if(start_date_initialized)
 			modified('start_date');
-		this.start_date = start_date;
+		this.start_date = start_date ;
 		start_date_initialized = true; 
-		return start_date;
-	}
-
-	public function clear_start_date():String{
-		start_date = 'null';
 		return start_date;
 	}	
 		
@@ -192,13 +158,8 @@ class Deal extends ORM
 	function set_cycle(cycle:String):String{
 		if(cycle_initialized)
 			modified('cycle');
-		this.cycle = cycle;
+		this.cycle = cycle ;
 		cycle_initialized = true; 
-		return cycle;
-	}
-
-	public function clear_cycle():String{
-		cycle = '';
 		return cycle;
 	}	
 		
@@ -213,13 +174,8 @@ class Deal extends ORM
 	function set_amount(amount:String):String{
 		if(amount_initialized)
 			modified('amount');
-		this.amount = amount;
+		this.amount = amount ;
 		amount_initialized = true; 
-		return amount;
-	}
-
-	public function clear_amount():String{
-		amount = '';
 		return amount;
 	}	
 		
@@ -234,13 +190,8 @@ class Deal extends ORM
 	function set_product(product:Int):Int{
 		if(product_initialized)
 			modified('product');
-		this.product = product;
+		this.product = product ;
 		product_initialized = true; 
-		return product;
-	}
-
-	public function clear_product():Int{
-		product = null;
 		return product;
 	}	
 		
@@ -255,13 +206,8 @@ class Deal extends ORM
 	function set_agent(agent:Int):Int{
 		if(agent_initialized)
 			modified('agent');
-		this.agent = agent;
+		this.agent = agent ;
 		agent_initialized = true; 
-		return agent;
-	}
-
-	public function clear_agent():Int{
-		agent = null;
 		return agent;
 	}	
 		
@@ -276,13 +222,8 @@ class Deal extends ORM
 	function set_project(project:Int):Int{
 		if(project_initialized)
 			modified('project');
-		this.project = project;
+		this.project = project ;
 		project_initialized = true; 
-		return project;
-	}
-
-	public function clear_project():Int{
-		project = null;
 		return project;
 	}	
 		
@@ -297,13 +238,8 @@ class Deal extends ORM
 	function set_status(status:String):String{
 		if(status_initialized)
 			modified('status');
-		this.status = status;
+		this.status = status ;
 		status_initialized = true; 
-		return status;
-	}
-
-	public function clear_status():String{
-		status = 'active';
 		return status;
 	}	
 		
@@ -318,13 +254,8 @@ class Deal extends ORM
 	function set_pay_method(pay_method:String):String{
 		if(pay_method_initialized)
 			modified('pay_method');
-		this.pay_method = pay_method;
+		this.pay_method = pay_method ;
 		pay_method_initialized = true; 
-		return pay_method;
-	}
-
-	public function clear_pay_method():String{
-		pay_method = 'debit';
 		return pay_method;
 	}	
 		
@@ -339,13 +270,8 @@ class Deal extends ORM
 	function set_end_date(end_date:String):String{
 		if(end_date_initialized)
 			modified('end_date');
-		this.end_date = end_date;
+		this.end_date = end_date ;
 		end_date_initialized = true; 
-		return end_date;
-	}
-
-	public function clear_end_date():String{
-		end_date = 'null';
 		return end_date;
 	}	
 		
@@ -360,13 +286,8 @@ class Deal extends ORM
 	function set_end_reason(end_reason:Int):Int{
 		if(end_reason_initialized)
 			modified('end_reason');
-		this.end_reason = end_reason;
+		this.end_reason = end_reason ;
 		end_reason_initialized = true; 
-		return end_reason;
-	}
-
-	public function clear_end_reason():Int{
-		end_reason = null;
 		return end_reason;
 	}	
 		
@@ -381,13 +302,8 @@ class Deal extends ORM
 	function set_repeat_date(repeat_date:String):String{
 		if(repeat_date_initialized)
 			modified('repeat_date');
-		this.repeat_date = repeat_date;
+		this.repeat_date = repeat_date ;
 		repeat_date_initialized = true; 
-		return repeat_date;
-	}
-
-	public function clear_repeat_date():String{
-		repeat_date = 'null';
 		return repeat_date;
 	}	
 		
@@ -402,13 +318,8 @@ class Deal extends ORM
 	function set_edited_by(edited_by:Int):Int{
 		if(edited_by_initialized)
 			modified('edited_by');
-		this.edited_by = edited_by;
+		this.edited_by = edited_by ;
 		edited_by_initialized = true; 
-		return edited_by;
-	}
-
-	public function clear_edited_by():Int{
-		edited_by = null;
 		return edited_by;
 	}	
 		
@@ -423,13 +334,8 @@ class Deal extends ORM
 	function set_mandator(mandator:Int):Int{
 		if(mandator_initialized)
 			modified('mandator');
-		this.mandator = mandator;
+		this.mandator = mandator ;
 		mandator_initialized = true; 
-		return mandator;
-	}
-
-	public function clear_mandator():Int{
-		mandator = null;
 		return mandator;
 	}	
 		
@@ -444,13 +350,8 @@ class Deal extends ORM
 	function set_old_active(old_active:Bool):Bool{
 		if(old_active_initialized)
 			modified('old_active');
-		this.old_active = old_active;
+		this.old_active = old_active ;
 		old_active_initialized = true; 
-		return old_active;
-	}
-
-	public function clear_old_active():Bool{
-		old_active = 1;
 		return old_active;
 	}	
 		
@@ -465,13 +366,8 @@ class Deal extends ORM
 	function set_cycle_start_date(cycle_start_date:String):String{
 		if(cycle_start_date_initialized)
 			modified('cycle_start_date');
-		this.cycle_start_date = cycle_start_date;
+		this.cycle_start_date = cycle_start_date ;
 		cycle_start_date_initialized = true; 
-		return cycle_start_date;
-	}
-
-	public function clear_cycle_start_date():String{
-		cycle_start_date = 'null';
 		return cycle_start_date;
 	}	
 		
@@ -486,13 +382,8 @@ class Deal extends ORM
 	function set_last_locktime(last_locktime:String):String{
 		if(last_locktime_initialized)
 			modified('last_locktime');
-		this.last_locktime = last_locktime;
+		this.last_locktime = last_locktime ;
 		last_locktime_initialized = true; 
-		return last_locktime;
-	}
-
-	public function clear_last_locktime():String{
-		last_locktime = 'CURRENT_TIMESTAMP';
 		return last_locktime;
 	}	
 	

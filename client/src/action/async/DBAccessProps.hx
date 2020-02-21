@@ -9,15 +9,16 @@ typedef DBAccessOutcome =
 typedef DBAccessProps = 
 {
 	?action:String,	
-	?pages:Int,
+	?devIP:String,	
 	?className:String,
 	?filter:Dynamic,
 	?dataSource:Map<String,Map<String,Dynamic>>,
 	?limit:Int,
 	?maxImport:Int,
-	?totalRecords:Int,
+	?pages:Int,
 	?offset:Int,
-	?outcome:DBAccessOutcome,
+	//?outcome:DBAccessOutcome,
 	?table:String,
+	?totalRecords:Int,
 	?user:UserState
 };

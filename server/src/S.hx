@@ -1,5 +1,7 @@
 package;
-
+import db.DbRelation;
+import db.DbUser;
+import db.DbQuery;
 import haxe.PosInfos;
 import haxe.ds.StringMap;
 
@@ -112,17 +114,22 @@ class S
 		//var pd:Dynamic = Web.getPostData();
 
 		response = {content:'',error:''};
-		var params:Map<String,String> = Web.getParams();
+		var params:Map<String,Dynamic> = Web.getParams();
 		devIP = params.get('devIP');
-		trace(params);		
-
+		trace(params);
+		if(params.exists('user')){
+			trace(Reflect.fields(params.get('user')));
+			params.set('user',haxe.Unserializer.run(params.get('user')));
+		}
+		//trace(Reflect.fields(Syntax.code("$_POST['filter']")));
 		var action:String = params.get('action');
 		if (action.length == 0 || params.get('className') == null)
 		{
 			trace(Web.getMethod());
-			trace(Web.getClientHeaders());
+			//trace(Web.getClientHeaders());
 			try {
-				Model.binary();
+				var dbQuery:DbQuery = Model.binary();
+				trace(dbQuery);
 				//Model.binary(params.get('dbData'));
 			}
 			exit( { error:"required params action and/or className missing" } );
@@ -156,7 +163,7 @@ class S
 			trace('SHOULD NEVER HAPPEN');
 		}
 	
-		User.login(params);		
+		User.login(Model.binary());		
 		exit(response);
 	}
 	
@@ -521,5 +528,8 @@ class S
 		var ini:NativeArray = Syntax.code("$ini");
 		conf.set('ini', ini);		
 		//trace(conf.get('ini'));
+		//edump(new DbUser(null));
+		//edump(new DbRelation(null));
+		//edump(new DbQuery());
 	}
 }

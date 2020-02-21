@@ -1,4 +1,5 @@
 package action.async;
+import haxe.Json;
 import js.lib.Promise;
 import haxe.Unserializer;
 import action.AppAction;
@@ -129,8 +130,9 @@ class DBAccess
 				id:props.user.id,
 				jwt:props.user.jwt,
 				className:props.className,
-				action:props.action,
+				action:props.action,				
 				dataSource:Serializer.run(props.dataSource),
+				//dataSource:props.dataSource,
 				devIP:App.devIP
 			};
 			if(props.table != null)

@@ -1,5 +1,7 @@
 package;
-
+import db.DbQuery;
+import tjson.TJSON;
+import haxe.Json;
 import action.async.DBAccessProps;
 import haxe.PosInfos;
 import haxe.Constraints.Function;
@@ -71,13 +73,6 @@ typedef DataRelation =
 	var joinCondition:String;	
 }
 
-typedef DataSource =
-{
-	@:optional var alias:String;
-	@:optional var fields:Array<String>;
-	@:optional var filter:Array<Map<String,String>>;
-}
-
 class Model
 {
 	public var data:MData;
@@ -98,7 +93,8 @@ class Model
 	var dbAccessProps:DBAccessProps;
 	var dbData:DbData;
 	var dParam:DbData;
-	var dataSource:Map<String,Map<String,Dynamic>>;// EACH KEY IS A TABLE NAME
+	var dataSource:Map<String,Dynamic>;// EACH KEY IS A TABLE NAME
+	var relations:Map<String,DbQuery>;// EACH KEY IS A TABLE NAME
 	var dataSourceSql:String;
 	var param:Map<String, Dynamic>;
 	
@@ -715,17 +711,19 @@ class Model
 		return filterSql;
 	}
 
-	public function buildCond(filter:Dynamic):String
+	public function buildCond(filters:Map<String,String>):String
 	{
-		if (filter == null)		
+		if (filters == null)		
 		{
 			return filterSql;			
 		}
-		var filters:Array<String> = Reflect.fields(filter);
+		trace(filters);
+		//var filters:Map<String,String> = Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(filter));
+		trace(filters);
 		var	fBuf:StringBuf = new StringBuf();
 		var first:Bool = true;
 		filterValues = new Array();
-		for (key in filters)
+		for (key => val in filters)
 		{			
 			var keys = key.split('.');
 			if(keys.length>2)
@@ -733,7 +731,7 @@ class Model
 				S.sendErrors(dbData,['invalidFilter'=>S.errorInfo(key)]);
 			}
 
-			var values:Array<String> = Reflect.field(filter, key);			
+			var values:Array<String> = val.split('|');			
 			var how:String = values.shift();
 			if (first)
 				fBuf.add(' WHERE ' );
@@ -886,16 +884,17 @@ class Model
 		return _jsonb_array_text.toString();
 	}
 
-	public static function binary()
+	public static function binary():DbQuery
 	{
 		var pData = Bytes.ofString(Web.getPostData());
-		var d:DbData = new DbData();
+		//var d:DbQuery = new DbQuery();
+		trace(Web.getPostData());
 		trace(pData);
 		var s:Serializer = new Serializer();
-		trace(s.unserialize(pData, DbData));
+		return s.unserialize(pData, DbQuery);
 	}
 	
-	public function new(?param:Map<String,String>) 
+	public function new(?param:Map<String,Dynamic>) 
 	{
 		this.param = param;
 		//trace(param);
@@ -922,7 +921,7 @@ class Model
 			trace(Bytes.ofString(param.get('dbData')));
 			var s:Serializer = new Serializer();			
 			dParam = s.unserialize(Bytes.ofString(param.get('dbData')),DbData);
-			dataSource = dParam.dataParams;
+			var dataSource = dParam.dataParams;
 			trace(dataSource.toString());
 		}
 		else 
@@ -943,12 +942,14 @@ class Model
 			var fields:Array<String> = [];
 			if(param.get('dataSource') != null)
 			{
-				dataSource = Unserializer.run(param.get('dataSource'));	
+				dataSource = Unserializer.run(param.get('dataSource'));
+				//dataSource = TJSON.parse(param.get('dataSource'));
 			}
 		}
 		var fields:Array<String> = [];
 		if(dataSource != null)
 		{
+			trace(Std.string(dataSource));
 			var tKeys:Iterator<String> = dataSource.keys();
 			while(tKeys.hasNext())
 			{

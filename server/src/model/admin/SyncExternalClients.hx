@@ -34,7 +34,7 @@ class SyncExternalClients extends Model
 {
 	var keys:Array<String>;	
 	var synced:Int;
-	public function new(param:Map<String,String>):Void
+	public function new(param:Map<String,Dynamic>):Void
 	{
 		super(param);	
 		//self.table = 'columns';

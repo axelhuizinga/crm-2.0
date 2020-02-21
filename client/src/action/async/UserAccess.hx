@@ -1,5 +1,7 @@
 package action.async;
 
+import db.DbRelation;
+import db.DbUser;
 import js.html.svg.Point;
 import action.AppAction;
 import action.UserAction;
@@ -149,32 +151,34 @@ class UserAccess {
 	public static function doLogin(props:UserState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+			if(props.mandator==null)
+				props.mandator=1;
 			trace(props);
 			//trace(getState());
 			if (props.pass == '' && props.new_pass == '' || props.user_name == '') 
 				return dispatch(User(LoginError({user_name:props.user_name, loginError:'Passwort und user_name eintragen!'})));
 			//var spin:Dynamic = dispatch(AppAction.AppWait);
 			trace(App.maxLoginAttempts);
-			var bL:XMLHttpRequest = null;
+			var bL:XMLHttpRequest = null; 
 			if(App.maxLoginAttempts-->0)
-			bL = BinaryLoader.create(
-			'${App.config.api}', 
+			bL = BinaryLoader.dbQuery( 
+			'${App.config.api}',
 			{				
-				user_name:props.user_name,
-				jwt:props.jwt,
+				user:new DbUser(props),
 				className:'auth.User',
 				action: (props.new_pass != null?'changePassword':'login'),
-				filter:'user_name|${props.user_name},us.mandator|1',//TODO. ADD MANDATOR SELECT AT LOGINFORM
-				dataSource:Serializer.run([
-					"users" => ["alias" => 'us',
-						"fields" => 'id,last_login,mandator'],
-					"contacts" => [
-						"alias" => 'co',
-						"fields" => 'first_name,last_name,email',
-						"jCond"=>'contact=co.id']
-				]),
-				pass:props.pass,
-				new_pass:props.new_pass,
+				relations:[
+					"users" => new DbRelation({
+						alias:'us',
+						fields: ['id','last_login','mandator'],
+						filter: {mandator:1}
+					}),
+					"contacts" => new DbRelation({
+						alias: 'co',
+						fields: ['first_name','last_name','email'],
+						jCond: 'contact=co.id'
+					}) 
+				],
 				devIP:App.devIP
 			},
 			function(data:DbData)
@@ -329,8 +333,9 @@ class UserAccess {
 				jwt:state.user.jwt,
 				className:'auth.User', 
 				action:'clientVerify',
-				filter:'us.id|${state.user.id}',//LOGIN NAME
+				filter:{'us.id':state.user},//LOGIN NAME				
 				dataSource:Serializer.run([
+				//dataSource:Json.stringify([
 					"users" => ["alias" => 'us',
 						"fields" => 'id,last_login,mandator'],
 					"contacts" => [

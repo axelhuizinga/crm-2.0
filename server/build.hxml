@@ -6,6 +6,7 @@
 #-lib smtpmailer
 
 -cp /opt/src/lib
+-cp ../lib
 -cp lib
 -cp src
 -php ../httpdocs

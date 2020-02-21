@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import css.Overflow.OverflowCompo;
 import haxe.Timer;
 import state.AppState;
 import redux.Redux.Dispatch;
@@ -469,7 +470,7 @@ class FormApi
 		var k:Int = 0;
 		//trace(name);
 		elements.push( jsx('
-		<div  key=${Utils.genKey(k++)} className="form-table-cell" style=${{minHeight:"0px",height:"0px",overflow:"hidden",padding:"0px 0.3rem"}}>
+		<div  key=${Utils.genKey(k++)} className="form-table-cell" style=${{minHeight:"0px",height:"0px",overflow:OverflowCompo.Hidden,padding:"0px 0.3rem"}}>
 		<div className = "header" data-name= ${name}>${_fstate.fields[name].label}</div>
 		</div>'));		
 		for (fF in formColElements[name])

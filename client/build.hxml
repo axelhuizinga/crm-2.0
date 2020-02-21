@@ -11,8 +11,8 @@
 -lib event-types 
 -lib js-object
 -lib tink_core
-
 -cp /opt/src/lib
+-cp ../lib
 -cp lib
 -cp src
 

@@ -1,6 +1,7 @@
 package loader;
 
-import db.DbQuery;
+import haxe.io.ArrayBufferView;
+import org.msgpack.MsgPack;
 import haxe.Json;
 import haxe.CallStack;
 import me.cunity.debug.Out;
@@ -12,53 +13,24 @@ import shared.DbData;
 
 import haxe.io.Bytes;
 import hxbit.Serializer;
-import js.html.FileReader;
 import js.html.FormData;
-import js.html.XMLHttpRequest; 
+import js.html.XMLHttpRequest;
 
 
-class BinaryLoader {
+class MsgPackLoader {
 
 	public static function create(url:String, p:Dynamic, onLoaded:DbData->Void):XMLHttpRequest
 	{
-		var bl:BinaryLoader = new BinaryLoader(url);
-		bl.param = new FormData();
-		//bl.param = Json.stringify(p);
-		bl.cB = onLoaded;
-		for (f in Reflect.fields(p))
-		{
-			bl.param.set(f, Reflect.field(p, f));
-		}
-		bl.load();
-		return bl.xhr;
-	}
-
-	public static function dbQuery(url:String,dbQP:DbQueryParam, onLoaded:DbData->Void) {
-		var s:Serializer = new Serializer();
-		var bl:BinaryLoader = new BinaryLoader(url);
-		var dbQuery = new DbQuery(dbQP);//.toHex();
-		var b:Bytes = s.serialize(dbQuery);
-		trace(dbQuery.getSerializeSchema());
-		//dbQuery.dump('/tmp/dbQuery.json');
-		trace(dbQuery);
-		trace('b.length:${b.length}');
-		var blen:Int = b.length;
-		for(i in 0...blen){
-			trace('$i:${b.get(i)}  ${b.getString(i,1)}');
-		}
-		//bl.param = b.getString(0,b.length); //s.serialize(dbQuery);//.toHex();
-		bl.param = b.getData();
-		//bl.param = new FileReader().readAsBinaryString(s.serialize(new DbQuery(dbQuery)));
-		Out.dumpObject(dbQP);
-		trace(bl.param.length);
-		//trace(bl.param.toHex().length + ' :: ' + bl.param.toString().length + ' : ' + bl.param.length);
+		var bl:MsgPackLoader = new MsgPackLoader(url);
+		//bl.param = new FormData();
+		bl.param = MsgPack.encode(p);
 		bl.cB = onLoaded;
 		bl.load();
 		return bl.xhr;
 	}
 	var cB:DbData->Void;	
-	var param:Dynamic;
-	//var param:String;
+	//var param:FormData;
+	var param:Bytes;
 	public var xhr:XMLHttpRequest;
 	
 	public var url(default, null) : String;
@@ -90,8 +62,7 @@ class BinaryLoader {
 
 	public function load() {
 		xhr.open('POST', url, true);
-		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
-		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+		xhr.setRequestHeader("Content-type", "application/x-msgpack; charset=utf-8");
 		xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;
 		xhr.onerror = function(e) onError(xhr.statusText);
 		xhr.withCredentials = true;
@@ -112,7 +83,7 @@ class BinaryLoader {
 			onProgress(Std.int(untyped __js__("{0}.loaded || {0}.position", e)), Std.int(untyped __js__("{0}.total || {0}.totalSize", e)));
 			#end
 		}
-		xhr.send(param);
+		xhr.send(ArrayBufferView.fromData(param));
 	}
 
 }

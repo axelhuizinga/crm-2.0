@@ -1,4 +1,5 @@
 package view.data.contacts;
+import action.async.DBAccessProps;
 import react.router.RouterMatch;
 import js.Browser;
 import js.html.NodeList;
@@ -104,16 +105,15 @@ class List extends BaseForm
 		{
 			offset = Std.int(props.limit * ev.page);
 		}
-		var params:Dynamic = {
-			id:props.user.id,
-			jwt:props.user.jwt,
+		var params:DBAccessProps = {
 			className:'data.Contacts',
 			action:'get',
-			filter:(props.match.params.id!=null?'id|${props.match.params.id}':'mandator|1'),
+			filter:(props.match.params.id!=null?{id:props.match.params.id}:{mandator:'1'}),
 			devIP:App.devIP,
 			limit:props.limit,
 			offset:offset>0?offset:0,
-			table:'contacts'
+			table:'contacts',
+			user:props.user
 		};
 		BinaryLoader.create(
 			'${App.config.api}', 

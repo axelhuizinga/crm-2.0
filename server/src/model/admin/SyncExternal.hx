@@ -30,7 +30,7 @@ class SyncExternal extends Model
 {
 	var sEC:SyncExternalClients;
 
-	public function new(param:Map<String,String>):Void
+	public function new(param:Map<String,Dynamic>):Void
 	{
 		super(param);	
 		//self.table = 'columns';

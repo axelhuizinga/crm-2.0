@@ -103,7 +103,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 			pass:uState.pass,
 			jwt:uState.jwt,
 		//	isMounted:mounted,
-			loggedIn:uState.loggedIn,
+			online:uState.online,
 			loginError:uState.loginError,
 			last_login:uState.last_login,
 			first_name:uState.first_name,
@@ -144,7 +144,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 	 render=${function(p:RouteRenderProps){return renderComponent(Setup,p,props.user);}}
 	**/
 
-	/*function renderComponent(Comp:Dynamic,props:Dynamic, user:UserState):ReactFragment
+	/*function renderComponent(Comp:Dynamic,props:Dynamic, userState:UserState):ReactFragment
 	{
 		trace(user.first_name);
 		props.user = user;

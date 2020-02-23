@@ -41,7 +41,7 @@ class DBAccess
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			//trace(getState());
 			trace(props);
-			if (!props.user.loggedIn)
+			if (!props.user.online)
 			{
 				return dispatch(User(LoginError(
 				{
@@ -115,7 +115,7 @@ class DBAccess
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
 			trace(props);
 			//trace(getState());
-			if (!props.user.loggedIn)
+			if (!props.user.online)
 			{
 				return dispatch(User(LoginError(
 				{
@@ -173,7 +173,7 @@ class DBAccess
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(props);
 			//trace(getState());
-			if (!props.user.loggedIn)
+			if (!props.user.online)
 			{
 				return dispatch(LoginError(
 				{

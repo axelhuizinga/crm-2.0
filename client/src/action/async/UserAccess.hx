@@ -25,14 +25,14 @@ using DateTools;
 
 class UserAccess {
 
-	public static function changePassword(props:UserState) 
+	public static function changePassword(user:DbUser) 
 	{
-		trace(props);
+		trace(user);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState)
 		{
 			if (props.jwt == '' || props.new_pass == '' || props.user_name == '') 
 				return dispatch(
-					User(LoginError({user_name:props.user_name, loginError:'Neues Passwort eingeben!'})));
+					User(LoginError({dbUser:user, loginError:'Neues Passwort eingeben!'})));
 			
 			var aState:AppState = getState();
 			trace('${aState.locationStore.redirectAfterLogin}');
@@ -57,23 +57,25 @@ class UserAccess {
 					if (data.dataErrors.keys().hasNext())
 					{
 						trace(data.dataErrors.toString());
-						return dispatch(User(LoginError({loginError: data.dataErrors.iterator().next()})));
+						user.last_error = data.dataErrors.iterator().next();
+						return dispatch(User(LoginError(user)));
 					}
 					if (data.dataInfo['jwtExpired'])
 					{
-						return dispatch(User(LoginExpired({loginError:data.dataInfo['jwtExpired']})));
+						user.last_error = data.dataInfo['jwtExpired'];
+						return dispatch(User(LoginExpired(user)));
 					}
-					if (data.dataInfo['loggedIn'])
+					if (data.dataInfo['online'])
 					{
 						trace(aState.user);			
 						aState.user.new_pass = '';
-						aState.user.loginTask = Login;
+						//aState.user.loginTask = Login;
 						aState.user.first_name = data.dataInfo['first_name'];
 						aState.user.last_name = data.dataInfo['last_name'];
 						aState.user.last_login = data.dataInfo['last_login'];
 						aState.user.id = data.dataInfo['id'];
 						aState.user.jwt = data.dataInfo['jwt'];
-						aState.user.pass = '';
+						aState.user.password = '';
 						aState.user.change_pass_required = false;						
 						//return dispatch(LocationAccess.redirect([], aState.app.redirectAfterLogin));
 						Cookie.set('user.id', Std.string(aState.user.id), null, '/');
@@ -194,7 +196,7 @@ class UserAccess {
 				{
 					switch (k)
 					{
-						case 'change_pass_required'|'loggedIn':
+						case 'change_pass_required'|'online':
 							Reflect.setField(uState, k, v=='true');
 						default:
 							Reflect.setField(uState, k, v);
@@ -207,7 +209,7 @@ class UserAccess {
 				Cookie.set('user.jwt',uState.jwt, null, '/');
 
 				trace(Cookie.get('user.jwt'));
-				uState.loggedIn = true;
+				uState.online = true;
 				if(uState.change_pass_required)
 					uState.pass = props.pass;
 				trace(uState);
@@ -267,7 +269,7 @@ class UserAccess {
 					Cookie.set('user.jwt', '', 31556926);
 					Cookie.set('user.id', null, null, '/');					
 					trace(Cookie.get('user.jwt'));
-					return dispatch(User(LogOutComplete({id:null, jwt:'', loggedIn:false, waiting: false})));
+					return dispatch(User(LogOutComplete({id:null, jwt:'', online:false, waiting: false})));
 				}
 			});
 			return null;
@@ -297,7 +299,7 @@ class UserAccess {
 					//Cookie.set('user.id', Std.string(props.id));
 					Cookie.set('user.jwt', jRes.jwt);
 					trace(Cookie.get('user.jwt'));
-					return dispatch(User(LoginComplete({id:props.id, jwt:jRes.jwt, loggedIn:false})));
+					return dispatch(User(LoginComplete({id:props.id, jwt:jRes.jwt, online:false})));
 				} else {
 					  // Otherwise reject with the status text
 					  // which will hopefully be a meaningful error
@@ -305,20 +307,9 @@ class UserAccess {
 				}
 			};
 			req.send(fD);
-			return null;
-			/*var spin:Dynamic = dispatch(AppWait);
-			
-			trace(spin);
-			return spin;	*/		
+			return null;	
 		});
 	}	
-
-	/*public static function logOut() {
-		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			trace('logout');		
-			return dispatch(User(LogOut({jwt:'', id: getState().user.id })));
-		});
-	}*/
 
 	public static function verify() {
 		//CHECK IF WE HAVE A VALID SESSION
@@ -326,23 +317,24 @@ class UserAccess {
 			//trace('clientVerify');
 			var state:AppState = getState();
 			trace(state.user);
-			var bL:XMLHttpRequest = BinaryLoader.create(
+			var bL:XMLHttpRequest = BinaryLoader.dbQuery(
 			'${App.config.api}', 
 			{				
-				id:state.user.id,
-				jwt:state.user.jwt,
+				user:new DbUser(state.user),
 				className:'auth.User', 
-				action:'clientVerify',
-				filter:{'us.id':state.user},//LOGIN NAME				
-				dataSource:Serializer.run([
-				//dataSource:Json.stringify([
-					"users" => ["alias" => 'us',
-						"fields" => 'id,last_login,mandator'],
-					"contacts" => [
-						"alias" => 'co',
-						"fields" => 'first_name,last_name,email',
-						"jCond"=>'contact=co.id'] 
-				]),
+				action:'clientVerify',								
+				relations:[
+					"users" => new DbRelation({
+						alias:  'us',
+						fields: ['id','last_login','mandator'],
+						filter:{id:state.user}
+					}),
+					"contacts" => new DbRelation({
+						alias: 'co',
+						fields: 'first_name,last_name,email',
+						jCond: 'contact=co.id'
+					}) 
+				],
 				devIP:App.devIP
 			},			
 			function(data:DbData)
@@ -365,7 +357,7 @@ class UserAccess {
 				{
 					switch (k)
 					{
-						case 'change_pass_required'|'loggedIn':
+						case 'change_pass_required'|'online':
 							Reflect.setField(uState, k, v=='true');
 							trace('$k: ${v=='true'?'Y':'N'} =>  ${v?'Y':'N'}');
 						default:

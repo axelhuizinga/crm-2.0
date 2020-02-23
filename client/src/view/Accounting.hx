@@ -66,7 +66,7 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 				user:uState,
 				/*pass:uState.pass,
 				jwt:uState.jwt,
-				loggedIn:uState.loggedIn,
+				online:uState.online,
 				loginError:uState.loginError,
 				last_login:uState.last_login,
 				first_name:uState.first_name,

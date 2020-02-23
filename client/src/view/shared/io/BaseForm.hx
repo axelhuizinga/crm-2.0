@@ -28,37 +28,28 @@ import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import view.table.Table;
 
-class BaseForm extends ReactComponentOf<DataFormProps,FormState>
+class BaseForm
 {
-	var dataDisplay:Map<String,DataState>;
-	var dataAccess:DataAccess;	
-	var actualState:Dynamic;	
-	var initialState:Dynamic;
-	var formApi:FormApi;
-	var formBuilder:FormBuilder;
-	var formFields:DataView;
-	var formRef:ReactRef<FormElement>;
-	var fieldNames:Array<String>;
+	var comp:ReactComponentOf<DataFormProps,FormState>;
 
-	/*public function new(props:DataFormProps) {
-		super(props);
-		formApi = new FormApi(this, init.sideMenu),
-			formBuilder:new FormBuilder(comp),		
-	}*/
+
+	public function new(comp:Dynamic) {
+		this.comp = comp;		
+	}
 
 	public function compareStates() {
-		for(f in Reflect.fields(initialState))
+		for(f in Reflect.fields(comp.state.initialState))
 		{
-			trace('$f:${Reflect.field(actualState,f)}<==>${Reflect.field(initialState,f)}<');
+			trace('$f:${Reflect.field(comp.state.actualState,f)}<==>${Reflect.field(comp.state.initialState,f)}<');
 		}
 	}
 
 	public function doChange(name,value) {
 		trace('$name: $value');
 		if(name!=null && name!='')
-		Reflect.setField(actualState,name,value);
+		Reflect.setField(comp.state.actualState,name,value);
 		
-		//setState({initialState:actualState});
+		//setState({comp.state.initialState:comp.state.actualState});
 	}
 
 	public function handleChange(e:Event) 
@@ -69,18 +60,18 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 		if(el.name != '' && el.name != null)
 		{
 			trace('>>${el.name}=>${el.value}<<');
-			//trace(actualState);
-			Reflect.setField(actualState,el.name,el.value);
-			trace(actualState.last_name);
+			//trace(comp.state.actualState);
+			Reflect.setField(comp.state.actualState,el.name,el.value);
+			trace(comp.state.actualState.last_name);
 		}	
 
-		//trace(actualState);
+		//trace(comp.state.actualState);
 	}		
 
-	function handleSubmit(event:Event) {
+	/*function handleSubmit(event:Event) {
 
 		event.preventDefault();
-		trace(state.initialState.id);
+		trace(comp.state.initialState.id);
 		var doc:Document = Browser.window.document;
 		var formElement:FormElement = formRef.current;//cast(doc.querySelector('form[name="contact"]'),FormElement);
 		var elements:HTMLCollection = formElement.elements;
@@ -92,7 +83,7 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 			{
 				var item:Dynamic = elements.namedItem(k);
 				//trace('$k => ${item.type}:' + item.value);
-				Reflect.setField(actualState, item.name, switch (item.type)
+				Reflect.setField(comp.state.actualState, item.name, switch (item.type)
 				{
 					//case DateControl|DateTimrControl:
 
@@ -113,32 +104,27 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 				trace(ex);
 			}
 		}
-		//setState({actualState: actualState});
-		trace(actualState);
-		go(actualState);
-	}
+		//setState({comp.state.actualState: comp.state.actualState});
+		trace(comp.state.actualState);
+		go(comp.state.actualState);
+	}*/
 
-	function go(aState:Dynamic){}
-
-	override public function render():ReactFragment {
-		return null;
-	}	
-
-	function initFieldNames(keys:Iterator<String>) {
-		fieldNames = new Array();
+	public function initFieldNames(keys:Iterator<String>, fieldNames:Array<String>):Array<String> {
+		var fieldNames = new Array();
 		for(k in keys)
 		{
 			fieldNames.push(k);
-		}			
+		}		
+		return fieldNames;
 	}
 	
-	function sessionStore(){
-		trace(actualState);
-		Browser.window.sessionStorage.setItem('contact',Json.stringify(actualState));
+	public function sessionStore(){
+		trace(comp.state.actualState);
+		Browser.window.sessionStorage.setItem('contact',Json.stringify(comp.state.actualState));
 		Browser.window.removeEventListener('beforeunload', sessionStore);
 	}
 
-	function storeParams(path:String, params:Dynamic):Map<String,Map<String,String>>
+	public function storeParams(path:String, params:Dynamic):Map<String,Map<String,String>>
 	{
 		var pMap = [
 			for(f in Reflect.fields(params))
@@ -147,7 +133,7 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 		return [path=>pMap];
 	}
 
-	function restoreParams(m:Map<String,String>):Dynamic
+	public function restoreParams(m:Map<String,String>):Dynamic
 	{
 		var p:Dynamic = {};
 		for(k=>v in m.keyValueIterator())
@@ -155,64 +141,13 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 		return p;
 	}
 
-	function initSession2()
-	{
-		Browser.window.addEventListener('beforeunload', sessionStore);
-		var sessContacts = Browser.window.sessionStorage.getItem('contacts');
-		if(sessContacts != null)
-		{
-			var sessionContact:Contact = Json.parse(sessContacts);
-			trace(sessionContact);
-			if(sessionContact.id == initialState.id)
-			{
-				trace(actualState);
-				forceUpdate();
-			}
-		}
-		else if((initialState.id!=null && !App.store.getState().dataStore.contactData.exists(initialState.id)))
-		{
-			//DATA NOT IN STORE - LOAD IT
-			App.store.dispatch(DBAccess.get({
-				action:'get',
-				className:'data.Contacts',
-				table:'contacts',
-				filter:	'id|${initialState.id}',
-				user:App.store.getState().user
-			}));
-			//p.then(function ())
-			//App.store.dispatch(AppAction.GlobalState('contacts',initialState.id));
-			//untyped props.globalState('contacts',initialState.id);
-			
-		}
-		else if(actualState==null){
-			actualState = copy(initialState);
-			actualState = view.shared.io.Observer.run(actualState, function(newState){
-				actualState = newState;
-				trace(actualState);
-			});	
-		}
-		if(formRef.current != null)
-		{
-			//trace(Reflect.fields(formRef.current));
-			formRef.current.addEventListener('keyup', handleChange);
-			/*var formElement:Element = Browser.window.document.querySelector('form[name="contact"]');
-			trace(Reflect.fields(formElement));*/
-			formRef.current.addEventListener('mouseup', function(ev:Dynamic)
-			{
-				//trace(Reflect.fields(ev.originalTarget));
-				trace(ev.target.value);
-				//doChange(ev.target.name,ev.target.value);
-			});
-		}		
-	}
-
 	/**
 	 * PAGER HANDLING
 	 */
 
-	function renderPager():ReactFragment
+	public function renderPager():ReactFragment
 	{
-		trace('pageCount=${state.pageCount}');
+		trace('pageCount=${comp.state.pageCount}');
 		return jsx('
 		<div className="paginationContainer">
 			<nav>
@@ -223,7 +158,7 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 					nextLabel=${'>'}
 					breakLabel=${'...'}
 					breakClassName=${'break-me'}
-					pageCount=${state.pageCount}
+					pageCount=${comp.state.pageCount}
 					marginPagesDisplayed={2}
 					pageRangeDisplayed={5}
 					onPageChange=${onPageChange}
@@ -235,9 +170,9 @@ class BaseForm extends ReactComponentOf<DataFormProps,FormState>
 		');
 	}	
 
-	function onPageChange(data) {
-		trace('${props.match.params.action}:${data.selected}');
-		var fun:Function = Reflect.field(this,props.match.params.action);
+	public function onPageChange(data) {
+		trace('${comp.props.match.params.action}:${data.selected}');
+		var fun:Function = Reflect.field(this,comp.props.match.params.action);
 		if(Reflect.isFunction(fun))
 		{
 			Reflect.callMethod(this,fun,[{page:data.selected}]);

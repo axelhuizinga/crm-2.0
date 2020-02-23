@@ -21,13 +21,15 @@ import state.FormState;
 import view.shared.SMItem;
 import view.shared.SMenuProps;
 import view.shared.io.FormApi;
+import view.shared.FormBuilder;
+
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import loader.BinaryLoader;
 import view.table.Table;
 
 @:connect
-class List extends BaseForm
+class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
 		{label:'Anzeigen',action:'get'},
@@ -36,7 +38,11 @@ class List extends BaseForm
 		{label:'Neu', action:'insert'},
 		{label:'Löschen',action:'delete'}
 	];
-		
+	var dataAccess:DataAccess;	
+	var dataDisplay:Map<String,DataState>;
+	var formFields:DataView;
+	var fieldNames:Array<String>;
+	var baseForm:BaseForm;		
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
 

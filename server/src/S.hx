@@ -114,24 +114,24 @@ class S
 		//var pd:Dynamic = Web.getPostData();
 
 		response = {content:'',error:''};
-		var params:Map<String,Dynamic> = Web.getParams();
+		trace(Web.getMethod());
+		var params:Map<String,Dynamic> = null;//Web.getParams();
+		var dbQuery:DbQuery = null;
+		//trace(Web.getClientHeaders());
+		try {
+			dbQuery = Model.binary();
+			trace(dbQuery);
+			//Model.binary(params.get('dbData'));
+			params = dbQuery.dbParams;
+
+		}		
 		devIP = params.get('devIP');
 		trace(params);
-		if(params.exists('user')){
-			trace(Reflect.fields(params.get('user')));
-			params.set('user',haxe.Unserializer.run(params.get('user')));
-		}
-		//trace(Reflect.fields(Syntax.code("$_POST['filter']")));
+
 		var action:String = params.get('action');
 		if (action.length == 0 || params.get('className') == null)
 		{
-			trace(Web.getMethod());
-			//trace(Web.getClientHeaders());
-			try {
-				var dbQuery:DbQuery = Model.binary();
-				trace(dbQuery);
-				//Model.binary(params.get('dbData'));
-			}
+
 			exit( { error:"required params action and/or className missing" } );
 		}
 			//host=$dbHost;
@@ -158,12 +158,12 @@ class S
 		trace(jwt.length +':' + (jwt != null));
 		if (jwt.length > 0)
 		{
-			if(User.verify(params))
-				Model.dispatch(params);		
-			trace('SHOULD NEVER HAPPEN');
+			if(User.verify(dbQuery))
+				Model.dispatch(dbQuery);		
+			exit({'Error':'Model.dispatch ${params.get('className')}.$action did not send anything'});
 		}
 	
-		User.login(Model.binary());		
+		User.login(dbQuery.user);		
 		exit(response);
 	}
 	
@@ -528,8 +528,9 @@ class S
 		var ini:NativeArray = Syntax.code("$ini");
 		conf.set('ini', ini);		
 		//trace(conf.get('ini'));
-		//edump(new DbUser(null));
-		//edump(new DbRelation(null));
-		//edump(new DbQuery());
+		edump(new DbData());
+		edump(new DbUser(null));
+		edump(new DbRelation(null));
+		edump(new DbQuery());
 	}
 }

@@ -43,7 +43,7 @@ class CRUD
 			var dbData:DbData = DbDataTools.create();
 			trace(props);
 			return new Promise(function(resolve, reject){
-				if (!props.user.loggedIn)
+				if (!props.user.online)
 				{
 					dispatch(User(LoginError(
 					{
@@ -122,7 +122,7 @@ class CRUD
 			var dbData:DbData = DbDataTools.create();
 			//trace(getState());
 			return new Promise(function(resolve, reject){
-				if (!props.user.loggedIn)
+				if (!props.user.online)
 				{
 					dispatch(User(LoginError(
 					{

@@ -66,7 +66,7 @@ class AppStore
 				email:'',
 				pass:'',				
 				change_pass_required:false,
-				loggedIn:false,//Cookie.get('user.jwt')!=null && UserAccess.verify(),
+				online:false,//Cookie.get('user.jwt')!=null && UserAccess.verify(),
 				loginTask: (Browser.location.pathname.startsWith('/ResetPassword')?LoginTask.ResetPassword:LoginTask.Login),
 				last_login:null,
 				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),

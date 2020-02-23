@@ -29,7 +29,7 @@ import loader.BinaryLoader;
 import view.table.Table;
 import model.Contact;
 
-class List extends BaseForm
+class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
 		//{label:'Anzeigen',action:'get'},
@@ -40,13 +40,22 @@ class List extends BaseForm
 	//	{label:'Auswahl umkehren',action:'selectionInvert'},
 	//	{label:'Auswahl alle',action:'selectionAll'},
 	];
-	
+	var dataAccess:DataAccess;	
+	var dataDisplay:Map<String,DataState>;
+	var formApi:FormApi;
+	var formBuilder:FormBuilder;
+	var formFields:DataView;
+//	var formRef:ReactRef<FormElement>;
+	var fieldNames:Array<String>;
+	var baseForm:BaseForm;
+	var contact:Contact;
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
+
 	public function new(props) 
 	{
 		super(props);
-
+		baseForm = new BaseForm(this);
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
@@ -61,7 +70,7 @@ class List extends BaseForm
 					section: 'List',
 					items: menuItems
 				}					
-				,{	
+				,{
 					section: props.match.params.section==null? 'List':props.match.params.section, 
 					sameWidth: true
 				}),
@@ -225,18 +234,7 @@ class List extends BaseForm
 		trace('yeah: ${props.user.first_name}');
 		trace(props.match.params.action);
 		state.formApi.doAction();
-/*		if(props.match.params.action != null)
-		//dbData = FormApi.init(this, props);
-		{
-			var fun:Function = Reflect.field(this,props.match.params.action);			
-			trace(Reflect.isFunction(fun));
-			if(Reflect.isFunction(fun))
-			{
-				Reflect.callMethod(this,fun,null);
-			}
-		}
-		else 
-			setState({loading: false});*/
+
 	}
 	
 	function renderResults():ReactFragment
@@ -258,7 +256,7 @@ class List extends BaseForm
 				jsx('
 					<form className="tabComponentForm" >
 						<$Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
-						${...props} dataState = ${dataDisplay["contactList"]} renderPager=${renderPager}
+						${...props} dataState = ${dataDisplay["contactList"]} renderPager=${baseForm.renderPager}
 						className="is-striped is-hoverable" fullWidth=${true}/>
 					</form>
 				');

@@ -1,5 +1,6 @@
 package store;
 
+import db.DbUser;
 import js.Browser;
 import action.async.UserAccess;
 import action.UserAction;
@@ -25,41 +26,48 @@ class UserStore implements IReducer<UserAction, UserState>
 	public var store:StoreMethods<UserState>;
 	
 	public function new() {
-		if(Browser.location.pathname.startsWith('/ChangePassword')){
+		/*if(Browser.location.pathname.startsWith('/ChangePassword')){
 			var param:Map<String,Dynamic> = Browser.location.pathname.argList(
 					['action','jwt','user_name','opath']
 				);
 			initState = {
+				loginTask:LoginTask.ChangePassword,
+				?new_pass_confirm:String,
+				?waiting:Bool   				
+				dbUser: new DbUser({
+					first_name:Cookie.get('user.first_name')==null?'':Cookie.get('user.first_name'),
+					//id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
+					last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
+					mandator: Cookie.get('user.mandator')==null?1:Std.parseInt(Cookie.get('user.mandator')),
+					user_name:param.get('user_name'),
+					email:Cookie.get('user.email')==null?'':Cookie.get('user.email'),
+					password:'',				
+					change_pass_required:false,
+					online:false,//Cookie.get('user.jwt')!=null,
+					//loginTask: LoginTask.ChangePassword,
+					//last_login:null,
+					jwt:param.get('jwt'),
+					waiting: false
+				})
+			}
+		}
+		else	*/	
+		initState =  {
+			loginTask:null,
+			waiting:true,   				
+			dbUser: new DbUser({
 				first_name:Cookie.get('user.first_name')==null?'':Cookie.get('user.first_name'),
-				//id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
+				id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
 				last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
 				mandator: Cookie.get('user.mandator')==null?1:Std.parseInt(Cookie.get('user.mandator')),
-				user_name:param.get('user_name'),
+				user_name:Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name'),
 				email:Cookie.get('user.email')==null?'':Cookie.get('user.email'),
-				pass:'',				
+				password:'',				
 				change_pass_required:false,
-				loggedIn:false,//Cookie.get('user.jwt')!=null,
-				loginTask: LoginTask.ChangePassword,
+				online:false,//Cookie.get('user.jwt')!=null,
 				last_login:null,
-				jwt:param.get('jwt'),
-				waiting: false
-			};
-		}
-		else		
-		initState = {
-			first_name:Cookie.get('user.first_name')==null?'':Cookie.get('user.first_name'),
-			id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
-			last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
-			mandator: Cookie.get('user.mandator')==null?1:Std.parseInt(Cookie.get('user.mandator')),
-			user_name:Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name'),
-			email:Cookie.get('user.email')==null?'':Cookie.get('user.email'),
-			pass:'',				
-			change_pass_required:false,
-			loggedIn:false,//Cookie.get('user.jwt')!=null,
-			loginTask: LoginTask.Login,
-			last_login:null,
-			jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
-			waiting: true
+				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt'))
+			})
 		};
 		trace(initState);
 		trace(store);
@@ -78,19 +86,19 @@ class UserStore implements IReducer<UserAction, UserState>
 				//if(err.id==state.user.id)
 				copy(state, {
 					jwt:'',
-					loggedIn:false,
+					online:false,
 					loginTask:LoginTask.ResetPassword,
 					loginError:err.loginError, waiting:false});   
 			case LoginExpired(uState):
 				copy(state, {
 					jwt:'',
-					loggedIn:false,
+					online:false,
 					loginTask:LoginTask.Login,
 					loginError:uState.loginError,
 					waiting:false});  
 	                    
 			case LoginComplete(uState):
-					//trace(uState.id + ':' + uState.loggedIn);
+					//trace(uState.id + ':' + uState.online);
 					trace(uState);
 					copy(state, {		
 						change_pass_required:uState.change_pass_required,			
@@ -100,7 +108,7 @@ class UserStore implements IReducer<UserAction, UserState>
 						jwt:uState.jwt,
 						last_login:uState.last_login,
 						loginError: null,
-						loggedIn: true,
+						online: true,
 						loginTask:uState.loginTask,
 						pass:uState.pass,
 						waiting:false
@@ -110,7 +118,7 @@ class UserStore implements IReducer<UserAction, UserState>
 					copy(state, {
 						change_pass_required:uState.change_pass_required,
 						loginError: null,
-						loggedIn: false,					
+						online: false,					
 						jwt:'',
 						waiting:false
 					});   					
@@ -132,9 +140,6 @@ class UserStore implements IReducer<UserAction, UserState>
 			//store.dispatch(UserAction.LoginRequired(state));
 			//next();
 			//
-			case LoginComplete(uState):
-				//save user session locally
-				next();
 			default: 
 			next();
 		}

@@ -44,13 +44,13 @@ class BinaryLoader {
 		trace('b.length:${b.length}');
 		var blen:Int = b.length;
 		for(i in 0...blen){
-			trace('$i:${b.get(i)}  ${b.getString(i,1)}');
+			//trace('$i:${b.get(i)}  ${b.getString(i,1)}');
 		}
 		//bl.param = b.getString(0,b.length); //s.serialize(dbQuery);//.toHex();
 		bl.param = b.getData();
 		//bl.param = new FileReader().readAsBinaryString(s.serialize(new DbQuery(dbQuery)));
 		Out.dumpObject(dbQP);
-		trace(bl.param.length);
+		trace(bl.param);
 		//trace(bl.param.toHex().length + ' :: ' + bl.param.toString().length + ' : ' + bl.param.length);
 		bl.cB = onLoaded;
 		bl.load();

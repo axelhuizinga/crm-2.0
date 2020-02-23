@@ -20,5 +20,5 @@ typedef DBAccessProps =
 	//?outcome:DBAccessOutcome,
 	?table:String,
 	?totalRecords:Int,
-	?user:UserState
+	?userState:UserState
 };

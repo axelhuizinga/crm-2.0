@@ -23,7 +23,7 @@ typedef DbRequestParam = {
 //	?pages:Int,
 	?offset:Int,
 	?table:String,
-	?user:UserState
+	?userState:UserState
 };
 
 class DbParam implements Serializable 
@@ -31,7 +31,7 @@ class DbParam implements Serializable
 
 	@:s public var dataParams:Map<String,Dynamic>;
 	@:s public var dbQuery:Map<String,DbQuery>;
-	@:s public var user:UserState;
+	@:s public var userState:UserState;
 
 	public function new() 
 	{

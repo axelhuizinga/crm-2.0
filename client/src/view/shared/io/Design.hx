@@ -34,11 +34,11 @@ class Design extends ReactComponentOf<DataFormProps,FormState>
 		props.formApi.requests.push(AjaxLoader.load(	
 			'${App.config.api}', 
 			{
-				id:props.user.id,
-				jwt:props.user.jwt,
+				id:props.userState.dbUser.id,
+				jwt:props.userState.dbUser.jwt,
 				className:'auth.User',
 				action:'update',
-				filter:'id|${props.user.id}',
+				filter:'id|${props.userState.dbUser.id}',
 				//dataSource:Serializer.run(view.shared.io.User.userModel)
 			},
 			function(data:Dynamic )

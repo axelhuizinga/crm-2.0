@@ -23,7 +23,7 @@ import view.shared.io.BaseForm;
  * @author axel@cunity.me
  */
 @:connect
-class DBSync extends BaseForm
+class DBSync extends ReactComponentOf<DataFormProps,FormState>
 {
 
 	static var _instance:DBSync;
@@ -39,7 +39,17 @@ class DBSync extends BaseForm
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];
-	
+	var dataAccess:DataAccess;	
+	var dataDisplay:Map<String,DataState>;
+	var formApi:FormApi;
+	var formBuilder:FormBuilder;
+	var formFields:DataView;
+	var formRef:ReactRef<FormElement>;
+	var fieldNames:Array<String>;
+	var baseForm:BaseForm;
+	var contact:Contact;
+	var dbData: shared.DbData;
+	var dbMetaData:shared.DBMetaData;	
 
 	public function new(props) 
 	{

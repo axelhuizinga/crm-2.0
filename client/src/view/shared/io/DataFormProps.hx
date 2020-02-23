@@ -35,6 +35,6 @@ typedef DataFormProps =
 	?storeData:String->DataAction->Void,
 	?storeFormChange:String->FormState->Void,
 	?render:FormState->ReactFragment,
-	user:UserState,
+	userState:UserState,
 	model:String
 }

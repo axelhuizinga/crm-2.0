@@ -98,8 +98,9 @@ class Model
 	var dataSourceSql:String;
 	var param:Map<String, Dynamic>;
 	
-	public static function dispatch(param:Map<String,Dynamic>):Void
+	public static function dispatch(dbQuery:DbQuery):Void
 	{
+		var param:Map<String,Dynamic> = dbQuery.dbParams;
 		var cl:Class<Dynamic> = Type.resolveClass('model.' + param.get('className'));
 		//trace(cl);
 		if (cl == null)
@@ -126,8 +127,7 @@ class Model
 		else 
 		{					
 			trace('Method ${param.get('className')}.${param['action']} does not exist!');	
-			S.sendErrors(null,['invalid method' => 'Method ${param.get('className')}.${} does not exist!']);
-			trace('not calling create ');	
+			S.sendErrors(null,['invalid method' => 'Method ${param.get('className')}.${param['action']} does not exist!']);
 		}
 	}
 	
@@ -888,8 +888,8 @@ class Model
 	{
 		var pData = Bytes.ofString(Web.getPostData());
 		//var d:DbQuery = new DbQuery();
-		trace(Web.getPostData());
-		trace(pData);
+		//trace(Web.getPostData());
+		//trace(pData);
 		var s:Serializer = new Serializer();
 		return s.unserialize(pData, DbQuery);
 	}

@@ -35,7 +35,7 @@ typedef StatusBarProps =
 	?className:String,
 	date:Date,
 	text:String,
-	user:UserState,
+	userState:UserState,
 	?userList:Array<UserState>
 }
 

@@ -69,7 +69,15 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 	var contact:Contact;
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
-
+	var dataAccess:DataAccess;	
+	var dataDisplay:Map<String,DataState>;
+	var formApi:FormApi;
+	var formBuilder:FormBuilder;
+	var formFields:DataView;
+	var formRef:ReactRef<FormElement>;
+	var fieldNames:Array<String>;
+	var baseForm:BaseForm;
+	
 	public function new(props) 
 	{
 		super(props);
@@ -89,7 +97,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			return;
 		}		
 		dataAccess = ContactsModel.dataAccess;
-		initFieldNames(dataAccess['update'].view.keys());
+		fieldNames = initFieldNames(dataAccess['update'].view.keys());
 		dataDisplay = ContactsModel.dataDisplay;
 		//trace('...' + Reflect.fields(props));
 		formRef = React.createRef();

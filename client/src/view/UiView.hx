@@ -59,7 +59,7 @@ import view.DashBoard;
 typedef UIProps =
 {
 	?store:Store<AppState>,
-	?user:UserState
+	?userState:UserState
 }
 
 typedef UIState =
@@ -156,8 +156,8 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 			');		
 		}
 		
-		trace('${props.user.jwt} ${props.user.loggedIn}');
-		if(props.user.jwt == null || props.user.jwt == '' || !props.user.loggedIn || props.user.change_pass_required)//
+		trace('${props.user.jwt} ${props.user.online}');
+		if(props.user.jwt == null || props.user.jwt == '' || !props.user.online || props.user.change_pass_required)//
 		{
 			// WE NEED TO LOGIN FIRST
 			trace(props.user);

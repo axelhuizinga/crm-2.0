@@ -109,11 +109,11 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 			/*BinaryLoader.create(
 			'${App.config.api}', 
 			{				
-				id:props.user.id,
-				jwt:props.user.jwt,
+				id:props.userState.dbUser.id,
+				jwt:props.userState.dbUser.jwt,
 				className:'auth.User',
 				action:'update',
-				filter:'id|${props.user.id}',
+				filter:'id|${props.userState.dbUser.id}',
 				dataSource:Serializer.run(dataAccess['update'].source),
 				devIP:App.devIP	
 			},
@@ -132,13 +132,13 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 					App.store.dispatch(AppAction.User(UserAction.User({
 						first_name:data.dataRows[0]['first_name'],
 						last_name:data.dataRows[0]['last_name'],
-						id:props.user.id,
+						id:props.userState.dbUser.id,
 						email:data.dataRows[0]['email'],
 						pass:'',
 						new_pass:'',
 						new_pass_confirm:'',
 						waiting:false,
-						loggedIn: true,
+						online: true,
 						last_login:Date.fromString(data.dataRows[0]['last_login']),
 					})));				
 				}
@@ -151,11 +151,11 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 					App.store.dispatch(AppAction.User(UserAction.User({
 						first_name:data.dataRows[0]['first_name'],
 						last_name:data.dataRows[0]['last_name'],
-						id:props.user.id,
+						id:props.userState.dbUser.id,
 						email:data.dataRows[0]['email'],
 						pass:'',
 						waiting:false,
-						loggedIn:false,
+						online:false,
 						last_login:Date.fromString(data.dataRows[0]['last_login']),
 					})));
 				} 				
@@ -181,7 +181,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		if(props.match.params.action!='changePassword')
 		{
 			updateMenu('changePassword');
-			props.history.push(props.location.pathname + '/user/changePassword/${props.user.id}');
+			props.history.push(props.location.pathname + '/user/changePassword/${props.userState.dbUser.id}');
 			return setState({action:'changePassword'});
 		}
 		else {
@@ -203,11 +203,11 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		props.formApi.requests.push(Loader.loadData(	
 			'${App.config.api}', 
 			{
-				id:props.user.id,
-				jwt:props.user.jwt,
+				id:props.userState.dbUser.id,
+				jwt:props.userState.dbUser.jwt,
 				className:'auth.User',
 				action:'update',
-				filter:'id|${props.user.id}',
+				filter:'id|${props.userState.dbUser.id}',
 				dataSource:Serializer.run(dataAccess['update'].source)
 			},
 			function(data:Array<Map<String,String>>)
@@ -253,13 +253,12 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		props.formApi.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
-				id:props.user.id,
-				jwt:props.user.jwt,
+				id:props.userState.dbUser.id,
+				jwt:props.userState.dbUser.jwt,
 				className:'auth.User',
 				action:'save',
-				filter:'id|${props.user.id}',
+				filter:'id|${props.userState.dbUser.id}',
 				dataSource:Serializer.run(dataAccess['update'].source)
-				//dataSource:Serializer.run(filterMap(state.values, skeys))
 			},
 			function(data:Array<Map<String,String>>)
 			{

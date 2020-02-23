@@ -56,7 +56,7 @@ using Lambda;
  * 
  */
 
-class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
+class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
 		{label:'Schließen',action:'restore',section: 'List'},		
@@ -65,7 +65,14 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		{label:'Neu', action:'insert'},
 		{label:'Löschen',action:'delete'}
 	];
-
+	var dataAccess:DataAccess;	
+	var dataDisplay:Map<String,DataState>;
+	var formApi:FormApi;
+	var formBuilder:FormBuilder;
+	var formFields:DataView;
+	var formRef:ReactRef<FormElement>;
+	var fieldNames:Array<String>;
+	var baseForm:BaseForm;
 	var contact:Contact;
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
@@ -73,6 +80,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
+		baseForm = new BaseForm(this);
 		trace(props.match.params);
 		state = initialState = {
 			id:null,//2000328,
@@ -89,10 +97,10 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			return;
 		}		
 		dataAccess = ContactsModel.dataAccess;
-		initFieldNames(dataAccess['update'].view.keys());
+		fieldNames = baseForm.initFieldNames(dataAccess['update'].view.keys());
 		dataDisplay = ContactsModel.dataDisplay;
 		//trace('...' + Reflect.fields(props));
-		formRef = React.createRef();
+		//formRef = React.createRef();
 		if(props.match.params.id!=null)
 			initialState.id = Std.parseInt(props.match.params.id);
 		
@@ -118,7 +126,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		}
 		else if(initialState.id!=null && (props.dataStore.contactData == null || !props.dataStore.contactData.exists(initialState.id))){			
 			//actualState = copy(initialState);
-			trace(actualState);
+			//trace(actualState);
 			trace('no data - redirect');
 			var baseUrl:String = props.match.path.split(':section')[0];
 			props.history.push('${baseUrl}List/get');
@@ -127,7 +135,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		
 		state =  App.initEState({
 			dataTable:[],
-			formBuilder:new FormBuilder(this),
+			//formBuilder:new FormBuilder(this),
 			initialState:initialState,
 			loading:false,
 			handleSubmit:[
@@ -257,7 +265,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(DataAction.SelectActContacts(actData));
 	}
 
-	override function handleSubmit(event:Event) {
+	function handleSubmit(event:Event) {
 		//trace(Reflect.fields(event));
 		//trace(Type.typeof(event));
 		event.preventDefault();
@@ -437,7 +445,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 				];*/
-				(actualState==null ? state.formApi.renderWait():
+				(state.actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
 					handleSubmit:state.handleSubmit,
 					fields:[
@@ -446,10 +454,10 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 					model:'contact',
 					ref:formRef,
 					title: 'Kontakt - Bearbeite Stammdaten' 
-				},actualState));
+				},state.actualState));
 				//null;
 			case 'insert':
-				trace(actualState);
+				trace(state.actualState);
 				state.formBuilder.renderForm({
 					handleSubmit:state.handleSubmit,
 					fields:[
@@ -458,7 +466,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 					model:'contact',
 					ref:formRef,
 					title: 'Kontakt - Neue Stammdaten' 
-				},actualState);
+				},state.actualState);
 			default:
 				null;
 		}

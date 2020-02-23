@@ -1,6 +1,7 @@
 package state;
 //import view.shared.io.User;
 //import history.Location;
+import db.DbUser;
 import state.ConfigState;
 import state.LocationState;
 import state.UserState;
@@ -16,5 +17,5 @@ typedef AppState =
 	?locationStore:LocationState,
 	//?redirectAfterLogin:String,
 	?status:StatusState,
-	?user:UserState
+	?user:DbUser
 };

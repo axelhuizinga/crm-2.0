@@ -1,9 +1,10 @@
 package model.auth;
+import haxe.Json;
+import db.DbUser;
 import comments.CommentString.*;
 import db.DbQuery;
 import haxe.CallStack;
 import shared.DbData;
-import haxe.Serializer;
 import haxe.crypto.Sha256;
 import haxe.ds.IntMap;
 import haxe.ds.Map;
@@ -72,19 +73,6 @@ class User extends Model
 			run();
 	}	
 	
-	public function clientVerify():Void
-	{
-		if (verify(param))
-		{			
-			dbData.dataInfo['verified'] = 'true';
-			
-			//dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(doSelect()[0]);
-			dbData.dataInfo.copyStringMap(Lib.hashOfAssociativeArray(doSelect()[0]));
-			//dbData.dataInfo['user_data'] = param['jwt'];
-			S.sendInfo(dbData);
-		}
-	}
-	
 	public function edit():Void
 	{
 		trace(joinSql);
@@ -146,19 +134,19 @@ class User extends Model
 		}
 	}
 
-	public static function resetPassword(param:Map<String,Dynamic>):Bool {
+	public static function resetPassword(user:Map<String,Dynamic>):Bool {
 		var dbData:DbData = new DbData();
 		//TODO: configure valid time span of token
 		var d:Float = DateTools.delta(Date.now(), DateTools.minutes(8)).getTime();
-		param.set('email',userEmail(param));
-		param.set('jwt',JWT.sign({
-			user_name:param['user_name'],
+		user.set('email',userEmail(user));
+		user.set('jwt',JWT.sign({
+			user_name:user['user_name'],
 			validUntil:d,
-			mandator:param['mandator']
+			mandator:user['mandator']
 		}, S.secret));
-		sendMail(param);
+		sendMail(user);
 		dbData.dataInfo = [
-			'email' => param.get('email'),
+			'email' => user.get('email'),
 			'pin'=>'12341',
 			'resetPassword' => 'OK'
 		];
@@ -167,20 +155,19 @@ class User extends Model
 	}
 	/**
 	 * 	
-	 * @param param 
+	 * @user user 
 	 * @return UserAuth
 	 */
 	
-	static function userIsAuthorized(dbQuery:DbQuery):UserAuth
+	static function userIsAuthorized(user:DbUser):UserAuth
 	{
 		var dbData:DbData = new DbData();
-		trace(Reflect.fields(dbQuery.user));
 		var sql:String = 'SELECT user_name FROM ${S.db}.users WHERE user_name=:user_name AND active=TRUE';
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
-		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${dbQuery.user.user_name}'})))
+		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${user.user_name}'})))
 		{			
 			trace(stmt.errorInfo());
-			S.sendErrors(dbData,['${dbQuery.dbParams['action']}' => Std.string(stmt.errorInfo())]);
+			S.sendErrors(dbData,['User.userIsAuthorized' => Std.string(stmt.errorInfo())]);
 		}
 		if(stmt.rowCount()>0)
 		{
@@ -188,13 +175,13 @@ class User extends Model
 			sql = 'SELECT change_pass_required, first_name, last_name, last_login, us.id, us.mandator FROM ${S.db}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name AND phash=crypt(:password,phash)';
 			trace(sql);
 			stmt = S.dbh.prepare(sql,Syntax.array(null));
-			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${dbQuery.user.user_name}',':password':'${dbQuery.user.pass}'})))
+			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${user.user_name}',':password':'${user.password}'})))
 			{
-				S.sendErrors(dbData,['${dbQuery.dbParams['action']}' => stmt.errorInfo()]);
+				S.sendErrors(dbData,['User.userIsAuthorized' => stmt.errorInfo()]);
 			}
 			if (stmt.rowCount()==0)
 			{
-				S.sendErrors(dbData,['user'=>'user ${dbQuery.user.user_name} not found!']);
+				S.sendErrors(dbData,['user'=>'user ${user.user_name} forgot password?']);
 				return UserAuth.NotOK;
 			}
 			// USER AUTHORIZED
@@ -222,16 +209,16 @@ class User extends Model
 		else
 		{
 			trace(stmt.rowCount+':$sql');
-			S.sendErrors(dbData,['${dbQuery.dbParams['action']}'=>'user_name']);
+			S.sendErrors(dbData,['User.userIsAuthorized'=>'user ${user.user_name} not found!']);
 			return UserAuth.NotOK;
 		}
 	}
 	
-	public static function login(params:DbQuery):Bool
+	public static function login(user:DbUser):Bool
 	{
-		//var me:User = new User(params);
-		trace(params);
-		switch(userIsAuthorized(params))
+		//var me:User = new User(user);
+		trace(user);
+		switch(userIsAuthorized(user))
 		{//TODO:CONFIG JWT DURATION
 			case uath = UserAuth.AuthOK(dbData)|UserAuth.PassChangeRequired(dbData):
 				var d:Float = DateTools.delta(Date.now(), DateTools.hours(11)).getTime();
@@ -263,14 +250,14 @@ class User extends Model
 		}
 	}
 	
-	public static function logout(params:Map<String,Dynamic>):Bool
+	public static function logout(user:Map<String,Dynamic>):Bool
 	{	
-		trace(params);
-		//var me:User = new User(params);		
-		trace(params['id']);	
+		trace(user);
+		//var me:User = new User(user);		
+		trace(user['id']);	
 		var expiryDate = Date.now().delta(31556926000);//1 year
 		Web.setCookie('user.jwt', '', expiryDate);
-		Web.setCookie('user.id', params['id'], expiryDate);
+		Web.setCookie('user.id', user['id'], expiryDate);
 
 		//me.dbData.dataInfo['user_data'].id = jwt;
 		//trace(me.dbData);
@@ -286,27 +273,24 @@ class User extends Model
 			S.sendInfo(dbData);
 		}
 		
-	//	if (verify(param))
-		//{
-			//var sql = (param.get('id')!='undefined'&&param.get('id')!=null?
-			var sql = (param.get('user').id!='undefined'&&param.get('user').id!=null?
+		var sql = (param.get('user').id!='undefined'&&param.get('user').id!=null?
 				'UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id':
 				'UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE user_name=:user_name AND mandator=:mandator');
-			trace(sql);
-			var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
-			if ( !Model.paramExecute(stmt, Lib.associativeArrayOfObject(
-				//(param.get('id')!='undefined'&&param.get('id')!=null?				 
-				(param.get('user').id!='undefined'&&param.get('user').id!=null? 				 
-				 {':id': param.get('user').id,':new_password':param.get('new_pass')}:
-				 {':new_password':param.get('new_pass'),':user_name': param.get('user').user_name,':mandator': param.get('mandator')}
-			))))
-			{
-				S.sendErrors(dbData,['changePassword' => stmt.errorInfo()]);
-			}
-			if (stmt.rowCount()==0)
-			{
-				S.sendErrors(dbData,['changePassword'=>'Benutzer nicht gefunden!']);
-			}
+		trace(sql);
+		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
+		if ( !Model.paramExecute(stmt, Lib.associativeArrayOfObject(
+			//(param.get('id')!='undefined'&&param.get('id')!=null?				 
+			(param.get('user').id!='undefined'&&param.get('user').id!=null? 				 
+				{':id': param.get('user').id,':new_password':param.get('new_pass')}:
+				{':new_password':param.get('new_pass'),':user_name': param.get('user').user_name,':mandator': param.get('mandator')}
+		))))
+		{
+			S.sendErrors(dbData,['changePassword' => stmt.errorInfo()]);
+		}
+		if (stmt.rowCount()==0)
+		{
+			S.sendErrors(dbData,['changePassword'=>'Benutzer nicht gefunden!']);
+		}
 		//}		
 		var userInfo:UserInfo = JWT.extract(param.get('jwt'));
 		trace(userInfo);				
@@ -315,7 +299,7 @@ class User extends Model
 		//param.set('pass', param.get('new_pass'));
 		var dbQuery = Model.binary();
 		//dbQuery.formData.set('pass', param.get('new_pass'));
-		return login(dbQuery);
+		return login(dbQuery.user);
 		S.sendInfo(dbData);
 		return true;
 	}
@@ -400,11 +384,12 @@ html,body{
 		return true;
 	}
 	
-	static function saveRequest(id:Int, params:Map<String,Dynamic>):Bool
+	static function saveRequest(id:Int, dbQuery:DbQuery):Bool
 	{
-		var request:String = Serializer.run(params);
+		var request:String = Json.stringify(
+			new hxbit.Dump(new hxbit.Serializer().serialize(dbQuery)).dumpObj());
 		var rTime:String = DateTools.format(S.last_request_time, "'%Y-%m-%d %H:%M:%S'");//,request=?
-		var stmt:PDOStatement = S.dbh.prepare('UPDATE users SET online=TRUE,last_request_time=${rTime},"request"=:request WHERE id=:id',Syntax.array(null));
+		var stmt:PDOStatement = S.dbh.prepare('UPDATE activity INNER JOIN users ON users.id=activity.user SET online=true,last_request_time=${rTime},"request"=:request WHERE users.id=:id',Syntax.array(null));
 		//trace('UPDATE users SET last_request_time=${rTime},request=\'$request\' WHERE id=\'$id\'');
 		var success:Bool = Model.paramExecute(stmt, //null
 			Lib.associativeArrayOfObject({':id': id, ':request': '$request'})
@@ -419,19 +404,18 @@ html,body{
 		return '';
 	}
 	
-	public static function verify(?params:Map<String,Dynamic>):Bool
+	public static function verify(dbQuery:DbQuery):Bool
 	{
-		var jwt:String = params.get('jwt');
-		var id:Int = Std.parseInt(params.get('id'));	
+		var jwt:String = dbQuery.user.jwt;
+		var id:Int = dbQuery.user.id;	
 		var now:Float = Date.now().getTime();	
+		var dbData:DbData = new DbData();
 		trace('$now:$jwt');
 		try{
 			var userInfo:UserInfo = JWT.extract(jwt);
-			trace(userInfo);
-			
-			if(userInfo.id==null && userInfo.user_name == params.get('user').user_name && (userInfo.validUntil - Date.now().getTime()) > 0)
+			trace(userInfo);			
+			if(userInfo.id==null && userInfo.user_name == dbQuery.user.user_name && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
-				//PASSWORD RESET?
 				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
 				trace(jRes);
 				return switch(jRes)				
@@ -439,13 +423,15 @@ html,body{
 					case Invalid(payload):
 						trace(payload);
 						// JWT INVALID
-						saveRequest(id, params);
-						S.sendErrors(new DbData(), ['jwtError'=>payload]);
+						saveRequest(id, dbQuery);
+						S.sendErrors(dbData, ['jwtError'=>payload]);
 						false;
 					case Valid(payload):
 						// JWT VALID AND NOT OLDER THAN...
-						saveRequest(id, params);	
-						params.set('mandator',userInfo.mandator);
+						if(dbQuery.user.mandator == null)
+							dbQuery.user.mandator = userInfo.mandator;
+						//params.set('mandator',userInfo.mandator);
+						saveRequest(id, dbQuery);	
 						true;
 					default:
 						S.sendErrors(new DbData(), 
@@ -469,15 +455,15 @@ html,body{
 					case Invalid(payload):
 						trace(payload);
 						// JWT INVALID
-						saveRequest(id, params);
+						saveRequest(id, dbQuery);
 						S.sendErrors(new DbData(), ['jwtError'=>payload]);
 						false;
 					case Valid(payload):
 						// JWT VALID AND NOT OLDER THAN 11 h
-						saveRequest(id, params);						
+						saveRequest(id, dbQuery);						
 						true;
 					default:
-						S.sendErrors(new DbData(), ['jwtError'=>params]);
+						S.sendErrors(new DbData(), ['jwtError'=>jRes]);
 						false;
 				}
 			}// expired - TODO: configure error messages

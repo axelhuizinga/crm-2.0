@@ -3,7 +3,10 @@ package view.stats.history;
 import js.d3.color.LAB;
 import js.d3.color.HSL;
 import eventtypes.electron.InAppPurchaseEventType;
+
+import js.html.FormElement;
 import js.html.svg.StopElement;
+
 import js.html.MouseEvent;
 import js.d3.time.Time;
 import js.d3.locale.TimeFormat;
@@ -16,7 +19,10 @@ import react.ReactRef;
 import js.d3.selection.Selection;
 import js.d3.D3;
 import js.d3.D3.time;
+import react.ReactComponent.ReactComponentOf;
+import view.shared.io.DataAccess;
 import view.shared.io.FormApi;
+import view.table.Table.DataState;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
 import shared.DbData;
@@ -27,6 +33,8 @@ import haxe.Constraints.Function;
 import haxe.extern.EitherType;
 import view.shared.SMItem;
 import view.shared.io.BaseForm;
+import view.shared.io.DataFormProps;
+import state.FormState;
 
 typedef ChartDataState =
 {
@@ -95,7 +103,7 @@ typedef SortProps =
 	direction:SortDirection
 }
 
-class Charts extends BaseForm
+class Charts extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
 		//{label:'Anzeigen',action:'get'},
@@ -104,7 +112,15 @@ class Charts extends BaseForm
 	//	{label:'Auswahl alle',action:'selectionAll'},
 	];
 	
+	var dataAccess:DataAccess;	
+	var dataDisplay:Map<String,DataState>;
+
+	var formFields:DataView;
+	var formRef:ReactRef<FormElement>;
+	var fieldNames:Array<String>;
+	var baseForm:BaseForm;
 	var dbData: shared.DbData;
+	var dbMetaData:shared.DBMetaData;
 	var chartBox:Element;
 	var svg:Selection;
 
@@ -163,8 +179,8 @@ class Charts extends BaseForm
 			offset = Std.int(props.limit * ev.page);
 		}
 		var params:Dynamic = {
-			id:props.user.id,
-			jwt:props.user.jwt,
+			id:props.userState.dbUser.id,
+			jwt:props.userState.dbUser.jwt,
 			className:'stats.History',
 			action:'get',
 			filter:(props.filter==null?'termin<NOW()':props.filter),
@@ -219,8 +235,8 @@ class Charts extends BaseForm
 			},
 		];			
 		//
-		if(props.user != null)
-		trace('yeah: ${props.user.first_name}');
+		if(props.userState.dbUser != null)
+		trace('yeah: ${props.userState.dbUser.first_name}');
 		trace(props.match.params.action);
 		//state.formApi.doAction();
 		//chartBox = ReactDOM.findDOMNode(this);

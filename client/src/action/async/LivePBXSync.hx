@@ -39,7 +39,7 @@ class LivePBXSync
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
 			trace(props.offset);
-			if (!props.user.loggedIn)
+			if (!props.user.online)
 			{
 				return dispatch(User(LoginError(
 				{
@@ -113,7 +113,7 @@ class LivePBXSync
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
 			trace(props.offset);
-			if (!props.user.loggedIn)
+			if (!props.user.online)
 			{
 				return dispatch(User(LoginError(
 				{
@@ -188,7 +188,7 @@ class LivePBXSync
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
 			trace(props.offset);
-			if (!props.user.loggedIn)
+			if (!props.user.online)
 			{
 				return dispatch(User(LoginError(
 				{

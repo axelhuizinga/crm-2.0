@@ -17,5 +17,5 @@ typedef AppState =
 	?locationStore:LocationState,
 	//?redirectAfterLogin:String,
 	?status:StatusState,
-	?user:DbUser
+	?userState:UserState
 };

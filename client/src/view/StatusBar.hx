@@ -98,7 +98,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	
 	static function mapStateToProps(state:AppState) 
 	{
-		trace(state.user.first_name);
+		trace(state.userState.dbUser.first_name);
 		trace(Reflect.fields(state));
 		trace(state.status);
 		//setState({status:state.statusBar.status})
@@ -106,7 +106,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 			/*date:state.statusBar.date,*/
 			//userList:state.userList,
 			className:state.status.className==null?'':state.status.className,
-			user:state.user,
+			userState:state.user,
 			text: state.status.text//state.history.location.pathname
 		};
 		//};
@@ -114,22 +114,22 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	
 	override public function render()
 	{
-		var id:String = 'Gast';
+		var display_name:String = 'Gast';
 		var userIcon:String = 'fa fa-user-o';
 		trace(props.text);
-		if (props.user != null)
+		if (props.userState.dbUser != null)
 		{
-		 id = props.user.first_name != null &&  props.user.first_name !='' ?
-			[props.user.first_name , props.user.last_name].join(' ') :'';
+		 display_name = props.userState.dbUser.first_name != null &&  props.userState.dbUser.first_name !='' ?
+			[props.userState.dbUser.first_name , props.userState.dbUser.last_name].join(' ') :'';
 		 userIcon = 'fa fa-user';			
 		}
-		//trace(id +':' + cast id.length);
+		//trace(display_name +':' + cast display_name.length);
 		return jsx('
 		<Footer>
 			<div className="statusbar">
 				<span className="column ${props.className}" >${props.text}</span>				
 				<span className="column flex-end">
-				<i className=${userIcon}></i> $id</span>
+				<i className=${userIcon}></i> $display_name</span>
 				<$DateTime />			
 			</div>
 		</Footer>

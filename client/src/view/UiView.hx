@@ -81,7 +81,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		//trace(aState.user.id);
 		trace(Reflect.fields(aState));
 		return {
-			user:aState.user
+			userState:aState.user
 		};
 	}
 	
@@ -139,12 +139,12 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 
 	override function render()
 	{
-		if(props.user !=null)
-		trace(props.user.id);
-		if (state.hasError || props.user == null) {
+		if(props.userState.dbUser !=null)
+		trace(props.userState.dbUser.id);
+		if (state.hasError || props.userState.dbUser == null) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
-		if (props.user.waiting)
+		if (props.userState.waiting)
 		{
 			trace('waiting hero');
 			return jsx('
@@ -156,11 +156,11 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 			');		
 		}
 		
-		trace('${props.user.jwt} ${props.user.online}');
-		if(props.user.jwt == null || props.user.jwt == '' || !props.user.online || props.user.change_pass_required)//
+		trace('${props.userState.dbUser.jwt} ${props.userState.dbUser.online}');
+		if(props.userState.dbUser.jwt == null || props.userState.dbUser.jwt == '' || !props.userState.dbUser.online || props.userState.dbUser.change_pass_required)//
 		{
 			// WE NEED TO LOGIN FIRST
-			trace(props.user);
+			trace(props.userState.dbUser);
 			//return null;
 			return jsx('<$LoginForm user=${props.user}/>');
 		}

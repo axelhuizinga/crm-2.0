@@ -62,7 +62,7 @@ class Reports extends ReactComponentOf<DataProps,CompState>
 			return {
 				appConfig:aState.config,
 				//redirectAfterLogin:aState.locationStore.redirectAfterLogin,
-				user:aState.user
+				userState:aState.userState
 			};
 		};
 	}	

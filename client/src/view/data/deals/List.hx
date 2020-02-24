@@ -1,5 +1,7 @@
 package view.data.deals;
 
+import db.DbQuery.DbQueryParam;
+import action.async.DBAccessProps;
 import view.shared.io.BaseForm;
 import redux.Redux.Dispatch;
 import js.lib.Promise;
@@ -49,6 +51,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
+		baseForm = new BaseForm(this);
 		dataDisplay = DealsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		//state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
@@ -89,22 +92,14 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
     static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-            load: function(param) return dispatch(CRUD.read({
-				className:'data.Deals',
-				action:'get',
-				filter:param.filter,
-				limit:param.limit,
-				offset:param.offset,
-				table:'deals',
-				user:param.user
-			}))
+            load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
         };
 	}
 		
 	static function mapStateToProps(aState:AppState) 
 	{
 		return {
-			user:aState.user
+			userState:aState.userState
 		};
 	}
 	
@@ -128,11 +123,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{
 				className:'data.Deals',
 				action:'get',
-				filter:(props.match.params.id!=null?'id|${props.match.params.id}':'mandator|1'),
+				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				table:'deals',
-				user:props.user
+				userState:props.userState
 			}
 		);
 		p.then(function(data:DbData){
@@ -179,8 +174,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			},
 		];			
 		//
-		if(props.user != null)
-		trace('yeah: ${props.user.first_name}');
+		if(props.userState.dbUser != null)
+		trace('yeah: ${props.userState.dbUser.first_name}');
 		//dbData = FormApi.init(this, props);
 		if(props.match.params.action != null)
 		{
@@ -207,7 +202,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			case 'get':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable} 
-					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${renderPager} parentComponent=${this}
+					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${baseForm.renderPager} parentComponent=${this}
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'update':

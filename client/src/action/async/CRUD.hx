@@ -1,4 +1,5 @@
 package action.async;
+import db.DbQuery.DbQueryParam;
 import js.lib.Promise;
 import haxe.Unserializer;
 import action.AppAction;
@@ -36,37 +37,27 @@ class CRUD
 		
 	}
 
-	public static function read(props:DBAccessProps) 
+	public static function read(param:DbQueryParam) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			//trace(getState());
-			var dbData:DbData = DbDataTools.create();
-			trace(props);
+			trace(param);
 			return new Promise(function(resolve, reject){
-				if (!props.user.online)
+				if (!param.userState.dbUser.online)
 				{
 					dispatch(User(LoginError(
 					{
-						id:props.user.id,
+						id:param.userState.dbUser.id,
 						loginError:'Du musst dich neu anmelden!',
-						user_name:props.user.user_name
+						user_name:param.userState.dbUser.user_name
 					})));
 					trace('LoginError');
-					dbData.dataErrors = ['LoginError'=>'Du musst dich neu anmelden!'];
+					var dbData:DbData = DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']);
 					resolve(dbData);
 				}
-				var bl:XMLHttpRequest = BinaryLoader.create(
+				var bl:XMLHttpRequest = BinaryLoader.dbQuery(
 					'${App.config.api}', 
-					{
-						id:props.user.id,
-						jwt:props.user.jwt,
-						className:props.className,
-						action:props.action,
-						filter:props.filter,
-						dataSource:Serializer.run(props.dataSource),
-						table:props.table,
-						devIP:App.devIP
-					},
+					param,
 					function(data:DbData)
 					{			
 						trace(data.dataInfo);
@@ -77,14 +68,14 @@ class CRUD
 							{
 								trace(data.dataRows[0]);
 
-								/*dispatch(Status(Update({text:switch ('${props.className}.${props.action}')
+								/*dispatch(Status(Update({text:switch ('${param.className}.${param.action}')
 								{
 									case "data.Contacts.get":
 										resolve(dbData);
-										'Kontakt ${props.filter.substr(3)} geladen';
+										'Kontakt ${param.filter.substr(3)} geladen';
 									case "data.Contacts.update":
 										resolve(dbData);
-										'Kontakt ${props.filter.substr(3)} wurde gespeichert';
+										'Kontakt ${param.filter.substr(3)} wurde gespeichert';
 									default:
 										resolve(null);
 										"Unbekannter Vorgang";
@@ -98,7 +89,7 @@ class CRUD
 								dispatch(Status(Update(
 									{
 										className:'error',
-										text:'${data.dataErrors.get(props.action)}',
+										text:'${data.dataErrors.get(param.action)}',
 									})));
 								resolve(dbData);
 							}				
@@ -107,7 +98,7 @@ class CRUD
 							dispatch(Status(Update(
 							{
 								className: 'warn',
-								text: 'Keine Daten für ${props.filter.substr(3)} gefunden'
+								text: 'Keine Daten für ${param.filter.substr(3)} gefunden'
 							})));
 					}
 				);
@@ -122,20 +113,20 @@ class CRUD
 			var dbData:DbData = DbDataTools.create();
 			//trace(getState());
 			return new Promise(function(resolve, reject){
-				if (!props.user.online)
+				if (!props.userState.dbUser.online)
 				{
 					dispatch(User(LoginError(
 					{
-						id:props.user.id,
+						id:props.userState.dbUser.id,
 						loginError:'Du musst dich neu anmelden!',
-						user_name:props.user.user_name
+						user_name:props.userState.dbUser.user_name
 					})));
 					trace('LoginError');
 					resolve(null);
 				}	
 				var params:Dynamic = {				
-					id:props.user.id,
-					jwt:props.user.jwt,
+					id:props.userState.dbUser.id,
+					jwt:props.userState.dbUser.jwt,
 					className:props.className,
 					action:props.action,
 					devIP:App.devIP

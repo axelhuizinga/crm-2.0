@@ -67,7 +67,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	static function mapStateToProps(aState:AppState) 
 	{
 		return {
-			user:aState.user
+			userState:aState.userState
 		};
 	}
 	
@@ -128,8 +128,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			},
 		];			
 		//
-		if(props.user != null)
-		trace('yeah: ${props.user.first_name}');
+		if(props.userState.dbUser != null)
+		trace('yeah: ${props.userState.dbUser.first_name}');
 		//dbData = FormApi.init(this, props);
 		if(props.match.params.action != null)
 		{

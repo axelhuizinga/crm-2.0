@@ -100,8 +100,8 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		fieldNames = initFieldNames(dataAccess['update'].view.keys());
 		dataDisplay = ContactsModel.dataDisplay;
 		//trace('...' + Reflect.fields(props));
-		formRef = React.createRef();
-		if(props.match.params.id!=null)
+		//formRef = React.createRef();
+		/*if(props.match.params.id!=null)
 			initialState.id = Std.parseInt(props.match.params.id);
 		
 		if(props.dataStore.contactData != null)
@@ -122,7 +122,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		/*	actualState = view.shared.io.Observer.run(actualState, function(newState){
 				actualState = newState;
 				trace(actualState);
-			});	*/
+			});	
 		}
 		else if(initialState.id!=null && (props.dataStore.contactData == null || !props.dataStore.contactData.exists(initialState.id))){			
 			//actualState = copy(initialState);
@@ -131,12 +131,12 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			var baseUrl:String = props.match.path.split(':section')[0];
 			props.history.push('${baseUrl}List/get');
 			return;			
-		}
+		}*/
 		
 		state =  App.initEState({
 			dataTable:[],
-			formBuilder:new FormBuilder(this),
-			initialState:initialState,
+			actualState:{edited_by: props.userState.dbUser.id,mandator: props.userState.dbUser.mandator},
+			initialState:loadContactData(props.match.params.id),
 			loading:false,
 			handleSubmit:[
 				{
@@ -166,7 +166,8 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				,{	
 					section: props.match.params.section==null? 'Edit':props.match.params.section, 
 					sameWidth: true
-				}),	
+				}				
+			),	
 			/*storeListener:App.store.subscribe(function(){
 				trace(App.store.getState().dataStore);
 			}),*/
@@ -179,11 +180,20 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 	{
 		trace('loading:$id');
 		if(id == null)
-			return initialState;
-		//actualState = {edited_by: props.user.id,mandator: props.user.mandator};
-
-		//contact.initFields();		
-		//{edited_by: props.user.id,mandator: 0};
+			return null;
+		var p:Promise<DbData> = props.load(
+			{
+				className:'data.Contacts',
+				action:'get',
+				filter:({id:$id,mandator:1}),
+				table:'contacts',
+				userState:props.userState
+			}
+		);
+		p.then(function(data:DbData){
+			trace(data.dataRows.length); 
+			setState({loading:false, dataTable:data.dataRows});
+		});
 		var data = props.dataStore.contactData.get(id);
 		trace(data);	
 		for(k=>v in data.keyValueIterator())
@@ -198,15 +208,15 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			}		
 		}
 		
-		contact = new Contact(actualState);
+		contact = new Contact(actualState, dataAccess['update'].view);
 		//contact = actualState;
 		trace(actualState);
 		//trace('Rtti:' + Rtti.getRtti(Contact).fields[0].meta);
 		trace(contact.fieldsModified);		
 		trace('contact.fieldsModified:' + contact.fieldsModified);		
-		initialState = contact.copy(data, actualState);
+		initialState = contact.load(data);
 		//initialState = copy(actualState);
-		compareStates();	
+		baseForm.compareStates();	
 		//trace(actualState);	
 		//trace(initialState);	
 		/*actualState = view.shared.io.Observer.run(initialState, function(newState){

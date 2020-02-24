@@ -114,9 +114,9 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 		props.formApi.requests.push(AjaxLoader.load(
 			'${App.config.api}', 
 			{
-				id:props.user.id,
-				jwt:props.user.jwt,
-				first_name:props.user.first_name,
+				id:props.userState.dbUser.id,
+				jwt:props.userState.dbUser.jwt,
+				first_name:props.userState.dbUser.first_name,
 				className:'admin.CreateUsers',
 				action:'importExternal'
 			},

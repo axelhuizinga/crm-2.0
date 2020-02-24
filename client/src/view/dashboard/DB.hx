@@ -77,8 +77,8 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		state.formApi.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
-				id:props.user.id,
-				jwt:props.user.jwt,
+				id:props.userState.dbUser.id,
+				jwt:props.userState.dbUser.jwt,
 				className:'tools.DB',
 				action:'createFieldList',
 				update:'1'
@@ -188,8 +188,8 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		state.formApi.requests.push( /*BinaryLoader.insert(
 			'${App.config.api}', 
 			{
-				id:props.user.id,
-				jwt:props.user.jwt,
+				id:props.userState.dbUser.id,
+				jwt:props.userState.dbUser.jwt,
 				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
 				className:'tools.DB',
 				action:'createFieldList',

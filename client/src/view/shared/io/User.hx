@@ -168,7 +168,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		//trace(prevProps);
 		//trace(prevState);
 		//trace(state.values);
-		trace(App.store.getState().user.first_name);
+		trace(App.store.getState().userState.dbUser.first_name);
 		//trace(props.match.params.action);
 		if(autoFocus!=null)
 		autoFocus.current.focus();
@@ -193,7 +193,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 			return setState({errors:['changePassword'=>'Die Passwörter stimmen nicht überein!']});
 		if (state.values['new_pass'] == state.values['pass'] && state.values['new_pass']!='' && state.values['new_pass']!=null)
 			return setState({errors:['changePassword'=>'Das Passwort muss geändert werden!']});
-		trace(App.store.getState().user);
+		trace(App.store.getState().userState);
 		
 	}
 	

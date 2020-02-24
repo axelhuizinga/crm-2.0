@@ -166,7 +166,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 	{
 		throw ('never');
 		return {
-			user:aState.user
+			userState:aState.userState
 		};
 	}
 

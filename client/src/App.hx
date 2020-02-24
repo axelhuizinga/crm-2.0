@@ -191,7 +191,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//trace(store);
 		trace(state.user);
 		//CState.init(store);		
-		if (!(state.user.id == null || state.user.jwt == ''))
+		if (!(state.userState.id == null || state.userState.jwt == ''))
 		{			
 			store.dispatch(action.async.UserAccess.verify());
 		}
@@ -204,7 +204,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 						ReactUtil.copy( state.user, {waiting:false}))));
 		}
 
-		//trace(state.user.jwt);
+		//trace(state.userState.jwt);
 		
 		//state.history.listen(CState.historyChange);
 		trace(Reflect.fields(state));

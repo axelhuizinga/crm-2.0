@@ -14,5 +14,6 @@ typedef UserState =
 	?lastError:Dynamic,
 	?loginTask:LoginTask,
 	?new_pass_confirm:String,
+	?new_pass:String,
 	?waiting:Bool    
 }

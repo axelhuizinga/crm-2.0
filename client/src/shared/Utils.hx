@@ -142,4 +142,18 @@ class Utils
 		}
 		return res;
 	}
+	
+	public static function update(obj1: Dynamic, obj2: Dynamic): Dynamic {
+		
+		var keys = Reflect.fields(obj1);
+		if(obj1 == null)
+			return null;
+		for (k in keys) {
+			var value: Dynamic = Reflect.field(obj2, k);
+			if(Reflect.hasField(obj2, k))
+				Reflect.setField(obj1, k, value);
+		}
+		
+		return obj1;
+	}
 }

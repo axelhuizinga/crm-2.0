@@ -96,7 +96,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		throw ('never');
 		return {
-			user:aState.user
+			userState:aState.userState
 		};
 	}
 	
@@ -122,7 +122,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			limit:props.limit,
 			offset:offset>0?offset:0,
 			table:'contacts',
-			user:props.user
+			userState:props.userState
 		};
 		BinaryLoader.create(
 			'${App.config.api}', 
@@ -230,8 +230,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			},
 		];			
 		//
-		if(props.user != null)
-		trace('yeah: ${props.user.first_name}');
+		if(props.userState != null)
+		trace('yeah: ${props.userState.dbUser.first_name}');
 		trace(props.match.params.action);
 		state.formApi.doAction();
 

@@ -1,4 +1,5 @@
 package view.data.contacts;
+import action.async.CRUD;
 import haxe.CallStack;
 import me.cunity.debug.Out;
 import haxe.rtti.Rtti;
@@ -33,6 +34,7 @@ import react.ReactEvent;
 import react.ReactRef;
 import react.ReactMacro.jsx;
 import react.ReactUtil.copy;
+import redux.Redux.Dispatch;
 import shared.DbData;
 import shared.DBMetaData;
 import view.shared.FormBuilder;
@@ -55,7 +57,7 @@ using Lambda;
 /**
  * 
  */
-
+@:connect
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
@@ -82,11 +84,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		baseForm = new BaseForm(this);
 		trace(props.match.params);
-		state = initialState = {
+/*		state = initialState = {
 			id:null,//2000328,
-			edited_by: props.user.id,
-			mandator: props.user.mandator
-		};	
+			edited_by: props.userState.dbUser.id,
+			mandator: props.userState.dbUser.mandator
+		};	*/
 
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
@@ -108,9 +110,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.dataStore.contactData.keys().next());
 		//Out.dumpStack(CallStack.callStack());
 		// FOR NOW IGNORE THE dataStore and Observer
-		if(initialState.id!=null && props.dataStore.contactData != null && props.dataStore.contactData.exists(initialState.id))
+		/*if(initialState.id!=null && props.dataStore.contactData != null && props.dataStore.contactData.exists(initialState.id))
 		{
-			actualState = {edited_by: props.user.id,mandator: props.user.mandator};
+			actualState = {edited_by: props.userState.dbUser.id,mandator: props.userState.dbUser.mandator};
 			initialState = loadContactData(initialState.id);
 			//actualState = copy(initialState);
 			//select(props.data['id'], 
@@ -119,10 +121,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			trace(contact.fieldsModified);
 			//props.select(initialState.id,[initialState.id => initialState], props.match);
 			//OK we got the data
-		/*	actualState = view.shared.io.Observer.run(actualState, function(newState){
+			actualState = view.shared.io.Observer.run(actualState, function(newState){
 				actualState = newState;
 				trace(actualState);
-			});	*/
+			});	
 		}
 		else if(initialState.id!=null && (props.dataStore.contactData == null || !props.dataStore.contactData.exists(initialState.id))){			
 			//actualState = copy(initialState);
@@ -131,12 +133,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			var baseUrl:String = props.match.path.split(':section')[0];
 			props.history.push('${baseUrl}List/get');
 			return;			
-		}
+		}*/
 		
 		state =  App.initEState({
 			dataTable:[],
-			//formBuilder:new FormBuilder(this),
-			initialState:initialState,
+			actualState:{edited_by: props.userState.dbUser.id,mandator: props.userState.dbUser.mandator},
+			initialState:loadContactData(props.match.params.id),
 			loading:false,
 			handleSubmit:[
 				{
@@ -179,11 +181,20 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace('loading:$id');
 		if(id == null)
-			return initialState;
-		//actualState = {edited_by: props.user.id,mandator: props.user.mandator};
-
-		//contact.initFields();		
-		//{edited_by: props.user.id,mandator: 0};
+			return null;
+		var p:Promise<DbData> = props.load(
+			{
+				className:'data.Contacts',
+				action:'get',
+				filter:({id:$id,mandator:1}),
+				table:'contacts',
+				userState:props.userState
+			}
+		);
+		p.then(function(data:DbData){
+			trace(data.dataRows.length); 
+			setState({loading:false, dataTable:data.dataRows});
+		});
 		var data = props.dataStore.contactData.get(id);
 		trace(data);	
 		for(k=>v in data.keyValueIterator())
@@ -206,7 +217,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace('contact.fieldsModified:' + contact.fieldsModified);		
 		initialState = contact.load(data);
 		//initialState = copy(actualState);
-		compareStates();	
+		baseForm.compareStates();	
 		//trace(actualState);	
 		//trace(initialState);	
 		/*actualState = view.shared.io.Observer.run(initialState, function(newState){
@@ -238,17 +249,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
-		trace('propsChanged:${nextProps!=props}');
-		trace('stateChanged:${nextState!=state}');
-		// FOR NOW IGNORE THE dataStore and Observer
-		if(false && props.dataStore != null && actualState == null)
-		{
-			actualState = loadContactData(initialState.id);
-			setState({
-				initialState:actualState,
-				actualState:actualState
-			});
-		}		
+		trace('propsChanged:${nextProps!=props} stateChanged:${nextState!=state}');				
 		if(nextState!=state)
 			return true;
 		return nextProps!=props;
@@ -257,9 +258,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentWillUnmount() {
 		//state.storeListener();
 		return;
-		var actData:IntMap<Map<String,Dynamic>> = [initialState.id => [
-		for(f in Reflect.fields(actualState))
-			f => Reflect.field(actualState,f)		
+		var actData:IntMap<Map<String,Dynamic>> = [state.initialState.id => [
+		for(f in Reflect.fields(state.actualState))
+			f => Reflect.field(state.actualState,f)		
 		]];
 		trace(actData);
 		App.store.dispatch(DataAction.SelectActContacts(actData));
@@ -340,7 +341,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			{
 				var item:Dynamic = elements.namedItem(k);
 				//trace('$k => ${item.type}:' + item.value);
-				Reflect.setField(actualState, item.name, switch (item.type)
+				Reflect.setField(state.actualState, item.name, switch (item.type)
 				{
 					//case DateControl|DateTimrControl:
 
@@ -363,14 +364,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 		//setState({actualState: actualState});
 		//compareStates();
-		var aState:Dynamic = copy(actualState);
+		var aState:Dynamic = copy(state.actualState);
 		var dbaProps:DBAccessProps = 
 		{
 			action:'update',
 			className:'data.Contacts',
 			dataSource:null,
 		//	table:'contacts',
-			user:props.user
+			userState:props.userState
 		};
 		switch (props.match.params.action)
 		{
@@ -397,16 +398,16 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				];	
 			case 'update':
 				//Reflect.deleteField(aState,'creation_date');
-				trace('${initialState.id} :: creation_date: ${aState.creation_date} ${state.initialState.creation_date}');
+				trace('${state.initialState.id} :: creation_date: ${aState.creation_date} ${state.initialState.creation_date}');
 				//var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialState.id);
 				//trace();
 				trace(contact.modified() + ':${contact.fieldsModified}');
 				for(f in fieldNames)
 				{
 					//UPDATE FIELDS WITH VALUES CHANGED
-					if(Reflect.field(aState,f)!=Reflect.field(initialState,f))
+					if(Reflect.field(aState,f)!=Reflect.field(state.initialState,f))
 					{
-						trace('$f:${Reflect.field(aState,f)}==${Reflect.field(initialState,f)}<<');
+						trace('$f:${Reflect.field(aState,f)}==${Reflect.field(state.initialState,f)}<<');
 						Reflect.setProperty(contact, f, Reflect.field(aState,f));
 						contact.modified(f);
 					}						
@@ -423,7 +424,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				dbaProps.dataSource = [
 					"contacts" => [
 						"data" => contact.store(),
-						"filter" => {id:initialState.id}
+						"filter" => {id:state.initialState.id}
 					]
 				];
 				trace(dbaProps.dataSource["contacts"]["filter"]);
@@ -512,4 +513,17 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		return sideMenu;
 	}
 
+	static function mapDispatchToProps(dispatch:Dispatch) {
+        return {
+            load: function(param:DBAccessProps) return dispatch(CRUD.read(param))
+        };
+	}
+		
+	static function mapStateToProps(aState:AppState) 
+	{
+		return {
+			userState:aState.userState
+		};
+	}
+		
 }

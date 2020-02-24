@@ -53,9 +53,9 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 
 	function buildNav()
 	{
-		var state = App.store.getState().user;
-		//trace(state);
-		if (state.waiting || state.id == 0|| state.jwt == null || state.jwt == '')
+		var userState = App.store.getState().userState;
+		//trace(userState);
+		if (userState.waiting || userState.dbUser.id == 0|| userState.dbUser.jwt == null || userState.dbUser.jwt == '')
 		{
 			// WE REQUIRE TO LOGIN FIRST
 			return null;

@@ -1,5 +1,4 @@
 package model;
-import view.shared.io.DataAccess.DataView;
 
 typedef ProductProps = {
 	?id:Int,
@@ -16,9 +15,9 @@ typedef ProductProps = {
 class Product extends ORM
 {
 
-	public function new(props:ProductProps, view:DataView) {
+	public function new(data:Map<String,String>) {
+		super(data);
 		propertyNames = 'id,name,description,value,attributes,mandator,active,edited_by'.split(',');
-		super(props, view);
 	}	
 		
 	@dataType("bigint")

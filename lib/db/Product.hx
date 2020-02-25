@@ -1,21 +1,23 @@
 package model;
 
-typedef UserGroupProps = {
+typedef ProductProps = {
 	?id:Int,
 	?name:String,
 	?description:String,
-	?can:String,
+	?value:String,
+	?attributes:String,
 	?mandator:Int,
+	?active:Bool,
 	?edited_by:Int
 };
 
 @:rtti
-class UserGroup extends ORM
+class Product extends ORM
 {
 
-	public function new(data:Map<String,String>) {
-		super(data);
-		propertyNames = 'id,name,description,can,mandator,edited_by'.split(',');
+	public function new(props:ProductProps) {
+		propertyNames = 'id,name,description,value,attributes,mandator,active,edited_by'.split(',');
+		super(propsMwaaa);
 	}	
 		
 	@dataType("bigint")
@@ -34,7 +36,7 @@ class UserGroup extends ORM
 		return id;
 	}	
 		
-	@dataType("character varying(64)")
+	@dataType("character varying(1024)")
 	@:isVar public var name(get,set):String;
 	var name_initialized:Bool;
 	
@@ -50,7 +52,7 @@ class UserGroup extends ORM
 		return name;
 	}	
 		
-	@dataType("character varying(1024)")
+	@dataType("character varying(4096)")
 	@:isVar public var description(get,set):String;
 	var description_initialized:Bool;
 	
@@ -66,20 +68,36 @@ class UserGroup extends ORM
 		return description;
 	}	
 		
-	@dataType("jsonb")
-	@:isVar public var can(get,set):String;
-	var can_initialized:Bool;
+	@dataType("numeric(10,2)")
+	@:isVar public var value(get,set):String;
+	var value_initialized:Bool;
 	
-	function get_can():String{
-			return can;
+	function get_value():String{
+			return value;
 	}
 
-	function set_can(can:String):String{
-		if(can_initialized)
-			modified('can');
-		this.can = can ;
-		can_initialized = true; 
-		return can;
+	function set_value(value:String):String{
+		if(value_initialized)
+			modified('value');
+		this.value = value ;
+		value_initialized = true; 
+		return value;
+	}	
+		
+	@dataType("jsonb")
+	@:isVar public var attributes(get,set):String;
+	var attributes_initialized:Bool;
+	
+	function get_attributes():String{
+			return attributes;
+	}
+
+	function set_attributes(attributes:String):String{
+		if(attributes_initialized)
+			modified('attributes');
+		this.attributes = attributes ;
+		attributes_initialized = true; 
+		return attributes;
 	}	
 		
 	@dataType("bigint")
@@ -96,6 +114,22 @@ class UserGroup extends ORM
 		this.mandator = mandator ;
 		mandator_initialized = true; 
 		return mandator;
+	}	
+		
+	@dataType("boolean")
+	@:isVar public var active(get,set):Bool;
+	var active_initialized:Bool;
+	
+	function get_active():Bool{
+		return active;
+	}
+
+	function set_active(active:Bool):Bool{
+		if(active_initialized)
+			modified('active');
+		this.active = active ;
+		active_initialized = true; 
+		return active;
 	}	
 		
 	@dataType("bigint")

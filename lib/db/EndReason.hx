@@ -11,9 +11,9 @@ typedef EndReasonProps = {
 class EndReason extends ORM
 {
 
-	public function new(data:Map<String,String>) {
-		super(data);
+	public function new(props:EndReasonProps) {
 		propertyNames = 'id,reason,edited_by,mandator'.split(',');
+		super(propsMwaaa);
 	}	
 		
 	@dataType("bigint")

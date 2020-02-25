@@ -149,7 +149,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 		trace(App.store.getState().dataStore.contactsDbData);
 		var bState =  {
 			dataStore:aState.dataStore,
-			user:aState.user,
+			userState:aState.userState,
 			//idLoaded:aState.dataStore.contactData.keys().next()
 		};
 		//trace(bState);

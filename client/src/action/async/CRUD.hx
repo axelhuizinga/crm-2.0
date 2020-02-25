@@ -43,13 +43,12 @@ class CRUD
 			//trace(getState());
 			trace(param);
 			return new Promise(function(resolve, reject){
-				if (!param.userState.dbUser.online)
+				if (!param.dbUser.online)
 				{
 					dispatch(User(LoginError(
 					{
-						id:param.userState.dbUser.id,
-						loginError:'Du musst dich neu anmelden!',
-						user_name:param.userState.dbUser.user_name
+						dbUser:param.dbUser,
+						lastError:'Du musst dich neu anmelden!'
 					})));
 					trace('LoginError');
 					var dbData:DbData = DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']);
@@ -91,14 +90,14 @@ class CRUD
 										className:'error',
 										text:'${data.dataErrors.get(param.action)}',
 									})));
-								resolve(dbData);
+								resolve(data);
 							}				
 						}
 						else
 							dispatch(Status(Update(
 							{
 								className: 'warn',
-								text: 'Keine Daten für ${param.filter.substr(3)} gefunden'
+								text: 'Keine Daten für ${param.filter.toString()} gefunden'
 							})));
 					}
 				);
@@ -117,9 +116,8 @@ class CRUD
 				{
 					dispatch(User(LoginError(
 					{
-						id:props.userState.dbUser.id,
-						loginError:'Du musst dich neu anmelden!',
-						user_name:props.userState.dbUser.user_name
+						dbUser:props.userState.dbUser,
+						lastError:'Du musst dich neu anmelden!'
 					})));
 					trace('LoginError');
 					resolve(null);
@@ -146,9 +144,9 @@ class CRUD
 						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
 							trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
 
-						if(data.dataErrors.exists('loginError'))
+						if(data.dataErrors.exists('lastError'))
 						{
-							dispatch(User(LoginError({loginError: data.dataErrors.get('loginError')})));
+							dispatch(User(LoginError({lastError: data.dataErrors.get('lastError')})));
 							resolve(null);
 						}
 						else{
@@ -157,9 +155,9 @@ class CRUD
 								{text:switch ('${props.className}.${props.action}')
 									{
 										case "data.Contacts.edit":
-											'Kontakt ${props.dataSource["contacts"]["filter"].substr(3)} geladen';
+											'Kontakt ${props.dataSource["contacts"]["filter"].toString()} geladen';
 										case "data.Contacts.update":
-											'Kontakt ${props.dataSource["contacts"]["filter"].substr(3)} wurde gespeichert';
+											'Kontakt ${props.dataSource["contacts"]["filter"].toString()} wurde gespeichert';
 										default:
 											"Unbekannter Vorgang";
 

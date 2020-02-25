@@ -30,7 +30,7 @@ class SettingsFormModel
 	
 	public static var relations:StringMap<FormRelation> = [
 		'user' => {
-			props:{elements:accountDataElements,user:App._app.state.user.id},
+			props:{elements:accountDataElements,userState:App._app.state.user.id},
 			state:null
 		},
 		'userBookmarks' => {}

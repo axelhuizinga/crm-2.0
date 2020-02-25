@@ -16,9 +16,9 @@ typedef UserInterfaceProps = {
 class UserInterface extends ORM
 {
 
-	public function new(data:Map<String,String>) {
-		super(data);
+	public function new(props:UserInterfaceProps) {
 		propertyNames = 'id,key,content,classPath,component,edited_by,updated_at,locale,mandator'.split(',');
+		super(propsMwaaa);
 	}	
 		
 	@dataType("bigint")

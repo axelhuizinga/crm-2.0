@@ -16,8 +16,6 @@ import view.shared.io.DataAccess.DataSource;
  * @author axel@cunity.me
  */
 
-
-
 class Design extends ReactComponentOf<DataFormProps,FormState>
 {
 	

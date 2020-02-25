@@ -42,7 +42,7 @@ class DataStore
 			trace(data.dataParams);
 				copy(state, {
 					dbData:data,
-					//user:initState.user,
+					//userState:initState.user,
 					waiting:true
 				});
 			case Done(data):

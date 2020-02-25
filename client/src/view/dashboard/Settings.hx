@@ -106,7 +106,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 			var uState = aState.user;
 			//trace(uState);		
 			return {
-				user:uState
+				userState:uState
 			};
 		};
 	}	*/

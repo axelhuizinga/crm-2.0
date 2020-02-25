@@ -41,13 +41,12 @@ class DBAccess
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			//trace(getState());
 			trace(props);
-			if (!props.user.online)
+			if (!props.userState.dbUser.online)
 			{
 				return dispatch(User(LoginError(
 				{
-					id:props.user.id,
-					loginError:'Du musst dich neu anmelden!',
-					user_name:props.user.user_name
+					dbUser:props.userState.dbUser,
+					lastError:'Du musst dich neu anmelden!'
 				})));
 			}				
 			trace('creating BinaryLoader ${App.config.api}');
@@ -55,8 +54,8 @@ class DBAccess
 			var bl:XMLHttpRequest = BinaryLoader.create(
 				'${App.config.api}', 
 				{
-					id:props.user.id,
-					jwt:props.user.jwt,
+					id:props.userState.dbUser.id,
+					jwt:props.userState.dbUser.jwt,
 					className:props.className,
 					action:props.action,
 					filter:props.filter,
@@ -115,20 +114,19 @@ class DBAccess
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
 			trace(props);
 			//trace(getState());
-			if (!props.user.online)
+			if (!props.userState.dbUser.online)
 			{
 				return dispatch(User(LoginError(
 				{
-					id:props.user.id,
-					loginError:'Du musst dich neu anmelden!',
-					user_name:props.user.user_name
+					dbUser:props.userState.dbUser,
+					lastError:'Du musst dich neu anmelden!'
 				})));
 			}	
 			//var spin:Dynamic = dispatch(AppWait);
 			//trace(spin);
 			var params:Dynamic = {				
-				id:props.user.id,
-				jwt:props.user.jwt,
+				id:props.userState.dbUser.id,
+				jwt:props.userState.dbUser.jwt,
 				className:props.className,
 				action:props.action,				
 				dataSource:Serializer.run(props.dataSource),
@@ -148,9 +146,9 @@ class DBAccess
 				if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
 					trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
 
-				if(data.dataErrors.exists('loginError'))
+				if(data.dataErrors.exists('lastError'))
 				{
-					return dispatch(User(LoginError({loginError: data.dataErrors.get('loginError')})));
+					return dispatch(User(LoginError({lastError: data.dataErrors.get('lastError')})));
 				}
 
 				return dispatch(Status(Update({text:switch ('${props.className}.${props.action}')
@@ -173,13 +171,13 @@ class DBAccess
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(props);
 			//trace(getState());
-			if (!props.user.online)
+			if (!props.userState.dbUser.online)
 			{
 				return dispatch(LoginError(
 				{
-					id:props.user.id,
-					loginError:'Du musst dich neu anmelden!',
-					user_name:props.user.user_name
+					id:props.userState.dbUser.id,
+					lastError:'Du musst dich neu anmelden!',
+					user_name:props.userState.dbUser.user_name
 				}));
 			}	
 			var spin:Dynamic = dispatch(AppWait);
@@ -187,8 +185,8 @@ class DBAccess
 			var bL:XMLHttpRequest = BinaryLoader.create(
 			'${App.config.api}', 
 			{				
-				id:props.user.id,
-				jwt:props.user.jwt,
+				id:props.userState.dbUser.id,
+				jwt:props.userState.dbUser.jwt,
 				className:props.className,
 				action:props.action,
 				dataSource:Serializer.run(props.dataSource),

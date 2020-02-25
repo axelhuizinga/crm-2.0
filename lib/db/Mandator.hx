@@ -15,9 +15,9 @@ typedef MandatorProps = {
 class Mandator extends ORM
 {
 
-	public function new(data:Map<String,String>) {
-		super(data);
+	public function new(props:MandatorProps) {
 		propertyNames = 'id,contact,name,description,any,edited_by,parent,last_locktime'.split(',');
+		super(propsMwaaa);
 	}	
 		
 	@dataType("bigint")

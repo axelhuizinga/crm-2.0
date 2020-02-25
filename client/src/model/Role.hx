@@ -1,5 +1,4 @@
 package model;
-import view.shared.io.DataAccess.DataView;
 
 typedef RoleProps = {
 	?id:Int,
@@ -14,9 +13,9 @@ typedef RoleProps = {
 class Role extends ORM
 {
 
-	public function new(props:RoleProps, view:DataView) {
+	public function new(data:Map<String,String>) {
+		super(data);
 		propertyNames = 'id,name,description,permissions,edited_by,mandator'.split(',');
-		super(props, view);
 	}	
 		
 	@dataType("bigint")

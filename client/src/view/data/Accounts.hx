@@ -37,7 +37,6 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
 	public function new(?props:DataFormProps) 
 	{
-		trace(props.user);
 		super(props);	
 		trace(Reflect.fields(props));
 		trace(props.match.params.section);

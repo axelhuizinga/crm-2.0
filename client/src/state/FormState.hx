@@ -1,5 +1,6 @@
 package state;
 
+import model.ORM;
 import js.html.InputElement;
 import haxe.ds.IntMap;
 import js.html.FormElement;
@@ -39,7 +40,7 @@ typedef FormState =
 	?pageCount:Int,
 	?ref:ReactRef<FormElement>,
 	//?contactData:IntMap<Map<String,Dynamic>>,
-	?initialData:IntMap<Map<String,Dynamic>>,
+	?initialData:ORM,//IntMap<Map<String,Dynamic>>,
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,
 	?handleChange:InputEvent->Void,

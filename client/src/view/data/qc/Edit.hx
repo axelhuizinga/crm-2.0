@@ -231,7 +231,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(aState);
 		return {
-			user:aState.user
+			userState:aState.user
 		};
 	}*/
 	
@@ -380,7 +380,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			className:'data.Contacts',
 			dataSource:null,
 		//	table:'contacts',
-			user:props.user
+			userState:props.user
 		};
 		switch (props.match.params.action)
 		{

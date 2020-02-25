@@ -15,7 +15,7 @@ class StatusStore
 		initState = {
 			text:Browser.location.pathname,// '',
 			date:Date.now(),
-			user:null
+			userState:null
 		}
 	}
 	public function reduce(state:StatusState, action:StatusAction):StatusState

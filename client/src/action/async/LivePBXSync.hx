@@ -39,21 +39,20 @@ class LivePBXSync
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
 			trace(props.offset);
-			if (!props.user.online)
+			if (!props.userState.dbUser.online)
 			{
 				return dispatch(User(LoginError(
 				{
-					id:props.user.id,
-					loginError:'Du musst dich neu anmelden!',
-					user_name:props.user.user_name
+					dbUser:props.userState.dbUser,
+					lastError:'Du musst dich neu anmelden!'
 				})));
 			}				
 			trace('creating BinaryLoader ${App.config.api}');
 			var bl:XMLHttpRequest = BinaryLoader.create(
 				'${App.config.api}', 
 				{
-					id:props.user.id,
-					jwt:props.user.jwt,
+					id:props.userState.dbUser.id,
+					jwt:props.userState.dbUser.jwt,
 					className:props.className,
 					action:props.action,
 					limit:props.limit,
@@ -113,21 +112,20 @@ class LivePBXSync
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
 			trace(props.offset);
-			if (!props.user.online)
+			if (!props.userState.dbUser.online)
 			{
 				return dispatch(User(LoginError(
 				{
-					id:props.user.id,
-					loginError:'Du musst dich neu anmelden!',
-					user_name:props.user.user_name
+					dbUser:props.userState.dbUser,
+					lastError:'Du musst dich neu anmelden!'
 				})));
 			}				
 			trace('creating BinaryLoader ${App.config.api}');
 			var bl:XMLHttpRequest = BinaryLoader.create(
 				'${App.config.api}', 
 				{
-					id:props.user.id,
-					jwt:props.user.jwt,
+					id:props.userState.dbUser.id,
+					jwt:props.userState.dbUser.jwt,
 					className:props.className,
 					action:props.action,
 					limit:props.limit,
@@ -188,21 +186,20 @@ class LivePBXSync
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
 			trace(props.offset);
-			if (!props.user.online)
+			if (!props.userState.dbUser.online)
 			{
 				return dispatch(User(LoginError(
 				{
-					id:props.user.id,
-					loginError:'Du musst dich neu anmelden!',
-					user_name:props.user.user_name
+					dbUser:props.userState.dbUser,
+					lastError:'Du musst dich neu anmelden!'					
 				})));
 			}				
 			trace('creating BinaryLoader ${App.config.api}');
 			var bl:XMLHttpRequest = BinaryLoader.create(
 				'${App.config.api}', 
 				{
-					id:props.user.id,
-					jwt:props.user.jwt,
+					id:props.userState.dbUser.id,
+					jwt:props.userState.dbUser.jwt,
 					className:props.className,
 					action:props.action,
 					limit:props.limit,

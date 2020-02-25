@@ -56,7 +56,7 @@ class AppStore
 			status: {
 				text: '',//Browser.location.pathname,
 				date:Date.now(),
-				user:null
+				userState:null
 			},
 			userState:uStore.initState/*{
 				first_name:'',

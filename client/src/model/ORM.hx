@@ -16,52 +16,41 @@ class ORM {
 	public var fieldFormat:Map<String, Function>;
 	public var propertyNames:Array<String>;
 	var fields:Dynamic<Dynamic<Array<Dynamic>>>;
-	var view:DataView;
-	//static var fieldNames:Array<String>;
-	//var mandator:Int;
 
-	public function new(props:Dynamic, view:DataView) {
+	public function new(data:Map<String,Dynamic>) {
 		fieldsModified = new Array();
-		this.view = view;
 		fields = Meta.getFields(Type.getClass(this));
 		propertyNames = Reflect.fields(fields);
 		trace(fields);
-		for(f in propertyNames)
-		{
-			var nv:Dynamic = Reflect.field(props, f);
-			Reflect.setProperty(this, f, switch(Reflect.field(fields, f).dataType[0]){				
-				case('bigint[]'):
-					nv==null?[]:nv;
-				case _.indexOf('timestamp') => 0:
-					nv == null? '': nv;
-				case('date'):
-					nv == null? '': nv;
-				default:
-					nv;
-			});
-		}		
-		//edited_by = props.user.id;
-		//mandator = props.mandator;
+		if(data != null)
+			for(f in propertyNames)
+			{
+				if(data.exists(f)){
+					var nv:Dynamic = data[f];
+					Reflect.setProperty(this, f, switch(Reflect.field(fields, f).dataType[0]){				
+						case('bigint[]'):
+							nv==null?[]:nv;
+						case _.indexOf('timestamp') => 0:
+							nv == null? '': nv;
+						case('date'):
+							nv == null? '': nv;
+						default:
+							nv;
+					});				
+				}
+			}		
 	}
 
-	public function load(data:Map<String,Dynamic>):Dynamic {
-		var t:Dynamic = {};
-		var cls:Dynamic = Type.getClass(this);
+	public function load(data:Map<String,Dynamic>):ORM {
 		
-		//trace(data);
-		//trace(propertyNames);
 		for(pName in propertyNames)
 		{
 			//trace('$pName:${Reflect.field(this, pName)}');
-
-			Reflect.setField(t, pName, Reflect.field(this, pName));
-			/*if(cState!=null)
-			{
-				Reflect.setField(cState, pName, Reflect.field(this, pName));
-			}*/
+			if(data.exists(pName))
+				Reflect.setProperty(this, pName, data[pName]);
 		}
 		//trace(cls.propertyNames);
-		return t;
+		return this;
 	}
 
 	public function store():Dynamic {

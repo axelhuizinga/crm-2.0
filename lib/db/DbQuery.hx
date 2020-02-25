@@ -22,7 +22,7 @@ typedef DbQueryParam = {
 //	?pages:Int,
 	?offset:Int,
 	?table:String,
-	?user:DbUser
+	?dbUser:DbUser
 };
 
 class DbQuery implements hxbit.Serializable 
@@ -31,18 +31,18 @@ class DbQuery implements hxbit.Serializable
 	@:s public var dbParams:Map<String,Dynamic>;
 	//@:s public var formData:Dynamic;
 	@:s public var relations:Map<String,DbRelation>;
-	@:s public var user:DbUser;
+	@:s public var dbUser:DbUser;
 
 	public function new(?drp:DbQueryParam) 
 	{
 		dbParams = new Map();
 		if(drp!=null){
-			user = drp.user;		
-			//user = drp.user;		
+			dbUser = drp.dbUser;		
+			//dbUser = drp.dbUser;		
 			relations = drp.relations;
 			for(f in Reflect.fields(drp)){
 				switch (f){
-					case '__uid'|'user'|'relations'|'getCLID'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':
+					case '__uid'|'dbUser'|'relations'|'getCLID'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':
 						//SKIP
 					default:
 						var v = Reflect.field(drp,f);

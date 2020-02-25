@@ -44,7 +44,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	static function mapStateToProps(aState:AppState) 
 	{
 		return {
-			user:aState.user
+			userState:aState.userState
 		};
 	}
 	
@@ -67,8 +67,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		state.formApi.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
-				id:props.user.id,
-				jwt:props.user.jwt,
+				id:props.userState.dbUser.id,
+				jwt:props.userState.dbUser.jwt,
 				//fields:'disabled:disabled,element=:element,required=:required,use_as_index=:use_as_index',
 				className:'data.Contacts',
 				action:'get',
@@ -123,8 +123,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			},
 		];			
 		//
-		if(props.user != null)
-		trace('yeah: ${props.user.first_name}');
 		//dbData = FormApi.init(this, props);
 		if(props.match.params.action != null)
 		{

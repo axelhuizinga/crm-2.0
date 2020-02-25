@@ -5,20 +5,22 @@ import state.AppState;
 import haxe.ds.Map;
 import loader.BinaryLoader;
 import me.cunity.debug.Out;
+import model.Contact;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
 import shared.DbData;
+import state.FormState;
 import view.shared.FormBuilder;
 import view.shared.SMItem;
 import view.shared.SMenuProps;
 import view.dashboard.model.DBSyncModel;
-
+import view.table.Table.DataState;
 import view.shared.io.BaseForm;
 import view.shared.io.DataAccess;
 import view.shared.io.DataFormProps;
-
+import view.shared.io.FormApi;
 
 /**
  * ...
@@ -46,7 +48,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	var formApi:FormApi;
 	var formBuilder:FormBuilder;
 	var formFields:DataView;
-	var formRef:ReactRef<FormElement>;
+	//var formRef:ReactRef<FormElement>;
 	var fieldNames:Array<String>;
 	var baseForm:BaseForm;
 	var contact:Contact;
@@ -56,10 +58,6 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		initialState = {
-			edited_by: props.user.id,
-			mandator: props.user.mandator
-		}
 		dataDisplay = DBSyncModel.dataDisplay;
 		dataAccess = DBSyncModel.dataAccess(props.match.params.action);
 		formFields = DBSyncModel.formFields(props.match.params.action);
@@ -68,20 +66,22 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			loading:false,
 			dataTable:[],
 			formBuilder:new FormBuilder(this),
-			initialState:initialState,values:new Map<String,Dynamic>()},this);
+			actualState:{
+				edited_by: props.userState.dbUser.id,
+				mandator: props.userState.dbUser.mandator
+			},
+			initialState:{
+				edited_by: props.userState.dbUser.id,
+				mandator: props.userState.dbUser.mandator
+			},values:new Map<String,Dynamic>()},this);
 		trace(state.loading);
-		actualState = initialState;
-		//trace(props.sideMenu);
-		//trace(state.sideMenu);
-		//var sideMenu =  updateMenu('DBSync');//state.sideMenu;
-		//trace(sideMenu.section);
 
 	}
 
 	static function mapStateToProps(aState:AppState) 
 	{
 		return {
-			user:aState.user
+			userState:aState.userState
 		};
 	}
 	
@@ -92,8 +92,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		/*props.formApi.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
-				id:props.user.id,
-				jwt:props.user.jwt,
+				id:props.userState.id,
+				jwt:props.userState.jwt,
 				className:'tools.DB',
 				action:'createFieldList',
 				update:'1'
@@ -154,8 +154,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		props.formApi.requests.push( /*BinaryLoader.insert(
 			'${App.config.api}', 
 			{
-				id:props.user.id,
-				jwt:props.user.jwt,
+				id:props.userState.id,
+				jwt:props.userState.jwt,
 				fields:'disabled:disabled,element=:element,required=:required,use_as_index=:use_as_index',
 				className:'tools.DB',
 				action:'saveTableFields',
@@ -172,11 +172,11 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function importAll(_):Void
 	{
-		trace(props.user.first_name);
+		trace(props.userState.dbUser.first_name);
 		App.store.dispatch(action.async.LivePBXSync.syncAll({
 			limit:1000,
 			maxImport:4000,
-			user:props.user,
+			userState:props.userState,
 			offset:0,
 			className:'admin.SyncExternal',
 			action:'syncAll'
@@ -185,11 +185,11 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 
 		public function importAllBookingRequests(_):Void
 	{
-		trace(props.user.first_name);
+		trace(props.userState.dbUser.first_name);
 		App.store.dispatch(action.async.LivePBXSync.syncAll({
 			limit:50000,
 			maxImport:50000,
-			user:props.user,
+			userState:props.userState,
 			offset:100000,
 			table:'bank_transfers',
 			className:'admin.SyncExternalBookings',
@@ -203,7 +203,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			offset:0,
 			className: 'admin.SyncExternalBookings',
 			action: 'syncBookingRequests',
-			user:props.user
+			userState:props.userState
 		}));
 	}	
 
@@ -214,7 +214,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			className: 'admin.SyncExternalClients',
 			action: 'syncImportDeals',
 			//action: 'mergeContacts',
-			user:props.user
+			userState:props.userState
 		}));
 	}
 
@@ -225,8 +225,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		BinaryLoader.create(
 			'${App.config.api}', 
 			{
-				id:props.user.id,
-				jwt:props.user.jwt,
+				id:props.userState.dbUser.id,
+				jwt:props.userState.dbUser.jwt,
 				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
 				className:'admin.SyncExternal',
 				action:'syncUserDetails',
@@ -252,8 +252,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			//'${App.config.api}', 
 			'https://pitverwaltung.de/sync/proxy.php', 
 			{
-				id:props.user.id,
-				jwt:props.user.jwt,
+				id:props.userState.dbUser.id,
+				jwt:props.userState.dbUser.jwt,
 				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
 				className:'admin.SyncExternal',
 				action:'syncUserDetails',
@@ -275,11 +275,11 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{				
 		//
-		if(props.user != null)
-		trace('yeah: ${props.user.first_name}');
+		if(props.userState != null)
+		trace('yeah: ${props.userState.dbUser.first_name}');
 	}
 
-	override function go(aState:Dynamic)
+	function go(aState:Dynamic)
 	{
 		trace(Reflect.fields(aState));
 		var dbaProps:DBAccessProps = 
@@ -288,7 +288,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			className:'data.Contacts',
 			dataSource:null,
 			table:'contacts',
-			user:props.user
+			userState:props.userState
 		};
 		switch (props.match.params.action)
 		{
@@ -341,11 +341,11 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				');*/
 			case 'importClientList':
 				//trace(initialState);
-				trace(actualState);
+				trace(state.actualState);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 				];*/
-				(actualState==null ? state.formApi.renderWait():
+				(state.actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
 					handleSubmit:state.handleSubmit,
 					fields:formFields,/*[
@@ -354,7 +354,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 					model:'importClientList',
 					//ref:formRef,
 					title: 'Stammdaten Import' 
-				},actualState));	
+				},state.actualState));	
 			/*case 'showFieldList2':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');

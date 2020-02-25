@@ -49,7 +49,7 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 	public function new(?props:Dynamic)
 	{
 		state = {hasError:false,mounted:false};
-		//trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} user:${props.user}');
+		//trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} userState:${props.user}');
 		super(props);
 		if (props.match.url == '/DashBoard')
 		{
@@ -91,14 +91,13 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
     }
 
 	static function mapStateToProps(aState:AppState) {
-		var uState:UserProps = aState.user;
-		trace(uState.first_name);
+		var uState:UserState = aState.userState;
 		//trace(' ${aState.locationState.history.location.pathname + (aState.compState.exists('dashboard') && aState.compState.get('dashboard').isMounted ? "Y":"N")}');
 		
 		return {
 			appConfig:aState.config,
 			redirectAfterLogin:aState.locationStore.redirectAfterLogin,
-			user:uState/*
+			userState:uState/*
 			id:uState.id,
 			pass:uState.pass,
 			jwt:uState.jwt,
@@ -116,7 +115,6 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 	{	
 		//trace(this.state);
 		//trace(props.history.location.pathname);
-		trace(props.user.first_name);
 		if (state.hasError)
 			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');
 		trace(Reflect.fields(props));

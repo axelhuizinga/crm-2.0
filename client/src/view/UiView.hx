@@ -81,7 +81,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		//trace(aState.user.id);
 		trace(Reflect.fields(aState));
 		return {
-			userState:aState.user
+			userState:aState.userState
 		};
 	}
 	
@@ -91,7 +91,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		state = {hasError:false};
 		browserHistory = App.store.getState().locationStore.history;// BrowserHistory.create({basename:"/"});
 		//ApplicationStore.startHistoryListener(App.store, browserHistory);
-		//trace(this.props.user.state.last_name);
+		//trace(this.props.userState.state.last_name);
 		mounted = false;
 		//_me = this;
 		App.modalBox = React.createRef();
@@ -162,7 +162,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 			// WE NEED TO LOGIN FIRST
 			trace(props.userState.dbUser);
 			//return null;
-			return jsx('<$LoginForm user=${props.user}/>');
+			return jsx('<$LoginForm user=${props.userState}/>');
 		}
 		else
 		{			

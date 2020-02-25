@@ -86,7 +86,7 @@ class List extends BaseForm
 	{
 		throw ('never');
 		return {
-			user:aState.user
+			userState:aState.user
 		};
 	}
 	

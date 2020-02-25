@@ -33,7 +33,7 @@ class StatusBarStore implements IReducer<StatusAction, StatusBarState>
 		initState = {
 			status: Browser.location.pathname,// '',
 			date:Date.now(),
-			user:null
+			userState:null
 		};
 		trace('ok');
 	}

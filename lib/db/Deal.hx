@@ -29,9 +29,9 @@ typedef DealProps = {
 class Deal extends ORM
 {
 
-	public function new(data:Map<String,String>) {
-		super(data);
+	public function new(props:DealProps) {
 		propertyNames = 'id,contact,creation_date,account,target_account,start_day,start_date,cycle,amount,product,agent,project,status,pay_method,end_date,end_reason,repeat_date,edited_by,mandator,old_active,cycle_start_date,last_locktime'.split(',');
+		super(propsMwaaa);
 	}	
 		
 	@dataType("bigint")

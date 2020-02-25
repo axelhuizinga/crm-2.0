@@ -20,9 +20,9 @@ typedef AccountProps = {
 class Account extends ORM
 {
 
-	public function new(data:Map<String,String>) {
-		super(data);
+	public function new(props:AccountProps) {
 		propertyNames = 'id,contact,bank_name,bic,account,blz,iban,creditor,sign_date,state,creation_date,edited_by,last_locktime'.split(',');
+		super(propsMwaaa);
 	}	
 		
 	@dataType("bigint")

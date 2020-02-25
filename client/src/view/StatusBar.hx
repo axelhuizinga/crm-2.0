@@ -106,7 +106,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 			/*date:state.statusBar.date,*/
 			//userList:state.userList,
 			className:state.status.className==null?'':state.status.className,
-			userState:state.user,
+			userState:state.userState,
 			text: state.status.text//state.history.location.pathname
 		};
 		//};

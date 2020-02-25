@@ -68,11 +68,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		trace(props.match.params);
 		dataAccess = ContactsModel.dataAccess;
-		initialState = new Contact({
+		initialState = null;/*new Contact({
 			id:null,//2000328,
-			edited_by: props.user.id,
-			mandator: props.user.mandator
-		}, dataAccess['update'].view);	
+			edited_by: props.userState.dbUser.id,
+			mandator: props.userState.dbUser.mandator
+		}, dataAccess['update'].view);	*/
 
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
@@ -139,9 +139,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	function loadContactData(id:Int)
 	{
 		trace('loading:$id');
-		if(id == null)
+		/*if(id == null)
 			return null;
-		var c:Contact = new Contact({edited_by: props.user.id,mandator: 0}, dataAccess['update'].view);
+		var c:Contact = new Contact({edited_by: props.userState.dbUser.id,mandator: 0}, dataAccess['update'].view);
 		var data = props.dataStore.contactData.get(id);
 		trace(data);
 		for(k=>v in data.keyValueIterator())
@@ -152,14 +152,15 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				actualState = newState;
 			trace(actualState);
 		});
-		return c;
+		return c;*/
+		return null;
 	}
 	
 	static function mapStateToProps(aState:AppState) 
 	{
 		trace(aState);
 		return {
-			user:aState.user
+			userState:aState.userState
 		};
 	}
 	
@@ -188,7 +189,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				className:'data.Contacts',
 				table:'contacts',
 				filter:	'id|${initialState.id}',
-				user:App.store.getState().user
+				userState:App.store.getState().userState
 			}));
 			//p.then(function ())
 			//App.store.dispatch(AppAction.GlobalState('contacts',initialState.id));
@@ -334,7 +335,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			className:'data.Contacts',
 			dataSource:null,
 			table:'contacts',
-			user:props.user
+			userState:props.userState
 		};
 		switch (props.match.params.action)
 		{

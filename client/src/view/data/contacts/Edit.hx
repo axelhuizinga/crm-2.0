@@ -1,4 +1,5 @@
 package view.data.contacts;
+import db.DbQuery.DbQueryParam;
 import action.async.CRUD;
 import haxe.CallStack;
 import me.cunity.debug.Out;
@@ -101,13 +102,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		dataAccess = ContactsModel.dataAccess;
 		fieldNames = baseForm.initFieldNames(dataAccess['update'].view.keys());
 		dataDisplay = ContactsModel.dataDisplay;
-		//trace('...' + Reflect.fields(props));
-		//formRef = React.createRef();
-		if(props.match.params.id!=null)
-			initialState.id = Std.parseInt(props.match.params.id);
 		
 		if(props.dataStore.contactData != null)
-		trace(props.dataStore.contactData.keys().next());
+			trace(props.dataStore.contactData.keys().next());
 		//Out.dumpStack(CallStack.callStack());
 		// FOR NOW IGNORE THE dataStore and Observer
 		/*if(initialState.id!=null && props.dataStore.contactData != null && props.dataStore.contactData.exists(initialState.id))
@@ -138,7 +135,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		state =  App.initEState({
 			dataTable:[],
 			actualState:{edited_by: props.userState.dbUser.id,mandator: props.userState.dbUser.mandator},
-			initialState:loadContactData(props.match.params.id),
+			initialData:null,
 			loading:false,
 			handleSubmit:[
 				{
@@ -175,9 +172,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			values:new Map<String,Dynamic>()
 		},this);
 		trace(state.initialState.id);
+		loadContactData(Std.parseInt(props.match.params.id));
 	}
 
-	function loadContactData(id:Int)
+	function loadContactData(id:Int):Contact
 	{
 		trace('loading:$id');
 		if(id == null)
@@ -186,38 +184,31 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			{
 				className:'data.Contacts',
 				action:'get',
-				filter:({id:$id,mandator:1}),
+				filter:({id:id,mandator:1}),
 				table:'contacts',
 				userState:props.userState
 			}
 		);
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
-			setState({loading:false, dataTable:data.dataRows});
-		});
-		var data = props.dataStore.contactData.get(id);
-		trace(data);	
-		for(k=>v in data.keyValueIterator())
-		{
-			try{
-				//trace('$k:$v');
-				Reflect.setField(actualState,k, v);
-				}
-			catch(ex:Dynamic)
+			if(data.dataRows.length==1)
 			{
-				trace(ex);
-			}		
-		}
+				var data = data.dataRows[0];
+				trace(data);	
+				setState({loading:false, initialData:new Contact(data)});
+			}
+			
+		});
+		//;
 		
-		contact = new Contact(actualState, dataAccess['update'].view);
+		//contact = new Contact(state.actualState, dataAccess['update'].view);
 		//contact = actualState;
-		trace(actualState);
+		trace(state.actualState);
 		//trace('Rtti:' + Rtti.getRtti(Contact).fields[0].meta);
 		trace(contact.fieldsModified);		
 		trace('contact.fieldsModified:' + contact.fieldsModified);		
-		initialState = contact.load(data);
 		//initialState = copy(actualState);
-		baseForm.compareStates();	
+		//baseForm.compareStates();	
 		//trace(actualState);	
 		//trace(initialState);	
 		/*actualState = view.shared.io.Observer.run(initialState, function(newState){
@@ -225,14 +216,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			trace(actualState);
 		});*/
 		//props.select(initialState.id,[initialState.id => initialState], props.match);
-		return initialState;
+		return null;
 	}
 	
 	/*static function mapStateToProps(aState:AppState) 
 	{
 		trace(aState);
 		return {
-			user:aState.user
+			userState:aState.user
 		};
 	}*/
 	
@@ -515,7 +506,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-            load: function(param:DBAccessProps) return dispatch(CRUD.read(param))
+            load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
         };
 	}
 		

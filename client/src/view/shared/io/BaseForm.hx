@@ -109,7 +109,7 @@ class BaseForm
 		go(comp.state.actualState);
 	}*/
 
-	public function initFieldNames(keys:Iterator<String>, fieldNames:Array<String>):Array<String> {
+	public function initFieldNames(keys:Iterator<String>):Array<String> {
 		var fieldNames = new Array();
 		for(k in keys)
 		{

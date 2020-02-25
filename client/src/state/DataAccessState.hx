@@ -10,7 +10,7 @@ typedef DataSource =
     ?host:String,
     ?port:Int,
     ?url:String,
-    ?user:String,
+    ?userState:String,
     ?pass:String, 
 }
 

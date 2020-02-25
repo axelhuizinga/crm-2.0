@@ -57,13 +57,13 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 
 		return function(aState:state.AppState) 
 		{
-			var uState = aState.user;
+			var uState = aState.userState;
 
 			//trace(uState);
 			
 			return {
 				appConfig:aState.config,
-				user:uState,
+				userState:aState.userState,
 				/*pass:uState.pass,
 				jwt:uState.jwt,
 				online:uState.online,

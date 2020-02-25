@@ -98,7 +98,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			dataStore: mapReducer(DataAction, new DataStore()),
 			locationStore: mapReducer(LocationAction,locationStore),
 			status: mapReducer(StatusAction, new StatusStore()),
-			user: mapReducer(UserAction, userStore)
+			userState: mapReducer(UserAction, userStore)
 		});
 		//var dataStore:DataAccessState = loadFromLocalStorage();
 		//trace(dataStore);		
@@ -189,9 +189,9 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			},250);
 		}
 		//trace(store);
-		trace(state.user);
+		trace(state.userState);
 		//CState.init(store);		
-		if (!(state.userState.id == null || state.userState.jwt == ''))
+		if (!(state.userState.dbUser.id == null || state.userState.dbUser.jwt == ''))
 		{			
 			store.dispatch(action.async.UserAccess.verify());
 		}
@@ -201,7 +201,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			store.dispatch(
 				User(
 					UserAction.LoginRequired(
-						ReactUtil.copy( state.user, {waiting:false}))));
+						ReactUtil.copy( state.userState, {waiting:false}))));
 		}
 
 		//trace(state.userState.jwt);
@@ -246,7 +246,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	public static function edump(el:Dynamic){Out.dumpObject(el); return 'OK'; };
 
   	override function render() {
-		trace(state.user);
+		trace(state.userState);
 		//trace(state.history.location.pathname);	store={store}	<UiView/>	<div>more soon...</div>
         return jsx('
 			<$Provider store={store}>

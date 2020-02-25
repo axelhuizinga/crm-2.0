@@ -25,9 +25,9 @@ typedef UserProps = {
 class User extends ORM
 {
 
-	public function new(data:Map<String,String>) {
-		super(data);
+	public function new(props:UserProps) {
 		propertyNames = 'id,contact,last_login,password,user_name,active,edited_by,editing,settings,external,user_group,change_pass_required,online,last_request_time,last_error,mandator,last_locktime,phash'.split(',');
+		super(propsMwaaa);
 	}	
 		
 	@dataType("bigint")

@@ -13,9 +13,9 @@ typedef UserGroupProps = {
 class UserGroup extends ORM
 {
 
-	public function new(data:Map<String,String>) {
-		super(data);
+	public function new(props:UserGroupProps) {
 		propertyNames = 'id,name,description,can,mandator,edited_by'.split(',');
+		super(propsMwaaa);
 	}	
 		
 	@dataType("bigint")

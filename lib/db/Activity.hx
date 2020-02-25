@@ -12,9 +12,9 @@ typedef ActivityProps = {
 class Activity extends ORM
 {
 
-	public function new(data:Map<String,String>) {
-		super(data);
+	public function new(props:ActivityProps) {
 		propertyNames = 'id,result,request,user,date'.split(',');
+		super(propsMwaaa);
 	}	
 		
 	@dataType("bigint")

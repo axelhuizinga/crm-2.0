@@ -13,5 +13,5 @@ typedef RouteTabProps =
 	>RouteComponentProps,
 	?appConfig:Dynamic,
 	//?dispatch:Dispatch,
-	user: UserState,
+	userState: UserState,
 }

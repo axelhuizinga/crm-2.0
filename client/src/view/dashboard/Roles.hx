@@ -129,10 +129,10 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 	static function mapStateToProps(aState:AppState) {
 		return function(aState:AppState) 
 		{
-			var uState = aState.user;
+			var uState = aState.userState;
 			trace(uState);		
 			return {
-				user:uState
+				userState:uState
 			};
 		};
 	}	

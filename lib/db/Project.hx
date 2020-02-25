@@ -15,9 +15,9 @@ typedef ProjectProps = {
 class Project extends ORM
 {
 
-	public function new(data:Map<String,String>) {
-		super(data);
+	public function new(props:ProjectProps) {
 		propertyNames = 'id,mandator,name,description,edited_by,provision_percent,cancellation_liable,target_account'.split(',');
+		super(propsMwaaa);
 	}	
 		
 	@dataType("bigint")

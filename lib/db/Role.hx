@@ -1,21 +1,21 @@
 package model;
 
-typedef UserGroupProps = {
+typedef RoleProps = {
 	?id:Int,
 	?name:String,
 	?description:String,
-	?can:String,
-	?mandator:Int,
-	?edited_by:Int
+	?permissions:String,
+	?edited_by:Int,
+	?mandator:Int
 };
 
 @:rtti
-class UserGroup extends ORM
+class Role extends ORM
 {
 
-	public function new(data:Map<String,String>) {
-		super(data);
-		propertyNames = 'id,name,description,can,mandator,edited_by'.split(',');
+	public function new(props:RoleProps) {
+		propertyNames = 'id,name,description,permissions,edited_by,mandator'.split(',');
+		super(propsMwaaa);
 	}	
 		
 	@dataType("bigint")
@@ -50,7 +50,7 @@ class UserGroup extends ORM
 		return name;
 	}	
 		
-	@dataType("character varying(1024)")
+	@dataType("character varying(2048)")
 	@:isVar public var description(get,set):String;
 	var description_initialized:Bool;
 	
@@ -67,35 +67,19 @@ class UserGroup extends ORM
 	}	
 		
 	@dataType("jsonb")
-	@:isVar public var can(get,set):String;
-	var can_initialized:Bool;
+	@:isVar public var permissions(get,set):String;
+	var permissions_initialized:Bool;
 	
-	function get_can():String{
-			return can;
+	function get_permissions():String{
+			return permissions;
 	}
 
-	function set_can(can:String):String{
-		if(can_initialized)
-			modified('can');
-		this.can = can ;
-		can_initialized = true; 
-		return can;
-	}	
-		
-	@dataType("bigint")
-	@:isVar public var mandator(get,set):Int;
-	var mandator_initialized:Bool;
-	
-	function get_mandator():Int{
-		return mandator;
-	}
-
-	function set_mandator(mandator:Int):Int{
-		if(mandator_initialized)
-			modified('mandator');
-		this.mandator = mandator ;
-		mandator_initialized = true; 
-		return mandator;
+	function set_permissions(permissions:String):String{
+		if(permissions_initialized)
+			modified('permissions');
+		this.permissions = permissions ;
+		permissions_initialized = true; 
+		return permissions;
 	}	
 		
 	@dataType("bigint")
@@ -112,6 +96,22 @@ class UserGroup extends ORM
 		this.edited_by = edited_by ;
 		edited_by_initialized = true; 
 		return edited_by;
+	}	
+		
+	@dataType("bigint")
+	@:isVar public var mandator(get,set):Int;
+	var mandator_initialized:Bool;
+	
+	function get_mandator():Int{
+		return mandator;
+	}
+
+	function set_mandator(mandator:Int):Int{
+		if(mandator_initialized)
+			modified('mandator');
+		this.mandator = mandator ;
+		mandator_initialized = true; 
+		return mandator;
 	}	
 	
 }

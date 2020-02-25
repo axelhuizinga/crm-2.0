@@ -139,7 +139,7 @@ class History extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match);
 	}
 	
-	override function render():ReactFragment
+	override function render()
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		//trace(props.match.params.section);					

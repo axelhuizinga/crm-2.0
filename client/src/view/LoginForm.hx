@@ -26,27 +26,11 @@ using StringTools;
 
 typedef LoginProps =
 {
-	//>RouteTabProps,
-	
-	//?loginTask:LoginTask,
 	?resetPassword:UserState->Dispatch,
 	?stateChange:UserState->Dispatch,
 	?submitLogin:UserState->Dispatch,
 	userState:UserState,
-	//api:String,	
-	/*?change_pass_required:Bool,
-	?reset_password:Bool,	
-	?email:String,
-	pass:String,
-	new_pass:String,
-	?jwt:String,
-	online:Bool,	
-	?loginError:String,
-	?last_login:Date,
-	//?first_name:String,
-	user_name:String,*/
 	redirectAfterLogin:String,
-	//waiting:Bool
 }
 
 /**
@@ -85,8 +69,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	}
 
 	override public function shouldComponentUpdate(nextProps:LoginProps, nextState:UserState) {
-		trace('propsChanged:${nextProps!=props}');
-		trace('stateChanged:${nextState!=state}');
+		trace('propsChanged:${nextProps!=props} stateChanged:${nextState!=state}');
 		if(nextState!=state)
 		{
 			state.compare(nextState);
@@ -94,7 +77,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		if(nextProps!=props)
 		{
 			//props.compare(nextProps);
-			props.userState.dbUser.compare(nextProps.user);
+			props.userState.dbUser.compare(nextProps.userState);
 		}
 		return true;
 	}
@@ -130,12 +113,12 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 				trace(param);
 				
 				return {
-					user:uState,
+					userState:uState,
 					redirectAfterLogin:aState.locationStore.redirectAfterLogin
 				};
 			}
 			return {
-				user:uState,
+				userState:uState,
 				redirectAfterLogin:aState.locationStore.redirectAfterLogin
 			};
 		};
@@ -172,7 +155,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		if(submitValue=='Login')
 		{
 			props.userState.dbUser.update({user_name:props.userState.dbUser.user_name, password:props.userState.dbUser.password, jwt:''});
-			props.submitLogin(props.userState.dbUser);		
+			props.submitLogin(props.userState);		
 			return true;	
 		}
 		switch (props.userState.loginTask)
@@ -180,11 +163,15 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			case LoginTask.ResetPassword:
 				trace('Reset Password requested');
 				trace(props);
-				props.resetPassword(props.userState.dbUser);
+				props.resetPassword(props.userState);
 				return false;
 			case LoginTask.ChangePassword:
-				props.userState.dbUser.update({});
-				props.submitLogin({user_name:props.userState.dbUser.user_name, new_pass:props.userState.new_pass,password:props.userState.dbUser.password, jwt:props.userState.dbUser.jwt});
+				props.userState.dbUser.update({
+					user_name:props.userState.dbUser.user_name,
+					password:props.userState.dbUser.password, 
+					jwt:props.userState.dbUser.jwt
+				});
+				props.submitLogin({ new_pass:props.userState.new_pass, dbUser: props.userState.dbUser});
 			default:
 				props.userState.dbUser.update({
 					user_name:props.userState.dbUser.user_name,
@@ -192,9 +179,9 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 					jwt:props.userState.dbUser.jwt
 				});
 				props.submitLogin(
-					props.userState.change_pass_required?
-					{ new_pass:props.userState.new_pass,}:
-					{user_name:props.userState.dbUser.user_name, password:props.userState.dbUser.password, jwt:''});			 	
+					props.userState.dbUser.change_pass_required?
+					{ new_pass:props.userState.new_pass,dbUser: props.userState.dbUser}:
+					{ dbUser: props.userState.dbUser});			 	
 		} 
 		return true;
 	}	
@@ -324,7 +311,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	override public function render()
 	{
 		trace(Reflect.fields(props));
-		trace(props.userState.loginError);
+		trace(props.userState.lastError);
 		trace(state.waiting);
 		var style = 
 		{
@@ -366,12 +353,12 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		var eStyle = switch(name)
 		{
 			case "password":
-				var res = props.userState.loginError == "password"?"error ":"";
+				var res = props.userState.lastError == "password"?"error ":"";
 				trace(res);
 				res;
 				
 			case "user_name":
-				props.userState.loginError == "user_name"?"error ":"";
+				props.userState.lastError == "user_name"?"error ":"";
 			
 			case "new_pass_confirm":
 				props.userState.new_pass != props.userState.new_pass_confirm?"error ":"";

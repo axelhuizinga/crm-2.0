@@ -67,7 +67,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	static function mapStateToProps(aState:AppState) 
 	{
 		return {
-			user:aState.user
+			userState:aState.user
 		};
 	}
 	

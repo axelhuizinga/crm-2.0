@@ -153,7 +153,7 @@ class S
 			exit(response);
 		}
 
-		var jwt:String = params.get('jwt');
+		var jwt:String = dbQuery.dbUser.jwt;
 		//var id:String = params.get('id');
 		trace(jwt.length +':' + (jwt != null));
 		if (jwt.length > 0)
@@ -163,7 +163,7 @@ class S
 			exit({'Error':'Model.dispatch ${params.get('className')}.$action did not send anything'});
 		}
 	
-		User.login(dbQuery.user);		
+		User.login(dbQuery.dbUser);		
 		exit(response);
 	}
 	

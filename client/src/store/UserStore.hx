@@ -84,7 +84,7 @@ class UserStore implements IReducer<UserAction, UserState>
 			case LoginError(err):
 				trace(err);
 				//if(err.id==state.user.id)
-				copy(state, {lastError:err});   
+				copy(state, err);   
 			case LoginExpired(uState):
 				copy(state, uState);  
 	                    

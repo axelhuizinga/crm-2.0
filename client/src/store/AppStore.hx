@@ -58,7 +58,8 @@ class AppStore
 				date:Date.now(),
 				userState:null
 			},
-			userState:uStore.initState/*{
+			userState:null//uStore.store.getState()
+			/*{
 				first_name:'',
 				last_name:'',
 				mandator: 1,

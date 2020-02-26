@@ -1,12 +1,6 @@
 package state;
 import db.DbUser;
-
-enum abstract LoginTask(String) {
-	var ChangePassword;
-	var CheckEmail;
-	var Login;
-	var ResetPassword;
-}
+import db.LoginTask;
 
 typedef UserState =
 {

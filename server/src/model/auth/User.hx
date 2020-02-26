@@ -3,6 +3,7 @@ import haxe.Json;
 import db.DbUser;
 import comments.CommentString.*;
 import db.DbQuery;
+import db.LoginTask;
 import haxe.CallStack;
 import shared.DbData;
 import haxe.crypto.Sha256;
@@ -299,7 +300,7 @@ class User extends Model
 		//param.set('pass', param.get('new_pass'));
 		var dbQuery = Model.binary();
 		//dbQuery.formData.set('pass', param.get('new_pass'));
-		return login(dbQuery.user);
+		return login(dbQuery.dbUser);
 		S.sendInfo(dbData);
 		return true;
 	}
@@ -406,15 +407,15 @@ html,body{
 	
 	public static function verify(dbQuery:DbQuery):Bool
 	{
-		var jwt:String = dbQuery.user.jwt;
-		var id:Int = dbQuery.user.id;	
+		var jwt:String = dbQuery.dbUser.jwt;
+		var id:Int = dbQuery.dbUser.id;	
 		var now:Float = Date.now().getTime();	
 		var dbData:DbData = new DbData();
 		trace('$now:$jwt');
 		try{
 			var userInfo:UserInfo = JWT.extract(jwt);
 			trace(userInfo);			
-			if(userInfo.id==null && userInfo.user_name == dbQuery.user.user_name && (userInfo.validUntil - Date.now().getTime()) > 0)
+			if(userInfo.id==null && userInfo.id ==dbQuery.dbUser.id && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
 				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
 				trace(jRes);
@@ -424,18 +425,19 @@ html,body{
 						trace(payload);
 						// JWT INVALID
 						saveRequest(id, dbQuery);
-						S.sendErrors(dbData, ['jwtError'=>payload]);
+						dbData.dataErrors = ['jwtError'=>'Invalid'];
+						S.sendInfo(dbData, ['loginTask'=>Login]);
 						false;
 					case Valid(payload):
 						// JWT VALID AND NOT OLDER THAN...
-						if(dbQuery.user.mandator == null)
-							dbQuery.user.mandator = userInfo.mandator;
+						if(dbQuery.dbUser.mandator == null)
+							dbQuery.dbUser.mandator = userInfo.mandator;
 						//params.set('mandator',userInfo.mandator);
 						saveRequest(id, dbQuery);	
 						true;
 					default:
-						S.sendErrors(new DbData(), 
-							['jwtError'=>'${DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")}<${DateTools.format(Date.fromTime(now),"%d.%m.%y %H:%M:%S")}']);
+						dbData.dataErrors = ['jwtError'=>'${DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")}<${DateTools.format(Date.fromTime(now),"%d.%m.%y %H:%M:%S")}'];
+						S.sendInfo(dbData, ['loginTask'=>Login]);
 						false;
 				}
 
@@ -456,7 +458,9 @@ html,body{
 						trace(payload);
 						// JWT INVALID
 						saveRequest(id, dbQuery);
-						S.sendErrors(new DbData(), ['jwtError'=>payload]);
+						dbData.dataErrors = ['jwtError'=>'Invalid'];
+						S.sendInfo(dbData, ['loginTask'=>Login]);
+						//S.sendErrors(new DbData(), ['jwtError'=>payload]);
 						false;
 					case Valid(payload):
 						// JWT VALID AND NOT OLDER THAN 11 h
@@ -466,9 +470,14 @@ html,body{
 						S.sendErrors(new DbData(), ['jwtError'=>jRes]);
 						false;
 				}
-			}// expired - TODO: configure error messages
-			S.sendInfo(new DbData(), ['jwtExpired'=>'Das Login war nur bis ${DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")} gültig - bitte neu anmelden!']);		
-			return false;
+			}
+			else{
+				// expired - TODO: configure error messages
+				dbData.dataErrors = ['jwtError'=>'${DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")}<${DateTools.format(Date.fromTime(now),"%d.%m.%y %H:%M:%S")}'];
+				S.sendInfo(dbData, ['loginTask'=>Login]);
+				//S.sendInfo(new DbData(), ['jwtExpired'=>'Das Login war nur bis ${DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")} gültig - bitte neu anmelden!']);		
+				return false;
+			}
 		}
 		catch (ex:Dynamic)
 		{

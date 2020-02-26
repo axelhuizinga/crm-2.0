@@ -39,6 +39,7 @@ class BinaryLoader {
 		var dbQuery = new DbQuery(dbQP);//.toHex();
 		var b:Bytes = s.serialize(dbQuery);
 		trace(dbQuery.getSerializeSchema());
+		trace(dbQuery.relations.get('contacts').fields);
 		//dbQuery.dump('/tmp/dbQuery.json');
 		trace(dbQuery);
 		trace('b.length:${b.length}');

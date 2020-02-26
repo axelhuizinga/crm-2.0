@@ -39,6 +39,7 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 			}
 			// (Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname)
 		};	
+		trace(initState);
 	}
 
 	public function reduce(state:LocationState, action:LocationAction):LocationState

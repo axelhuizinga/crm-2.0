@@ -1,5 +1,6 @@
 package view;
 
+import db.LoginTask;
 import js.html.Event;
 import haxe.Timer;
 import js.html.audio.WaveShaperOptions;

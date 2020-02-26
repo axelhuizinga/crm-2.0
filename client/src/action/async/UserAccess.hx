@@ -190,31 +190,31 @@ class UserAccess {
 					if(App.maxLoginAttempts-->0)
 					return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:data.dataErrors.iterator().next()})));
 				}
-				var uState:UserState = {};
+				//var uProps:UserState = {};
 				for(k=>v in data.dataInfo.keyValueIterator())
 				{
 					trace('$k => $v');
 					switch (k)
 					{
 						case 'change_pass_required'|'online':
-							Reflect.setField(uState.dbUser, k, v=='true');
+							Reflect.setField(userState.dbUser, k, v=='true');
 						default:
-							Reflect.setField(uState, k, v);
+							Reflect.setField(userState, k, v);
 					}								
 				}
-				//var uState:UserState = data.dataInfo['user_data'];
-				Cookie.set('userState.dbUser.id', Std.string(uState.dbUser.id), null, '/');
-				Cookie.set('userState.dbUser.first_name',uState.dbUser.first_name, null, '/');
-				Cookie.set('userState.dbUser.last_name',uState.dbUser.last_name, null, '/');
-				Cookie.set('userState.dbUser.jwt',uState.dbUser.jwt, null, '/');
+				//var uProps:UserState = data.dataInfo['user_data'];
+				Cookie.set('userState.dbUser.id', Std.string(userState.dbUser.id), null, '/');
+				Cookie.set('userState.dbUser.first_name',userState.dbUser.first_name, null, '/');
+				Cookie.set('userState.dbUser.last_name',userState.dbUser.last_name, null, '/');
+				Cookie.set('userState.dbUser.jwt',userState.dbUser.jwt, null, '/');
 
 				trace(Cookie.get('userState.dbUser.jwt'));
-				uState.dbUser.online = true;
+				userState.dbUser.online = true;
 				//if(uState.dbUser.change_pass_required)
 				//	uState.pass = userState.dbUser.pass;
-				trace(uState);
+				trace(userState);
 				//trace(dispatch);
-				return dispatch(User(LoginComplete(uState)));
+				return dispatch(User(LoginComplete(userState)));
 				//return dispatch(AppAction.LoginComplete(
 			});
 			if (requests != null)
@@ -265,6 +265,7 @@ class UserAccess {
 					//Cookie.set('userState.dbUser.id', Std.string(userState.dbUser.id));
 					return null;
 				} else {
+					userState.dbUser.online = false;
 					//var d:Date = Date.now().delta(31556926000);//ADD one year				
 					Cookie.set('userState.dbUser.jwt', '', 31556926);
 					Cookie.set('userState.dbUser.id', null, null, '/');					
@@ -316,6 +317,7 @@ class UserAccess {
 			//trace('clientVerify');
 			var state:AppState = getState();
 			trace(state.userState.dbUser);
+			//trace(Type.getClass(state.userState.dbUser));
 			var bL:XMLHttpRequest = BinaryLoader.dbQuery(
 			'${App.config.api}', 
 			{				
@@ -325,12 +327,12 @@ class UserAccess {
 				relations:[
 					"users" => new DbRelation({
 						alias:  'us',
-						fields: ['id','last_login','mandator'],
-						filter:{id:state.userState.dbUser}
+						fields: ['last_login','mandator'],
+						filter:{id:state.userState.dbUser.id}
 					}),
 					"contacts" => new DbRelation({
 						alias: 'co',
-						fields: 'first_name,last_name,email',
+						fields: ['first_name','last_name','email'],
 						jCond: 'contact=co.id'
 					}) 
 				],
@@ -338,36 +340,39 @@ class UserAccess {
 			},			
 			function(data:DbData)
 			{
+				trace(data);
 				if (data.dataErrors.keys().hasNext())
 				{
 					trace(data.dataErrors);
 					
 					return dispatch(User(LoginError(
 						{
-							dbUser:state.userState.dbUser, 
+							//dbUser:state.userState.dbUser, 
 							lastError:data.dataErrors.iterator().next(),
+							loginTask: data.dataInfo['loginTask'],
 							waiting: false
 						})));
 				}	
-				var uState:UserState = {};
+				var uData = data.dataRows[0];
+				//var uProps:Dynamic = {};
 				//trace(data.dataInfo);
-				for(k=>v in data.dataInfo.keyValueIterator())
+				for(k=>v in uData.keyValueIterator())
 				{
+					if(Reflect.hasField(state.userState.dbUser, k))
 					switch (k)
 					{
 						case 'change_pass_required'|'online':
-							Reflect.setField(uState, k, v=='true');
-							trace('$k: ${v=='true'?'Y':'N'} =>  ${v?'Y':'N'}');
+							Reflect.setField(state.userState.dbUser, k, v=='true');
+							//trace('$k: ${v=='true'?'Y':'N'} =>  ${v?'Y':'N'}');
 						default:
-							Reflect.setField(uState, k, v);
+							Reflect.setField(state.userState.dbUser, k, v);
 
 					}						
 				}
+				state.userState.waiting = false;
 				trace(state.userState.dbUser.jwt);
-				//trace(copy(state,{userState:uState}).userState.dbUser);
-				uState.waiting = false;
-				trace(uState);
-				return dispatch(User(LoginComplete(copy(state,{userState:uState}).userState.dbUser)));			
+
+				return dispatch(User(LoginComplete(state.userState)));			
 			});
 		});	
 	}

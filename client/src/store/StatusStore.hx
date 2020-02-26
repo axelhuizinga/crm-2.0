@@ -17,6 +17,7 @@ class StatusStore
 			date:Date.now(),
 			userState:null
 		}
+		trace(initState);
 	}
 	public function reduce(state:StatusState, action:StatusAction):StatusState
 	{

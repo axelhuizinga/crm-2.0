@@ -4,10 +4,10 @@ import hxbit.Serializable;
 
 class DbRelation implements hxbit.Serializable{
 
-	@:s var alias:String;
-	@:s var fields:Array<String>;
-	@:s var filter:Dynamic;
-	@:s var jCond:String;
+	@:s public var alias:String;
+	@:s public var fields:Array<String>;
+	@:s public var filter:Dynamic;
+	@:s public var jCond:String;
 
 	public function new(p:Dynamic){
 		

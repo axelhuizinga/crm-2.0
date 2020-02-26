@@ -14,6 +14,7 @@ class ConfigStore
 	public function new(p:Dynamic) {
 		
 		initState = p;
+		trace('ok');
 	}
 
 	public function reduce(state:ConfigState, action:ConfigAction):ConfigState

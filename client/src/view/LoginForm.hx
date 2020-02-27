@@ -1,5 +1,6 @@
 package view;
 
+import action.AppAction;
 import db.LoginTask;
 import js.html.Event;
 import haxe.Timer;
@@ -127,7 +128,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	
 	function handleChange(e:InputEvent)
 	{
-		var s:Dynamic = {};
+		var s:Dynamic = {dbUser:props.userState.dbUser};
 		var t:InputElement = cast e.target;
 		trace(t.name);
 		trace(t.value);
@@ -137,11 +138,11 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			t.value='';
 		}
 		//TODO: HANDLE CHANGE
-		//Reflect.setField(s, t.name, t.value);
-		//props.stateChange(copy(props.userState,s));
+		Reflect.setField((t.name.indexOf('new_pass')==-1? s.dbUser:s), t.name, t.value);
+		props.stateChange(copy(props.userState,s));
 		//trace(props.dispatch + '==' + App.store.dispatch);
 		//trace(props.dispatch == App.store.dispatch);
-		//App.store.dispatch(AppAction.LoginChange(s));
+		//App.store.dispatch(UserAction.LoginChange(s));
 		//TODO: PUT INTO Global State to avoid rerender
 		//this.setState(s);
 		trace(this.state);
@@ -155,7 +156,8 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		trace(submitValue);
 		if(submitValue=='Login')
 		{
-			props.userState.dbUser.update({user_name:props.userState.dbUser.user_name, password:props.userState.dbUser.password, jwt:''});
+			//props.userState.dbUser.update(
+				//{user_name:props.userState.dbUser.user_name, password:props.userState.dbUser.password, jwt:''});
 			props.submitLogin(props.userState);		
 			return true;	
 		}
@@ -167,22 +169,22 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 				props.resetPassword(props.userState);
 				return false;
 			case LoginTask.ChangePassword:
-				props.userState.dbUser.update({
+				
+				props.submitLogin({ new_pass:props.userState.new_pass, dbUser: props.userState.dbUser.update({
 					user_name:props.userState.dbUser.user_name,
 					password:props.userState.dbUser.password, 
 					jwt:props.userState.dbUser.jwt
-				});
-				props.submitLogin({ new_pass:props.userState.new_pass, dbUser: props.userState.dbUser});
+				})});
 			default:
-				props.userState.dbUser.update({
+				var dbUserProps = props.userState.dbUser.update({
 					user_name:props.userState.dbUser.user_name,
 					password:props.userState.dbUser.password, 
 					jwt:props.userState.dbUser.jwt
 				});
 				props.submitLogin(
 					props.userState.dbUser.change_pass_required?
-					{ new_pass:props.userState.new_pass,dbUser: props.userState.dbUser}:
-					{ dbUser: props.userState.dbUser});			 	
+					{ new_pass:props.userState.new_pass,dbUser: dbUserProps}:
+					{ dbUser: dbUserProps});			 	
 		} 
 		return true;
 	}	
@@ -215,7 +217,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		{
 			return jsx('
 					<form name="form" onSubmit={handleSubmit} className="login" >
-						<input  name="pass" type="hidden" value=${props.userState.dbUser.password} />														
+						<input  name="password" type="hidden" value=${props.userState.dbUser.password} />														
 						<div className="formField">
 							<h3>Bitte neues Passwort eintragen!</h3>
 						</div>
@@ -295,7 +297,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								<label className="fa lockIcon" forhtml="pw">
 										<span className="hidden">Password</span>
 								</label>
-								<input id="pw" className=${errorStyle("pass") + "form-input"} name="pass" value=${props.userState.dbUser.password} type="password" placeholder="Password" onChange=${handleChange} />
+								<input id="pw" className=${errorStyle("password") + "form-input"} name="password" value=${props.userState.dbUser.password} type="password" placeholder="Password" onChange=${handleChange} />
 						</div>
 						<div className="formField">
 								<input type="submit" style=${{width:'100%'}} value="Login" onClick=${function(){submitValue='Login';return true;}}/>

@@ -22,6 +22,7 @@ import state.AppState;
 import state.UserState;
 import view.shared.OneOf;
 using DateTools;
+using Lambda;
 
 class UserAccess {
 
@@ -45,7 +46,7 @@ class UserAccess {
 					action:'changePassword',
 					new_pass:userState.dbUser.new_pass,
 					original_path:aState.locationStore.redirectAfterLogin,
-					pass:userState.dbUser.password,
+					password:userState.dbUser.password,
 					user_name:userState.dbUser.user_name,
 					devIP:App.devIP
 				},
@@ -161,6 +162,7 @@ class UserAccess {
 			//var spin:Dynamic = dispatch(AppAction.AppWait);
 			trace(App.maxLoginAttempts);
 			var bL:XMLHttpRequest = null; 
+			userState.dbUser.jwt = '';
 			if(App.maxLoginAttempts-->0)
 			bL = BinaryLoader.dbQuery( 
 			'${App.config.api}',
@@ -190,19 +192,24 @@ class UserAccess {
 					if(App.maxLoginAttempts-->0)
 					return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:data.dataErrors.iterator().next()})));
 				}
+				trace(DbUser);
+				var userFields:Array<String> = Type.getInstanceFields(DbUser);
 				//var uProps:UserState = {};
 				for(k=>v in data.dataInfo.keyValueIterator())
 				{
 					trace('$k => $v');
 					switch (k)
 					{
-						case 'change_pass_required'|'online':
+						case 'online'|'change_pass_required':
 							Reflect.setField(userState.dbUser, k, v=='true');
-						default:
-							Reflect.setField(userState, k, v);
+						case _:
+							(userFields.has(k)?
+							Reflect.setField(userState.dbUser, k, v):
+							Reflect.setField(userState, k, v));
 					}								
 				}
 				//var uProps:UserState = data.dataInfo['user_data'];
+				userState.loginTask = null;
 				Cookie.set('userState.dbUser.id', Std.string(userState.dbUser.id), null, '/');
 				Cookie.set('userState.dbUser.first_name',userState.dbUser.first_name, null, '/');
 				Cookie.set('userState.dbUser.last_name',userState.dbUser.last_name, null, '/');

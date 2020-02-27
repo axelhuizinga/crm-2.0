@@ -75,7 +75,7 @@ class UserStore implements IReducer<UserAction, UserState>
 	
 	public function reduce(state:UserState, action:UserAction):UserState
 	{
-		//trace(action);
+		trace(action);
 		return switch(action)
 		{
 			case LoginChange(uState)|LoginRequired(uState):

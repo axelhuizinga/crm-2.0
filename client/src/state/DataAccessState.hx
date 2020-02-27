@@ -11,7 +11,7 @@ typedef DataSource =
     ?port:Int,
     ?url:String,
     ?userState:String,
-    ?pass:String, 
+    ?password:String, 
 }
 
 typedef 

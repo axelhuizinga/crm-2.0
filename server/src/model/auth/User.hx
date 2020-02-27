@@ -160,7 +160,7 @@ class User extends Model
 	 * @return UserAuth
 	 */
 	
-	static function userIsAuthorized(user:DbUser):UserAuth
+	static function userIsAuthorized(user:DbUser,?login:Bool):UserAuth
 	{
 		var dbData:DbData = new DbData();
 		var sql:String = 'SELECT user_name FROM ${S.db}.users WHERE user_name=:user_name AND active=TRUE';
@@ -196,13 +196,16 @@ class User extends Model
 			dbData.dataInfo['loggedIn'] = 'true';
 			trace(res['user_name']+':'+res['change_pass_required']);
 			trace('change_pass_required'+(res['change_pass_required']==true || res['change_pass_required']=='true'?'Y':'N'));
-			// UPDATE LAST_LOGIN
-			var rTime:String = DateTools.format(Date.now(), "'%Y-%m-%d %H:%M:%S'");//,request=?
-			var update:PDOStatement = S.dbh.prepare('UPDATE users SET last_login=${rTime} WHERE id=:id',Syntax.array(null));
-			var success:Bool = Model.paramExecute(update, Lib.associativeArrayOfObject({':id':res['id']}));
-			trace(update.errorCode());
-			trace(update.errorInfo());
-			//UPDATE DONE			
+			if(login){					
+				// UPDATE LAST_LOGIN
+				var rTime:String = DateTools.format(Date.now(), "'%Y-%m-%d %H:%M:%S'");//,request=?
+				var update:PDOStatement = S.dbh.prepare('UPDATE users SET last_login=${rTime} WHERE id=:id',Syntax.array(null));
+				var success:Bool = Model.paramExecute(update, Lib.associativeArrayOfObject({':id':res['id']}));
+				trace(update.errorCode());
+				//trace(update.errorInfo());
+				dbData.dataInfo['last_login'] = rTime;
+				//UPDATE DONE			
+			}
 			if (res['change_pass_required']==true || res['change_pass_required']=='true')
 				return UserAuth.PassChangeRequired(dbData);
 			return UserAuth.AuthOK(dbData);			
@@ -219,7 +222,7 @@ class User extends Model
 	{
 		//var me:User = new User(user);
 		trace(user);
-		switch(userIsAuthorized(user))
+		switch(userIsAuthorized(user, true))
 		{//TODO:CONFIG JWT DURATION
 			case uath = UserAuth.AuthOK(dbData)|UserAuth.PassChangeRequired(dbData):
 				var d:Float = DateTools.delta(Date.now(), DateTools.hours(11)).getTime();

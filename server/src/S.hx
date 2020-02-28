@@ -72,8 +72,9 @@ class S
 	static inline var debug:Bool = true;
 	static var headerSent:Bool = false;
 	static var response:Response;
-	public static var secret:String;
+	public static var action:String;
 	public static var conf:Map<String,Dynamic>;
+	public static var secret:String;
 	public static var dbh:PDO;
 	public static var syncDbh:PDO;
 	public static var last_request_time:Date;
@@ -90,6 +91,7 @@ class S
 	public static var dbViciBoxHost:String;
 	public static var dbViciBoxUser:String;
 	public static var dbViciBoxPass:String;	
+	public static var dbQuery:DbQuery;
 	public static var vicidialUser:String;
 	public static var viciDial: Map<String, Dynamic>;
 	static var ts:Float;
@@ -116,7 +118,6 @@ class S
 		response = {content:'',error:''};
 		trace(Web.getMethod());
 		var params:Map<String,Dynamic> = null;//Web.getParams();
-		var dbQuery:DbQuery = null;
 		//trace(Web.getClientHeaders());
 		try {
 			dbQuery = Model.binary();
@@ -128,7 +129,7 @@ class S
 		devIP = params.get('devIP');
 		trace(params);
 
-		var action:String = params.get('action');
+		action = params.get('action');
 		if (action.length == 0 || params.get('className') == null)
 		{
 

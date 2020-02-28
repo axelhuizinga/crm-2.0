@@ -11,14 +11,13 @@ class DbRelation implements hxbit.Serializable{
 
 	public function new(p:Dynamic){
 		
-		for(f in Type.getInstanceFields(Type.getClass(this))){
+		for(f in Type.getInstanceFields(DbRelation)){
 			switch (f){
 				case '__uid'|'getCLID'|'serialize'|'unserialize'|'getSerializeSchema':
 					//SKIP
 				default:
-					var v = Reflect.field(p,f);
-					//if(v!=null)
-						Reflect.setField(this, f, v);
+					if(Reflect.hasField(p, f))
+						Reflect.setField(this, f, Reflect.field(p,f));
 			}
 		}	
 	};	

@@ -1,3 +1,5 @@
+import shared.DbData;
+import js.lib.Promise;
 import react.ReactUtil;
 import state.DataAccessState;
 import haxe.macro.Expr.Catch;
@@ -193,7 +195,11 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//CState.init(store);		
 		if (!(state.userState.dbUser.id == null || state.userState.dbUser.jwt == ''))
 		{			
-			store.dispatch(action.async.UserAccess.verify());
+			var p:Promise<DbData> = load();
+			p.then(function(dbData:DbData){
+				trace(dbData);
+				
+			});
 		}
 		else
 		{// WE HAVE EITHER NO VALID JWT OR id
@@ -208,7 +214,11 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		
 		//state.history.listen(CState.historyChange);
 		trace(Reflect.fields(state));
-  	}
+	}
+	
+	function load() {
+		return store.dispatch(action.async.UserAccess.verify());
+	}
 
 	public function gGet(key:String):Dynamic
 	{

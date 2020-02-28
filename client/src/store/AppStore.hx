@@ -63,14 +63,14 @@ class AppStore
 				first_name:'',
 				last_name:'',
 				mandator: 1,
-				id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
+				id:Cookie.get('userState.dbUser.id')==null?0:Std.parseInt(Cookie.get('userState.dbUser.id')),
 				email:'',
 				pass:'',				
 				change_pass_required:false,
-				online:false,//Cookie.get('user.jwt')!=null && UserAccess.verify(),
+				online:false,//Cookie.get('userState.dbUser.jwt')!=null && UserAccess.verify(),
 				loginTask: (Browser.location.pathname.startsWith('/ResetPassword')?LoginTask.ResetPassword:LoginTask.Login),
 				last_login:null,
-				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
+				jwt:(Cookie.get('userState.dbUser.jwt')==null?'':Cookie.get('userState.dbUser.jwt')),
 				waiting: true
 			}*/
 		};

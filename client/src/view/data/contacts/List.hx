@@ -1,4 +1,5 @@
 package view.data.contacts;
+import js.lib.Promise;
 import action.async.DBAccessProps;
 import react.router.RouterMatch;
 import js.Browser;
@@ -114,16 +115,22 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			offset = Std.int(props.limit * ev.page);
 		}
-		var params:DBAccessProps = {
-			className:'data.Contacts',
-			action:'get',
-			filter:(props.match.params.id!=null?{id:props.match.params.id}:{mandator:'1'}),
-			devIP:App.devIP,
-			limit:props.limit,
-			offset:offset>0?offset:0,
-			table:'contacts',
-			userState:props.userState
-		};
+
+		var p:Promise<DbData> = props.load(
+			{
+				className:'data.Contacts',
+				action:'get',
+				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
+				limit:props.limit,
+				offset:offset>0?offset:0,
+				table:'contacts',
+				userState:props.userState
+			}
+		);
+		p.then(function(data:DbData){
+			trace(data.dataRows.length); 
+			setState({loading:false, dataTable:data.dataRows});
+		});/*
 		BinaryLoader.create(
 			'${App.config.api}', 
 			params,
@@ -137,14 +144,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				{
 					if(!data.dataErrors.keys().hasNext())
 					{
-						/*var dRows:Array<Dynamic> = [];
-						for(row in data.dataRows)
-						{
-							var rO:Dynamic = {};
-							for(k=>v in row.keyValueIterator())
-								Reflect.setField(rO, k , v);
-							dRows.push(rO);						
-						}*/
 						//trace(props.storeContactsList);
 						//trace(props.parentComponent.storeContactsList);
 						
@@ -162,7 +161,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 						setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});					
 				}
 			}
-		);
+		);*/
 	}
 	
 	public function edit(ev:ReactEvent):Void

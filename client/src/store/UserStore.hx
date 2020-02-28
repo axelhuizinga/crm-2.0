@@ -35,15 +35,15 @@ class UserStore implements IReducer<UserAction, UserState>
 				?new_pass_confirm:String,
 				?waiting:Bool   				
 				dbUser: new DbUser({
-					first_name:Cookie.get('user.first_name')==null?'':Cookie.get('user.first_name'),
-					//id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
-					last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
-					mandator: Cookie.get('user.mandator')==null?1:Std.parseInt(Cookie.get('user.mandator')),
+					first_name:Cookie.get('userState.dbUser.first_name')==null?'':Cookie.get('userState.dbUser.first_name'),
+					//id:Cookie.get('userState.dbUser.id')==null?0:Std.parseInt(Cookie.get('userState.dbUser.id')),
+					last_name:Cookie.get('userState.dbUser.last_name')==null?'':Cookie.get('userState.dbUser.last_name'),
+					mandator: Cookie.get('userState.dbUser.mandator')==null?1:Std.parseInt(Cookie.get('userState.dbUser.mandator')),
 					user_name:param.get('user_name'),
-					email:Cookie.get('user.email')==null?'':Cookie.get('user.email'),
+					email:Cookie.get('userState.dbUser.email')==null?'':Cookie.get('userState.dbUser.email'),
 					password:'',				
 					change_pass_required:false,
-					online:false,//Cookie.get('user.jwt')!=null,
+					online:false,//Cookie.get('userState.dbUser.jwt')!=null,
 					//loginTask: LoginTask.ChangePassword,
 					//last_login:null,
 					jwt:param.get('jwt'),
@@ -56,17 +56,17 @@ class UserStore implements IReducer<UserAction, UserState>
 			loginTask:null,
 			waiting:true,   				
 			dbUser: new DbUser({
-				first_name:Cookie.get('user.first_name')==null?'':Cookie.get('user.first_name'),
-				id:Cookie.get('user.id')==null?0:Std.parseInt(Cookie.get('user.id')),
-				last_name:Cookie.get('user.last_name')==null?'':Cookie.get('user.last_name'),
-				mandator: Cookie.get('user.mandator')==null?1:Std.parseInt(Cookie.get('user.mandator')),
-				user_name:Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name'),
-				email:Cookie.get('user.email')==null?'':Cookie.get('user.email'),
+				first_name:Cookie.get('userState.dbUser.first_name')==null?'':Cookie.get('userState.dbUser.first_name'),
+				id:Cookie.get('userState.dbUser.id')==null?0:Std.parseInt(Cookie.get('userState.dbUser.id')),
+				last_name:Cookie.get('userState.dbUser.last_name')==null?'':Cookie.get('userState.dbUser.last_name'),
+				mandator: Cookie.get('userState.dbUser.mandator')==null?1:Std.parseInt(Cookie.get('userState.dbUser.mandator')),
+				user_name:Cookie.get('userState.dbUser.user_name')==null?'':Cookie.get('userState.dbUser.user_name'),
+				email:Cookie.get('userState.dbUser.email')==null?'':Cookie.get('userState.dbUser.email'),
 				password:'',				
 				change_pass_required:false,
-				online:false,//Cookie.get('user.jwt')!=null,
+				online:false,//Cookie.get('userState.dbUser.jwt')!=null,
 				last_login:null,
-				jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt'))
+				jwt:(Cookie.get('userState.dbUser.jwt')==null?'':Cookie.get('userState.dbUser.jwt'))
 			})
 		};
 		trace(initState);

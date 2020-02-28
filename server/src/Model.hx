@@ -112,7 +112,7 @@ class Model
 		if (staticMethods.has(param['action']))
 		{                                                                                        
 			trace('calling static Method ${param.get('className')}.${param['action']}');
-			Reflect.callMethod(cl, Reflect.field(cl, param['action']),[param]);
+			Reflect.callMethod(cl, Reflect.field(cl, param['action']),[dbQuery]);
 			return;
 		}
 

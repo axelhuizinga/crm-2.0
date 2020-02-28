@@ -390,13 +390,17 @@ html,body{
 	
 	static function saveRequest(id:Int, dbQuery:DbQuery):Bool
 	{
-		var request:String = Json.stringify(
-			new hxbit.Dump(new hxbit.Serializer().serialize(dbQuery)).dumpObj());
+		trace(new hxbit.Serializer().serialize(dbQuery));
+		trace(S.dbQuery);
+		//var request:String = Json.stringify(new hxbit.Dump(new hxbit.Serializer().serialize(dbQuery)).dumpObj());
+		var request:String = Web.getPostData();
+		
+		trace(request);
 		var rTime:String = DateTools.format(S.last_request_time, "'%Y-%m-%d %H:%M:%S'");//,request=?
-		var stmt:PDOStatement = S.dbh.prepare('UPDATE activity INNER JOIN users ON users.id=activity.user SET online=true,last_request_time=${rTime},"request"=:request WHERE users.id=:id',Syntax.array(null));
+		var stmt:PDOStatement = S.dbh.prepare('UPDATE activity SET "request"=:request FROM users WHERE users.id=:id AND users.id=activity.user' ,Syntax.array(null));
 		//trace('UPDATE users SET last_request_time=${rTime},request=\'$request\' WHERE id=\'$id\'');
 		var success:Bool = Model.paramExecute(stmt, //null
-			Lib.associativeArrayOfObject({':id': id, ':request': '$request'})
+			Lib.associativeArrayOfObject({':id': id, ':request': request})
 		);
 		if(Std.parseInt(stmt.errorCode())>0)
 			trace(stmt.errorInfo());
@@ -415,6 +419,7 @@ html,body{
 		var now:Float = Date.now().getTime();	
 		var dbData:DbData = new DbData();
 		trace('$now:$jwt');
+		//trace(dbQuery);
 		try{
 			var userInfo:UserInfo = JWT.extract(jwt);
 			trace(userInfo);			
@@ -437,6 +442,8 @@ html,body{
 							dbQuery.dbUser.mandator = userInfo.mandator;
 						//params.set('mandator',userInfo.mandator);
 						saveRequest(id, dbQuery);	
+						if(S.action=='verify')
+							S.sendInfo(dbData, ['verify'=>'OK']);
 						true;
 					default:
 						dbData.dataErrors = ['jwtError'=>'${DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")}<${DateTools.format(Date.fromTime(now),"%d.%m.%y %H:%M:%S")}'];
@@ -452,9 +459,10 @@ html,body{
 			//trace(':'+((userInfo.validUntil - Date.now().getTime()) > 0));
 			if (id == userInfo.id && userInfo.ip == Web.getClientIP() && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
-				//trace('calling JWT.verify now...');
+				trace('calling JWT.verify now...');
 				//trace(JWT.verify(jwt, S.secret));
 				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
+				trace(jRes);
 				return switch(jRes)				
 				{
 					case Invalid(payload):
@@ -462,12 +470,15 @@ html,body{
 						// JWT INVALID
 						saveRequest(id, dbQuery);
 						dbData.dataErrors = ['jwtError'=>'Invalid'];
-						S.sendInfo(dbData, ['loginTask'=>Login]);
+						S.sendInfo(dbData, ['loginTask'=>'Login']);
 						//S.sendErrors(new DbData(), ['jwtError'=>payload]);
 						false;
 					case Valid(payload):
 						// JWT VALID AND NOT OLDER THAN 11 h
-						saveRequest(id, dbQuery);						
+						trace(dbQuery);
+						saveRequest(id, dbQuery);		
+						if(S.action=='verify')
+							S.sendInfo(dbData, ['verify'=>'OK']);				
 						true;
 					default:
 						S.sendErrors(new DbData(), ['jwtError'=>jRes]);

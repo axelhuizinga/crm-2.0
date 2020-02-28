@@ -39,7 +39,7 @@ class BinaryLoader {
 		var dbQuery = new DbQuery(dbQP);//.toHex();
 		var b:Bytes = s.serialize(dbQuery);
 		trace(dbQuery.getSerializeSchema());
-		trace(dbQuery.relations.get('contacts').fields);
+		//trace(dbQuery.relations.get('contacts').fields);
 		//dbQuery.dump('/tmp/dbQuery.json');
 		trace(dbQuery);
 		trace('b.length:${b.length}');
@@ -50,7 +50,6 @@ class BinaryLoader {
 		//bl.param = b.getString(0,b.length); //s.serialize(dbQuery);//.toHex();
 		bl.param = b.getData();
 		//bl.param = new FileReader().readAsBinaryString(s.serialize(new DbQuery(dbQuery)));
-		Out.dumpObject(dbQP);
 		trace(bl.param);
 		//trace(bl.param.toHex().length + ' :: ' + bl.param.toString().length + ' : ' + bl.param.length);
 		bl.cB = onLoaded;

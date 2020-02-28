@@ -1,5 +1,6 @@
 package action.async;
 
+import js.lib.Promise;
 import db.DbRelation;
 import db.DbUser;
 import js.html.svg.Point;
@@ -215,7 +216,7 @@ class UserAccess {
 				Cookie.set('userState.dbUser.last_name',userState.dbUser.last_name, null, '/');
 				Cookie.set('userState.dbUser.jwt',userState.dbUser.jwt, null, '/');
 
-				trace(Cookie.get('userState.dbUser.jwt'));
+				trace(Cookie.get('userState.dbUserState.dbUser.jwt'));
 				userState.dbUser.online = true;
 				//if(uState.dbUser.change_pass_required)
 				//	uState.pass = userState.dbUser.pass;
@@ -255,13 +256,16 @@ class UserAccess {
 			if (userState.dbUser.id == null) 
 				return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:'UserId fehlt!'})));
 			var bL:XMLHttpRequest = null;
-			bL = BinaryLoader.create(
+			bL = BinaryLoader.dbQuery(
 			'${App.config.api}', 
 			{				
-				id:userState.dbUser.id,
-				jwt:userState.dbUser.jwt,
 				className:'auth.User',
 				action:'logout',
+				dbUser: userState.dbUser,
+				relations: ["users" => new DbRelation({
+					filter:{id:userState.dbUser.id}
+					}),
+				],
 				devIP:App.devIP
 			},
 			function(data:DbData)
@@ -276,7 +280,7 @@ class UserAccess {
 					//var d:Date = Date.now().delta(31556926000);//ADD one year				
 					Cookie.set('userState.dbUser.jwt', '', 31556926);
 					Cookie.set('userState.dbUser.id', null, null, '/');					
-					trace(Cookie.get('userState.dbUser.jwt'));
+					trace(Cookie.get('userState.dbUserState.dbUser.jwt'));
 					return dispatch(User(LogOutComplete({dbUser: userState.dbUser, waiting: false})));
 				}
 			});
@@ -284,102 +288,75 @@ class UserAccess {
 		});		
 	}
 
-	/*public static function logOut() 
-	{
-		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			trace(getState().userState.dbUser);
-			var userState:UserState = getState().userState;
-			if (userState.dbUser.id == null) 
-				return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:'UserId fehlt!'})));
-			var fD:FormData = new FormData();
-			fD.append('action', 'logOut');
-			fD.append('className', 'auth.User');
-			fD.append('id', Std.string(userState.dbUser.id));
-			var req:XMLHttpRequest = new XMLHttpRequest();
-			req.open('POST', '${App.config.api}');
-			req.onload = function()
-			{
-				 if (req.status == 200) {
-					 // OK
-					var jRes:UserState = Json.parse( req.response);
-					trace(jRes.jwt);
-					//Cookie.set('userState.dbUser.id', Std.string(userState.dbUser.id));
-					Cookie.set('userState.dbUser.jwt', jRes.jwt);
-					trace(Cookie.get('userState.dbUser.jwt'));
-					return dispatch(User(LoginComplete({dbUser:userState.dbUser, waiting:false})));
-				} else {
-					  // Otherwise reject with the status text
-					  // which will hopefully be a meaningful error
-					return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:req.statusText})));
-				}
-			};
-			req.send(fD);
-			return null;	
-		});
-	}	*/
-
 	public static function verify() {
 		//CHECK IF WE HAVE A VALID SESSION
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			//trace('clientVerify');
-			var state:AppState = getState();
-			trace(state.userState.dbUser);
-			//trace(Type.getClass(state.userState.dbUser));
-			var bL:XMLHttpRequest = BinaryLoader.dbQuery(
-			'${App.config.api}', 
-			{				
-				dbUser:state.userState.dbUser,
-				className:'auth.User', 
-				action:'clientVerify',								
-				relations:[
-					"users" => new DbRelation({
-						alias:  'us',
-						fields: ['last_login','mandator'],
-						filter:{id:state.userState.dbUser.id}
-					}),
-					"contacts" => new DbRelation({
-						alias: 'co',
-						fields: ['first_name','last_name','email'],
-						jCond: 'contact=co.id'
-					}) 
-				],
-				devIP:App.devIP
-			},			
-			function(data:DbData)
-			{
-				trace(data);
-				if (data.dataErrors.keys().hasNext())
+			return new Promise(function(resolve, reject){
+				var state:AppState = getState();
+				trace(state.userState.dbUser);
+				//trace(Type.getClass(state.userState.dbUser));
+				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
+				'${App.config.api}', 
+				{				
+					dbUser:state.userState.dbUser,
+					className:'auth.User', 
+					action:'verify',								
+					relations:[
+						"users" => new DbRelation({
+							alias:  'us',
+							fields: ['last_login','mandator'],
+							filter:{id:state.userState.dbUser.id}
+						}),
+						"contacts" => new DbRelation({
+							alias: 'co',
+							fields: ['first_name','last_name','email'],
+							jCond: 'contact=co.id'
+						}) 
+					],
+					devIP:App.devIP
+				},			
+				function(data:DbData)
 				{
-					trace(data.dataErrors);
-					
-					return dispatch(User(LoginError(
+					trace(data);
+					if(data.dataInfo.exists('verify') && data.dataInfo.get('verify')=='OK'){
+						resolve(data);
+					}
+					trace(data.dataErrors.empty);
+					if (data.dataErrors.keys().hasNext())
+					{
+						trace(data.dataErrors);
+						resolve(data);
+						/*return dispatch(User(LoginError(
 						{
 							//dbUser:state.userState.dbUser, 
 							lastError:data.dataErrors.iterator().next(),
 							loginTask: data.dataInfo['loginTask'],
 							waiting: false
-						})));
-				}	
-				var uData = data.dataRows[0];
-				//var uProps:Dynamic = {};
-				//trace(data.dataInfo);
-				for(k=>v in uData.keyValueIterator())
-				{
-					if(Reflect.hasField(state.userState.dbUser, k))
-					switch (k)
+						})));*/
+					}	
+					var uData = data.dataRows[0];
+					//var uProps:Dynamic = {};
+					//trace(data.dataInfo);
+					for(k=>v in uData.keyValueIterator())
 					{
-						case 'change_pass_required'|'online':
-							Reflect.setField(state.userState.dbUser, k, v=='true');
-							//trace('$k: ${v=='true'?'Y':'N'} =>  ${v?'Y':'N'}');
-						default:
-							Reflect.setField(state.userState.dbUser, k, v);
+						if(Reflect.hasField(state.userState.dbUser, k))
+						switch (k)
+						{
+							case 'change_pass_required'|'online':
+								Reflect.setField(state.userState.dbUser, k, v=='true');
+								//trace('$k: ${v=='true'?'Y':'N'} =>  ${v?'Y':'N'}');
+							default:
+								Reflect.setField(state.userState.dbUser, k, v);
 
-					}						
-				}
-				state.userState.waiting = false;
-				trace(state.userState.dbUser.jwt);
-
-				return dispatch(User(LoginComplete(state.userState)));			
+						}						
+					}
+					state.userState.waiting = false;
+					trace(state.userState.dbUser.jwt);
+					dispatch(User(LoginComplete(state.userState)));
+					resolve(data);
+					//return dispatch(User(LoginComplete(state.userState)));			
+				});
 			});
 		});	
 	}

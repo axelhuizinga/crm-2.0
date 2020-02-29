@@ -93,10 +93,15 @@ class BinaryLoader {
 		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
 		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
 		xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;
-		xhr.onerror = function(e) onError(xhr.statusText);
+		
+		//xhr.onerror = function(e) onError(xhr.statusText);
+		xhr.onerror = function(e) {
+			trace(e);
+			trace(e.type);
+		}
 		xhr.withCredentials = true;
 		xhr.onload = function(e) {
-			
+			trace(xhr.status);
 			if (xhr.status != 200) {
 				onError(xhr.statusText);
 				return;
@@ -107,7 +112,8 @@ class BinaryLoader {
 		
 		xhr.onprogress = function(e) {
 			#if (haxe_ver >= 4)
-			onProgress(Std.int(js.Syntax.code("{0}.loaded || {0}.position", e)), Std.int(js.Syntax.code("{0}.total || {0}.totalSize", e)));
+			trace('${e.loaded} :: ${e.total}');
+			//onProgress(Std.int(js.Syntax.code("{0}.loaded || {0}.position", e)), Std.int(js.Syntax.code("{0}.total || {0}.totalSize", e)));
 			#else
 			onProgress(Std.int(untyped __js__("{0}.loaded || {0}.position", e)), Std.int(untyped __js__("{0}.total || {0}.totalSize", e)));
 			#end

@@ -364,6 +364,7 @@ class Model
 			info:['count'=>Std.string(count()),'page'=>(param.exists('page') ? param.get('page') : '1')],
 			rows: doSelect()
 		};
+		//trace(rData.rows);
 		S.sendData(dbData,rData);
 	}
 	
@@ -371,6 +372,7 @@ class Model
 	{
 		trace(sql);	
 		trace(setValues.join(','));
+		trace(filterValues);
 		var stmt:PDOStatement =  S.dbh.prepare(sql,Syntax.array(null));
 		if (S.dbh.errorCode()!='00000')
 		{
@@ -413,6 +415,7 @@ class Model
 				}
 			}	
 		}		
+		trace(values2bind);
 		if(i>0)
 		{
 			success = stmt.execute(values2bind);
@@ -434,7 +437,9 @@ class Model
 				data = stmt.fetchAll(PDO.FETCH_ASSOC);
 			}			
 			//trace(Lib.toHaxeArray(data).join(','));		
-			//trace(stmt.errorInfo());
+			
+			//trace(data);
+			trace(stmt.errorInfo());
 			return(data);		
 		}
 		else {
@@ -711,14 +716,14 @@ class Model
 		return filterSql;
 	}
 
-	public function buildCond(filters:Map<String,String>):String
+	public function buildCond(filters:Dynamic):String
 	{
 		if (filters == null)		
 		{
 			return filterSql;			
 		}
 		trace(filters);
-		//var filters:Map<String,String> = Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(filter));
+		var filters:Map<String,String> = Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(filters));
 		trace(filters);
 		var	fBuf:StringBuf = new StringBuf();
 		var first:Bool = true;
@@ -733,6 +738,7 @@ class Model
 
 			var values:Array<String> = val.split('|');			
 			var how:String = values.shift();
+			trace(how);
 			if (first)
 				fBuf.add(' WHERE ' );
 			else
@@ -779,7 +785,9 @@ class Model
 						fBuf.add(" IS NULL");
 					else {
 						fBuf.add(" = ?");
-						filterValues.push([keys[0],values[0]]);	
+						trace(how +':$val:' + values[0]);
+						filterValues.push([keys[0],val]);	
+						trace(filterValues);
 					}			
 			}			
 		}
@@ -897,7 +905,7 @@ class Model
 	public function new(?param:Map<String,Dynamic>) 
 	{
 		this.param = param;
-		//trace(param);
+		trace(param);
 		id = param['id'];
 		trace(id);
 		action = param.get('action');
@@ -984,8 +992,10 @@ class Model
 			joinSql = buildJoin();
 		}			
 		trace('filter:${param.get('filter')}<');
-		if(param.exists('filter')&&param.get('filter')!='')
+		if(param.exists('filter')&&param.get('filter')!=''){
 			filterSql += buildCond(param.get('filter'));
+			//buildValues
+		}
 		Reflect.callMethod(this, Reflect.field(this,action), [param]);
 	}
 	

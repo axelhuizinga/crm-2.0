@@ -1,4 +1,7 @@
 package view.data.contacts;
+import action.async.CRUD;
+import db.DbQuery.DbQueryParam;
+import redux.Redux.Dispatch;
 import js.lib.Promise;
 import action.async.DBAccessProps;
 import react.router.RouterMatch;
@@ -30,6 +33,7 @@ import loader.BinaryLoader;
 import view.table.Table;
 import model.Contact;
 
+@:connect
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
@@ -46,7 +50,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	var formApi:FormApi;
 	var formBuilder:FormBuilder;
 	var formFields:DataView;
-//	var formRef:ReactRef<FormElement>;
 	var fieldNames:Array<String>;
 	var baseForm:BaseForm;
 	var contact:Contact;
@@ -95,7 +98,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	static function mapStateToProps(aState:AppState) 
 	{
-		throw ('never');
+		trace ('never');
 		return {
 			userState:aState.userState
 		};
@@ -115,7 +118,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			offset = Std.int(props.limit * ev.page);
 		}
-
+		trace(props.userState);
 		var p:Promise<DbData> = props.load(
 			{
 				className:'data.Contacts',
@@ -124,44 +127,14 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				table:'contacts',
-				userState:props.userState
+				dbUser:props.userState.dbUser,
+				devIP: App.devIP
 			}
 		);
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
 			setState({loading:false, dataTable:data.dataRows});
-		});/*
-		BinaryLoader.create(
-			'${App.config.api}', 
-			params,
-			function(data:DbData)
-			{			
-				//UserAccess.jwtCheck(data);
-				trace(data.dataInfo);
-				trace(data.dataParams);
-				trace(data.dataRows.length);
-				if(data.dataRows.length>0) 
-				{
-					if(!data.dataErrors.keys().hasNext())
-					{
-						//trace(props.storeContactsList);
-						//trace(props.parentComponent.storeContactsList);
-						
-						//if(props.storeContactsList !=null)
-						//props.storeContactsList(data);
-						setState({
-						//props.parentComponent.setStateFromChild({
-							//rows:dRows,
-							dataTable:data.dataRows,
-							dataCount:Std.parseInt(data.dataInfo['count']),
-							pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
-						});
-					}
-					else 
-						setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});					
-				}
-			}
-		);*/
+		});
 	}
 	
 	public function edit(ev:ReactEvent):Void
@@ -297,6 +270,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			}			
 		}
 		return sideMenu;
+	}
+
+	static function mapDispatchToProps(dispatch:Dispatch) {
+        return {
+            load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
+        };
 	}
 
 }

@@ -28,7 +28,8 @@ import loader.BinaryLoader;
 import view.table.Table;
 import model.Contact;
 
-class List extends BaseForm
+@:connect
+class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<SMItem> = [
 		//{label:'Anzeigen',action:'get'},
@@ -40,12 +41,21 @@ class List extends BaseForm
 	//	{label:'Auswahl alle',action:'selectionAll'},
 	];
 	
+	var dataAccess:DataAccess;	
+	var dataDisplay:Map<String,DataState>;
+	var formApi:FormApi;
+	var formBuilder:FormBuilder;
+	var formFields:DataView;
+	var fieldNames:Array<String>;
+	var baseForm:BaseForm;
+	var contact:Contact;
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
+
 	public function new(props) 
 	{
 		super(props);
-
+		baseForm = new BaseForm(this);
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
@@ -84,9 +94,9 @@ class List extends BaseForm
 	
 	static function mapStateToProps(aState:AppState) 
 	{
-		throw ('never');
+		trace ('never');
 		return {
-			userState:aState.user
+			userState:aState.userState
 		};
 	}
 	
@@ -105,8 +115,8 @@ class List extends BaseForm
 			offset = Std.int(props.limit * ev.page);
 		}
 		var params:Dynamic = {
-			id:props.user.id,
-			jwt:props.user.jwt,
+			id:props.userState.dbUser.id,
+			jwt:props.userState.dbUser.jwt,
 			className:'data.Contacts',
 			action:'get',
 			filter:(props.match.params.id!=null?'id|${props.match.params.id}':'mandator|1,'),
@@ -221,8 +231,8 @@ class List extends BaseForm
 			},
 		];			
 		//
-		if(props.user != null)
-		trace('yeah: ${props.user.first_name}');
+		if(props.userState.dbUser != null)
+		trace('yeah: ${props.userState.dbUser.first_name}');
 		trace(props.match.params.action);
 		state.formApi.doAction();
 /*		if(props.match.params.action != null)
@@ -258,7 +268,7 @@ class List extends BaseForm
 				jsx('
 					<form className="tabComponentForm" >
 						<$Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
-						${...props} dataState = ${dataDisplay["contactList"]} renderPager=${renderPager}
+						${...props} dataState = ${dataDisplay["contactList"]} renderPager=${baseForm.renderPager}
 						className="is-striped is-hoverable" fullWidth=${true}/>
 					</form>
 				');

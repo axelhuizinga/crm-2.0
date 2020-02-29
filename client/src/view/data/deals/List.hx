@@ -127,7 +127,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				table:'deals',
-				userState:props.userState
+				dbUser:props.userState.dbUser,
+				devIP:App.devIP
 			}
 		);
 		p.then(function(data:DbData){

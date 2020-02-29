@@ -164,7 +164,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 	
 	static function mapStateToProps(aState:AppState) 
 	{
-		throw ('never');
+		trace ('never');
 		return {
 			userState:aState.userState
 		};
@@ -179,8 +179,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 			offset = Std.int(props.limit * ev.page);
 		}
 		var params:Dynamic = {
-			id:props.userState.dbUser.id,
-			jwt:props.userState.dbUser.jwt,
+			dbUser:props.userState.dbUser,
 			className:'stats.History',
 			action:'get',
 			filter:(props.filter==null?'termin<NOW()':props.filter),
@@ -190,7 +189,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 			order:'termin',
 			table:'bank_transfers'
 		};
-		BinaryLoader.create(
+		BinaryLoader.dbQuery(
 			'${App.config.api}', 
 			params,
 			function(data:DbData)

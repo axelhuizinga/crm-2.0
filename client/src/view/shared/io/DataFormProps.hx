@@ -1,4 +1,5 @@
 package view.shared.io;
+import db.DbQuery.DbQueryParam;
 import action.DataAction;
 import action.async.DBAccessProps;
 import view.shared.io.FormApi;
@@ -24,7 +25,7 @@ typedef DataFormProps =
 	?filter:String,
 	?fullWidth:Bool,	
 	?limit:Int,
-	?load:DBAccessProps->Promise<DbData>,
+	?load:DbQueryParam->Promise<DbData>,
 	?parentComponent:Dynamic,
 	?select:Function, // Int->IntMap<Map<String,Dynamic>>->RouterMatch->SelectType,
 	?setStateFromChild:FormState->Void,

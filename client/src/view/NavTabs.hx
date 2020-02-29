@@ -8,6 +8,7 @@ import react.router.Link;
 import react.router.NavLink;
 import bulma_components.Tabs;
 import view.shared.SLink;
+import view.shared.TabLink;
 
 /**
  * ...
@@ -40,18 +41,18 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 		');
 	}	
 	
-	function TabLink(rprops)
+	/*function TabLink(rprops)
 	{
 		return jsx('
 		<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}><NavLink to=${rprops.to}>${rprops.children}</NavLink></li>
 		');
-	}
+	}*/
 
 	function logOut() {
 		App.store.dispatch( UserAccess.logOut());
 	}
 
-	function buildNav()
+	function buildNav():ReactFragment
 	{
 		var userState = App.store.getState().userState;
 		//trace(userState);
@@ -63,14 +64,17 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 		else		
 		return jsx('
 		<>
-			<TabLink to="/DashBoard" ${...props}>DashBoard</TabLink> 
-			<TabLink to="/Data" ${...props}>Daten</TabLink>			
-			<TabLink to="/Accounting" ${...props}>Buchhaltung</TabLink>
-			<TabLink to="/Reports" ${...props}>Berichte</TabLink>
-			<i className = "icon abs-right fa fa-sign-out"  title = "Abmelden"  onClick=${logOut}
-			style={{margin:".8rem .5rem",fontSize:"1.7rem", cursor:"pointer", color:"#801111"}}></i>
+		<$TabLink to="/DashBoard" ${...props}>DashBoard</$TabLink> 
+		<$TabLink to="/Data" ${...props}>Daten</$TabLink>			
+		<$TabLink to="/Accounting" ${...props}>Buchhaltung</$TabLink>
+		<$TabLink to="/Reports" ${...props}>Berichte</$TabLink>
+		<i className = "icon abs-right fa fa-sign-out"  title = "Abmelden"  onClick=${logOut}
+		style={{margin:".8rem .5rem",fontSize:"1.7rem", cursor:"pointer", color:"#801111"}}></i>
 		</>
 		');
-		//<TabLink to="/Qc" ${...props}>QC</TabLink>
+		//<TabLink to="/Qc" ${...props}>QC</TabLink>onClick=${logOut}
+	/**
+	 * 			
+	 */
 	}
 }

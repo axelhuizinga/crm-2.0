@@ -15,7 +15,7 @@ typedef DbQueryParam = {
 	?className:String,
 	?relations:Map<String,DbRelation>,
 	?devIP:String,	
-	?filter:Map<String,String>,
+	?filter:Dynamic,//Map<String,String>,
 	?formData:Dynamic,
 	?limit:Int,
 	?maxImport:Int,

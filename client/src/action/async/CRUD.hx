@@ -66,20 +66,6 @@ class CRUD
 							if(!data.dataErrors.keys().hasNext())
 							{
 								trace(data.dataRows[0]);
-
-								/*dispatch(Status(Update({text:switch ('${param.className}.${param.action}')
-								{
-									case "data.Contacts.get":
-										resolve(dbData);
-										'Kontakt ${param.filter.substr(3)} geladen';
-									case "data.Contacts.update":
-										resolve(dbData);
-										'Kontakt ${param.filter.substr(3)} wurde gespeichert';
-									default:
-										resolve(null);
-										"Unbekannter Vorgang";
-
-								}})));*/
 								resolve(data);
 							}
 							else 

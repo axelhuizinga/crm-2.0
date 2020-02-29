@@ -320,10 +320,10 @@ class UserAccess {
 				{
 					trace(data);
 					if(data.dataInfo.exists('verify') && data.dataInfo.get('verify')=='OK'){
-						resolve(data);
+						return resolve(data);
 					}
-					trace(data.dataErrors.empty);
-					if (data.dataErrors.keys().hasNext())
+					trace(data.dataErrors.empty());
+					if (!data.dataErrors.empty())
 					{
 						trace(data.dataErrors);
 						resolve(data);

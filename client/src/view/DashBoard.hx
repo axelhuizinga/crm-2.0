@@ -25,6 +25,7 @@ import react.router.NavLink;
 import view.shared.io.FormApi;
 import view.shared.RouteTabProps;
 import view.shared.CompState;
+import view.shared.TabLink;
 import view.LoginForm;
 import view.StatusBar;
 //import react.redux.form.Control.ControlProps;
@@ -123,9 +124,9 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 		<>
 			<div className="tabNav2" >
 				<Tabs className="is-boxed" >
-					<TabLink to="/DashBoard/Roles" ${...props}>Benutzer</TabLink>
-					<TabLink to="/DashBoard/Settings" ${...props}>Meine Einstellungen</TabLink>
-					<TabLink to="/DashBoard/Setup" ${...props}>Setup</TabLink>
+					<$TabLink to="/DashBoard/Roles" ${...props}>Benutzer</$TabLink>
+					<$TabLink to="/DashBoard/Settings" ${...props}>Meine Einstellungen</$TabLink>
+					<$TabLink to="/DashBoard/Setup" ${...props}>Setup</$TabLink>
 				</Tabs>
 			</div>
             <div className="tabContent2" >
@@ -157,7 +158,8 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 				jsx('<$Setup  user=${this.props.user} ${...props}/>');
 			default:
 				null;
-		}
+		}<li className=${props.location.pathname.indexOf(props.to) == 0 ?"is-active":""}>
+		<$NavLink to=${props.to}>${props.children}</$NavLink></li>
 	}*/
 	
 	function internalRedirect(path:String = '/DashBoard/Settings')
@@ -166,12 +168,13 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 		return null;
 	}
 	
-	function TabLink(rprops)
+/*	function TabLink(rprops)
 	{
 		//trace(Reflect.fields(rprops));
 		//trace(rprops.children);
 		return jsx('
-		<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}><NavLink to=${rprops.to}>${rprops.children}</NavLink></li>
+		<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}>
+		<NavLink to=${rprops.to}>${rprops.children}</NavLink></li>
 		');
-	}
+	}*/
 }

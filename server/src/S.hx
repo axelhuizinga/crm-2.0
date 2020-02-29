@@ -223,12 +223,17 @@ class S
 		//trace(data.info);
 		if(data != null){
 			dbData.dataInfo = dbData.dataInfo.copyStringMap(data.info);
-			Syntax.foreach(data.rows, function(k:Int, v:Dynamic)
+			if(data.rows!=null)
+				for(row in data.rows.iterator())
+					dbData.dataRows.push(Lib.hashOfAssociativeArray(row));
+			/*Syntax.foreach(data.rows, function(k:Int, v:Dynamic)
 			{
 				dbData.dataRows.push(Lib.hashOfAssociativeArray(v));			
-			});			
+			});	*/		
 		}
+		
 		//trace(Std.string(dbData).substr(0,250));
+		trace(dbData.dataRows[0]);
 		return sendbytes(s.serialize(dbData));
 	}
 
@@ -277,6 +282,7 @@ class S
 		Web.setHeader('Content-Type', 'application/octet-stream');
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 		Web.setHeader("Access-Control-Allow-Credentials", "true");
+		if(S.devIP!=null)
 		Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');
 		
 		var out = File.write("php://output", true);
@@ -529,9 +535,9 @@ class S
 		var ini:NativeArray = Syntax.code("$ini");
 		conf.set('ini', ini);		
 		//trace(conf.get('ini'));
-		edump(new DbData());
-		edump(new DbUser(null));
-		edump(new DbRelation(null));
-		edump(new DbQuery());
+		new DbData();
+		new DbUser(null);
+		new DbRelation(null);
+		new DbQuery();
 	}
 }

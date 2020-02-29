@@ -390,12 +390,12 @@ html,body{
 	
 	static function saveRequest(id:Int, dbQuery:DbQuery):Bool
 	{
-		trace(new hxbit.Serializer().serialize(dbQuery));
-		trace(S.dbQuery);
+		//trace(new hxbit.Serializer().serialize(dbQuery));
+		//trace(S.dbQuery);
 		//var request:String = Json.stringify(new hxbit.Dump(new hxbit.Serializer().serialize(dbQuery)).dumpObj());
 		var request:String = Web.getPostData();
 		
-		trace(request);
+		//trace(request);
 		var rTime:String = DateTools.format(S.last_request_time, "'%Y-%m-%d %H:%M:%S'");//,request=?
 		var stmt:PDOStatement = S.dbh.prepare('UPDATE activity SET "request"=:request FROM users WHERE users.id=:id AND users.id=activity.user' ,Syntax.array(null));
 		//trace('UPDATE users SET last_request_time=${rTime},request=\'$request\' WHERE id=\'$id\'');

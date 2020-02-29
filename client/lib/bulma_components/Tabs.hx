@@ -1,7 +1,7 @@
 package bulma_components;
 
 import react.ReactComponent;
-import react.ReactPropTypes;
+import react.ReactType;
 
 /**
  * ...
@@ -17,6 +17,7 @@ typedef TabsProps = {
 	?className:String,
 	?right:Bool,		
 	?centered:Bool,		
+	?children:ReactType,
 	?boxed:Bool,		
 	?fullwidth:Bool,		
 	?small:Bool,		

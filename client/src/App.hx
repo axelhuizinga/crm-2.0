@@ -52,6 +52,7 @@ import redux.thunk.ThunkMiddleware;
 import view.shared.io.FormApi;
 import view.shared.FormBuilder;
 
+using Lambda;
 using StringTools;
 
 typedef AppProps =
@@ -196,9 +197,14 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		if (!(state.userState.dbUser.id == null || state.userState.dbUser.jwt == ''))
 		{			
 			var p:Promise<DbData> = load();
-			p.then(function(dbData:DbData){
-				trace(dbData);
-				
+			p.then(function(dbData:DbData){ 
+				trace(dbData.dataErrors.keys().hasNext());
+				if(!dbData.dataErrors.empty() && dbData.dataErrors.exists('jwtError')){
+					
+					store.dispatch(LoginExpired({waiting: false, loginTask: Login}));
+				}
+				state.userState.dbUser.online = true;
+				store.dispatch(LoginComplete({waiting:false}));
 			});
 		}
 		else
@@ -216,8 +222,9 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		trace(Reflect.fields(state));
 	}
 	
-	function load() {
-		return store.dispatch(action.async.UserAccess.verify());
+	function load():Promise<DbData> {
+		return cast store.dispatch(
+			action.async.UserAccess.verify());
 	}
 
 	public function gGet(key:String):Dynamic

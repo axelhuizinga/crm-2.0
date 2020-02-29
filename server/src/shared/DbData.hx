@@ -19,7 +19,7 @@ class DbData implements Serializable
 	
 	public function new() 
 	{
-		dataErrors = new Map();
+		dataErrors = [];//new Map();
 		dataInfo = [
 			'datetime'=>DateTools.format(Date.now(), '%Y-%m-%d_%H:%M:%S')
 		];

@@ -186,7 +186,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				action:'get',
 				filter:{id:id,mandator:1},
 				table:'contacts',
-				dbUser:props.userState.dbUser
+				dbUser:props.userState.dbUser,
+				devIP:App.devIP
 			}
 		);
 		p.then(function(data:DbData){

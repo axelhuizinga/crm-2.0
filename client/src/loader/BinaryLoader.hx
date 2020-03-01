@@ -38,10 +38,10 @@ class BinaryLoader {
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbQP);//.toHex();
 		var b:Bytes = s.serialize(dbQuery);
-		trace(dbQuery.getSerializeSchema());
+		//trace(dbQuery.getSerializeSchema());
 		//trace(dbQuery.relations.get('contacts').fields);
 		//dbQuery.dump('/tmp/dbQuery.json');
-		trace(dbQuery);
+		//trace(dbQuery);
 		trace('b.length:${b.length}');
 		var blen:Int = b.length;
 		for(i in 0...blen){

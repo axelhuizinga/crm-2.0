@@ -54,11 +54,13 @@ typedef DataColumn =
 	@:optional var headerFormat:Function;
 	@:optional var headerStyle:Dynamic;
 	@:optional var label:String;
-	@:optional var name:String;
+	@:optional var name:String;	
 	@:optional var title:String;
 	@:optional var search:SortDirection;
-	@:optional var show:Bool;
+	@:optional var show:Bool;	
 	@:optional var style:Dynamic;
+	@:optional var usAsIndex:Bool;
+	@:optional var useInTooltip:Int;//-1 = not, n = position
 }
 
 typedef DataCellPos =

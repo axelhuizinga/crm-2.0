@@ -105,7 +105,6 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			trace(aState.locationStore.redirectAfterLogin);
 			trace(uState);		
 			if(uState.loginTask == LoginTask.ChangePassword)
-			//if(aState.locationState.redirectAfterLogin != null && aState.locationState.redirectAfterLogin.startsWith('/ChangePassword'))
 			{
 				var rAL:String = aState.locationStore.redirectAfterLogin;
 				trace(rAL);

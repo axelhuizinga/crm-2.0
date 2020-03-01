@@ -203,8 +203,11 @@ class App  extends ReactComponentOf<AppProps, AppState>
 					
 					store.dispatch(LoginExpired({waiting: false, loginTask: Login}));
 				}
-				state.userState.dbUser.online = true;
-				store.dispatch(LoginComplete({waiting:false}));
+				else{
+
+					state.userState.dbUser.online = true;
+					store.dispatch(LoginComplete({waiting:false}));					
+				}
 			});
 		}
 		else

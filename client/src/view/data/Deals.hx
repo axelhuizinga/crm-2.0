@@ -123,7 +123,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				');					
 			case "List":
 				jsx('
-					<$List ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$List ${...props}  limit=${100} fullWidth={true} sideMenu=${state.sideMenu}/>
 				');						
 			default:
 				null;					

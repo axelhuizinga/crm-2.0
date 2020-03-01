@@ -172,10 +172,10 @@ class BaseForm
 
 	public function onPageChange(data) {
 		trace('${comp.props.match.params.action}:${data.selected}');
-		var fun:Function = Reflect.field(this,comp.props.match.params.action);
+		var fun:Function = Reflect.field(comp,comp.props.match.params.action);
 		if(Reflect.isFunction(fun))
 		{
-			Reflect.callMethod(this,fun,[{page:data.selected}]);
+			Reflect.callMethod(comp,fun,[{page:data.selected}]);
 		}		
 	}
 	

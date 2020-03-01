@@ -54,8 +54,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		baseForm = new BaseForm(this);
 		dataDisplay = DealsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
-		//state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
-		//trace(state.loading);
+
 		state =  App.initEState({
 			dataTable:[],
 			loading:false,

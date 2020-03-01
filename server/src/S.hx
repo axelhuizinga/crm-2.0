@@ -225,11 +225,7 @@ class S
 			dbData.dataInfo = dbData.dataInfo.copyStringMap(data.info);
 			if(data.rows!=null)
 				for(row in data.rows.iterator())
-					dbData.dataRows.push(Lib.hashOfAssociativeArray(row));
-			/*Syntax.foreach(data.rows, function(k:Int, v:Dynamic)
-			{
-				dbData.dataRows.push(Lib.hashOfAssociativeArray(v));			
-			});	*/		
+					dbData.dataRows.push(Lib.hashOfAssociativeArray(row));		
 		}
 		
 		//trace(Std.string(dbData).substr(0,250));

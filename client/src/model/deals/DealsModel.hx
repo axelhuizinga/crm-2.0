@@ -36,18 +36,19 @@ class DealsModel
 	?last_locktime:String
 	 */
 	public static var listColumns:Map<String,DataColumn> = [
-		'first_name'=>{label:'Vorname', flexGrow:0},
-		'last_name'=>{label:'Name', flexGrow:0},
-		'email'=>{label:'Email'},
-		'phone_number'=>{label:'Telefon', flexGrow:1},		
+		'contact'=>{show:false, usAsIndex: true},		
+		'first_name'=>{show: false, useInTooltip: 0},
+		'last_name'=>{show: false, useInTooltip: 1},
+		'start_date'=>{label:'Seit'},		
 		'state' => {label:'Aktiv', className: 'tCenter',
 			cellFormat:function(v:String) 
 			{
-				var uState = (v=='active'?'user':'user-slash');
+				var uState = (v=='active'?'thumbs-up':'thumbs-down');
 				//trace(uState);
-				return jsx('<span className="fa fa-$uState"></span>');
+				return jsx('<span className="far fa-$uState"></span>');
 			}},
-		'id' => {show:false}
+		'id' => {show:false},
+		
 	];
 
 	public static var dataDisplay:Map<String,DataState> = [

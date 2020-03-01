@@ -326,7 +326,7 @@ class UserAccess {
 					if (!data.dataErrors.empty())
 					{
 						trace(data.dataErrors);
-						resolve(data);
+						return resolve(data);
 						/*return dispatch(User(LoginError(
 						{
 							//dbUser:state.userState.dbUser, 
@@ -354,7 +354,7 @@ class UserAccess {
 					state.userState.waiting = false;
 					trace(state.userState.dbUser.jwt);
 					dispatch(User(LoginComplete(state.userState)));
-					resolve(data);
+					return resolve(data);
 					//return dispatch(User(LoginComplete(state.userState)));			
 				});
 			});

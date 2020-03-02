@@ -1,4 +1,5 @@
 package view.dashboard;
+import js.lib.Promise;
 import action.async.DBAccessProps;
 import action.async.LivePBXSync;
 import state.AppState;
@@ -22,6 +23,7 @@ import view.shared.io.DataAccess;
 import view.shared.io.DataFormProps;
 import view.shared.io.FormApi;
 
+using Lambda;
 /**
  * ...
  * @author axel@cunity.me
@@ -186,6 +188,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		public function importAllBookingRequests(_):Void
 	{
 		trace(props.userState.dbUser.first_name);
+		//var p:Promise<DbData> = cast 
 		App.store.dispatch(action.async.LivePBXSync.syncAll({
 			limit:50000,
 			maxImport:50000,
@@ -195,6 +198,20 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			className:'admin.SyncExternalBookings',
 			action:'syncAll'
 		}));
+		/*p.then(function(dbData:DbData){ 
+			trace(dbData.dataErrors.keys().hasNext());
+			if(!dbData.dataErrors.empty()){
+				
+				//App.store.dispatch(LoginExpired({waiting: false, loginTask: Login}));
+				trace(dbData);
+			}
+			else{
+
+				trace('OK');
+				//state.userState.dbUser.online = true;
+				//App.store.dispatch(LoginComplete({waiting:false}));					
+			}
+		});*/
 	}
 
 	public function importBookingRequests() {

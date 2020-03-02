@@ -85,11 +85,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		baseForm = new BaseForm(this);
 		trace(props.match.params);
-/*		state = initialState = {
-			id:null,//2000328,
-			edited_by: props.userState.dbUser.id,
-			mandator: props.userState.dbUser.mandator
-		};	*/
 
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
@@ -106,31 +101,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		if(props.dataStore.contactData != null)
 			trace(props.dataStore.contactData.keys().next());
 		//Out.dumpStack(CallStack.callStack());
-		// FOR NOW IGNORE THE dataStore and Observer
-		/*if(initialState.id!=null && props.dataStore.contactData != null && props.dataStore.contactData.exists(initialState.id))
-		{
-			actualState = {edited_by: props.userState.dbUser.id,mandator: props.userState.dbUser.mandator};
-			initialState = loadContactData(initialState.id);
-			//actualState = copy(initialState);
-			//select(props.data['id'], 
-					//[Std.int(props.data['id'])=>props.data], props.parentComponent.props.match);
-			trace(actualState.creation_date);	
-			trace(contact.fieldsModified);
-			//props.select(initialState.id,[initialState.id => initialState], props.match);
-			//OK we got the data
-			actualState = view.shared.io.Observer.run(actualState, function(newState){
-				actualState = newState;
-				trace(actualState);
-			});	
-		}
-		else if(initialState.id!=null && (props.dataStore.contactData == null || !props.dataStore.contactData.exists(initialState.id))){			
-			//actualState = copy(initialState);
-			//trace(actualState);
-			trace('no data - redirect');
-			var baseUrl:String = props.match.path.split(':section')[0];
-			props.history.push('${baseUrl}List/get');
-			return;			
-		}*/
 		
 		state =  App.initEState({
 			dataTable:[],

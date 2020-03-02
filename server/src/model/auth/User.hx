@@ -254,14 +254,13 @@ class User extends Model
 		}
 	}
 	
-	public static function logout(user:Map<String,Dynamic>):Bool
+	public static function logout(dbQuery:DbQuery):Bool
 	{	
-		trace(user);
+		trace(dbQuery.dbUser);
 		//var me:User = new User(user);		
-		trace(user['id']);	
 		var expiryDate = Date.now().delta(31556926000);//1 year
 		Web.setCookie('user.jwt', '', expiryDate);
-		Web.setCookie('user.id', user['id'], expiryDate);
+		Web.setCookie('user.id', Std.string(dbQuery.dbUser.id), expiryDate);
 
 		//me.dbData.dataInfo['user_data'].id = jwt;
 		//trace(me.dbData);

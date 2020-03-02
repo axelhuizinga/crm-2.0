@@ -1,5 +1,6 @@
 package action.async;
 
+import js.lib.Promise;
 import haxe.ds.IntMap;
 import state.UserState;
 import state.AppState;
@@ -14,6 +15,7 @@ import js.html.XMLHttpRequest;
 import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
 import shared.DbData;
+import shared.DbDataTools;
 import loader.BinaryLoader;
 
 using shared.Utils;
@@ -39,70 +41,72 @@ class LivePBXSync
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
 			trace(props.offset);
-			if (!props.userState.dbUser.online)
-			{
-				return dispatch(User(LoginError(
+			//return new Promise(function(resolve, reject){
+				if (!props.userState.dbUser.online)
 				{
-					dbUser:props.userState.dbUser,
-					lastError:'Du musst dich neu anmelden!'
-				})));
-			}				
-			trace('creating BinaryLoader ${App.config.api}');
-			var bl:XMLHttpRequest = BinaryLoader.create(
-				'${App.config.api}', 
-				{
-					id:props.userState.dbUser.id,
-					jwt:props.userState.dbUser.jwt,
-					className:props.className,
-					action:props.action,
-					limit:props.limit,
-					offset:props.offset,
-					table:props.table,
-					filter:props.filter,
-					firstBatch:props.offset==0, 
-					maxImport:props.maxImport==null?1000:props.maxImport,
-					devIP:App.devIP
-				},
-				function(data:DbData)
-				{			
-					trace(data.dataInfo);
-					trace(data.dataRows.length);
-					if(data.dataErrors.keys().hasNext())
+					return dispatch(User(LoginError(
 					{
-						return dispatch(Status(Update(
-							{
-								className:'error',
-								text:data.dataErrors.iterator().next()
-							}							
-						)));
-					} 
-					trace(data.dataInfo);
-					if(data.dataInfo['offset']==null)
+						dbUser:props.userState.dbUser,
+						lastError:'Du musst dich neu anmelden!'
+					})));
+					//resolve(DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']));
+				}				
+				trace('creating BinaryLoader ${App.config.api}');
+				var bl:XMLHttpRequest = BinaryLoader.dbQuery(
+					'${App.config.api}', 
 					{
-						return dispatch(Status(Update(
-							{
-								className:'error',
-								text:'Fehler 0 ${props.className} Aktualisiert'})));
-					}
-					//props.batchCount += data.dataInfo['offset'];
-					if(data.dataInfo['offset']!=null)
-					{
-						props.offset = Std.parseInt(data.dataInfo['offset']);
-						dispatch(Status(Update(
-							{
-								className:'',
-								text:'${props.offset} ${props.className} von ${props.maxImport} aktualisiert'})));
-					}
-					trace('${props.offset} < ${props.maxImport}');
-					if(props.offset < props.maxImport){
-						//LOOP UNTIL LIMIT
-						trace('next loop:${props}');
-						return dispatch(syncAll(props));
-					}
+						dbUser:props.userState.dbUser,
+						className:props.className,
+						action:props.action,
+						limit:props.limit,
+						offset:props.offset,
+						table:props.table,
+						filter:props.filter,
+						maxImport:props.maxImport==null?1000:props.maxImport,
+						devIP:App.devIP
+					},
+					function(data:DbData)
+					{			
+						trace(data.dataInfo);
+						trace(data.dataRows.length);
+						if(data.dataErrors.keys().hasNext())
+						{
+							return dispatch(Status(Update(
+								{
+									className:'error',
+									text:data.dataErrors.iterator().next()
+								}							
+							)));
+							//return resolve(DbDataTools.create(['Error'=>'?']));
+						} 
+						trace(data.dataInfo);
+						if(data.dataInfo['offset']==null)
+						{
+							return dispatch(Status(Update(
+								{
+									className:'error',
+									text:'Fehler 0 ${props.className} Aktualisiert'})));
+						}
+						//props.batchCount += data.dataInfo['offset'];
+						if(data.dataInfo['offset']!=null)
+						{
+							props.offset = Std.parseInt(data.dataInfo['offset']);
+							return dispatch(Status(Update(
+								{
+									className:'',
+									text:'${props.offset} ${props.className} von ${props.maxImport} aktualisiert'})));
+						}
+						trace('${props.offset} < ${props.maxImport}');
+						if(props.offset < props.maxImport){
+							//LOOP UNTIL LIMIT
+							trace('next loop:${props}');
+							return dispatch(syncAll(props));
+						}
 						
-					return null;
-				}
-			);
+						return null;
+					}
+				);
+		//	});
 			return null;
 		});
 	}

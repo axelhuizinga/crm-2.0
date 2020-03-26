@@ -11,6 +11,7 @@
     "d3": "^5.14.2",
     "flatpickr": "^4.6.3",
     "font-awesome": "^4.7.0",
+    "history": "^4.10.1",
     "prop-types": "15.6.2",
     "react": "16.9",
     "react-bulma-components": "2.3.0",
@@ -52,6 +53,6 @@
     "pstart": "cross-env NODE_ENV=development webpack-dev-server --hot --progress",
     "build:dev": "webpack",
     "build": "NODE_ENV=production webpack",
-    "postbuild": "sh publish.sh"	
+    "postbuild": "sh publish.sh"
   }
 }

@@ -131,7 +131,7 @@ class Model
 		}
 	}
 	
-	static function paramExecute(stmt:PDOStatement, ?values:NativeArray):Bool
+	public static function paramExecute(stmt:PDOStatement, ?values:NativeArray):Bool
 	{
 		//S.saveLog(values);
 		trace(values);

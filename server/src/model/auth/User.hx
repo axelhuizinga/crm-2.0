@@ -391,9 +391,10 @@ html,body{
 	{
 		//trace(new hxbit.Serializer().serialize(dbQuery));
 		//trace(S.dbQuery);
+		trace(Json.stringify(dbQuery));
 		//var request:String = Json.stringify(new hxbit.Dump(new hxbit.Serializer().serialize(dbQuery)).dumpObj());
 		var request:String = Web.getPostData();
-		
+		trace( request.length + ' == ' +  Syntax.code('strlen(@iconv("UTF-8", "UTF-8//IGNORE",{0}))',request));
 		//trace(request);
 		var rTime:String = DateTools.format(S.last_request_time, "'%Y-%m-%d %H:%M:%S'");//,request=?
 		var stmt:PDOStatement = S.dbh.prepare('UPDATE activity SET "request"=:request FROM users WHERE users.id=:id AND users.id=activity.user' ,Syntax.array(null));
@@ -431,7 +432,7 @@ html,body{
 					case Invalid(payload):
 						trace(payload);
 						// JWT INVALID
-						saveRequest(id, dbQuery);
+						//saveRequest(id, dbQuery);
 						dbData.dataErrors = ['jwtError'=>'Invalid'];
 						S.sendInfo(dbData, ['loginTask'=>Login]);
 						false;
@@ -440,7 +441,7 @@ html,body{
 						if(dbQuery.dbUser.mandator == null)
 							dbQuery.dbUser.mandator = userInfo.mandator;
 						//params.set('mandator',userInfo.mandator);
-						saveRequest(id, dbQuery);	
+						//saveRequest(id, dbQuery);	
 						if(S.action=='verify')
 							S.sendInfo(dbData, ['verify'=>'OK']);
 						true;
@@ -467,7 +468,7 @@ html,body{
 					case Invalid(payload):
 						trace(payload);
 						// JWT INVALID
-						saveRequest(id, dbQuery);
+						//saveRequest(id, dbQuery);
 						dbData.dataErrors = ['jwtError'=>'Invalid'];
 						S.sendInfo(dbData, ['loginTask'=>'Login']);
 						//S.sendErrors(new DbData(), ['jwtError'=>payload]);
@@ -475,7 +476,7 @@ html,body{
 					case Valid(payload):
 						// JWT VALID AND NOT OLDER THAN 11 h
 						trace(dbQuery);
-						saveRequest(id, dbQuery);		
+						//saveRequest(id, dbQuery);		
 						if(S.action=='verify')
 							S.sendInfo(dbData, ['verify'=>'OK']);				
 						true;

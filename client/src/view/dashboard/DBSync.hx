@@ -1,4 +1,7 @@
 package view.dashboard;
+import db.DbQuery.DbQueryParam;
+import redux.Redux.Dispatch;
+import action.async.CRUD;
 import js.lib.Promise;
 import action.async.DBAccessProps;
 import action.async.LivePBXSync;
@@ -86,6 +89,12 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			userState:aState.userState
 		};
 	}
+
+	static function mapDispatchToProps(dispatch:Dispatch) {
+        return {
+            load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
+        };
+	}	
 	
 	public function createFieldList(ev:ReactEvent):Void
 	{
@@ -171,6 +180,32 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			}
 		)*/null);
 	}
+	
+	public function importAccounts(_):Void
+	{
+		trace(props.userState.dbUser.first_name);
+
+		setState({loading:true});
+		var p:Promise<DbData> = props.load(
+			{
+				className:'admin.SyncExternalAccounts',
+				action:'syncAll',
+				filter:{mandator:'1'},
+				limit:1000,
+				offset:0,
+				table:'accounts',
+				dbUser:props.userState.dbUser,
+				devIP:App.devIP,
+				maxImport:4000,
+				relations:new Map()
+			}
+		);
+		p.then(function(data:DbData){
+			trace(data);
+			setState({loading:false});
+		});
+	}
+
 	
 	public function importAll(_):Void
 	{

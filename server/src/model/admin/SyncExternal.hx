@@ -179,4 +179,67 @@ class SyncExternal extends Model
 		return updated;	
 	}
 
+	public static function  getMissing(dbData:DbData):String {
+		var sql:String = '
+		SELECT DISTINCT(cl.client_id) FROM clients cl 
+INNER JOIN pay_plan pp 
+ON pp.client_id=cl.client_id 
+INNER JOIN pay_source ps 
+ON ps.client_id = cl.client_id;';
+        var stmt:PDOStatement = S.syncDbh.query(sql);
+		if(untyped stmt==false)
+		{
+			trace(S.syncDbh.errorInfo());
+			S.sendErrors(dbData, ['getAll query:'=>S.syncDbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+		}
+		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_NUM):null);	
+		
+		trace(Syntax.code("count({0})",res));
+				
+		var cleared:Int = S.dbh.exec('CREATE TEMP TABLE contact_ids(id BIGINT)');
+		if(S.dbh.errorCode() !='00000')
+		{
+			trace(S.dbh.errorInfo());
+		}
+		else 	
+			trace('created temp table contact_ids');
+		var cIDs:NativeArray = Syntax.code("array_map(function($r){return $r[0];}, {0})",res);
+		trace(Syntax.code("print_r({0}[0],1)", cIDs));
+		var ok:Bool = S.dbh.pgsqlCopyFromArray("contact_ids",cIDs);
+		if(!ok)
+		{
+			trace(S.dbh.errorInfo());
+		}
+		if(S.dbh.errorCode() !='00000')
+		{
+			trace(S.dbh.errorInfo());
+		}
+		sql = comment(unindent, format)/* 
+		SELECT ARRAY_TO_STRING(array_agg(acid.id),',') from contact_ids acid
+		left join 
+		(SELECT 1 as gg,id from contacts) c
+		ON acid.id=c.id
+		where c.id IS NULL
+		GROUP BY gg;
+		*/;
+		stmt = S.dbh.query(sql);
+		if(untyped stmt==false)
+		{
+			trace('$sql ${Std.parseInt(S.dbQuery.dbParams['limit'])}');
+			S.sendErrors(dbData, ['getMissingIDs query:'=>S.syncDbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+		}
+		var ids:String = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN,0):null);
+		trace(ids);
+		return ids;
+	}
+
+
 }

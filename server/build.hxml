@@ -15,4 +15,4 @@
 -dce std
 -main S
 
--cmd build.sh
+-cmd ./build.sh

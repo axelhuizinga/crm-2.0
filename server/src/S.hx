@@ -23,6 +23,7 @@ import model.data.Deals;
 import model.admin.CreateHistoryTrigger;
 import model.admin.CreateUsers;
 import model.admin.SyncExternal;
+import model.admin.SyncExternalAccounts;
 import model.admin.SyncExternalBookings;
 import model.admin.SyncExternalClients;
 import model.roles.Users;
@@ -139,6 +140,7 @@ class S
 		dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
 			Syntax.array([PDO.ATTR_PERSISTENT,true]));
 		
+		trace(dbh);
 		if(action.indexOf('sync')==0)
 		{
 			//CONNECT DIALER DB	
@@ -147,6 +149,8 @@ class S
 				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
 			//trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
 		}
+
+		saveRequest(dbQuery);
 
 		if(action == 'resetPassword')
 		{
@@ -504,6 +508,26 @@ class S
 		trace(sql);
 		return null;
 	}
+
+	static function saveRequest(dbQuery:DbQuery):Bool
+	{
+		//trace(new hxbit.Serializer().serialize(dbQuery));
+		//trace(S.dbQuery);
+		trace(Json.stringify(dbQuery));
+		//var request:String = Json.stringify(new hxbit.Dump(new hxbit.Serializer().serialize(dbQuery)).dumpObj());
+		//var request:String = Web.getPostData();
+		//trace( request.length + ' == ' +  Syntax.code('strlen(@iconv("UTF-8", "UTF-8//IGNORE",{0}))',request));
+		//trace(request);
+		var rTime:String = DateTools.format(S.last_request_time, "'%Y-%m-%d %H:%M:%S'");//,request=?
+		var stmt:PDOStatement = dbh.prepare('UPDATE activity SET "request"=:request FROM users WHERE users.id=:id AND users.id=activity.user' ,Syntax.array(null));
+		//trace('UPDATE users SET last_request_time=${rTime},request=\'$request\' WHERE id=\'$id\'');
+		var success:Bool = Model.paramExecute(stmt, //null
+			Lib.associativeArrayOfObject({':id': dbQuery.dbUser.id, ':request': Json.stringify(dbQuery)})
+		);
+		if(Std.parseInt(stmt.errorCode())>0)
+			trace(stmt.errorInfo());
+		return success;
+	}	
 		
 	static function __init__() {
 		Syntax.code('require_once({0})', '../.crm/db.php');

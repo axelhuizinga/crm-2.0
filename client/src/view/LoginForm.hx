@@ -54,7 +54,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		super(props);
 		trace(props);
 		submitValue = '';
-		state = copy(props.userState,{waiting:true});//{user_name:'',pass:'',new_pass_confirm: '', new_pass: '',waiting:true};
+		state = copy(props.userState,{waiting:false});//{user_name:'',pass:'',new_pass_confirm: '', new_pass: '',waiting:true};
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {

@@ -41,13 +41,13 @@ module.exports = {
         path: dist,
         filename: 'js/[name].js',
         //filename: ([name] == 'app'? 'app.js':'[name].app.js'),
-	//publicPath: dist
+		//publicPath: dist,
 		publicPath: '/'
 	//publicPath: 'https://192.168.178.20:9000/'
     },
     // Module resolution options (alias, default paths,...)
     resolve: {
-	modules: [path.resolve(dir, 'res/scss'), 'node_modules'],
+		modules: [dist, path.resolve(dir, 'res/scss'), 'node_modules'],
         extensions: ['.js', '.json']
     },
     // Sourcemaps option for development
@@ -85,7 +85,7 @@ module.exports = {
 			index:false
 		},
 		//publicPath: __dirname + '../httpdocs/'
-		publicPath: '/',
+		publicPath: dist,//'/',
 			// Accepted values: none, errors-only, minimal, normal, detailed, verbose
 			// Any other falsy value will behave as 'none', truthy values as 'normal'	
 		stats: {

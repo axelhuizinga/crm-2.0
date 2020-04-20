@@ -119,12 +119,13 @@ class CreateUsers extends Model
 		var vD:NativeArray = ini['vicidial'];
 		//trace(ini);
 		trace(S.vicidialUser);
-		var url:String = Syntax.code("{0}['vicidial']['url']", ini);
+		return null;
+	/*	var url:String = Syntax.code("{0}['vicidial']['url']", ini);
 		trace(url + '?className=AdminApi&action=storno_grund&user=${S.viciDial["admin"]}&pass=xxx');
 		//trace(Syntax.code("file_get_contents({0})",'${url}?className=AdminApi&action=storno_grund&user=${S.vicidialUser}&pass=${S.vicidialPass}'));
 		return Json.parse(Syntax.code("file_get_contents({0})",
 		'${url}?className=AdminApi&action=storno_grund&user=${S.viciDial["admin"]}&pass=${S.viciDial["pass"]}')).rows;
-		//data.rows = end_reasons.rows;		
+		//data.rows = end_reasons.rows;		*/
 	}
 	
 	public function importExternal():Void

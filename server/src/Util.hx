@@ -94,11 +94,11 @@ class Util
 
 	public static function map2fields(row:NativeArray,keys:Array<String>):Map<String,Dynamic> {
 		
-		//trace(row);
-		//trace(keys);
+		trace(row);
+		trace(keys);
 		return[
 			for(k in keys)
-				k => row[k]
+				k => (Syntax.code('array_key_exists({0},{1})', k, row) ? row[k]:null)
 		];
 	}
 

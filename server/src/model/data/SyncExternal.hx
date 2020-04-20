@@ -35,7 +35,7 @@ class SyncExternal extends Model
 		Reflect.callMethod(self, Reflect.field(self,param.get("action")), [param]);
 	}	
 
-    public function syncContactDetails(?contact:Dynamic):Void
+    /*public function syncContactDetails(?contact:Dynamic):Void
     {
         var info:Map<String,Dynamic>  = getViciDialData();
         //var req:Http = new Http(info['syncApi']);
@@ -48,12 +48,6 @@ class SyncExternal extends Model
         var data:String = Syntax.code("exec({0})", 'curl -d "user=${user}&pass=${pass}" ${url}');
         //var data:String = untyped __call__('exec','curl -d "user=${user}&pass=${pass}" ${url}');
         trace(data);
-        /*return;
-        req.addParameter('pass', info['pass']);
-        req.addParameter('user', info['admin']);
-        req.addParameter('action', info['syncContactDetails']);
-        req.onData = function(data:String)
-        {*/
             //S.saveLog(data);
             var dRows:Array<Dynamic> = Json.parse(data);
             trace(dRows.length);
@@ -75,16 +69,16 @@ class SyncExternal extends Model
                 );
             }
             S.sendData(saveContactDetails(), null);
-        /*};
+      };
         req.onError = function (msg:String)
         {
             trace(msg);
         }
         req.onStatus = function (s:Int)
         { trace(s);}
-        req.request(true);*/
+        req.request(true);
         trace('done');
-    }
+    }*/
 
     function saveContactDetails():DbData
     {
@@ -126,7 +120,7 @@ class SyncExternal extends Model
 		return dbData; 
     }
 
-    public function getViciDialData():Map<String,Dynamic> 
+/*    public function getViciDialData():Map<String,Dynamic> 
 	{		        
         S.saveLog(S.conf.get('ini'));
         var ini:NativeArray = S.conf.get('ini');
@@ -139,6 +133,6 @@ class SyncExternal extends Model
         //S.saveLog(info);
         return info;
 		S.sendInfo(dbData, info);
-	}
+	}*/
 
 }

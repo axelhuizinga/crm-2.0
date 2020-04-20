@@ -100,8 +100,8 @@ class S
 	static function main() 
 	{		
 		//trace(conf.get('ini'));
-		var ini:NativeArray = S.conf.get('ini');
-		var vD:NativeArray = ini['vicidial'];
+		//var ini:NativeArray = S.conf.get('ini');
+		//var vD:NativeArray = ini['vicidial'];
 		//trace(ini);
 		ts = Sys.time();
 		last_request_time = Date.fromTime(ts/1000);
@@ -109,7 +109,7 @@ class S
 		//trace(last_request_time.toString() + ' == $now' );		
 		trace(DateTools.format(last_request_time, "%d.%m.%y %H:%M:%S") + ' == $now' );		
 		//trace(vD['syncApi']);
-		var viciDial = Lib.hashOfAssociativeArray(vD);
+		//var viciDial = Lib.hashOfAssociativeArray(vD);
 		//trace(viciDial['url']);
 		//trace(viciDial['admin']);
 		if(Syntax.code("isset($_SERVER['VERIFIED'])"))
@@ -450,6 +450,28 @@ class S
 		}
 		return null;
 	}
+	
+	
+	public static function syncTableFields(table:String, db:String = 'fly_crm'): Array<String>
+	{
+		var sql:String = comment(unindent, format) /*
+			SELECT GROUP_CONCAT(COLUMN_NAME,',') FROM information_schema.columns WHERE table_schema = '$db' AND table_name = '$table'
+			*/;
+
+		var stmt:PDOStatement = syncDbh.query(sql);
+		if (S.dbh.errorCode() != '00000')
+		{
+			trace(syncDbh.errorCode());
+			trace(syncDbh.errorInfo());
+			Sys.exit(0);
+		}		
+		if (stmt.rowCount() == 1)
+		{
+			return stmt.fetchColumn().split(',');
+		}
+		return null;
+	}
+		
 	/**
 	 * [Returns a map of metadatas for the columns of a given table]
 	 * @param table 
@@ -507,6 +529,19 @@ class S
 		}
 		trace(sql);
 		return null;
+	}
+
+	public static function getViciDialData():Map<String,Dynamic> 
+	{		        
+		S.saveLog(S.conf.get('ini'));
+		var ini:NativeArray = S.conf.get('ini');
+		ini = ini['vicidial'];
+		var fields:Array<String> = Reflect.fields(Lib.objectOfAssociativeArray(ini));
+		var info:Map<String,Dynamic> = [
+			for(f in fields)
+			f => ini[f]
+		];
+		return info;
 	}
 
 	static function saveRequest(dbQuery:DbQuery):Bool

@@ -15,4 +15,4 @@
 -dce std
 -main S
 
--cmd rdev.sh
+-cmd ./dev.sh

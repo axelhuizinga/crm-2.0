@@ -129,7 +129,7 @@ class SyncExternal extends Model
 		return dbData; 
     }
 
-    public function getViciDialData():Map<String,Dynamic> 
+    /*public function getViciDialData():Map<String,Dynamic> 
 	{		        
         S.saveLog(S.conf.get('ini'));
         var ini:NativeArray = S.conf.get('ini');
@@ -142,7 +142,7 @@ class SyncExternal extends Model
         //S.saveLog(info);
         return info;
 		S.sendInfo(dbData, info);
-	}
+	}*/
 
 	function syncUserIds(vdUsers:NativeArray):Int 
 	{

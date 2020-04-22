@@ -189,7 +189,7 @@ class LivePBXSync
 		trace('${props.maxImport} ${props.limit} ${props.offset}');
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
-			trace(props.offset);
+			trace(props);
 			if (!props.userState.dbUser.online)
 			{
 				return dispatch(User(LoginError(

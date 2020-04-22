@@ -220,7 +220,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		}));
 	}
 
-		public function importAllBookingRequests(_):Void
+	public function importAllBookingRequests(_):Void
 	{
 		trace(props.userState.dbUser.first_name);
 		//var p:Promise<DbData> = cast 

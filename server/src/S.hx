@@ -119,8 +119,11 @@ class S
 		response = {content:'',error:''};
 		trace(Web.getMethod());
 		var params:Map<String,Dynamic> = null;//Web.getParams();
-		//trace(Web.getClientHeaders());
+		trace(Web.getParams());
+		trace(Web.getMultipart(11));
+		trace(Web.getClientHeaders());
 		try {
+			trace(Web.getPostData());
 			dbQuery = Model.binary();
 			trace(dbQuery);
 			//Model.binary(params.get('dbData'));

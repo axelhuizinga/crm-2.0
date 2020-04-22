@@ -53,6 +53,6 @@
     "pstart": "cross-env NODE_ENV=development webpack-dev-server --hot --progress",
     "build:dev": "NODE_ENV=development webpack",
     "build": "NODE_ENV=production webpack",
-    "postbuild": "sh publish.sh $npm_config_host $npm_config_root $npm_config_port"
+    "postbuild": "sh publish.sh $npm_config_app_host $npm_config_app_root $npm_config_app_port"
   }
 }

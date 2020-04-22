@@ -3,11 +3,11 @@
 // This configuration is still relatively minimalistic;
 // each section has many more options
 //
-module.exports = (env, arg) =>{
+module.exports = () =>{
 	// context: __dirname,
-	console.log(env);
-	//console.log(arg);	
-	const localConf = require('./webpack.local')(env);
+	//console.log(env);
+	//console.log(opt);	
+	const localConf = require('./webpack.local')(process.env);
 	const devHost = localConf.ip;
 	const devServerHttps = localConf.devServerHttps;
 	const fs = require('fs');
@@ -209,10 +209,10 @@ module.exports = (env, arg) =>{
 			new HtmlWebpackPlugin({
 				filename: (isProd ? 'index.php' : 'crm.html'),
 				template: path.resolve(__dirname, 'res/'+(isProd ? 'crm.php' : 'crm.html')),
-				title: (env.org ? env.org + ' ' : '' )+ 'CRM 2.0'
+				title: (localConf.org ? localConf.org + ' ' : '' )+ 'CRM 2.0'
 			}),
 			new webpack.DefinePlugin({
-				__host__:env.host
+				__host__:JSON.stringify(localConf.host)
 			})
 		]
 	}

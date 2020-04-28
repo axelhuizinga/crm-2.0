@@ -202,6 +202,7 @@ class LivePBXSync
 			var bl:XMLHttpRequest = BinaryLoader.create(
 				'${App.config.api}', 
 				{
+					dbUser:props.userState.dbUser,
 					id:props.userState.dbUser.id,
 					jwt:props.userState.dbUser.jwt,
 					className:props.className,

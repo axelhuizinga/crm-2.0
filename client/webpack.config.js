@@ -77,8 +77,8 @@ module.exports = () =>{
 			//inline: false,
 			//useLocalIp: true,
 			headers: {
-				"Access-Control-Allow-Origin": "https://pitverwaltung.de",
-				"Access-Control-Allow-Origin": "*",
+				//"Access-Control-Allow-Origin": "https://pitverwaltung.de",
+				"Access-Control-Allow-Origin": "https://" + localConf.host,
 				"Access-Control-Allow-Credentials":true,
 				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
 				"Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
@@ -180,6 +180,7 @@ module.exports = () =>{
 			]
 		},
 		optimization: {
+			//minimize:false,
 			splitChunks: {
 			cacheGroups: {
 				styles: {
@@ -209,7 +210,7 @@ module.exports = () =>{
 			new HtmlWebpackPlugin({
 				filename: (isProd ? 'index.php' : 'crm.html'),
 				template: path.resolve(__dirname, 'res/'+(isProd ? 'crm.php' : 'crm.html')),
-				title: (localConf.org ? localConf.org + ' ' : '' )+ 'CRM 2.0'
+				title: (localConf.org ? localConf.org + ' ' : '' ) + 'CRM 2.0'
 			}),
 			new webpack.DefinePlugin({
 				__host__:JSON.stringify(localConf.host)

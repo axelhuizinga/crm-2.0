@@ -118,18 +118,21 @@ class S
 
 		response = {content:'',error:''};
 		trace(Web.getMethod());
-		var params:Map<String,Dynamic> = null;//Web.getParams();
-		trace(Web.getParams());
-		trace(Web.getMultipart(11));
+		var params:Map<String,Dynamic> = Web.getParams();
+		//trace(Web.getParams());
+		//trace(Web.getMultipart(512000));
 		trace(Web.getClientHeaders());
-		try {
-			trace(Web.getPostData());
-			dbQuery = Model.binary();
-			trace(dbQuery);
-			//Model.binary(params.get('dbData'));
-			params = dbQuery.dbParams;
+		if(true||params.exists('action'))
+		{
+			try {
+				trace(Web.getPostData());
+				dbQuery = Model.binary();
+				trace(dbQuery);
+				//Model.binary(params.get('dbData'));
+				params = dbQuery.dbParams;
+			}		
+		}
 
-		}		
 		devIP = params.get('devIP');
 		trace(params);
 

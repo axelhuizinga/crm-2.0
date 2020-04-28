@@ -21,7 +21,9 @@ class BinaryLoader {
 
 	public static function create(url:String, p:Dynamic, onLoaded:DbData->Void):XMLHttpRequest
 	{
+		return dbQuery(url, p, onLoaded);
 		var bl:BinaryLoader = new BinaryLoader(url);
+		trace(p);
 		bl.param = new FormData();
 		//bl.param = Json.stringify(p);
 		bl.cB = onLoaded;
@@ -110,14 +112,14 @@ class BinaryLoader {
 			onLoaded(haxe.io.Bytes.ofData(xhr.response));
 		}
 		
-		xhr.onprogress = function(e) {
+	/*	xhr.onprogress = function(e) {
 			#if (haxe_ver >= 4)
 			trace('${e.loaded} :: ${e.total}');
 			//onProgress(Std.int(js.Syntax.code("{0}.loaded || {0}.position", e)), Std.int(js.Syntax.code("{0}.total || {0}.totalSize", e)));
 			#else
 			onProgress(Std.int(untyped __js__("{0}.loaded || {0}.position", e)), Std.int(untyped __js__("{0}.total || {0}.totalSize", e)));
 			#end
-		}
+		}*/
 		xhr.send(param);
 	}
 

@@ -16,6 +16,7 @@ typedef DbQueryParam = {
 	?relations:Map<String,DbRelation>,
 	?devIP:String,	
 	?filter:Dynamic,//Map<String,String>,
+	?firstBatch:Bool,
 	?formData:Dynamic,
 	?limit:Int,
 	?maxImport:Int,
@@ -33,19 +34,18 @@ class DbQuery implements hxbit.Serializable
 	@:s public var relations:Map<String,DbRelation>;
 	@:s public var dbUser:DbUser;
 
-	public function new(?drp:DbQueryParam) 
+	public function new(?dp:DbQueryParam) 
 	{
 		dbParams = new Map();
-		if(drp!=null){
-			dbUser = drp.dbUser;		
-			//dbUser = drp.dbUser;		
-			relations = drp.relations;
-			for(f in Reflect.fields(drp)){
+		if(dp!=null){
+			dbUser = dp.dbUser;		
+			relations = dp.relations;
+			for(f in Reflect.fields(dp)){
 				switch (f){
 					case '__uid'|'dbUser'|'relations'|'getCLID'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':
 						//SKIP
 					default:
-						var v = Reflect.field(drp,f);
+						var v = Reflect.field(dp,f);
 						//if(v!=null)
 							dbParams.set(f, v);
 				}

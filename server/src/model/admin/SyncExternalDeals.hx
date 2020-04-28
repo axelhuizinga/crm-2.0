@@ -27,6 +27,7 @@ class SyncExternalDeals {
 				ON CONFLICT (id) DO UPDATE
 				SET $dSet returning id;
 			*/;
+		trace(sql);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		for(row in deals.iterator())
 		{

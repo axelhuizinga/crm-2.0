@@ -229,66 +229,7 @@ class Model
 		return joinSql;
 	}
 
-	public function buildJoin1():String
-	{
-		if (joinSql != null)
-			return joinSql;
-		var sqlBf:StringBuf = new StringBuf();				
-		for (table in tableNames)
-		{
-			var tRel:Map<String,Dynamic> = dataSource.get(table);
-			var alias:String = (tRel.exists('alias')? quoteIdent(tRel.get('alias')):'');
-			var jCond:String = tRel.exists('jCond') ? tRel.get('jCond'):null;
-			if (jCond != null)
-			{
-				if(~/\./.match(jCond))
-				{
-					var jParts = jCond.split('=');					
-					trace(jParts.join('='));
-					trace(jParts[0]);
-					trace(jParts[1]);
-					if(jParts[0].indexOf('.')>-1)
-					{
-						var dots = jParts[0].split('.');
-						if(dots.length>2)
-						{
-							S.sendErrors(dbData,['invalidJoinCond'=>jCond]);
-						}
-						if(dots.length==2){
-							jCond = '${quoteIdent(dots[0])}.${dots[1]}=${jParts[1]}';
-						}
-					}
-					else {
-						var dots = jParts[1].split('.');
-						//trace(dots);
-						if(dots.length>2)
-						{
-							S.sendErrors(dbData,['invalidJoinCond'=>jCond]);
-						}
-						if(dots.length==2){
-							jCond = '${jParts[0]}=${quoteIdent(dots[0])}.${dots[1]}';
-						}						
-					}
-				}
-				var jType:String = switch(tRel.get('jType'))
-				{
-					case JoinType.LEFT:
-						'LEFT';
-					case JoinType.RIGHT:
-						'RIGHT';
-					default:
-						'INNER';
-				}
-				sqlBf.add('$jType JOIN ${quoteIdent(table)} $alias ON $jCond ');		
-			}
-			else
-			{// FIRST TABLE
-				sqlBf.add('${quoteIdent(table)} $alias ');
-			}
-		}
-		joinSql = sqlBf.toString();
-		return joinSql;
-	}	
+		
 	public function doSelect():NativeArray
 	{	
 		var sqlBf:StringBuf = new StringBuf();

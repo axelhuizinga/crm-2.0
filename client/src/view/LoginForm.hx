@@ -336,7 +336,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			<div className="formContainer">
 				<div className="formBox is-rounded" style=${style}>
 					<div className="logo">
-					<img src="img/logo.png" style=${{width:'100%'}}/>
+					<img src="img/schutzengelwerk-logo.png" style=${{width:'100%'}}/>
 					<h2 className="overlaySubTitle">				  
 					crm 2.0
 					</h2>

@@ -1,4 +1,5 @@
 package;
+import php.SuperGlobal;
 import db.DbRelation;
 import db.DbUser;
 import db.DbQuery;
@@ -117,11 +118,11 @@ class S
 		//var pd:Dynamic = Web.getPostData();
 
 		response = {content:'',error:''};
-		trace(Web.getMethod());
-		var params:Map<String,Dynamic> = Web.getParams();
+		//trace(Web.getMethod());
+		var params:Map<String,Dynamic> = Lib.hashOfAssociativeArray(SuperGlobal._POST);//Web.getParams();
 		//trace(Web.getParams());
 		//trace(Web.getMultipart(512000));
-		trace(Web.getClientHeaders());
+		//trace(Web.getClientHeaders());
 		if(true||params.exists('action'))
 		{
 			try {
@@ -571,9 +572,10 @@ class S
 	}	
 		
 	static function __init__() {
-		Syntax.code('require_once({0})', '../.crm/db.php');
+		var branch:String = #if dev 'dev' #else 'crm' #end;
+		Syntax.code('require_once({0})', '../.$branch/db.php');
 		Syntax.code("file_put_contents($appLog,'.', FILE_APPEND)");
-		Syntax.code('require_once({0})', '../.crm/functions.php');
+		Syntax.code('require_once({0})', '../.$branch/functions.php');
 		//Syntax.code('require_once({0})', 'inc/PhpRbac/Rbac.php');
 		Debug.logFile = untyped Syntax.code("$appLog");
 		haxe.Log.trace = Debug._trace;

@@ -77,8 +77,8 @@ module.exports = () =>{
 			//inline: false,
 			//useLocalIp: true,
 			headers: {
-				//"Access-Control-Allow-Origin": "https://pitverwaltung.de",
 				"Access-Control-Allow-Origin": "https://" + localConf.host,
+				//"Access-Control-Allow-Origin": "https://" + localConf.host,
 				"Access-Control-Allow-Credentials":true,
 				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
 				"Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
@@ -90,7 +90,7 @@ module.exports = () =>{
 			staticOptions:{
 				index:false
 			},
-			//publicPath: __dirname + '../httpdocs/'
+			//publicPath: __dirname + '../httpdocs/',
 			publicPath: '/',
 				// Accepted values: none, errors-only, minimal, normal, detailed, verbose
 				// Any other falsy value will behave as 'none', truthy values as 'normal'	

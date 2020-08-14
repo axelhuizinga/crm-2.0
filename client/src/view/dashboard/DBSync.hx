@@ -260,8 +260,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	}	
 
 	public function importDeals() {
-		App.store.dispatch(LivePBXSync.mergeContacts({
-			limit: 25000,
+		App.store.dispatch(LivePBXSync.importDeals({
+			limit: 250,//00,
 			offset:0,
 			className: 'admin.SyncExternalClients',
 			action: 'syncImportDeals',

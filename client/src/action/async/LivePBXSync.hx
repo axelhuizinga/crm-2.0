@@ -257,4 +257,79 @@ class LivePBXSync
 			return null;
 		});
 	}	
+
+	public static function importDeals(props:DBAccessProps) 
+	{
+		trace('${props.maxImport} ${props.limit} ${props.offset}');
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+			var aState:AppState = getState();
+			trace(props);
+			if (!props.userState.dbUser.online)
+			{
+				return dispatch(User(LoginError(
+				{
+					dbUser:props.userState.dbUser,
+					lastError:'Du musst dich neu anmelden!'					
+				})));
+			}				
+			trace('creating BinaryLoader ${App.config.api}');
+			var bl:XMLHttpRequest = BinaryLoader.create(
+				'${App.config.api}', 
+				{
+					dbUser:props.userState.dbUser,
+					id:props.userState.dbUser.id,
+					jwt:props.userState.dbUser.jwt,
+					className:props.className,
+					action:props.action,
+					limit:props.limit,
+					offset:props.offset,
+					filter:props.filter,
+					firstBatch:props.offset==0, 
+					maxImport:props.maxImport==null?1000:props.maxImport,
+					devIP:App.devIP
+				},
+				function(data:DbData)
+				{			
+					trace(data);
+					trace(data.dataRows.length);
+					if(data.dataErrors.keys().hasNext())
+					{
+						return dispatch(Status(Update(
+							{
+								className:'error',
+								text:data.dataErrors.iterator().next()
+							}							
+						)));
+					} 
+					trace(data.dataInfo);
+					if(data.dataInfo['offset']==null)
+					{
+						return dispatch(Status(Update(
+						{
+							className:'error',
+							text:'Fehler 0 Deals Aktualisiert'
+						})));
+					}
+					//props.batchCount += data.dataInfo['offset'];
+					if(data.dataInfo['offset']!=null)
+					{
+						props.offset = Std.parseInt(data.dataInfo['offset']);
+						dispatch(Status(Update(
+						{
+							className:'',
+							text:'${props.offset} Deals von ${props.maxImport} geladen oder aktualisiert'
+						})));
+					}
+					trace('${props.offset} < ${props.maxImport}');
+					if(props.offset < props.maxImport){
+						//LOOP UNTIL LIMIT
+						trace('next loop:${props}');
+						return dispatch(importDeals(props));
+					}						
+					return null;
+				}
+			);
+			return null;
+		});
+	}		
 }

@@ -12,9 +12,10 @@ class SyncExternalDeals {
 	static var dKeys:Array<String> =  S.tableFields('deals');
 
 	public static function importDeals(dbh:PDO, dbData:DbData, deals:NativeArray):Void 
-	{		
+	{
 		var dealsRows:Int = Syntax.code("count({0})",deals);
 		trace('dealsRows:$dealsRows');
+		trace(dbData);
 		var dD:Map<String,Dynamic> = Util.map2fields(deals[0], dKeys);
         var dNames:Array<String> = [for(k in dD.keys()) k];		
 		var dPlaceholders:Array<String> =  [for(k in dNames) k].map(function (k) return ':$k');
@@ -29,6 +30,7 @@ class SyncExternalDeals {
 			*/;
 		trace(sql);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
+		var synced:Int = 0;
 		for(row in deals.iterator())
 		{
 			Util.bindClientData('deals',stmt,row,dbData);
@@ -39,9 +41,11 @@ class SyncExternalDeals {
 				'sql'=>sql,
 				'id'=>Std.string(Syntax.code("{0}['id']",row))]);
 			}
+			trace(stmt.rowCount());
+			synced++;
 		}
         trace('done');
-		//dbData.dataInfo['offset'] = param['offset'] + synced;
+		//dbData.dataInfo['offset'] = Std.parseInt(dbData.dataParams.get('offset')) + synced;
 		trace(dbData.dataInfo);
         //S.sendData(dbData, null);
 		S.sendInfo(dbData,['imported'=>'OK:' + stmt.rowCount()]);

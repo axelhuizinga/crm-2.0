@@ -21,6 +21,9 @@ class Util
 	public static function bindClientData(table:String, stmt:PDOStatement, row:NativeArray, dbData:DbData)
 	{
 		var meta:Map<String, NativeArray> = S.columnsMeta(table);
+		
+		Syntax.code("error_log({0})", table);
+		Syntax.code("error_log({0})", Std.string(row));
 		for(k => v in meta.keyValueIterator())
 		{
 			//if(k=='id')
@@ -28,7 +31,7 @@ class Util
 			
 			var pdoType:Int = v['pdo_type'];
 			if(row[k]==null||row[k].indexOf('0000-00-00')==0||row[k]=='')
-			{				
+			{
 				//trace (v['native_type']);
 				switch (v['native_type'])
 				{

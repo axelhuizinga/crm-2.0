@@ -1,4 +1,5 @@
 package;
+import php.Global;
 import shared.DbData;
 import php.db.PDO;
 import php.db.PDOStatement;
@@ -22,15 +23,18 @@ class Util
 	{
 		var meta:Map<String, NativeArray> = S.columnsMeta(table);
 		
-		Syntax.code("error_log({0})", table);
-		Syntax.code("error_log({0})", Std.string(row));
+		//Syntax.code("error_log({0})", table);
+		//Syntax.code("error_log({0})", Std.string(row));
+		//trace(meta);
+
 		for(k => v in meta.keyValueIterator())
 		{
 			//if(k=='id')
-				//continue;
+				//continue;!Global.array_key_exists(k,row)||
+			var kv:Dynamic = Global.array_key_exists(k,row)?row[k]:null;
 			
 			var pdoType:Int = v['pdo_type'];
-			if(row[k]==null||row[k].indexOf('0000-00-00')==0||row[k]=='')
+			if(kv==null||kv.indexOf('0000-00-00')==0||kv=='')
 			{
 				//trace (v['native_type']);
 				switch (v['native_type'])
@@ -38,16 +42,16 @@ class Util
 					case 'date'|'datetime'|'timestamp':
 					pdoType = PDO.PARAM_NULL;
 					case 'text'|'varchar':
-					row[k] = '';
+					kv = '';
 					case 'int8':
-					row[k] = 0;
+					kv = 0;
 				}
 			}
-			//trace('$k => $pdoType:${row[k]}');
-			if(!stmt.bindValue(':$k',row[k], pdoType))//row[k]==null?1:
+			//trace('$k => $pdoType:${kv}');
+			if(!stmt.bindValue(':$k',kv, pdoType))//kv==null?1:
 			{
 				//trace('$k => $v');
-				S.sendErrors(dbData,['bindValue'=>'${row[k]}:$pdoType']);
+				S.sendErrors(dbData,['bindValue'=>'${kv}:$pdoType']);
 			}		
 		}
 	}
@@ -55,7 +59,7 @@ class Util
 	public static function bindClientDataNum(table:String, stmt:PDOStatement, row:NativeArray, dbData:DbData)
 	{
 		var meta:Map<String, NativeArray> = S.columnsMeta(table);
-		//trace(meta);
+		trace(meta);
 		var i:Int = 0;
 		for(k => v in meta.keyValueIterator())
 		{

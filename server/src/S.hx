@@ -87,13 +87,15 @@ class S
 	public static var db:String;
 	public static var dbHost:String;
 	public static var dbUser:String;
-	public static var dbPass:String;	
+	public static var dbPass:String;
+	public static var dbSchema:String;
 	public static var dbViciBoxCRM:String;
 	public static var dbViciBoxDB:String;
 	public static var dbViciBoxHost:String;
 	public static var dbViciBoxUser:String;
 	public static var dbViciBoxPass:String;	
 	public static var dbQuery:DbQuery;
+	public static var params:Map<String,Dynamic>;
 	public static var vicidialUser:String;
 	public static var viciDial: Map<String, Dynamic>;
 	static var ts:Float;
@@ -119,16 +121,16 @@ class S
 
 		response = {content:'',error:''};
 		//trace(Web.getMethod());
-		var params:Map<String,Dynamic> = Lib.hashOfAssociativeArray(SuperGlobal._POST);//Web.getParams();
+		params = Lib.hashOfAssociativeArray(SuperGlobal._POST);//Web.getParams();
 		//trace(Web.getParams());
 		//trace(Web.getMultipart(512000));
 		//trace(Web.getClientHeaders());
 		if(true||params.exists('action'))
 		{
 			try {
-				trace(Web.getPostData());
+				//trace(Web.getPostData());
 				dbQuery = Model.binary();
-				trace(dbQuery);
+				//trace(dbQuery);
 				//Model.binary(params.get('dbData'));
 				params = dbQuery.dbParams;
 			}		
@@ -147,7 +149,7 @@ class S
 		dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
 			Syntax.array([PDO.ATTR_PERSISTENT,true]));
 		
-		trace(dbh);
+		//trace(dbh);
 		if(action.indexOf('sync')==0)
 		{
 			//CONNECT DIALER DB	
@@ -582,6 +584,7 @@ class S
 		Out.skipFields = ['admin','keyPhrase','pass','password'];
 		edump(Debug.logFile);
 		db = Syntax.code("$DB");
+		dbSchema = Syntax.code("$DB_schema");
 		dbHost = Syntax.code("$DB_server");
 		dbUser = Syntax.code("$DB_user");
 		dbPass = Syntax.code("$DB_pass");		

@@ -1,6 +1,7 @@
 package view;
 
 
+import react.ReactUtil;
 import state.UserState;
 import react.ReactComponent.ReactFragment;
 import haxe.Timer;
@@ -41,7 +42,10 @@ typedef StatusBarProps =
 
 typedef StatusBarState = 
 {
-	?date:Date
+	?date:Date,
+	?text:String,
+	?className:String,
+	userState:UserState,
 }
 //@:expose('default')
 @:connect
@@ -53,7 +57,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	
 	public function new(?props:StatusBarProps,?context:Dynamic)
 	{
-		state = {date:Date.now()};
+		state = ReactUtil.copy(props, {date:Date.now()});
 		//trace(props);
 		//trace(context);
 		trace('ok');
@@ -98,7 +102,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	
 	static function mapStateToProps(state:AppState) 
 	{
-		trace(state.userState.dbUser.first_name);
+		//trace(state.userState.dbUser.first_name);
 		trace(Reflect.fields(state));
 		trace(state.status);
 		//setState({status:state.statusBar.status})

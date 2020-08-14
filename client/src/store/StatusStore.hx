@@ -26,9 +26,9 @@ class StatusStore
 		{
 			case Update(status):
 				trace(status);
-				copy(state, status);
+				copy(status);
 			default:
-				state;
+				initState;
 		}
 	}
 	

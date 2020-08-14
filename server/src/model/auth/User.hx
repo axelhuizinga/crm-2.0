@@ -89,7 +89,7 @@ class User extends Model
 	static function userEmail(param:Map<String,Dynamic>):String
 	{
 		var dbData:DbData = new DbData();
-		var sql:String = 'SELECT user_name FROM ${S.db}.users WHERE user_name=:user_name AND mandator=:mandator AND active=TRUE';
+		var sql:String = 'SELECT user_name FROM ${S.dbSchema}.users WHERE user_name=:user_name AND mandator=:mandator AND active=TRUE';
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject(
 			{':user_name': param.get('user').user_name,':mandator':param.get('mandator')}))
@@ -101,7 +101,7 @@ class User extends Model
 		if(stmt.rowCount()>0)
 		{
 			//ACTIVE USER EXISTS - CHECK EMAIL
-			sql = 'SELECT email, first_name, last_name, last_login, us.id FROM ${S.db}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name';
+			sql = 'SELECT email, first_name, last_name, last_login, us.id FROM ${S.dbSchema}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name';
 			stmt = S.dbh.prepare(sql,Syntax.array(null));
 			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject(
 				{':user_name': param.get('user').user_name}
@@ -163,7 +163,7 @@ class User extends Model
 	static function userIsAuthorized(user:DbUser,?login:Bool):UserAuth
 	{
 		var dbData:DbData = new DbData();
-		var sql:String = 'SELECT user_name FROM ${S.db}.users WHERE user_name=:user_name AND active=TRUE';
+		var sql:String = 'SELECT user_name FROM ${S.dbSchema}.users WHERE user_name=:user_name AND active=TRUE';
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${user.user_name}'})))
 		{			
@@ -173,7 +173,7 @@ class User extends Model
 		if(stmt.rowCount()>0)
 		{
 			//ACTIVE USER EXISTS
-			sql = 'SELECT change_pass_required, first_name, last_name, last_login, us.id, us.mandator FROM ${S.db}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name AND phash=crypt(:password,phash)';
+			sql = 'SELECT change_pass_required, first_name, last_name, last_login, us.id, us.mandator FROM ${S.dbSchema}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name AND phash=crypt(:password,phash)';
 			trace(sql);
 			stmt = S.dbh.prepare(sql,Syntax.array(null));
 			if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${user.user_name}',':password':'${user.password}'})))
@@ -277,8 +277,8 @@ class User extends Model
 		}
 		
 		var sql = (param.get('user').id!='undefined'&&param.get('user').id!=null?
-				'UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id':
-				'UPDATE ${S.db}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE user_name=:user_name AND mandator=:mandator');
+				'UPDATE ${S.dbSchema}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id':
+				'UPDATE ${S.dbSchema}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE user_name=:user_name AND mandator=:mandator');
 		trace(sql);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		if ( !Model.paramExecute(stmt, Lib.associativeArrayOfObject(
@@ -475,7 +475,7 @@ html,body{
 						false;
 					case Valid(payload):
 						// JWT VALID AND NOT OLDER THAN 11 h
-						trace(dbQuery);
+						//trace(dbQuery);
 						//saveRequest(id, dbQuery);		
 						if(S.action=='verify')
 							S.sendInfo(dbData, ['verify'=>'OK']);				

@@ -1,4 +1,5 @@
 package store;
+import action.StatusAction;
 import action.async.UserAccess;
 import state.UserState;
 import action.DataAction;
@@ -93,10 +94,13 @@ class AppStore
 					trace(data.dataRows);
 					copy(state,
 						{dataStore:{contactsDbData:data}});
+
 					default:
 						state;
 				}
-				
+			case Status(action):
+				copy(state,
+					{status:{text:'666'}});				
 			/*case FormChange(cfp, fState):
 				var formStates = state.formStates;
 				if(formStates.exists(cfp))
@@ -118,6 +122,11 @@ class AppStore
 	public function middleware(action:AppAction, next:Void -> Dynamic)
 	{
 		trace(Type.enumConstructor(action)+'.'+Type.enumConstructor(Type.enumParameters(action)[0]));
+		trace(Type.enumParameters(action));
+		Type.enumParameters(action).map(function (p) {
+			trace(p);
+			return p;
+		});
 		return switch(action)
 		{			
 			/*case GlobalState(key, value):
@@ -126,6 +135,13 @@ class AppStore
 			//case DataLoaded(component:String,sData:IntMap<Map<String,Dynamic>>):
 			case DataLoaded(component,sData):
 				next();
+			*/	
+			case Status(action):
+				
+				//store.dispatch(StatusAction.Update(copy(Type.enumParameters(action)[0])));
+				store.dispatch(action);
+			/*	next();
+				
 			case Status(status):
 				trace(status);
 				//Out.dumpStack(CallStack.callStack());ReduxAction

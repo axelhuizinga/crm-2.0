@@ -1,5 +1,6 @@
 package action.async;
 
+import react.ReactUtil;
 import js.lib.Promise;
 import haxe.ds.IntMap;
 import state.UserState;
@@ -290,8 +291,8 @@ class LivePBXSync
 				},
 				function(data:DbData)
 				{			
-					trace(data);
-					trace(data.dataRows.length);
+					//trace(data);
+					//trace(data.dataRows.length);
 					if(data.dataErrors.keys().hasNext())
 					{
 						return dispatch(Status(Update(
@@ -311,20 +312,27 @@ class LivePBXSync
 						})));
 					}
 					//props.batchCount += data.dataInfo['offset'];
-					if(data.dataInfo['offset']!=null)
+					var nProps:Dynamic = {};
+					if(data.dataInfo.get('offset')!=null)
 					{
-						props.offset = Std.parseInt(data.dataInfo['offset']);
+						nProps = ReactUtil.copy(props,{
+							limit:data.dataInfo['limit'],
+							maxImport:data.dataInfo['maxImport'],
+							offset:data.dataInfo['offset']
+						});
+						
+						trace(nProps);
 						dispatch(Status(Update(
 						{
 							className:'',
-							text:'${props.offset} Deals von ${props.maxImport} geladen oder aktualisiert'
+							text:'${nProps.offset} Deals von ${nProps.maxImport} geladen oder aktualisiert'
 						})));
 					}
-					trace('${props.offset} < ${props.maxImport}');
-					if(props.offset < props.maxImport){
+					trace('${nProps.offset} < ${nProps.maxImport}');
+					if(nProps.offset < nProps.maxImport){
 						//LOOP UNTIL LIMIT
-						trace('next loop:${props}');
-						return dispatch(importDeals(props));
+						//trace('next loop:${props}');
+						return dispatch(importDeals(nProps));
 					}						
 					return null;
 				}

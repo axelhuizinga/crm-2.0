@@ -41,11 +41,11 @@ class SyncExternalDeals {
 				'sql'=>sql,
 				'id'=>Std.string(Syntax.code("{0}['id']",row))]);
 			}
-			trace(stmt.rowCount());
+			//trace(stmt.rowCount());
 			synced++;
 		}
         trace('done');
-		//dbData.dataInfo['offset'] = Std.parseInt(dbData.dataParams.get('offset')) + synced;
+		dbData.dataInfo['offset'] = Std.parseInt(S.params.get('offset')) + synced;
 		trace(dbData.dataInfo);
         //S.sendData(dbData, null);
 		S.sendInfo(dbData,['imported'=>'OK:' + stmt.rowCount()]);

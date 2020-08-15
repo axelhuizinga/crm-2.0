@@ -12,6 +12,7 @@
 -php ../httpdocs
 #-D analyzer-optimize
 -D dev
+-D no-deprecation-warnings
 -debug
 -dce std
 -main S

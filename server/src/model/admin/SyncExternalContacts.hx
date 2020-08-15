@@ -30,7 +30,7 @@ using Util;
  * @author axel@bi4.me
  */
 
-class SyncExternalClients extends Model 
+class SyncExternalContacts extends Model 
 {
 	var keys:Array<String>;	
 	var synced:Int;
@@ -48,6 +48,8 @@ class SyncExternalClients extends Model
 		trace(action);
 		//SWITCH Call either an instance method directly or use the shared Model query execution
 		switch(action ){
+			case 'importContacts':
+				getMissing();
 			case 'syncAll':
 				syncAll();
 			
@@ -60,13 +62,18 @@ class SyncExternalClients extends Model
 		}		
 	}
 
+	function importContacts(){
+		if(S.params.get('onlyNew'))
+		{
+			getMissing();
+		}
+	}
+
 	function  getMissing() {
+		var min_id= (S.params.get('offset') != null? S.params.get('offset') : 9999999);
 		var sql:String = '
-		SELECT DISTINCT(cl.client_id) FROM clients cl 
-INNER JOIN pay_plan pp 
-ON pp.client_id=cl.client_id 
-INNER JOIN pay_source ps 
-ON ps.client_id = cl.client_id;';
+		SELECT cl.client_id FROM clients cl 
+		WHERE client_id>${min_id}';
         var stmt:PDOStatement = S.syncDbh.query(sql);
 		if(untyped stmt==false)
 		{
@@ -81,16 +88,20 @@ ON ps.client_id = cl.client_id;';
 		
 		trace(Syntax.code("count({0})",res));
 				
-		var cleared:Int = S.dbh.exec('TRUNCATE contact_ids');
+		var action = S.params["className"]+'.'+S.params["action"];
+		var cleared:Int = S.dbh.exec(
+			'DELETE FROM ext_ids WHERE auth_user=${S.dbQuery.dbUser.id} AND action="$action" AND table="contacts"');
 		if(S.dbh.errorCode() !='00000')
 		{
 			trace(S.dbh.errorInfo());
 		}
 		else 	
-			trace('cleared all IDs from contact_ids');
-		var cIDs:NativeArray = Syntax.code("array_map(function($r){return $r[0];}, {0})",res);
+			trace('cleared all IDs from ext_ids');
+		var cIDs:NativeArray = Syntax.code(
+			"array_map(function($r){return array($r[0],{1},{2},'contacts');}, 
+				{0})",res, S.dbQuery.dbUser.id, S.params['className']+'.'+S.params['action']);
 		trace(Syntax.code("print_r({0}[0],1)", cIDs));
-		var ok:Bool = S.dbh.pgsqlCopyFromArray("contact_ids",cIDs);
+		var ok:Bool = S.dbh.pgsqlCopyFromArray("ext_ids",cIDs);
 		if(!ok)
 		{
 			trace(S.dbh.errorInfo());
@@ -100,11 +111,13 @@ ON ps.client_id = cl.client_id;';
 			trace(S.dbh.errorInfo());
 		}
 		sql = comment(unindent, format)/* 
-		SELECT ARRAY_TO_STRING(array_agg(acid.id),',') from contact_ids acid
+		SELECT ARRAY_TO_STRING(array_agg(acid.id),',') from ext_ids acid
 		left join 
 		(SELECT 1 as gg,id from contacts) c
 		ON acid.id=c.id
 		where c.id IS NULL
+		AND eid.table='contacts'
+		AND eid.action='${S.params["className"]}.${S.params["action"]}'		
 		GROUP BY gg;
 		*/;
 		stmt = S.dbh.query(sql);
@@ -118,18 +131,12 @@ ON ps.client_id = cl.client_id;';
 			trace(stmt.errorInfo());
 		}
 		var ids:String = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN,0):null);
-		//trace(ids);
+		trace(ids);
 		sql = comment(unindent,format)/*
-		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(TO_DAYS(STR_TO_DATE(cl.birth_date, '%Y-%m-%d'))>500000 ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,
-pp.pay_plan_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,IF(pp.product='K',2,3) product ,pp.agent,pp.agency_project project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,
- ps.pay_source_id,ps.debtor,ps.bank_name,ps.account,ps.blz,ps.iban,ps.sign_date,ps.pay_source_state,ps.creation_date account_creation_date,
-vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
-IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner,vl.entry_list_id, 1 mandator, 100 edited_by, '' company_name
-FROM clients cl
-INNER JOIN pay_plan pp
-ON pp.client_id=cl.client_id
-INNER JOIN pay_source ps
-ON ps.client_id=cl.client_id
+		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(cl.birth_date<NOW(),cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,
+		vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
+		IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner,vl.entry_list_id, ${S.params["mandator"]} mandator, 100 edited_by, '' company_name
+		FROM clients cl
 INNER JOIN asterisk.vicidial_list vl
 ON (vl.lead_id=cl.lead_id )
 WHERE cl.client_id IN($ids)

@@ -5,7 +5,8 @@ enum StatusAction
 	Update(
 		status:{
 			?className:String,
-			text:String
+			?text:String,
+			?path:String
 		}
 	);
 }

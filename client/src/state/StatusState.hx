@@ -5,7 +5,8 @@ import state.UserState;
 typedef StatusState = {
 	?className:String,
     userState:UserState,
-	text: String,
+	path: String,
+	?text: String,
 	date:Date,
 }
 

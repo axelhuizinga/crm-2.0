@@ -35,15 +35,17 @@ typedef StatusBarProps =
 	> RouteComponentProps,
 	?className:String,
 	date:Date,
-	text:String,
 	userState:UserState,
+	path:String,
+	?text:String,
 	?userList:Array<UserState>
 }
 
 typedef StatusBarState = 
 {
-	?date:Date,
+	?path:String,
 	?text:String,
+	?date:Date,
 	?className:String,
 	userState:UserState,
 }
@@ -100,18 +102,19 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 			timer.stop();
 	}	
 	
-	static function mapStateToProps(state:AppState) 
+	static function mapStateToProps(astate:AppState) 
 	{
-		//trace(state.userState.dbUser.first_name);
-		trace(Reflect.fields(state));
-		trace(state.status);
-		//setState({status:state.statusBar.status})
+		//trace(astate.userState.dbUser.first_name);
+		trace(Reflect.fields(astate));
+		trace(astate.status);
+		//setState({status:astate.statusBar.status})
 		return {
-			/*date:state.statusBar.date,*/
-			//userList:state.userList,
-			className:state.status.className==null?'':state.status.className,
-			userState:state.userState,
-			text: state.status.text//state.history.location.pathname
+			/*date:astate.statusBar.date,*/
+			//userList:astate.userList,
+			className:astate.status.className==null?'':astate.status.className,
+			userState:astate.userState,
+			path: astate.status.path,
+			text: astate.status.text
 		};
 		//};
 	}	
@@ -120,7 +123,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	{
 		var display_name:String = 'Gast';
 		var userIcon:String = 'fa fa-user-o';
-		trace(props.text);
+		trace(props.path);
 		if (props.userState.dbUser != null)
 		{
 		 display_name = props.userState.dbUser.first_name != null &&  props.userState.dbUser.first_name !='' ?
@@ -131,7 +134,8 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		return jsx('
 		<Footer>
 			<div className="statusbar">
-				<span className="column ${props.className}" >${props.text}</span>				
+				<span className="column ${props.className}" >${props.path}</span>	
+				<span className="column ${props.className}" >${props.text}</span>			
 				<span className="column flex-end">
 				<i className=${userIcon}></i> $display_name</span>
 				<$DateTime />			

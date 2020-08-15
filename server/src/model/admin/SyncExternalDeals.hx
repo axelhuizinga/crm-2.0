@@ -1,4 +1,5 @@
 package model.admin;
+import php.Global;
 import comments.CommentString.*;
 import php.db.PDO;
 import php.db.PDOStatement;
@@ -13,9 +14,13 @@ class SyncExternalDeals {
 
 	public static function importDeals(dbh:PDO, dbData:DbData, deals:NativeArray):Void 
 	{
-		var dealsRows:Int = Syntax.code("count({0})",deals);
+		var dealsRows:Int = Global.count(deals);
+		if(dealsRows==0){
+			S.sendInfo(dbData,['imported'=>0]);
+		}
+		//Syntax.code("count({0})",deals);
 		trace('dealsRows:$dealsRows');
-		trace(dbData);
+		//trace(dbData);
 		var dD:Map<String,Dynamic> = Util.map2fields(deals[0], dKeys);
         var dNames:Array<String> = [for(k in dD.keys()) k];		
 		var dPlaceholders:Array<String> =  [for(k in dNames) k].map(function (k) return ':$k');

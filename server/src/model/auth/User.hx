@@ -418,15 +418,15 @@ html,body{
 		var id:Int = dbQuery.dbUser.id;	
 		var now:Float = Date.now().getTime();	
 		var dbData:DbData = new DbData();
-		trace('$now:$jwt');
+		//trace('$now:$jwt');
 		//trace(dbQuery);
 		try{
 			var userInfo:UserInfo = JWT.extract(jwt);
-			trace(userInfo);			
+			//trace(userInfo);			
 			if(userInfo.id==null && userInfo.id ==dbQuery.dbUser.id && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
 				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
-				trace(jRes);
+				//trace(jRes);
 				return switch(jRes)				
 				{
 					case Invalid(payload):

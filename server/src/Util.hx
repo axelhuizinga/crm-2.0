@@ -101,8 +101,8 @@ class Util
 
 	public static function map2fields(row:NativeArray,keys:Array<String>):Map<String,Dynamic> {
 		
-		trace(row);
-		trace(keys);
+		//trace(row);
+		//trace(keys);
 		return[
 			for(k in keys)
 				k => (Syntax.code('array_key_exists({0},{1})', k, row) ? row[k]:null)
@@ -151,6 +151,13 @@ class Util
 	{
 		return Syntax.array(null);
 	}
+
+	/*public static function saveExtIDs(rows:NativeArray):Void {
+		var sRows:NativeArray = Syntax.code("array_map(
+			function($row){
+				return array($row[0],)
+			},{0})", );
+	}*/
 	
 	public static inline function randomString(length:Int, ?charactersToUse = "abcdefghijklmnopqrstuvwxyz_§!%ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"):String
 	{

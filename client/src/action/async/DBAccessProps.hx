@@ -17,7 +17,7 @@ typedef DBAccessProps =
 	?maxImport:Int,
 	?pages:Int,
 	?offset:Int,
-	//?outcome:DBAccessOutcome,
+	?onlyNew:Bool,
 	?table:String,
 	?totalRecords:Int,
 	?userState:UserState

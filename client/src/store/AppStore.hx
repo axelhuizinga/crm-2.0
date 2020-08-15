@@ -55,8 +55,9 @@ class AppStore
 			//redirectAfterLogin: (Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname), 
 			 
 			status: {
-				text: '',//Browser.location.pathname,
 				date:Date.now(),
+				path: Browser.location.pathname,
+				text: '',
 				userState:null
 			},
 			userState:null//uStore.store.getState()
@@ -98,10 +99,10 @@ class AppStore
 					default:
 						state;
 				}
-			case Status(action):
+			/*case Status(action):
 				copy(state,
 					{status:{text:'666'}});				
-			/*case FormChange(cfp, fState):
+			case FormChange(cfp, fState):
 				var formStates = state.formStates;
 				if(formStates.exists(cfp))
 				{

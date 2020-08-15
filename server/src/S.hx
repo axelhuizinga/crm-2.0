@@ -25,6 +25,7 @@ import model.admin.CreateHistoryTrigger;
 import model.admin.CreateUsers;
 import model.admin.SyncExternal;
 import model.admin.SyncExternalAccounts;
+import model.admin.SyncExternalContacts;
 import model.admin.SyncExternalBookings;
 import model.admin.SyncExternalClients;
 import model.roles.Users;
@@ -121,20 +122,20 @@ class S
 
 		response = {content:'',error:''};
 		//trace(Web.getMethod());
-		params = Lib.hashOfAssociativeArray(SuperGlobal._POST);//Web.getParams();
+		//params = Lib.hashOfAssociativeArray(SuperGlobal._POST);//Web.getParams();
 		//trace(Web.getParams());
 		//trace(Web.getMultipart(512000));
 		//trace(Web.getClientHeaders());
-		if(true||params.exists('action'))
+		/*if(true||params.exists('action'))
 		{
-			try {
+			try {*/
 				//trace(Web.getPostData());
 				dbQuery = Model.binary();
 				//trace(dbQuery);
 				//Model.binary(params.get('dbData'));
 				params = dbQuery.dbParams;
-			}		
-		}
+		/*	}		
+		}*/
 
 		devIP = params.get('devIP');
 		trace(params);
@@ -150,7 +151,7 @@ class S
 			Syntax.array([PDO.ATTR_PERSISTENT,true]));
 		
 		//trace(dbh);
-		if(action.indexOf('sync')==0)
+		if(params.get('extDB'))
 		{
 			//CONNECT DIALER DB	
 			trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM');

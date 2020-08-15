@@ -59,6 +59,7 @@ class LivePBXSync
 						dbUser:props.userState.dbUser,
 						className:props.className,
 						action:props.action,
+						extDB:true,
 						limit:props.limit,
 						offset:props.offset,
 						table:props.table,
@@ -94,7 +95,7 @@ class LivePBXSync
 							props.offset = Std.parseInt(data.dataInfo['offset']);
 							return dispatch(Status(Update(
 								{
-									className:'',
+									className:' ',
 									text:'${props.offset} ${props.className} von ${props.maxImport} aktualisiert'})));
 						}
 						trace('${props.offset} < ${props.maxImport}');
@@ -107,7 +108,6 @@ class LivePBXSync
 						return null;
 					}
 				);
-		//	});
 			return null;
 		});
 	}
@@ -133,6 +133,7 @@ class LivePBXSync
 					jwt:props.userState.dbUser.jwt,
 					className:props.className,
 					action:props.action,
+						extDB:true,
 					limit:props.limit,
 					offset:props.offset,
 					filter:props.filter,
@@ -167,7 +168,7 @@ class LivePBXSync
 						props.offset = Std.parseInt(data.dataInfo['offset']);
 						dispatch(Status(Update(
 							{
-								className:'',
+								className:' ',
 								text:'${props.offset} Kontakte von ${props.maxImport} aktualisiert'})));
 					}
 					trace('${props.offset} < ${props.maxImport}');
@@ -208,6 +209,7 @@ class LivePBXSync
 					jwt:props.userState.dbUser.jwt,
 					className:props.className,
 					action:props.action,
+						extDB:true,
 					limit:props.limit,
 					offset:props.offset,
 					filter:props.filter,
@@ -259,6 +261,83 @@ class LivePBXSync
 		});
 	}	
 
+	public static function importContacts(props:DBAccessProps) 
+	{
+		trace('${props.table} ${props.maxImport} ${props.limit} ${props.offset}');
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+			var aState:AppState = getState();
+			trace(props.offset);
+			//return new Promise(function(resolve, reject){
+				if (!props.userState.dbUser.online)
+				{
+					return dispatch(User(LoginError(
+					{
+						dbUser:props.userState.dbUser,
+						lastError:'Du musst dich neu anmelden!'
+					})));
+					//resolve(DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']));
+				}				
+				trace('creating BinaryLoader ${App.config.api}');
+				var bl:XMLHttpRequest = BinaryLoader.dbQuery(
+					'${App.config.api}',
+					{
+						dbUser:props.userState.dbUser,
+						className:props.className,
+						action:props.action,
+						extDB:true,
+						limit:props.limit,
+						offset:props.offset,
+						onlyNew:props.onlyNew,
+						table:props.table,
+						filter:props.filter,
+						maxImport:props.maxImport==null?1000:props.maxImport,
+						devIP:App.devIP
+					},
+					function(data:DbData)
+					{			
+						trace(data.dataInfo);
+						trace(data.dataRows.length);
+						if(data.dataErrors.keys().hasNext())
+						{
+							return dispatch(Status(Update(
+								{
+									className:'error',
+									text:data.dataErrors.iterator().next()
+								}							
+							)));
+						} 
+						trace(data.dataInfo);
+						if(data.dataInfo['offset']==null)
+						{
+							return dispatch(Status(Update(
+								{
+									className:'error',
+									text:'Fehler 0 ${props.className} Aktualisiert'})));
+						}
+						
+						if(data.dataInfo['offset']!=null)
+						{
+							props.offset = Std.parseInt(data.dataInfo['offset']);
+							return dispatch(Status(Update(
+								{
+									className:' ',
+									text:'${props.offset} ${props.className} von ${props.maxImport} aktualisiert'})));
+						}
+						trace('${props.offset} < ${props.maxImport}');
+						if(props.offset < props.maxImport){
+							//LOOP UNTIL LIMIT
+							trace('next loop:${props}');
+							return dispatch(importContacts(props));
+						}
+						
+						return null;
+					}
+				);
+			return null;
+		});
+	}
+
+	
 	public static function importDeals(props:DBAccessProps) 
 	{
 		trace('${props.maxImport} ${props.limit} ${props.offset}');
@@ -282,8 +361,10 @@ class LivePBXSync
 					jwt:props.userState.dbUser.jwt,
 					className:props.className,
 					action:props.action,
+						extDB:true,
 					limit:props.limit,
 					offset:props.offset,
+					onlyNew:props.onlyNew,
 					filter:props.filter,
 					firstBatch:props.offset==0, 
 					maxImport:props.maxImport==null?1000:props.maxImport,
@@ -324,7 +405,7 @@ class LivePBXSync
 						trace(nProps);
 						dispatch(Status(Update(
 						{
-							className:'',
+							className:' ',
 							text:'${nProps.offset} Deals von ${nProps.maxImport} geladen oder aktualisiert'
 						})));
 					}

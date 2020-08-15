@@ -1,4 +1,5 @@
 package view.dashboard;
+import action.AppAction;
 import db.DbQuery.DbQueryParam;
 import redux.Redux.Dispatch;
 import action.async.CRUD;
@@ -42,8 +43,11 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		
 		{label:'BenutzerDaten Abgleich',action:'syncUserList'},
 		{label:'BuchungsDaten Abgleich',action:'importAllBookingRequests'},
-		{label:'Stammdaten Import ',action:'importAll'},
+		
+		{label:'Stammdaten Import ',action:'importContacts'},
+		{label:'Stammdaten Update ',action:'importAll'},
 		{label:'Abschlüsse Import ',action:'importDeals'},
+		{label:'Abschlüsse Update ',action:'syncDeals'},
 		{label:'Konten Import ',action:'importAccounts'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
@@ -259,16 +263,44 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		}));
 	}	
 
+	public function importContacts():Void
+		{
+			trace(props.userState.dbUser.first_name);
+			App.store.dispatch(Status(Update(
+				{
+					className:' ',
+					text:'Importiere Kontakte'})));
+			App.store.dispatch(action.async.LivePBXSync.importContacts({
+				limit:1000,
+				maxImport:4000,
+				userState:props.userState,
+				offset:0,
+				onlyNew: true,
+				className:'admin.SyncExternalContacts',
+				action:'importContacts'
+			}));
+		}	
+
 	public function importDeals() {
+		App.store.dispatch(LivePBXSync.importDeals({
+			limit: 250,//00,
+			offset:0,
+			onlyNew:true,
+			className: 'admin.SyncExternalClients',
+			action: 'syncImportDeals',
+			userState:props.userState
+		}));
+	}
+
+	public function syncDeals() {
 		App.store.dispatch(LivePBXSync.importDeals({
 			limit: 250,//00,
 			offset:0,
 			className: 'admin.SyncExternalClients',
 			action: 'syncImportDeals',
-			//action: 'mergeContacts',
 			userState:props.userState
 		}));
-	}
+	}	
 
 	public function syncUserList(_):Void
 	{

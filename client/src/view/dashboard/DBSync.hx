@@ -268,7 +268,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			trace(props.userState.dbUser.first_name);
 			App.store.dispatch(Status(Update(
 				{
-					className:' ',
+					cssClass:' ',
 					text:'Importiere Kontakte'})));
 			App.store.dispatch(action.async.LivePBXSync.importContacts({
 				limit:1000,

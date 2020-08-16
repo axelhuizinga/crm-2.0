@@ -247,6 +247,21 @@ class S
 		return sendbytes(s.serialize(dbData));
 	}
 
+	public static function checkStmt(dbConn:PDO, stmt:PDOStatement, err:String, ?pos:PosInfos):Bool
+	{
+		if(untyped stmt==false)
+		{
+			trace('${pos.fileName}::${pos.lineNumber}' + dbConn.errorInfo());
+			S.sendErrors(null, ['${pos.fileName}::${pos.lineNumber}'=>dbConn.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace('${pos.fileName}::${pos.lineNumber}' + stmt.errorInfo());
+			S.sendErrors(null, ['${pos.fileName}::${pos.lineNumber}'=>stmt.errorInfo()]);
+		}		
+		return true;
+	}
+
 	public static function sendErrors(dbData:DbData = null, ?err:Map<String,Dynamic>, ?pos:PosInfos):Bool
 	{
 	 	trace('${pos.fileName}::${pos.lineNumber}');
@@ -583,7 +598,7 @@ class S
 		Debug.logFile = untyped Syntax.code("$appLog");
 		haxe.Log.trace = Debug._trace;
 		Out.skipFields = ['admin','keyPhrase','pass','password'];
-		edump(Debug.logFile);
+		//edump(Debug.logFile);
 		db = Syntax.code("$DB");
 		dbSchema = Syntax.code("$DB_schema");
 		dbHost = Syntax.code("$DB_server");

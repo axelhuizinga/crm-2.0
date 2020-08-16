@@ -4,7 +4,7 @@ enum StatusAction
 {	
 	Update(
 		status:{
-			?className:String,
+			?cssClass:String,
 			?text:String,
 			?path:String
 		}

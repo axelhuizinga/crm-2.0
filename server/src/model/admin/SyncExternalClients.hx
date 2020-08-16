@@ -134,6 +134,7 @@ INNER JOIN asterisk.vicidial_list vl
 ON (vl.lead_id=cl.lead_id )
 WHERE cl.client_id IN($ids)
 ORDER BY cl.client_id  
+LIMIT ${Util.limit()}
 */;
 
         stmt = S.syncDbh.query(sql);

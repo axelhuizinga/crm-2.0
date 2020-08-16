@@ -151,7 +151,17 @@ class Util
 	{
 		return Syntax.array(null);
 	}
+	public static function minId() {
+		return (
+			S.params.get('offset') != null && Std.parseInt(S.params.get('offset')) != null? 
+			Std.parseInt(S.params.get('offset'))+9999999 : 
+			9999999);
+	}
+	
+	public static function limit() {
 
+		return (S.params.exists('limit')&&S.params.get('limit')!=null?S.params.get('limit'):1000);
+	}
 	/*public static function saveExtIDs(rows:NativeArray):Void {
 		var sRows:NativeArray = Syntax.code("array_map(
 			function($row){

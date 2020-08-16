@@ -76,14 +76,14 @@ class DBAccess
 								for(row in data.dataRows)
 									Std.parseInt(row['id']) => row
 							])));//.then(function()trace('yeah'));
-							return dispatch(Status(Update({text:switch ('${props.className}.${props.action}')
+							return dispatch(Status(Update({cssClass:'', text:switch ('${props.className}.${props.action}')
 							{
 								case "data.Contacts.get":
 									'Kontakt ${props.filter.substr(3)} geladen';
 								case "data.Contacts.update":
 									'Kontakt ${props.filter.substr(3)} wurde gespeichert';
 								default:
-									"Unbekannter Vorgang";
+									"Unbekannter Vorgang"; 
 							}})));
 						}
 						else 
@@ -91,7 +91,7 @@ class DBAccess
 							//TODO: IMPLEMENT GENERIC FAILURE FEEDBACK
 							return dispatch(Status(Update(
 								{
-									className:'error',
+									cssClass:'error',
 									text:'${data.dataErrors.get(props.action)}',
 								})));
 						
@@ -100,7 +100,7 @@ class DBAccess
 					else
 						return dispatch(Status(Update(
 							{
-								className: 'warn',
+								cssClass: 'warn',
 								text: 'Keine Daten für ${props.filter.substr(3)} gefunden'
 							})));
 				}
@@ -151,7 +151,9 @@ class DBAccess
 					return dispatch(User(LoginError({lastError: data.dataErrors.get('lastError')})));
 				}
 
-				return dispatch(Status(Update({text:switch ('${props.className}.${props.action}')
+				return dispatch(Status(Update({
+					cssClass:'',
+					text:switch ('${props.className}.${props.action}')
 				{
 					case "data.Contacts.edit":
 						'Kontakt ${props.dataSource["contacts"]["filter"].substr(3)} geladen';

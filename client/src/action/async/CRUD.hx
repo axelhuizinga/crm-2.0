@@ -73,7 +73,7 @@ class CRUD
 								//TODO: IMPLEMENT GENERIC FAILURE FEEDBACK
 								dispatch(Status(Update(
 									{
-										className:'error',
+										cssClass:'error',
 										text:'${data.dataErrors.get(param.action)}',
 									})));
 								resolve(data);
@@ -82,7 +82,7 @@ class CRUD
 						else
 							dispatch(Status(Update(
 							{
-								className: 'warn',
+								cssClass: 'warn',
 								text: 'Keine Daten für ${param.filter.toString()} gefunden'
 							})));
 					}
@@ -138,7 +138,8 @@ class CRUD
 						else{
 
 							dispatch(Status(Update(
-								{text:switch ('${props.className}.${props.action}')
+								{	cssClass:'',
+									text:switch ('${props.className}.${props.action}')
 									{
 										case "data.Contacts.edit":
 											'Kontakt ${props.dataSource["contacts"]["filter"].toString()} geladen';

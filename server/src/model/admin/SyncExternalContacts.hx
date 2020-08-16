@@ -1,5 +1,6 @@
 package model.admin;
 
+import php.Global;
 import action.async.DBAccessProps;
 import php.NativeAssocArray;
 import haxe.macro.Expr.Catch;
@@ -70,70 +71,77 @@ class SyncExternalContacts extends Model
 	}
 
 	function  getMissing() {
-		var min_id= (S.params.get('offset') != null? S.params.get('offset') : 9999999);
+		var min_id = Util.minId();
+		var got:Int = 0;
+		var stmt:PDOStatement = S.dbh.query('SELECT MAX(id) FROM contacts');
+		var max_contact = stmt.fetch(PDO.FETCH_COLUMN);
+		if(max_contact>min_id)
+			min_id = max_contact;
+		trace('max_contact:$max_contact');
 		var sql:String = '
-		SELECT cl.client_id FROM clients cl 
-		WHERE client_id>${min_id}';
-        var stmt:PDOStatement = S.syncDbh.query(sql);
-		if(untyped stmt==false)
-		{
-			trace(S.syncDbh.errorInfo());
-			S.sendErrors(dbData, ['getAll query:'=>S.syncDbh.errorInfo()]);
-		}
-		if(stmt.errorCode() !='00000')
-		{
-			trace(stmt.errorInfo());
-		}
-		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_NUM):null);	
-		
-		trace(Syntax.code("count({0})",res));
+		(SELECT client_id FROM clients 
+		WHERE client_id>${min_id} LIMIT 1000)
+		UNION
+		(SELECT MAX(client_id) FROM clients)';
+		//trace(sql);
+		var start = Sys.time();
+        stmt = S.syncDbh.query(sql);
+		// DIE IF ERROR
+		S.checkStmt(S.syncDbh, stmt, 'getMissing-get-clients');
 				
 		var action = S.params["className"]+'.'+S.params["action"];
 		var cleared:Int = S.dbh.exec(
-			'DELETE FROM ext_ids WHERE auth_user=${S.dbQuery.dbUser.id} AND action="$action" AND table="contacts"');
-		if(S.dbh.errorCode() !='00000')
-		{
-			trace(S.dbh.errorInfo());
+			'DELETE FROM ext_ids WHERE auth_user=${S.dbQuery.dbUser.id} AND action=\'${action}\' AND table_name=\'contacts\'');
+		trace(
+			'DELETE FROM ext_ids WHERE auth_user=${S.dbQuery.dbUser.id} AND action=\'${action}\' AND table_name=\'contacts\'');
+		var cids:Array<Dynamic> = Lib.toHaxeArray(stmt.execute()?stmt.fetchAll(PDO.FETCH_NUM):null);	
+		if(cids!=null)
+			trace(cids.length);
+		var maxCid = cids.pop()[0];
+		
+		trace(maxCid + ' took:' + (Sys.time()-start));
+		start = Sys.time();
+		for(cid in cids){
+			//var sti:PDOStatement = S.dbh.query('INSERT IGNORE INTO ext_ids VALUES(${cid[0]}, ${S.dbQuery.dbUser.id}, \'${action}\',\'contacts\')');
+			var sti:PDOStatement = S.dbh.prepare('INSERT INTO ext_ids VALUES(?,?,?,?) ON CONFLICT DO NOTHING');			
+			if(untyped sti==false)
+			{
+				trace(S.dbh.errorInfo);
+				trace('INSERT INTO ext_ids VALUES(${cid[0]}, ${S.dbQuery.dbUser.id}, \'${action}\',\'contacts\')');
+				S.exit({oops:666});
+			}
+			//var args:Array<Dynamic> = [cid[0], S.dbQuery.dbUser.id, action,'contacts'];
+			if(! sti.execute(
+				//args.toPhpArray())){
+				Syntax.code("array({0},{1},{2},{3})",cid[0], S.dbQuery.dbUser.id, action,'contacts'))){
+				trace(S.dbh.errorInfo());
+				trace(sti.errorInfo());
+				S.exit({oops:666});
+			}
 		}
-		else 	
-			trace('cleared all IDs from ext_ids');
-		var cIDs:NativeArray = Syntax.code(
-			"array_map(function($r){return array($r[0],{1},{2},'contacts');}, 
-				{0})",res, S.dbQuery.dbUser.id, S.params['className']+'.'+S.params['action']);
-		trace(Syntax.code("print_r({0}[0],1)", cIDs));
-		var ok:Bool = S.dbh.pgsqlCopyFromArray("ext_ids",cIDs);
-		if(!ok)
-		{
-			trace(S.dbh.errorInfo());
-		}
-		if(S.dbh.errorCode() !='00000')
-		{
-			trace(S.dbh.errorInfo());
-		}
+		trace(cids.length + ' storing took:' + (Sys.time()-start));
+		start = Sys.time();
 		sql = comment(unindent, format)/* 
-		SELECT ARRAY_TO_STRING(array_agg(acid.id),',') from ext_ids acid
+		SELECT ARRAY_TO_STRING(array_agg(eid.ext_id),',') from ext_ids eid
 		left join 
 		(SELECT 1 as gg,id from contacts) c
-		ON acid.id=c.id
+		ON eid.ext_id=c.id
 		where c.id IS NULL
-		AND eid.table='contacts'
+		AND eid.table_name='contacts'
 		AND eid.action='${S.params["className"]}.${S.params["action"]}'		
 		GROUP BY gg;
 		*/;
 		stmt = S.dbh.query(sql);
-		if(untyped stmt==false)
-		{
-			trace('$sql ${Std.parseInt(param['limit'])}');
-			S.sendErrors(dbData, ['getMissingIDs query:'=>S.syncDbh.errorInfo()]);
-		}
-		if(stmt.errorCode() !='00000')
-		{
-			trace(stmt.errorInfo());
-		}
+		//trace(sql);
+		S.checkStmt(S.dbh,stmt,'getMissingIDs ');
+		
 		var ids:String = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN,0):null);
-		trace(ids);
+		
+		trace(ids.substr(0, 24) + 'took:' + (Sys.time()-start));
+		start = Sys.time();
+
 		sql = comment(unindent,format)/*
-		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(cl.birth_date<NOW(),cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,
+		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(TO_DAYS(STR_TO_DATE(cl.birth_date, '%Y-%m-%d'))>500000,cl.birth_date,null)date_of_birth,IF(cl.old_active=1,'true','false')old_active,
 		vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
 		IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner,vl.entry_list_id, ${S.params["mandator"]} mandator, 100 edited_by, '' company_name
 		FROM clients cl
@@ -146,24 +154,31 @@ ORDER BY cl.client_id
         stmt = S.syncDbh.query(sql);
 		if(untyped stmt==false)
 		{
-			trace(sql);
+			trace(sql.substr(0, 1100));
 			S.sendErrors(dbData, ['getMissingCrmData query:'=>S.syncDbh.errorInfo()]);
 		}
 		if(stmt.errorCode() !='00000')
 		{
 			S.sendErrors(dbData,['getMissingCrmData'=>stmt.errorInfo()]);
 		}
-		res = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
-		var missing:Int = Syntax.code("count({0})",res);
-		trace(missing);
+		var res = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		var missing:Int = (res!=null?Global.count(res):0);
+		if(missing==0){
+			S.sendInfo(dbData,['OK? found 0 missing '=> sql.substr(0,1100)]);
+		}
+		trace(missing + ' took:' + (Sys.time()-start));
 		for(row in res.iterator())
 		{			
 			//trace(row);
 			//S.sendErrors(dbData,['syncAll'=>'NOTOK']);
 			var stmt:PDOStatement = upsertClient(row);
 			try{
-				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
-				//trace(res);
+				//trace(Global.count(res));
+				var res:NativeArray = stmt.fetch(PDO.FETCH_NUM);		
+				got++;
+				if(got<8)
+				trace('got $got missing :)' + res);
+				//var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
 			}
 			catch(e:Dynamic)
 			{
@@ -174,11 +189,12 @@ ORDER BY cl.client_id
 				]);}		
 			}
 		}		
-        trace('done');
+		trace('done took:' + (Sys.time()-start));
+		
 		//dbData.dataInfo['offset'] = param['offset'] + synced;
 		trace(dbData.dataInfo);
         //S.sendData(dbData, null);
-		S.sendInfo(dbData,['gotMissing'=>'OK:$missing']);
+		S.sendInfo(dbData,['missing'=> missing, 'got' => got]);
 	}
 
 	function syncImportDeals() {

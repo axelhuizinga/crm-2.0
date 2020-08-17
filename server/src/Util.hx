@@ -116,7 +116,12 @@ class Util
 				k => row[i++]
 		];
 	}
-
+	public static function copy2map(m:Map<String,Dynamic>, obj:Dynamic):Void
+	{
+		for (field in Reflect.fields(obj))
+			m.set(field, Reflect.field(obj, field));
+	}
+	
 	public static function copy(source1:Dynamic, ?source2:Dynamic):Dynamic
 	{
 		var target = {};
@@ -151,15 +156,16 @@ class Util
 	{
 		return Syntax.array(null);
 	}
+
 	public static function minId() {
 		return (
 			S.params.get('offset') != null && Std.parseInt(S.params.get('offset')) != null? 
 			Std.parseInt(S.params.get('offset'))+9999999 : 
 			9999999);
 	}
-	
-	public static function limit() {
 
+	public static function limit() {
+		trace(S.params.get('limit'));
 		return (S.params.exists('limit')&&S.params.get('limit')!=null?S.params.get('limit'):1000);
 	}
 	/*public static function saveExtIDs(rows:NativeArray):Void {

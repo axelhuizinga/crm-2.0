@@ -73,31 +73,36 @@ class SyncExternalContacts extends Model
 	function  getMissing() {
 		var min_id = Util.minId();
 		var got:Int = 0;
-		var stmt:PDOStatement = S.dbh.query('SELECT MAX(id) FROM contacts');
-		var max_contact = stmt.fetch(PDO.FETCH_COLUMN);
-		if(max_contact>min_id)
-			min_id = max_contact;
-		trace('max_contact:$max_contact');
-		var sql:String = '
-		(SELECT client_id FROM clients 
-		WHERE client_id>${min_id} LIMIT 1000)
-		UNION
-		(SELECT MAX(client_id) FROM clients)';
-		//trace(sql);
-		var start = Sys.time();
-        stmt = S.syncDbh.query(sql);
-		// DIE IF ERROR
-		S.checkStmt(S.syncDbh, stmt, 'getMissing-get-clients');
-				
+		var stmt:PDOStatement = S.dbh.query('SELECT MAX(id)max_contact, COUNT(*)previous_count FROM contacts');
+		var rO = stmt.fetch(PDO.FETCH_OBJ);
+		if(rO.max_contact>min_id)
+			min_id = rO.max_contact;
+		trace('max_contact:${rO.max_contact}');
+		dbData.dataInfo.copy2map(rO);
+
+		/*CLEAR fly_crm client_id's from ext_ids table*/
 		var action = S.params["className"]+'.'+S.params["action"];
 		var cleared:Int = S.dbh.exec(
 			'DELETE FROM ext_ids WHERE auth_user=${S.dbQuery.dbUser.id} AND action=\'${action}\' AND table_name=\'contacts\'');
 		trace(
 			'DELETE FROM ext_ids WHERE auth_user=${S.dbQuery.dbUser.id} AND action=\'${action}\' AND table_name=\'contacts\'');
+
+		/*GET NEXT 1000 client_id's from fly_crm*/			
+		var sql:String = '
+		(SELECT client_id FROM clients 
+		WHERE client_id>${min_id} LIMIT 1000)
+		UNION
+		(SELECT MAX(client_id) FROM clients)';
+		trace(sql);
+		var start = Sys.time();
+        stmt = S.syncDbh.query(sql);
+		// DIE ON ERROR
+		S.checkStmt(S.syncDbh, stmt, 'getMissing-get-client_ids');
+				
 		var cids:Array<Dynamic> = Lib.toHaxeArray(stmt.execute()?stmt.fetchAll(PDO.FETCH_NUM):null);	
 		if(cids!=null)
 			trace(cids.length);
-		var maxCid = cids.pop()[0];
+		var maxCid = (cids.length==1? cids[0][0] : cids.pop()[0]);
 		
 		trace(maxCid + ' took:' + (Sys.time()-start));
 		start = Sys.time();
@@ -139,7 +144,8 @@ class SyncExternalContacts extends Model
 		
 		trace(ids.substr(0, 24) + 'took:' + (Sys.time()-start));
 		start = Sys.time();
-
+		
+		/*GET DATA FROM fly_crm + vicidial*/
 		sql = comment(unindent,format)/*
 		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(TO_DAYS(STR_TO_DATE(cl.birth_date, '%Y-%m-%d'))>500000,cl.birth_date,null)date_of_birth,IF(cl.old_active=1,'true','false')old_active,
 		vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
@@ -167,6 +173,11 @@ ORDER BY cl.client_id
 			S.sendInfo(dbData,['OK? found 0 missing '=> sql.substr(0,1100)]);
 		}
 		trace(missing + ' took:' + (Sys.time()-start));
+		var last_import_cid = Syntax.code("{0}[{1}]['id']",res,missing-1);
+		dbData.dataInfo.set('last_import_cid', last_import_cid);
+		start = Sys.time();
+		
+		/* STORE fetched data in new crm */
 		for(row in res.iterator())
 		{			
 			//trace(row);
@@ -176,7 +187,7 @@ ORDER BY cl.client_id
 				//trace(Global.count(res));
 				var res:NativeArray = stmt.fetch(PDO.FETCH_NUM);		
 				got++;
-				if(got<8)
+				if(got<3)
 				trace('got $got missing :)' + res);
 				//var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
 			}
@@ -194,7 +205,7 @@ ORDER BY cl.client_id
 		//dbData.dataInfo['offset'] = param['offset'] + synced;
 		trace(dbData.dataInfo);
         //S.sendData(dbData, null);
-		S.sendInfo(dbData,['missing'=> missing, 'got' => got]);
+		S.sendInfo(dbData,['missing'=> missing, 'got' => got, 'max_client_id' => maxCid]);
 	}
 
 	function syncImportDeals() {

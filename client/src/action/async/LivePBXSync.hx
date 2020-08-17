@@ -89,7 +89,7 @@ class LivePBXSync
 									cssClass:'error',
 									text:'Fehler 0 ${props.className} Aktualisiert'})));
 						}
-						//props.batchCount += data.dataInfo['offset'];
+						
 						if(data.dataInfo['offset']!=null)
 						{
 							props.offset = Std.parseInt(data.dataInfo['offset']);
@@ -261,6 +261,7 @@ class LivePBXSync
 		});
 	}	
 
+	/* GET NEW CONTACTS FROM OLD fly_crm SYSTEM*/
 	public static function importContacts(props:DBAccessProps) 
 	{
 		trace('${props.table} ${props.maxImport} ${props.limit} ${props.offset}');
@@ -296,7 +297,7 @@ class LivePBXSync
 					function(data:DbData)
 					{			
 						trace(data.dataInfo);
-						trace(data.dataRows.length);
+						//trace(data.dataRows.length);
 						if(data.dataErrors.keys().hasNext())
 						{
 							return dispatch(Status(Update(
@@ -307,29 +308,37 @@ class LivePBXSync
 							)));
 						} 
 						trace(data.dataInfo);
-						if(data.dataInfo['offset']==null)
+						if(data.dataInfo['missing'] >0 && data.dataInfo['got'] != data.dataInfo['missing'])
 						{
 							return dispatch(Status(Update(
-								{
-									cssClass:'error',
-									text:'Fehler 0 ${props.className} Aktualisiert'})));
-						}
-						
-						if(data.dataInfo['offset']!=null)
+							{
+								cssClass:'error',
+								text:'Fehler ${data.dataInfo['got']} von ${data.dataInfo['missing']} Aktualisiert'})));
+							}
+
+						trace('got:' + Std.parseInt(untyped 666));
+						if(data.dataInfo['got']>0 && data.dataInfo['last_import_cid'] == data.dataInfo['max_client_id'])
 						{
-							props.offset = Std.parseInt(data.dataInfo['offset']);
 							return dispatch(Status(Update(
+							{
+								cssClass:' ',
+								text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert'
+							})));
+						}	
+						if(data.dataInfo['got']>0)
+						{
+							dispatch(Status(Update(
 								{
 									cssClass:' ',
-									text:'${props.offset} ${props.className} von ${props.maxImport} aktualisiert'})));
-						}
-						trace('${props.offset} < ${props.maxImport}');
-						if(props.offset < props.maxImport){
-							//LOOP UNTIL LIMIT
+									text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert - lade weitere'})));
+					/*	}												
+						//LOOP UNTIL LIMIT
+						//if(props.offset < props.maxImport){
+						if(data.dataInfo['got'] >0 && data.dataInfo['last_import_cid'] != data.dataInfo['max_client_id']){*/
 							trace('next loop:${props}');
 							return dispatch(importContacts(props));
 						}
-						
+						trace((Std.parseInt(data.dataInfo['got']) >0 && data.dataInfo['last_import_cid'] != data.dataInfo['max_client_id'] ? 'loop':'no'));
 						return null;
 					}
 				);

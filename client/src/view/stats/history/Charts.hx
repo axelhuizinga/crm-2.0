@@ -182,7 +182,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 			dbUser:props.userState.dbUser,
 			className:'stats.History',
 			action:'get',
-			filter:(props.filter==null?'termin<NOW()':props.filter),
+			filter:(props.filter==null?"termin<date_trunc('month', CURRENT_DATE)":props.filter),
 			devIP:App.devIP,
 			limit:props.limit,
 			offset:offset>0?offset:0,

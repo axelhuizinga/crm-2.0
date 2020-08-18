@@ -312,8 +312,10 @@ class Model
 	public function execute(sql:String):NativeArray
 	{
 		trace(sql);	
+		if(setValues.length>0)
 		trace(setValues.join(','));
-		trace(filterValues);
+		if(filterValues.length>0)
+		trace(filterValues[0].toString());
 		var stmt:PDOStatement =  S.dbh.prepare(sql,Syntax.array(null));
 		if (S.dbh.errorCode()!='00000')
 		{
@@ -380,7 +382,7 @@ class Model
 			//trace(Lib.toHaxeArray(data).join(','));		
 			
 			//trace(data);
-			trace(stmt.errorInfo());
+			//trace(stmt.errorInfo());
 			return(data);		
 		}
 		else {

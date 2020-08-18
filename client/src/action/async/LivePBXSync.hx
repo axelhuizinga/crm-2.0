@@ -262,7 +262,7 @@ class LivePBXSync
 	}	
 
 	/* GET NEW CONTACTS FROM OLD fly_crm SYSTEM*/
-	public static function importContacts(props:DBAccessProps) 
+	public static function importAll(props:DBAccessProps) 
 	{
 		trace('${props.table} ${props.maxImport} ${props.limit} ${props.offset}');
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
@@ -327,18 +327,19 @@ class LivePBXSync
 						}	
 						if(data.dataInfo['got']>0)
 						{
+							//LOOP UNTIL LIMIT
 							dispatch(Status(Update(
 								{
 									cssClass:' ',
-									text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert - lade weitere'})));
-					/*	}												
-						//LOOP UNTIL LIMIT
-						//if(props.offset < props.maxImport){
-						if(data.dataInfo['got'] >0 && data.dataInfo['last_import_cid'] != data.dataInfo['max_client_id']){*/
+									text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert - lade weitere'
+								})));
+							if(!props.onlyNew){
+								props.offset += data.dataInfo['got'];
+							}																							
 							trace('next loop:${props}');
-							return dispatch(importContacts(props));
+							return dispatch(importAll(props));
 						}
-						trace((Std.parseInt(data.dataInfo['got']) >0 && data.dataInfo['last_import_cid'] != data.dataInfo['max_client_id'] ? 'loop':'no'));
+						trace((data.dataInfo['got'] >0 && data.dataInfo['last_import_cid'] != data.dataInfo['max_client_id'] ? 'loop':'no'));
 						return null;
 					}
 				);
@@ -393,7 +394,41 @@ class LivePBXSync
 						)));
 					} 
 					trace(data.dataInfo);
-					if(data.dataInfo['offset']==null)
+					if(data.dataInfo['missing'] >0 && data.dataInfo['got'] != data.dataInfo['missing'])
+						{
+							return dispatch(Status(Update(
+							{
+								cssClass:'error',
+								text:'Fehler ${data.dataInfo['got']} von ${data.dataInfo['missing']} Aktualisiert'})));
+							}
+
+						trace('got:' + Std.parseInt(untyped 666));
+						if(data.dataInfo['got']>0 && data.dataInfo['last_import_cid'] == data.dataInfo['max_client_id'])
+						{
+							return dispatch(Status(Update(
+							{
+								cssClass:' ',
+								text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert'
+							})));
+						}	
+						if(data.dataInfo['got']>0)
+						{
+							//LOOP UNTIL LIMIT
+							dispatch(Status(Update(
+								{
+									cssClass:' ',
+									text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert - lade weitere'
+								})));
+							if(!props.onlyNew){
+								props.offset += data.dataInfo['got'];
+							}																							
+							trace('next loop:${props}');
+							return dispatch(importAll(props));
+						}
+						trace((data.dataInfo['got'] >0 && data.dataInfo['last_import_cid'] != data.dataInfo['max_client_id'] ? 'loop':'no'));
+						return null;
+					// first=>
+					/*if(data.dataInfo['got']==null)
 					{
 						return dispatch(Status(Update(
 						{
@@ -403,10 +438,10 @@ class LivePBXSync
 					}
 					//props.batchCount += data.dataInfo['offset'];
 					var nProps:Dynamic = {};
-					if(data.dataInfo.get('offset')!=null)
+					if(data.dataInfo.get('got')!=null)
 					{
 						nProps = ReactUtil.copy(props,{
-							limit:data.dataInfo['limit'],
+							got:data.dataInfo['got'],
 							maxImport:data.dataInfo['maxImport'],
 							offset:data.dataInfo['offset']
 						});
@@ -424,7 +459,7 @@ class LivePBXSync
 						//trace('next loop:${props}');
 						return dispatch(importDeals(nProps));
 					}						
-					return null;
+					return null;*/
 				}
 			);
 			return null;

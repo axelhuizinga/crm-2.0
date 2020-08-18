@@ -130,8 +130,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function editTableFields(ev:ReactEvent):Void
 	{
-		trace(state.selectedRows.length);
-				
+		trace(state.selectedRows.length);				
 	}
 
 	function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
@@ -270,34 +269,44 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				{
 					cssClass:' ',
 					text:'Importiere Kontakte'})));
-			App.store.dispatch(action.async.LivePBXSync.importContacts({
+			App.store.dispatch(action.async.LivePBXSync.importAll({
 				limit:1000,
-				maxImport:4000,
+				//maxImport:4000,
 				userState:props.userState,
 				offset:0,
 				onlyNew: true,
 				className:'admin.SyncExternalContacts',
-				action:'importContacts'
+				action:'importAll'
 			}));
 		}	
 
 	public function importDeals() {
+		App.store.dispatch(Status(Update(
+			{
+				cssClass:' ',
+				text:'Importiere Abschlüsse'})));		
 		App.store.dispatch(LivePBXSync.importDeals({
-			limit: 250,//00,
+			limit: 1000,//00,
 			offset:0,
 			onlyNew:true,
-			className: 'admin.SyncExternalClients',
-			action: 'syncImportDeals',
+			className: 'admin.SyncExternalDeals',
+			action: 'importAll',
 			userState:props.userState
 		}));
 	}
 
 	public function syncDeals() {
+		App.store.dispatch(Status(Update(
+		{
+			cssClass:' ',
+			text:'Aktualisiere Abschlüsse'
+		})));	
+
 		App.store.dispatch(LivePBXSync.importDeals({
-			limit: 250,//00,
+			limit: 1000,
 			offset:0,
-			className: 'admin.SyncExternalClients',
-			action: 'syncImportDeals',
+			className: 'admin.SyncExternalDeals',
+			action: 'importAll',
 			userState:props.userState
 		}));
 	}	

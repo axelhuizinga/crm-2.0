@@ -49,7 +49,7 @@ class SyncExternalContacts extends Model
 		trace(action);
 		//SWITCH Call either an instance method directly or use the shared Model query execution
 		switch(action ){
-			case 'importContacts':
+			case 'importAll':
 				getMissing();
 			case 'syncAll':
 				syncAll();
@@ -63,7 +63,7 @@ class SyncExternalContacts extends Model
 		}		
 	}
 
-	function importContacts(){
+	function importAll(){
 		if(S.params.get('onlyNew'))
 		{
 			getMissing();
@@ -182,7 +182,7 @@ ORDER BY cl.client_id
 		{			
 			//trace(row);
 			//S.sendErrors(dbData,['syncAll'=>'NOTOK']);
-			var stmt:PDOStatement = upsertClient(row);
+			var stmt:PDOStatement = upsertContact(row);
 			try{
 				//trace(Global.count(res));
 				var res:NativeArray = stmt.fetch(PDO.FETCH_NUM);		
@@ -195,7 +195,7 @@ ORDER BY cl.client_id
 			{
 				{S.sendErrors(dbData, [
 					'dbError'=>S.dbh.errorInfo(),
-					'upsertClient'=>S.errorInfo(row),
+					'upsertContact'=>S.errorInfo(row),
 					'exception'=>e
 				]);}		
 			}
@@ -304,7 +304,7 @@ ORDER BY cl.client_id
 		{			
 			//trace(row);
 			//S.sendErrors(dbData,['syncAll'=>'NOTOK']);
-			var stmt:PDOStatement = upsertClient(row);
+			var stmt:PDOStatement = upsertContact(row);
 			try{
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
 				//trace(res);
@@ -313,7 +313,7 @@ ORDER BY cl.client_id
 			{
 				{S.sendErrors(dbData, [
 					'dbError'=>S.dbh.errorInfo(),
-					'upsertClient'=>S.errorInfo(row),
+					'upsertContact'=>S.errorInfo(row),
 					'exception'=>e
 				]);}		
 			}
@@ -333,7 +333,7 @@ ORDER BY cl.client_id
 		{			
 			//trace(row);
 			//S.sendErrors(dbData,['syncAll'=>'NOTOK']);
-			var stmt:PDOStatement = upsertClient(row);
+			var stmt:PDOStatement = upsertContact(row);
 			try{
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
 				//trace(res);
@@ -342,7 +342,7 @@ ORDER BY cl.client_id
 			{
 				{S.sendErrors(dbData, [
 					'dbError'=>S.dbh.errorInfo(),
-					'upsertClient'=>S.errorInfo(row),
+					'upsertContact'=>S.errorInfo(row),
 					'exception'=>e
 				]);}		
 			}
@@ -356,7 +356,7 @@ ORDER BY cl.client_id
     inline function testValue(v:Dynamic):Bool return cast v;
     //inline function testValue(v:Dynamic):Bool return cast v != null && v != false;
 
-    function upsertClient(rD:NativeArray):PDOStatement
+    function upsertContact(rD:NativeArray):PDOStatement
     {
 		var cD:Map<String,Dynamic> = Util.map2fields(rD, keys);
         var cNames:Array<String> = [for(k in cD.keys()) k];

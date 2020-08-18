@@ -45,10 +45,11 @@ class History extends Model
 	
 	override function get()
 	{
-		trace(param);
+		//trace(param);
+		var filter = (param.get('filter')!=null ? 'WHERE '+param.get('filter') :'');
 		var sql:String = comment(unindent, format)/*		
 		SELECT COUNT(*),  date(date_trunc('month',Termin)), SUM(Betrag) 
-		FROM bank_transfers GROUP BY  date(date_trunc('month',Termin)) 
+		FROM bank_transfers ${filter} GROUP BY  date(date_trunc('month',Termin)) 
 		ORDER BY date(date_trunc('month',Termin))
 		*/;
 		var hData:NativeArray = fetchAll(sql,S.dbh);

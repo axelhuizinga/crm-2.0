@@ -59,7 +59,7 @@ class Util
 	public static function bindClientDataNum(table:String, stmt:PDOStatement, row:NativeArray, dbData:DbData)
 	{
 		var meta:Map<String, NativeArray> = S.columnsMeta(table);
-		trace(meta);
+		//trace(meta);
 		var i:Int = 0;
 		for(k => v in meta.keyValueIterator())
 		{

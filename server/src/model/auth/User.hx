@@ -426,7 +426,7 @@ html,body{
 			if(userInfo.id==null && userInfo.id ==dbQuery.dbUser.id && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
 				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
-				//trace(jRes);
+				trace(jRes);
 				return switch(jRes)				
 				{
 					case Invalid(payload):

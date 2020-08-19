@@ -70,8 +70,8 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	
 	public static var store:Store<AppState>;
 	//public static var config:ConfigState = Webpack.require('../../httpdocs/config.js').config;
-	public static var env:Dynamic = Webpack.require('../webpack.local.js')();
-	public static var devIP = env.ip;
+	//public static var env:Dynamic = Webpack.require('../webpack.local.js')();
+	public static var devIP = untyped __devIP__;
 	public static var config:ConfigState = js.Lib.require('config.js').config;
 	public static var flatpickr:Function = Webpack.require('flatpickr');
 	public static var German = js.Lib.require('flatpickr/dist/l10n/de.js');
@@ -173,7 +173,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		state = store.getState();
 		trace(Reflect.fields(state));
 		trace(config);
-		trace(env);
+		trace(devIP);
 		//trace(state);
 		tul = startHistoryListener(store, state.locationStore.history);
 		//store.subscribe(saveToLocalStorage);

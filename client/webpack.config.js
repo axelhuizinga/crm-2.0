@@ -5,8 +5,9 @@
 //
 module.exports = () =>{
 	// context: __dirname,
-	//console.log(env);
-	//console.log(opt);	
+	//console.log(process.env);
+	console.log('build:'+ process.env.build);	
+	const buildTarget = process.env.build || 'dev';
 	const localConf = require('./webpack.local')(process.env);
 	const devHost = localConf.ip;
 	const devServerHttps = localConf.devServerHttps;
@@ -14,7 +15,6 @@ module.exports = () =>{
 	const path = require('path');
 	
 	const buildMode = process.env.NODE_ENV || 'development';
-	const buildTarget = process.env.TARGET || 'web';
 	
 	const isProd = buildMode === 'production';
 	
@@ -59,9 +59,7 @@ module.exports = () =>{
 		// Sourcemaps option for development
 		devtool: sourcemapsMode,
 		// Live development server (serves from memory)
-		devServer: {
-			//public:'https://'+devHost+':9000',
-			//contentBase: './httpdocs/', //gives me directory listing in the browser
+		devServer: isProd ? {}: {
 			contentBase: dist,
 			compress: true,
 			host:  devHost,
@@ -180,7 +178,7 @@ module.exports = () =>{
 			]
 		},
 		optimization: {
-			//minimize:false,
+			minimize:false,
 			splitChunks: {
 			cacheGroups: {
 				styles: {
@@ -213,7 +211,8 @@ module.exports = () =>{
 				title: (localConf.org ? localConf.org + ' ' : '' ) + 'CRM 2.0'
 			}),
 			new webpack.DefinePlugin({
-				__host__:JSON.stringify(localConf.host)
+				__host__:JSON.stringify(localConf.host),
+				__devIP__:JSON.stringify(localConf.ip)
 			})
 		]
 	}

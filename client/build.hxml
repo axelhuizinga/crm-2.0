@@ -18,6 +18,7 @@
 
 -js ../httpdocs/js/app.js
 -dce std
+--debug
 #--no-traces
 #-D eval-stack
 -main Go

@@ -573,7 +573,7 @@ class S
 	{
 		//trace(new hxbit.Serializer().serialize(dbQuery));
 		//trace(S.dbQuery);
-		trace(Json.stringify(dbQuery));
+		//trace(Json.stringify(dbQuery));
 		//var request:String = Json.stringify(new hxbit.Dump(new hxbit.Serializer().serialize(dbQuery)).dumpObj());
 		//var request:String = Web.getPostData();
 		//trace( request.length + ' == ' +  Syntax.code('strlen(@iconv("UTF-8", "UTF-8//IGNORE",{0}))',request));

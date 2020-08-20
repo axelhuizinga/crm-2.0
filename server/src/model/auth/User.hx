@@ -462,7 +462,7 @@ html,body{
 				trace('calling JWT.verify now...');
 				//trace(JWT.verify(jwt, S.secret));
 				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
-				trace(jRes);
+				//trace(jRes);
 				return switch(jRes)				
 				{
 					case Invalid(payload):
@@ -478,7 +478,7 @@ html,body{
 						//trace(dbQuery);
 						//saveRequest(id, dbQuery);		
 						if(S.action=='verify')
-							S.sendInfo(dbData, ['verify'=>'OK']);				
+							S.sendInfo(dbData, ['verify'=>'OK','validUntil'=>DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")]);				
 						true;
 					default:
 						S.sendErrors(new DbData(), ['jwtError'=>jRes]);

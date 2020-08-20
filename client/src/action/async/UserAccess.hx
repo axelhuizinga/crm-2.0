@@ -337,7 +337,7 @@ class UserAccess {
 					}	
 					var uData = data.dataRows[0];
 					//var uProps:Dynamic = {};
-					//trace(data.dataInfo);
+					trace(data.dataInfo);
 					for(k=>v in uData.keyValueIterator())
 					{
 						if(Reflect.hasField(state.userState.dbUser, k))

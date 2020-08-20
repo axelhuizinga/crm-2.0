@@ -202,7 +202,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 				{
 					if(!data.dataErrors.keys().hasNext())
 					{
-						data.dataRows.pop();
+						//data.dataRows.pop();
 						setState({
 						//props.parentComponent.setStateFromChild({
 							//rows:dRows,
@@ -247,8 +247,13 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	function draw() {
+		if(state.dataTable != null && state.dataTable.length>0)
+			{		
 		//trace(chartBox.outerHTML);	
-		var cW:Int = chartBox.offsetWidth-1;
+		var cW:Int = chartBox.offsetWidth;
+		var iX:Int = Math.floor(cW/state.dataTable.length);		
+		cW = iX * state.dataTable.length;
+		chartBox.style.width = cW + 'px';
 		var cH:Int = chartBox.offsetHeight-1;
 		var lH:Int = cH*0.064>24?Math.round(cH*0.064):24;
 		cH -= lH;
@@ -270,6 +275,10 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 		var cRatio:Float = cH/maxCount;
 		var sRatio:Float = cH/maxSum;
 		trace('$maxCount => $maxSum $cW: $cRatio $sRatio ${state.dataTable.length} svg: ${svg!=null?svg:null}');
+		trace(state.dataTable[0]);
+		
+		//var iW:Int = Math.floor(cW/state.dataTable.length)-2;
+		var iW:Int = iX-2;
 		if(svg!=null)
 			return;
 		var div = D3.select(".tabComponentForm").append("div")	
@@ -301,11 +310,11 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 		trace(stop1.nextElementSibling.classList.value);
 		//.attr("gradientTransform", "rotate(270)");
 		//{var h = Std.parseFloat(d.get('sum'))*sRatio;trace(h);return h;}.attr("gradientTransform", "rotate(" + d3.select("#range1").property("value")+")");
-		if(state.dataTable != null && state.dataTable.length>0)
-		{
+		//if(state.dataTable != null && state.dataTable.length>0)
+	/*	{
 			trace(state.dataTable[0]);
 			var iW:Int = Math.floor(cW/state.dataTable.length)-2;
-			var iX:Float = cW/state.dataTable.length;
+			var iX:Float = cW/state.dataTable.length;*/
 			trace(svg);
 			svg.selectAll(null).data(state.dataTable).enter().append("rect")
 				.attr('x', function(d:Dynamic,i:Int)return i*(iX))
@@ -353,13 +362,13 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 				var svg:Selection = legend.append('svg')
 				.attr('y', 0)
 				.attr('x', yearX)				
-				.attr('width', (i*iX)-3-yearX)				
+				.attr('width', (i*iX)-2-yearX)				
 				.attr('height', h)
 				.attr('viewBox', '0 0 ${(i*iX)-2-yearX} $h');
 				svg.append('rect')				
-				.attr('x', 0.5)
+				.attr('x', 0.0)
 				.attr('y', 2)
-				.attr('width', (i*iX)-3-yearX)
+				.attr('width', (i*iX)-2-yearX)
 				.attr('height', h-4)
 				.attr('fill', '#fff');
 				//.attr('stroke', '#666')
@@ -380,13 +389,13 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 			var svg:Selection = legend.append('svg')
 			.attr('y', 0)
 			.attr('x', yearX)				
-			.attr('width', (i*iX)-3-yearX)				
+			.attr('width', (i*iX)-2-yearX)				
 			.attr('height', h)
 			.attr('viewBox', '0 0 ${(i*iX)-2-yearX} $h');
 			svg.append('rect')				
-			.attr('x', 0.5)
+			.attr('x', 0.0)
 			.attr('y', 2)
-			.attr('width', (i*iX)-3-yearX)
+			.attr('width', (i*iX)-2-yearX)
 			.attr('height', h-4)
 			.attr('fill', '#fff');
 			//.attr('stroke', '#666')

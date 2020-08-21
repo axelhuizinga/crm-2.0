@@ -29,13 +29,13 @@ class FormBuilder {
 	public var dbData:DbData;
 	public var dbMetaData:DBMetaData;
 	public var formColElements:Map<String,Array<FormField>>;
-	public var _menuItems:Array<SMItem>;
+	public var _menuItems:Array<MItem>;
 	public var fState:FormState;
 	public var _fstate:FormState;
 	public var initialState:Dynamic;
 	public var section:String;
 	var comp:Dynamic;
-	var sM:SMenuProps;
+	var sM:MenuProps;
 	
 	public function new(rc:Dynamic)
 	{

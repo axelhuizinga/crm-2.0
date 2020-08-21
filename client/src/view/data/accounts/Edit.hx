@@ -28,8 +28,8 @@ import view.shared.FormBuilder;
 import view.shared.FormField;
 import state.FormState;
 import model.contacts.ContactsModel;
-import view.shared.SMItem;
-import view.shared.SMenuProps;
+import view.shared.MItem;
+import view.shared.MenuProps;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
@@ -45,7 +45,7 @@ using Lambda;
 
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<SMItem> = [
+	public static var menuItems:Array<MItem> = [
 		{label:'Auswahl',action:'get',section: 'List'},
 		{label:'Bearbeiten',action:'update'},
 		{label:'Neu', action:'insert'},
@@ -186,7 +186,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//DATA NOT IN STORE - LOAD IT
 			App.store.dispatch(DBAccess.get({
 				action:'get',
-				className:'data.Contacts',
+				classPath:'data.Contacts',
 				table:'contacts',
 				filter:	'id|${initialState.id}',
 				userState:App.store.getState().userState
@@ -332,7 +332,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var dbaProps:DBAccessProps = 
 		{
 			action:props.match.params.action,
-			className:'data.Contacts',
+			classPath:'data.Contacts',
 			dataSource:null,
 			table:'contacts',
 			userState:props.userState
@@ -443,7 +443,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 	
-	function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;
 		trace(sideMenu.section);

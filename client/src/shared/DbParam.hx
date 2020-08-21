@@ -14,7 +14,7 @@ import hxbit.Serializer;
 
 typedef DbRequestParam = {
 	?action:String,	
-	?className:String,
+	?classPath:String,
 	?dataSource:Map<String,DbQuery>,
 	?devIP:String,	
 	?filter:Dynamic,

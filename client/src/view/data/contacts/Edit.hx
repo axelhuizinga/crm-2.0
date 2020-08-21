@@ -42,8 +42,8 @@ import view.shared.FormBuilder;
 import view.shared.FormField;
 import state.FormState;
 import model.contacts.ContactsModel;
-import view.shared.SMItem;
-import view.shared.SMenuProps;
+import view.shared.MItem;
+import view.shared.MenuProps;
 import view.shared.io.BaseForm;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
@@ -61,12 +61,11 @@ using Lambda;
 @:connect
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<SMItem> = [
-		{label:'Schließen',action:'restore',section: 'List'},		
-		{label:'Speichern + Schließen',action:'updateAndClose'},
-		{label:'Speichern',action:'update'},
-		{label:'Neu', action:'insert'},
-		{label:'Löschen',action:'delete'}
+	public static var menuItems:Array<MItem> = [
+		{label:'Schließen',action:'close'},		
+		{label:'Speichern + Schließen',action:'saveAndClose'},
+		{label:'Speichern',action:'save'},
+		{label:'Zurücksetzen',action:'reset'}
 	];
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
@@ -79,6 +78,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var contact:Contact;
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
+	var mounted:Bool = false;
 
 	public function new(props) 
 	{
@@ -103,19 +103,19 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//Out.dumpStack(CallStack.callStack());
 		
 		state =  App.initEState({
-			dataTable:[],
-			actualState:{edited_by: props.userState.dbUser.id,mandator: props.userState.dbUser.mandator},
+			//dataTable:[],
+			actualState:{edited_by:props.userState.dbUser.id},
 			initialData:null,
 			loading:false,
 			handleSubmit:[
 				{
 					handler:handleSubmit,
-					handlerAction:SubmitAndClose,
+					handlerAction:SaveAndClose,
 					label:'Speichern + Schließen',
 				},
 				{
 					handler:handleSubmit,
-					handlerAction:Submit,
+					handlerAction:Save,
 					label:'Speichern',
 				},
 				{
@@ -141,18 +141,20 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			}),*/
 			values:new Map<String,Dynamic>()
 		},this);
-		trace(state.initialState.id);
-		loadContactData(Std.parseInt(props.match.params.id));
+		
+		trace(state.initialState);
+		//trace(state.initialState.id);
+		//loadContactData(Std.parseInt(props.match.params.id));
 	}
 
-	function loadContactData(id:Int):Contact
+	function loadContactData(id:Int):Void
 	{
 		trace('loading:$id');
 		if(id == null)
-			return null;
+			return;
 		var p:Promise<DbData> = props.load(
 			{
-				className:'data.Contacts',
+				classPath:'data.Contacts',
 				action:'get',
 				filter:{id:id,mandator:1},
 				table:'contacts',
@@ -166,28 +168,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			{
 				var data = data.dataRows[0];
 				trace(data);	
+				//if( mounted)
 				setState({loading:false, initialData:new Contact(data)});
+				trace(untyped state.initialData.id + ':' + state.initialData.fieldsInitalized.join(','));
+				setState({actualState:copy(state.initialData)});
 			}
-			
 		});
-		//;
-		
-		//contact = new Contact(state.actualState, dataAccess['update'].view);
-		//contact = actualState;
-		trace(state.actualState);
-		//trace('Rtti:' + Rtti.getRtti(Contact).fields[0].meta);
-		trace(contact.fieldsModified);		
-		trace('contact.fieldsModified:' + contact.fieldsModified);		
-		//initialState = copy(actualState);
-		//baseForm.compareStates();	
-		//trace(actualState);	
-		//trace(initialState);	
-		/*actualState = view.shared.io.Observer.run(initialState, function(newState){
-				actualState = newState;
-			trace(actualState);
-		});*/
-		//props.select(initialState.id,[initialState.id => initialState], props.match);
-		return null;
 	}
 	
 	/*static function mapStateToProps(aState:AppState) 
@@ -206,7 +192,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		
 	override public function componentDidMount():Void 
 	{	
-		trace('mounted');
+		trace('mounted:' + mounted);
+		mounted = true;
+		loadContactData(Std.parseInt(props.match.params.id));
 		//initSession();
 	}
 	
@@ -284,13 +272,15 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		compareStates();
 		//trace(initialState);
 		//trace(actualState);*/
-		update();
+		//update();
 	}
 
 
 	function update()
 	{
 		//trace(Reflect.fields(aState));
+		if(contact == null)
+			return;
 		var doc:Document = Browser.window.document;
 
 		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
@@ -330,7 +320,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var dbaProps:DBAccessProps = 
 		{
 			action:'update',
-			className:'data.Contacts',
+			classPath:'data.Contacts',
 			dataSource:null,
 		//	table:'contacts',
 			userState:props.userState
@@ -363,6 +353,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				trace('${state.initialState.id} :: creation_date: ${aState.creation_date} ${state.initialState.creation_date}');
 				//var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialState.id);
 				//trace();
+				if(contact != null)
 				trace(contact.modified() + ':${contact.fieldsModified}');
 				for(f in fieldNames)
 				{
@@ -404,7 +395,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'update':
 				//trace(state.handleSubmit);
-				//trace(actualState);
+				trace(state.actualState.id);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 				];*/
@@ -438,6 +429,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	override function render():ReactFragment
 	{
 		trace(props.match.params.action);		
+		if(state.initialData==null)
+			return null;
 		//trace('state.loading: ${state.loading}');		
 		return switch(props.match.params.action)
 		{	
@@ -457,7 +450,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 	
-	function updateMenu(?viewClassPath:String):SMenuProps
+	/*function updateMenu(?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;
 		trace(sideMenu.section);
@@ -473,7 +466,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			}			
 		}
 		return sideMenu;
-	}
+	}*/
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {

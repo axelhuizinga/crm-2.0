@@ -12,7 +12,7 @@ import hxbit.Serializable;
 
 typedef DbQueryParam = {
 	?action:String,	
-	?className:String,
+	?classPath:String,
 	?extDB:Bool,
 	?relations:Map<String,DbRelation>,
 	?devIP:String,	

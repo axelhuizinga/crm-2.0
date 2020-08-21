@@ -17,66 +17,42 @@ class EndReason extends ORM
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var id(get,set):Int;
-	var id_initialized:Bool;
-	
-	function get_id():Int{
-		return id;
-	}
+	@:isVar public var id(default,set):Int;
 
 	function set_id(id:Int):Int{
-		if(id_initialized)
+		if(initialized('id'))
 			modified('id');
 		this.id = id ;
-		id_initialized = true; 
 		return id;
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var reason(get,set):String;
-	var reason_initialized:Bool;
-	
-	function get_reason():String{
-		return reason;
-	}
+	@:isVar public var reason(default,set):String;
 
 	function set_reason(reason:String):String{
-		if(reason_initialized)
+		if(initialized('reason'))
 			modified('reason');
 		this.reason = reason ;
-		reason_initialized = true; 
 		return reason;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var edited_by(get,set):Int;
-	var edited_by_initialized:Bool;
-	
-	function get_edited_by():Int{
-		return edited_by;
-	}
+	@:isVar public var edited_by(default,set):Int;
 
 	function set_edited_by(edited_by:Int):Int{
-		if(edited_by_initialized)
+		if(initialized('edited_by'))
 			modified('edited_by');
 		this.edited_by = edited_by ;
-		edited_by_initialized = true; 
 		return edited_by;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var mandator(get,set):Int;
-	var mandator_initialized:Bool;
-	
-	function get_mandator():Int{
-		return mandator;
-	}
+	@:isVar public var mandator(default,set):Int;
 
 	function set_mandator(mandator:Int):Int{
-		if(mandator_initialized)
+		if(initialized('mandator'))
 			modified('mandator');
 		this.mandator = mandator ;
-		mandator_initialized = true; 
 		return mandator;
 	}	
 	

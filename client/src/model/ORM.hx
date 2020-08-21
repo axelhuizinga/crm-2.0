@@ -11,18 +11,26 @@ using Lambda;
 
 @:keep
 class ORM {
-	
+	public var fieldsInitalized(default,null):Array<String>;
 	public var fieldsModified(default,null):Array<String>;
+	
 	public var fieldFormat:Map<String, Function>;
 	public var propertyNames:Array<String>;
 	var fields:Dynamic<Dynamic<Array<Dynamic>>>;
 
 	public function new(data:Map<String,Dynamic>) {
+		fields = Meta.getFields(Type.getClass(this));		
+		fieldsInitalized = new Array();
 		fieldsModified = new Array();
-		fields = Meta.getFields(Type.getClass(this));
 		propertyNames = Reflect.fields(fields);
-		trace(fields);
+		load(data);
+	}
+
+	public function load(data:Map<String,Dynamic>):ORM {
 		if(data != null)
+		{
+			fieldsInitalized = new Array();
+			fieldsModified = new Array();
 			for(f in propertyNames)
 			{
 				if(data.exists(f)){
@@ -38,18 +46,8 @@ class ORM {
 							nv;
 					});				
 				}
-			}		
-	}
-
-	public function load(data:Map<String,Dynamic>):ORM {
-		
-		for(pName in propertyNames)
-		{
-			//trace('$pName:${Reflect.field(this, pName)}');
-			if(data.exists(pName))
-				Reflect.setProperty(this, pName, data[pName]);
+			}
 		}
-		//trace(cls.propertyNames);
 		return this;
 	}
 
@@ -69,10 +67,9 @@ class ORM {
 		var rtti:Classdef = getRtti(me);
 		var rttiFields:Array<haxe.rtti.CType.ClassField> = rtti.fields;
 		//trace(rttiFields[0]);
-		trace(propertyNames);
+		//trace(propertyNames);
 		var dTypes:Array<String> = [];
 		for(fld in rttiFields)
-		//for(fi in 0...rttiFields.length)
 		{
 			//var fld:ClassField = rttiFields[fi];
 			//trace(fld.name);
@@ -87,15 +84,26 @@ class ORM {
 				//trace(fld.meta[0].params);//DB FIELD DATATYPE
 			}
 		}
-		trace(dTypes);
+		//trace(dTypes);
+	}
+
+	public function initialized(?attName:String):Bool {
+		if(attName==null)			
+			return fieldsInitalized.length>0;
+		if(!fieldsInitalized.has(attName)){
+			fieldsInitalized.push(attName);
+			return false;
+		}
+		return true;
 	}
 
 	public function modified(?attName:String):Bool {
 		if(attName==null)			
 			return fieldsModified.length>0;
-			//return fieldsModified.filter(function(p:String)return fieldsModified.has(p)).length>0;			
-		if(!fieldsModified.has(attName))
+		if(!fieldsModified.has(attName)){
 			fieldsModified.push(attName);
+			return false;
+		}
 		return true;
 	}
 

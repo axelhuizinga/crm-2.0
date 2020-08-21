@@ -23,7 +23,7 @@ import shared.DBMetaData;
 import view.dashboard.model.DBSyncModel;
 import view.shared.FormField;
 import state.FormState;
-import view.shared.SMItem;
+import view.shared.MItem;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
@@ -41,7 +41,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 
 	static var _instance:DBSync;
 
-	public static var menuItems:Array<SMItem> = [
+	public static var menuItems:Array<MItem> = [
 		{label:'Anzeigen',action:'get'},
 		{label:'Bearbeiten',action:'update'},
 		//{label:'Finden',action:'get'},
@@ -83,7 +83,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 			{
 				id:props.user.id,
 				jwt:props.user.jwt,
-				className:'data.Contacts',
+				classPath:'data.Contacts',
 				action:'get',
 				edit:'1'
 			},
@@ -152,7 +152,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 				id:props.user.id,
 				jwt:props.user.jwt,
 				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
-				className:'admin.SyncExternalClients',
+				classPath:'admin.SyncExternalClients',
 				action:'importClientDetails',
 				devIP:App.devIP
 			},
@@ -185,7 +185,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 				id:props.user.id,
 				jwt:props.user.jwt,
 				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
-				className:'admin.SyncExternal',
+				classPath:'admin.SyncExternal',
 				action:'syncUserDetails',
 				target: 'syncUsers.php',
 				devIP:App.devIP
@@ -293,7 +293,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		</>'));		
 	}
 	
-	function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;
 		trace(sideMenu.section);

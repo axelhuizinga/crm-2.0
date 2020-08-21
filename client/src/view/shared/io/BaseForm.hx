@@ -22,7 +22,7 @@ import react.ReactUtil.copy;
 import view.shared.FormBuilder;
 import state.FormState;
 import view.dashboard.model.DBSyncModel;
-import view.shared.SMItem;
+import view.shared.MItem;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
@@ -31,7 +31,6 @@ import view.table.Table;
 class BaseForm
 {
 	var comp:ReactComponentOf<DataFormProps,FormState>;
-
 
 	public function new(comp:Dynamic) {
 		this.comp = comp;		

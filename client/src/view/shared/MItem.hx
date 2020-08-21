@@ -1,8 +1,9 @@
 package view.shared;
+import state.FormState.HandlerAction;
 import react.ReactType;
 import haxe.Constraints.Function;
 
-typedef SMItem =
+typedef MItem =
 {
 	?action:String,
 	//?className:String,

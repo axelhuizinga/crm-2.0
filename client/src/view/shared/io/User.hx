@@ -27,7 +27,7 @@ import shared.DbData;
 import state.FormState;
 import state.UserState;
 import view.shared.OneOf;
-import view.shared.SMenu;
+import view.shared.Menu;
 import view.shared.io.FormApi;
 import view.shared.io.DataAccess;
 import view.shared.io.DataFormProps;
@@ -50,7 +50,7 @@ typedef UserFilter = Dynamic;
 class User extends ReactComponentOf<DataFormProps,FormState>
 {
 	static var _instance:User;
-	public static var menuItems:Array<SMItem> = [
+	public static var menuItems:Array<MItem> = [
 		{label:'Neu',action:'insert'},
 		{label:'Bearbeiten',action:'update'},
 		{label:'Speichern', action:'save'},
@@ -111,7 +111,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 			{				
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
-				className:'auth.User',
+				classPath:'auth.User',
 				action:'update',
 				filter:'id|${props.userState.dbUser.id}',
 				dataSource:Serializer.run(dataAccess['update'].source),
@@ -205,7 +205,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 			{
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
-				className:'auth.User',
+				classPath:'auth.User',
 				action:'update',
 				filter:'id|${props.userState.dbUser.id}',
 				dataSource:Serializer.run(dataAccess['update'].source)
@@ -255,7 +255,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 			{
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
-				className:'auth.User',
+				classPath:'auth.User',
 				action:'save',
 				filter:'id|${props.userState.dbUser.id}',
 				dataSource:Serializer.run(dataAccess['update'].source)
@@ -270,7 +270,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		));
 	}
 	
-	function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;
 		sideMenu.menuBlocks['users'].isActive = true;

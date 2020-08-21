@@ -20,7 +20,7 @@ import view.shared.io.Design;
 import view.shared.io.FormApi;
 import state.FormState;
 import view.shared.OneOf;
-import view.shared.SMenu;
+import view.shared.Menu;
 import view.shared.io.Bookmarks;
 import view.shared.io.User;
 

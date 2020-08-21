@@ -20,8 +20,8 @@ import view.dashboard.model.RolesFormModel;
 import view.shared.io.DataFormProps;
 import view.shared.io.FormApi;
 import state.FormState;
-import view.shared.SMenu;
-import view.shared.SMenuProps;
+import view.shared.Menu;
+import view.shared.MenuProps;
 import view.shared.io.Users;
 using Lambda;
 /**
@@ -117,7 +117,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
 				first_name:props.userState.dbUser.first_name,
-				className:'admin.CreateUsers',
+				classPath:'admin.CreateUsers',
 				action:'importExternal'
 			},
 			function(data){
@@ -157,19 +157,19 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
         return jsx('		
 				<div className="columns">
 					<div className="tabComponentForm" children={renderContent()} />
-					<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks}/>					
+					<Menu className="menu" menuBlocks={state.sideMenu.menuBlocks}/>					
 				</div>		
         ');
     }	*/	
 	
 	override public function render() {
-		var sM:SMenuProps = state.sideMenu;
+		var sM:MenuProps = state.sideMenu;
 		if(sM.menuBlocks != null)
 			trace(sM.menuBlocks.keys().next() + ':' + props.match.params.section);
 		return jsx('
 			<div className="columns">
 				${renderContent()}
-				<$SMenu className="menu" {...sM} />
+				<$Menu className="menu" {...sM} />
 			</div>			
 		');		
 		//return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} render=${renderContent}/>');

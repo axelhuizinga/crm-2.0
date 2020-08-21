@@ -9,8 +9,8 @@ import shared.DBMetaData;
 import view.shared.FormField;
 import state.FormState;
 import view.data.accounts.model.Accounts;
-import view.shared.SMItem;
-import view.shared.SMenuProps;
+import view.shared.MItem;
+import view.shared.MenuProps;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
@@ -20,7 +20,7 @@ import model.Account;
 
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<SMItem> = [
+	public static var menuItems:Array<MItem> = [
 		{label:'Anzeigen',action:'get'},
 		{label:'Bearbeiten',action:'update'},
 		//{label:'Finden',action:'get'},
@@ -70,7 +70,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
 				//fields:'disabled:disabled,element=:element,required=:required,use_as_index=:use_as_index',
-				className:'data.Contacts',
+				classPath:'data.Contacts',
 				action:'get',
 				//dataSource:Serializer.run(dataAccess['get'].source),
 				devIP:App.devIP
@@ -186,7 +186,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		</>'));		
 	}
 	
-	function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;
 		trace(sideMenu.section);

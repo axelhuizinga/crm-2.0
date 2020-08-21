@@ -47,7 +47,7 @@ using shared.Utils;
 class Data extends ReactComponentOf<DataProps,CompState>
 {
 	//static var user = {first_name:'dummy'};
-	var mounted:Bool = false;
+	public var mounted:Bool = false;
 	var rendered:Bool = false;
 	var renderCount:Int = 0;
 	var _trace:Bool;
@@ -58,7 +58,7 @@ class Data extends ReactComponentOf<DataProps,CompState>
 		state = {hasError:false,mounted:false};
 		//if(_trace) trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} userState:${props.user}');
 		super(props);	
-		_strace = _trace = false;	
+		_strace = _trace = true;	
 		if(_trace) trace(props.match);
 		if(_trace) trace(props.store);
 		if (props.match.url == '/Data' && props.match.isExact)
@@ -134,8 +134,8 @@ class Data extends ReactComponentOf<DataProps,CompState>
 		//if(_trace) trace(this.state);
 		//if(_trace) trace(props.history.location.pathname);
 		//if(_trace) trace(props.user);
-		if (state.hasError)
-			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');
+		//if (state.hasError)
+		//	return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');
 		if(_trace) trace(Reflect.fields(props));
 		if(_trace) trace(Reflect.fields(state));
 		return jsx('

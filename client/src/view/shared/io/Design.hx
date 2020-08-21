@@ -7,7 +7,7 @@ import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import state.FormState;
-import view.shared.SMenu;
+import view.shared.Menu;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess.DataSource;
 
@@ -19,7 +19,7 @@ import view.shared.io.DataAccess.DataSource;
 class Design extends ReactComponentOf<DataFormProps,FormState>
 {
 	
-	public static var menuItems:Array<SMItem> = [
+	public static var menuItems:Array<MItem> = [
 		{label:'Neu',action:'insert'},
 		{label:'Bearbeiten',action:'update'},
 		{label:'Speichern', action:'save'},
@@ -34,7 +34,7 @@ class Design extends ReactComponentOf<DataFormProps,FormState>
 			{
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
-				className:'auth.User',
+				classPath:'auth.User',
 				action:'update',
 				filter:'id|${props.userState.dbUser.id}',
 				//dataSource:Serializer.run(view.shared.io.User.userModel)
@@ -66,7 +66,7 @@ class Design extends ReactComponentOf<DataFormProps,FormState>
 			loading:true,
 			sideMenu:{}, 
 		};
-		/*_menuItems = menuItems.map(function (mI:SMItem){
+		/*_menuItems = menuItems.map(function (mI:MItem){
 			var h:Event->Void = Reflect.field(this, mI.action);
 			trace(h);
 			mI.handler = h;

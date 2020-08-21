@@ -35,354 +35,222 @@ class Deal extends ORM
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var id(get,set):Int;
-	var id_initialized:Bool;
-	
-	function get_id():Int{
-		return id;
-	}
+	@:isVar public var id(default,set):Int;
 
 	function set_id(id:Int):Int{
-		if(id_initialized)
+		if(initialized('id'))
 			modified('id');
 		this.id = id ;
-		id_initialized = true; 
 		return id;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var contact(get,set):Int;
-	var contact_initialized:Bool;
-	
-	function get_contact():Int{
-		return contact;
-	}
+	@:isVar public var contact(default,set):Int;
 
 	function set_contact(contact:Int):Int{
-		if(contact_initialized)
+		if(initialized('contact'))
 			modified('contact');
 		this.contact = contact ;
-		contact_initialized = true; 
 		return contact;
 	}	
 		
 	@dataType("timestamp(0) without time zone")
-	@:isVar public var creation_date(get,set):String;
-	var creation_date_initialized:Bool;
-	
-	function get_creation_date():String{
-			return creation_date;
-	}
+	@:isVar public var creation_date(default,set):String;
 
 	function set_creation_date(creation_date:String):String{
-		if(creation_date_initialized)
+		if(initialized('creation_date'))
 			modified('creation_date');
 		this.creation_date = creation_date ;
-		creation_date_initialized = true; 
 		return creation_date;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var account(get,set):Int;
-	var account_initialized:Bool;
-	
-	function get_account():Int{
-		return account;
-	}
+	@:isVar public var account(default,set):Int;
 
 	function set_account(account:Int):Int{
-		if(account_initialized)
+		if(initialized('account'))
 			modified('account');
 		this.account = account ;
-		account_initialized = true; 
 		return account;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var target_account(get,set):Int;
-	var target_account_initialized:Bool;
-	
-	function get_target_account():Int{
-		return target_account;
-	}
+	@:isVar public var target_account(default,set):Int;
 
 	function set_target_account(target_account:Int):Int{
-		if(target_account_initialized)
+		if(initialized('target_account'))
 			modified('target_account');
 		this.target_account = target_account ;
-		target_account_initialized = true; 
 		return target_account;
 	}	
 		
 	@dataType("character varying(2)")
-	@:isVar public var start_day(get,set):String;
-	var start_day_initialized:Bool;
-	
-	function get_start_day():String{
-		return start_day;
-	}
+	@:isVar public var start_day(default,set):String;
 
 	function set_start_day(start_day:String):String{
-		if(start_day_initialized)
+		if(initialized('start_day'))
 			modified('start_day');
 		this.start_day = start_day ;
-		start_day_initialized = true; 
 		return start_day;
 	}	
 		
 	@dataType("date")
-	@:isVar public var start_date(get,set):String;
-	var start_date_initialized:Bool;
-	
-	function get_start_date():String{
-			return start_date;
-	}
+	@:isVar public var start_date(default,set):String;
 
 	function set_start_date(start_date:String):String{
-		if(start_date_initialized)
+		if(initialized('start_date'))
 			modified('start_date');
 		this.start_date = start_date ;
-		start_date_initialized = true; 
 		return start_date;
 	}	
 		
 	@dataType("deals_cycle")
-	@:isVar public var cycle(get,set):String;
-	var cycle_initialized:Bool;
-	
-	function get_cycle():String{
-			return cycle;
-	}
+	@:isVar public var cycle(default,set):String;
 
 	function set_cycle(cycle:String):String{
-		if(cycle_initialized)
+		if(initialized('cycle'))
 			modified('cycle');
 		this.cycle = cycle ;
-		cycle_initialized = true; 
 		return cycle;
 	}	
 		
 	@dataType("numeric(10,2)")
-	@:isVar public var amount(get,set):String;
-	var amount_initialized:Bool;
-	
-	function get_amount():String{
-			return amount;
-	}
+	@:isVar public var amount(default,set):String;
 
 	function set_amount(amount:String):String{
-		if(amount_initialized)
+		if(initialized('amount'))
 			modified('amount');
 		this.amount = amount ;
-		amount_initialized = true; 
 		return amount;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var product(get,set):Int;
-	var product_initialized:Bool;
-	
-	function get_product():Int{
-		return product;
-	}
+	@:isVar public var product(default,set):Int;
 
 	function set_product(product:Int):Int{
-		if(product_initialized)
+		if(initialized('product'))
 			modified('product');
 		this.product = product ;
-		product_initialized = true; 
 		return product;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var agent(get,set):Int;
-	var agent_initialized:Bool;
-	
-	function get_agent():Int{
-		return agent;
-	}
+	@:isVar public var agent(default,set):Int;
 
 	function set_agent(agent:Int):Int{
-		if(agent_initialized)
+		if(initialized('agent'))
 			modified('agent');
 		this.agent = agent ;
-		agent_initialized = true; 
 		return agent;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var project(get,set):Int;
-	var project_initialized:Bool;
-	
-	function get_project():Int{
-		return project;
-	}
+	@:isVar public var project(default,set):Int;
 
 	function set_project(project:Int):Int{
-		if(project_initialized)
+		if(initialized('project'))
 			modified('project');
 		this.project = project ;
-		project_initialized = true; 
 		return project;
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var status(get,set):String;
-	var status_initialized:Bool;
-	
-	function get_status():String{
-		return status;
-	}
+	@:isVar public var status(default,set):String;
 
 	function set_status(status:String):String{
-		if(status_initialized)
+		if(initialized('status'))
 			modified('status');
 		this.status = status ;
-		status_initialized = true; 
 		return status;
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var pay_method(get,set):String;
-	var pay_method_initialized:Bool;
-	
-	function get_pay_method():String{
-		return pay_method;
-	}
+	@:isVar public var pay_method(default,set):String;
 
 	function set_pay_method(pay_method:String):String{
-		if(pay_method_initialized)
+		if(initialized('pay_method'))
 			modified('pay_method');
 		this.pay_method = pay_method ;
-		pay_method_initialized = true; 
 		return pay_method;
 	}	
 		
 	@dataType("date")
-	@:isVar public var end_date(get,set):String;
-	var end_date_initialized:Bool;
-	
-	function get_end_date():String{
-			return end_date;
-	}
+	@:isVar public var end_date(default,set):String;
 
 	function set_end_date(end_date:String):String{
-		if(end_date_initialized)
+		if(initialized('end_date'))
 			modified('end_date');
 		this.end_date = end_date ;
-		end_date_initialized = true; 
 		return end_date;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var end_reason(get,set):Int;
-	var end_reason_initialized:Bool;
-	
-	function get_end_reason():Int{
-		return end_reason;
-	}
+	@:isVar public var end_reason(default,set):Int;
 
 	function set_end_reason(end_reason:Int):Int{
-		if(end_reason_initialized)
+		if(initialized('end_reason'))
 			modified('end_reason');
 		this.end_reason = end_reason ;
-		end_reason_initialized = true; 
 		return end_reason;
 	}	
 		
 	@dataType("date")
-	@:isVar public var repeat_date(get,set):String;
-	var repeat_date_initialized:Bool;
-	
-	function get_repeat_date():String{
-			return repeat_date;
-	}
+	@:isVar public var repeat_date(default,set):String;
 
 	function set_repeat_date(repeat_date:String):String{
-		if(repeat_date_initialized)
+		if(initialized('repeat_date'))
 			modified('repeat_date');
 		this.repeat_date = repeat_date ;
-		repeat_date_initialized = true; 
 		return repeat_date;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var edited_by(get,set):Int;
-	var edited_by_initialized:Bool;
-	
-	function get_edited_by():Int{
-		return edited_by;
-	}
+	@:isVar public var edited_by(default,set):Int;
 
 	function set_edited_by(edited_by:Int):Int{
-		if(edited_by_initialized)
+		if(initialized('edited_by'))
 			modified('edited_by');
 		this.edited_by = edited_by ;
-		edited_by_initialized = true; 
 		return edited_by;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var mandator(get,set):Int;
-	var mandator_initialized:Bool;
-	
-	function get_mandator():Int{
-		return mandator;
-	}
+	@:isVar public var mandator(default,set):Int;
 
 	function set_mandator(mandator:Int):Int{
-		if(mandator_initialized)
+		if(initialized('mandator'))
 			modified('mandator');
 		this.mandator = mandator ;
-		mandator_initialized = true; 
 		return mandator;
 	}	
 		
 	@dataType("boolean")
-	@:isVar public var old_active(get,set):Bool;
-	var old_active_initialized:Bool;
-	
-	function get_old_active():Bool{
-		return old_active;
-	}
+	@:isVar public var old_active(default,set):Bool;
 
 	function set_old_active(old_active:Bool):Bool{
-		if(old_active_initialized)
+		if(initialized('old_active'))
 			modified('old_active');
 		this.old_active = old_active ;
-		old_active_initialized = true; 
 		return old_active;
 	}	
 		
 	@dataType("date")
-	@:isVar public var cycle_start_date(get,set):String;
-	var cycle_start_date_initialized:Bool;
-	
-	function get_cycle_start_date():String{
-			return cycle_start_date;
-	}
+	@:isVar public var cycle_start_date(default,set):String;
 
 	function set_cycle_start_date(cycle_start_date:String):String{
-		if(cycle_start_date_initialized)
+		if(initialized('cycle_start_date'))
 			modified('cycle_start_date');
 		this.cycle_start_date = cycle_start_date ;
-		cycle_start_date_initialized = true; 
 		return cycle_start_date;
 	}	
 		
 	@dataType("timestamp(0) without time zone")
-	@:isVar public var last_locktime(get,set):String;
-	var last_locktime_initialized:Bool;
-	
-	function get_last_locktime():String{
-			return last_locktime;
-	}
+	@:isVar public var last_locktime(default,set):String;
 
 	function set_last_locktime(last_locktime:String):String{
-		if(last_locktime_initialized)
+		if(initialized('last_locktime'))
 			modified('last_locktime');
 		this.last_locktime = last_locktime ;
-		last_locktime_initialized = true; 
 		return last_locktime;
 	}	
 	

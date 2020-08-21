@@ -42,10 +42,10 @@ import view.shared.io.DataFormProps;
 import view.shared.io.FormApi;
 import state.FormState;
 import view.shared.OneOf;
-import view.shared.SMenu;
-import view.shared.SMItem;
+import view.shared.Menu;
+import view.shared.MItem;
 
-import view.shared.SMenuProps;
+import view.shared.MenuProps;
 import view.table.Table;
 using  shared.Utils;
 

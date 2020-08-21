@@ -6,7 +6,7 @@ typedef  InteractionState =
 	var enables:Array<String>;
 }
 
-typedef SMenuState =
+typedef MenuState =
 {
 	?hidden:Bool,
 	?disabled:Bool,

@@ -26,210 +26,132 @@ class Account extends ORM
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var id(get,set):Int;
-	var id_initialized:Bool;
-	
-	function get_id():Int{
-		return id;
-	}
+	@:isVar public var id(default,set):Int;
 
 	function set_id(id:Int):Int{
-		if(id_initialized)
+		if(initialized('id'))
 			modified('id');
 		this.id = id ;
-		id_initialized = true; 
 		return id;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var contact(get,set):Int;
-	var contact_initialized:Bool;
-	
-	function get_contact():Int{
-		return contact;
-	}
+	@:isVar public var contact(default,set):Int;
 
 	function set_contact(contact:Int):Int{
-		if(contact_initialized)
+		if(initialized('contact'))
 			modified('contact');
 		this.contact = contact ;
-		contact_initialized = true; 
 		return contact;
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var bank_name(get,set):String;
-	var bank_name_initialized:Bool;
-	
-	function get_bank_name():String{
-		return bank_name;
-	}
+	@:isVar public var bank_name(default,set):String;
 
 	function set_bank_name(bank_name:String):String{
-		if(bank_name_initialized)
+		if(initialized('bank_name'))
 			modified('bank_name');
 		this.bank_name = bank_name ;
-		bank_name_initialized = true; 
 		return bank_name;
 	}	
 		
 	@dataType("character varying(11)")
-	@:isVar public var bic(get,set):String;
-	var bic_initialized:Bool;
-	
-	function get_bic():String{
-		return bic;
-	}
+	@:isVar public var bic(default,set):String;
 
 	function set_bic(bic:String):String{
-		if(bic_initialized)
+		if(initialized('bic'))
 			modified('bic');
 		this.bic = bic ;
-		bic_initialized = true; 
 		return bic;
 	}	
 		
 	@dataType("character varying(32)")
-	@:isVar public var account(get,set):String;
-	var account_initialized:Bool;
-	
-	function get_account():String{
-		return account;
-	}
+	@:isVar public var account(default,set):String;
 
 	function set_account(account:String):String{
-		if(account_initialized)
+		if(initialized('account'))
 			modified('account');
 		this.account = account ;
-		account_initialized = true; 
 		return account;
 	}	
 		
 	@dataType("character varying(12)")
-	@:isVar public var blz(get,set):String;
-	var blz_initialized:Bool;
-	
-	function get_blz():String{
-		return blz;
-	}
+	@:isVar public var blz(default,set):String;
 
 	function set_blz(blz:String):String{
-		if(blz_initialized)
+		if(initialized('blz'))
 			modified('blz');
 		this.blz = blz ;
-		blz_initialized = true; 
 		return blz;
 	}	
 		
 	@dataType("character varying(32)")
-	@:isVar public var iban(get,set):String;
-	var iban_initialized:Bool;
-	
-	function get_iban():String{
-		return iban;
-	}
+	@:isVar public var iban(default,set):String;
 
 	function set_iban(iban:String):String{
-		if(iban_initialized)
+		if(initialized('iban'))
 			modified('iban');
 		this.iban = iban ;
-		iban_initialized = true; 
 		return iban;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var creditor(get,set):Int;
-	var creditor_initialized:Bool;
-	
-	function get_creditor():Int{
-		return creditor;
-	}
+	@:isVar public var creditor(default,set):Int;
 
 	function set_creditor(creditor:Int):Int{
-		if(creditor_initialized)
+		if(initialized('creditor'))
 			modified('creditor');
 		this.creditor = creditor ;
-		creditor_initialized = true; 
 		return creditor;
 	}	
 		
 	@dataType("date")
-	@:isVar public var sign_date(get,set):String;
-	var sign_date_initialized:Bool;
-	
-	function get_sign_date():String{
-			return sign_date;
-	}
+	@:isVar public var sign_date(default,set):String;
 
 	function set_sign_date(sign_date:String):String{
-		if(sign_date_initialized)
+		if(initialized('sign_date'))
 			modified('sign_date');
 		this.sign_date = sign_date ;
-		sign_date_initialized = true; 
 		return sign_date;
 	}	
 		
 	@dataType("accounts_state")
-	@:isVar public var state(get,set):String;
-	var state_initialized:Bool;
-	
-	function get_state():String{
-			return state;
-	}
+	@:isVar public var state(default,set):String;
 
 	function set_state(state:String):String{
-		if(state_initialized)
+		if(initialized('state'))
 			modified('state');
 		this.state = state ;
-		state_initialized = true; 
 		return state;
 	}	
 		
 	@dataType("timestamp without time zone")
-	@:isVar public var creation_date(get,set):String;
-	var creation_date_initialized:Bool;
-	
-	function get_creation_date():String{
-			return creation_date;
-	}
+	@:isVar public var creation_date(default,set):String;
 
 	function set_creation_date(creation_date:String):String{
-		if(creation_date_initialized)
+		if(initialized('creation_date'))
 			modified('creation_date');
 		this.creation_date = creation_date ;
-		creation_date_initialized = true; 
 		return creation_date;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var edited_by(get,set):Int;
-	var edited_by_initialized:Bool;
-	
-	function get_edited_by():Int{
-		return edited_by;
-	}
+	@:isVar public var edited_by(default,set):Int;
 
 	function set_edited_by(edited_by:Int):Int{
-		if(edited_by_initialized)
+		if(initialized('edited_by'))
 			modified('edited_by');
 		this.edited_by = edited_by ;
-		edited_by_initialized = true; 
 		return edited_by;
 	}	
 		
 	@dataType("timestamp(0) without time zone")
-	@:isVar public var last_locktime(get,set):String;
-	var last_locktime_initialized:Bool;
-	
-	function get_last_locktime():String{
-			return last_locktime;
-	}
+	@:isVar public var last_locktime(default,set):String;
 
 	function set_last_locktime(last_locktime:String):String{
-		if(last_locktime_initialized)
+		if(initialized('last_locktime'))
 			modified('last_locktime');
 		this.last_locktime = last_locktime ;
-		last_locktime_initialized = true; 
 		return last_locktime;
 	}	
 	

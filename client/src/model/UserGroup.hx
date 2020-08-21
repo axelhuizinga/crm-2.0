@@ -19,98 +19,62 @@ class UserGroup extends ORM
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var id(get,set):Int;
-	var id_initialized:Bool;
-	
-	function get_id():Int{
-		return id;
-	}
+	@:isVar public var id(default,set):Int;
 
 	function set_id(id:Int):Int{
-		if(id_initialized)
+		if(initialized('id'))
 			modified('id');
 		this.id = id ;
-		id_initialized = true; 
 		return id;
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var name(get,set):String;
-	var name_initialized:Bool;
-	
-	function get_name():String{
-		return name;
-	}
+	@:isVar public var name(default,set):String;
 
 	function set_name(name:String):String{
-		if(name_initialized)
+		if(initialized('name'))
 			modified('name');
 		this.name = name ;
-		name_initialized = true; 
 		return name;
 	}	
 		
 	@dataType("character varying(1024)")
-	@:isVar public var description(get,set):String;
-	var description_initialized:Bool;
-	
-	function get_description():String{
-		return description;
-	}
+	@:isVar public var description(default,set):String;
 
 	function set_description(description:String):String{
-		if(description_initialized)
+		if(initialized('description'))
 			modified('description');
 		this.description = description ;
-		description_initialized = true; 
 		return description;
 	}	
 		
 	@dataType("jsonb")
-	@:isVar public var can(get,set):String;
-	var can_initialized:Bool;
-	
-	function get_can():String{
-			return can;
-	}
+	@:isVar public var can(default,set):String;
 
 	function set_can(can:String):String{
-		if(can_initialized)
+		if(initialized('can'))
 			modified('can');
 		this.can = can ;
-		can_initialized = true; 
 		return can;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var mandator(get,set):Int;
-	var mandator_initialized:Bool;
-	
-	function get_mandator():Int{
-		return mandator;
-	}
+	@:isVar public var mandator(default,set):Int;
 
 	function set_mandator(mandator:Int):Int{
-		if(mandator_initialized)
+		if(initialized('mandator'))
 			modified('mandator');
 		this.mandator = mandator ;
-		mandator_initialized = true; 
 		return mandator;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var edited_by(get,set):Int;
-	var edited_by_initialized:Bool;
-	
-	function get_edited_by():Int{
-		return edited_by;
-	}
+	@:isVar public var edited_by(default,set):Int;
 
 	function set_edited_by(edited_by:Int):Int{
-		if(edited_by_initialized)
+		if(initialized('edited_by'))
 			modified('edited_by');
 		this.edited_by = edited_by ;
-		edited_by_initialized = true; 
 		return edited_by;
 	}	
 	

@@ -4,7 +4,7 @@ import redux.Redux.Dispatch;
 import react.ReactType;
 import react.ReactComponent;
 import view.shared.FormField;
-import view.shared.SMenuProps;
+import view.shared.MenuProps;
 
  typedef FormProps =
  {
@@ -16,6 +16,6 @@ import view.shared.SMenuProps;
 	?handleChangeByParent:InputEvent->Void,
 	?handleSubmitByParent:InputEvent->Void,
 	?name:String,
-	?sideMenu:SMenuProps,
+	?sideMenu:MenuProps,
 	?submit:FormState->Dispatch
  }

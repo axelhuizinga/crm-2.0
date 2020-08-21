@@ -20,8 +20,8 @@ import shared.DBMetaData;
 //import view.data.deals.model.Deals;
 import view.shared.FormField;
 import state.FormState;
-import view.shared.SMItem;
-import view.shared.SMenuProps;
+import view.shared.MItem;
+import view.shared.MenuProps;
 import view.shared.io.FormApi;
 import view.shared.FormBuilder;
 
@@ -33,7 +33,7 @@ import view.table.Table;
 @:connect
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<SMItem> = [
+	public static var menuItems:Array<MItem> = [
 		{label:'Anzeigen',action:'get'},
 		{label:'Bearbeiten',action:'update'},
 		//{label:'Finden',action:'get'},
@@ -120,7 +120,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var contact = (props.location.state.contact);
 		var p:Promise<DbData> = props.load(
 			{
-				className:'data.Deals',
+				classPath:'data.Deals',
 				action:'get',
 				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
 				limit:props.limit,
@@ -239,7 +239,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		</>'));		
 	}
 	
-	function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;
 		trace(sideMenu.section);

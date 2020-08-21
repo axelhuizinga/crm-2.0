@@ -25,9 +25,9 @@ import view.dashboard.model.DBFormsModel;
 import view.shared.FormField;
 import view.shared.FormBuilder;
 import view.shared.OneOf;
-import view.shared.SMenu;
-import view.shared.SMItem;
-import view.shared.SMenuProps;
+import view.shared.Menu;
+import view.shared.MItem;
+import view.shared.MenuProps;
 
 import view.shared.io.DataAccess;
 import view.shared.io.DataFormProps;
@@ -56,7 +56,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		state = {formApi:new FormApi(this), hasError:false, sideMenu:props.sideMenu};		
 	}
 	
-	public static var menuItems:Array<SMItem> = [
+	public static var menuItems:Array<MItem> = [
 		{label:'Create Fields Table',action:'createFieldList'},
 		{label:'Table Fields',action:'showFieldList'},
 		{label:'Bearbeiten',action:'editTableFields'},
@@ -79,7 +79,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			{
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
-				className:'tools.DB',
+				classPath:'tools.DB',
 				action:'createFieldList',
 				update:'1'
 			},
@@ -169,7 +169,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 				id:props.id,
 				jwt:props.jwt,
 				fields:'disabled:disabled,element=:element,required=:required,use_as_index=:use_as_index',
-				className:'tools.DB',
+				classPath:'tools.DB',
 				action:'saveTableFields',
 				dbData:s.serialize(dbData),
 				devIP:App.devIP
@@ -191,7 +191,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
 				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
-				className:'tools.DB',
+				classPath:'tools.DB',
 				action:'createFieldList',
 				devIP:App.devIP
 			},
@@ -292,7 +292,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		'));		
 	}
 	
-	function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		//trace('${Type.getClassName(Type.getClass(this))} task');
 		var sideMenu = state.sideMenu;

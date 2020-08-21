@@ -41,28 +41,6 @@ class CState
 		return false;
 	}
 	
-	/*public static function addComponent(comp:ReactComponent):Void
-	{
-		var state:AppState = store.getState();
-		var d:Promise<Dynamic> = store.dispatch(AppAction.AddComponent(
-			comp.props.match.url.split('/')[1],
-			{
-				clean:true,
-				matchUrl:comp.props.match.url,
-				pathname:comp.props.history.location.pathname,
-				formFields:new StringMap(),
-				isMounted:true,
-				lastMounted:Date.now()
-			}
-		));
-		trace(Promise.resolve(d));
-			//function(t:Dynamic){trace(t); }, 
-			//function(t){trace ('oops:$t');}));
-		trace(comp.props.history.location);
-	}*/
-	
-	//function fulFill(
-	
 	public static function init(store:Store<AppState>)
 	{
 		CState.store = store;
@@ -74,4 +52,3 @@ class CState
 	}
 
 }
-//		)).then(fulFill:PromiseCallback<Dynamic, Dynamic>, ?reject:EitherType<Dynamic->Void,PromiseCallback<Dynamic, Dynamic>>)

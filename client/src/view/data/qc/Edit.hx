@@ -39,8 +39,8 @@ import view.shared.FormBuilder;
 import view.shared.FormField;
 import state.FormState;
 import model.contacts.ContactsModel;
-import view.shared.SMItem;
-import view.shared.SMenuProps;
+import view.shared.MItem;
+import view.shared.MenuProps;
 import view.shared.io.BaseForm;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
@@ -58,7 +58,7 @@ using Lambda;
 
 class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<SMItem> = [
+	public static var menuItems:Array<MItem> = [
 		{label:'Schließen',action:'restore',section: 'List'},		
 		{label:'Speichern + Schließen',action:'updateAndClose'},
 		{label:'Speichern',action:'update'},
@@ -141,12 +141,12 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			handleSubmit:[
 				{
 					handler:handleSubmit,
-					handlerAction:SubmitAndClose,
+					handlerAction:SaveAndClose,
 					label:'Speichern + Schließen',
 				},
 				{
 					handler:handleSubmit,
-					handlerAction:Submit,
+					handlerAction:Save,
 					label:'Speichern',
 				},
 				{
@@ -183,7 +183,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			return null;
 		var p:Promise<DbData> = props.load(
 			{
-				className:'data.Contacts',
+				classPath:'data.Contacts',
 				action:'get',
 				filter:({id:$id,mandator:1}),
 				table:'contacts',
@@ -377,7 +377,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		var dbaProps:DBAccessProps = 
 		{
 			action:'update',
-			className:'data.Contacts',
+			classPath:'data.Contacts',
 			dataSource:null,
 		//	table:'contacts',
 			userState:props.user
@@ -506,7 +506,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 	
-	function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;
 		trace(sideMenu.section);

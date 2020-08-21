@@ -18,82 +18,52 @@ class Activity extends ORM
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var id(get,set):Int;
-	var id_initialized:Bool;
-	
-	function get_id():Int{
-		return id;
-	}
+	@:isVar public var id(default,set):Int;
 
 	function set_id(id:Int):Int{
-		if(id_initialized)
+		if(initialized('id'))
 			modified('id');
 		this.id = id ;
-		id_initialized = true; 
 		return id;
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var result(get,set):String;
-	var result_initialized:Bool;
-	
-	function get_result():String{
-		return result;
-	}
+	@:isVar public var result(default,set):String;
 
 	function set_result(result:String):String{
-		if(result_initialized)
+		if(initialized('result'))
 			modified('result');
 		this.result = result ;
-		result_initialized = true; 
 		return result;
 	}	
 		
-	@dataType("character varying(4096)")
-	@:isVar public var request(get,set):String;
-	var request_initialized:Bool;
-	
-	function get_request():String{
-		return request;
-	}
+	@dataType("text")
+	@:isVar public var request(default,set):String;
 
 	function set_request(request:String):String{
-		if(request_initialized)
+		if(initialized('request'))
 			modified('request');
 		this.request = request ;
-		request_initialized = true; 
 		return request;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var user(get,set):Int;
-	var user_initialized:Bool;
-	
-	function get_user():Int{
-		return user;
-	}
+	@:isVar public var user(default,set):Int;
 
 	function set_user(user:Int):Int{
-		if(user_initialized)
+		if(initialized('user'))
 			modified('user');
 		this.user = user ;
-		user_initialized = true; 
 		return user;
 	}	
 		
 	@dataType("timestamp(3) without time zone")
-	@:isVar public var date(get,set):String;
-	var date_initialized:Bool;
-	
-	function get_date():String{
-			return date;
-	}
+	@:isVar public var date(default,set):String;
 
 	function set_date(date:String):String{
-		if(date_initialized)
+		if(initialized('date'))
 			modified('date');
 		this.date = date ;
-		date_initialized = true; 
 		return date;
 	}	
 	

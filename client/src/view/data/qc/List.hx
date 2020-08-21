@@ -18,8 +18,8 @@ import view.shared.FormBuilder;
 import view.shared.FormField;
 import state.FormState;
 import model.contacts.ContactsModel;
-import view.shared.SMItem;
-import view.shared.SMenuProps;
+import view.shared.MItem;
+import view.shared.MenuProps;
 import view.shared.io.BaseForm;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
@@ -31,7 +31,7 @@ import model.Contact;
 @:connect
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<SMItem> = [
+	public static var menuItems:Array<MItem> = [
 		//{label:'Anzeigen',action:'get'},
 		{label:'Bearbeiten',action:'update',section: 'Edit'},
 	//	{label:'Neu', action:'insert',section: 'Edit'},		
@@ -117,7 +117,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var params:Dynamic = {
 			id:props.userState.dbUser.id,
 			jwt:props.userState.dbUser.jwt,
-			className:'data.Contacts',
+			classPath:'data.Contacts',
 			action:'get',
 			filter:(props.match.params.id!=null?'id|${props.match.params.id}':'mandator|1,'),
 			devIP:App.devIP,
@@ -296,7 +296,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace('...');
 	}
 
-	function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;
 		trace(sideMenu.section);

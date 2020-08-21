@@ -33,8 +33,8 @@ import view.shared.FormInputElement;
 import view.shared.FormField;
 import state.FormState;
 import view.shared.OneOf;
-import view.shared.SMenuProps;
-import view.shared.SMItem;
+import view.shared.MenuProps;
+import view.shared.MItem;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess.DataView;
 import view.table.Table.DataState;
@@ -63,7 +63,7 @@ class FormApi
 	public var dbMetaData:DBMetaData;
 	public var formColElements:Map<String,Array<FormField>>;
 	//public var dataDisplay:Map<String,DataState>;
-	public var _menuItems:Array<SMItem>;
+	public var _menuItems:Array<MItem>;
 	public var fState:FormState;
 	public var _fstate:FormState;
 	public var modalFormTableHeader:ReactRef<DivElement>;
@@ -72,9 +72,9 @@ class FormApi
 	public var initialState:Dynamic;
 	public var section:ReactComponent;
 	var comp:ReactComponentOf<DataFormProps,FormState>;
-	var sM:SMenuProps;
+	var sM:MenuProps;
 	
-	public function new(rc:ReactComponentOf<DataFormProps,FormState>,?sM:SMenuProps)
+	public function new(rc:ReactComponentOf<DataFormProps,FormState>,?sM:MenuProps)
 	{
 		comp = rc;
 		//trace(Type.getClass(comp));
@@ -255,14 +255,14 @@ class FormApi
 		}
 	}
 
-	public function updateMenu(state:FormState,?viewClassPath:String):SMenuProps
+	/*public function updateMenu(state:FormState,?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;
 		if(viewClassPath==null)
 			return sideMenu;
 		trace(sideMenu.menuBlocks);
 		/*sideMenu.menuBlocks['bookmarks'].isActive = true;
-		sideMenu.menuBlocks['bookmarks'].label='Lesezeichen';*/
+		sideMenu.menuBlocks['bookmarks'].label='Lesezeichen';
 		for(mI in sideMenu.menuBlocks['bookmarks'].items)
 		{
 			switch(mI.action)
@@ -277,7 +277,7 @@ class FormApi
 		}		
 		//trace(sideMenu.menuBlocks['user'].items);	
 		return sideMenu;
-	}	
+	}	*/
 	
 	public static function handleSubmit(e:InputEvent)
 	{
@@ -296,7 +296,7 @@ class FormApi
 		return jsx('
 			<div className="columns">
 				${content}
-				<$SMenu className="menu" ${...sM} ${...comp.props} itemHandler=${itemHandler} />
+				<$Menu className="menu" ${...sM} ${...comp.props} itemHandler=${itemHandler} />
 			</div>			
 		');
 	}
@@ -641,7 +641,7 @@ class FormApi
 		return ids.pInts();
 	}
 
-	public static function initSideMenu2(comp:Dynamic, sMb:SMenuBlock, sM:SMenuProps):SMenuProps
+	public static function initSideMenu2(comp:Dynamic, sMb:MenuBlock, sM:MenuProps):MenuProps
 	{
 		for(sI in sMb.items)
 			if(sI.section == null)
@@ -650,9 +650,9 @@ class FormApi
 		return sM;
 	}
 
-	public static function initSideMenu(comp:Dynamic, sMa:Array<SMenuBlock>, sM:SMenuProps):SMenuProps
+	public static function initSideMenu(comp:Dynamic, sMa:Array<MenuBlock>, sM:MenuProps):MenuProps
 	{
-		var sma:SMenuBlock;
+		var sma:MenuBlock;
 		sM.menuBlocks = [
 			for (sma in sMa)
 				sma.section => sma

@@ -1,7 +1,7 @@
 package view.shared;
 
 import haxe.Constraints.Function;
-import view.shared.SMenuProps;
+import view.shared.MenuProps;
 import react.ReactComponent;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;

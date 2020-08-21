@@ -2,20 +2,20 @@ package view.shared;
 import haxe.Constraints.Function;
 import react.router.Route.RouteRenderProps;
 import js.html.Event;
-import view.shared.SMItem;
-import view.shared.SMenuBlock;
+import view.shared.MItem;
+import view.shared.MenuBlock;
 
-typedef SMenuProps =
+typedef MenuProps =
 {
 	>RouteRenderProps,
 	?activeInstance:Dynamic,
 	?className:String,
 	?basePath:String,
 	?hidden:Bool,
-	?menuBlocks:Map<String,SMenuBlock>,
+	?menuBlocks:Map<String,MenuBlock>,
 	?section:String,
 	?switchSection:Function,
-	?items:Array<SMItem>,
+	?items:Array<MItem>,
 	?itemHandler:Event->Void,
 	?right:Bool,
 	?sameWidth:Bool

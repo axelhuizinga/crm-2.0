@@ -9,8 +9,8 @@ import shared.DBMetaData;
 import view.shared.FormField;
 import state.FormState;
 import view.data.accounts.model.Accounts;
-import view.shared.SMItem;
-import view.shared.SMenuProps;
+import view.shared.MItem;
+import view.shared.MenuProps;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
@@ -43,7 +43,7 @@ import model.Account;
 
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<SMItem> = [
+	public static var menuItems:Array<MItem> = [
 		{label:'Anzeigen',action:'get'},
 		{label:'Bearbeiten',action:'update'},
 		//{label:'Finden',action:'get'},
@@ -190,7 +190,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		</>'));		
 	}
 	
-	function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;
 		trace(sideMenu.section);

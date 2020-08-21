@@ -10,8 +10,8 @@ import shared.DBMetaData;
 import view.shared.FormField;
 import state.FormState;
 import model.deals.DealsModel;
-import view.shared.SMItem;
-import view.shared.SMenuProps;
+import view.shared.MItem;
+import view.shared.MenuProps;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
@@ -44,7 +44,7 @@ import view.table.Table;
 
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<SMItem> = [
+	public static var menuItems:Array<MItem> = [
 		{label:'Anzeigen',action:'get'},
 		{label:'Bearbeiten',action:'update'},
 		{label:'Neu', action:'insert'},
@@ -193,7 +193,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		</>'));		
 	}
 	
-	function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;
 		trace(sideMenu.section);

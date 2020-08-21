@@ -31,7 +31,7 @@ import state.AppState;
 import model.stats.HistoryModel;
 import haxe.Constraints.Function;
 import haxe.extern.EitherType;
-import view.shared.SMItem;
+import view.shared.MItem;
 import view.shared.io.BaseForm;
 import view.shared.io.DataFormProps;
 import state.FormState;
@@ -105,7 +105,7 @@ typedef SortProps =
 
 class Charts extends ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<SMItem> = [
+	public static var menuItems:Array<MItem> = [
 		//{label:'Anzeigen',action:'get'},
 		{label:'Einstellung',action:'setup',section: 'Charts'},
 	//	{label:'Auswahl umkehren',action:'selectionInvert'},

@@ -30,7 +30,7 @@ enum FormAction
 	StartSubmit;
 	StopAsyncValidation;
 	StopSubmit;
-	Submit;
+	Save;
 	Touch;
 	UnregisterField;
 	Untouch;

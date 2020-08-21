@@ -10,7 +10,7 @@ typedef DBAccessProps =
 {
 	?action:String,	
 	?devIP:String,	
-	?className:String,
+	?classPath:String,
 	?filter:Dynamic,
 	?dataSource:Map<String,Map<String,Dynamic>>,
 	?limit:Int,

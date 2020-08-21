@@ -43,7 +43,7 @@ class UserAccess {
 				{				
 					id:userState.dbUser.id, 
 					jwt:userState.dbUser.jwt,
-					className:'auth.User',
+					classPath:'auth.User',
 					action:'changePassword',
 					new_pass:userState.dbUser.new_pass,
 					original_path:aState.locationStore.redirectAfterLogin,
@@ -107,7 +107,7 @@ class UserAccess {
 				{				
 					user_name:userState.dbUser.user_name, 
 					mandator:userState.dbUser.mandator,
-					className:'auth.User',
+					classPath:'auth.User',
 					action:'resetPassword',
 					original_path:appState.locationStore.redirectAfterLogin,
 					devIP:App.devIP
@@ -169,7 +169,7 @@ class UserAccess {
 			'${App.config.api}',
 			{				
 				dbUser:userState.dbUser,
-				className:'auth.User',
+				classPath:'auth.User',
 				action: (userState.dbUser.new_pass != null?'changePassword':'login'),
 				relations:[
 					"users" => new DbRelation({
@@ -259,7 +259,7 @@ class UserAccess {
 			bL = BinaryLoader.dbQuery(
 			'${App.config.server}/${App.config.api}', 
 			{				
-				className:'auth.User',
+				classPath:'auth.User',
 				action:'logout',
 				dbUser: userState.dbUser,
 				relations: ["users" => new DbRelation({
@@ -300,7 +300,7 @@ class UserAccess {
 				'${App.config.api}', 
 				{				
 					dbUser:state.userState.dbUser,
-					className:'auth.User', 
+					classPath:'auth.User', 
 					action:'verify',								
 					relations:[
 						"users" => new DbRelation({

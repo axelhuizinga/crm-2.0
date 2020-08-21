@@ -1,8 +1,8 @@
 package view.shared;
 import haxe.Constraints.Function;
-import view.shared.SMItem;
+import view.shared.MItem;
 
-typedef SMenuBlock =
+typedef MenuBlock =
 {
 	?dataClassPath:String,
 	?disabled:Bool,
@@ -13,7 +13,7 @@ typedef SMenuBlock =
 	?img:String,
 	?info:String,
 	?isActive:Bool,
-	?items:Array<SMItem>,
+	?items:Array<MItem>,
 	?label:String,	
 	?section:String
 }

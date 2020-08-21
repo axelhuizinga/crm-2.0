@@ -56,7 +56,7 @@ class DBAccess
 				{
 					id:props.userState.dbUser.id,
 					jwt:props.userState.dbUser.jwt,
-					className:props.className,
+					classPath:props.classPath,
 					action:props.action,
 					filter:props.filter,
 					//dataSource:Serializer.run(props.dataSource),
@@ -76,7 +76,7 @@ class DBAccess
 								for(row in data.dataRows)
 									Std.parseInt(row['id']) => row
 							])));//.then(function()trace('yeah'));
-							return dispatch(Status(Update({cssClass:'', text:switch ('${props.className}.${props.action}')
+							return dispatch(Status(Update({cssClass:'', text:switch ('${props.classPath}.${props.action}')
 							{
 								case "data.Contacts.get":
 									'Kontakt ${props.filter.substr(3)} geladen';
@@ -127,7 +127,7 @@ class DBAccess
 			var params:Dynamic = {				
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
-				className:props.className,
+				classPath:props.classPath,
 				action:props.action,				
 				dataSource:Serializer.run(props.dataSource),
 				//dataSource:props.dataSource,
@@ -153,7 +153,7 @@ class DBAccess
 
 				return dispatch(Status(Update({
 					cssClass:'',
-					text:switch ('${props.className}.${props.action}')
+					text:switch ('${props.classPath}.${props.action}')
 				{
 					case "data.Contacts.edit":
 						'Kontakt ${props.dataSource["contacts"]["filter"].substr(3)} geladen';
@@ -189,7 +189,7 @@ class DBAccess
 			{				
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
-				className:props.className,
+				classPath:props.classPath,
 				action:props.action,
 				dataSource:Serializer.run(props.dataSource),
 				devIP:App.devIP

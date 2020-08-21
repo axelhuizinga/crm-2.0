@@ -7,16 +7,21 @@ import js.html.FormElement;
 import js.html.InputEvent;
 import js.html.TableRowElement;
 import react.ReactRef;
-import view.shared.SMenuProps;
+import view.shared.MenuProps;
 import view.shared.FormBuilder;
 import view.shared.FormField;
 import view.shared.io.FormApi;
 
-enum abstract HandlerAction(String) {
-	var Submit;
-	var SubmitAndClose;
+enum abstract HandlerAction(String) 
+{
 	var Close;
+	var Delete;
+	var New;
+	var Reset;
+	var Save;
+	var SaveAndClose;
 }
+
 typedef SubmitHandler = 
 {
 	handler:InputEvent->Void,
@@ -39,7 +44,6 @@ typedef FormState =
 	?clean:Bool,
 	?pageCount:Int,
 	?ref:ReactRef<FormElement>,
-	//?contactData:IntMap<Map<String,Dynamic>>,
 	?initialData:ORM,//IntMap<Map<String,Dynamic>>,
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,
@@ -57,7 +61,7 @@ typedef FormState =
 	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES
 	?rows:Array<Dynamic>,
 	?section:String,
-	?sideMenu:SMenuProps,
+	?sideMenu:MenuProps,
 	?storeListener:redux.Redux.Unsubscribe,
 	?submitted:Bool,
 	?errors:Map<String,String>,

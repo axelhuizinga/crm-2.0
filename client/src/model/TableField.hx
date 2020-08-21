@@ -24,178 +24,112 @@ class TableField extends ORM
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var id(get,set):Int;
-	var id_initialized:Bool;
-	
-	function get_id():Int{
-		return id;
-	}
+	@:isVar public var id(default,set):Int;
 
 	function set_id(id:Int):Int{
-		if(id_initialized)
+		if(initialized('id'))
 			modified('id');
 		this.id = id ;
-		id_initialized = true; 
 		return id;
 	}	
 		
 	@dataType("character varying")
-	@:isVar public var table_name(get,set):String;
-	var table_name_initialized:Bool;
-	
-	function get_table_name():String{
-		return table_name;
-	}
+	@:isVar public var table_name(default,set):String;
 
 	function set_table_name(table_name:String):String{
-		if(table_name_initialized)
+		if(initialized('table_name'))
 			modified('table_name');
 		this.table_name = table_name ;
-		table_name_initialized = true; 
 		return table_name;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var mandator(get,set):Int;
-	var mandator_initialized:Bool;
-	
-	function get_mandator():Int{
-		return mandator;
-	}
+	@:isVar public var mandator(default,set):Int;
 
 	function set_mandator(mandator:Int):Int{
-		if(mandator_initialized)
+		if(initialized('mandator'))
 			modified('mandator');
 		this.mandator = mandator ;
-		mandator_initialized = true; 
 		return mandator;
 	}	
 		
 	@dataType("character varying")
-	@:isVar public var field_name(get,set):String;
-	var field_name_initialized:Bool;
-	
-	function get_field_name():String{
-		return field_name;
-	}
+	@:isVar public var field_name(default,set):String;
 
 	function set_field_name(field_name:String):String{
-		if(field_name_initialized)
+		if(initialized('field_name'))
 			modified('field_name');
 		this.field_name = field_name ;
-		field_name_initialized = true; 
 		return field_name;
 	}	
 		
 	@dataType("boolean")
-	@:isVar public var readonly(get,set):Bool;
-	var readonly_initialized:Bool;
-	
-	function get_readonly():Bool{
-		return readonly;
-	}
+	@:isVar public var readonly(default,set):Bool;
 
 	function set_readonly(readonly:Bool):Bool{
-		if(readonly_initialized)
+		if(initialized('readonly'))
 			modified('readonly');
 		this.readonly = readonly ;
-		readonly_initialized = true; 
 		return readonly;
 	}	
 		
 	@dataType("element")
-	@:isVar public var element(get,set):String;
-	var element_initialized:Bool;
-	
-	function get_element():String{
-			return element;
-	}
+	@:isVar public var element(default,set):String;
 
 	function set_element(element:String):String{
-		if(element_initialized)
+		if(initialized('element'))
 			modified('element');
 		this.element = element ;
-		element_initialized = true; 
 		return element;
 	}	
 		
 	@dataType("jsonb")
-	@:isVar public var any(get,set):String;
-	var any_initialized:Bool;
-	
-	function get_any():String{
-			return any;
-	}
+	@:isVar public var any(default,set):String;
 
 	function set_any(any:String):String{
-		if(any_initialized)
+		if(initialized('any'))
 			modified('any');
 		this.any = any ;
-		any_initialized = true; 
 		return any;
 	}	
 		
 	@dataType("boolean")
-	@:isVar public var required(get,set):Bool;
-	var required_initialized:Bool;
-	
-	function get_required():Bool{
-		return required;
-	}
+	@:isVar public var required(default,set):Bool;
 
 	function set_required(required:Bool):Bool{
-		if(required_initialized)
+		if(initialized('required'))
 			modified('required');
 		this.required = required ;
-		required_initialized = true; 
 		return required;
 	}	
 		
 	@dataType("boolean")
-	@:isVar public var use_as_index(get,set):Bool;
-	var use_as_index_initialized:Bool;
-	
-	function get_use_as_index():Bool{
-		return use_as_index;
-	}
+	@:isVar public var use_as_index(default,set):Bool;
 
 	function set_use_as_index(use_as_index:Bool):Bool{
-		if(use_as_index_initialized)
+		if(initialized('use_as_index'))
 			modified('use_as_index');
 		this.use_as_index = use_as_index ;
-		use_as_index_initialized = true; 
 		return use_as_index;
 	}	
 		
 	@dataType("boolean")
-	@:isVar public var admin_only(get,set):Bool;
-	var admin_only_initialized:Bool;
-	
-	function get_admin_only():Bool{
-		return admin_only;
-	}
+	@:isVar public var admin_only(default,set):Bool;
 
 	function set_admin_only(admin_only:Bool):Bool{
-		if(admin_only_initialized)
+		if(initialized('admin_only'))
 			modified('admin_only');
 		this.admin_only = admin_only ;
-		admin_only_initialized = true; 
 		return admin_only;
 	}	
 		
 	@dataType("data_type")
-	@:isVar public var field_type(get,set):String;
-	var field_type_initialized:Bool;
-	
-	function get_field_type():String{
-			return field_type;
-	}
+	@:isVar public var field_type(default,set):String;
 
 	function set_field_type(field_type:String):String{
-		if(field_type_initialized)
+		if(initialized('field_type'))
 			modified('field_type');
 		this.field_type = field_type ;
-		field_type_initialized = true; 
 		return field_type;
 	}	
 	

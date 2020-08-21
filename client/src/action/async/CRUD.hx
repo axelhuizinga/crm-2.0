@@ -111,7 +111,7 @@ class CRUD
 				var params:Dynamic = {				
 					id:props.userState.dbUser.id,
 					jwt:props.userState.dbUser.jwt,
-					className:props.className,
+					classPath:props.classPath,
 					action:props.action,
 					devIP:App.devIP
 				};
@@ -139,7 +139,7 @@ class CRUD
 
 							dispatch(Status(Update(
 								{	cssClass:'',
-									text:switch ('${props.className}.${props.action}')
+									text:switch ('${props.classPath}.${props.action}')
 									{
 										case "data.Contacts.edit":
 											'Kontakt ${props.dataSource["contacts"]["filter"].toString()} geladen';

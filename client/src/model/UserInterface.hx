@@ -22,146 +22,92 @@ class UserInterface extends ORM
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var id(get,set):Int;
-	var id_initialized:Bool;
-	
-	function get_id():Int{
-		return id;
-	}
+	@:isVar public var id(default,set):Int;
 
 	function set_id(id:Int):Int{
-		if(id_initialized)
+		if(initialized('id'))
 			modified('id');
 		this.id = id ;
-		id_initialized = true; 
 		return id;
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var key(get,set):String;
-	var key_initialized:Bool;
-	
-	function get_key():String{
-		return key;
-	}
+	@:isVar public var key(default,set):String;
 
 	function set_key(key:String):String{
-		if(key_initialized)
+		if(initialized('key'))
 			modified('key');
 		this.key = key ;
-		key_initialized = true; 
 		return key;
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var content(get,set):String;
-	var content_initialized:Bool;
-	
-	function get_content():String{
-		return content;
-	}
+	@:isVar public var content(default,set):String;
 
 	function set_content(content:String):String{
-		if(content_initialized)
+		if(initialized('content'))
 			modified('content');
 		this.content = content ;
-		content_initialized = true; 
 		return content;
 	}	
 		
 	@dataType("character varying(512)")
-	@:isVar public var classPath(get,set):String;
-	var classPath_initialized:Bool;
-	
-	function get_classPath():String{
-		return classPath;
-	}
+	@:isVar public var classPath(default,set):String;
 
 	function set_classPath(classPath:String):String{
-		if(classPath_initialized)
+		if(initialized('classPath'))
 			modified('classPath');
 		this.classPath = classPath ;
-		classPath_initialized = true; 
 		return classPath;
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var component(get,set):String;
-	var component_initialized:Bool;
-	
-	function get_component():String{
-		return component;
-	}
+	@:isVar public var component(default,set):String;
 
 	function set_component(component:String):String{
-		if(component_initialized)
+		if(initialized('component'))
 			modified('component');
 		this.component = component ;
-		component_initialized = true; 
 		return component;
 	}	
 		
 	@dataType("integer")
-	@:isVar public var edited_by(get,set):String;
-	var edited_by_initialized:Bool;
-	
-	function get_edited_by():String{
-			return edited_by;
-	}
+	@:isVar public var edited_by(default,set):String;
 
 	function set_edited_by(edited_by:String):String{
-		if(edited_by_initialized)
+		if(initialized('edited_by'))
 			modified('edited_by');
 		this.edited_by = edited_by ;
-		edited_by_initialized = true; 
 		return edited_by;
 	}	
 		
 	@dataType("timestamp without time zone")
-	@:isVar public var updated_at(get,set):String;
-	var updated_at_initialized:Bool;
-	
-	function get_updated_at():String{
-			return updated_at;
-	}
+	@:isVar public var updated_at(default,set):String;
 
 	function set_updated_at(updated_at:String):String{
-		if(updated_at_initialized)
+		if(initialized('updated_at'))
 			modified('updated_at');
 		this.updated_at = updated_at ;
-		updated_at_initialized = true; 
 		return updated_at;
 	}	
 		
 	@dataType("character varying(8)")
-	@:isVar public var locale(get,set):String;
-	var locale_initialized:Bool;
-	
-	function get_locale():String{
-		return locale;
-	}
+	@:isVar public var locale(default,set):String;
 
 	function set_locale(locale:String):String{
-		if(locale_initialized)
+		if(initialized('locale'))
 			modified('locale');
 		this.locale = locale ;
-		locale_initialized = true; 
 		return locale;
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var mandator(get,set):Int;
-	var mandator_initialized:Bool;
-	
-	function get_mandator():Int{
-		return mandator;
-	}
+	@:isVar public var mandator(default,set):Int;
 
 	function set_mandator(mandator:Int):Int{
-		if(mandator_initialized)
+		if(initialized('mandator'))
 			modified('mandator');
 		this.mandator = mandator ;
-		mandator_initialized = true; 
 		return mandator;
 	}	
 	

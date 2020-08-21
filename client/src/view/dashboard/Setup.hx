@@ -22,8 +22,8 @@ import view.shared.io.DataFormProps;
 import view.shared.io.FormApi;
 import state.FormState;
 import view.shared.OneOf;
-import view.shared.SMenu;
-import view.shared.SMenuProps;
+import view.shared.Menu;
+import view.shared.MenuProps;
 import view.dashboard.DB;
 import view.dashboard.DBSync;
 import view.table.Table;
@@ -113,7 +113,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			{
 				id:props.user.id,
 				jwt:props.user.jwt,
-				className:'admin.CreateHistoryTrigger',
+				classPath:'admin.CreateHistoryTrigger',
 				action:'run'				
 			}, 
 			function(data:String){

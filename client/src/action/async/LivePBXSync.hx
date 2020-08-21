@@ -57,7 +57,7 @@ class LivePBXSync
 					'${App.config.api}', 
 					{
 						dbUser:props.userState.dbUser,
-						className:props.className,
+						classPath:props.classPath,
 						action:props.action,
 						extDB:true,
 						limit:props.limit,
@@ -87,7 +87,7 @@ class LivePBXSync
 							return dispatch(Status(Update(
 								{
 									cssClass:'error',
-									text:'Fehler 0 ${props.className} Aktualisiert'})));
+									text:'Fehler 0 ${props.classPath} Aktualisiert'})));
 						}
 						
 						if(data.dataInfo['offset']!=null)
@@ -96,7 +96,7 @@ class LivePBXSync
 							return dispatch(Status(Update(
 								{
 									cssClass:' ',
-									text:'${props.offset} ${props.className} von ${props.maxImport} aktualisiert'})));
+									text:'${props.offset} ${props.classPath} von ${props.maxImport} aktualisiert'})));
 						}
 						trace('${props.offset} < ${props.maxImport}');
 						if(props.offset < props.maxImport){
@@ -131,7 +131,7 @@ class LivePBXSync
 				{
 					id:props.userState.dbUser.id,
 					jwt:props.userState.dbUser.jwt,
-					className:props.className,
+					classPath:props.classPath,
 					action:props.action,
 						extDB:true,
 					limit:props.limit,
@@ -207,7 +207,7 @@ class LivePBXSync
 					dbUser:props.userState.dbUser,
 					id:props.userState.dbUser.id,
 					jwt:props.userState.dbUser.jwt,
-					className:props.className,
+					classPath:props.classPath,
 					action:props.action,
 						extDB:true,
 					limit:props.limit,
@@ -283,7 +283,7 @@ class LivePBXSync
 					'${App.config.api}',
 					{
 						dbUser:props.userState.dbUser,
-						className:props.className,
+						classPath:props.classPath,
 						action:props.action,
 						extDB:true,
 						limit:props.limit,
@@ -369,7 +369,7 @@ class LivePBXSync
 					dbUser:props.userState.dbUser,
 					id:props.userState.dbUser.id,
 					jwt:props.userState.dbUser.jwt,
-					className:props.className,
+					classPath:props.classPath,
 					action:props.action,
 						extDB:true,
 					limit:props.limit,

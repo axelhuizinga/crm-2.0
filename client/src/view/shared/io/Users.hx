@@ -5,13 +5,13 @@ import react.ReactMacro.jsx;
 import react.ReactComponent;
 import state.FormState;
 import view.shared.io.DataFormProps;
-import view.shared.SMItem;
+import view.shared.MItem;
 import view.table.Table;
 import view.table.Table.DataState;
 
 class Users extends ReactComponentOf<DataFormProps,FormState>
 {
-    public static var menuItems:Array<SMItem> = [
+    public static var menuItems:Array<MItem> = [
 		{label:'Liste',action:'get'},
 		{label:'Neu',action:'insert'},
 		{label:'Bearbeiten',action:'update'},
@@ -25,7 +25,7 @@ class Users extends ReactComponentOf<DataFormProps,FormState>
     public function new(props:DataFormProps)
 	{
 		super(props);
-       /* _menuItems = menuItems.map(function (mI:SMItem){
+       /* _menuItems = menuItems.map(function (mI:MItem){
 			var h:Event->Void = Reflect.field(this, mI.action);
 			trace(h);
 			mI.handler = h;

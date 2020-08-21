@@ -11,7 +11,7 @@ import react.ReactRef;
 import react.ReactType;
 import react.ReactComponent;
 import view.shared.FormBuilder;
-import view.shared.SMenuProps;
+import view.shared.MenuProps;
 import view.shared.io.FormApi;
 
 enum Loading
@@ -49,7 +49,7 @@ typedef FormState =
 	?valuesArray:Array<Map<String,Dynamic>>,//FORMATTED DISPLAY VALUES
 	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES
 	?section:String,
-	?sideMenu:SMenuProps,
+	?sideMenu:MenuProps,
 	?submitted:Bool,
 	?errors:Map<String,String>,
 	?title:String

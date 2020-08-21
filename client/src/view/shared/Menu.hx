@@ -24,10 +24,10 @@ import bulma_components.Button;
 import react.ReactRef;
 import redux.Redux.Dispatch;
 import redux.react.ReactRedux;
-import view.shared.SMItem;
-import view.shared.SMenuBlock;
-import view.shared.SMenuProps;
-import view.shared.SMenuState;
+import view.shared.MItem;
+import view.shared.MenuBlock;
+import view.shared.MenuProps;
+import view.shared.MenuState;
 
 using Lambda;
 
@@ -41,13 +41,13 @@ using Lambda;
 @:connect
 //@:wrap(react.router.ReactRouter.withRouter)
 //@:wrap(ReactRedux.connect(null,mapDispatchToProps))
-class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
+class Menu extends ReactComponentOf<MenuProps,MenuState>
 
 {
 	var menuRef:ReactRef<DivElement>;
 	var aW:Int;
 
-	static function mapDispatchToProps(dispatch:Dispatch):SMenuProps
+	static function mapDispatchToProps(dispatch:Dispatch):MenuProps
     {
 		
       	return {
@@ -65,7 +65,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		return {};
 	}
 
-	public function new(props:SMenuProps) 
+	public function new(props:MenuProps) 
 	{
 		super(props);
 		//trace(props.menuBlocks);
@@ -83,7 +83,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		var header:Array<ReactFragment> = new Array();
 		var i:Int = 1;		
 
-		props.menuBlocks.iter(function(block:SMenuBlock) {
+		props.menuBlocks.iter(function(block:MenuBlock) {
 			var check:Bool = props.section==block.section;
 			if(props.section==null && i==1)
 			{
@@ -118,7 +118,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		var panels:Array<ReactFragment> = [];
 		//var panels:Array<ReactFragment> = props.menuBlocks.mapi(renderPanel).array();
 		//trace(props.menuBlocks);		
-		props.menuBlocks.iter(function(block:SMenuBlock)
+		props.menuBlocks.iter(function(block:MenuBlock)
 		{
 			//trace(block.handlerInstance);
 			panels.push( jsx('	
@@ -132,7 +132,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		return panels;
 	}	
 
-	function renderPanel(_i:Int,block:SMenuBlock):ReactFragment
+	/*function renderPanel(_i:Int,block:MenuBlock):ReactFragment
 	{
 		var i:Int = _i+1;
 		var style:Dynamic =(props.sameWidth && state.sameWidth>0 ? 
@@ -146,15 +146,16 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 			<div id=${"pblock" + i} className=${"panel-block body-"+(i++)} children=${renderItems(block.items)}/>
 			</div>		
 		');
-	}
+	}*/
 	
-	function renderItems(items:Array<SMItem>):ReactFragment
+	function renderItems(items:Array<MItem>):ReactFragment
 	{
 		if (items == null || items.length == 0)
 			return null;
 		var i:Int = 1;
-		return items.map(function(item:SMItem) 
+		return items.map(function(item:MItem) 
 		{
+			trace(item);
 			return switch(item.component)
 			{
 				//case Filter: jsx('<$Filter  key=${i++}/>');
@@ -233,7 +234,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		}
 	}
 	
-	override public function componentDidUpdate(prevProps:SMenuProps, prevState:SMenuState):Void 
+	override public function componentDidUpdate(prevProps:MenuProps, prevState:MenuState):Void 
 	{
 		//super.componentDidUpdate(prevProps, prevState);
 	}

@@ -18,8 +18,8 @@ import react.ReactUtil;
 import shared.DbData;
 import state.FormState;
 import view.shared.FormBuilder;
-import view.shared.SMItem;
-import view.shared.SMenuProps;
+import view.shared.MItem;
+import view.shared.MenuProps;
 import view.dashboard.model.DBSyncModel;
 import view.table.Table.DataState;
 import view.shared.io.BaseForm;
@@ -38,7 +38,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 
 	static var _instance:DBSync;
 
-	public static var menuItems:Array<SMItem> = [		
+	public static var menuItems:Array<MItem> = [		
 		{label:'BenutzerDaten ',action:'showUserList'},
 		
 		{label:'BenutzerDaten Abgleich',action:'syncUserList'},
@@ -109,7 +109,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			{
 				id:props.userState.id,
 				jwt:props.userState.jwt,
-				className:'tools.DB',
+				classPath:'tools.DB',
 				action:'createFieldList',
 				update:'1'
 			},
@@ -171,7 +171,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				id:props.userState.id,
 				jwt:props.userState.jwt,
 				fields:'disabled:disabled,element=:element,required=:required,use_as_index=:use_as_index',
-				className:'tools.DB',
+				classPath:'tools.DB',
 				action:'saveTableFields',
 				dbData:s.serialize(dbData),
 				devIP:App.devIP
@@ -191,7 +191,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		setState({loading:true});
 		var p:Promise<DbData> = props.load(
 			{
-				className:'admin.SyncExternalAccounts',
+				classPath:'admin.SyncExternalAccounts',
 				action:'syncAll',
 				filter:{mandator:'1'},
 				limit:1000,
@@ -218,7 +218,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			maxImport:4000,
 			userState:props.userState,
 			offset:0,
-			className:'admin.SyncExternal',
+			classPath:'admin.SyncExternal',
 			action:'syncAll'
 		}));
 	}
@@ -233,7 +233,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			userState:props.userState,
 			offset:100000,
 			table:'bank_transfers',
-			className:'admin.SyncExternalBookings',
+			classPath:'admin.SyncExternalBookings',
 			action:'syncAll'
 		}));
 		/*p.then(function(dbData:DbData){ 
@@ -256,7 +256,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(LivePBXSync.importBookingRequests({
 			limit: 25000,
 			offset:0,
-			className: 'admin.SyncExternalBookings',
+			classPath: 'admin.SyncExternalBookings',
 			action: 'syncBookingRequests',
 			userState:props.userState
 		}));
@@ -275,7 +275,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				userState:props.userState,
 				offset:0,
 				onlyNew: true,
-				className:'admin.SyncExternalContacts',
+				classPath:'admin.SyncExternalContacts',
 				action:'importAll'
 			}));
 		}	
@@ -289,7 +289,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			limit: 1000,//00,
 			offset:0,
 			onlyNew:true,
-			className: 'admin.SyncExternalDeals',
+			classPath: 'admin.SyncExternalDeals',
 			action: 'importAll',
 			userState:props.userState
 		}));
@@ -305,7 +305,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(LivePBXSync.importDeals({
 			limit: 1000,
 			offset:0,
-			className: 'admin.SyncExternalDeals',
+			classPath: 'admin.SyncExternalDeals',
 			action: 'importAll',
 			userState:props.userState
 		}));
@@ -321,7 +321,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
 				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
-				className:'admin.SyncExternal',
+				classPath:'admin.SyncExternal',
 				action:'syncUserDetails',
 				devIP:App.devIP
 			},
@@ -348,7 +348,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
 				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
-				className:'admin.SyncExternal',
+				classPath:'admin.SyncExternal',
 				action:'syncUserDetails',
 				target: 'syncUsers.php',
 				devIP:App.devIP
@@ -378,7 +378,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		var dbaProps:DBAccessProps = 
 		{
 			action:props.match.params.action,
-			className:'data.Contacts',
+			classPath:'data.Contacts',
 			dataSource:null,
 			table:'contacts',
 			userState:props.userState
@@ -465,7 +465,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 	
-	function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;
 		trace(sideMenu.section);

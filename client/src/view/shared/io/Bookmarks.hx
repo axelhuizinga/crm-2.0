@@ -13,7 +13,7 @@ import react.ReactComponent;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
 import state.FormState;
-import view.shared.SMenu;
+import view.shared.Menu;
 //import view.shared.io.DataAccessForm;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess.DataSource;
@@ -58,7 +58,7 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 			{
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
-				className:'auth.User',
+				classPath:'auth.User',
 				action:'update',
 				filter:'id|${props.userState.dbUser.id}',
 				dataSource:Serializer.run(null)
@@ -125,14 +125,14 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 		');
 	}
 
-	public static var menuItems:Array<SMItem> = [
+	public static var menuItems:Array<MItem> = [
 		{label:'Neu',action:'insert'},
 		{label:'Bearbeiten',action:'update'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'},
 	];
 
-	function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		if(state==null)
 		{

@@ -101,17 +101,18 @@ class Model
 	public static function dispatch(dbQuery:DbQuery):Void
 	{
 		var param:Map<String,Dynamic> = dbQuery.dbParams;
-		var cl:Class<Dynamic> = Type.resolveClass('model.' + param.get('className'));
+		trace(param);
+		var cl:Class<Dynamic> = Type.resolveClass('model.' + param.get('classPath'));
 		//trace(cl);
 		if (cl == null)
 		{
-			trace('model.' + param.get('className') + ' ???');
-			S.sendErrors(null,['invalid className' => ' cannot find model.' + cast param.get('className')]);
+			trace('model.' + param.get('classPath') + ' ???');
+			S.sendErrors(null,['invalid classPath' => ' cannot find model.' + cast param.get('classPath')]);
 		}
 		var staticMethods:Array<String> = Type.getClassFields(cl);
 		if (staticMethods.has(param['action']))
 		{                                                                                        
-			trace('calling static Method ${param.get('className')}.${param['action']}');
+			trace('calling static Method ${param.get('classPath')}.${param['action']}');
 			Reflect.callMethod(cl, Reflect.field(cl, param['action']),[dbQuery]);
 			return;
 		}
@@ -120,14 +121,14 @@ class Model
 		//trace('$iFields ${param['action']}');
 		if (iFields.has(param['action']))
 		{
-			trace('creating instance of ${param.get('className')}');
+			trace('creating instance of ${param.get('classPath')}');
 			var cInst:Model = Type.createInstance(cl,[param]);
 			Reflect.callMethod(cInst, Reflect.field(cInst, param['action']),[]);
 		}
 		else 
 		{					
-			trace('Method ${param.get('className')}.${param['action']} does not exist!');	
-			S.sendErrors(null,['invalid method' => 'Method ${param.get('className')}.${param['action']} does not exist!']);
+			trace('Method ${param.get('classPath')}.${param['action']} does not exist!');	
+			S.sendErrors(null,['invalid method' => 'Method ${param.get('classPath')}.${param['action']} does not exist!']);
 		}
 	}
 	
@@ -665,7 +666,7 @@ class Model
 		{
 			return filterSql;			
 		}
-		trace(filters);
+		//trace(filters);
 		var filters:Map<String,String> = Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(filters));
 		trace(filters);
 		var	fBuf:StringBuf = new StringBuf();
@@ -730,7 +731,7 @@ class Model
 						fBuf.add(" = ?");
 						trace(how +':$val:' + values[0]);
 						filterValues.push([keys[0],val]);	
-						trace(filterValues);
+						//trace(filterValues);
 					}			
 			}			
 		}
@@ -1014,22 +1015,6 @@ class Model
 		//trace(ret);
 		return ret;
 	}
-	
-	/*function initDbAccessProps():DBAccessProps
-	{
-		dbAccessProps = {};
-		for(k=>v in param.keyValueIterator())
-		{
-			switch(k)
-			{
-				case 'action'|'user'|'className':
-					//skip
-				default:
-				 	Reflect.set(dbAccessProps,k,v);
-			}
-		}
-		return dbAccessProps;
-	}*/
 		
 	function serializeRows(rows:NativeArray):Bytes
 	{

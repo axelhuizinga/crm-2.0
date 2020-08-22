@@ -156,7 +156,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		return items.map(function(item:MItem) 
 		{
 			trace(item);
-			return switch(item.component)
+			return switch(item.section)
 			{
 				//case Filter: jsx('<$Filter  key=${i++}/>');
 				default:jsx('<Button key=${i++} onClick=${props.itemHandler} data-action=${item.action}

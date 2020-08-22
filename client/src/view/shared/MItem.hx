@@ -6,12 +6,12 @@ import haxe.Constraints.Function;
 typedef MItem =
 {
 	?action:String,
-	//?className:String,
-	?component:String,
+	?className:String,
 	?section:String,
 	?disabled:Bool,	
-	?handler:Function,
+	?handler:Function,//default:action
 	?img:String,
 	?info:String,
-	?label:String,	
+	?label:String,
+	?onlySm:Bool	
 }

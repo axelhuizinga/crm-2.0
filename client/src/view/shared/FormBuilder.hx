@@ -1,13 +1,16 @@
 package view.shared;
 
+//import js.lib.Reflect;
 import js.html.InputElement;
 import react.DateControlTypes.DateTimeProps;
 import shared.Utils;
 import haxe.ds.StringMap;
+
+import react.React;
 import react.ReactType;
-import haxe.ds.Map;
+import haxe.ds.StringMap;
 import haxe.Constraints.Function;
-import macrotools.Macro.model;
+//import macrotools.Macro.model;
 import shared.DateFormat;
 import shared.DBMetaData;
 import shared.DbData;
@@ -179,18 +182,40 @@ class FormBuilder {
 				<div className="grid_box" role="table" aria-label="Destinations">
 					<div className="g_caption" >${props.title}</div>	
 					${renderFormInputElements(props.fields, initialState)}
-					<div className="g_footer">
-						${for (sH in props.handleSubmit) renderSubmit(sH,++sK)}
+					<div className="g_footer" >
+					${for (mI in props.mHandlers) renderSubmit(mI,++sK)}
 					</div>					
 				</div>									
 			</form>
-		');		
-    }	
+		');
+    }	// children=${renderItems(props.mHandlers)}
 
-	function renderSubmit(submitHandler:SubmitHandler, i:Int) {
-		return jsx('<input type="submit" className="center" onClick=${submitHandler.handler} key=${'k_'+ i}
-		data-action=${submitHandler.handlerAction} value=${submitHandler.label}/> ');	
+	function renderSubmit(mItem:MItem, i:Int) {
+		if(mItem.onlySm)
+			return null;
+		var mHandler:Function = Reflect.field(comp,mItem.action);
+		return jsx('<button key=${i++} onClick=${mHandler} data-action=${mItem.action}
+		data-section=${mItem.section} disabled=${mItem.disabled}>${mItem.label}</button>');	
 	}
+/*<input type="button" key=${i++} onClick=${mHandler} data-action=${mItem.action}
+		data-section=${mItem.section} disabled=${mItem.disabled} value=${mItem.label}/>
+<Button key=${i++} onClick=${mHandler} data-action=${mItem.action}
+		data-section=${mItem.section} disabled=${mItem.disabled}>${mItem.label}</Button>
+	function renderItems(items:Array<MItem>):ReactFragment
+	{
+		if (items == null || items.length == 0)
+			return null;
+		var i:Int = 1;
+		return items.map(function(item:MItem) 
+		{
+			trace(item);
+			return switch(item.section)
+			{
+				default:jsx('<Button key=${i++} onClick=${props.itemHandler} data-action=${item.action}
+				data-section=${item.section} disabled=${item.disabled}>${item.label}</Button>');
+			}
+		}).array();
+	}*/
 
 	public function  hidden(cm:String):ReactFragment
 	{

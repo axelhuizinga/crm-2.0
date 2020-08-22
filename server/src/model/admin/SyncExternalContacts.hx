@@ -81,7 +81,7 @@ class SyncExternalContacts extends Model
 		dbData.dataInfo.copy2map(rO);
 
 		/*CLEAR fly_crm client_id's from ext_ids table*/
-		var action = S.params["className"]+'.'+S.params["action"];
+		var action = S.params["classPath"]+'.'+S.params["action"];
 		var cleared:Int = S.dbh.exec(
 			'DELETE FROM ext_ids WHERE auth_user=${S.dbQuery.dbUser.id} AND action=\'${action}\' AND table_name=\'contacts\'');
 		trace(
@@ -133,7 +133,7 @@ class SyncExternalContacts extends Model
 		ON eid.ext_id=c.id
 		where c.id IS NULL
 		AND eid.table_name='contacts'
-		AND eid.action='${S.params["className"]}.${S.params["action"]}'		
+		AND eid.action='${S.params["classPath"]}.${S.params["action"]}'		
 		GROUP BY gg;
 		*/;
 		stmt = S.dbh.query(sql);

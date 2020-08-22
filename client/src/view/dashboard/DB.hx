@@ -117,7 +117,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	/*	state.formApi.renderModalForm({
 			data:new Map(),
 			dataTable:data,
-			handleSubmit: saveTableFields,
+			mHandlers: saveTableFields,
 			hasError:false,
 			isConnected:true,
 			initialState: initStateFromDataTable(data),

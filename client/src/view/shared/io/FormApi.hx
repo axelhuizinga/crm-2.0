@@ -279,7 +279,7 @@ class FormApi
 		return sideMenu;
 	}	*/
 	
-	public static function handleSubmit(e:InputEvent)
+	public static function mHandlers(e:InputEvent)
 	{
 		e.preventDefault();
 	}	
@@ -523,9 +523,9 @@ class FormApi
 		var click:Function = function(_)App.modalBox.current.classList.toggle("is-active");
 		var submit:Dynamic->Event->Void = function(tfd, ev){
 			trace(tfd);
-			if (_fstate.handleSubmit != null)
+			if (_fstate.mHandlers != null)
 			{
-				_fstate.handleSubmit[0].handler(tfd);
+				_fstate.mHandlers[0].handler(tfd);
 			}
 		};
 

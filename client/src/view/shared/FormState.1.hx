@@ -37,7 +37,7 @@ typedef FormState =
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,
 	?handleChange:InputEvent->Void,
-	?handleSubmit:Dynamic->Void,	
+	?mHandlers:Dynamic->Void,	
 	?hasError:Bool,
 	?mounted:Bool,
 	?isConnected:Bool,

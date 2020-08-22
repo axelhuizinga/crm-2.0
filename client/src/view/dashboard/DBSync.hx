@@ -440,7 +440,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				];*/
 				(state.actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
-					handleSubmit:state.handleSubmit,
+					mHandlers:state.mHandlers,
 					fields:formFields,/*[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],*/

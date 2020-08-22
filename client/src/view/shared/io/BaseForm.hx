@@ -67,7 +67,7 @@ class BaseForm
 		//trace(comp.state.actualState);
 	}		
 
-	/*function handleSubmit(event:Event) {
+	/*function mHandlers(event:Event) {
 
 		event.preventDefault();
 		trace(comp.state.initialState.id);
@@ -117,9 +117,9 @@ class BaseForm
 		return fieldNames;
 	}
 	
-	public function sessionStore(){
+	public function sessionStore(classPath:String){
 		trace(comp.state.actualState);
-		Browser.window.sessionStorage.setItem('contact',Json.stringify(comp.state.actualState));
+		Browser.window.sessionStorage.setItem(classPath,Json.stringify(comp.state.actualState));
 		Browser.window.removeEventListener('beforeunload', sessionStore);
 	}
 

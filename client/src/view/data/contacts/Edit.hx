@@ -65,7 +65,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Schließen',action:'close'},		
 		{label:'Speichern + Schließen',action:'saveAndClose'},
 		{label:'Speichern',action:'save'},
-		{label:'Zurücksetzen',action:'reset'}
+		{label:'Zurücksetzen',action:'reset',onlySm: true}
 	];
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
@@ -100,30 +100,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		
 		if(props.dataStore.contactData != null)
 			trace(props.dataStore.contactData.keys().next());
-		//Out.dumpStack(CallStack.callStack());
+		//Out.dumpStac02k(CallStack.callStack());
 		
 		state =  App.initEState({
 			//dataTable:[],
 			actualState:{edited_by:props.userState.dbUser.id},
 			initialData:null,
 			loading:false,
-			handleSubmit:[
-				{
-					handler:handleSubmit,
-					handlerAction:SaveAndClose,
-					label:'Speichern + Schließen',
-				},
-				{
-					handler:handleSubmit,
-					handlerAction:Save,
-					label:'Speichern',
-				},
-				{
-					handler:handleSubmit,
-					handlerAction:Close,
-					label:'Schließen',
-				}				
-			],
+			mHandlers:menuItems,
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu2( this,
 				{
@@ -216,7 +200,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(DataAction.SelectActContacts(actData));
 	}
 
-	function handleSubmit(event:Event) {
+	function mHandlers(event:Event) {
 		//trace(Reflect.fields(event));
 		//trace(Type.typeof(event));
 		event.preventDefault();
@@ -394,14 +378,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{
 			case 'update':
-				//trace(state.handleSubmit);
+				//trace(state.mHandlers);
 				trace(state.actualState.id);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 				];*/
 				(state.actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
-					handleSubmit:state.handleSubmit,
+					mHandlers:state.mHandlers,
 					fields:[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],
@@ -413,7 +397,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			case 'insert':
 				trace(state.actualState);
 				state.formBuilder.renderForm({
-					handleSubmit:state.handleSubmit,
+					mHandlers:state.mHandlers,
 					fields:[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],

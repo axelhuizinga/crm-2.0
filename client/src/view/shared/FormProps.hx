@@ -12,7 +12,7 @@ import view.shared.MenuProps;
 	?elements:Map<String,FormField>,
 	?isConnected:Bool,
 	?handleChange:Bool,
-	?handleSubmit:Bool,
+	?mHandlers:Bool,
 	?handleChangeByParent:InputEvent->Void,
 	?handleSubmitByParent:InputEvent->Void,
 	?name:String,

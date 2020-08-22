@@ -121,30 +121,21 @@ class S
 		//var pd:Dynamic = Web.getPostData();
 
 		response = {content:'',error:''};
-		//trace(Web.getMethod());
-		//params = Lib.hashOfAssociativeArray(SuperGlobal._POST);//Web.getParams();
-		//trace(Web.getParams());
-		//trace(Web.getMultipart(512000));
-		//trace(Web.getClientHeaders());
-		/*if(true||params.exists('action'))
-		{
-			try {*/
-				//trace(Web.getPostData());
-				dbQuery = Model.binary();
-				//trace(dbQuery);
-				//Model.binary(params.get('dbData'));
-				params = dbQuery.dbParams;
-		/*	}		
-		}*/
+
+		//trace(Web.getPostData());
+		dbQuery = Model.binary();
+		//trace(dbQuery);
+		//Model.binary(params.get('dbData'));
+		params = dbQuery.dbParams;
+
 
 		devIP = params.get('devIP');
 		trace(params);
 
 		action = params.get('action');
-		if (action.length == 0 || params.get('className') == null)
+		if (action.length == 0 || params.get('classPath') == null)
 		{
-
-			exit( { error:"required params action and/or className missing" } );
+			exit( { error:"required params action and/or classPath missing" } );
 		}
 			//host=$dbHost;
 		dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
@@ -175,7 +166,7 @@ class S
 		{
 			if(User.verify(dbQuery))
 				Model.dispatch(dbQuery);		
-			exit({'Error':'Model.dispatch ${params.get('className')}.$action did not send anything'});
+			exit({'Error':'Model.dispatch ${params.get('classPath')}.$action did not send anything'});
 		}
 	
 		User.login(dbQuery.dbUser);		

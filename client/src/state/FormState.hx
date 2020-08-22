@@ -1,5 +1,6 @@
 package state;
 
+import view.shared.MItem;
 import model.ORM;
 import js.html.InputElement;
 import haxe.ds.IntMap;
@@ -48,7 +49,7 @@ typedef FormState =
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,
 	?handleChange:InputEvent->Void,
-	?handleSubmit:Array<SubmitHandler>,	
+	?mHandlers:Array<MItem>,	
 	?hasError:Bool,
 	?limit:Int,
 	?mounted:Bool,

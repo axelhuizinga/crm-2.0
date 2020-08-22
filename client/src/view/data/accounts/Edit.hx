@@ -273,7 +273,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//trace(actualState);
 	}		
 
-	function handleSubmit(event:Event) {
+	function mHandlers(event:Event) {
 		//trace(Reflect.fields(event));
 		//trace(Type.typeof(event));
 		event.preventDefault();
@@ -396,7 +396,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				];*/
 				(actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
-					handleSubmit:state.handleSubmit,
+					mHandlers:state.mHandlers,
 					fields:[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],
@@ -408,7 +408,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			case 'insert':
 				trace(actualState);
 				state.formBuilder.renderForm({
-					handleSubmit:state.handleSubmit,
+					mHandlers:state.mHandlers,
 					fields:[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],

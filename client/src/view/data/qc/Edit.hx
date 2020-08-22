@@ -138,19 +138,19 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			actualState:{edited_by: props.userState.dbUser.id,mandator: props.userState.dbUser.mandator},
 			initialState:loadContactData(props.match.params.id),
 			loading:false,
-			handleSubmit:[
+			mHandlers:[
 				{
-					handler:handleSubmit,
+					handler:mHandlers,
 					handlerAction:SaveAndClose,
 					label:'Speichern + Schließen',
 				},
 				{
-					handler:handleSubmit,
+					handler:mHandlers,
 					handlerAction:Save,
 					label:'Speichern',
 				},
 				{
-					handler:handleSubmit,
+					handler:mHandlers,
 					handlerAction:Close,
 					label:'Schließen',
 				}				
@@ -275,7 +275,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(DataAction.SelectActContacts(actData));
 	}
 
-	override function handleSubmit(event:Event) {
+	override function mHandlers(event:Event) {
 		//trace(Reflect.fields(event));
 		//trace(Type.typeof(event));
 		event.preventDefault();
@@ -452,14 +452,14 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{
 			case 'update':
-				//trace(state.handleSubmit);
+				//trace(state.mHandlers);
 				//trace(actualState);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 				];*/
 				(actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
-					handleSubmit:state.handleSubmit,
+					mHandlers:state.mHandlers,
 					fields:[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],
@@ -471,7 +471,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 			case 'insert':
 				trace(actualState);
 				state.formBuilder.renderForm({
-					handleSubmit:state.handleSubmit,
+					mHandlers:state.mHandlers,
 					fields:[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],

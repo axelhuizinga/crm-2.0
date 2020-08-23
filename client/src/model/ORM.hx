@@ -11,6 +11,7 @@ using Lambda;
 
 @:keep
 class ORM {
+	public var id(default,null):Int;
 	public var fieldsInitalized(default,null):Array<String>;
 	public var fieldsModified(default,null):Array<String>;
 	
@@ -51,7 +52,7 @@ class ORM {
 		return this;
 	}
 
-	public function store():Dynamic {
+	public function allModified():Dynamic {
 		var data:Dynamic = {};
 		for(f in fieldsModified)
 		{
@@ -117,5 +118,9 @@ class ORM {
 		}
 		fieldsModified = new Array();
 		return r;
+	}
+
+	public function save():Void{
+
 	}
 }

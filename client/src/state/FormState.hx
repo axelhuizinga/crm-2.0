@@ -33,7 +33,7 @@ typedef SubmitHandler =
 typedef FormState =
 {
 	?action:String,
-	?actualState:Dynamic,
+	?actualState:ORM,
 	?dataClassPath:String,
 	?data:Map<String,Dynamic>,
 	?dataTable:Array<Map<String,Dynamic>>,
@@ -45,7 +45,7 @@ typedef FormState =
 	?clean:Bool,
 	?pageCount:Int,
 	?ref:ReactRef<FormElement>,
-	?initialData:ORM,//IntMap<Map<String,Dynamic>>,
+	?initialData:Dynamic,//IntMap<Map<String,Dynamic>>,
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,
 	?handleChange:InputEvent->Void,

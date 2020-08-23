@@ -25,7 +25,7 @@ class Account extends ORM
 		propertyNames = 'id,contact,bank_name,bic,account,blz,iban,creditor,sign_date,state,creation_date,edited_by,last_locktime'.split(',');
 	}	
 		
-	@dataType("bigint")
+	/*@dataType("bigint")
 	@:isVar public var id(default,set):Int;
 
 	function set_id(id:Int):Int{
@@ -33,7 +33,7 @@ class Account extends ORM
 			modified('id');
 		this.id = id ;
 		return id;
-	}	
+	}	*/
 		
 	@dataType("bigint")
 	@:isVar public var contact(default,set):Int;

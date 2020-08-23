@@ -1,5 +1,6 @@
 package view.shared.io;
 
+//import js.lib.Reflect;
 import css.Overflow.OverflowCompo;
 import haxe.Timer;
 import state.AppState;
@@ -73,10 +74,12 @@ class FormApi
 	public var section:ReactComponent;
 	var comp:ReactComponentOf<DataFormProps,FormState>;
 	var sM:MenuProps;
+	var _me:FormApi;
 	
 	public function new(rc:ReactComponentOf<DataFormProps,FormState>,?sM:MenuProps)
 	{
 		comp = rc;
+		_me = this;
 		//trace(Type.getClass(comp));
 		requests = [];
 		if(rc.props != null)
@@ -162,10 +165,11 @@ class FormApi
 	
 	public function itemHandler(e:Event)
 	{
+		//trace(e);
 		e.preventDefault();
 		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
-		var dataSet:DOMStringMap = cast(e.target, ButtonElement).dataset;
-		//trace(dataSet);
+		trace(action);
+		trace(Reflect.field(_me,'callMethod'));
 		callMethod(action, e);
 	}
 

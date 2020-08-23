@@ -124,7 +124,7 @@ class DBAccess
 			}	
 			//var spin:Dynamic = dispatch(AppWait);
 			//trace(spin);
-			var params:Dynamic = {				
+			var params:Dynamic = {		
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
 				classPath:props.classPath,
@@ -135,7 +135,7 @@ class DBAccess
 			};
 			if(props.table != null)
 				params.table = props.table;
-			var bL:XMLHttpRequest = BinaryLoader.create(
+			var bL:XMLHttpRequest = BinaryLoader.dbQuery(
 			'${App.config.api}', 
 			params,
 			function(data:DbData)

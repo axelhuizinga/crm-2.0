@@ -61,7 +61,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var fieldNames:Array<String>;
 	var actualState:Contact;
 	
-	var initialState:Contact;
+	var initialState:Dynamic;
 
 	public function new(props) 
 	{
@@ -92,6 +92,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		formRef = React.createRef();
 		if(props.match.params.id!=null)
 			initialState.id = Std.parseInt(props.match.params.id);
+			
 		
 		trace(props.dataStore.contactActData);
 		trace(props.dataStore.contactData);

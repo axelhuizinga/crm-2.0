@@ -61,7 +61,7 @@ class BaseForm
 			trace('>>${el.name}=>${el.value}<<');
 			//trace(comp.state.actualState);
 			Reflect.setField(comp.state.actualState,el.name,el.value);
-			trace(comp.state.actualState.last_name);
+			trace(Reflect.field(comp.state.actualState, 'last_name'));
 		}	
 
 		//trace(comp.state.actualState);

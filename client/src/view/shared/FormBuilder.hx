@@ -1,6 +1,9 @@
 package view.shared;
 
 //import js.lib.Reflect;
+import js.html.Element;
+import js.html.Event;
+import bulma_components.Button;
 import js.html.InputElement;
 import react.DateControlTypes.DateTimeProps;
 import shared.Utils;
@@ -94,7 +97,7 @@ class FormBuilder {
 			{
 				case FormInputElement.Hidden:
 					jsx('<input key=${ki++} type="hidden" name=${name} defaultValue=${value}/>');
-				case FormInputElement.Button:
+				case FormInputElement.button: 
 					jsx('<button type="submit">
 						${value}
 					</button>');
@@ -183,43 +186,36 @@ class FormBuilder {
 					<div className="g_caption" >${props.title}</div>	
 					${renderFormInputElements(props.fields, initialState)}
 					<div className="g_footer" >
-					${for (mI in props.mHandlers) renderSubmit(mI,++sK)}
+					${for (mI in props.mHandlers) renderButton(mI,++sK)}
 					</div>					
 				</div>									
 			</form>
 		');
     }	// children=${renderItems(props.mHandlers)}
 
-	function renderSubmit(mItem:MItem, i:Int) {
+	function renderButton(mItem:MItem, i:Int):ReactFragment {
 		if(mItem.onlySm)
 			return null;
-		var mHandler:Function = Reflect.field(comp,mItem.action);
-		return jsx('<button key=${i++} onClick=${mHandler} data-action=${mItem.action}
-		data-section=${mItem.section} disabled=${mItem.disabled}>${mItem.label}</button>');	
+		var mHandler:Function = comp.state.formApi.itemHandler;//Reflect.field(comp,mItem.action);
+		return jsx('<$Button key=${i++} onClick=${itemHandler} data-action=${mItem.action}
+		data-section=${mItem.section} disabled=${mItem.disabled} type="button" >${mItem.label}</$Button>');	
 	}
-/*<input type="button" key=${i++} onClick=${mHandler} data-action=${mItem.action}
-		data-section=${mItem.section} disabled=${mItem.disabled} value=${mItem.label}/>
-<Button key=${i++} onClick=${mHandler} data-action=${mItem.action}
-		data-section=${mItem.section} disabled=${mItem.disabled}>${mItem.label}</Button>
-	function renderItems(items:Array<MItem>):ReactFragment
-	{
-		if (items == null || items.length == 0)
-			return null;
-		var i:Int = 1;
-		return items.map(function(item:MItem) 
+
+	public function itemHandler(e:Event)
 		{
-			trace(item);
-			return switch(item.section)
-			{
-				default:jsx('<Button key=${i++} onClick=${props.itemHandler} data-action=${item.action}
-				data-section=${item.section} disabled=${item.disabled}>${item.label}</Button>');
-			}
-		}).array();
-	}*/
+			//trace(e);
+			e.preventDefault();
+			var action:String = cast(e.target, Element).getAttribute('data-action');
+			//trace(Reflect.field(_me,'callMethod'));
+			trace(action);
+			//callMethod(action, e);
+			//trace(this.comp.state.formApi);
+			var mP:Function = Reflect.field(this.comp.state.formApi,'callMethod');
+			Reflect.callMethod(this.comp.state.formApi,mP,[action, e]);
+		}
 
 	public function  hidden(cm:String):ReactFragment
 	{
-		//return null;
 		return jsx('<input type="hidden" name=${cm} />');
 	}
 	

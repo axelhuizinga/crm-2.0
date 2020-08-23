@@ -40,15 +40,15 @@ class Contact extends ORM
 		propertyNames = 'id,mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner'.split(',');
 	}	
 		
-	@dataType("bigint")
-	@:isVar public var id(default,set):Int;
+	/*@dataType("bigint")
+	@:isVar override public var id(default,set):Int;
 
 	function set_id(id:Int):Int{
 		if(initialized('id'))
 			modified('id');
 		this.id = id ;
 		return id;
-	}	
+	}	*/
 		
 	@dataType("bigint")
 	@:isVar public var mandator(default,set):Int;

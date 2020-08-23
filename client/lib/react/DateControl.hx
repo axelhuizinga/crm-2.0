@@ -56,8 +56,8 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 		var altInput:InputElement = fpInstance.altInput;
 		//trace(Reflect.fields(fP));
 		trace('${props.value}:${fpInstance.config.altFormat}');
-		altInput.value = props.value == null? '': fpInstance.formatDate(new Date(Date.parse(props.value)), fpInstance.config.altFormat);
-		//trace(fpInstance.formatDate(new Date(Date.parse(props.value)), fpInstance.config.altFormat));
+		altInput.value = (val == '' ? '': fpInstance.formatDate(new Date(Date.parse(props.value)), fpInstance.config.altFormat));
+		trace(altInput.value + '::' + fpInstance.formatDate(new Date(Date.parse(props.value)), fpInstance.config.altFormat));
 
 		altInput.addEventListener('keyup', function(ev:KeyboardEvent){
 			//trace(ev.key);

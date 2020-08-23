@@ -3,7 +3,7 @@ package view.shared;
 @:enum
 abstract FormInputElement(String)
 {
-	var Button;
+	var button;
 	var Hidden;
 	var DatePicker;
 	var DateTimePicker;	

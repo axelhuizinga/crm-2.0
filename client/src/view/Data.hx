@@ -93,7 +93,7 @@ class Data extends ReactComponentOf<DataProps,CompState>
 	override function shouldComponentUpdate(nextProps:DataProps, nextState:CompState):Bool
 	{
 		if(_trace) trace('propsChanged:${nextProps!=props}');
-		//if(nextProps!=props)			props.compare(nextProps);
+		if(nextProps!=props)			props.compare(nextProps);
 		if(_trace) trace('stateChanged:${nextState!=state}');
 		if(nextState!=state || nextProps!=props)
 		{

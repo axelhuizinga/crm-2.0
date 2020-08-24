@@ -324,6 +324,7 @@ class FormApi
 	
 	public function renderElements(cState:FormState):ReactFragment
 	{
+		trace(cState.data.empty());
 		if(cState.data.empty())
 			return null;
 		var fields:Iterator<String> = cState.fields.keys();

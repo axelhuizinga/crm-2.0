@@ -155,7 +155,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		var i:Int = 1;
 		return items.map(function(item:MItem) 
 		{
-			trace(item);
+			//trace(item);
 			return switch(item.section)
 			{
 				//case Filter: jsx('<$Filter  key=${i++}/>');

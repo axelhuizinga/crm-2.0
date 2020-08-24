@@ -11,7 +11,8 @@ using Lambda;
 
 @:keep
 class ORM {
-	public var id(default,null):Int;
+	@dataType("bigint")
+	@:isVar public var id(default,null):Int;
 	public var fieldsInitalized(default,null):Array<String>;
 	public var fieldsModified(default,null):Array<String>;
 	
@@ -20,7 +21,11 @@ class ORM {
 	var fields:Dynamic<Dynamic<Array<Dynamic>>>;
 
 	public function new(data:Map<String,Dynamic>) {
-		fields = Meta.getFields(Type.getClass(this));		
+		fields = Meta.getFields(Type.getClass(this));	
+		fields.id = {
+			dataType : ['bigint']
+		};
+		//trace(Std.string(fields));
 		fieldsInitalized = new Array();
 		fieldsModified = new Array();
 		propertyNames = Reflect.fields(fields);
@@ -30,12 +35,14 @@ class ORM {
 	public function load(data:Map<String,Dynamic>):ORM {
 		if(data != null)
 		{
+			//trace('data.id: ${data.get('id')}');
 			fieldsInitalized = new Array();
 			fieldsModified = new Array();
 			for(f in propertyNames)
 			{
 				if(data.exists(f)){
-					var nv:Dynamic = data[f];
+					var nv:Dynamic = data.get(f);
+					//trace('$f => $nv');
 					Reflect.setProperty(this, f, switch(Reflect.field(fields, f).dataType[0]){				
 						case('bigint[]'):
 							nv==null?[]:nv;
@@ -49,6 +56,7 @@ class ORM {
 				}
 			}
 		}
+		trace(this.id +':' + data.get('id'));
 		return this;
 	}
 

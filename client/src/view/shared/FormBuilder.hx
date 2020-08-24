@@ -220,7 +220,7 @@ class FormBuilder {
 	}
 	
 	function onChange(ev:Dynamic) {
-		//trace(ev.target.type);
+		trace(ev.target.type);
 		switch (ev.target.type)
 		{
 			case 'checkbox':
@@ -233,12 +233,13 @@ class FormBuilder {
 					default:
 						false;
 				});
-				comp.forceUpdate();
+				//comp.forceUpdate();
 			case 'select-multiple'|'select-one':
 				//trace (ev.target.selectedOptions.length);
 			default:
 				//trace('${ev.target.name}:${ev.target.value}');
 		}				
+		comp.baseForm.doChange(ev.target.name, ev.target.value);
 	}	
 }
 

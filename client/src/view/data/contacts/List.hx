@@ -38,7 +38,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
 		//{label:'Anzeigen',action:'get'},
-		{label:'Bearbeiten',action:'update',section: 'Edit'},
+		{label:'Bearbeiten',action:'open',section: 'Edit'},
 		{label:'Neu', action:'insert',section: 'Edit'},		
 		{label:'Löschen',action:'delete'},
 		{label:'Auswahl aufheben',action:'selectionClear'},

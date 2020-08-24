@@ -1,4 +1,5 @@
 package;
+import php.SuperGlobal;
 import db.DbQuery;
 import tjson.TJSON;
 import haxe.Json;
@@ -838,6 +839,8 @@ class Model
 
 	public static function binary():DbQuery
 	{
+		trace(SuperGlobal._POST.keyValueIterator().hasNext()?'Y':'N');
+		trace(Std.string(SuperGlobal._POST));
 		var pData = Bytes.ofString(Web.getPostData());
 		//var d:DbQuery = new DbQuery();
 		//trace(Web.getPostData());

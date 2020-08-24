@@ -1,4 +1,5 @@
 package view.shared.io;
+import model.ORM;
 import haxe.Constraints.Function;
 import model.Contact;
 import haxe.Json;
@@ -37,7 +38,8 @@ class BaseForm
 	}
 
 	public function compareStates() {
-		for(f in Reflect.fields(comp.state.initialState))
+		var dObj:ORM = cast(comp.state.actualState, ORM);
+		for(f in Reflect.fields(dObj))
 		{
 			trace('$f:${Reflect.field(comp.state.actualState,f)}<==>${Reflect.field(comp.state.initialState,f)}<');
 		}
@@ -46,15 +48,16 @@ class BaseForm
 	public function doChange(name,value) {
 		trace('$name: $value');
 		if(name!=null && name!='')
-		Reflect.setField(comp.state.actualState,name,value);
-		
+		//Reflect.setField(comp.state.actualState,name,value);
+		Reflect.setProperty(comp.state.actualState,name,value);
+		//Reflect.set(comp.state.actualState,name,value);
 		//setState({comp.state.initialState:comp.state.actualState});
 	}
 
 	public function handleChange(e:Event) 
 	{
 		var el:Dynamic = e.target;
-		//trace(Type.typeof(el));
+		trace(Type.typeof(el));
 		//trace('${el.name}:${el.value}');
 		if(el.name != '' && el.name != null)
 		{

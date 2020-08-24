@@ -19,7 +19,7 @@ class Utils
 		{
 			if(Reflect.field(ob1,k)!=Reflect.field(ob2,k))
 			{
-				trace('$k: ${Reflect.field(ob1,k)} != ${Reflect.field(ob2,k)}');
+				//trace('$k: ${Reflect.field(ob1,k)} != ${Reflect.field(ob2,k)}');
 			}
 		}
 	}

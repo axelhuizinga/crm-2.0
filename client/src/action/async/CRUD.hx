@@ -90,41 +90,48 @@ class CRUD
 			});
 		});
 	}
-
-	public static function update(props:DBAccessProps) 
-	{	//trace(props);
+	//public static function update(props:DBAccessProps) 
+	public static function update(props:DbQueryParam) 
+	{	trace(props.action);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
 			trace(props);
+			//if(props.dataSource != null)
+				//trace(props.dataSource.get('contacts').get('data'));
+			
 			var dbData:DbData = DbDataTools.create();
 			//trace(getState());
 			return new Promise(function(resolve, reject){
-				if (!props.userState.dbUser.online)
+				if (!props.dbUser.online)
 				{
 					dispatch(User(LoginError(
 					{
-						dbUser:props.userState.dbUser,
+						dbUser:props.dbUser,
 						lastError:'Du musst dich neu anmelden!'
 					})));
 					trace('LoginError');
 					resolve(null);
 				}	
-				var params:Dynamic = {				
-					id:props.userState.dbUser.id,
-					jwt:props.userState.dbUser.jwt,
+				var params:Dynamic = {			
+					dbUser:props.dbUser,
+					filter:props.filter,	
+					table:props.table,
+					//id:props.userState.dbUser.id,
+					//jwt:props.userState.dbUser.jwt,
 					classPath:props.classPath,
-					action:props.action,
+					action: props.action,
 					devIP:App.devIP
 				};
-				if(props.dataSource != null)
-					params.dataSource = props.dataSource;
+				//if(props.dataSource != null)
+					//params.dataSource = props.dataSource;
 				if(props.table != null)
 					params.table = props.table;
-				var bL:XMLHttpRequest = BinaryLoader.create(
+				trace(params);
+				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
 					'${App.config.api}', 
 					params,
 					function(data:DbData)
 					{				
-						//trace(data);
+						trace(data);
 						if(data.dataErrors != null)
 							trace(data.dataErrors);
 						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
@@ -142,9 +149,9 @@ class CRUD
 									text:switch ('${props.classPath}.${props.action}')
 									{
 										case "data.Contacts.edit":
-											'Kontakt ${props.dataSource["contacts"]["filter"].toString()} geladen';
+											'Kontakt ${props.filter.toString()} geladen';
 										case "data.Contacts.update":
-											'Kontakt ${props.dataSource["contacts"]["filter"].toString()} wurde gespeichert';
+											'Kontakt ${props.filter.toString()} wurde gespeichert';
 										default:
 											"Unbekannter Vorgang";
 
@@ -155,7 +162,7 @@ class CRUD
 						}
 					}
 				);
-				//resolve(dbData);
+				trace(bL);
 			});	
 		});
 			

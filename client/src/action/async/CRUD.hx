@@ -128,7 +128,7 @@ class CRUD
 				trace(params);
 				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
 					'${App.config.api}', 
-					params,
+					props,
 					function(data:DbData)
 					{				
 						trace(data);
@@ -149,9 +149,9 @@ class CRUD
 									text:switch ('${props.classPath}.${props.action}')
 									{
 										case "data.Contacts.edit":
-											'Kontakt ${props.filter.toString()} geladen';
+											'Kontakt ${props.filter.id} geladen';
 										case "data.Contacts.update":
-											'Kontakt ${props.filter.toString()} wurde gespeichert';
+											'Kontakt ${props.filter.id} wurde gespeichert';
 										default:
 											"Unbekannter Vorgang";
 

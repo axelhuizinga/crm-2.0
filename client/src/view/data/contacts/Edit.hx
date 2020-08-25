@@ -1,4 +1,5 @@
 package view.data.contacts;
+import db.DbRelation;
 import db.DbQuery;
 import db.DbQuery.DbQueryParam;
 import action.async.CRUD;
@@ -291,37 +292,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
 		var elements:HTMLCollection = formElement.elements;
-		/*for(k in dataAccess['open'].view.keys())
-		{
-			if(k=='id')
-				continue;
-			try 
-			{
-				var item:Dynamic = elements.namedItem(k);
-				//trace('$k => ${item.type}:' + item.value);
-				Reflect.setField(state.actualState, item.name, switch (item.type)
-				{
-					//case DateControl|DateTimrControl:
-
-					case 'checkbox':
-					//trace('${item.name}:${item.checked?true:false}');
-					item.checked?1:0;
-					case 'select-multiple'|'select-one':
-					var sOpts:HTMLOptionsCollection = item.selectedOptions;
-					//trace (sOpts.length);
-					sOpts.length>1 ? [for(o in 0...sOpts.length)sOpts[o].value ].join('|'):item.value;
-					default:
-					//trace('${item.name}:${item.value}');
-					item.value;
-				});			
-			}
-			catch(ex:Dynamic)
-			{
-				trace(ex);
-			}
-		}*/
-		//setState({actualState: actualState});
-		//compareStates();
 		var aState:Dynamic = copy(state.actualState);
 		var dbaProps:DBAccessProps = 
 		{
@@ -334,14 +304,15 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var dbQ:DbQueryParam = {
 			classPath:'data.Contacts',
 			action:'update',
-			formData: data2save,
+			data:data2save,
 			filter:{id:state.actualState.id,mandator:1},
 			table:'contacts',
 			dbUser:props.userState.dbUser,
 			devIP:App.devIP
 		}
-		//switch (props.match.params.action)
-		switch ('update')
+		trace(props.match.params.action);
+		switch (props.match.params.action)
+		//switch ('update')
 		{
 			case 'insert':
 				for(f in fieldNames)

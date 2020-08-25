@@ -301,7 +301,7 @@ class User extends Model
 		dbData.dataInfo['changePassword'] = 'OK';
 		//param.set('pass', param.get('new_pass'));
 		var dbQuery = Model.binary();
-		//dbQuery.formData.set('pass', param.get('new_pass'));
+		//dbQuery.data.set('pass', param.get('new_pass'));
 		return login(dbQuery.dbUser);
 		S.sendInfo(dbData);
 		return true;

@@ -771,7 +771,7 @@ class Model
 		return alias;
 	}
 
-	public function buildSet(tableName:String,data:Dynamic, alias:String):String
+	public function buildSet(tableName:String,data:Dynamic, ?alias:String):String
 	{
 		alias = alias!=null?'${quoteIdent(alias)}.':'';
 		var defaults:Array<ColDef> = S.columnDefaults(tableName);
@@ -870,7 +870,7 @@ class Model
 	}
 
 	function run(){
-		if(param.exists('dbData'))
+		/*if(param.exists('dbData'))
 		{
 			trace(param.get('dbData'));
 			trace(Bytes.ofString(param.get('dbData')));
@@ -880,7 +880,7 @@ class Model
 			trace(dataSource.toString());
 		}
 		else 
-		{
+		{*/
 			if(param.exists('table'))
 				table = param.get('table');
 			if(table != null)
@@ -900,7 +900,7 @@ class Model
 				dataSource = Unserializer.run(param.get('dataSource'));
 				//dataSource = TJSON.parse(param.get('dataSource'));
 			}
-		}
+		//}
 		var fields:Array<String> = [];
 		if(dataSource != null)
 		{
@@ -931,6 +931,26 @@ class Model
 			}			
 			queryFields += fields.length > 0 ? fields.join(','):'';
 		}		
+		else{
+		/**
+		 * SINGLE TABLE DATA 
+		 */
+		 	if(action == 'update')
+			{
+				setSql += buildSet(param.get('table'), param.get('data'));
+			}
+			if(action == 'create')
+			{
+				var dataFields = Reflect.fields(param.get('data'));
+				fields = S.tableFields(param.get('table'),S.db).filter(function(field) return dataFields.contains(field) ).map(function(field) return '${quoteIdent(field)}');
+				//fields.remove('id');
+				//fieldNames = fields;
+				buildValues(param.get('data'));
+				setSql = fields.map(function (_)return '?').join(',');
+				setSql = '($setSql)';
+			}			
+			queryFields += fields.length > 0 ? fields.join(','):'';			
+		}
 		trace('${action}:' + tableNames.toString());
 		trace(queryFields);
 		trace(setSql);

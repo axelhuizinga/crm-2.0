@@ -17,7 +17,7 @@ typedef DbQueryParam = {
 	?relations:Map<String,DbRelation>,
 	?devIP:String,	
 	?filter:Dynamic,//Map<String,String>,
-	?formData:Dynamic,	
+	?data:Dynamic,	
 	?firstBatch:Bool,
 	?onlyNew:Bool,
 	?limit:Int,
@@ -30,9 +30,7 @@ typedef DbQueryParam = {
 
 class DbQuery implements hxbit.Serializable 
 {
-
 	@:s public var dbParams:Map<String,Dynamic>;
-	//@:s public var formData:Dynamic;
 	@:s public var relations:Map<String,DbRelation>;
 	@:s public var dbUser:DbUser;
 
@@ -53,7 +51,5 @@ class DbQuery implements hxbit.Serializable
 				}
 			}			
 		}
-
 	}
-
 }

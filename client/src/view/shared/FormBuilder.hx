@@ -1,6 +1,8 @@
 package view.shared;
 
 //import js.lib.Reflect;
+import react.ReactUtil;
+import js.html.AbortController;
 import js.html.Element;
 import js.html.Event;
 import bulma_components.Button;
@@ -102,17 +104,22 @@ class FormBuilder {
 						${value}
 					</button>');
 				case FormInputElement.Checkbox:		
-					//trace(field);//disabled=${field.disabled} required=${field.required}
-					var checked = switch(value)
+					//trace(field);//disabled=${field.disabled} required=${field.required}//false;//true;
+					trace (field.type +' $name:' + value);
+					var checked:Bool = switch(value)
 					{
 						case "TRUE"|true|"on"|"1":
-							true;
+							true; 
 						default:
 							false;
-					}
-					trace('$checked $value');
+					};
+					//trace(checked);
 					renderElement(
-						jsx('<input name=${name}  key=${ki++} type="checkbox" checked=${checked} onChange=${onChange} />'),
+						jsx('<input name=${name}  key=${ki++} type="checkbox" defaultChecked=${checked} onChange=${onChange} />')
+						/*(checked?
+							jsx('<input name=${name}  key=${ki++} type="checkbox" checked="checked" onChange=${onChange} />') :
+							jsx('<input name=${name}  key=${ki++} type="checkbox"  onChange=${onChange} />'	)
+						)*/,
 						ki++, field.label
 					);
 				case Select:
@@ -224,22 +231,27 @@ class FormBuilder {
 		switch (ev.target.type)
 		{
 			case 'checkbox':
-				trace('${ev.target.name}:${ev.target.checked?true:false}');
+				trace('${ev.target.name}:${ev.target.value}:${ev.target.checked?true:false}');
 				//trace('doChange:${Reflect.isFunction(Reflect.field(comp,'doChange'))}');
-				comp.doChange(ev.target.name, switch(ev.target.checked)
+				comp.baseForm.doChange(ev.target.name, switch(ev.target.checked)
 				{
 					case "TRUE"|true|"on"|"1":
-						true;
+						1;
 					default:
-						false;
+						0;
 				});
+				//ev.target.checked = !ev.target.checked;
+				trace('${ev.target.name}:${ev.target.value}:${ev.target.checked?true:false}');
+				//comp.setState({actualState:ReactUtil.copy({use_email:(ev.target.checked?1:0)})});
 				//comp.forceUpdate();
 			case 'select-multiple'|'select-one':
 				//trace (ev.target.selectedOptions.length);
+				comp.baseForm.doChange(ev.target.name, ev.target.value);
 			default:
 				//trace('${ev.target.name}:${ev.target.value}');
+				comp.baseForm.doChange(ev.target.name, ev.target.value);
 		}				
-		comp.baseForm.doChange(ev.target.name, ev.target.value);
+		
 	}	
 }
 

@@ -50,6 +50,7 @@ class BaseForm
 		if(name!=null && name!='')
 		//Reflect.setField(comp.state.actualState,name,value);
 		Reflect.setProperty(comp.state.actualState,name,value);
+		trace(Reflect.field(comp.state.actualState, name));
 		//Reflect.set(comp.state.actualState,name,value);
 		//setState({comp.state.initialState:comp.state.actualState});
 	}
@@ -64,7 +65,7 @@ class BaseForm
 			trace('>>${el.name}=>${el.value}<<');
 			//trace(comp.state.actualState);
 			Reflect.setField(comp.state.actualState,el.name,el.value);
-			trace(Reflect.field(comp.state.actualState, 'last_name'));
+			trace(Reflect.field(comp.state.actualState, el.name));
 		}	
 
 		//trace(comp.state.actualState);

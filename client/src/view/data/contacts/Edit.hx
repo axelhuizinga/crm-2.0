@@ -168,7 +168,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				setState({loading:false, actualState:new Contact(data)});
 				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
 				setState({initialData:copy(state.actualState)});
-				trace(props.location.pathname);
+				trace(props.location.pathname + ':' + untyped state.actualState.use_email);
 				props.history.replace(props.location.pathname.replace('open','update'));
 			}
 		});

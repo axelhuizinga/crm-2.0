@@ -47,7 +47,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 				altInputClass: "form-control input",
 				defaultValue:props.value,
 				//locale:'de',
-				//onChange:onChange,
+				onChange:onChange,
 				onClose:onClose,
 				onOpen:onOpen,
 				onReady:onReady
@@ -130,7 +130,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 	function onChange(_) {
 		if(props.comp != null)
 		{
-			props.comp.doChange(props.name, fpInstance.input.value);
+			props.comp.baseForm.doChange(props.name, fpInstance.input.value);
 		}
 	}
 

@@ -59,7 +59,7 @@ typedef DataColumn =
 	@:optional var search:SortDirection;
 	@:optional var show:Bool;	
 	@:optional var style:Dynamic;
-	@:optional var usAsIndex:Bool;
+	@:optional var useAsIndex:Bool;
 	@:optional var useInTooltip:Int;//-1 = not, n = position
 }
 

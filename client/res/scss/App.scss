@@ -43,6 +43,7 @@ $lightBlue: rgb(240,240,255);
 $lightGreen: rgb(240,255,240);
 $darkRed: rgb(128, 17, 17);
 $lightRed: rgb(251, 220, 220);
+$passive: #aaa4a4;
 $primary: #601111;
 $darkSun: #fabf32;
 $lightSun: #fefdfa;
@@ -312,6 +313,8 @@ h1 {
 }
 .fa-user-slash
 {color: $disabled}
+
+
 .formField label,
 .formField input
 {
@@ -516,6 +519,14 @@ button::-moz-focus-inner {padding:0; border:0}
 }
 
 .table{margin-bottom: 0em;}
+.active
+{
+	color:$darkSun;
+}
+.passive
+{
+	color:$passive;
+}
 .is-fullheight
 {
 	flex:auto;

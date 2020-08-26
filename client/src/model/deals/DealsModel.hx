@@ -1,5 +1,6 @@
 package model.deals;
 
+import tink.CoreApi.Callback;
 import react.ReactMacro.jsx;
 
 import view.table.Table.DataColumn;
@@ -36,16 +37,14 @@ class DealsModel
 	?last_locktime:String
 	 */
 	public static var listColumns:Map<String,DataColumn> = [
-		'contact'=>{show:false, usAsIndex: true},		
-		'first_name'=>{show: false, useInTooltip: 0},
-		'last_name'=>{show: false, useInTooltip: 1},
+		'contact'=>{show:true, useAsIndex: true},		
 		'start_date'=>{label:'Seit'},		
-		'state' => {label:'Aktiv', className: 'tCenter',
+		'status' => {label:'Aktiv', className: 'tCenter',
 			cellFormat:function(v:String) 
 			{
-				var uState = (v=='active'?'thumbs-up':'thumbs-down');
+				var className = (v=='active'?'active fas fa-heart':'passive far fa-heart');
 				//trace(uState);
-				return jsx('<span className="far fa-$uState"></span>');
+				return jsx('<span className=${className}></span>');
 			}},
 		'id' => {show:false},
 		

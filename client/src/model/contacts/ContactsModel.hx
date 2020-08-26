@@ -65,7 +65,7 @@ class ContactsModel
 	public static var listColumns:Map<String,DataColumn> = [
 		'first_name'=>{label:'Vorname', flexGrow:0},
 		'last_name'=>{label:'Name', flexGrow:0},
-		'email'=>{label:'Email'},
+		//'email'=>{label:'Email'},
 		'phone_number'=>{label:'Telefon'},				
 		'address'=>{label: 'Straße'},		
 		'address_2'=>{label: 'Hausnummer'},		

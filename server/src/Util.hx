@@ -29,25 +29,28 @@ class Util
 
 		for(k => v in meta.keyValueIterator())
 		{
-			//if(k=='id')
-				//continue;!Global.array_key_exists(k,row)||
-			var kv:Dynamic = Global.array_key_exists(k,row)?row[k]:null;
-			
+			var kv:Dynamic = Global.array_key_exists(k,row)?row[k]:null;			
 			var pdoType:Int = v['pdo_type'];
 			if(kv==null||kv.indexOf('0000-00-00')==0||kv=='')
 			{
-				//trace (v['native_type']);
+				trace (v['native_type']);
 				switch (v['native_type'])
 				{
 					case 'date'|'datetime'|'timestamp':
-					pdoType = PDO.PARAM_NULL;
+						pdoType = PDO.PARAM_NULL;
+					case 'timestamptz':
+						pdoType = PDO.PARAM_STR;
+						trace(pdoType);
+						pdoType = PDO.PARAM_INT;
+						trace(pdoType);			
+						//kv = 0;
 					case 'text'|'varchar':
-					kv = '';
+						kv = '';
 					case 'int8':
-					kv = 0;
+						kv = 0;
 				}
 			}
-			//trace('$k => $pdoType:${kv}');
+			trace('$k => ${v['native_type']} :: $pdoType:${kv}');
 			if(!stmt.bindValue(':$k',kv, pdoType))//kv==null?1:
 			{
 				//trace('$k => $v');
@@ -102,10 +105,10 @@ class Util
 	public static function map2fields(row:NativeArray,keys:Array<String>):Map<String,Dynamic> {
 		
 		//trace(row);
-		//trace(keys);
+		trace(keys);
 		return[
-			for(k in keys)
-				k => (Syntax.code('array_key_exists({0},{1})', k, row) ? row[k]:null)
+			for(k in keys.filter(function(k)return Global.array_key_exists(k,row)))
+				k => row[k]				
 		];
 	}
 

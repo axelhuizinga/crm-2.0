@@ -193,6 +193,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			{
 				classPath:'admin.SyncExternalAccounts',
 				action:'syncAll',
+				extDB: true,
 				filter:{mandator:'1'},
 				limit:1000,
 				offset:0,

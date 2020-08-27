@@ -150,7 +150,11 @@ class S
 				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
 			//trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
 		}
-
+		#if debug
+		dbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
+		if(params.get('extDB'))
+			syncDbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
+		#end
 		saveRequest(dbQuery);
 
 		if(action == 'resetPassword')
@@ -471,9 +475,8 @@ class S
 	public static function syncTableFields(table:String, db:String = 'fly_crm'): Array<String>
 	{
 		var sql:String = comment(unindent, format) /*
-			SELECT GROUP_CONCAT(COLUMN_NAME,',') FROM information_schema.columns WHERE table_schema = '$db' AND table_name = '$table'
+			SELECT GROUP_CONCAT(COLUMN_NAME) FROM information_schema.columns WHERE table_schema = '$db' AND table_name = '$table'
 			*/;
-
 		var stmt:PDOStatement = syncDbh.query(sql);
 		if (S.dbh.errorCode() != '00000')
 		{

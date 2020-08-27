@@ -1,5 +1,6 @@
 package model.admin;
 
+import php.Global;
 import php.NativeAssocArray;
 import shared.DbData;
 import haxe.macro.Type.Ref;
@@ -92,7 +93,7 @@ ON ps.client_id = cl.client_id;';
 		sql = comment(unindent, format)/* 
 		SELECT ARRAY_TO_STRING(array_agg(acid.id),',') from account_contact_ids acid
 		left join 
-		(SELECT 1 as gg,id accounts) c
+		(SELECT 1 as gg,id FROM accounts) c
 		ON acid.id=c.id
 		where c.id IS NULL
 		GROUP BY gg;
@@ -108,12 +109,12 @@ ON ps.client_id = cl.client_id;';
 			trace(stmt.errorInfo());
 		}
 		var ids:String = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN,0):null);
-		trace(ids);
+		//trace(ids);
 		return ids;
 	}
 
 	/**
-	 * Import or Update accounts
+I kno	 * Import or Update accounts
 	 */
 
 	function syncAll() {
@@ -131,7 +132,7 @@ ON ps.client_id = cl.client_id;';
 		var ids:String = getMissing();
 		// GET ViciBox fly_crm db account data
 		var sql:String = comment(unindent,format)/*
-		SELECT * FROM pay_source WHERE client_id IN($ids)
+		SELECT pay_source_id id,client_id contact,debtor account_holder,bank_name,account,blz bic,blz,iban,sign_date,pay_source_state status,IF(creation_date LIKE '0000-00-00%', NULL, DATE_FORMAT(creation_date,'%Y-%m-%dT%TZ')), 100 edited_by, NULL last_locktime FROM pay_source WHERE client_id IN($ids)
 		ORDER BY client_id LIMIT  
 */;
 
@@ -148,12 +149,16 @@ ON ps.client_id = cl.client_id;';
 		}
 		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		var got:Int = Syntax.code("count({0})",res);
-		trace(got);
+		trace(sql.substr(0,180) + '::' + got);
+		var cD:Map<String,Dynamic> = Util.map2fields(res[0], Global.array_keys(res[0]));
+		trace(cD);
+		var cNames:Array<String> = [for(k in cD.keys()) k];
+		trace(cNames);
 		for(row in res.iterator())
 		{			
 			//trace(row);
 			//S.sendErrors(dbData,['syncAll'=>'NOTOK']);
-			var stmt:PDOStatement = upsertAccount(row);
+			var stmt:PDOStatement = upsertAccount(row, cD, cNames);
 			try{
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
 				//trace(res);
@@ -168,9 +173,12 @@ ON ps.client_id = cl.client_id;';
 			}
 		}		
 		trace('done');
+		dbData.dataInfo['offset'] = param['offset'] + synced;
 		trace(dbData.dataInfo);
+		S.sendData(dbData, null);		
+		//trace(dbData.dataInfo);
 
-		importAccountData(res);
+		//importAccountData(res);
 		S.sendErrors(dbData,['syncAccounts'=>'NOTOK']);				
 		S.sendInfo(dbData,['syncUserDetail'=>'no results???']);
 	}
@@ -191,7 +199,7 @@ ON ps.client_id = cl.client_id;';
 		trace('done');
 	}
 	
-	public function importAccountData(cData:NativeArray):Void
+	/*public function importAccountData(cData:NativeArray):Void
 	{
 		//var cData:NativeArray = getAccountData();
 		//trace(cData[0]);        
@@ -218,16 +226,19 @@ ON ps.client_id = cl.client_id;';
 		dbData.dataInfo['offset'] = param['offset'] + synced;
 		trace(dbData.dataInfo);
 		S.sendData(dbData, null);
-	}
+	}*/
 	
-	function upsertAccount(rD:NativeArray):PDOStatement
+	function upsertAccount(rD:NativeArray, cD:Map<String,Dynamic>, cNames:Array<String>):PDOStatement
 	{
-		var cD:Map<String,Dynamic> = Util.map2fields(rD, S.syncTableFields('pay_source'));
-		var cNames:Array<String> = [for(k in cD.keys()) k];
+		//var cD:Map<String,Dynamic> = Util.map2fields(rD, S.syncTableFields('pay_source'));
+		//trace(cD);
+		//var cNames:Array<String> = [for(k in cD.keys()) k];
+		trace(rD);
 		//var cVals:String =  [for(v in cD.iterator()) v].map(function (v) return '\'$v\'').join(',');
+		//for(k in cNames.filter(function(k)return k!='id')) k
 		var cPlaceholders:Array<String> =  [for(k in cNames) k].map(function (k) return ':$k');
 		var cSet:String = [
-			for(k in cNames.filter(function(k)return k!='id')) k
+			for(k in cNames) k
 			].map(function (k) {
 				return (k=='merged'?
 				'"$k"=:IF(array_length("merged",1)>0 THEN "merged" ELSE $k)'

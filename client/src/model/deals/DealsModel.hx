@@ -46,6 +46,8 @@ class DealsModel
 				//trace(uState);
 				return jsx('<span className=${className}></span>');
 			}},
+		'cycle' => {label: 'Turnus'},
+		'amount' => {label: 'Betrag'},
 		'id' => {show:false},
 		
 	];

@@ -51,7 +51,31 @@ class SyncExternalAccounts extends Model
 		}		
 	}
 
-	public function  getMissing():String {
+	public function  getMissing():Map<String,Int> {
+		//GET ALL client_id's from ViciBox fly_crm db accounts
+		var sql:String = '
+SELECT MIN(pay_source_id)sstart, MAX(pay_source_id)send FROM 
+(SELECT pay_source_id FROM clients cl 
+INNER JOIN pay_source ps 
+ON ps.client_id = cl.client_id LIMIT ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])})ss';
+	trace(sql);
+        var stmt:PDOStatement = S.syncDbh.query(sql);
+		if(untyped stmt==false)
+		{
+			trace(S.syncDbh.errorInfo());
+			S.sendErrors(dbData, ['getMissing query:'=>S.syncDbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+		}
+		var res:NativeArray = (stmt.execute()?stmt.fetch(PDO.FETCH_ASSOC):null);	
+		
+		trace(Syntax.code("print_r({0},1)",res));
+		return Lib.hashOfAssociativeArray(res);
+	}
+
+	public function  getMissing1st():String {
 		//GET ALL client_id's from ViciBox fly_crm db accounts
 		var sql:String = '
 SELECT DISTINCT(cl.client_id) FROM clients cl 
@@ -129,14 +153,17 @@ I kno	 * Import or Update accounts
 			param['limit'] = Std.string(Std.parseInt(param['maxImport']) - Std.parseInt(param['offset']));
 		}
 		trace(param);		
-		var ids:String = getMissing();
+		var ids:Map<String,Int> = getMissing();
 		// GET ViciBox fly_crm db account data
 		var sql:String = comment(unindent,format)/*
-		SELECT pay_source_id id,client_id contact,debtor account_holder,bank_name,account,blz bic,blz,iban,sign_date,pay_source_state status,IF(creation_date LIKE '0000-00-00%', NULL, DATE_FORMAT(creation_date,'%Y-%m-%dT%TZ')), 100 edited_by, NULL last_locktime FROM pay_source WHERE client_id IN($ids)
-		ORDER BY client_id LIMIT  
+		SELECT id, contact, account_holder,bank_name,account,blz bic,blz,iban,sign_date, status,IF(pcd LIKE '0000%', creation_date, pcd)creation_date, 100 edited_by FROM 
+		(SELECT pay_source_id id, ps.client_id contact,debtor account_holder,bank_name,account,blz bic,blz,iban,sign_date,pay_source_state status,cl.creation_date, ps.creation_date pcd, 100 edited_by FROM pay_source ps
+		INNER JOIN clients cl ON cl.client_id=ps.client_id
+		WHERE pay_source_id BETWEEN ${ids['sstart']} AND ${ids['send']}
+		ORDER BY cl.client_id ) sj
 */;
-
-		var stmt:PDOStatement = S.syncDbh.query('$sql ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');
+	trace('$sql ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');
+		var stmt:PDOStatement = S.syncDbh.query(sql);
 		trace('loading  ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');		
 		if(untyped stmt==false)
 		{
@@ -152,6 +179,10 @@ I kno	 * Import or Update accounts
 		trace(sql.substr(0,180) + '::' + got);
 		var cD:Map<String,Dynamic> = Util.map2fields(res[0], Global.array_keys(res[0]));
 		trace(cD);
+		if(cD.get('creation_date')=='null')
+			cD.remove('creation_date');
+		//if(cD.get('last_locktime')=='null')
+			//cD.remove('last_locktime');
 		var cNames:Array<String> = [for(k in cD.keys()) k];
 		trace(cNames);
 		for(row in res.iterator())

@@ -201,7 +201,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP,
 				maxImport:4000,
-				relations:new Map()
+				//relations:new Map()
 			}
 		);
 		p.then(function(data:DbData){

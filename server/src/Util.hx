@@ -29,7 +29,9 @@ class Util
 
 		for(k => v in meta.keyValueIterator())
 		{
-			var kv:Dynamic = Global.array_key_exists(k,row)?row[k]:null;			
+			if(!Global.array_key_exists(k,row))
+				continue;
+			var kv:Dynamic = row[k];			
 			var pdoType:Int = v['pdo_type'];
 			if(kv==null||kv.indexOf('0000-00-00')==0||kv=='')
 			{
@@ -42,7 +44,8 @@ class Util
 						pdoType = PDO.PARAM_STR;
 						trace(pdoType);
 						pdoType = PDO.PARAM_INT;
-						trace(pdoType);			
+						trace(pdoType);	
+						continue;		
 						//kv = 0;
 					case 'text'|'varchar':
 						kv = '';

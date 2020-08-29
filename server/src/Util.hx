@@ -35,7 +35,7 @@ class Util
 			var pdoType:Int = v['pdo_type'];
 			if(kv==null||kv.indexOf('0000-00-00')==0||kv=='')
 			{
-				trace (v['native_type']);
+				//trace (v['native_type']);
 				switch (v['native_type'])
 				{
 					case 'date'|'datetime'|'timestamp':
@@ -53,7 +53,7 @@ class Util
 						kv = 0;
 				}
 			}
-			trace('$k => ${v['native_type']} :: $pdoType:${kv}');
+			//trace('$k => ${v['native_type']} :: $pdoType:${kv}');
 			if(!stmt.bindValue(':$k',kv, pdoType))//kv==null?1:
 			{
 				//trace('$k => $v');

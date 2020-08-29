@@ -51,7 +51,7 @@ class SyncExternalAccounts extends Model
 		}		
 	}
 
-	public function  getMissing():Map<String,Int> {
+	public function getMissing():Map<String,Int> {
 		//GET ALL client_id's from ViciBox fly_crm db accounts
 		var sql:String = '
 SELECT MIN(pay_source_id)sstart, MAX(pay_source_id)send FROM 
@@ -143,7 +143,6 @@ I kno	 * Import or Update accounts
 
 	function syncAll() {
 		trace(param);
-		trace(param);
 		if(param['offset']==null)
 			param['offset'] = '0';
 		if(param['limit']==null)			
@@ -203,7 +202,7 @@ I kno	 * Import or Update accounts
 				]);}		
 			}
 		}		
-		trace('done');
+		trace('synced: $synced');
 		dbData.dataInfo['offset'] = param['offset'] + synced;
 		trace(dbData.dataInfo);
 		S.sendData(dbData, null);		
@@ -264,7 +263,7 @@ I kno	 * Import or Update accounts
 		//var cD:Map<String,Dynamic> = Util.map2fields(rD, S.syncTableFields('pay_source'));
 		//trace(cD);
 		//var cNames:Array<String> = [for(k in cD.keys()) k];
-		trace(rD);
+		//trace(rD);
 		//var cVals:String =  [for(v in cD.iterator()) v].map(function (v) return '\'$v\'').join(',');
 		//for(k in cNames.filter(function(k)return k!='id')) k
 		var cPlaceholders:Array<String> =  [for(k in cNames) k].map(function (k) return ':$k');
@@ -281,8 +280,8 @@ I kno	 * Import or Update accounts
 				ON CONFLICT (id) DO UPDATE
 				SET $cSet returning id;	
 			*/;
-		trace(sql);
-		trace(cSet);
+		//trace(sql);
+		//trace(cSet);
 
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		Util.bindClientData('accounts',stmt,rD,dbData);

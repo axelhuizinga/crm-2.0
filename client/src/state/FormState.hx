@@ -1,5 +1,6 @@
 package state;
 
+import db.DbQuery.DbQueryParam;
 import view.shared.MItem;
 import model.ORM;
 import js.html.InputElement;
@@ -38,6 +39,7 @@ typedef FormState =
 	?data:Map<String,Dynamic>,
 	?dataTable:Array<Map<String,Dynamic>>,
 	?dataCount:Int,
+	?dbQueryParam:DbQueryParam,
 	?fields:Map<String,FormField>,//VIEW FORMFIELDS
 	?formApi:FormApi,
 	?formBuilder:FormBuilder,

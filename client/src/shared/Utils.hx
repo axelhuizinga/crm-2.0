@@ -5,6 +5,8 @@ package shared;
  * @author axel@cunity.me
  */
 
+import redux.Redux.Dispatch;
+import haxe.Constraints.Function;
 import react.ReactDOM;
 import haxe.ds.StringMap;
 import me.cunity.debug.Out;
@@ -142,6 +144,12 @@ class Utils
 		}
 		return res;
 	}
+
+	/*public static function untilDone(fn:redux.Dispatch, check:DbData->Bool, isDone = false):Dispatch {
+		if(isDone) return fn;
+		var p = fn();
+		return fn.then(function(data:DbData)return untilDone(fn, check, check(data)));
+	}*/
 	
 	public static function update(obj1: Dynamic, obj2: Dynamic): Dynamic {
 		

@@ -144,7 +144,7 @@ class CRUD
 						}
 						else{
 
-							dispatch(Status(Update(
+							/*dispatch(Status(Update(
 								{	cssClass:'',
 									text:switch ('${props.classPath}.${props.action}')
 									{
@@ -157,8 +157,8 @@ class CRUD
 
 									}
 								}
-							)));
-							resolve(dbData);
+							)));*/
+							resolve(data);
 						}
 					}
 				);

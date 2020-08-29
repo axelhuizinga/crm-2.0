@@ -1,4 +1,7 @@
 package view.dashboard;
+import haxe.Constraints.Function;
+import shared.DbParam;
+import shared.Utils;
 import action.AppAction;
 import db.DbQuery.DbQueryParam;
 import redux.Redux.Dispatch;
@@ -96,10 +99,11 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-            load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
-        };
+			load: function(param:DbQueryParam) return dispatch(CRUD.update(param))			
+        }
 	}	
-	
+	//,doSyncAll: function(dbQueryParam:DbQueryParam) return dispatch(CRUD.update(dbQueryParam))	
+		
 	public function createFieldList(ev:ReactEvent):Void
 	{
 		trace('hi :)');
@@ -187,27 +191,74 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	public function importAccounts(_):Void
 	{
 		trace(props.userState.dbUser.first_name);
-
 		setState({loading:true});
-		var p:Promise<DbData> = props.load(
-			{
-				classPath:'admin.SyncExternalAccounts',
-				action:'syncAll',
-				extDB: true,
-				filter:{mandator:'1'},
-				limit:1000,
-				offset:0,
-				table:'accounts',
-				dbUser:props.userState.dbUser,
-				devIP:App.devIP,
-				maxImport:4000,
-				//relations:new Map()
-			}
-		);
-		p.then(function(data:DbData){
-			trace(data);
-			setState({loading:false});
+		doSyncAll(			
+		{
+			classPath:'admin.SyncExternalAccounts',
+			action:'syncAll',
+			extDB: true,
+			filter:{mandator:'1'},
+			limit:1000,
+			offset:0,
+			table:'accounts',
+			dbUser:props.userState.dbUser,
+			devIP:App.devIP,
+			maxImport:4000,
+			//relations:new Map()
 		});
+	}
+
+	function doSyncAll(dbQueryParam:DbQueryParam) {
+		
+	
+		/*var p:Promise<DbData> =props.doSyncAll({		
+			classPath:'admin.SyncExternalAccounts',
+			action:'syncAll',
+			extDB: true,
+			filter:{mandator:'1'},
+			limit:1000,
+			offset:0,
+			table:'accounts',
+			dbUser:props.userState.dbUser,
+			devIP:App.devIP,
+			maxImport:4000				
+		});*/
+		var p:Promise<DbData> = props.load(dbQueryParam);
+		p.then(function(data:DbData){
+			if(data.dataInfo['offset']==null)
+			{
+				return App.store.dispatch(Status(Update(
+				{
+					cssClass:'error',
+					text:'Fehler 0 ${data.dataInfo['classPath']} Aktualisiert'}
+				)));
+			}					
+			var offset = Std.parseInt(data.dataInfo['offset']);
+			App.store.dispatch(Status(Update(
+				{
+					cssClass:' ',
+					text:'${offset} ${dbQueryParam.classPath} von ${data.dataInfo['maxImport']} aktualisiert'
+				}
+			)));
+
+			trace('${offset} < ${data.dataInfo['maxImport']}');
+			if(offset < data.dataInfo['maxImport']){
+				//LOOP UNTIL LIMIT
+				trace('next loop:${data.dataInfo}');
+				return doSyncAll(cast data.dataInfo);
+			}					
+			else{
+				setState({loading:false});
+				return App.store.dispatch(Status(Update(
+					{
+						cssClass:' ',
+						text:'${offset} ${dbQueryParam.classPath} von ${data.dataInfo['maxImport']} aktualisiert'
+					}
+				)));
+			}
+
+		});//*/
+		return p;
 	}
 
 	
@@ -365,6 +416,12 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			}
 		);
 	}
+
+	/*function untilDone(fn:Dispatch, check:DbData->Bool, isDone = false):Dispatch {
+		if(isDone) return fn;
+		var p = fn();
+		return fn.then(function(data:DbData)return untilDone(fn, check, check(data)));
+	}*/
 	
 	override public function componentDidMount():Void 
 	{				

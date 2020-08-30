@@ -37,7 +37,7 @@ class DealsModel
 	?last_locktime:String
 	 */
 	public static var listColumns:Map<String,DataColumn> = [
-		'contact'=>{show:true, useAsIndex: true},		
+		'contact'=>{label:'Kontakt',show:true, useAsIndex: true},		
 		'start_date'=>{label:'Seit'},		
 		'status' => {label:'Aktiv', className: 'tCenter',
 			cellFormat:function(v:String) 

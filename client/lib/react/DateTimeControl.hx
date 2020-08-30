@@ -3,7 +3,7 @@ package react;
 import js.lib.intl.DateTimeFormat;
 import js.html.InputElement;
 import js.html.KeyboardEvent;
-import js.lib.Date;
+//import js.lib.Date;
 import react.ReactComponent.ReactFragment;
 import react.ReactRef;
 import react.ReactMacro.jsx;
@@ -36,15 +36,16 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 	override public function componentDidMount():Void 
 	{
 		var fP:Dynamic = App.flatpickr;
-		//var val = (props.value == null ? null:new Date(Date.parse(props.value)));
+		//var val = (props.value == null ? null:new Date(Date.parse(Std.string(props.value).split('+')[0])));
 		//var val = (props.value == null ? null:props.value);
-		//trace('$val ${props.options.dateFormat}');
+		var val:Date = (props.value == null ? null:parseTimestampz(props.value));
+		trace('${props.value} $val ${props.options.dateFormat}');
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
-				dateFormat:'Y-m-d H:i:S',
+				dateFormat:props.options.dateFormat,//'Y-m-d H:i:S',
 				//dateFormat:props.options.dateFormat,
-				altInput:true,
+				altInput:props.options.allowInput,
 				altInputClass: "form-control input",
 				defaultValue:props.value, 
 				//onChange:onChange,
@@ -53,11 +54,12 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 		});
 
 		var altInput:InputElement = fpInstance.altInput;
-		altInput.value = props.value == null? '': fpInstance.formatDate(new Date(Date.parse(props.value)), fpInstance.config.altFormat);
-		trace(fpInstance.input.value);
+		
 		//trace(untyped  fpRef.current.value);
 		if(!props.disabled)
 		{
+			altInput.value = props.value == null? '': fpInstance.formatDate(Date.fromString(props.value), fpInstance.config.altFormat);
+			trace(fpInstance.input.value);			
 			altInput.addEventListener('keyup', function(ev:KeyboardEvent){
 				//trace(ev.key);
 				fpInstance.close();
@@ -122,6 +124,18 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 				}
 			});		
 		}
+	}
+
+
+	public static function parseTimestampz(tz:String):Date {
+		var b:Array<Int> = ~/[^0-9]/g.split(tz).map(function(t) return Std.parseInt(t));
+		b[1] = b[1]-1;
+		b[6] = 0;//Math.floor(b[6].substr(0,3);
+		trace(b.join('-'));
+		b.pop();
+		trace(Reflect.field(DateTools, 'makeUtc'));
+		return Date.now();
+		return Date.fromTime(Reflect.callMethod(DateTools, Reflect.field(DateTools, 'makeUtc'),b));
 	}
 
 	function onChange(_) {

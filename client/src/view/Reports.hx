@@ -73,14 +73,12 @@ class Reports extends ReactComponentOf<DataProps,CompState>
             <div className="tabNav2" >
 				<$Tabs className="is-boxed" >
 					<$TabLink to="/Reports/History" ${...props} >Entwicklung</$TabLink>
-					<$TabLink to="/Reports/Performance" ${...props} >Leistung</$TabLink>
 					<$TabLink to="/Reports/Preview" ${...props} >Vorschau</$TabLink>
 				</$Tabs>
 			</div>
             <div className="tabContent2" >
 			<$Switch>
 				<$Route path="/Reports/History/:section?/:action?/:id?"  ${...props} component={History}/>
-				<$Route path="/Reports/Performance/:section?/:action?/:id?"  ${...props} component={Performance}/>
 				<$Route path="/Reports/Preview/:section?/:action?/:id?"   ${...props} component={Preview}/>	
 				
             </$Switch>
@@ -90,3 +88,9 @@ class Reports extends ReactComponentOf<DataProps,CompState>
         ');
     }
 }
+/**
+					<$TabLink to="/Reports/Performance" ${...props} >Leistung</$TabLink>
+				<$Route path="/Reports/Performance/:section?/:action?/:id?"  ${...props} component={Performance}/>
+
+ * 
+ */

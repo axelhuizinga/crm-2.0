@@ -117,7 +117,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			offset = Std.int(props.limit * ev.page);
 		}		
-		var contact = (props.location.state.contact);
+		//var contact = (props.location.state.contact);
 		var p:Promise<DbData> = props.load(
 			{
 				classPath:'data.Deals',

@@ -98,9 +98,9 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		if (props.match.params.section == null)
 		{
 			var basePath:String = props.match.url;
-			props.history.push('$basePath/DB');
+			props.history.push('$basePath/List');
 			trace(props.history.location.pathname);
-			trace('setting section to:DB');
+			trace('setting section to:List');
 		}		
 		trace('${}');
 		//TODO: AUTOMATE CREATE HISTORY TRIGGER IF DB TABLES CHANGED
@@ -135,7 +135,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 				');					
 			case "List":
 				jsx('
-					<$List ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$List ${...props}  limit=${100} fullWidth={true} sideMenu=${state.sideMenu}/>
 				');						
 			default:
 				null;				

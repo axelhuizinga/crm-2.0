@@ -19,6 +19,7 @@ import shared.DbData;
 //import model.App;
 //import model.Campaigns;
 
+import model.data.Accounts;
 import model.data.Contacts;
 import model.data.Deals;
 import model.admin.CreateHistoryTrigger;

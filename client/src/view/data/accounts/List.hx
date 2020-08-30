@@ -1,4 +1,10 @@
 package view.data.accounts;
+import action.async.CRUD;
+import haxe.ds.IntMap;
+import redux.Redux.Dispatch;
+import db.DbQuery.DbQueryParam;
+import view.shared.io.BaseForm;
+import js.lib.Promise;
 import state.AppState;
 import haxe.Constraints.Function;
 import react.ReactComponent;
@@ -18,6 +24,7 @@ import loader.BinaryLoader;
 import view.table.Table;
 import model.Account;
 
+@:connect
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
@@ -27,7 +34,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Neu', action:'insert'},
 		{label:'Löschen',action:'delete'}
 	];
-	
+	var baseForm:BaseForm;
 	var dataDisplay:Map<String,DataState>;
 	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
@@ -35,14 +42,54 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
+		baseForm = new BaseForm(this);
 		dataDisplay = Accounts.dataDisplay;
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
+		state =  App.initEState({
+			dataTable:[],
+			loading:false,
+			accountsData:new IntMap(),			
+			selectedRows:[],
+			sideMenu:FormApi.initSideMenu2( this,
+				{
+					dataClassPath:'data.Accounts',
+					label:'Liste',
+					section: 'List',
+					items: menuItems
+				}					
+				,{	
+					section: props.match.params.section==null? 'List':props.match.params.section, 
+					sameWidth: true
+				}),
+			values:new Map<String,Dynamic>()
+		},this);
+		//state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
 		trace(state.loading);
+		if(props.match.params.action==null)
+			{
+				//var sData = App.store.getState().dataStore.contactData;	props.match.params.section==null||		
+				var baseUrl:String = props.match.path.split(':section')[0];
+				trace('redirecting to ${baseUrl}List/get');
+				props.history.push('${baseUrl}List/get');
+				get(null);
+			}
+			else 
+			{
+				//
+				trace(props.match.params);
+			}		
+			trace(state.loading);		
+	}
+
+	static function mapDispatchToProps(dispatch:Dispatch) {
+        return {
+            load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
+        };
 	}
 	
 	static function mapStateToProps(aState:AppState) 
 	{
+		trace(aState.userState);
 		return {
 			userState:aState.userState
 		};
@@ -54,35 +101,33 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
-	public function get(ev:ReactEvent):Void
+	public function get(ev:Dynamic):Void
 	{
 		trace('hi :)');
-		//return;
-		//dbMetaData = new  DBMetaData();
-		//dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
-		//trace(dbMetaData.dataFields.get(111));
-		var s:hxbit.Serializer = new hxbit.Serializer();
-		
-		//return;
-		state.formApi.requests.push( BinaryLoader.create(
-			'${App.config.api}', 
+		var offset:Int = 0;
+		setState({loading:true});
+		if(ev != null && ev.page!=null)
+		{
+			offset = Std.int(props.limit * ev.page);
+		}		
+		//var contact = (props.location.state.contact);
+		trace(props.userState);
+		var p:Promise<DbData> = props.load(
 			{
-				id:props.userState.dbUser.id,
-				jwt:props.userState.dbUser.jwt,
-				//fields:'disabled:disabled,element=:element,required=:required,use_as_index=:use_as_index',
-				classPath:'data.Contacts',
+				classPath:'data.Accounts',
 				action:'get',
-				//dataSource:Serializer.run(dataAccess['get'].source),
+				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
+				limit:props.limit,
+				offset:offset>0?offset:0,
+				table:'accounts',
+				dbUser:props.userState.dbUser,
 				devIP:App.devIP
-			},
-			function(data:DbData)
-			{			
-				//UserAccess.jwtCheck(data);
-				trace(data.dataInfo);
-				if(data.dataRows.length>0)
-				setState({dataTable:data.dataRows});
 			}
-		));
+		);
+		p.then(function(data:DbData){
+			trace(data.dataRows.length); 
+			setState({loading:false, dataTable:data.dataRows});
+		});
 	}
 	
 	public function edit(ev:ReactEvent):Void
@@ -149,8 +194,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			case 'get':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["contactList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
+					${...props} dataState = ${dataDisplay["accountsList"]} renderPager=${baseForm.renderPager}
+					parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'update':
 				jsx('

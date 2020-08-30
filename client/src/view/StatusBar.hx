@@ -49,10 +49,9 @@ typedef StatusBarState =
 	?className:String,
 	userState:UserState,
 }
-//@:expose('default')
+
 @:connect
-class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
-	
+class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>	
 {
 	var mounted:Bool = false;
 	var timer:Timer;
@@ -111,8 +110,8 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		return {
 			/*date:astate.statusBar.date,*/
 			//userList:astate.userList,
-			className:astate.status.className==null?'':astate.status.className,
-			userState:astate.userState,
+			className: astate.status.className==null?'':astate.status.className,
+			userState: astate.userState,
 			path: astate.status.path,
 			text: astate.status.text
 		};

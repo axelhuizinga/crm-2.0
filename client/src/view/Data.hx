@@ -56,7 +56,7 @@ class Data extends ReactComponentOf<DataProps,CompState>
 	public function new(?props:Dynamic)
 	{
 		state = {hasError:false,mounted:false};
-		//if(_trace) trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} userState:${props.user}');
+		if(_trace) trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} userState:${props.user}');
 		super(props);	
 		_strace = _trace = true;	
 		if(_trace) trace(props.match);

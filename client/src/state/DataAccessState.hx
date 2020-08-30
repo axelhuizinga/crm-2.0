@@ -24,6 +24,7 @@ DataAccessState =
 	?dealData:IntMap<Map<String,Dynamic>>,
 	?accountActData:IntMap<Map<String,Dynamic>>,
 	?accountData:IntMap<Map<String,Dynamic>>,
+	?accountDbData:DbData,
     ?source:DataSource,
     ?waiting:Bool
 }

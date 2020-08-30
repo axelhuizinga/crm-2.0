@@ -1,5 +1,6 @@
 package shared;
 
+import js.lib.RegExp;
 using DateTools;
 
 enum abstract DateFormatResult(String)
@@ -59,6 +60,15 @@ class DateFormat {
 			return {result:DayFormatRange};
 		}
 		return {date:Date.fromString('$year-$month-$day'),result:OK};
+	}
+
+	public static function parseTimestampz(tz:String):Date {
+		var b:Array<Int> = ~/[^0-9]/g.split(tz).map(function(t) return Std.parseInt(t));
+		b[1] = b[1]-1;
+		b[6] = 0;//Math.floor(b[6].substr(0,3);
+		trace(b.join('-'));
+		b.pop();
+		return Date.fromTime(Reflect.callMethod(DateTools, Reflect.field(DateTools, 'makeUtc'),b));
 	}
 	
 }

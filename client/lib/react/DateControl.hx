@@ -42,7 +42,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
-				dateFormat:'Y-m-d',
+				dateFormat:props.options.dateFormat,//'Y-m-d',
 				altInput:true,
 				altInputClass: "form-control input",
 				defaultValue:props.value,
@@ -84,7 +84,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 			var pd:Date = fpInstance.parseDate(val, fpInstance.config.altFormat);
 			//trace('$val === ${pd.toString()}');
 			var fD:String = fpInstance.formatDate(pd, fpInstance.config.altFormat);
-			//trace('$val==$fD');
+			trace('$val==$fD');
 			if(val==fD)
 			{
 				fpInstance.setDate(val,true,fpInstance.config.altFormat);

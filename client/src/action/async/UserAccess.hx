@@ -257,7 +257,7 @@ class UserAccess {
 				return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:'UserId fehlt!'})));
 			var bL:XMLHttpRequest = null;
 			bL = BinaryLoader.dbQuery(
-			'${App.config.server}/${App.config.api}', 
+			'${App.config.api}', 
 			{				
 				classPath:'auth.User',
 				action:'logout',

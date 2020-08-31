@@ -37,15 +37,17 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 	override public function componentDidMount():Void 
 	{
 		var fP:Dynamic = App.flatpickr;
-		var val = (props.value == null ?'':props.value);
+		
+		//var val = (props.value == null ?'':props.value);
+		var val = (props.value == null ?'':'05.05.1954');
 		trace('$val =>${props.value}<<');
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
-				dateFormat:props.options.dateFormat,//'Y-m-d',
-				altInput:true,
-				altInputClass: "form-control input",
-				defaultValue:props.value,
+				dateFormat:'d.m.Y',//props.options.dateFormat,//'Y-m-d',
+				altInput:false,
+				//altInputClass: "form-control input",
+				defaultValue:'05.05.1954',//props.value,
 				//locale:'de',
 				onChange:onChange,
 				onClose:onClose,
@@ -53,7 +55,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 				onReady:onReady
 		});
 		trace('fpInstance.input.value:${fpInstance.input.value}');
-		var altInput:InputElement = fpInstance.altInput;
+		/*var altInput:InputElement = fpInstance.altInput;
 		//trace(Reflect.fields(fP));
 		trace('${props.value}:${fpInstance.config.altFormat}');
 		altInput.value = (val == '' ? '': fpInstance.formatDate(new Date(Date.parse(props.value)), fpInstance.config.altFormat));
@@ -120,7 +122,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 				if(tip != null)
 					tip.clear();
 			}
-		});		
+		});		*/
 	}
 
 	function onOpen(e:Dynamic) {
@@ -142,7 +144,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 		//trace(val + '==' + fpInstance.formatDate(fpInstance.parseDate(fpInstance.altInput.value), fpInstance.config.altFormat));
 		if(tip != null)
 			tip.clear();
-		if(fpInstance.altInput.value==null)
+		/*if(fpInstance.altInput.value==null)
 		if(val==fpInstance.formatDate(fpInstance.parseDate(fpInstance.altInput.value), fpInstance.config.altFormat))
 		{
 
@@ -152,7 +154,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 			fpInstance.altInput.value = fpInstance.formatDate(fpInstance.input.value, fpInstance.config.altFormat);
 			tip = new Tooltip(fpInstance.altInput.parentElement, {data: 'DateFormat',classes:['danger','active']});
 
-		}		
+		}	*/	
 
 	}
 

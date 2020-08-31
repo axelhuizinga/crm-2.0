@@ -3,7 +3,7 @@ package react;
 import js.lib.intl.DateTimeFormat;
 import js.html.InputElement;
 import js.html.KeyboardEvent;
-//import js.lib.Date;
+import js.lib.Date;
 import react.ReactComponent.ReactFragment;
 import react.ReactRef;
 import react.ReactMacro.jsx;
@@ -58,7 +58,7 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 		//trace(untyped  fpRef.current.value);
 		if(!props.disabled)
 		{
-			altInput.value = props.value == null? '': fpInstance.formatDate(Date.fromString(props.value), fpInstance.config.altFormat);
+			altInput.value = props.value == null? '': fpInstance.formatDate(new Date(props.value), fpInstance.config.altFormat);
 			trace(fpInstance.input.value);			
 			altInput.addEventListener('keyup', function(ev:KeyboardEvent){
 				//trace(ev.key);
@@ -134,8 +134,8 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 		trace(b.join('-'));
 		b.pop();
 		trace(Reflect.field(DateTools, 'makeUtc'));
-		return Date.now();
-		return Date.fromTime(Reflect.callMethod(DateTools, Reflect.field(DateTools, 'makeUtc'),b));
+		return new Date('05.05.1954');
+		//return Date.fromTime(Reflect.callMethod(DateTools, Reflect.field(DateTools, 'makeUtc'),b));
 	}
 
 	function onChange(_) {

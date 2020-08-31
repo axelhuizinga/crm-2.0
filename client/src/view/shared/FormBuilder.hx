@@ -158,10 +158,10 @@ class FormBuilder {
 						//onChange: comp.handleChange,
 						options:{
 							dateFormat:field.displayFormat(),
-							defaultDate:Date.now(),
+							defaultDate:'05.05.1954',//Date.now(),
 							_inline:field.disabled
 						},
-						value:value
+						value:'05.05.1954'//value
 					};
 					jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">

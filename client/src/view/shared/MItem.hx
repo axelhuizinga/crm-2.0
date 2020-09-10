@@ -13,5 +13,6 @@ typedef MItem =
 	?img:String,
 	?info:String,
 	?label:String,
+	?closeAfter:Bool,	
 	?onlySm:Bool	
 }

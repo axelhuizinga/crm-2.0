@@ -67,7 +67,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
 		{label:'Schließen',action:'close'},		
-		{label:'Speichern + Schließen',action:'saveAndClose'},
+		{label:'Speichern + Schließen',action:'update', closeAfter:true},
 		{label:'Speichern',action:'update'},
 		{label:'Zurücksetzen',action:'reset',onlySm: true}
 	];

@@ -264,6 +264,11 @@ acorn-walk@^6.1.1:
   resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-6.2.0.tgz#123cb8f3b84c2171f1f7fb252615b1c78a6b1a8c"
   integrity sha512-7evsyfH1cLOCdAzZAd43Cic04yKydNx0cF+7tiA19p1XnLLPU4dpCQOqpjqwokFe//vS0QqfqqjCS2JkiIs0cA==
 
+acorn-walk@^7.1.1:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-7.2.0.tgz#0de889a601203909b0fbe07b8938dc21d2e967bc"
+  integrity sha512-OPdCF6GsMIP+Az+aWfAAOEt2/+iVDKE7oy6lJ098aoe59oAmK76qV6Gw60SbZ8jHuG2wH058GF4pLFbYamYrVA==
+
 acorn@^4.0.3:
   version "4.0.13"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-4.0.13.tgz#105495ae5361d697bd195c825192e1ad7f253787"
@@ -273,6 +278,16 @@ acorn@^6.0.7, acorn@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.2.0.tgz#67f0da2fc339d6cfb5d6fb244fd449f33cd8bbe3"
   integrity sha512-8oe72N3WPMjA+2zVG71Ia0nXZ8DpQH+QyyHO+p06jT8eg8FGG3FbcUIi8KziHlAfheJQZeoqbvq1mQSQHXKYLw==
+
+acorn@^6.4.1:
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.4.1.tgz#531e58ba3f51b9dacb9a6646ca4debf5b14ca474"
+  integrity sha512-ZVA9k326Nwrj3Cj9jlh3wGFutC2ZornPNARZwsNYqQYgN0EsV2d53w5RN/co65Ohn4sUAUtb1rSUAOD6XN9idA==
+
+acorn@^7.1.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.0.tgz#e1ad486e6c54501634c6c397c5c121daa383607c"
+  integrity sha512-+G7P8jJmCHr+S+cLfQxygbWhXy+8YTVGzAkpEbcLo2mLoL7tij/VG41QSHACSf5QgYRhMZYHuNc6drJaO0Da+w==
 
 aggregate-error@^3.0.0:
   version "3.0.1"
@@ -2463,6 +2478,13 @@ graphlib@^2.1.1:
   dependencies:
     lodash "^4.17.5"
 
+graphlib@^2.1.8:
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/graphlib/-/graphlib-2.1.8.tgz#5761d414737870084c92ec7b5dbcb0592c9d35da"
+  integrity sha512-jcLLfkpoVGmH7/InMC/1hIvOPSUh38oJtGhvrOFGzioE1DZ+0YW16RgmOJhHiuWTvGiJQ9Z1Ik43JvkRPRvE+A==
+  dependencies:
+    lodash "^4.17.15"
+
 gzip-size@^5.0.0:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/gzip-size/-/gzip-size-5.1.1.tgz#cb9bee692f87c0612b232840a873904e4c135274"
@@ -2582,28 +2604,41 @@ haxe-error-parser@0.1.2:
   dependencies:
     chalk "^1.1.3"
 
-haxe-loader@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/haxe-loader/-/haxe-loader-0.9.0.tgz#083314ca390daa07605ce8becf278efe5f7c4c38"
-  integrity sha512-PRe/o+WxGZLY77bkCmcTLNcWI/wOrT7q+vPzp20Xp2XfqxNU7yXo4Vp2zL/wyAztn+54tCnL1qBm94w4yq5PPQ==
+haxe-loader@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/haxe-loader/-/haxe-loader-0.10.0.tgz#102eb1fc7c908885f3e09816fbe5fa535090484a"
+  integrity sha512-sTpwHb9WQtzIM6/BnZG76XLM9InnCy8hsiiCAHW8hbIrVuumLQhd8R0wzuL16IPDK1Dmn3pN3m1leIorKqC7AA==
   dependencies:
     chalk "^1.1.3"
     hash-sum "^1.0.2"
     haxe-error-parser "0.1.2"
-    haxe-modular "^0.10.13"
+    haxe-modular "^0.11.0"
     loader-utils "^1.1.0"
     null-loader "^0.1.1"
     tmp "0.0.33"
     yargs-parser "^10.0.0"
 
-haxe-modular@^0.10.13:
-  version "0.10.15"
-  resolved "https://registry.yarnpkg.com/haxe-modular/-/haxe-modular-0.10.15.tgz#4dcc60089c4350e92dce05c701254dc26271dd8a"
-  integrity sha512-R7x7G3qbWKlVsYVuj4847ykQpLSKrdKlHZrX/or1T/iqwT+pHBqUDH5Qf8f4/9/hYz4qf77FM2UNDiTtF7SRhA==
+haxe-modular@^0.11.0:
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/haxe-modular/-/haxe-modular-0.11.3.tgz#209852f9386fba32d72976eb0505d28163551acb"
+  integrity sha512-XESL2Cg/ZVw6lkVdEMsnezzyrLpI+1c1QEQcxc30axGpiuAAAz+fhjzD+wVQe2/BDU/6UsroEB/THZZxrUvKVw==
   dependencies:
     "@elsassph/fast-source-map" "^0.3.0"
     acorn "^4.0.3"
     graphlib "^2.1.1"
+    react-deep-force-update "^2.0.1"
+    react-proxy "^2.0.8"
+    source-map "^0.5.6"
+
+haxe-modular@^0.12.1:
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/haxe-modular/-/haxe-modular-0.12.1.tgz#07a3003489c2bcad6d349746b5caa60647582b16"
+  integrity sha512-zIEBPcGQ1NW4fPFU22JxMdyMvkTHZcjUhv6VOCphf9E829hBxE6w3Vc+7jLzcqBAzHLxfNHTygniqu8+XLAZ2Q==
+  dependencies:
+    "@elsassph/fast-source-map" "^0.3.0"
+    acorn "^7.1.0"
+    acorn-walk "^7.1.1"
+    graphlib "^2.1.8"
     react-deep-force-update "^2.0.1"
     react-proxy "^2.0.8"
     source-map "^0.5.6"
@@ -3281,6 +3316,11 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
   integrity sha512-s5kLOcnH0XqDO+FvuaLX8DDjZ18CGFk7VygH40QoKPUQhW4e2rvM0rwUq0t8IQDOwYSeLK01U90OjzBTme2QqA==
 
+kind-of@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
+  integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
+
 lcid@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/lcid/-/lcid-1.0.0.tgz#308accafa0bc483a3867b4b6f2b9506251d1b835"
@@ -3359,6 +3399,11 @@ lodash@^4.17.10, lodash@^4.17.3, lodash@^4.17.5, lodash@^4.6.1:
   version "4.17.14"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
   integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
+
+lodash@^4.17.19:
+  version "4.17.20"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
+  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
 loglevel@^1.4.1:
   version "1.6.3"
@@ -6301,6 +6346,14 @@ yargs-parser@^11.1.1:
   version "11.1.1"
   resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-11.1.1.tgz#879a0865973bca9f6bab5cbdf3b1c67ec7d3bcf4"
   integrity sha512-C6kB/WJDiaxONLJQnF8ccx9SEeoTTLek8RVbaOIsrAUS8VrBEXfmeSnCZxygc+XC2sNMBIwOOnfcxiynjHsVSQ==
+  dependencies:
+    camelcase "^5.0.0"
+    decamelize "^1.2.0"
+
+yargs-parser@^13.1.2:
+  version "13.1.2"
+  resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-13.1.2.tgz#130f09702ebaeef2650d54ce6e3e5706f7a4fb38"
+  integrity sha512-3lbsNRf/j+A4QuSZfDRA7HRSfWrzO0YjqTJd5kjAq37Zep1CEgaYmrH9Q3GwPiB9cHyd1Y1UwggGhJGoxipbzg==
   dependencies:
     camelcase "^5.0.0"
     decamelize "^1.2.0"

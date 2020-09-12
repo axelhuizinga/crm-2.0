@@ -21,7 +21,7 @@ class ContactsModel
 				],
 			view:[
 				'title'=>{label:'Anrede',type:Select,options:[
-						''=>'Unbekannt',
+						''=>'?',
 						'Herr'=>'Herr',
 						'Frau'=>'Frau',
 						'Familie'=>'Familie',
@@ -47,7 +47,7 @@ class ContactsModel
 					displayFormat: function() return "d.m.Y H:i:S"}, 
 				'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat:  function() return "d.m.Y"},
 				'gender'=>{label:'Geschlecht',type:Select,options:[
-						''=>'Unbekannt',
+						''=>'?',
 						'M'=>'Männlich',
 						'F'=>'Weiblich'
 					]

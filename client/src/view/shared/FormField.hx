@@ -15,7 +15,7 @@ typedef FormField =
 	?dataTable:String,
 	?dataField:String,
 	?preset:Any,
-	?displayFormat:Function,
+	?displayFormat:String,
 	?type:FormInputElement,
 	?primary:Bool,
 	?disabled:Bool,

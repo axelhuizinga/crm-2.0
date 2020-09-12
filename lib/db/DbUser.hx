@@ -1,6 +1,6 @@
 package db;
 import hxbit.Serializable;
-//propertyNames = 'id,contact,last_login,password,user_name,active,edited_by,editing,settings,external,user_group,change_pass_required,online,last_request_time,request,mandator,last_locktime,phash'.split(',');
+
 class DbUser implements hxbit.Serializable{
 	
 	@:s public var active:Bool;

@@ -135,7 +135,7 @@ class FormBuilder {
 						disabled:field.disabled,
 						onChange: comp.handleChange,						
 						options:{
-							dateFormat:field.displayFormat(), 
+							dateFormat:field.displayFormat, 
 							defaultDate: value,
 							time_24hr:true,
 							_inline:field.disabled

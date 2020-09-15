@@ -104,8 +104,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		
 		if(props.dataStore.contactData != null)
 			trace(props.dataStore.contactData.keys().next());
-		//Out.dumpStac02k(CallStack.callStack());
-		
+				
 		state =  App.initEState({
 			//dataTable:[],
 			actualState:null,
@@ -151,6 +150,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				classPath:'data.Contacts',
 				action:'get',
 				filter:{id:id,mandator:1},
+				resolveMessage:{
+					success:'Kontakt ${id} wurde geladen',
+					failure:'Kontakt ${id} konnte nicht geladen werden'
+				},
 				table:'contacts',
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP
@@ -168,7 +171,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				setState({loading:false, actualState:new Contact(data)});
 				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
 				setState({initialData:copy(state.actualState)});
-				trace(props.location.pathname + ':' + untyped state.actualState.use_email);
+				trace(props.location.pathname + ':' + untyped state.actualState.date_of_birth);
 				props.history.replace(props.location.pathname.replace('open','update'));
 			}
 		});
@@ -306,6 +309,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			action:'update',
 			data:data2save,
 			filter:{id:state.actualState.id,mandator:1},
+			resolveMessage:{
+				success:'Kontakt ${state.actualState.id} wurde aktualisiert',
+				failure:'Kontakt ${state.actualState.id} konnte nicht aktualisiert werden'
+			},
 			table:'contacts',
 			dbUser:props.userState.dbUser,
 			devIP:App.devIP

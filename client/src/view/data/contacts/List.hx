@@ -127,6 +127,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				table:'contacts',
+				resolveMessage:{					
+					success:'Kontaktliste wurde geladen',
+					failure:'Kontaktliste konnte nicht geladen werden'
+				},
 				dbUser:props.userState.dbUser,
 				devIP: App.devIP
 			}

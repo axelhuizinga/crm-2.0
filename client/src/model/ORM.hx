@@ -13,6 +13,14 @@ using Lambda;
 class ORM {
 	@dataType("bigint")
 	@:isVar public var id(default,null):Int;
+
+	function set_id(id:Int):Int{
+		if(initialized('id'))
+			modified('id');
+		this.id = id ;
+		return id;
+	}	
+	
 	public var fieldsInitalized(default,null):Array<String>;
 	public var fieldsModified(default,null):Array<String>;
 	

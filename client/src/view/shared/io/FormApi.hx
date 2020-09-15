@@ -118,8 +118,9 @@ class FormApi
 		for (k in data.keys())
 		{
 			if(view.exists(k))
-			{
-				vState[k] = (view[k].displayFormat == null?data[k]:view[k].displayFormat(data[k]));
+			{				
+				//vState[k] = (view[k].displayFormat == null?data[k]:view[k].displayFormat(data[k]));
+				vState[k] = data[k];
 			}
 		}
 		trace(vState);
@@ -382,7 +383,8 @@ class FormApi
 					className:fF.className,
 					name:name,
 					//?label:String,
-					value:fF.displayFormat == null?dR[name]: fF.displayFormat(dR[name]),
+					value: dR[name],
+					//value:fF.displayFormat == null?dR[name]: fF.displayFormat(dR[name]),
 					//?dataBase:String, 
 					//?dataTable:String,
 					//?dataField:String,c

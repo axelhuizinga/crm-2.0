@@ -26,7 +26,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 
 	public function new(props:DateTimeProps) 
 	{
-		//trace( props.value );
+		trace( props.value );
 		super(props);
 		//this.props = props;
 		//trace(Reflect.fields(props));
@@ -39,16 +39,16 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 		var fP:Dynamic = App.flatpickr;
 		
 		//var val = (props.value == null ?'':props.value);
-		var val = (props.value == null ?'':'05.05.1954');
+		var val = (props.value == null ?'':'00.00.0000');
 		trace('$val =>${props.value}<<');
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
-				dateFormat:'d.m.Y',//props.options.dateFormat,//'Y-m-d',
-				altInput:false,
+				dateFormat:'Y-m-d',//props.options.dateFormat,//'Y-m-d',
+				altInput:true,
 				//altInputClass: "form-control input",
-				defaultValue:'05.05.1954',//props.value,
-				//locale:'de',
+				defaultValue:props.value,
+				locale:'de',
 				onChange:onChange,
 				onClose:onClose,
 				onOpen:onOpen,

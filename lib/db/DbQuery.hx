@@ -9,7 +9,10 @@ import hxbit.Serializable;
  * ...
  * @author axel@cunity.me
  */
-
+typedef DbQueryResolveMessage = {
+	?success:String,
+	?failure:String
+}
 typedef DbQueryParam = {
 	?action:String,	
 	?classPath:String,
@@ -23,6 +26,7 @@ typedef DbQueryParam = {
 	?limit:Int,
 	?maxImport:Int,
 //	?pages:Int,
+	?resolveMessage:DbQueryResolveMessage,
 	?offset:Int,
 	?table:String,
 	?dbUser:DbUser

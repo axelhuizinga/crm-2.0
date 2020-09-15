@@ -43,9 +43,9 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
-				dateFormat:props.options.dateFormat,//'Y-m-d H:i:S',
+				dateFormat:'Y-m-d H:i:S',
 				//dateFormat:props.options.dateFormat,
-				altInput:props.options.allowInput,
+				altInput:true,//props.options.allowInput,
 				altInputClass: "form-control input",
 				defaultValue:props.value, 
 				//onChange:onChange,
@@ -180,7 +180,7 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 			trace(null);
 			return null;
 		}
-		trace('${props.value}');
+		trace('${props.name}:${props.value}');
 		return  jsx('<input className="h100"  name=${props.name} id=${props.name} ref=${fpRef} disabled=${props.disabled}
 			defaultValue=${props.value}/>');
 	}	

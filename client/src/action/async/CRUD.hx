@@ -66,6 +66,11 @@ class CRUD
 							if(!data.dataErrors.keys().hasNext())
 							{
 								trace(data.dataRows[0]);
+								dispatch(Status(Update( 
+									{	cssClass:'',
+										text:(param.resolveMessage==null?'':param.resolveMessage.success)
+									}
+								)));								
 								resolve(data);
 							}
 							else 
@@ -90,45 +95,45 @@ class CRUD
 			});
 		});
 	}
-	//public static function update(props:DBAccessProps) 
-	public static function update(props:DbQueryParam) 
-	{	trace(props.action);
+	
+	public static function update(param:DbQueryParam) 
+	{	trace(param.action);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
-			trace(props);
-			//if(props.dataSource != null)
-				//trace(props.dataSource.get('contacts').get('data'));
+			trace(param);
+			//if(param.dataSource != null)
+				//trace(param.dataSource.get('contacts').get('data'));
 			
 			var dbData:DbData = DbDataTools.create();
 			//trace(getState());
 			return new Promise(function(resolve, reject){
-				if (!props.dbUser.online)
+				if (!param.dbUser.online)
 				{
 					dispatch(User(LoginError(
 					{
-						dbUser:props.dbUser,
+						dbUser:param.dbUser,
 						lastError:'Du musst dich neu anmelden!'
 					})));
 					trace('LoginError');
 					resolve(null);
 				}	
 				var params:Dynamic = {			
-					dbUser:props.dbUser,
-					filter:props.filter,	
-					table:props.table,
-					//id:props.userState.dbUser.id,
-					//jwt:props.userState.dbUser.jwt,
-					classPath:props.classPath,
-					action: props.action,
+					dbUser:param.dbUser,
+					filter:param.filter,	
+					table:param.table,
+					//id:param.userState.dbUser.id,
+					//jwt:param.userState.dbUser.jwt,
+					classPath:param.classPath,
+					action: param.action,
 					devIP:App.devIP
 				};
-				//if(props.dataSource != null)
-					//params.dataSource = props.dataSource;
-				if(props.table != null)
-					params.table = props.table;
+				//if(param.dataSource != null)
+					//params.dataSource = param.dataSource;
+				if(param.table != null)
+					params.table = param.table;
 				trace(params);
 				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
 					'${App.config.api}', 
-					props,
+					param,
 					function(data:DbData)
 					{				
 						trace(data);
@@ -146,16 +151,17 @@ class CRUD
 
 							dispatch(Status(Update( 
 								{	cssClass:'',
-									text:switch ('${props.classPath}.${props.action}')
+									text:(param.resolveMessage==null?'':param.resolveMessage.success)
+									/*switch ('${param.classPath}.${param.action}')
 									{
 										case "data.Contacts.edit":
-											'Kontakt ${props.filter.id} geladen';
+											'Kontakt ${param.filter.id} geladen';
 										case "data.Contacts.update":
-											'Kontakt ${props.filter.id} wurde gespeichert';
+											'Kontakt ${param.filter.id} wurde gespeichert';
 										default:
 											"Unbekannter Vorgang";
 
-									}
+									}*/
 								}
 							)));
 							resolve(data);

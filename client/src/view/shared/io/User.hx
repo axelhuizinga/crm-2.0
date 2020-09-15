@@ -92,7 +92,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 					'first_name'=>{label:'Vorname'},
 					'last_name'=>{label:'Name'},
 					'email' => {label:'Email'},
-					'last_login'=>{label:'Letze Anmeldung',disabled:true, displayFormat:FormApi.localDate}
+					'last_login'=>{label:'Letze Anmeldung',disabled:true, displayFormat:FormApi.localDate()}
 				]
 			},
 			'save' => {

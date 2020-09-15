@@ -93,8 +93,8 @@ class FormBuilder {
 		return [for(name => field in fields)
 		{
 			var value:Dynamic = Reflect.field(initialData,name);
-			if(name=='id')trace (field.type +' $name:' + value);
-			if(name=='last_name')trace (field.type +' $name:' + value);
+			if(name=='date_of_birth')trace (field.type +' $name:' + value);
+			if(name=='date_of_birth')trace (field.type +' $name:' + value);
 			switch (field.type)
 			{
 				case FormInputElement.Hidden:
@@ -157,11 +157,11 @@ class FormBuilder {
 						name:name,
 						//onChange: comp.handleChange,
 						options:{
-							dateFormat:field.displayFormat(),
-							defaultDate:'05.05.1954',//Date.now(),
+							dateFormat:field.displayFormat,
+							defaultDate:'00.00.0000',//Date.now(),
 							_inline:field.disabled
 						},
-						value:'05.05.1954'//value
+						value:value
 					};
 					jsx('
 					<div key=${ki++} className="g_row_2" role="rowgroup">

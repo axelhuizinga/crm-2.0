@@ -3,7 +3,7 @@ client/.haxelib
 client/.vscode
 client/*.sh
 client/webpack.local.js
-httpdocs/lib
+httpdocs/lib/
 node_modules
 .temp
 cmessage.txt

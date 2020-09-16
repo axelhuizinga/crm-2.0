@@ -36,8 +36,6 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 	override public function componentDidMount():Void 
 	{
 		var fP:Dynamic = App.flatpickr;
-		//var val = (props.value == null ? null:new Date(Date.parse(Std.string(props.value).split('+')[0])));
-		//var val = (props.value == null ? null:props.value);
 		var val:Date = (props.value == null ? null:parseTimestampz(props.value));
 		trace('${props.value} $val ${props.options.dateFormat}');
 		fpInstance = fP(fpRef.current,{
@@ -113,9 +111,9 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 				//trace(fpInstance.input.value);
 				var val:String = altInput.value;
 				var pd:Date = fpInstance.parseDate(val, fpInstance.config.altFormat);
-				//trace('$val === ${pd.toString()}');
+				trace('$val === ${pd.toString()}');
 				var fD:String = fpInstance.formatDate(pd, fpInstance.config.altFormat);
-				//trace('$val==$fD');
+				trace('$val==$fD');
 				if(val==fD)
 				{
 					fpInstance.setDate(val,true,fpInstance.config.altFormat);

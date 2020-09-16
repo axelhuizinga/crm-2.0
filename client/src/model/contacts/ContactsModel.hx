@@ -36,7 +36,7 @@ class ContactsModel
 				'mobile'=>{label:'Mobil'},
 				'fax'=>{label:'Fax'},
 				'company_name'=>{label:'Firmenname'},	
-				'address'=>{label:'Strasse'},
+				'address'=>{label:'Straße'},
 				'address_2'=>{label:'Hausnummer'},
 				'postal_code'=>{label:'PLZ'},
 				'city'=>{label:'Ort'},

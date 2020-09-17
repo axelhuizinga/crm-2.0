@@ -1,11 +1,16 @@
 package view.data.deals;
 
+import js.Browser;
+import js.html.NodeList;
+import js.html.TableRowElement;
+import react.router.RouterMatch;
 import db.DbQuery.DbQueryParam;
 import action.async.DBAccessProps;
 import view.shared.io.BaseForm;
 import redux.Redux.Dispatch;
 import js.lib.Promise;
 import action.async.CRUD;
+import action.DataAction;
 import model.deals.DealsModel;
 import state.AppState;
 import haxe.Constraints.Function;
@@ -126,6 +131,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				table:'deals',
+				resolveMessage:{					
+					success:'Abschlußliste wurde geladen',
+					failure:'Abschlußliste konnte nicht geladen werden'
+				},				
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP
 			}
@@ -141,7 +150,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.selectedRows.length);				
 	}
 
-	function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
+	/*function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
 	{
 		var iS:Dynamic = {};
 		for(dR in dt)
@@ -161,6 +170,25 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		}
 		trace(iS);
 		return iS;
+	}*/
+
+	public function selectionClear() {
+		var match:RouterMatch = ReactUtil.copy(props.match);
+		match.params.action = 'get';
+		trace(state.dataTable.length);
+		props.select(0, null,match, UnselectAll);	
+		//trace(formRef !=null);
+
+		var trs:NodeList = Browser.document.querySelectorAll('.tabComponentForm tr');				
+		trace(trs.length);
+		for(i in 0...trs.length){
+			var tre:TableRowElement = cast(trs.item(i), TableRowElement);
+			if(tre.classList.contains('is-selected')){
+				trace('unselect:${tre.dataset.id}');
+				tre.classList.remove('is-selected');
+			}
+		};
+		Browser.document.querySelector('[class="grid-container-inner"]').scrollTop = 0;
 	}
 		
 	override public function componentDidMount():Void 
@@ -168,7 +196,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		dataAccess = [
 			'get' =>{
 				source:[
-					"contacts" => []
+					"deals" => []
 				],
 				view:[]
 			},
@@ -177,6 +205,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		if(props.userState.dbUser != null)
 		trace('yeah: ${props.userState.dbUser.first_name}');
 		//dbData = FormApi.init(this, props);
+		state.formApi.doAction();
+		/*
 		if(props.match.params.action != null)
 		{
 			var fun:Function = Reflect.field(this,props.match.params.action);
@@ -186,7 +216,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			}
 		}
 		else 
-			setState({loading: false});
+			setState({loading: false});*/
 	}
 	
 	function renderResults():ReactFragment
@@ -200,25 +230,19 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{
 			case 'get':
+			jsx('
+				<form className="tabComponentForm" >
+					<$Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
+					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${baseForm.renderPager}
+					className="is-striped is-hoverable" fullWidth=${true}/>
+				</form>
+			');			
+			/*case 'get':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable} 
 					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${baseForm.renderPager} parentComponent=${this}
 					className="is-striped is-hoverable" fullWidth=${true}/>
-				');
-			case 'update':
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["clientList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');			
-			case 'insert':
-				trace(dataDisplay["fieldsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["fieldsList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>				
-				');	
+				');*/
 			case 'delete':
 				null;
 			default:
@@ -232,18 +256,15 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
-		<>
-			<form className="tabComponentForm"  >
 				${renderResults()}
-			</form>
-		</>'));		
+		'));		
 	}
 	
 	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;
 		trace(sideMenu.section);
-		for(mI in sideMenu.menuBlocks['Contact'].items)
+		for(mI in sideMenu.menuBlocks['List'].items)
 		{
 			switch(mI.action)
 			{

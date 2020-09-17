@@ -196,7 +196,9 @@ class Tr extends ReactComponentOfProps<TrProps>
 		if(props.parentComponent != null)
 		{
 			if(!selected)
-			{				
+			{								
+				trace(props.data['id']);
+				trace(props.parentComponent.props.select);
 				props.parentComponent.props.select(props.data['id'], 
 					[Std.int(props.data['id'])=>props.data], props.parentComponent.props.match);
 			}//

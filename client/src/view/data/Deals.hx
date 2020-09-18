@@ -1,5 +1,9 @@
 package view.data;
 
+import haxe.ds.IntMap;
+import action.async.LiveDataAccess;
+import action.DataAction;
+import redux.Redux.Dispatch;
 import view.data.deals.Edit;
 import view.data.deals.List;
 
@@ -37,12 +41,15 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 
+ @:connect
 class Deals extends ReactComponentOf<DataFormProps,FormState>
 {
 	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
+	static var _trace:Bool;
 	public function new(?props:DataFormProps) 
 	{
-		super(props);	
+		super(props);
+		_trace = true;	
 		trace(Reflect.fields(props));
 		trace(props.match.params.section);
 		state = {
@@ -88,6 +95,27 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			};
 		};
 	}	*/
+	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
+		{
+			if(_trace) trace('ok');
+			return {
+				/*globalState: function (key:String,?data:Dynamic)
+				{
+					if(_trace) trace('$key => $data');
+					dispatch(GlobalState(key,data));
+				},*/
+				storeData:function(id:String, action:DataAction)
+				{
+					dispatch(LiveDataAccess.storeData(id, action));
+				},
+				select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
+				{
+					if(_trace) trace('select:$id selectType:${selectType}');
+					//dispatch(DataAction.CreateSelect(id,data,match));
+					dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
+				}
+			};
+		}
 	
 	override function componentDidCatch(error, info) {
 		// Display fallback UI

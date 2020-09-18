@@ -1,4 +1,6 @@
 {
+
+	"license":"MIT",
   "dependencies": {
     "yargs-parser": "^13.1.2"
   }

@@ -91,7 +91,7 @@ class LiveDataAccess
 				case 'Deals':
 					sData = aState.dataStore.dealData;
 					sData = selectType(props.id, props.data, sData, props.selectType);
-					aState.locationStore.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
+					aState.locationStore.history.push('${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}');
 					return dispatch(DataAction.SelectDeals(props.data));
 				default:
 					return null;

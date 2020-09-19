@@ -176,7 +176,7 @@ class FormApi
 
 	public function callMethod(method:String, ?e:Event):Bool
 	{
-		trace(Reflect.fields(e));
+		///trace(Reflect.fields(e));
 		var eTarget:Element = cast(e.target, Element);
 		var targetSection = eTarget.dataset.section;
 		trace('>>$targetSection<< ${comp.props.match.params.section}');
@@ -259,30 +259,6 @@ class FormApi
 				r.classList.add('is-selected');
 		}
 	}
-
-	/*public function updateMenu(state:FormState,?viewClassPath:String):MenuProps
-	{
-		var sideMenu = state.sideMenu;
-		if(viewClassPath==null)
-			return sideMenu;
-		trace(sideMenu.menuBlocks);
-		/*sideMenu.menuBlocks['bookmarks'].isActive = true;
-		sideMenu.menuBlocks['bookmarks'].label='Lesezeichen';
-		for(mI in sideMenu.menuBlocks['bookmarks'].items)
-		{
-			switch(mI.action)
-			{		
-				case 'update':
-					mI.disabled = state.selectedRows.length==0;
-				case 'save':
-					mI.disabled = state.clean;
-				default:
-
-			}			
-		}		
-		//trace(sideMenu.menuBlocks['user'].items);	
-		return sideMenu;
-	}	*/
 	
 	public static function mHandlers(e:InputEvent)
 	{

@@ -34,7 +34,7 @@ class Deal extends ORM
 		propertyNames = 'id,contact,creation_date,account,target_account,start_day,start_date,cycle,amount,product,agent,project,status,pay_method,end_date,end_reason,repeat_date,edited_by,mandator,old_active,cycle_start_date,last_locktime'.split(',');
 	}	
 		
-	@dataType("bigint")
+	/*@dataType("bigint")
 	@:isVar public var id(default,set):Int;
 
 	function set_id(id:Int):Int{
@@ -42,7 +42,7 @@ class Deal extends ORM
 			modified('id');
 		this.id = id ;
 		return id;
-	}	
+	}	*/
 		
 	@dataType("bigint")
 	@:isVar public var contact(default,set):Int;

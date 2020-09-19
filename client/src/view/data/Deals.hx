@@ -41,7 +41,7 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 
- @:connect
+@:connect
 class Deals extends ReactComponentOf<DataFormProps,FormState>
 {
 	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
@@ -62,13 +62,13 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				[
 					{
 						dataClassPath:'data.deals.List',
-						label:'Abschüsse',
+						label:'Abschlüsse',
 						section: 'List',
 						items: List.menuItems
 					},
 					{
 						dataClassPath:'data.deals.Edit',
-						label:'Abschüsse',
+						label:'Abschlüsse',
 						section: 'Edit',
 						items: Edit.menuItems
 					}
@@ -81,20 +81,17 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		trace(Reflect.fields(props));		
 	}
 	
-	/*static function mapStateToProps() {
-
-		return function(aState:state.AppState) 
-		{
-			var uState = aState.user;
-			//trace(uState);		
-			return {
-				//appConfig:aState.config,
-				id:uState.id,
-				jwt:uState.jwt,
-				first_name:uState.first_name
-			};
+	static function mapStateToProps(aState:AppState) {
+		var bState =  {
+			dataStore:aState.dataStore,
+			userState:aState.userState,
+			//idLoaded:aState.dataStore.contactData.keys().next()
 		};
-	}	*/
+		//if(_strace) trace(bState);
+		if(_trace) trace(bState.dataStore.dealData);
+		return bState;
+	}
+
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
 		{
 			if(_trace) trace('ok');
@@ -111,6 +108,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
 				{
 					if(_trace) trace('select:$id selectType:${selectType}');
+					trace(data);
 					//dispatch(DataAction.CreateSelect(id,data,match));
 					dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
 				}
@@ -147,11 +145,11 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case "Edit":
 				jsx('
-					<$Edit ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$Edit ${...props} fullWidth={true}  formApi=${state.formApi} sideMenu=${state.sideMenu}/>
 				');					
 			case "List":
 				jsx('
-					<$List ${...props}  limit=${100} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$List ${...props}  limit=${100}  formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
 				');						
 			default:
 				null;					

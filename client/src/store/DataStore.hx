@@ -76,7 +76,7 @@ class DataStore
 			case SelectDeals(sData):
 				trace(sData.keys().keysList());
 				copy(state,{
-					contactData:sData
+					dealData:sData
 				});
 			case Update(uData):
 				trace(uData);

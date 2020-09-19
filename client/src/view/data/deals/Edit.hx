@@ -1,10 +1,13 @@
 package view.data.deals;
 
+import model.Deal;
 import state.AppState;
 import haxe.Constraints.Function;
+import js.lib.Promise;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
+import react.ReactUtil.copy;
 import shared.DbData;
 import shared.DBMetaData;
 import view.shared.FormField;
@@ -18,6 +21,9 @@ import view.shared.io.DataAccess;
 import loader.BinaryLoader;
 import view.table.Table;
 
+using  shared.Utils;
+using Lambda;
+using StringTools;
 
 /*
  * GNU Affero General Public License
@@ -119,17 +125,21 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		
 	override public function componentDidMount():Void 
 	{	
-		dataAccess = [
+		trace('mounted:' + true);
+		//mounted = true;
+		loadDealData(Std.parseInt(props.match.params.id));
+		/*dataAccess = [
 			'get' =>{
 				source:[
-					"contacts" => []
+					"deals" => []
 				],
 				view:[]
 			},
 		];			
 		//
-		if(props.userState.dbUser != null)
-		trace('yeah: ${props.userState.dbUser.first_name}');
+		trace(props);
+		//if(props.userState.dbUser != null)
+		//trace('yeah: ${props.userState.dbUser.first_name}');
 		//dbData = FormApi.init(this, props);
 		if(props.match.params.action != null)
 		{
@@ -140,14 +150,51 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			}
 		}
 		else 
-			setState({loading: false});
+			setState({loading: false});*/
 	}
+
+	function loadDealData(id:Int):Void
+		{
+			trace('loading:$id');
+			if(id == null)
+				return;
+			var p:Promise<DbData> = props.load(
+				{
+					classPath:'data.Deals',
+					action:'get',
+					filter:{id:id,mandator:1},
+					resolveMessage:{
+						success:'Abschluß ${id} wurde geladen',
+						failure:'Abschluß ${id} konnte nicht geladen werden'
+					},
+					table:'contacts',
+					dbUser:props.userState.dbUser,
+					devIP:App.devIP
+				}
+			);
+			p.then(function(data:DbData){
+				trace(data.dataRows.length); 
+				if(data.dataRows.length==1)
+				{
+					var data = data.dataRows[0];
+					trace(data);	
+					//if( mounted)
+					var cObj:Deal = new Deal(data);
+					trace(cObj.id);
+					setState({loading:false, actualState:new Deal(data)});
+					trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
+					setState({initialData: copy(state.actualState)});
+					trace(props.location.pathname + ':' + untyped state.actualState.amount);
+					props.history.replace(props.location.pathname.replace('open','update'));
+				}
+			});
+		}
 	
 	function renderResults():ReactFragment
 	{
 		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
-		trace(state.loading);
+		trace(state.loading + ':' + props.match.params.action);
 		if(state.loading)
 			return state.formApi.renderWait();
 		trace('###########loading:' + state.loading);
@@ -162,7 +209,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			case 'update':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["clientList"]} 
+					${...props} dataState = ${dataDisplay["dealsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');			
 			case 'insert':

@@ -1,7 +1,7 @@
 {
-
-	"license":"MIT",
+  "license": "MIT",
   "dependencies": {
+    "node-forge": "^0.10.0",
     "yargs-parser": "^13.1.2"
   }
 }

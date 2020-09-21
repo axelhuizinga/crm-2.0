@@ -167,7 +167,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						success:'Abschluß ${id} wurde geladen',
 						failure:'Abschluß ${id} konnte nicht geladen werden'
 					},
-					table:'contacts',
+					table:'deals',
 					dbUser:props.userState.dbUser,
 					devIP:App.devIP
 				}

@@ -175,7 +175,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var match:RouterMatch = ReactUtil.copy(props.match);
 		match.params.action = 'get';
 		trace(state.dataTable.length);
-		props.select(0, null,match, UnselectAll);	
+		props.select(1, null,match, UnselectAll);	
 		//trace(formRef !=null);
 
 		var trs:NodeList = Browser.document.querySelectorAll('.tabComponentForm tr');				

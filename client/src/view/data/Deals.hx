@@ -31,11 +31,8 @@ import state.FormState;
 import view.shared.OneOf;
 import view.shared.Menu;
 import view.shared.MenuProps;
-//import view.shared.io.Deals;
-//import view.shared.io.Contact;
-//import view.shared.io.Accounts;
 import view.table.Table;
-
+using  shared.Utils;
 /**
  * ...
  * @author axel@cunity.me
@@ -52,6 +49,19 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		_trace = true;	
 		trace(Reflect.fields(props));
 		trace(props.match.params.section);
+		if(props.match.params.section==null)
+			{
+				//SET DEFAULT SECTION
+				if(_trace) trace('reme');
+				var baseUrl:String = props.match.path.split(':section')[0];
+				if(props.dataStore.dealData.iterator().hasNext())
+				{
+					if(_trace) trace(props.dataStore.dealData.keys().keysList());
+				}
+				
+				props.history.push('${baseUrl}List/');
+				//props.history.push('${baseUrl}List/get${props.dataStore.contactData.iterator().hasNext()?'/'+props.dataStore.contactData.keys().keysList():''}');
+			}				
 		state = {
 			clean:true,
 			//formApi: new FormApi(this),
@@ -126,14 +136,14 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//
 		//setState({mounted:true});
-		if (props.match.params.section == null)
+		/*if (props.match.params.section == null)
 		{
 			var basePath:String = props.match.url;
 			props.history.push('$basePath/List/get', props.location);
 			trace(props.history.location.pathname);
 			trace('redirecting to $basePath/List/get');
 		}		
-		trace('${}');
+		trace('${}');*/
 	
 	}
 	

@@ -104,8 +104,8 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	static function mapStateToProps(astate:AppState) 
 	{
 		//trace(astate.userState.dbUser.first_name);
-		trace(Reflect.fields(astate));
-		trace(astate.status);
+		//trace(Reflect.fields(astate));
+		//trace(astate.status);
 		//setState({status:astate.statusBar.status})
 		return {
 			/*date:astate.statusBar.date,*/
@@ -122,7 +122,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	{
 		var display_name:String = 'Gast';
 		var userIcon:String = 'fa fa-user-o';
-		trace(props.path);
+		//trace(props.path);
 		if (props.userState.dbUser != null)
 		{
 		 display_name = props.userState.dbUser.first_name != null &&  props.userState.dbUser.first_name !='' ?
@@ -143,11 +143,11 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		');
 	}
 
-
+	/*
 	function DateTimeClock(p:Dynamic):ReactFragment
 	{
-		trace(p);
+		//trace(p);
 		return null;
 	}
-	
+	*/
 }

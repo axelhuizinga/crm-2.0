@@ -106,11 +106,6 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		{
 			if(_trace) trace('ok');
 			return {
-				/*globalState: function (key:String,?data:Dynamic)
-				{
-					if(_trace) trace('$key => $data');
-					dispatch(GlobalState(key,data));
-				},*/
 				storeData:function(id:String, action:DataAction)
 				{
 					dispatch(LiveDataAccess.storeData(id, action));
@@ -150,16 +145,17 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	override public function render() 
 	{
 		trace(props.match.params.section);
+		if(_trace) trace(props.match.params.action);	
 		//trace(state.sideMenu); 
 		return switch(props.match.params.section)
 		{
 			case "Edit":
 				jsx('
-					<$Edit ${...props} fullWidth={true}  formApi=${state.formApi} sideMenu=${state.sideMenu}/>
+					<$Edit ${...props} fullWidth={true}  parentComponent=${this} formApi=${state.formApi} sideMenu=${state.sideMenu}/>
 				');					
 			case "List":
 				jsx('
-					<$List ${...props}  limit=${100}  formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$List ${...props}  limit=${100}   parentComponent=${this} formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
 				');						
 			default:
 				null;					

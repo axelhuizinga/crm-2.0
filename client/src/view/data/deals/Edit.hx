@@ -1,5 +1,8 @@
 package view.data.deals;
 
+import redux.Redux.Dispatch;
+import action.async.CRUD;
+import db.DbQuery.DbQueryParam;
 import model.Deal;
 import state.AppState;
 import haxe.Constraints.Function;
@@ -47,7 +50,7 @@ using StringTools;
 /**
  * 
  */
-
+ @:connect
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
@@ -61,6 +64,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
+
 	public function new(props) 
 	{
 		super(props);
@@ -68,6 +72,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
 		trace(state.loading);
+	}
+
+	static function mapDispatchToProps(dispatch:Dispatch) {
+		trace('here we should be ready to load');
+        return {
+            load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
+        };
 	}
 	
 	static function mapStateToProps(aState:AppState) 

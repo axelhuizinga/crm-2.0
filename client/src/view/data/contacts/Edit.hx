@@ -466,6 +466,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	}*/
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
+		trace('here we should be ready to load');
         return {
             load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
         };

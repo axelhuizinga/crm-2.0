@@ -116,7 +116,7 @@ class CRUD
 					trace('LoginError');
 					resolve(null);
 				}	
-				var params:Dynamic = {			
+				/*var params:Dynamic = {			
 					dbUser:param.dbUser,
 					filter:param.filter,	
 					table:param.table,
@@ -130,7 +130,7 @@ class CRUD
 					//params.dataSource = param.dataSource;
 				if(param.table != null)
 					params.table = param.table;
-				trace(params);
+				trace(params);*/
 				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
 					'${App.config.api}', 
 					param,

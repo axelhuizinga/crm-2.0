@@ -1,10 +1,10 @@
 package model.deals;
 
-import tink.CoreApi.Callback;
 import react.ReactMacro.jsx;
-
+import view.shared.io.DataAccess;
 import view.table.Table.DataColumn;
 import view.table.Table.DataState;
+import view.shared.FormInputElement;
 
 /**
  * @author axel@cunity.me
@@ -36,6 +36,36 @@ class DealsModel
 	?cycle_start_date:String,
 	?last_locktime:String
 	 */
+	public static var dataAccess:DataAccess = [
+		'open' => {
+			source:[
+				"deals" => [
+					"filter" => 'id',
+				//"joins" => []//Array of join parameters
+					],
+				],
+			view:[
+				
+				'creation_date'=>{label:'Erstellt',type:DatePicker, displayFormat: "d.m.Y", disabled:true},
+				'start_date'=>{label:'Start',type:DatePicker, displayFormat: "d.m.Y"},
+				'booking_run'=>{label:'Buchungslauf',type: Radio,options: ['start'=>'Monatsanfang','middle'=>'Monatsmitte']},
+				'cycle'=>{label:'Turnus',type:Radio,options:[
+					'once'=>'Einmal','monthly'=>'Monatlich','quarterly'=>'Vierteljährlich',
+					'semiannual'=>'Halbjährlich', 'annual'=>'Jährlich']},
+				'amount'=>{label:'Betrag'},
+				'produkt'=>{label:'Produkt',type:Select,options:['1'=>'Kinderhilfe','2'=>'Tierhilfe']},
+				//'agent'=>{label:'Agent'},
+				//'end_reason'=>{label:'Kündigungsgrund',type:DatePicker, displayFormat: "d.m.Y"},
+				'end_date'=>{label:'Start',type:DatePicker, displayFormat: "d.m.Y"},				
+				'repeat_date'=>{label:'Start',type:DatePicker, displayFormat: "d.m.Y"},				
+				//'cycle_start_date'=>{label:'Start',type:DatePicker, displayFormat: "d.m.Y"},
+				'id' => {type:Hidden},
+				'edited_by' => {type:Hidden},				
+				'mandator' => {type:Hidden}				
+			]
+		}
+	];
+
 	public static var listColumns:Map<String,DataColumn> = [
 		'contact'=>{label:'Kontakt',show:true, useAsIndex: true},		
 		'start_date'=>{label:'Seit'},		

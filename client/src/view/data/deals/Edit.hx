@@ -1,5 +1,8 @@
 package view.data.deals;
 
+import js.html.FormElement;
+import view.shared.FormBuilder;
+import view.shared.io.BaseForm;
 import redux.Redux.Dispatch;
 import action.async.CRUD;
 import db.DbQuery.DbQueryParam;
@@ -10,6 +13,7 @@ import js.lib.Promise;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
+import react.ReactRef;
 import react.ReactUtil.copy;
 import shared.DbData;
 import shared.DBMetaData;
@@ -50,7 +54,8 @@ using StringTools;
 /**
  * 
  */
- @:connect
+
+@:connect
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
@@ -59,18 +64,71 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Neu', action:'insert'},
 		{label:'Löschen',action:'delete'}
 	];
-	
-	var dataDisplay:Map<String,DataState>;
 	var dataAccess:DataAccess;	
+	var dataDisplay:Map<String,DataState>;
+	var formApi:FormApi;
+	var formBuilder:FormBuilder;
+	var formFields:DataView;
+	var formRef:ReactRef<FormElement>;
+	var fieldNames:Array<String>;
+	var baseForm:BaseForm;
+	var deal:Deal;
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
+	var mounted:Bool = false;
 
 	public function new(props) 
 	{
 		super(props);
+		baseForm = new BaseForm(this);
+		
+		trace(props.match.params);
+		//trace(props.parentComponent);
+		trace(Reflect.fields(props));
+
+		//REDIRECT WITHOUT ID OR edit action
+		if(props.match.params.id==null && ~/open(\/)*$/.match(props.match.params.action) )
+		{
+			trace('nothing selected - redirect');
+			var baseUrl:String = props.match.path.split(':section')[0];
+			props.history.push('${baseUrl}List/get');
+			return;
+		}		
+		dataAccess = DealsModel.dataAccess;
+		fieldNames = baseForm.initFieldNames(dataAccess['open'].view.keys());
 		dataDisplay = DealsModel.dataDisplay;
+		
+		if(props.dataStore.dealData != null)
+			trace(props.dataStore.dealData.keys().next());
+				
+		state =  App.initEState({
+			//dataTable:[],
+			actualState:null,
+			initialData:null,
+			loading:false,
+			mHandlers:menuItems,
+			selectedRows:[],
+			sideMenu:FormApi.initSideMenu2( this,
+				{
+					dataClassPath:'data.Deals',
+					label:'Bearbeiten',
+					section: 'Edit',
+					items: menuItems
+				}					
+				,{	
+					section: props.match.params.section==null? 'Edit':props.match.params.section, 
+					sameWidth: true
+				}),	
+			/*storeListener:App.store.subscribe(function(){
+				trace(App.store.getState().dataStore);
+			}),*/
+			values:new Map<String,Dynamic>()
+		},this);
+		
+		trace(state.initialData);
+	/*	dataDisplay = DealsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
-		state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);
+		state =  App.initEState({loading:false,values:new Map<String,Dynamic>()},this);*/
 		trace(state.loading);
 	}
 
@@ -190,11 +248,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					var data = data.dataRows[0];
 					trace(data);	
 					//if( mounted)
-					var cObj:Deal = new Deal(data);
-					trace(cObj.id);
-					setState({loading:false, actualState:new Deal(data)});
+					var deal:Deal = new Deal(data);
+					trace(deal.id);
+					setState({loading:false, actualState:deal, initialData: copy(deal)});
 					trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
-					setState({initialData: copy(state.actualState)});
+					//setState({});
 					trace(props.location.pathname + ':' + untyped state.actualState.amount);
 					props.history.replace(props.location.pathname.replace('open','update'));
 				}
@@ -211,18 +269,28 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
-			case 'get':
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["contactList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');
-			case 'update':
+			/*case 'get':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["dealsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
-				');			
+				');*/
+			case 'open'|'update':
+				trace(state.actualState);
+				/*var fields:Map<String,FormField> = [
+					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
+				];*/
+				(state.actualState==null ? state.formApi.renderWait():
+				state.formBuilder.renderForm({
+					mHandlers:state.mHandlers,
+					fields:[
+						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
+					],
+					model:'deal',
+					//ref:formRef,
+					title: 'Bearbeite Abschluß' 
+				},state.actualState));
+		
 			case 'insert':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');

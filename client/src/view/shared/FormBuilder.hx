@@ -183,12 +183,12 @@ class FormBuilder {
 
     public function renderForm(props:FormState, initialState:Dynamic):ReactFragment
     {
-		trace('props');
-		//trace(props);
+		trace(props.fields);
+		//trace(props); ref=${props.ref} 
 		var sK:Int = 0;
 		
 		return jsx('
-			<form name=${props.model}  ref=${props.ref} className="tabComponentForm formField">
+			<form name=${props.model} className="tabComponentForm formField">
 				<div className="grid_box" role="table" aria-label="Destinations">
 					<div className="g_caption" >${props.title}</div>	
 					${renderFormInputElements(props.fields, initialState)}

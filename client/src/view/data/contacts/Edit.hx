@@ -166,11 +166,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				var data = data.dataRows[0];
 				trace(data);	
 				//if( mounted)
-				var cObj:Contact = new Contact(data);
-				trace(cObj.id);
-				setState({loading:false, actualState:new Contact(data)});
+				var contact:Contact = new Contact(data);
+				trace(contact.id);
+				setState({loading:false, actualState:contact, initialData:copy(contact)});
 				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
-				setState({initialData:copy(state.actualState)});
+				//setState({initialData:copy(state.actualState)});
 				trace(props.location.pathname + ':' + untyped state.actualState.date_of_birth);
 				props.history.replace(props.location.pathname.replace('open','update'));
 			}

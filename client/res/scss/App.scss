@@ -329,7 +329,7 @@ h1 {
   color: #3A3F44;  
   
 }
-.formField .g_cell input,.formField .g_cell_r input, .login input {
+.formField .g_cell input[type=text],.formField .g_cell_r input[type=text], .login input[type=text] {
   width: 100%;
   /*padding:1rem;*/
   background-color: #fafafa;
@@ -355,6 +355,18 @@ h1 {
 input::-moz-focus-inner { 
 	border: 0; 
   }
+.optLabel label{
+	font-size: 0.8rem;
+	color:inherit;
+	border-style: none;
+}
+.optLabel input{
+	display: inline-block;
+	height: inherit;
+	line-height: 0.8rem;
+	font-size: inherit;
+	margin-right: 0.8rem;
+}
 .abs-right
 {
 	position: absolute;
@@ -911,9 +923,8 @@ form td, form caption
 
 .g_cell, .g_cell_r
 {
-	display: inline-block;
-	align-self: center;
-	vertical-align: middle;
+	display: flex;
+	align-self: start;
 	height: inherit;
 }
 .g_cell_r{

@@ -86,6 +86,29 @@ class FormBuilder {
 		}].array();
 	}
 	
+	/*function renderRadioOption(si:Int,label:String,?value:Dynamic) {
+		return	
+			value == null ? jsx('<option>$label</option>'):
+			jsx('<option key=${si} value=${value}>$label</option>');
+	}*/
+
+	function renderRadio(name:String,options:StringMap<String>, actValue:String):ReactFragment
+	{
+		var si:Int = 1;
+		//onChange=${onChange} 
+		return [for (value=>label in options)
+		{			
+			//var check:Bool = actValue==value;
+			var check:String = (actValue==value ? 'on':'');
+			trace('$check $actValue $value');
+			jsx('
+			<>
+				<label key=${si++} >${label}</label>
+				<input key=${si++} type="radio" name=${name} defaultChecked=${check} onChange=${onChange} />
+			</>');
+		}].array();
+	}
+
 	function renderFormInputElements(fields:Map<String, FormField>, initialData:Dynamic, ?compOnChange:Function):ReactFragment
 	{
 		var ki:Int = 0;
@@ -122,6 +145,14 @@ class FormBuilder {
 						)*/,
 						ki++, field.label
 					);
+				case Radio:
+					trace (field.type +' $name:' + value);
+					jsx('<div key=${ki++} className="g_row_2" role="rowgroup">
+						<div className="g_cell" role="cell">${field.label}</div>
+						<div className="g_cell_r optLabel" role="cell">
+							${renderRadio(name,field.options, value)}
+						</div>
+					</div>');				
 				case Select:
 				renderElement(
 					jsx('<select name=${name} onChange=${onChange}  defaultValue=${value} key=${ki++} 
@@ -153,7 +184,7 @@ class FormBuilder {
 					//trace(field.disabled);
 					var dC:DateTimeProps = {
 						comp:comp,
-						//disabled:field.disabled,
+						disabled:field.disabled,
 						name:name,
 						//onChange: comp.handleChange,
 						options:{

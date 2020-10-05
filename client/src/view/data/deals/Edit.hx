@@ -1,9 +1,13 @@
 package view.data.deals;
 
+import js.html.HTMLCollection;
+import js.Browser;
+import js.html.Document;
 import js.html.FormElement;
 import view.shared.FormBuilder;
 import view.shared.io.BaseForm;
 import redux.Redux.Dispatch;
+import action.AppAction;
 import action.async.CRUD;
 import db.DbQuery.DbQueryParam;
 import model.Deal;
@@ -58,12 +62,18 @@ using StringTools;
 @:connect
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<MItem> = [
+	/*public static var menuItems:Array<MItem> = [
 		{label:'Anzeigen',action:'get'},
 		{label:'Bearbeiten',action:'update'},
 		{label:'Neu', action:'insert'},
 		{label:'Löschen',action:'delete'}
-	];
+	];*/
+	public static var menuItems:Array<MItem> = [
+		{label:'Schließen',action:'close'},		
+		{label:'Speichern + Schließen',action:'update', closeAfter:true},
+		{label:'Speichern',action:'update'},
+		{label:'Zurücksetzen',action:'reset',onlySm: true}
+	];	
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
 	var formApi:FormApi;
@@ -146,6 +156,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		};
 	}
 	
+	public function close() {
+		// TODO: CHECK IF MODIFIED + ASK FOR SAVING / DISCARDING
+		//var baseUrl:String = props.match.path.split(':section')[0];
+		props.history.push('${props.match.path.split(':section')[0]}List/get');
+	}	
+	
 	public function delete(ev:ReactEvent):Void
 	{
 		trace(state.selectedRows.length);
@@ -169,6 +185,63 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(state.selectedRows.length);				
 	}
+
+	function update()
+	{
+		//trace(Reflect.fields(aState));
+		if(state.actualState != null)
+			trace(state.actualState.fieldsModified.length);
+		if(state.actualState == null || state.actualState.fieldsModified.length==0)
+			return;
+		var data2save = state.actualState.allModified();
+		var doc:Document = Browser.window.document;
+
+		var formElement:FormElement = cast(doc.querySelector('form[name="deal"]'),FormElement);
+		var elements:HTMLCollection = formElement.elements;
+		var aState:Dynamic = copy(state.actualState);
+		/*var dbaProps:DBAccessProps = 
+		{
+			action:'update',
+			classPath:'data.Deals',
+			dataSource:null,
+		//	table:'contacts',
+			userState:props.userState
+		};*/
+		var dbQ:DbQueryParam = {
+			classPath:'data.Deals',
+			action:'update',
+			data:data2save,
+			filter:{id:state.actualState.id,mandator:1},
+			resolveMessage:{
+				success:'Abschluss ${state.actualState.id} wurde aktualisiert',
+				failure:'Abschluss ${state.actualState.id} konnte nicht aktualisiert werden'
+			},
+			table:'deals',
+			dbUser:props.userState.dbUser,
+			devIP:App.devIP
+		}
+		trace('${props.match.params.action}: ${state.initialData.id} :: creation_date: ${aState.creation_date} ${state.initialData.creation_date}');
+
+		if(state.actualState != null)
+		trace(state.actualState.modified() + ':${state.actualState.fieldsModified}');
+
+		//trace(aState);
+		trace(state.actualState.id);
+		if(!state.actualState.modified())
+		{
+			//TODO: NOCHANGE ACTION => Display Feedback nothing to save
+			App.store.dispatch(Status(Update( 
+				{	cssClass:'',
+					text:'Abschluss wurde nicht geändert'			
+				}
+			)));			
+			trace('nothing modified');
+			return;
+		}
+		trace(state.actualState.allModified());
+		App.store.dispatch(CRUD.update(dbQ));
+		
+	}	
 
 	function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
 	{

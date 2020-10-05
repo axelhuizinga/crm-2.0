@@ -151,17 +151,7 @@ class CRUD
 
 							dispatch(Status(Update( 
 								{	cssClass:'',
-									text:(param.resolveMessage==null?'':param.resolveMessage.success)
-									/*switch ('${param.classPath}.${param.action}')
-									{
-										case "data.Contacts.edit":
-											'Kontakt ${param.filter.id} geladen';
-										case "data.Contacts.update":
-											'Kontakt ${param.filter.id} wurde gespeichert';
-										default:
-											"Unbekannter Vorgang";
-
-									}*/
+									text:(param.resolveMessage==null?'':param.resolveMessage.success)				
 								}
 							)));
 							resolve(data);

@@ -44,6 +44,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
+				clickOpens:!props.disabled,
 				dateFormat:'Y-m-d',//props.options.dateFormat,//'Y-m-d',
 				altInput:true,
 				//altInputClass: "form-control input",
@@ -54,7 +55,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 				onOpen:onOpen,
 				onReady:onReady
 		});
-		trace('fpInstance.input.value:${fpInstance.input.value}');		
+		trace('fpInstance.input.value:${fpInstance.input.value}');			
 	}
 
 	function onOpen(e:Dynamic) {

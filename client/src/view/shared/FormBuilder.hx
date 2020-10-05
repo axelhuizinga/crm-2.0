@@ -104,7 +104,7 @@ class FormBuilder {
 			jsx('
 			<>
 				<label key=${si++} >${label}</label>
-				<input key=${si++} type="radio" name=${name} defaultChecked=${check} onChange=${onChange} />
+				<input key=${si++} type="radio" name=${name} defaultChecked=${check} onChange=${onChange} value=${value}/>
 			</>');
 		}].array();
 	}

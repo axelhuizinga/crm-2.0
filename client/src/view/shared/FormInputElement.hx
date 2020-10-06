@@ -13,4 +13,5 @@ abstract FormInputElement(String)
 	var Radio;
 	var Select;
 	var TextArea;
+	var NFormat;
 }

@@ -30,7 +30,7 @@ class DealsModel
 				'cycle'=>{label:'Turnus',type:Radio,options:[
 					'once'=>'Einmal','monthly'=>'Monatlich','quarterly'=>'Vierteljährlich',
 					'semiannual'=>'Halbjährlich', 'annual'=>'Jährlich']},
-				'amount'=>{label:'Betrag'},
+				'amount'=>{label:'Betrag', type:NFormat},
 				'produkt'=>{label:'Produkt',type:Select,options:['1'=>'Kinderhilfe','2'=>'Tierhilfe']},
 				//'agent'=>{label:'Agent'},
 				//'end_reason'=>{label:'Kündigungsgrund',type:DatePicker, displayFormat: "d.m.Y"},

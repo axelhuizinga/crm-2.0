@@ -1,6 +1,7 @@
 package view.shared;
 
 //import js.lib.Reflect;
+import react.NumberFormatProps;
 import react.ReactUtil;
 import js.html.AbortController;
 import js.html.Element;
@@ -8,6 +9,7 @@ import js.html.Event;
 import bulma_components.Button;
 import js.html.InputElement;
 import react.DateControlTypes.DateTimeProps;
+import react.NumberFormat;
 import shared.Utils;
 import haxe.ds.StringMap;
 
@@ -30,6 +32,7 @@ import react.DateControl;
 import react.DateTimeControl;
 
 using Lambda;
+using StringTools;
 
 class FormBuilder {
     public var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
@@ -201,6 +204,36 @@ class FormBuilder {
 							<$DateControl ${...dC}/>
 						</div>
 					</div>');
+				case FormInputElement.NFormat:
+					var nfP:NumberFormatProps = {
+						//getInputRef:React.createRef(),
+						decimalScale:2,
+						decimalSeparator:",",						
+						fixedDecimalScale:true,
+						/*format:function(nV:String) {
+							return nV.replace('.',',');
+						},*/
+						isNumericString: true,
+						name:name,
+						onChange: onChange,
+						onValueChange: function(values:Dynamic){
+							trace(values);
+						},
+						removeFormatting: function(fV:String){
+							
+							trace(Std.string(Std.parseFloat(fV)));
+							return Std.string(Std.parseFloat(fV));
+						},
+						suffix: ' €',
+						value:value
+					};
+					jsx('
+					<div key=${ki++} className="g_row_2" role="rowgroup">
+						<div className="g_cell" role="cell">${field.label}</div>
+						<div className="g_cell_r" role="cell">
+							<$NumberFormat ${...nfP}/>
+						</div>
+					</div>');					
 				default:
 					renderElement(
 						jsx('<input name=${name} onChange=${onChange} type="text"  defaultValue=${value} disabled=${field.disabled} required=${field.required}/>'),

@@ -1,4 +1,5 @@
 package model;
+import me.cunity.tools.StringTool;
 import haxe.rtti.Meta;
 import view.shared.io.DataAccess.DataView;
 import haxe.Constraints.Function;
@@ -7,6 +8,7 @@ import haxe.rtti.CType.Classdef;
 import haxe.rtti.Rtti.getRtti;
 import js.lib.RegExp;
 import react.ReactUtil.copy;
+
 using Lambda;
 
 @:keep
@@ -21,6 +23,9 @@ class ORM {
 		return id;
 	}	
 	
+	//TODO: LOAD DSEP FROM CONFIG
+	static var dsep:String = ',';
+
 	public var fieldsInitalized(default,null):Array<String>;
 	public var fieldsModified(default,null):Array<String>;
 	
@@ -73,7 +78,26 @@ class ORM {
 		for(f in fieldsModified)
 		{
 			//TODO: ADD FORMAT SWITCH BEFORE ADDING DATA TO STORAGE
-			Reflect.setField(data, f, Reflect.field(this, f));
+			var nv:String = Reflect.field(this, f);
+			var dType:String = Reflect.field(fields,f).dataType[0];			
+			trace(nv + ' => $dsep : $dType::'+dType.indexOf('numeric'));
+			//Reflect.setField(data, f, Reflect.field(this, f));
+			Reflect.setField(data, f, switch(dType){
+				case('bigint[]'):
+				nv==null?[]:nv;
+				case _.indexOf('timestamp') => 0:
+					nv == null? '': nv;
+				case('date'):
+					nv == null? '': nv;
+				case _.indexOf('numeric') => 0:
+					nv = nv.split(' ')[0];
+					var dvals:Array<String> = nv.split(dsep);
+					trace(dvals);
+					'${dvals[0]}.${dvals[1]}';
+				default:
+					nv;
+			});
+			
 		}
 		return data;
 	}

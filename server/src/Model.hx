@@ -3,7 +3,7 @@ import php.SuperGlobal;
 import db.DbQuery;
 import tjson.TJSON;
 import haxe.Json;
-import action.async.DBAccessProps;
+//import action.async.DBAccessProps;
 import haxe.PosInfos;
 import haxe.Constraints.Function;
 import S.ColDef;
@@ -91,7 +91,7 @@ class Model
 	public var id(default, null):String;
 	public var num_rows(default, null):Int;
 	var action:String;
-	var dbAccessProps:DBAccessProps;
+	//var dbAccessProps:DBAccessProps;
 	var dbData:DbData;
 	var dParam:DbData;
 	var dataSource:Map<String,Dynamic>;// EACH KEY IS A TABLE NAME
@@ -841,7 +841,7 @@ class Model
 	{
 		trace(SuperGlobal._POST.keyValueIterator().hasNext()?'Y':'N');
 		trace(Std.string(SuperGlobal._POST));
-		var pData = Bytes.ofString(Web.getPostData());
+		var pData = Bytes.ofString(Std.string(SuperGlobal._POST));
 		//var d:DbQuery = new DbQuery();
 		//trace(Web.getPostData());
 		trace(pData.length);

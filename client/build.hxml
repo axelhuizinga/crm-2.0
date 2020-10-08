@@ -11,6 +11,8 @@
 -lib event-types 
 -lib js-object
 -lib tink_core
+-lib thx.format
+
 -cp /opt/src/lib
 -cp ../lib
 -cp lib

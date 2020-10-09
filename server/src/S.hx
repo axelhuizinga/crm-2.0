@@ -566,18 +566,14 @@ class S
 
 	static function saveRequest(dbQuery:DbQuery):Bool
 	{
-		//trace(new hxbit.Serializer().serialize(dbQuery));
-		//trace(S.dbQuery);
 		//trace(Json.stringify(dbQuery));
-		//var request:String = Json.stringify(new hxbit.Dump(new hxbit.Serializer().serialize(dbQuery)).dumpObj());
-		//var request:String = Web.getPostData();
-		//trace( request.length + ' == ' +  Syntax.code('strlen(@iconv("UTF-8", "UTF-8//IGNORE",{0}))',request));
-		//trace(request);
-		var rTime:String = DateTools.format(S.last_request_time, "'%Y-%m-%d %H:%M:%S'");//,request=?
-		var stmt:PDOStatement = dbh.prepare('UPDATE activity SET "request"=:request FROM users WHERE users.id=:id AND users.id=activity.user' ,Syntax.array(null));
-		//trace('UPDATE users SET last_request_time=${rTime},request=\'$request\' WHERE id=\'$id\'');
-		var success:Bool = Model.paramExecute(stmt, //null
-			Lib.associativeArrayOfObject({':id': dbQuery.dbUser.id, ':request': Json.stringify(dbQuery)})
+		var stmt:PDOStatement = dbh.prepare(
+			'INSERT INTO activity(action,request,"user") VALUES(:action,:request,:user)' ,Syntax.array(null));
+
+		var success:Bool = Model.paramExecute(stmt, 
+			Lib.associativeArrayOfObject(
+				{':action':params.get('classPath') + '.' + params.get('action'),
+				':user': dbQuery.dbUser.id, ':request': Json.stringify(dbQuery)})			
 		);
 		if(Std.parseInt(stmt.errorCode())>0)
 			trace(stmt.errorInfo());

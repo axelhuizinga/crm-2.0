@@ -64,7 +64,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			loading:false,
 			dealsData:new IntMap(),			
 			selectedRows:[],
-			sideMenu:FormApi.initSideMenu2( this,
+			sideMenu:FormApi.initSideMenu( this,
 				{
 					dataClassPath:'data.Deals',
 					label:'Liste',
@@ -148,28 +148,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(state.selectedRows.length);				
 	}
-
-	/*function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
-	{
-		var iS:Dynamic = {};
-		for(dR in dt)
-		{
-			var rS:Dynamic = {};
-			for(k in dR.keys())
-			{
-				trace(k);
-				if(dataDisplay['fieldsList'].columns[k].cellFormat == view.shared.Format.formatBool)
-				{
-					Reflect.setField(rS,k, dR[k] == 'Y');
-				}
-				else
-					Reflect.setField(rS,k, dR[k]);
-			}
-			Reflect.setField(iS, dR['id'], rS);			
-		}
-		trace(iS);
-		return iS;
-	}*/
 
 	public function selectionClear() {
 		var match:RouterMatch = ReactUtil.copy(props.match);

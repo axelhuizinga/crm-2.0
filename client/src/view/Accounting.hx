@@ -1,24 +1,35 @@
 package view;
-import bulma_components.*;
+//import bulma_components.*;
+import bulma_components.Tabs;
 import action.AppAction;
 import action.ConfigAction;
+
+import state.LocationState;
+//import react.Partial;
+import react.React;
 import react.ReactComponent;
-import react.ReactDateTimeClock;
 import react.ReactMacro.jsx;
-import react.Partial;
-import react.router.Route.RouteRenderProps;
-import redux.react.IConnectedComponent;
 import redux.Redux;
-import redux.StoreMethods;
+import redux.Redux.Dispatch;
+import react.router.Route;
+import react.router.RouterMatch;
+import react.router.Redirect;
+import react.router.Switch;
+import react.router.NavLink;
+import view.shared.io.FormApi;
+import view.shared.DataProps;
 import view.shared.RouteTabProps;
-//import react.form.Form;
-//import react.form.Text;
-
-
-import Webpack.*;
+import view.shared.CompState;
+import view.shared.TabLink;
+import view.LoginForm;
+import view.StatusBar;
+//import Webpack.*;
 import state.AppState;
+import view.data.Accounts;
+import view.accounting.Import;
+using state.CState;
+using shared.Utils;
 
-//@:expose('default')
 @:connect
 class Accounting extends ReactComponentOfProps<RouteTabProps>
 	
@@ -80,11 +91,59 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 	{
 		return jsx('
 		<>
+			<div className="tabNav2" >
+				<$Tabs className="is-boxed" >					
+					<$TabLink to=${{
+						key:props.location.key,
+						hash:props.location.hash,
+						pathname:"/Accounting/Accounts",
+						search:'',
+						state:props.location.state.extend({contact:props.location.hash})
+					}} ${...props} >Konten</$TabLink>
+					<$TabLink to="/Accounting/Import" ${...props} >Import</$TabLink>
+				</$Tabs>
+			</div>		
             <div className="tabContent2">
-				...
+				<$Switch>
+					<$Route path="/Accounting/Accounts/:section?/:action?/:id?"   ${...props} component={Accounts}/>	
+					<$Route path="/Accounting/Import/:section?/:action?/:id?"  ${...props} component={Import}/>
+				</$Switch>
             </div>
 			<StatusBar {...props}/>
         </>
-        ');
+		');
+    /**
+     * <>
+			<div className="tabNav2" >
+				<$Tabs className="is-boxed" >
+					<$TabLink to="/Data/Contacts" ${...props} >Kontakte</$TabLink>
+					<$TabLink to=${{
+						key:props.location.key,
+						hash:'',
+						pathname:"/Data/Deals",
+						search:'',
+						state:props.location.state.extend({contact:props.location.hash})
+					}} ${...props} >Abschlüsse</$TabLink>					
+					<$TabLink to=${{
+						key:props.location.key,
+						hash:props.location.hash,
+						pathname:"/Data/Accounts",
+						search:'',
+						state:props.location.state.extend({contact:props.location.hash})
+					}} ${...props} >Konten</$TabLink>
+					<$TabLink to="/Data/QC" ${...props} >QC</$TabLink>
+				</$Tabs>
+			</div>
+            <div className="tabContent2" >
+			<$Switch>
+				<$Route path="/Data/Contacts/:section?/:action?/:id?"  ${...props} component={Contacts}/>
+				<$Route path="/Data/Deals/:section?/:action?/:id?"  ${...props} component={Deals}/>
+				<$Route path="/Data/Accounts/:section?/:action?/:id?"   ${...props} component={Accounts}/>	
+				<$Route path="/Data/QC/:section?/:action?/:id?"  ${...props} component={QC}/>
+            </$Switch>
+			</div>
+			<$StatusBar ${...props}/>
+		</>
+     */
     }
 }

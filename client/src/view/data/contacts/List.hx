@@ -67,7 +67,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			loading:false,
 			contactData:new IntMap(),			
 			selectedRows:[],
-			sideMenu:FormApi.initSideMenu2( this,
+			sideMenu:FormApi.initSideMenu( this,
 				{
 					dataClassPath:'data.Contacts',
 					label:'Liste',

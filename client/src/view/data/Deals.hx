@@ -68,7 +68,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			hasError:false,
 			mounted:false,
 			loading:true,
-			sideMenu:FormApi.initSideMenu( this,
+			sideMenu:FormApi.initSideMenu2( this,
 				[
 					{
 						dataClassPath:'data.deals.List',

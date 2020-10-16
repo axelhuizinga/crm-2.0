@@ -50,7 +50,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			loading:false,
 			accountsData:new IntMap(),			
 			selectedRows:[],
-			sideMenu:FormApi.initSideMenu2( this,
+			sideMenu:FormApi.initSideMenu( this,
 				{
 					dataClassPath:'data.Accounts',
 					label:'Liste',

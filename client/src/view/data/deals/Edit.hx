@@ -118,7 +118,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			loading:false,
 			mHandlers:menuItems,
 			selectedRows:[],
-			sideMenu:FormApi.initSideMenu2( this,
+			sideMenu:FormApi.initSideMenu( this,
 				{
 					dataClassPath:'data.Deals',
 					label:'Bearbeiten',

@@ -87,6 +87,8 @@ class FormApi
 			//trace(rc.props.match);
 			this.sM = sM==null?rc.props.sideMenu:sM;
 			//trace(rc.props.history);			
+			trace(sM);
+			trace(this.sM);
 		}
 		//dbData = new DbData();
 		//trace('>>>${props.match.params.action}<<<');
@@ -624,7 +626,7 @@ class FormApi
 		return ids.pInts();
 	}
 
-	public static function initSideMenu2(comp:Dynamic, sMb:MenuBlock, sM:MenuProps):MenuProps
+	public static function initSideMenu(comp:Dynamic, sMb:MenuBlock, sM:MenuProps):MenuProps
 	{
 		for(sI in sMb.items)
 			if(sI.section == null)
@@ -633,7 +635,7 @@ class FormApi
 		return sM;
 	}
 
-	public static function initSideMenu(comp:Dynamic, sMa:Array<MenuBlock>, sM:MenuProps):MenuProps
+	public static function initSideMenu2(comp:Dynamic, sMa:Array<MenuBlock>, sM:MenuProps):MenuProps
 	{
 		var sma:MenuBlock;
 		sM.menuBlocks = [

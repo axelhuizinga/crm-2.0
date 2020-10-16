@@ -1,4 +1,4 @@
-package view.dashboard;
+package view.accounting;
 import haxe.Constraints.Function;
 import shared.DbParam;
 import shared.Utils;
@@ -23,7 +23,7 @@ import state.FormState;
 import view.shared.FormBuilder;
 import view.shared.MItem;
 import view.shared.MenuProps;
-import view.dashboard.model.DBSyncModel;
+import view.accounting.model.ReturnDebitModel;
 import view.table.Table.DataState;
 import view.shared.io.BaseForm;
 import view.shared.io.DataAccess;
@@ -36,22 +36,13 @@ using Lambda;
  * @author axel@cunity.me
  */
 @:connect
-class DBSync extends ReactComponentOf<DataFormProps,FormState>
+class ReturnDebit extends ReactComponentOf<DataFormProps,FormState>
 {
 
-	static var _instance:DBSync;
+	static var _instance:ReturnDebit;
 
 	public static var menuItems:Array<MItem> = [		
-		{label:'BenutzerDaten ',action:'showUserList'},
-		
-		{label:'BenutzerDaten Abgleich',action:'syncUserList'},
-		{label:'BuchungsDaten Abgleich',action:'importAllBookingRequests'},
-		
-		{label:'Stammdaten Import ',action:'importContacts'},
-		{label:'Stammdaten Update ',action:'importAll'},
-		{label:'Abschlüsse Import ',action:'importDeals'},
-		{label:'Abschlüsse Update ',action:'syncDeals'},
-		{label:'Konten Import ',action:'importAccounts'},
+		{label:'Import Rücklastschriften',action:'importReturnDebit'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -70,9 +61,9 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		dataDisplay = DBSyncModel.dataDisplay;
-		dataAccess = DBSyncModel.dataAccess(props.match.params.action);
-		formFields = DBSyncModel.formFields(props.match.params.action);
+		dataDisplay = ReturnDebitModel.dataDisplay;
+		dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
+		formFields = ReturnDebitModel.formFields(props.match.params.action);
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			loading:false,
@@ -146,7 +137,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			for(k in dR.keys())
 			{
 				trace(k);
-				if(dataDisplay['fieldsList'].columns[k].cellFormat == DBSyncModel.formatBool)
+				if(dataDisplay['fieldsList'].columns[k].cellFormat == ReturnDebitModel.formatBool)
 				{
 					Reflect.setField(rS,k, dR[k] == 'Y');
 				}

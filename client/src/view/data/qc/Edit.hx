@@ -156,7 +156,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 				}				
 			],
 			selectedRows:[],
-			sideMenu:FormApi.initSideMenu2( this,
+			sideMenu:FormApi.initSideMenu( this,
 				{
 					dataClassPath:'data.Contacts',
 					label:'Bearbeiten',

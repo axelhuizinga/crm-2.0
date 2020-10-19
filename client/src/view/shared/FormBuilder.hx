@@ -34,6 +34,8 @@ import react.DateTimeControl;
 using Lambda;
 using StringTools;
 
+typedef BButton = bulma_components.Button;
+
 class FormBuilder {
     public var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
 	public var dataAccess:DataAccess;
@@ -112,6 +114,7 @@ class FormBuilder {
 		}].array();
 	}
 
+
 	function renderFormInputElements(fields:Map<String, FormField>, initialData:Dynamic, ?compOnChange:Function):ReactFragment
 	{
 		var ki:Int = 0;
@@ -121,11 +124,12 @@ class FormBuilder {
 			var value:Dynamic = Reflect.field(initialData,name);
 			if(name=='date_of_birth')trace (field.type +' $name:' + value);
 			if(name=='date_of_birth')trace (field.type +' $name:' + value);
+			trace(field.type);
 			switch (field.type)
 			{
 				case FormInputElement.Hidden:
 					jsx('<input key=${ki++} type="hidden" name=${name} defaultValue=${value}/>');
-				case FormInputElement.button: 
+				case FormInputElement.Button: 
 					jsx('<button type="submit">
 						${value}
 					</button>');
@@ -233,7 +237,39 @@ class FormBuilder {
 						<div className="g_cell_r" role="cell">
 							<$NumberFormat ${...nfP}/>
 						</div>
-					</div>');					
+					</div>');			
+				case FormInputElement.Upload:
+					jsx('
+					<div key=${ki++} className="g_row_2" role="rowgroup">
+						<div className="g_cell" role="cell">${field.label}</div>
+						<div className="g_cell_r" role="cell">
+							Dummy
+						</div>
+					</div>');/*
+					jsx('
+					<div key=${ki++} className="g_row_2" role="rowgroup">
+						<div className="g_cell" role="cell">${field.label}</div>
+						<div className="g_cell_r" role="cell">
+							Dummy
+						</div>
+					</div>');
+					jsx('
+					<div id="uploadForm"  class="fileinput-button" >
+						<button style="white-space: nowrap;margin-top:3px;">${field.label}</button>
+						<!-- The file input field used as target for the file upload widget -->
+						<input id="fileupload" type="file" name="${field.name}"  >
+					</div>'
+				);*/
+
+				/**
+				 * 	function uploadFormRounded($name,$title='Buchungsreport')
+	{
+		return <<<EOF
+
+EOF;
+
+	}
+				 */
 				default:
 					renderElement(
 						jsx('<input name=${name} onChange=${onChange} type="text"  defaultValue=${value} disabled=${field.disabled} required=${field.required}/>'),
@@ -251,8 +287,7 @@ class FormBuilder {
 		//trace(props); ref=${props.ref} 
 		var sK:Int = 0;
 		
-		return jsx('
-			<form name=${props.model} className="tabComponentForm formField">
+		return jsx('<form name=${props.model} className="tabComponentForm formField">
 				<div className="grid_box" role="table" aria-label="Destinations">
 					<div className="g_caption" >${props.title}</div>	
 					${renderFormInputElements(props.fields, initialState)}
@@ -268,8 +303,8 @@ class FormBuilder {
 		if(mItem.onlySm)
 			return null;
 		var mHandler:Function = comp.state.formApi.itemHandler;//Reflect.field(comp,mItem.action);
-		return jsx('<$Button key=${i++} onClick=${itemHandler} data-action=${mItem.action}
-		data-section=${mItem.section} disabled=${mItem.disabled} type="button" >${mItem.label}</$Button>');	
+		return jsx('<$BButton key=${i++} onClick=${itemHandler} data-action=${mItem.action}
+		data-section=${mItem.section} disabled=${mItem.disabled} type="button" >${mItem.label}</$BButton>');	
 	}
 
 	public function itemHandler(e:Event)

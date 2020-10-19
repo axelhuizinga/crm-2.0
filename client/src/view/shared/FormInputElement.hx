@@ -3,7 +3,7 @@ package view.shared;
 @:enum
 abstract FormInputElement(String)
 {
-	var button;
+	var Button;
 	var Hidden;
 	var DatePicker;
 	var DateTimePicker;	
@@ -12,6 +12,7 @@ abstract FormInputElement(String)
 	var Checkbox;
 	var Radio;
 	var Select;
-	var TextArea;
+	var TextArea;	
 	var NFormat;
+	var Upload;
 }

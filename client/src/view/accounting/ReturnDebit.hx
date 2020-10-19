@@ -1,4 +1,6 @@
 package view.accounting;
+import view.shared.FormInputElement;
+import view.shared.FormField;
 import haxe.Constraints.Function;
 import shared.DbParam;
 import shared.Utils;
@@ -42,7 +44,7 @@ class ReturnDebit extends ReactComponentOf<DataFormProps,FormState>
 	static var _instance:ReturnDebit;
 
 	public static var menuItems:Array<MItem> = [		
-		{label:'Import Rücklastschriften',action:'importReturnDebit'},
+		{label:'Import Rücklastschriften',action:'importReturnDebit',formField:{type:FormInputElement.Upload}},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];

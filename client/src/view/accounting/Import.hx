@@ -113,19 +113,19 @@ class Import extends ReactComponentOf<DataFormProps,FormState>
 		trace(data);
 	}
 
-	public function importCamt(_):Void
+	public function importReturnDebit(_):Void
 	{
 		trace(props.userState.dbUser.first_name);
 		setState({loading:true});
 		doSyncAll(			
 		{
-			classPath:'admin.SyncExternalAccounts',
-			action:'syncAll',
+			classPath:'data.Booking',
+			action:'importReturnDebit',
 			extDB: true,
 			filter:{mandator:'1'},
 			limit:1000,
 			offset:0,
-			table:'accounts',
+			table:'bookings',
 			dbUser:props.userState.dbUser,
 			devIP:App.devIP,
 			maxImport:4000,

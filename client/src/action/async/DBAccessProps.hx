@@ -1,4 +1,5 @@
 package action.async;
+import db.DbQuery.DbQueryParam;
 import state.UserState;
 typedef DBAccessOutcome = 
 {
@@ -6,7 +7,7 @@ typedef DBAccessOutcome =
 	success:Bool
 }
 
-typedef DBAccessProps = 
+typedef DBAccessProps = DbQueryParam;/*
 {
 	?action:String,	
 	?devIP:String,	
@@ -22,3 +23,21 @@ typedef DBAccessProps =
 	?totalRecords:Int,
 	?userState:UserState
 };
+/*typedef DbQueryParam = {
+	?action:String,	
+	?classPath:String,
+	?extDB:Bool,
+	?relations:Map<String,DbRelation>,
+	?devIP:String,	
+	?filter:Dynamic,//Map<String,String>,
+	?data:Dynamic,	
+	?firstBatch:Bool,
+	?onlyNew:Bool,
+	?limit:Int,
+	?maxImport:Int,
+//	?pages:Int,
+	?resolveMessage:DbQueryResolveMessage,
+	?offset:Int,
+	?table:String,
+	?dbUser:DbUser
+};*/

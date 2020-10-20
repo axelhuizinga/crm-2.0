@@ -116,21 +116,7 @@ class CRUD
 					trace('LoginError');
 					resolve(null);
 				}	
-				/*var params:Dynamic = {			
-					dbUser:param.dbUser,
-					filter:param.filter,	
-					table:param.table,
-					//id:param.userState.dbUser.id,
-					//jwt:param.userState.dbUser.jwt,
-					classPath:param.classPath,
-					action: param.action,
-					devIP:App.devIP
-				};
-				//if(param.dataSource != null)
-					//params.dataSource = param.dataSource;
-				if(param.table != null)
-					params.table = param.table;
-				trace(params);*/
+				
 				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
 					'${App.config.api}', 
 					param,

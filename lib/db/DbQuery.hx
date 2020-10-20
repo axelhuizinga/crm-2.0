@@ -1,4 +1,5 @@
 package db;
+import state.UserState;
 import db.DbUser;
 import db.DbRelation;
 import haxe.ds.Map;
@@ -18,18 +19,21 @@ typedef DbQueryParam = {
 	?classPath:String,
 	?extDB:Bool,
 	?relations:Map<String,DbRelation>,
+	?dataSource:Map<String,Map<String,Dynamic>>,	
+	?dbUser:DbUser,
 	?devIP:String,	
-	?filter:Dynamic,//Map<String,String>,
+	?filter:Dynamic,
 	?data:Dynamic,	
 	?firstBatch:Bool,
 	?onlyNew:Bool,
 	?limit:Int,
 	?maxImport:Int,
-//	?pages:Int,
+	?pages:Int,
 	?resolveMessage:DbQueryResolveMessage,
 	?offset:Int,
 	?table:String,
-	?dbUser:DbUser
+	?totalRecords:Int,
+	?userState:UserState	
 };
 
 class DbQuery implements hxbit.Serializable 

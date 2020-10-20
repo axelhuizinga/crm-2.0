@@ -872,17 +872,7 @@ class Model
 	}
 
 	function run(){
-		/*if(param.exists('dbData'))
-		{
-			trace(param.get('dbData'));
-			trace(Bytes.ofString(param.get('dbData')));
-			var s:Serializer = new Serializer();			
-			dParam = s.unserialize(Bytes.ofString(param.get('dbData')),DbData);
-			var dataSource = dParam.dataParams;
-			trace(dataSource.toString());
-		}
-		else 
-		{*/
+
 			if(param.exists('table'))
 				table = param.get('table');
 			if(table != null)

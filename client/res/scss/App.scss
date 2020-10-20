@@ -936,8 +936,35 @@ form td, form caption
 .g_cell_r input[type=checkbox]{
 	justify-self: start;
 	width:auto;
-	margin-left: 1rem;;
+	margin-left: 1rem;
 }
+
+/*
+.fileinput-button input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+    font-size: 200px !important;
+    direction: ltr;
+    cursor: pointer;
+}*/
+.uploadBox{
+	text-align: center;
+	/*margin: auto;
+	display: inline-block;*/
+}
+.fileinput {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
 /*** D3 CHARTS ***/
 
 div.tooltip {	

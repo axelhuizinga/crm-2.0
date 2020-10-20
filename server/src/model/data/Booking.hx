@@ -1,7 +1,7 @@
 package model.data;
 import Model;
 
-class Accounts extends Model
+class Booking extends Model
 {
 	public function new(?param:Map<String,String>) 
 	{

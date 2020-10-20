@@ -15,9 +15,13 @@ import js.html.XMLHttpRequest;
 
 import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
+
+import shared.DbDataTools;
 import shared.DbData;
 import loader.BinaryLoader;
 import view.shared.OneOf;
+
+import db.DbQuery.DbQueryParam;
 using action.async.DBAccessProps;
 using shared.Utils;
 /**
@@ -168,46 +172,57 @@ class DBAccess
 		});
 	}
 
-	/*public static function update(props:DBAccessProps, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
-	{
-		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			trace(props);
+	public static function upload(param:DbQueryParam) 
+	{	trace(param.action);
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
+			trace(param);
+			//if(param.dataSource != null)
+				//trace(param.dataSource.get('contacts').get('data'));
+			
+			var dbData:DbData = DbDataTools.create();
 			//trace(getState());
-			if (!props.userState.dbUser.online)
-			{
-				return dispatch(LoginError(
+			return new Promise(function(resolve, reject){
+				if (!param.dbUser.online)
 				{
-					id:props.userState.dbUser.id,
-					lastError:'Du musst dich neu anmelden!',
-					user_name:props.userState.dbUser.user_name
-				}));
-			}	
-			var spin:Dynamic = dispatch(AppWait);
-			trace(spin);
-			var bL:XMLHttpRequest = BinaryLoader.create(
-			'${App.config.api}', 
-			{				
-				id:props.userState.dbUser.id,
-				jwt:props.userState.dbUser.jwt,
-				classPath:props.classPath,
-				action:props.action,
-				dataSource:Serializer.run(props.dataSource),
-				devIP:App.devIP
-			},
-			function(data:DbData)
-			{				
-				trace(data);
-				if (data.dataErrors.keys().hasNext())
-				{
-					trace(data.dataErrors);
-				}
-				return null;
-			});
-			if (requests != null)
-			{
-				requests.push(bL);
-			}
-			return null;
+					dispatch(User(LoginError(
+					{
+						dbUser:param.dbUser,
+						lastError:'Du musst dich neu anmelden!'
+					})));
+					trace('LoginError');
+					resolve(null);
+				}	
+				
+				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
+					'${App.config.api}', 
+					param,
+					function(data:DbData)
+					{				
+						trace(data);
+						if(data.dataErrors != null)
+							trace(data.dataErrors);
+						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
+							trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
+
+						if(data.dataErrors.exists('lastError'))
+						{
+							dispatch(User(LoginError({lastError: data.dataErrors.get('lastError')})));
+							resolve(null);
+						}
+						else{
+
+							dispatch(Status(Update( 
+								{	cssClass:'',
+									text:(param.resolveMessage==null?'':param.resolveMessage.success)				
+								}
+							)));
+							resolve(data);
+						}
+					}
+				);
+				trace(bL);
+			});	
 		});
-	}*/
+			
+	}
 }

@@ -212,11 +212,11 @@ class S
 		Sys.exit(0);		
 	}
 	
-	public static function send(r:String)
+	public static function send(r:String, ?json:Bool = false)
 	{
 		if (!headerSent)
 		{
-			Web.setHeader('Content-Type', 'text/plain');
+			Web.setHeader('Content-Type', (json?'application/json':'text/plain'));
 			Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 			Web.setHeader("Access-Control-Allow-Credentials", "true");
 			Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');

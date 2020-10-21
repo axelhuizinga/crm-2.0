@@ -23,5 +23,6 @@ typedef FormField =
 	?required:Bool,
 	?handleChange:Function,
 	?placeholder:String,
+	?submit:String,
 	?validate:String->Bool
 }

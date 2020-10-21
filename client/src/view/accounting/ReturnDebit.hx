@@ -1,5 +1,7 @@
 package view.accounting;
+import js.lib.Object;
 import js.Browser;
+import js.Syntax;
 import js.html.Window;
 import js.html.Document;
 import view.shared.FormInputElement;
@@ -19,6 +21,9 @@ import haxe.ds.Map;
 import loader.BinaryLoader;
 import me.cunity.debug.Out;
 import model.Contact;
+#if php
+import php.Lib.hashOfAssociativeArray;
+#end
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
@@ -47,15 +52,24 @@ class ReturnDebit extends ReactComponentOf<DataFormProps,FormState>
 	static var _instance:ReturnDebit;
 
 	public static var menuItems:Array<MItem> = [		
-		{label:'Import Rücklastschriften',action:'importReturnDebit',formField:{
+		{label:'Datei Rücklastschrift',action:'importReturnDebit',formField:{
 			name:'returnDebitFile',
+			submit:'Importieren',
 			type:FormInputElement.Upload},
-			handler: function(el) {
-				trace(Browser.document.getElementById('returnDebitFile'));
+			handler: function(el) {				
+				var finput = cast Browser.document.getElementById('returnDebitFile');
+				//var files = php.Lib.hashOfAssociativeArray(finput.files);
+				
+				trace(finput.files);
+				trace(finput.files[0]);
+				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
+				//trace(Syntax.code(""))
+				var fObj = new Object(finput.files[0]);
+				//trace(fObj.getOwnPropertyNames());
+				trace(finput.value);
+				//trace(finput.files.get('returnDebitFile'));
 			}
-		},
-		{label:'Speichern', action:'save'},
-		{label:'Löschen',action:'delete'}
+		}
 	];
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;

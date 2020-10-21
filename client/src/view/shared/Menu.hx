@@ -179,9 +179,9 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				case Upload:
 					jsx('<div key=${i++}  id="uploadForm"  className="uploadBox" >
 					<input id=${item.formField.name} type="file" name=${item.formField.name} className="fileinput"  />
-					<label for=${item.formField.name} >+</label>
+					<label htmlFor=${item.formField.name} className="button" >${item.label}</label>
 					<Button onClick=${item.handler} data-action=${item.action}
-				data-section=${item.section} disabled=${item.disabled}>${item.label}</Button>
+				data-section=${item.section} disabled=${item.disabled}>${item.formField.submit}</Button>
 				</div>');
 					/*jsx('<label for="${item.formField.name} ">+</label>
 					<div key=${i++} id="uploadForm"  class="fileinput-button">

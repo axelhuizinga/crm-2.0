@@ -10,6 +10,7 @@ import hxbit.Serializable;
  * ...
  * @author axel@cunity.me
  */
+
 typedef DbQueryResolveMessage = {
 	?success:String,
 	?failure:String

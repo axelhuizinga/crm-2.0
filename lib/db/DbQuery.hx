@@ -1,10 +1,10 @@
 package db;
-import state.UserState;
 import db.DbUser;
 import db.DbRelation;
 import haxe.ds.Map;
 import hxbit.Schema;
 import hxbit.Serializable;
+import state.UserState;
 
 /**
  * ...

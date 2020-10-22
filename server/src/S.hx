@@ -12,12 +12,7 @@ import php.Syntax;
 import php.db.PDO;
 import php.db.PDOStatement;
 import shared.DbData;
-
-//import me.cunity.php.Services_JSON;
-//import phprbac.Rbac;
-//import model.AgcApi;
-//import model.App;
-//import model.Campaigns;
+import shared.Upload;
 
 import model.data.Accounts;
 import model.data.Contacts;
@@ -51,6 +46,7 @@ import comments.CommentString.*;
 
 using Lambda;
 using Util;
+
 /**
  * ...
  * @author axel@cunity.me
@@ -170,8 +166,16 @@ class S
 		if (jwt.length > 0)
 		{
 			if(User.verify(dbQuery))
+			{
+				if(action=='returnDebitFile')
+				{
+					Upload.go();
+					exit({'Error':'Upload.go()$action did not send anything'});
+				}
 				Model.dispatch(dbQuery);		
-			exit({'Error':'Model.dispatch ${params.get('classPath')}.$action did not send anything'});
+				exit({'Error':'Model.dispatch ${params.get('classPath')}.$action did not send anything'});
+			}
+
 		}
 	
 		User.login(dbQuery.dbUser);		

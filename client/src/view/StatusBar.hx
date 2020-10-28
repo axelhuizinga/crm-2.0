@@ -143,11 +143,4 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		');
 	}
 
-	/*
-	function DateTimeClock(p:Dynamic):ReactFragment
-	{
-		//trace(p);
-		return null;
-	}
-	*/
 }

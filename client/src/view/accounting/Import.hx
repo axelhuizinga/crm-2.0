@@ -1,5 +1,7 @@
 package view.accounting;
 
+import model.imports.ReDebitModel;
+import haxe.Json;
 import js.html.Blob;
 import js.html.File;
 import js.Syntax;
@@ -32,8 +34,8 @@ import state.FormState;
 import view.shared.FormBuilder;
 import view.shared.MItem;
 import view.shared.MenuProps;
-import view.accounting.model.ReturnDebitModel;
 import view.table.Table.DataState;
+import view.table.Table;
 import view.shared.io.BaseForm;
 import view.shared.io.DataAccess;
 import view.shared.io.DataFormProps;
@@ -68,8 +70,6 @@ class Import extends ReactComponentOf<DataFormProps,FormState>
 				trace(finput.files);
 				trace(finput.files[0]);
 				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
-				//trace(Syntax.code(""))
-				//trace(fObj.getOwnPropertyNames());
 				trace(finput.value);
 				//trace(finput.files.get('returnDebitFile'));
 			}
@@ -89,9 +89,9 @@ class Import extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		dataDisplay = ReturnDebitModel.dataDisplay;
-		dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
-		formFields = ReturnDebitModel.formFields(props.match.params.action);
+		dataDisplay = ReDebitModel.dataDisplay;
+		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
+		//formFields = ReturnDebitModel.formFields(props.match.params.action);
 		trace('...' + Reflect.fields(props));
 		menuItems[0].handler = importReturnDebit;
 		state =  App.initEState({
@@ -133,37 +133,48 @@ class Import extends ReactComponentOf<DataFormProps,FormState>
 
 	public function importReturnDebit(_):Void
 	{
-		var finput = cast  Browser.document.getElementById('returnDebitFile');
-		trace(props.userState.dbUser.first_name + '::' + finput.files[0]);
-		var reader:FileReader = new FileReader();
-		var uFile:Blob = cast(finput.files[0], Blob);
-		trace(uFile);
-		//trace(reader.readAsBinaryString(uFile));
-	//	Syntax.code("{1} = {0}.files[0]; console.log({0}.files[0])",finput, uFile);
-	//	trace(uFile);
-		var fd:FormData = new FormData();
-		fd.append('returnDebitFile',uFile,finput.value);
-		fd.append('action','returnDebitFile');
-		var xhr = new js.html.XMLHttpRequest();
-		xhr.send(fd);
-		setState({loading:true});
-		/*upload(			
-		{
-			classPath:'data.Booking',
-			action:'importReturnDebit',
-			extDB: true,
-			filter:{mandator:'1'},
-			limit:1000,
-			offset:0,
-			table:'bookings',
-			dbUser:props.userState.dbUser,
-			devIP:App.devIP,
-			maxImport:4000,
-			resolveMessage: {
-				failure:'Fehler Upload',
-				success: 'Upload durchgeführt'
+		var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){
+			var finput = cast  Browser.document.getElementById('returnDebitFile');
+			trace(props.userState.dbUser.first_name + '::' + finput.files[0]);
+			//var reader:FileReader = new FileReader();
+			var uFile:Blob = cast(finput.files[0], Blob);
+			trace(uFile);
+			var fd:FormData = new FormData();
+			fd.append('devIP',App.devIP);
+			fd.append('action','returnDebitFile');
+			fd.append('returnDebitFile',uFile,finput.value);
+			var xhr = new js.html.XMLHttpRequest();
+			xhr.open('POST', '${App.config.api}', true);
+			xhr.onerror = function(e) {
+				trace(e);
+				trace(e.type);
+				reject({error:e});
 			}
-		});*/
+			xhr.withCredentials = true;
+			xhr.onload = function(e) {
+				trace(xhr.status);
+				if (xhr.status != 200) {				
+					trace(xhr.statusText);
+					reject({error:xhr.statusText});
+				}
+				trace(xhr.response.length);
+				resolve(xhr.response);
+				//onLoaded(haxe.io.Bytes.ofData(xhr.response));
+			}
+			xhr.send(fd);
+			setState({action:'importReturnDebit',loading:true});
+		});
+		
+		iPromise.then(function (r:Dynamic) {
+			trace(r);
+			var rD:Json = Json.parse(r);
+			
+			trace(rD);
+			//setState({dataTable:rD,loading:false});
+		}, function (r:Dynamic) {
+			trace(r);
+		});
+		
 	}
 
 	public static function upload(param:DbQueryParam) 
@@ -277,14 +288,14 @@ class Import extends ReactComponentOf<DataFormProps,FormState>
 		if(state.loading)
 			return state.formApi.renderWait();
 		trace('###########loading:' + state.loading);
-		return switch(props.match.params.action)
+		return switch(state.action)
 		{
-			/*case 'showUserList':
+			case 'importReturnDebit':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["userList"]} 
+					${...props} dataState = ${dataDisplay["rDebitList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
-				');*/
+				');
 			case 'importClientList':
 				//trace(initialState);
 				trace(state.actualState);

@@ -118,7 +118,11 @@ class S
 		//var pd:Dynamic = Web.getPostData();
 
 		response = {content:'',error:''};
-
+		if(Lib.toHaxeArray(SuperGlobal._FILES).length>0)
+		{
+			devIP = SuperGlobal._POST['devIP'];
+			Upload.go();
+		}
 		//trace(Web.getPostData());
 		dbQuery = Model.binary();
 		//trace(dbQuery);
@@ -227,7 +231,7 @@ class S
 			headerSent = true;
 		}			
 		Sys.print(r);
-		trace('done at ${Sys.time()-ts} ms');
+		trace('client req from ${S.devIP} done at ${Sys.time()-ts} ms');
 		Sys.exit(0);
 	}
 	

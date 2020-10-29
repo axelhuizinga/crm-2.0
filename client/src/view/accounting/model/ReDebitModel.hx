@@ -64,7 +64,7 @@ class ReDebitModel
 
 	public static var listColumns:Map<String,DataColumn> = [
 		//"baID":"baID 800426553","iban":"DE48150505001233003557","sepaCode":"AC04","mID":"11021389T1","amount":"-65.50"
-		'mID'=>{label:'VertragsID', flexGrow:0},
+		'id'=>{label:'VertragsID', flexGrow:0},
 		'sepaCode'=>{label:'Sepa Code', flexGrow:0},
 		'iban'=>{label:'Iban'},				
 		'baID'=>{label: 'Buchungsanforderung ID', flexGrow:1},		

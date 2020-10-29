@@ -132,6 +132,7 @@ class Tr extends ReactComponentOfProps<TrProps>
 		{
 			if (!cD.show)
 			 continue;//!=null?cD.flexGrow:null
+			//trace('key=${"r"+cD.pos.row+"c"+cD.pos.column}');
 			rCs.push(
 			jsx('<td className=${cD.className} data-name=${cD.name} key=${"r"+cD.pos.row+"c"+cD.pos.column} data-grow=${cD.flexGrow}>
 				${cD.dataDisplay}
@@ -158,18 +159,19 @@ class Tr extends ReactComponentOfProps<TrProps>
 			return null;
 		}		
 		var makeRef:String = selected && props.row>0?'ref=${ref}':'';
+		//trace('	<tr className=${cl} data-id=${props.data["id"]} data-row=${props.row} title=${props.data["id"]} ref=${ref} onClick=${select}>');
 		return jsx('
 		<tr className=${cl} data-id=${props.data["id"]} data-row=${props.row} title=${props.data["id"]} ref=${ref} onClick=${select}>
 		${renderCells(props.data)}
 		</tr>
 		');
-		//key=${"r"+props.row} 
-		//return me;
+		//
+		//return me;key=${props.row} 
 	}
 
 	public function select(mEvOrID:Dynamic)
 	{
-		trace('select from contructor:${mEvOrID.select}');
+		//trace('select from contructor:${mEvOrID.select}');
 		trace('${props.data['id']} selected:$selected');
 		trace(Reflect.fields(props));
 		//trace(props.row +':' + props.data.toString());
@@ -196,11 +198,11 @@ class Tr extends ReactComponentOfProps<TrProps>
 		if(props.parentComponent != null)
 		{
 			if(!selected)
-			{								
-				trace(props.data['id']);
+			{
+				//trace(props.data['id']);
 				trace(props.parentComponent.props.select);
-				props.parentComponent.props.select(props.data['id'], 
-					[Std.int(props.data['id'])=>props.data], props.parentComponent.props.match);
+				//props.parentComponent.props.select(props.data['id'], 
+					//[Std.int(props.data['id'])=>props.data], props.parentComponent.props.match);
 			}//
 			else
 			{

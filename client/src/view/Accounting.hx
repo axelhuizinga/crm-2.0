@@ -26,7 +26,7 @@ import view.StatusBar;
 //import Webpack.*;
 import state.AppState;
 import view.data.Accounts;
-import view.accounting.Import;
+import view.accounting.Imports;
 using state.CState;
 using shared.Utils;
 
@@ -100,13 +100,13 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 						search:'',
 						state:props.location.state.extend({contact:props.location.hash})
 					}} ${...props} >Konten</$TabLink>
-					<$TabLink to="/Accounting/Import" ${...props} >Import</$TabLink>
+					<$TabLink to="/Accounting/Imports" ${...props} >Imports</$TabLink>
 				</$Tabs>
 			</div>		
             <div className="tabContent2">
 				<$Switch>
 					<$Route path="/Accounting/Accounts/:section?/:action?/:id?"   ${...props} component={Accounts}/>	
-					<$Route path="/Accounting/Import/:section?/:action?/:id?"  ${...props} component={Import}/>
+					<$Route path="/Accounting/Imports/:section?/:action?/:id?"  ${...props} component={Imports}/>
 				</$Switch>
             </div>
 			<StatusBar {...props}/>

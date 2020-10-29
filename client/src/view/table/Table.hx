@@ -163,13 +163,17 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		headerUpdated = false;
 		fieldNames = [];
 		trs = [];
-		_trace = false;
+		_trace = true;
 		if(props.dataState!=null)
 		for (k in props.dataState.columns.keys())
 		{
 			//if(_trace) trace(k);
 			fieldNames.push(k);
 		}	
+		
+		//if(_trace) trace(props);
+		if(_trace) trace(Reflect.fields(props));
+		
 		if(_trace) trace(fieldNames);
 		state = {selectedRows:[]};
 	}

@@ -1,5 +1,8 @@
 package view.accounting;
 
+import action.DataAction;
+import action.async.LiveDataAccess;
+import shared.Utils;
 import model.imports.ReDebitModel;
 import haxe.Json;
 import js.html.Blob;
@@ -22,6 +25,7 @@ import action.async.DBAccessProps;
 import action.async.LivePBXSync;
 import state.AppState;
 import haxe.ds.Map;
+import haxe.ds.IntMap;
 import loader.BinaryLoader;
 import me.cunity.debug.Out;
 import model.Contact;
@@ -47,17 +51,11 @@ using Lambda;
  * @author axel@cunity.me
  */
 @:connect
-class Import extends ReactComponentOf<DataFormProps,FormState>
+class Imports extends ReactComponentOf<DataFormProps,FormState>
 {
 
-	static var _instance:Import;
+	static var _instance:Imports;
 
-	/*public static var menuItems:Array<MItem> = [		
-		
-		{label:'Kontoauszug Import ',action:'importCamt'},
-		{label:'Speichern', action:'save'},
-		{label:'Löschen',action:'delete'}
-	];*/
 	public static var menuItems:Array<MItem> = [		
 		{label:'Datei Rücklastschrift',action:'importReturnDebit',formField:{
 			name:'returnDebitFile',
@@ -93,6 +91,7 @@ class Import extends ReactComponentOf<DataFormProps,FormState>
 		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
 		//formFields = ReturnDebitModel.formFields(props.match.params.action);
 		trace('...' + Reflect.fields(props));
+		baseForm = new BaseForm(this);
 		menuItems[0].handler = importReturnDebit;
 		state =  App.initEState({
 			sideMenu:FormApi.initSideMenu2( this,
@@ -120,7 +119,17 @@ class Import extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-			load: function(param:DbQueryParam) return dispatch(Import.upload(param))			
+			load: function(param:DbQueryParam) return dispatch(Imports.upload(param)),
+			storeData:function(id:String, action:DataAction)
+			{
+				dispatch(LiveDataAccess.storeData(id, action));
+			},
+			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:react.router.RouterMatch, ?selectType:SelectType)
+			{
+				if(false) trace('select:$id selectType:${selectType}');
+				//dispatch(DataAction.CreateSelect(id,data,match));
+				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
+			}						
         }
 	}	
 	
@@ -168,9 +177,12 @@ class Import extends ReactComponentOf<DataFormProps,FormState>
 		iPromise.then(function (r:Dynamic) {
 			trace(r);
 			var rD:Json = Json.parse(r);
-			
+			var dd:{rlData:Array<Dynamic>} = Json.parse(r);
 			trace(rD);
-			//setState({dataTable:rD,loading:false});
+			var dT:Array<Map<String, Dynamic>> = new Array();
+			for(dR in dd.rlData)
+				dT.push(Utils.dynToMap(dR));
+			setState({dataTable:dT,loading:false});
 		}, function (r:Dynamic) {
 			trace(r);
 		});
@@ -292,9 +304,9 @@ class Import extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'importReturnDebit':
 				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["rDebitList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
+					<Table id="importedReturnDebit" data=${state.dataTable}
+					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${baseForm.renderPager} 
+					className="is-striped is-hoverable"  parentComponent=${this} fullWidth=${true}/>
 				');
 			case 'importClientList':
 				//trace(initialState);

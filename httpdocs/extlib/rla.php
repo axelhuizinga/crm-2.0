@@ -28,7 +28,7 @@ $dir = '/var/www/vhosts/pitverwaltung.de/files';
 #$message = $reader->readFile($dir.'/camt/2014-01-03_C52_DE58740618130100033626_EUR_A00035.xml');
 #$message = $reader->readFile($dir.'/camt-1169231300-43060967-2020-09-23.xml');
 $message = $reader->readFile($_GET['file']);
-#unlink($_GET['file']);
+unlink($_GET['file']);
 #print_r($message);
 $s_i = 0;
 $r = 0;
@@ -60,7 +60,7 @@ foreach ($statements as $statement) {
 				'baID'=>$traDet->getReference()->getEndToEndId(),
 				'iban'=>$account->getIdentification(),
 				'sepaCode'=>$rInfo->getCode(),
-				'mID'=>$traDet->getReference()->getMandateId(),
+				'dealId'=>$traDet->getReference()->getMandateId(),
 				'amount'=>sprintf("%.2f", $money->getAmount()/100)
 			);
 			array_push($rla,$rlData);
@@ -72,5 +72,7 @@ foreach ($statements as $statement) {
 	#print_r($entries);
 }
 	header('Content-Type: application/json');
-	echo json_encode(array('rlData'=>$rla),JSON_FORCE_OBJECT);
+	#echo json_encode(array('rlData'=>$rla),JSON_FORCE_OBJECT);
+	echo json_encode(array('rlData'=>$rla));
+
 ?>

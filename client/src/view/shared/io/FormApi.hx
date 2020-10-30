@@ -627,6 +627,10 @@ class FormApi
 		return ids.pInts();
 	}
 
+	public static function sParams(ids:Array<String>):String {
+		return ids.pStrings();
+	}	
+
 	public static function initSideMenu(comp:Dynamic, sMb:MenuBlock, sM:MenuProps):MenuProps
 	{
 		for(sI in sMb.items)

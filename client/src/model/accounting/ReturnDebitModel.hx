@@ -1,4 +1,4 @@
-package model.imports;
+package model.accounting;
 
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
@@ -10,7 +10,7 @@ import view.shared.FormInputElement;
  * @author axel@cunity.me
  */
 
-class ReDebitModel
+class ReturnDebitModel
 {
 	public static var dataAccess:DataAccess = [
 		'open' => {
@@ -63,8 +63,15 @@ class ReDebitModel
 	];
 
 	public static var listColumns:Map<String,DataColumn> = [
+		'id'=>{
+			cellFormat:function(v) {
+				return Std.parseInt(v);
+			},
+			show:false,
+			useAsIndex: true
+		},
+		'dealId'=>{label:'VertragsID', flexGrow:0},
 		//"baID":"baID 800426553","iban":"DE48150505001233003557","sepaCode":"AC04","mID":"11021389T1","amount":"-65.50"
-		'id'=>{label:'VertragsID', flexGrow:0},
 		'sepaCode'=>{label:'Sepa Code', flexGrow:0},
 		'iban'=>{label:'Iban'},				
 		'baID'=>{label: 'Buchungsanforderung ID', flexGrow:1},		

@@ -3,7 +3,7 @@ package view.accounting;
 import action.DataAction;
 import action.async.LiveDataAccess;
 import shared.Utils;
-import model.imports.ReDebitModel;
+import model.accounting.ReturnDebitModel;
 import haxe.Json;
 import js.html.Blob;
 import js.html.File;
@@ -24,7 +24,7 @@ import js.lib.Promise;
 import action.async.DBAccessProps;
 import action.async.LivePBXSync;
 import state.AppState;
-import haxe.ds.Map;
+import haxe.ds.StringMap;
 import haxe.ds.IntMap;
 import loader.BinaryLoader;
 import me.cunity.debug.Out;
@@ -87,7 +87,7 @@ class Imports extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		dataDisplay = ReDebitModel.dataDisplay;
+		dataDisplay = ReturnDebitModel.dataDisplay;
 		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
 		//formFields = ReturnDebitModel.formFields(props.match.params.action);
 		trace('...' + Reflect.fields(props));
@@ -124,11 +124,12 @@ class Imports extends ReactComponentOf<DataFormProps,FormState>
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
 			},
-			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:react.router.RouterMatch, ?selectType:SelectType)
+			select:function(id:Int = -1,data:StringMap<Map<String,Dynamic>>,match:react.router.RouterMatch, ?selectType:SelectType)
 			{
-				if(false) trace('select:$id selectType:${selectType}');
+				if(true) trace('select:$id selectType:${selectType}');
+				trace(data);
 				//dispatch(DataAction.CreateSelect(id,data,match));
-				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
+				dispatch(LiveDataAccess.sSelect({id:id,data:data,match:match,selectType: selectType}));
 			}						
         }
 	}	

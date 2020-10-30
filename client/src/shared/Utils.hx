@@ -36,6 +36,17 @@ class Utils
 		return l;
 	}
 
+
+	public static function sKeysList(ki:Iterator<String>):Array<String>
+		{
+			var l:Array<String> = [];
+			for(k in ki)
+			{
+				l.push(k);
+			}
+			return l;
+		}	
+
 	public static function argList(path:String, keys:Array<String>,del:String='/'):Map<String,Dynamic> {
 		//trace(path);
 		var segments:Array<String> = path.split(del);

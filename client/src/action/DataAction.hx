@@ -1,5 +1,6 @@
 package action;
 
+import haxe.ds.StringMap;
 import haxe.Constraints.Function;
 import haxe.ds.IntMap;
 import react.router.RouterMatch;
@@ -32,6 +33,14 @@ typedef LiveDataProps =
 	?callBack:Function,
 	?selectType:SelectType
 }
+typedef SDataProps = 
+{
+	id:Dynamic,
+	?data: StringMap<Map<String,Dynamic>>,
+	?match:RouterMatch,
+	?callBack:Function,
+	?selectType:SelectType
+}
 
 enum  DataAction
 {
@@ -44,6 +53,7 @@ enum  DataAction
 	SelectActContacts(sData:IntMap<Map<String,Dynamic>>);
 	SelectContacts(sData:IntMap<Map<String,Dynamic>>);
 	SelectDeals(sData:IntMap<Map<String,Dynamic>>);
+	SelectBookings(sData:StringMap<Map<String,Dynamic>>);
 	Sync(dataAccess:DBAccessProps);
 	UpStore(sData:IntMap<Map<String,Dynamic>>);
 	Unselect(id:Int);

@@ -113,11 +113,6 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
     {
 		if(_strace) trace('ok');
         return {
-			/*globalState: function (key:String,?data:Dynamic)
-			{
-				if(_strace) trace('$key => $data');
-				dispatch(GlobalState(key,data));
-			},*/
 			storeData:function(id:String, action:DataAction)
 			{
 				dispatch(LiveDataAccess.storeData(id, action));

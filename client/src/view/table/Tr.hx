@@ -60,7 +60,7 @@ class Tr extends ReactComponentOfProps<TrProps>
 	var selected:Bool;
 	var ref:ReactRef<TableRowElement>;
 
-	public function new(?props:Dynamic)
+	public function new(?props:TrProps)
 	{
 		super(props);	
 		ref = React.createRef();
@@ -158,8 +158,13 @@ class Tr extends ReactComponentOfProps<TrProps>
 		{
 			return null;
 		}		
+		if(props.row==3)
+		{
+			trace(props.data);
+		}		
 		var makeRef:String = selected && props.row>0?'ref=${ref}':'';
 		//trace('	<tr className=${cl} data-id=${props.data["id"]} data-row=${props.row} title=${props.data["id"]} ref=${ref} onClick=${select}>');
+		//
 		return jsx('
 		<tr className=${cl} data-id=${props.data["id"]} data-row=${props.row} title=${props.data["id"]} ref=${ref} onClick=${select}>
 		${renderCells(props.data)}
@@ -199,10 +204,13 @@ class Tr extends ReactComponentOfProps<TrProps>
 		{
 			if(!selected)
 			{
-				//trace(props.data['id']);
-				trace(props.parentComponent.props.select);
-				//props.parentComponent.props.select(props.data['id'], 
-					//[Std.int(props.data['id'])=>props.data], props.parentComponent.props.match);
+				//trace(props.parentComponent.props.select);
+				trace(Type.typeof(props.parentComponent));
+				trace(props.data['id']);
+				props.parentComponent.props.select(props.data['id'], 
+					//[Std.int(props.data['id'])=>props.data], 
+					null,//[props.data['id']=>props.data], 
+					props.parentComponent.props.match);
 			}//
 			else
 			{

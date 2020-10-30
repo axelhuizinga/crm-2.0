@@ -1,4 +1,5 @@
-package view.data.contacts;
+package view.accounting.imports;
+import model.accounting.ReturnDebitModel;
 import action.async.CRUD;
 import db.DbQuery.DbQueryParam;
 import redux.Redux.Dispatch;
@@ -22,7 +23,6 @@ import shared.DBMetaData;
 import view.shared.FormBuilder;
 import view.shared.FormField;
 import state.FormState;
-import model.contacts.ContactsModel;
 import view.shared.MItem;
 import view.shared.MenuProps;
 import view.shared.io.BaseForm;
@@ -60,7 +60,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		baseForm = new BaseForm(this);
-		dataDisplay = ContactsModel.dataDisplay;
+		dataDisplay = ReturnDebitModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			dataTable:[],

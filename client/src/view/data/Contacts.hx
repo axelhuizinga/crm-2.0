@@ -134,11 +134,6 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		if(_strace) trace(aState.dataStore.contactData.keys().next());
 		if(aState.dataStore.contactsDbData != null)
 		if(_strace) trace(aState.dataStore.contactsDbData.dataRows[0]);
-		else 
-		{
-			if(_strace) trace(aState.dataStore);
-			if(_strace) trace(Reflect.fields(aState.dataStore));
-		}
 		if(_strace) trace(App.store.getState().dataStore.contactsDbData);
 		var bState =  {
 			dataStore:aState.dataStore,
@@ -161,7 +156,8 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	if(_trace) trace(state.dataTable[0]);
+		//if(state.dataTable != null)	
+		if(_trace) trace(state.sideMenu);
 		if(_trace) trace(props.match.params.section);					
 		if(_trace) trace(props.match.params.action);	
 		return switch(props.match.params.section)

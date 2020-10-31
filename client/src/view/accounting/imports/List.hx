@@ -1,50 +1,79 @@
 package view.accounting.imports;
+
+import action.DataAction;
+import action.DataAction.SelectType;
+import action.async.LiveDataAccess;
+import shared.Utils;
 import model.accounting.ReturnDebitModel;
-import action.async.CRUD;
+import haxe.Json;
+import js.html.Blob;
+import js.html.File;
+import js.Syntax;
+import js.html.FormData;
+import view.shared.FormInputElement;
+import js.Browser;
+import js.html.FileReader;
+import haxe.Unserializer;
+import js.html.XMLHttpRequest;
+import shared.DbDataTools;
+import action.AppAction;
 import db.DbQuery.DbQueryParam;
 import redux.Redux.Dispatch;
+import redux.thunk.Thunk;
+import action.async.CRUD;
 import js.lib.Promise;
 import action.async.DBAccessProps;
-import react.router.RouterMatch;
-import js.Browser;
-import js.html.NodeList;
-import js.html.TableRowElement;
-import action.DataAction;
+import action.async.LivePBXSync;
 import state.AppState;
-import haxe.Constraints.Function;
+import haxe.ds.StringMap;
 import haxe.ds.IntMap;
-import react.data.ReactDataGrid;
+import loader.BinaryLoader;
+import me.cunity.debug.Out;
+import model.Contact;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
-import react.ReactUtil.copy;
+import react.ReactUtil;
 import shared.DbData;
-import shared.DBMetaData;
-import view.shared.FormBuilder;
-import view.shared.FormField;
 import state.FormState;
+import view.shared.FormBuilder;
 import view.shared.MItem;
 import view.shared.MenuProps;
-import view.shared.io.BaseForm;
-import view.shared.io.FormApi;
-import view.shared.io.DataFormProps;
-import view.shared.io.DataAccess;
-import loader.BinaryLoader;
+import view.table.Table.DataState;
 import view.table.Table;
-import model.Contact;
+import view.shared.io.BaseForm;
+import view.shared.io.DataAccess;
+import view.shared.io.DataFormProps;
+import view.shared.io.FormApi;
 
+using Lambda;
+/**
+ * ...
+ * @author axel@cunity.me
+ */
 @:connect
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<MItem> = [
-		//{label:'Anzeigen',action:'get'},
-		{label:'Bearbeiten',action:'open',section: 'Edit'},
-		{label:'Neu', action:'insert',section: 'Edit'},		
-		{label:'Löschen',action:'delete'},
-		{label:'Auswahl aufheben',action:'selectionClear'},
-	//	{label:'Auswahl umkehren',action:'selectionInvert'},
-	//	{label:'Auswahl alle',action:'selectionAll'},
-	];
+
+	static var _instance:List;
+
+	public static var menuItems:Array<MItem> = [		
+		{label:'Datei Rücklastschrift',action:'importReturnDebit',formField:{
+			name:'returnDebitFile',
+			submit:'Importieren',
+			type:FormInputElement.Upload},
+			handler: function(el) {				
+				var finput = cast Browser.document.getElementById('returnDebitFile');
+				//var files = php.Lib.hashOfAssociativeArray(finput.files);
+				
+				trace(finput.files);
+				trace(finput.files[0]);
+				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
+				trace(finput.value);
+				//trace(finput.files.get('returnDebitFile'));
+			}
+		}
+	];	
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
 	var formApi:FormApi;
@@ -54,232 +83,262 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	var baseForm:BaseForm;
 	var contact:Contact;
 	var dbData: shared.DbData;
-	var dbMetaData:shared.DBMetaData;
+	var dbMetaData:shared.DBMetaData;	
 
 	public function new(props) 
 	{
 		super(props);
-		baseForm = new BaseForm(this);
 		dataDisplay = ReturnDebitModel.dataDisplay;
+		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
+		//formFields = ReturnDebitModel.formFields(props.match.params.action);
 		trace('...' + Reflect.fields(props));
+		baseForm = new BaseForm(this);
+		
+		menuItems[0].handler = importReturnDebit;
 		state =  App.initEState({
-			dataTable:[],
-			loading:false,
-			contactData:new IntMap(),			
-			selectedRows:[],
-			sideMenu:FormApi.initSideMenu( this,
-				{
-					dataClassPath:'data.Contacts',
-					label:'Liste',
-					section: 'List',
-					items: menuItems
-				}					
-				,{
-					section: props.match.params.section==null? 'List':props.match.params.section, 
-					sameWidth: true
-				}),
-			values:new Map<String,Dynamic>()
+			sideMenu:FormApi.initSideMenu( this,			
+			{
+				dataClassPath:'admin.ImportCamt',
+				label:"Import RüLa's",
+				section: 'List',
+				items: menuItems
+			},
+			{	
+				section: props.match.params.section==null? 'List':props.match.params.section, 
+				sameWidth: true					
+			})
 		},this);
-		if(props.match.params.section==null||props.match.params.action==null)
-		{
-			//var sData = App.store.getState().dataStore.contactData;			
-			var baseUrl:String = props.match.path.split(':section')[0];
-			trace('redirecting to ${baseUrl}List/get');
-			props.history.push('${baseUrl}List/get');
-			get(null);
-		}
-		else 
-		{
-			//
-			trace(props.match.params);
-		}		
-		trace(state.loading);
+
+		trace(props.match.path);
 	}
-	
+
 	static function mapStateToProps(aState:AppState) 
 	{
-		trace ('never');
 		return {
 			userState:aState.userState
 		};
 	}
+
+	static function mapDispatchToProps(dispatch:Dispatch) {
+        return {
+			load: function(param:DbQueryParam) return dispatch(List.upload(param)),
+			storeData:function(id:String, action:DataAction)
+			{
+				dispatch(LiveDataAccess.storeData(id, action));
+			},
+			select:function(id:Int = -1,data:StringMap<Map<String,Dynamic>>,match:react.router.RouterMatch, ?selectType:SelectType)
+			{
+				if(true) trace('select:$id selectType:${selectType}');
+				trace(data);
+				dispatch(LiveDataAccess.sSelect({id:id,data:data,match:match,selectType: selectType}));
+			}						
+        }
+	}	
 	
 	public function delete(ev:ReactEvent):Void
 	{
 		trace(state.selectedRows.length);
 		var data = state.formApi.selectedRowsMap(state);
+		trace(data);
 	}
 
-	public function get(ev:Dynamic):Void
+	public function importReturnDebit(_):Void
 	{
-		trace('hi $ev');
-		var offset:Int = 0;
-		if(ev != null && ev.page!=null)
-		{
-			offset = Std.int(props.limit * ev.page);
-		}
-		trace(props.userState);
-		var p:Promise<DbData> = props.load(
-			{
-				classPath:'data.Contacts',
-				action:'get',
-				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
-				limit:props.limit,
-				offset:offset>0?offset:0,
-				table:'contacts',
-				resolveMessage:{					
-					success:'Kontaktliste wurde geladen',
-					failure:'Kontaktliste konnte nicht geladen werden'
-				},
-				dbUser:props.userState.dbUser,
-				devIP: App.devIP
+		var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){
+			var finput = cast  Browser.document.getElementById('returnDebitFile');
+			trace(props.userState.dbUser.first_name + '::' + finput.files[0]);
+			//var reader:FileReader = new FileReader();
+			var uFile:Blob = cast(finput.files[0], Blob);
+			trace(uFile);
+			var fd:FormData = new FormData();
+			fd.append('devIP',App.devIP);
+			fd.append('action','returnDebitFile');
+			fd.append('returnDebitFile',uFile,finput.value);
+			var xhr = new js.html.XMLHttpRequest();
+			xhr.open('POST', '${App.config.api}', true);
+			xhr.onerror = function(e) {
+				trace(e);
+				trace(e.type);
+				reject({error:e});
 			}
-		);
-		p.then(function(data:DbData){
-			trace(data.dataRows.length); 
-			setState({loading:false, dataTable:data.dataRows});
+			xhr.withCredentials = true;
+			xhr.onload = function(e) {
+				trace(xhr.status);
+				if (xhr.status != 200) {				
+					trace(xhr.statusText);
+					reject({error:xhr.statusText});
+				}
+				trace(xhr.response.length);
+				resolve(xhr.response);
+				//onLoaded(haxe.io.Bytes.ofData(xhr.response));
+			}
+			xhr.send(fd);
+			setState({action:'importReturnDebit',loading:true});
 		});
-	}
-	
-	public function edit(ev:ReactEvent):Void
-	{
-		trace(state.selectedRows.length);	
-		trace(Reflect.fields(ev));
-	}
-
-	public function restore() {
-		trace(Reflect.fields(props.dataStore));
-		if(props.dataStore != null && props.dataStore.contactsDbData != null)
-		{
-			setState({
-			//props.parentComponent.setStateFromChild({props.match.params.id!=null?'id|${props.match.params.id}'
-				//rows:dRows,
-				dataTable:props.dataStore.contactsDbData.dataRows,
-				dataCount:Std.parseInt(props.dataStore.contactsDbData.dataInfo['count']),
-				pageCount: Math.ceil(Std.parseInt(props.dataStore.contactsDbData.dataInfo['count']) / props.limit)
-			}, function (){
-				trace(state.dataTable);
-				props.history.push(
-					'${props.match.path.split(':section')[0]}List/get/${props.match.params.id!=null?props.match.params.id:''}'
-				);
-				//trace(props.history.)
-				//forceUpdate();
-			});			
-		}
-		else 
-		{
-			props.history.push(
-				'${props.match.path.split(':section')[0]}List/get/${props.match.params.id!=null?props.match.params.id:''}'
-			);
-			get(null);			
-		}
-		//props.storeData('Contacts', DataAction.Restore);
-	}
-
-	public function selectionClear() {
-		var match:RouterMatch = copy(props.match);
-		match.params.action = 'get';
-		trace(state.dataTable.length);
-		props.select(0, null,match, UnselectAll);	
-		//trace(formRef !=null);
-
-		var trs:NodeList = Browser.document.querySelectorAll('.tabComponentForm tr');				
-		trace(trs.length);
-		for(i in 0...trs.length){
-			var tre:TableRowElement = cast(trs.item(i), TableRowElement);
-			if(tre.classList.contains('is-selected')){
-				trace('unselect:${tre.dataset.id}');
-				tre.classList.remove('is-selected');
-			}
-		};
-		Browser.document.querySelector('[class="grid-container-inner"]').scrollTop = 0;
-	}
 		
-	override public function componentDidMount():Void 
-	{	
-		dataAccess = [
-			'get' =>{
-				source:[
-					"contacts" => []
-				],
-				view:[]
-			},
-		];			
-		//
-		if(props.userState != null)
-		trace('yeah: ${props.userState.dbUser.first_name}');
-		trace(props.match.params.action);
-		state.formApi.doAction();
-
-	}
-	
-	function renderResults():ReactFragment
-	{
-		trace(props.match.params.section + ':${props.match.params.action}::' + Std.string(state.dataTable != null));
-		//trace(dataDisplay["userList"]);
-		var pState:FormState = props.parentComponent.state;
-		trace(state.dataTable.length);
-		if(props.dataStore.contactsDbData != null)
-		trace(props.dataStore.contactsDbData.dataRows[0]);
-		else trace(props.dataStore.contactsDbData);
-		trace(state.loading);
-		if( state.dataTable.length==0)
-			return state.formApi.renderWait();
-		//trace('###########loading:' + state.rows[0]);
-		return switch(props.match.params.action)
-		{//  ${...props}
-			case 'get':
-				jsx('
-					<form className="tabComponentForm" >
-						<$Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
-						${...props} dataState = ${dataDisplay["contactList"]} renderPager=${baseForm.renderPager}
-						className="is-striped is-hoverable" fullWidth=${true}/>
-					</form>
-				');
-			default:
-				null;
-		}
-		return null;
+		iPromise.then(function (r:Dynamic) {
+			trace(r);
+			var rD:Json = Json.parse(r);
+			var dd:{rlData:Array<Dynamic>} = Json.parse(r);
+			trace(rD);
+			var dT:Array<Map<String, Dynamic>> = new Array();
+			for(dR in dd.rlData)
+				dT.push(Utils.dynToMap(dR));
+			setState({dataTable:dT,loading:false});
+		}, function (r:Dynamic) {
+			trace(r);
+		});
+		
 	}
 
-	function getCellData(cP:Dynamic) {
-		trace(cP);
+	public static function upload(param:DbQueryParam) 
+	{	trace(param.action);
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
+			trace(param);
+			var dbData:DbData = DbDataTools.create();
+
+			return new Promise(function(resolve, reject){
+				if (!param.dbUser.online)
+				{
+					dispatch(User(LoginError(
+					{
+						dbUser:param.dbUser,
+						lastError:'Du musst dich neu anmelden!'
+					})));
+					trace('LoginError');
+					resolve(null);
+				}	
+				
+				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
+					'${App.config.api}', 
+					param,
+					function(data:DbData)
+					{				
+						trace(data);
+						if(data.dataErrors != null)
+							trace(data.dataErrors);
+						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
+							trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
+
+						if(data.dataErrors.exists('lastError'))
+						{
+							dispatch(User(LoginError({lastError: data.dataErrors.get('lastError')})));
+							resolve(null);
+						}
+						else{
+
+							dispatch(Status(Update( 
+								{	cssClass:'',
+									text:(param.resolveMessage==null?'':param.resolveMessage.success)				
+								}
+							)));
+							resolve(data);
+						}
+					}
+				);
+				trace(bL);
+			});	
+		});
+			
 	}
-//cellDataGetter=${getCellData}
 	
+
+	function doImport(dbQueryParam:DbQueryParam) {
+		
+		var p:Promise<DbData> = props.load(dbQueryParam);
+		p.then(function(data:DbData){
+			if(data.dataInfo['offset']==null)
+			{
+				return App.store.dispatch(Status(Update(
+				{
+					cssClass:'error',
+					text:'Fehler 0 ${data.dataInfo['classPath']} Aktualisiert'}
+				)));
+			}					
+			var offset = Std.parseInt(data.dataInfo['offset']);
+			App.store.dispatch(Status(Update(
+				{
+					cssClass:' ',
+					text:'${offset} ${dbQueryParam.classPath} von ${data.dataInfo['maxImport']} aktualisiert'
+				}
+			)));
+
+			trace('${offset} < ${data.dataInfo['maxImport']}');
+			if(offset < data.dataInfo['maxImport']){
+				//LOOP UNTIL LIMIT
+				trace('next loop:${data.dataInfo}');
+				return doImport(cast data.dataInfo);
+			}					
+			else{
+				setState({loading:false});
+				return App.store.dispatch(Status(Update(
+					{
+						cssClass:' ',
+						text:'${offset} ${dbQueryParam.classPath} von ${data.dataInfo['maxImport']} aktualisiert'
+					}
+				)));
+			}
+
+		});//*/
+		return p;
+	}
+
 	override function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
+		<>
+			<form className="tabComponentForm"  >
 				${renderResults()}
-		'));		
+			</form>
+		</>'));		
 	}
-
-	override public function componentWillUnmount() {
-		trace('...');
-	}
-
-	function updateMenu(?viewClassPath:String):MenuProps
+	
+	function renderResults():ReactFragment
 	{
-		var sideMenu = state.sideMenu;
-		trace(sideMenu.section);
-		for(mI in sideMenu.menuBlocks['List'].items)
+		trace(props.match.params.action + ':' + Std.string(state.dataTable != null));
+		trace(state.loading);
+		if(state.loading)
+			return state.formApi.renderWait();
+		trace('###########loading:' + state.loading);
+		return switch(state.action)
 		{
-			switch(mI.action)
-			{
-				case 'update'|'delete':
-					mI.disabled = state.selectedRows.length==0;
-				default:
-			}			
+			case 'importReturnDebit':
+				jsx('
+					<Table id="importedReturnDebit" data=${state.dataTable}
+					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${baseForm.renderPager} 
+					className="is-striped is-hoverable"  parentComponent=${this} fullWidth=${true}/>
+				');
+			case 'importClientList':
+				//trace(initialState);
+				trace(state.actualState);
+				/*var fields:Map<String,FormField> = [
+					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+				];*/
+				(state.actualState==null ? state.formApi.renderWait():
+				state.formBuilder.renderForm({
+					mHandlers:state.mHandlers,
+					fields:formFields,/*[
+						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+					],*/
+					model:'importClientList',
+					//ref:formRef,
+					title: 'Stammdaten Import' 
+				},state.actualState));	
+			/*case 'showFieldList2':
+				trace(dataDisplay["fieldsList"]);
+				trace(state.dataTable[29]['id']+'<<<');
+				jsx('
+					<Table id="fieldsList" data=${state.dataTable}
+					${...props} dataState = ${dataDisplay["fieldsList"]} 
+					className="is-striped is-hoverable" fullWidth=${true}/>				
+				');	*/
+			case 'shared.io.DB.editTableFields':
+				null;
+			default:
+				null;
 		}
-		return sideMenu;
-	}
-
-	static function mapDispatchToProps(dispatch:Dispatch) {
-        return {
-            load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
-        };
-	}
-
+		return null;
+	}	
 }

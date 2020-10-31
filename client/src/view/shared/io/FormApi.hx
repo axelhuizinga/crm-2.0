@@ -80,14 +80,14 @@ class FormApi
 	{
 		comp = rc;
 		_me = this;
-		//trace(Type.getClass(comp));
+		trace(Type.getClass(comp));
 		requests = [];
 		if(rc.props != null)
 		{
 			//trace(rc.props.match);
+			trace(sM);
 			this.sM = sM==null?rc.props.sideMenu:sM;
 			//trace(rc.props.history);			
-			trace(sM);
 			trace(this.sM);
 		}
 		//dbData = new DbData();
@@ -270,6 +270,8 @@ class FormApi
 	
 	public function render(content:ReactFragment)
 	{
+		if(sM==null)
+			return null;
 		if(sM.section != null)//TODO: MONITOR PERFORMANCE + INTEGRITY SETTING SUBMENU SECTION HERE
 		{
 			trace(sM.section +':'+ comp.props.match.params.section);

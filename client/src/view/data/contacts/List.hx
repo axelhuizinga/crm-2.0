@@ -61,7 +61,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		baseForm = new BaseForm(this);
 		dataDisplay = ContactsModel.dataDisplay;
-		trace('...' + Reflect.fields(props));
+		//trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			dataTable:[],
 			loading:false,
@@ -98,7 +98,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	static function mapStateToProps(aState:AppState) 
 	{
-		trace ('never');
 		return {
 			userState:aState.userState
 		};

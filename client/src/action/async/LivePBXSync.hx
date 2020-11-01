@@ -89,8 +89,8 @@ class LivePBXSync
 									cssClass:'error',
 									text:'Fehler 0 ${props.classPath} Aktualisiert'})));
 						}
-						
-						if(data.dataInfo['offset']!=null)
+						else
+						//if(data.dataInfo['offset']!=null)
 						{
 							props.offset = Std.parseInt(data.dataInfo['offset']);
 							return dispatch(Status(Update(

@@ -4,7 +4,7 @@ import js.html.Location;
 import js.html.History;
 import js.html.Element;
 import js.Browser;
-import haxe.macro.Expr.Catch;
+import haxe.ds.StringMap;
 import react.ReactEvent;
 import js.html.Event;
 import action.DataAction;
@@ -143,10 +143,10 @@ class Tr extends ReactComponentOfProps<TrProps>
 	
 	override public function render():ReactFragment
 	{
-		//trace(selected);
 		if(props.row==0)
 		{
 			//trace(props.data);setFormState
+			trace(props.row);
 			ref = props.firstTableRow;
 		}
 		//else selected = props.parentComponent.props.match.params.id !=null && props.parentComponent.props.match.params.id.indexOf(id)>-1;		
@@ -162,11 +162,11 @@ class Tr extends ReactComponentOfProps<TrProps>
 		{
 			trace(props.data);
 		}		
-		var makeRef:String = selected && props.row>0?'ref=${ref}':'';
+		//var makeRef:String = selected && props.row>0?'ref=${ref}':'';
 		//trace('	<tr className=${cl} data-id=${props.data["id"]} data-row=${props.row} title=${props.data["id"]} ref=${ref} onClick=${select}>');
 		//
 		return jsx('
-		<tr className=${cl} data-id=${props.data["id"]} data-row=${props.row} title=${props.data["id"]} ref=${ref} onClick=${select}>
+		<tr className=${cl} data-id=${props.data["id"]} data-row=${props.row} title=${props.data["id"]} key=${props.row}  ref=${ref} onClick=${select}>
 		${renderCells(props.data)}
 		</tr>
 		');
@@ -207,9 +207,10 @@ class Tr extends ReactComponentOfProps<TrProps>
 				//trace(props.parentComponent.props.select);
 				trace(Type.typeof(props.parentComponent));
 				trace(props.data['id']);
+				var data:StringMap<StringMap<Dynamic>> = [props.data['id']=>props.data];
 				props.parentComponent.props.select(props.data['id'], 
 					//[Std.int(props.data['id'])=>props.data], 
-					null,//[props.data['id']=>props.data], 
+					data,//[props.data['id']=>props.data], 
 					props.parentComponent.props.match);
 			}//
 			else

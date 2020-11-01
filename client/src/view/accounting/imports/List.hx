@@ -58,11 +58,18 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	static var _instance:List;
 
 	public static var menuItems:Array<MItem> = [		
-		{label:'Datei Rücklastschrift',action:'importReturnDebit',formField:{
-			name:'returnDebitFile',
-			submit:'Importieren',
-			type:FormInputElement.Upload},
-			handler: function(el) {				
+		{label:'Datei Rücklastschrift',action:'importReturnDebit',
+			formField:{
+				name:'returnDebitFile',
+				submit:'Importieren',
+				type:FormInputElement.Upload,
+				handleChange: function(_) {
+					var finput = cast Browser.document.getElementById('returnDebitFile');
+					trace(finput);
+					_instance.setState({data:['hint'=>'Zum Upload ausgewählt:${finput.files[0]}']});
+				}
+			},
+			handler: function(_) {				
 				var finput = cast Browser.document.getElementById('returnDebitFile');
 				//var files = php.Lib.hashOfAssociativeArray(finput.files);
 				
@@ -71,7 +78,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
 				trace(finput.value);
 				//trace(finput.files.get('returnDebitFile'));
-			}
+			}/**/
 		}
 	];	
 	var dataAccess:DataAccess;	
@@ -91,6 +98,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = ReturnDebitModel.dataDisplay;
 		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
 		//formFields = ReturnDebitModel.formFields(props.match.params.action);
+		//trace('...' + Type.getInstanceFields(Type.resolveClass('view.shared.MItem')));
 		trace('...' + Reflect.fields(props));
 		baseForm = new BaseForm(this);
 		
@@ -180,13 +188,23 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			trace(r);
 			var rD:Json = Json.parse(r);
 			var dd:{rlData:Array<Dynamic>} = Json.parse(r);
-			trace(rD);
+			//trace(rD);
 			var dT:Array<Map<String, Dynamic>> = new Array();
 			for(dR in dd.rlData)
 				dT.push(Utils.dynToMap(dR));
 			setState({dataTable:dT,loading:false});
+			App.store.dispatch(Status(Update( 
+				{	
+					text:dT.count() + ' Rücklastschriften Importiert'
+				}
+			)));
 		}, function (r:Dynamic) {
 			trace(r);
+			App.store.dispatch(Status(Update( 
+				{	cssClass:'',
+					text:(r.error==null?'':r.error)
+				}
+			)));
 		});
 		
 	}
@@ -240,47 +258,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			});	
 		});
 			
-	}
-	
-
-	function doImport(dbQueryParam:DbQueryParam) {
-		
-		var p:Promise<DbData> = props.load(dbQueryParam);
-		p.then(function(data:DbData){
-			if(data.dataInfo['offset']==null)
-			{
-				return App.store.dispatch(Status(Update(
-				{
-					cssClass:'error',
-					text:'Fehler 0 ${data.dataInfo['classPath']} Aktualisiert'}
-				)));
-			}					
-			var offset = Std.parseInt(data.dataInfo['offset']);
-			App.store.dispatch(Status(Update(
-				{
-					cssClass:' ',
-					text:'${offset} ${dbQueryParam.classPath} von ${data.dataInfo['maxImport']} aktualisiert'
-				}
-			)));
-
-			trace('${offset} < ${data.dataInfo['maxImport']}');
-			if(offset < data.dataInfo['maxImport']){
-				//LOOP UNTIL LIMIT
-				trace('next loop:${data.dataInfo}');
-				return doImport(cast data.dataInfo);
-			}					
-			else{
-				setState({loading:false});
-				return App.store.dispatch(Status(Update(
-					{
-						cssClass:' ',
-						text:'${offset} ${dbQueryParam.classPath} von ${data.dataInfo['maxImport']} aktualisiert'
-					}
-				)));
-			}
-
-		});//*/
-		return p;
 	}
 
 	override function render():ReactFragment

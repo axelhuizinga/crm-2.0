@@ -29,6 +29,7 @@ import state.FormState;
 import view.shared.io.FormApi;
 import view.shared.OneOf;
 using Lambda;
+using StringTools;
 
 /**
  * ...
@@ -150,6 +151,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	var tableRef:ReactRef<TableElement>;
 	var fixedHeader:ReactRef<DivElement>;
 	var firstRowRef:ReactRef<TableRowElement>;
+	var id:String;
 	var tHeadRef:ReactRef<TableRowElement>;
 	var visibleColumns:Int;
 	var headerUpdated:Bool;
@@ -164,17 +166,21 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		fieldNames = [];
 		trs = [];
 		_trace = true;
+		id = 'id';
 		if(props.dataState!=null)
 		for (k in props.dataState.columns.keys())
-		{
+		{			
+			//if(_trace) trace(k+':'+props.dataState.columns.get(k).useAsIndex);
 			//if(_trace) trace(k);
+			if(props.dataState.columns.get(k).useAsIndex)
+				id = k;
 			fieldNames.push(k);
 		}	
 		
 		//if(_trace) trace(props);
 		if(_trace) trace(Reflect.fields(props));
 		
-		if(_trace) trace(fieldNames);
+		if(_trace) trace(id);
 		state = {selectedRows:[]};
 	}
 	
@@ -187,9 +193,9 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		{
 			return state.loading ? jsx('
 			<section className="hero is-alt" style={{flexGrow:1}}>
-	<div className="loader-box">
-			  <div className="loader"  style=${{width:'6rem', height:'6rem', margin:'auto', borderWidth:'0.64rem'}}/>
-			  </div>
+				<div className="loader-box">
+			  		<div className="loader"  style=${{width:'6rem', height:'6rem', margin:'auto', borderWidth:'0.64rem'}}/>
+			  	</div>
 			</section>
 			'): null;					
 		}		
@@ -245,9 +251,18 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			if (hC.show == false)
 				continue;
 			//if(_trace) trace(hC);
+			/*if(hC.className != null && StringTools.contains(hC.className,'euro'))
+			{
+				hC.className = 'th-box tRight';
+				trace(hC);
+			}
+			else {
+				//"th-box " + (hC.headerClassName != null? hC.headerClassName :hC.className)
+				hC.className = "th-box " + (hC.className != null? hC.className :'');
+			}*/
 			headerRow.push(jsx('	
 			<th key={field}>
-				<div  className={"th-box " + (hC.headerClassName != null? hC.headerClassName :hC.className)}>
+				<div  className=${hC.headerClassName}>
 				{hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
 				</div>
 			</th>
@@ -261,7 +276,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	{
 		if(props.dataState==null)
 			return null;
-		//if(_trace) trace(props.dataState.columns.keys());
+		if(_trace) trace(props.dataState.columns.keys());
 		var headerRow:Array<ReactFragment> = [];
 		for (field in props.dataState.columns.keys())
 		{
@@ -296,6 +311,8 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		for (dR in dRows)
 		{			
 			var fRRef:ReactRef<TableRowElement> = (row==0?firstRowRef:null);
+			if(row==1)
+				trace('$id key=' + dR);
 			dRs.push(
 			jsx('<$Tr key=${dR.get("id")} columns=${props.dataState.columns} data=${dR} firstTableRow=${fRRef} fieldNames=${fieldNames} row=${row++} parentComponent=${props.parentComponent}/>')
 			);//
@@ -433,15 +450,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		//if(_trace) trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
 		if(_trace) trace('firstRowRef.current.offsetWidth:${firstRowRef.current.offsetWidth} scrollBarWidth:$scrollBarWidth');
 		tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
-		//tableRef.current.style.marginTop = '-'+(tHeadRef.current.offsetHeight) + 'px';
-		//tableRef.current.parentElement.style.marginBottom = '-'+(tHeadRef.current.offsetHeight-10) + 'px';
-
-		//tableRef.current.parentElement.querySelector('.pagination').style.marginRight = scrollBarWidth + 'px';
-		//if(_trace) trace(tableRef.current.parentElement.querySelector('.pagination'));
-		//if(_trace) trace(tableRef.current.parentElement.querySelector('.pagination').style.marginRight);
-		//tHeadRef.current.style.visibility = "collapse";						
-		//if(_trace) trace(tableRef.current.offsetHeight);
-		//if(_trace) trace(tHeadRef.current.nodeName + ':' + tHeadRef.current.style.visibility);						
+						
 		var i:Int = 0;
 		var grow:Array<Int> = [];
 		if (props.fullWidth)

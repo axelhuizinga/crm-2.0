@@ -540,6 +540,12 @@ button::-moz-focus-inner {padding:0; border:0}
 {
 	color:$darkSun;
 }
+.euro{
+	text-align: end;
+}
+.euro:after{
+	content: ' €';
+}
 .passive
 {
 	color:$passive;
@@ -767,7 +773,6 @@ form table{
 }*/
 .th-box
 {
-	/*margin:0.5rem 0.75rem;*/
 	margin:$headPadding;
 }
 

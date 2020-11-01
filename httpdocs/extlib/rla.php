@@ -1,4 +1,8 @@
 <?php
+/**
+ * parse uploaded debit return statements 
+ */
+
 use Genkgo\Camt\Config;
 use Genkgo\Camt\Reader;
 use SimpleXMLElement;
@@ -57,6 +61,7 @@ foreach ($statements as $statement) {
 			edump('getReference:'.$traDet->getReference()->getMandateId().' getAccountServicerReference::'.$entry-> getAccountServicerReference().' getAccount::'.get_class($account).'<');
 			edump('getRemittanceInformation:'.$traDet->getRemittanceInformation()->getMessage().' getRelatedPartyAccount::'.$account->getIdentification().'  getEndToEndId::'.$traDet->getReference()->getEndToEndId());
 			$rlData = array(
+				'id'=>intval($traDet->getReference()->getMandateId()),
 				'baID'=>$traDet->getReference()->getEndToEndId(),
 				'iban'=>$account->getIdentification(),
 				'sepaCode'=>$rInfo->getCode(),

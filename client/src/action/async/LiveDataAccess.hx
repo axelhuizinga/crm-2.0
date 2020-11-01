@@ -170,8 +170,6 @@ class LiveDataAccess
 						{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
 						return dispatch(DataAction.SelectDeals(props.data));*/
 					case 'Imports':
-						//sData = aState.dataStore.dealData;
-						//trace(sData);
 						sData = sSelectType(props.id, props.data, sData, props.selectType);
 						trace(sData);
 						trace('${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}');

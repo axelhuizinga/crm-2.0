@@ -156,7 +156,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	
 		return history.listen( function(location:Location, action:history.Action){
 			trace(location.pathname);			
-			store.dispatch(Status(Update({path:location.pathname})));
+			store.dispatch(Status(Update({path:location.pathname, text:''})));
 			store.dispatch(LocationChange(location));
 		});
 	}	

@@ -121,6 +121,24 @@ class S
 		if(Lib.toHaxeArray(SuperGlobal._FILES).length>0)
 		{
 			devIP = SuperGlobal._POST['devIP'];
+			dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
+			Syntax.array([PDO.ATTR_PERSISTENT,true]));
+		
+			//trace(dbh);
+			params = Lib.hashOfAssociativeArray(SuperGlobal._POST);
+			if(params.get('extDB'))
+			{
+				//CONNECT DIALER DB	
+				trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM');
+				syncDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM',
+					dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
+				//trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
+			}
+			#if debug
+			dbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);	
+			if(params.get('extDB'))
+				syncDbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
+			#end			
 			Upload.go();
 		}
 		//trace(Web.getPostData());

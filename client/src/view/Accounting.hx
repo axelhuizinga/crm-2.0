@@ -44,8 +44,8 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 		//trace(this.state);
 		if (props.match.url == '/Accounting' && props.match.isExact)
 		{
-			if(true) trace('pushing2: /Accounting/Imports/List');
-			props.history.push('/Accounting/Imports/List');
+			if(true) trace('pushing2: /Accounting/Imports/Files');
+			props.history.push('/Accounting/Imports/Files');
 		}		
 	}
 
@@ -117,38 +117,5 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 			<StatusBar {...props}/>
         </>
 		');
-    /**
-     * <>
-			<div className="tabNav2" >
-				<$Tabs className="is-boxed" >
-					<$TabLink to="/Data/Contacts" ${...props} >Kontakte</$TabLink>
-					<$TabLink to=${{
-						key:props.location.key,
-						hash:'',
-						pathname:"/Data/Deals",
-						search:'',
-						state:props.location.state.extend({contact:props.location.hash})
-					}} ${...props} >Abschlüsse</$TabLink>					
-					<$TabLink to=${{
-						key:props.location.key,
-						hash:props.location.hash,
-						pathname:"/Data/Accounts",
-						search:'',
-						state:props.location.state.extend({contact:props.location.hash})
-					}} ${...props} >Konten</$TabLink>
-					<$TabLink to="/Data/QC" ${...props} >QC</$TabLink>
-				</$Tabs>
-			</div>
-            <div className="tabContent2" >
-			<$Switch>
-				<$Route path="/Data/Contacts/:section?/:action?/:id?"  ${...props} component={Contacts}/>
-				<$Route path="/Data/Deals/:section?/:action?/:id?"  ${...props} component={Deals}/>
-				<$Route path="/Data/Accounts/:section?/:action?/:id?"   ${...props} component={Accounts}/>	
-				<$Route path="/Data/QC/:section?/:action?/:id?"  ${...props} component={QC}/>
-            </$Switch>
-			</div>
-			<$StatusBar ${...props}/>
-		</>
-     */
     }
 }

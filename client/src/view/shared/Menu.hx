@@ -177,6 +177,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					</div>'
 				);*/				
 				case Upload:
+					//trace(item.formField.handleChange);
 					jsx('<div key=${i++}  id="uploadForm"  className="uploadBox" >
 					<input id=${item.formField.name} type="file" name=${item.formField.name} onChange=${item.formField.handleChange} className="fileinput"  />
 					<label htmlFor=${item.formField.name} className="button" >${item.label}</label>

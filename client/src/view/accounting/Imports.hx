@@ -37,7 +37,7 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import shared.DbData;
 import state.FormState;
-import view.accounting.imports.Edit;
+import view.accounting.imports.Files;
 import view.accounting.imports.List;
 import view.shared.FormBuilder;
 import view.shared.MItem;
@@ -89,7 +89,7 @@ class Imports extends ReactComponentOf<DataFormProps,FormState>
 				//SET DEFAULT SECTION
 			if(_trace) trace('reme');
 			var baseUrl:String = props.match.path.split(':section')[0];			
-			props.history.push('${baseUrl}List/');
+			props.history.push('${baseUrl}Files/');
 			//props.history.push('${baseUrl}List/get${props.dataStore.contactData.iterator().hasNext()?'/'+props.dataStore.contactData.keys().keysList():''}');
 		}		
 	}
@@ -131,19 +131,7 @@ class Imports extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	override function render():ReactFragment
-	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
-	/*	trace(props.match.params.section);		
-		return state.formApi.render(jsx('
-		<>
-			<form className="tabComponentForm"  >
-				${renderResults()}
-			</form>
-		</>'));		
-	}
-	
-	function renderResults():ReactFragment
-	{*/
+	{		
 		trace(props.match.params.action + ':' + props.match.params.section);
 		trace(state.loading);
 		if(state.loading)
@@ -154,11 +142,11 @@ class Imports extends ReactComponentOf<DataFormProps,FormState>
 			case "List":
 				trace('render List');
 				jsx('
-					<$List ${...props} limit=${100} parentComponent=${this} formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
-					');					
-			case "Edit":
+					<$List ${...props} limit=${100} parentComponent=${this} formApi=${state.formApi} fullWidth={true}/>
+				');					
+			case "Files":
 				jsx('
-					<$Edit ${...props} parentComponent=${this} formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$Files ${...props} parentComponent=${this} formApi=${state.formApi} fullWidth={true}/>
 				');				
 			default:
 				null;	

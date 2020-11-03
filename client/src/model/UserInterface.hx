@@ -1,7 +1,6 @@
 package model;
 
 typedef UserInterfaceProps = {
-	?id:Int,
 	?key:String,
 	?content:String,
 	?classPath:String,
@@ -18,17 +17,7 @@ class UserInterface extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'id,key,content,classPath,component,edited_by,updated_at,locale,mandator'.split(',');
-	}	
-		
-	@dataType("bigint")
-	@:isVar public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
+		propertyNames = 'key,content,classPath,component,edited_by,updated_at,locale,mandator'.split(',');
 	}	
 		
 	@dataType("character varying(64)")

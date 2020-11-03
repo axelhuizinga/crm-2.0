@@ -1,4 +1,4 @@
-package view.accounting.imports;
+package view.data.accounts;
 
 import js.html.Event;
 import action.DataAction;
@@ -53,10 +53,10 @@ using Lambda;
  * @author axel@cunity.me
  */
 @:connect
-class Files extends ReactComponentOf<DataFormProps,FormState>
+class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 {
 
-	static var _instance:Files;
+	static var _instance:DebitReturnStatements;
 
 	public static var menuItems:Array<MItem> = [		
 		{label:'Datei Rücklastschrift',action:'importReturnDebit',
@@ -78,7 +78,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				//var files = php.Lib.hashOfAssociativeArray(finput.files);
 				
 				trace(finput.files);
-				trace(Reflect.fields(finput));
+				trace(finput.files[0]);
 				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
 				trace(finput.value);
 				//trace(finput.files.get('returnDebitFile'));
@@ -101,24 +101,21 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		_instance = this;
 		dataDisplay = ReturnDebitModel.dataDisplay;
-		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
-		//formFields = ReturnDebitModel.formFields(props.match.params.action);
-		//trace('...' + Type.getInstanceFields(Type.resolveClass('view.shared.MItem')));
+		
 		trace('...' + Reflect.fields(props));
 		baseForm = new BaseForm(this);
 		
 		menuItems[0].handler = importReturnDebit;
 		state =  App.initEState({
-			data:['hint'=>'Datei zum Upload auswählen'],
 			sideMenu:FormApi.initSideMenu( this,			
 			{
 				dataClassPath:'admin.ImportCamt',
 				label:"Upload RüLa's",
-				section: 'Files',
+				section: 'DebitReturnStatements',
 				items: menuItems
 			},
 			{	
-				section: props.match.params.section==null? 'Files':props.match.params.section, 
+				section: props.match.params.section==null? 'DebitReturnStatements':props.match.params.section, 
 				sameWidth: true					
 			})
 		},this);
@@ -135,6 +132,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
+			load: function(param:DbQueryParam) return dispatch(CRUD.read(param)),
 			storeData:function(id:String, action:DataAction)
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
@@ -147,13 +145,6 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			}						
         }
 	}	
-
-	override public function componentDidMount():Void 
-	{	
-		dataAccess = ReturnDebitModel.dataAccess;
-		trace(props.match.params.action);
-		state.formApi.doAction();
-	}
 	
 	public function delete(ev:ReactEvent):Void
 	{
@@ -170,9 +161,8 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			//var reader:FileReader = new FileReader();
 			var uFile:Blob = cast(finput.files[0], Blob);
 			trace(uFile);
-			var fd:FormData = new FormData();			
+			var fd:FormData = new FormData();
 			fd.append('devIP',App.devIP);
-			fd.append('mandator',Std.string(App.mandator));
 			fd.append('action','returnDebitFile');
 			fd.append('returnDebitFile',uFile,finput.value);
 			var xhr = new js.html.XMLHttpRequest();
@@ -206,14 +196,11 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			for(dR in dd.rlData)
 				dT.push(Utils.dynToMap(dR));
 			setState({dataTable:dT,loading:false});
-			var baseUrl:String = props.match.path.split(':section')[0];			
-			props.history.push('${baseUrl}List');
 			App.store.dispatch(Status(Update( 
 				{	
 					text:dT.count() + ' Rücklastschriften Importiert'
 				}
 			)));
-			
 		}, function (r:Dynamic) {
 			trace(r);
 			App.store.dispatch(Status(Update( 
@@ -225,7 +212,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		
 	}
 
-	/*public static function upload(param:DbQueryParam) 
+	public static function upload(param:DbQueryParam) 
 	{	trace(param.action);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
 			trace(param);
@@ -274,7 +261,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			});	
 		});
 			
-	}*/
+	}
 
 	override function render():ReactFragment
 	{
@@ -294,10 +281,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
-		trace('${state.action} ###########loading:' + state.loading);
+		trace('###########loading:' + state.loading);
 		return switch(state.action)
 		{
-			/*case 'importReturnDebit':
+			case 'importReturnDebit':
 				jsx('
 					<Table id="importedReturnDebit" data=${state.dataTable}
 					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${baseForm.renderPager} 
@@ -308,13 +295,13 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				trace(state.actualState);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
-				];
+				];*/
 				(state.actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
 					mHandlers:state.mHandlers,
 					fields:formFields,/*[
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
-					],
+					],*/
 					model:'importClientList',
 					//ref:formRef,
 					title: 'Stammdaten Import' 
@@ -327,10 +314,11 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 					${...props} dataState = ${dataDisplay["fieldsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>				
 				');	*/
-
+			case 'shared.io.DB.editTableFields':
+				null;
 			default:
 				if(state.data != null && state.data.exists('hint')){
-					jsx('<div className="hint"><h2>${state.data.get('hint')}</h2></div>');
+					jsx('<div class="hint">${state.data.get('hint')}</div>');
 				}
 				else{
 					null;

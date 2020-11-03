@@ -36,7 +36,7 @@ class BinaryLoader {
 	}
 
 	public static function dbQuery(url:String,dbQP:DbQueryParam, onLoaded:DbData->Void) {
-		trace(dbQP);
+		//trace(dbQP);
 		var s:Serializer = new Serializer();
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbQP);//.toHex();

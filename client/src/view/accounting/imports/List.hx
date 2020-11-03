@@ -59,30 +59,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	static var _instance:List;
 
 	public static var menuItems:Array<MItem> = [		
-		{label:'Datei Rücklastschrift',action:'importReturnDebit',
-			formField:{
-				name:'returnDebitFile',
-				submit:'Importieren',
-				type:FormInputElement.Upload,
-				handleChange: function(evt:Event) {
-					//trace(Reflect.fields(evt));
-					var finput = cast Browser.document.getElementById('returnDebitFile');
-					trace(finput.value);
-					//trace(_instance);
-					var val = (finput.value == ''?'':finput.value.split('\\').pop());
-					_instance.setState({data:['hint'=>'Zum Upload ausgewählt:${val}']});
-				}
-			},
-			handler: function(_) {				
-				var finput = cast Browser.document.getElementById('returnDebitFile');
-				//var files = php.Lib.hashOfAssociativeArray(finput.files);
-				
-				trace(finput.files);
-				trace(finput.files[0]);
-				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
-				trace(finput.value);
-				//trace(finput.files.get('returnDebitFile'));
-			}/**/
+		{
+			label:'Anzeigen',action:'listReturnDebit'
+		},
+		{
+			label:'Details',action:'showDetails'
 		}
 	];	
 	var dataAccess:DataAccess;	
@@ -101,18 +82,15 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		_instance = this;
 		dataDisplay = ReturnDebitModel.dataDisplay;
-		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
-		//formFields = ReturnDebitModel.formFields(props.match.params.action);
-		//trace('...' + Type.getInstanceFields(Type.resolveClass('view.shared.MItem')));
+		
 		trace('...' + Reflect.fields(props));
 		baseForm = new BaseForm(this);
 		
-		menuItems[0].handler = importReturnDebit;
 		state =  App.initEState({
 			sideMenu:FormApi.initSideMenu( this,			
 			{
 				dataClassPath:'admin.ImportCamt',
-				label:"Upload RüLa's",
+				label:"Rücklastschriften",
 				section: 'List',
 				items: menuItems
 			},
@@ -134,7 +112,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-			load: function(param:DbQueryParam) return dispatch(List.upload(param)),
+			load: function(param:DbQueryParam) return dispatch(CRUD.read(param)),
 			storeData:function(id:String, action:DataAction)
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
@@ -148,6 +126,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
         }
 	}	
 	
+	override public function componentDidMount():Void 
+	{	
+		dataAccess = ReturnDebitModel.dataAccess;
+		trace(props.match.params.action);
+		state.formApi.doAction('get');
+	}
+
 	public function delete(ev:ReactEvent):Void
 	{
 		trace(state.selectedRows.length);
@@ -155,115 +140,36 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(data);
 	}
 
-	public function importReturnDebit(_):Void
+	public function get(ev:Dynamic):Void
 	{
-		var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){
-			var finput = cast  Browser.document.getElementById('returnDebitFile');
-			trace(props.userState.dbUser.first_name + '::' + finput.files[0]);
-			//var reader:FileReader = new FileReader();
-			var uFile:Blob = cast(finput.files[0], Blob);
-			trace(uFile);
-			var fd:FormData = new FormData();
-			fd.append('devIP',App.devIP);
-			fd.append('action','returnDebitFile');
-			fd.append('returnDebitFile',uFile,finput.value);
-			var xhr = new js.html.XMLHttpRequest();
-			xhr.open('POST', '${App.config.api}', true);
-			xhr.onerror = function(e) {
-				trace(e);
-				trace(e.type);
-				reject({error:e});
+		trace('hi $ev');
+		var offset:Int = 0;
+		if(ev != null && ev.page!=null)
+		{
+			offset = Std.int(props.limit * ev.page);
+		}
+		trace(props.userState);
+		var p:Promise<DbData> = props.load(
+			{
+				classPath:'data.DebitReturnStatements',
+				action:'get',
+				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1',processed:'false'}),
+				limit:props.limit,
+				offset:offset>0?offset:0,
+				table:'debit_return_statements',
+				resolveMessage:{					
+					success:'Rücklastschriften wurde geladen',
+					failure:'Rücklastschriften konnten nicht geladen werden'
+				},
+				dbUser:props.userState.dbUser,
+				devIP: App.devIP
 			}
-			xhr.withCredentials = true;
-			xhr.onload = function(e) {
-				trace(xhr.status);
-				if (xhr.status != 200) {				
-					trace(xhr.statusText);
-					reject({error:xhr.statusText});
-				}
-				trace(xhr.response.length);
-				resolve(xhr.response);
-				//onLoaded(haxe.io.Bytes.ofData(xhr.response));
-			}
-			xhr.send(fd);
-			setState({action:'importReturnDebit',loading:true});
+		);
+		p.then(function(data:DbData){
+			trace(data.dataRows.length); 
+			setState({loading:false, dataTable:data.dataRows});
 		});
-		
-		iPromise.then(function (r:Dynamic) {
-			trace(r);
-			var rD:Json = Json.parse(r);
-			var dd:{rlData:Array<Dynamic>} = Json.parse(r);
-			//trace(rD);
-			var dT:Array<Map<String, Dynamic>> = new Array();
-			for(dR in dd.rlData)
-				dT.push(Utils.dynToMap(dR));
-			setState({dataTable:dT,loading:false});
-			App.store.dispatch(Status(Update( 
-				{	
-					text:dT.count() + ' Rücklastschriften Importiert'
-				}
-			)));
-		}, function (r:Dynamic) {
-			trace(r);
-			App.store.dispatch(Status(Update( 
-				{	cssClass:'',
-					text:(r.error==null?'':r.error)
-				}
-			)));
-		});
-		
-	}
-
-	public static function upload(param:DbQueryParam) 
-	{	trace(param.action);
-		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
-			trace(param);
-			var dbData:DbData = DbDataTools.create();
-
-			return new Promise(function(resolve, reject){
-				if (!param.dbUser.online)
-				{
-					dispatch(User(LoginError(
-					{
-						dbUser:param.dbUser,
-						lastError:'Du musst dich neu anmelden!'
-					})));
-					trace('LoginError');
-					resolve(null);
-				}	
-				
-				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
-					'${App.config.api}', 
-					param,
-					function(data:DbData)
-					{				
-						trace(data);
-						if(data.dataErrors != null)
-							trace(data.dataErrors);
-						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
-							trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
-
-						if(data.dataErrors.exists('lastError'))
-						{
-							dispatch(User(LoginError({lastError: data.dataErrors.get('lastError')})));
-							resolve(null);
-						}
-						else{
-
-							dispatch(Status(Update( 
-								{	cssClass:'',
-									text:(param.resolveMessage==null?'':param.resolveMessage.success)				
-								}
-							)));
-							resolve(data);
-						}
-					}
-				);
-				trace(bL);
-			});	
-		});
-			
-	}
+	}	
 
 	override function render():ReactFragment
 	{
@@ -280,52 +186,19 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	function renderResults():ReactFragment
 	{
 		trace(props.match.params.action + ':' + Std.string(state.dataTable != null));
-		trace(state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
 		trace('###########loading:' + state.loading);
 		return switch(state.action)
 		{
-			case 'importReturnDebit':
+			case 'listReturnDebit':
+				null;			
+			default:
 				jsx('
 					<Table id="importedReturnDebit" data=${state.dataTable}
 					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${baseForm.renderPager} 
 					className="is-striped is-hoverable"  parentComponent=${this} fullWidth=${true}/>
-				');
-			case 'importClientList':
-				//trace(initialState);
-				trace(state.actualState);
-				/*var fields:Map<String,FormField> = [
-					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
-				];*/
-				(state.actualState==null ? state.formApi.renderWait():
-				state.formBuilder.renderForm({
-					mHandlers:state.mHandlers,
-					fields:formFields,/*[
-						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
-					],*/
-					model:'importClientList',
-					//ref:formRef,
-					title: 'Stammdaten Import' 
-				},state.actualState));	
-			/*case 'showFieldList2':
-				trace(dataDisplay["fieldsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["fieldsList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>				
-				');	*/
-			case 'shared.io.DB.editTableFields':
-				null;
-			default:
-				if(state.data != null && state.data.exists('hint')){
-					jsx('<div class="hint">${state.data.get('hint')}</div>');
-				}
-				else{
-					null;
-				}				
+				');							
 		}
-		return null;
 	}	
 }

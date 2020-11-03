@@ -1,7 +1,6 @@
 package model;
 
 typedef MandatorProps = {
-	?id:Int,
 	?contact:Int,
 	?name:String,
 	?description:String,
@@ -17,17 +16,7 @@ class Mandator extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'id,contact,name,description,any,edited_by,parent,last_locktime'.split(',');
-	}	
-		
-	@dataType("bigint")
-	@:isVar public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
+		propertyNames = 'contact,name,description,any,edited_by,parent,last_locktime'.split(',');
 	}	
 		
 	@dataType("bigint")

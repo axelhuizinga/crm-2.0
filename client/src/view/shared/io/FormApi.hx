@@ -80,15 +80,15 @@ class FormApi
 	{
 		comp = rc;
 		_me = this;
-		trace(Type.getClass(comp));
+		//trace(Type.getClass(comp));
 		requests = [];
 		if(rc.props != null)
 		{
 			//trace(rc.props.match);
-			trace(sM);
+			//trace(sM);
 			this.sM = sM==null?rc.props.sideMenu:sM;
 			//trace(rc.props.history);			
-			trace(this.sM);
+			//trace(this.sM);
 		}
 		//dbData = new DbData();
 		//trace('>>>${props.match.params.action}<<<');

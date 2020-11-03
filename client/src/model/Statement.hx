@@ -29,7 +29,6 @@ typedef StatementProps = {
 	?z:String,
 	?aa:Int,
 	?processed:Int,
-	?id:Int,
 	?edited_by:Int,
 	?mandator:Int
 };
@@ -40,7 +39,7 @@ class Statement extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,aa,processed,id,edited_by,mandator'.split(',');
+		propertyNames = 'a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,aa,processed,edited_by,mandator'.split(',');
 	}	
 		
 	@dataType("bigint")
@@ -321,16 +320,6 @@ class Statement extends ORM
 			modified('processed');
 		this.processed = processed ;
 		return processed;
-	}	
-		
-	@dataType("bigint")
-	@:isVar public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
 	}	
 		
 	@dataType("bigint")

@@ -1,7 +1,6 @@
 package model;
 
 typedef RoleProps = {
-	?id:Int,
 	?name:String,
 	?description:String,
 	?permissions:String,
@@ -15,17 +14,7 @@ class Role extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'id,name,description,permissions,edited_by,mandator'.split(',');
-	}	
-		
-	@dataType("bigint")
-	@:isVar public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
+		propertyNames = 'name,description,permissions,edited_by,mandator'.split(',');
 	}	
 		
 	@dataType("character varying(64)")

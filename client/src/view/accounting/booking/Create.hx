@@ -1,5 +1,6 @@
-package view.accounting.imports;
+package view.accounting.booking;
 
+import model.accounting.ReturnDebitModel;
 import js.html.HTMLCollection;
 import js.Browser;
 import js.html.Document;
@@ -60,20 +61,13 @@ using StringTools;
  */
 
 @:connect
-class Edit extends ReactComponentOf<DataFormProps,FormState>
+class Create extends ReactComponentOf<DataFormProps,FormState>
 {
-	/*public static var menuItems:Array<MItem> = [
-		{label:'Anzeigen',action:'get'},
-		{label:'Bearbeiten',action:'update'},
-		{label:'Neu', action:'insert'},
-		{label:'Löschen',action:'delete'}
-	];*/
 	public static var menuItems:Array<MItem> = [
-		{label:'Schließen',action:'close'},		
-		{label:'Speichern + Schließen',action:'update', closeAfter:true},
-		{label:'Speichern',action:'update'},
-		{label:'Zurücksetzen',action:'reset',onlySm: true}
-	];	
+		{label:'Anzeigen',action:'get'},
+		{label:'Download', action:'download'},
+		{label:'Bearbeiten',action:'edit'}
+	];
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
 	var formApi:FormApi;
@@ -104,12 +98,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			props.history.push('${baseUrl}List/get');
 			return;
 		}		
-		dataAccess = DealsModel.dataAccess;
+		dataAccess = ReturnDebitModel.dataAccess;
 		fieldNames = baseForm.initFieldNames(dataAccess['open'].view.keys());
-		dataDisplay = DealsModel.dataDisplay;
-		
-		if(props.dataStore.dealData != null)
-			trace(props.dataStore.dealData.keys().next());
+		dataDisplay = ReturnDebitModel.dataDisplay;
+
 				
 		state =  App.initEState({
 			//dataTable:[],
@@ -120,13 +112,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
 				{
-					dataClassPath:'data.Deals',
-					label:'Bearbeiten',
-					section: 'Edit',
+					dataClassPath:'data.Bookings',
+					label:'Buchungen',
+					section: 'Create',
 					items: menuItems
 				}					
 				,{	
-					section: props.match.params.section==null? 'Edit':props.match.params.section, 
+					section: props.match.params.section==null? 'Create':props.match.params.section, 
 					sameWidth: true
 				}),	
 			/*storeListener:App.store.subscribe(function(){
@@ -156,11 +148,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		};
 	}
 	
-	public function close() {
-		// TODO: CHECK IF MODIFIED + ASK FOR SAVING / DISCARDING
-		//var baseUrl:String = props.match.path.split(':section')[0];
-		props.history.push('${props.match.path.split(':section')[0]}List/get');
-	}	
+	override public function componentDidMount():Void 
+	{	
+		dataAccess = ReturnDebitModel.dataAccess;
+		trace(props.match.params.action);
+		state.formApi.doAction('get');
+	}
 	
 	public function delete(ev:ReactEvent):Void
 	{
@@ -168,17 +161,35 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
-	public function get(ev:ReactEvent):Void
+	public function get(ev:Dynamic):Void
 	{
-		trace('hi :)');
-		//return;
-		//dbMetaData = new  DBMetaData();
-		//dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
-		//trace(dbMetaData.dataFields.get(111));
-		var s:hxbit.Serializer = new hxbit.Serializer();
-		
-		//return;
-		state.formApi.requests.push( null);
+		trace('hi $ev');
+		var offset:Int = 0;
+		if(ev != null && ev.page!=null)
+		{
+			offset = Std.int(props.limit * ev.page);
+		}
+		trace(props.userState);
+		var p:Promise<DbData> = props.load(
+			{
+				classPath:'data.DebitReturnStatements',
+				action:'get',
+				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1',processed:'false'}),
+				limit:props.limit,
+				offset:offset>0?offset:0,
+				table:'debit_return_statements',
+				resolveMessage:{					
+					success:'Rücklastschriften wurde geladen',
+					failure:'Rücklastschriften konnten nicht geladen werden'
+				},
+				dbUser:props.userState.dbUser,
+				devIP: App.devIP
+			}
+		);
+		p.then(function(data:DbData){
+			trace(data.dataRows.length); 
+			setState({loading:false, dataTable:data.dataRows});
+		});
 	}
 	
 	public function edit(ev:ReactEvent):Void
@@ -261,38 +272,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			}
 			Reflect.setField(iS, dR['id'], rS);			
 		}
-		trace(iS);
+		trace(iS); 
 		return iS;
-	}
-		
-	override public function componentDidMount():Void 
-	{	
-		trace('mounted:' + true);
-		//mounted = true;
-		loadDealData(Std.parseInt(props.match.params.id));
-		/*dataAccess = [
-			'get' =>{
-				source:[
-					"deals" => []
-				],
-				view:[]
-			},
-		];			
-		//
-		trace(props);
-		//if(props.userState.dbUser != null)
-		//trace('yeah: ${props.userState.dbUser.first_name}');
-		//dbData = FormApi.init(this, props);
-		if(props.match.params.action != null)
-		{
-			var fun:Function = Reflect.field(this,props.match.params.action);
-			if(Reflect.isFunction(fun))
-			{
-				Reflect.callMethod(this,fun,null);
-			}
-		}
-		else 
-			setState({loading: false});*/
 	}
 
 	function loadDealData(id:Int):Void

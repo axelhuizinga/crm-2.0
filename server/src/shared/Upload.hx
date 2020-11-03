@@ -43,8 +43,8 @@ class Upload {
 			case 'returnDebitFile':
 				var dRows:Array<Dynamic> = Json.parse(data).rlData;
 				var sql =  comment(unindent, format) /*
-				INSERT INTO debit_return_statements (id,reason,iban,ba_id,amount) 
-				VALUES(:id,:sepaCode,:iban,:baID,:amount)
+				INSERT INTO debit_return_statements (id,reason,iban,ba_id,amount,mandator) 
+				VALUES(:id,:sepaCode,:iban,:baID,:amount,:mandator)
 				ON CONFLICT DO NOTHING
 				*/;
 				trace(sql);
@@ -62,6 +62,7 @@ class Upload {
 					for(k in dKeys){
 						stmt.bindValue(':$k', Reflect.field(r, k));
 					}
+					stmt.bindValue(':mandator', SuperGlobal._POST['mandator']);
 					if(!stmt.execute()){
 						S.send(Json.stringify(['error'=>S.dbh.errorInfo()]),true);
 						return 'ooops';

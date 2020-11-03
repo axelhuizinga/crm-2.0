@@ -1,7 +1,6 @@
 package model;
 
 typedef TableFieldProps = {
-	?id:Int,
 	?table_name:String,
 	?mandator:Int,
 	?field_name:String,
@@ -20,17 +19,7 @@ class TableField extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'id,table_name,mandator,field_name,readonly,element,any,required,use_as_index,admin_only,field_type'.split(',');
-	}	
-		
-	@dataType("bigint")
-	@:isVar public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
+		propertyNames = 'table_name,mandator,field_name,readonly,element,any,required,use_as_index,admin_only,field_type'.split(',');
 	}	
 		
 	@dataType("character varying")

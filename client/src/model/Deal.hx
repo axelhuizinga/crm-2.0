@@ -1,19 +1,18 @@
 package model;
 
 typedef DealProps = {
-	?id:Int,
 	?contact:Int,
 	?creation_date:String,
 	?account:Int,
 	?target_account:Int,
-	?start_day:String,
+	?booking_run:String,
 	?start_date:String,
 	?cycle:String,
 	?amount:String,
 	?product:Int,
 	?agent:Int,
 	?project:Int,
-	?status:String,
+	?active:Bool,
 	?pay_method:String,
 	?end_date:String,
 	?end_reason:Int,
@@ -22,7 +21,8 @@ typedef DealProps = {
 	?mandator:Int,
 	?old_active:Bool,
 	?cycle_start_date:String,
-	?last_locktime:String
+	?last_locktime:String,
+	?booking_day:String
 };
 
 @:rtti
@@ -31,18 +31,8 @@ class Deal extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'id,contact,creation_date,account,target_account,start_day,start_date,cycle,amount,product,agent,project,status,pay_method,end_date,end_reason,repeat_date,edited_by,mandator,old_active,cycle_start_date,last_locktime'.split(',');
+		propertyNames = 'contact,creation_date,account,target_account,booking_run,start_date,cycle,amount,product,agent,project,active,pay_method,end_date,end_reason,repeat_date,edited_by,mandator,old_active,cycle_start_date,last_locktime,booking_day'.split(',');
 	}	
-		
-	/*@dataType("bigint")
-	@:isVar public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
-	}	*/
 		
 	@dataType("bigint")
 	@:isVar public var contact(default,set):Int;
@@ -84,14 +74,14 @@ class Deal extends ORM
 		return target_account;
 	}	
 		
-	@dataType("character varying(2)")
-	@:isVar public var start_day(default,set):String;
+	@dataType("booking_runs")
+	@:isVar public var booking_run(default,set):String;
 
-	function set_start_day(start_day:String):String{
-		if(initialized('start_day'))
-			modified('start_day');
-		this.start_day = start_day ;
-		return start_day;
+	function set_booking_run(booking_run:String):String{
+		if(initialized('booking_run'))
+			modified('booking_run');
+		this.booking_run = booking_run ;
+		return booking_run;
 	}	
 		
 	@dataType("date")
@@ -154,17 +144,17 @@ class Deal extends ORM
 		return project;
 	}	
 		
-	@dataType("character varying(64)")
-	@:isVar public var status(default,set):String;
+	@dataType("boolean")
+	@:isVar public var active(default,set):Bool;
 
-	function set_status(status:String):String{
-		if(initialized('status'))
-			modified('status');
-		this.status = status ;
-		return status;
+	function set_active(active:Bool):Bool{
+		if(initialized('active'))
+			modified('active');
+		this.active = active ;
+		return active;
 	}	
 		
-	@dataType("character varying(64)")
+	@dataType("pay_methods")
 	@:isVar public var pay_method(default,set):String;
 
 	function set_pay_method(pay_method:String):String{
@@ -252,6 +242,16 @@ class Deal extends ORM
 			modified('last_locktime');
 		this.last_locktime = last_locktime ;
 		return last_locktime;
+	}	
+		
+	@dataType("int4range")
+	@:isVar public var booking_day(default,set):String;
+
+	function set_booking_day(booking_day:String):String{
+		if(initialized('booking_day'))
+			modified('booking_day');
+		this.booking_day = booking_day ;
+		return booking_day;
 	}	
 	
 }

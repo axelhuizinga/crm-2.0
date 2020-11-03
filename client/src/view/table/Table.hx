@@ -79,7 +79,7 @@ typedef DataCell =
 	@:optional var name:String;
 	@:optional var id:String;
 	@:optional var pos:DataCellPos;
-	@:value(true)
+	//@:value(true)
 	@:optional var show:Bool;
 	@:optional var style:Dynamic;
 	@:optional var title:String;

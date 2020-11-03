@@ -1,7 +1,6 @@
 package model;
 
 typedef UserGroupProps = {
-	?id:Int,
 	?name:String,
 	?description:String,
 	?can:String,
@@ -15,17 +14,7 @@ class UserGroup extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'id,name,description,can,mandator,edited_by'.split(',');
-	}	
-		
-	@dataType("bigint")
-	@:isVar public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
+		propertyNames = 'name,description,can,mandator,edited_by'.split(',');
 	}	
 		
 	@dataType("character varying(64)")

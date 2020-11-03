@@ -21,7 +21,7 @@ class ORM {
 			modified('id');
 		this.id = id ;
 		return id;
-	}	
+	}
 	
 	//TODO: LOAD DSEP FROM CONFIG
 	static var dsep:String = ',';
@@ -69,7 +69,7 @@ class ORM {
 				}
 			}
 		}
-		trace(this.id +':' + data.get('id'));
+		//trace(this.id +':' + data.get('id'));
 		return this;
 	}
 

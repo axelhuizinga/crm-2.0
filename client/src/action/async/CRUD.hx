@@ -1,4 +1,5 @@
 package action.async;
+import haxe.Json;
 import db.DbQuery.DbQueryParam;
 import js.lib.Promise;
 import haxe.Unserializer;
@@ -79,7 +80,7 @@ class CRUD
 								dispatch(Status(Update(
 									{
 										cssClass:'error',
-										text:'${data.dataErrors.get(param.action)}',
+										text:Json.stringify(data.dataErrors),
 									})));
 								resolve(data);
 							}				
@@ -88,8 +89,8 @@ class CRUD
 							dispatch(Status(Update(
 							{
 								cssClass: 'warn',
-								text: 'Keine Daten für ${param.filter.toString()} gefunden'
-							})));
+								text: 'Keine Daten für ${Json.stringify(param.filter)} gefunden'
+							}))); 
 					}
 				);
 			});

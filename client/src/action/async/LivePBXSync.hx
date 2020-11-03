@@ -402,7 +402,6 @@ class LivePBXSync
 								text:'Fehler ${data.dataInfo['got']} von ${data.dataInfo['missing']} Aktualisiert'})));
 							}
 
-						trace('got:' + Std.parseInt(untyped 666));
 						if(data.dataInfo['got']>0 && data.dataInfo['last_import_cid'] == data.dataInfo['max_client_id'])
 						{
 							return dispatch(Status(Update(

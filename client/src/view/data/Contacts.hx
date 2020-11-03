@@ -87,7 +87,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				if(_trace) trace(props.dataStore.contactData.keys().keysList());
 			}
 			
-			props.history.push('${baseUrl}List/');
+			props.history.push('${baseUrl}List');
 			//props.history.push('${baseUrl}List/get${props.dataStore.contactData.iterator().hasNext()?'/'+props.dataStore.contactData.keys().keysList():''}');
 		}		
 		

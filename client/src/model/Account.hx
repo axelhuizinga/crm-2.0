@@ -1,19 +1,19 @@
 package model;
 
 typedef AccountProps = {
-	?id:Int,
 	?contact:Int,
 	?bank_name:String,
 	?bic:String,
 	?account:String,
 	?blz:String,
 	?iban:String,
-	?creditor:Int,
+	?account_holder:String,
 	?sign_date:String,
-	?state:String,
+	?status:String,
 	?creation_date:String,
 	?edited_by:Int,
-	?last_locktime:String
+	?last_locktime:String,
+	?mandator:Int
 };
 
 @:rtti
@@ -22,18 +22,8 @@ class Account extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'id,contact,bank_name,bic,account,blz,iban,creditor,sign_date,state,creation_date,edited_by,last_locktime'.split(',');
+		propertyNames = 'contact,bank_name,bic,account,blz,iban,account_holder,sign_date,status,creation_date,edited_by,last_locktime,mandator'.split(',');
 	}	
-		
-	/*@dataType("bigint")
-	@:isVar public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
-	}	*/
 		
 	@dataType("bigint")
 	@:isVar public var contact(default,set):Int;
@@ -95,14 +85,14 @@ class Account extends ORM
 		return iban;
 	}	
 		
-	@dataType("bigint")
-	@:isVar public var creditor(default,set):Int;
+	@dataType("text")
+	@:isVar public var account_holder(default,set):String;
 
-	function set_creditor(creditor:Int):Int{
-		if(initialized('creditor'))
-			modified('creditor');
-		this.creditor = creditor ;
-		return creditor;
+	function set_account_holder(account_holder:String):String{
+		if(initialized('account_holder'))
+			modified('account_holder');
+		this.account_holder = account_holder ;
+		return account_holder;
 	}	
 		
 	@dataType("date")
@@ -116,16 +106,16 @@ class Account extends ORM
 	}	
 		
 	@dataType("accounts_state")
-	@:isVar public var state(default,set):String;
+	@:isVar public var status(default,set):String;
 
-	function set_state(state:String):String{
-		if(initialized('state'))
-			modified('state');
-		this.state = state ;
-		return state;
+	function set_status(status:String):String{
+		if(initialized('status'))
+			modified('status');
+		this.status = status ;
+		return status;
 	}	
 		
-	@dataType("timestamp without time zone")
+	@dataType("timestamp with time zone")
 	@:isVar public var creation_date(default,set):String;
 
 	function set_creation_date(creation_date:String):String{
@@ -145,7 +135,7 @@ class Account extends ORM
 		return edited_by;
 	}	
 		
-	@dataType("timestamp(0) without time zone")
+	@dataType("timestamp with time zone")
 	@:isVar public var last_locktime(default,set):String;
 
 	function set_last_locktime(last_locktime:String):String{
@@ -153,6 +143,16 @@ class Account extends ORM
 			modified('last_locktime');
 		this.last_locktime = last_locktime ;
 		return last_locktime;
+	}	
+		
+	@dataType("bigint")
+	@:isVar public var mandator(default,set):Int;
+
+	function set_mandator(mandator:Int):Int{
+		if(initialized('mandator'))
+			modified('mandator');
+		this.mandator = mandator ;
+		return mandator;
 	}	
 	
 }

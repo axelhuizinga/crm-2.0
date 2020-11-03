@@ -1,7 +1,6 @@
 package model;
 
 typedef ContactProps = {
-	?id:Int,
 	?mandator:Int,
 	?creation_date:String,
 	?state:String,
@@ -37,18 +36,8 @@ class Contact extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'id,mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner'.split(',');
+		propertyNames = 'mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner'.split(',');
 	}	
-		
-	/*@dataType("bigint")
-	@:isVar override public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
-	}	*/
 		
 	@dataType("bigint")
 	@:isVar public var mandator(default,set):Int;

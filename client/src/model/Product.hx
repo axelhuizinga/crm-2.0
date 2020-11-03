@@ -1,7 +1,6 @@
 package model;
 
 typedef ProductProps = {
-	?id:Int,
 	?name:String,
 	?description:String,
 	?value:String,
@@ -17,17 +16,7 @@ class Product extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'id,name,description,value,attributes,mandator,active,edited_by'.split(',');
-	}	
-		
-	@dataType("bigint")
-	@:isVar public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
+		propertyNames = 'name,description,value,attributes,mandator,active,edited_by'.split(',');
 	}	
 		
 	@dataType("character varying(1024)")

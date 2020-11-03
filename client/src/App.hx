@@ -83,8 +83,9 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	//public static var useState:Dynamic = Webpack.require('react').useState;
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
 	public static var onResizeComponents:List<Dynamic> = new List();
-	public static var maxLoginAttempts:Int = 3;
 	public static var defaultUrl = '/Data/Contacts/List/get';
+	public static var mandator:Int = 1;
+	public static var maxLoginAttempts:Int = 3;
 
 	var globalState:Map<String,Dynamic>;
 	var tul:TUnlisten;

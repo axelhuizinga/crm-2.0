@@ -1,8 +1,7 @@
 package model;
 
 typedef ActivityProps = {
-	?id:Int,
-	?result:String,
+	?action:String,
 	?request:String,
 	?user:Int,
 	?date:String
@@ -14,27 +13,17 @@ class Activity extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'id,result,request,user,date'.split(',');
-	}	
-		
-	@dataType("bigint")
-	@:isVar public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
+		propertyNames = 'action,request,user,date'.split(',');
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var result(default,set):String;
+	@:isVar public var action(default,set):String;
 
-	function set_result(result:String):String{
-		if(initialized('result'))
-			modified('result');
-		this.result = result ;
-		return result;
+	function set_action(action:String):String{
+		if(initialized('action'))
+			modified('action');
+		this.action = action ;
+		return action;
 	}	
 		
 	@dataType("text")

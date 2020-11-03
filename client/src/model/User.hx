@@ -1,7 +1,6 @@
 package model;
 
 typedef UserProps = {
-	?id:Int,
 	?contact:Int,
 	?last_login:String,
 	?user_name:String,
@@ -26,17 +25,7 @@ class User extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'id,contact,last_login,user_name,active,edited_by,editing,settings,external,user_group,change_pass_required,online,last_request_time,last_error,mandator,last_locktime,phash'.split(',');
-	}	
-		
-	@dataType("bigint")
-	@:isVar public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
+		propertyNames = 'contact,last_login,user_name,active,edited_by,editing,settings,external,user_group,change_pass_required,online,last_request_time,last_error,mandator,last_locktime,phash'.split(',');
 	}	
 		
 	@dataType("bigint")

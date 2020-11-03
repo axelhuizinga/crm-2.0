@@ -1,7 +1,6 @@
 package model;
 
 typedef ProjectProps = {
-	?id:Int,
 	?mandator:Int,
 	?name:String,
 	?description:String,
@@ -17,17 +16,7 @@ class Project extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'id,mandator,name,description,edited_by,provision_percent,cancellation_liable,target_account'.split(',');
-	}	
-		
-	@dataType("bigint")
-	@:isVar public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
+		propertyNames = 'mandator,name,description,edited_by,provision_percent,cancellation_liable,target_account'.split(',');
 	}	
 		
 	@dataType("bigint")

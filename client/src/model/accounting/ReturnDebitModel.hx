@@ -57,7 +57,7 @@ class ReturnDebitModel
 		'iban'=>{label:'Iban'},				
 		'ba_id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		
 		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
-		'processed'=>{label: 'Verarbeited'}
+		'processed'=>{label: 'Verarbeitet'}
 	];	
 
 	public static var dataDisplay:Map<String,DataState> = [

@@ -30,6 +30,7 @@ class Upload {
 				trace('https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file=$name');
 				trace(result);
 				dbStore(rData.get('action'), result);
+				Global.unlink('/var/www/vhosts/pitverwaltung.de/files/*');
 				S.send(result,true);
 			}
 			S.send(Json.stringify({error:'No File uploaded'}),true);

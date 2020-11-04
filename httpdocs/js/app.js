@@ -113,7 +113,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "d3f3e98c01914273bdc9";
+/******/ 	var hotCurrentHash = "7ba944cbba091859bd9d";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1048,9 +1048,9 @@ var App = function(props) {
 	var ti = null;
 	App.store = this.initStore(history_BrowserHistory.createBrowserHistory({ basename : "/", getUserConfirmation : state_CState.confirmTransition}));
 	this.state = App.store.getState();
-	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "App.hx", lineNumber : 174, className : "App", methodName : "new"});
-	haxe_Log.trace(App.config,{ fileName : "App.hx", lineNumber : 175, className : "App", methodName : "new"});
-	haxe_Log.trace(App.devIP,{ fileName : "App.hx", lineNumber : 176, className : "App", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "App.hx", lineNumber : 175, className : "App", methodName : "new"});
+	haxe_Log.trace(App.config,{ fileName : "App.hx", lineNumber : 176, className : "App", methodName : "new"});
+	haxe_Log.trace(App.devIP,{ fileName : "App.hx", lineNumber : 177, className : "App", methodName : "new"});
 	this.tul = App.startHistoryListener(App.store,this.state.locationStore.history);
 	window.onresize = function() {
 		if(ti != null) {
@@ -1064,11 +1064,11 @@ var App = function(props) {
 			while(cpi.hasNext()) cpi.next().layOut();
 		},250);
 	};
-	haxe_Log.trace(this.state.userState,{ fileName : "App.hx", lineNumber : 199, className : "App", methodName : "new"});
+	haxe_Log.trace(this.state.userState,{ fileName : "App.hx", lineNumber : 200, className : "App", methodName : "new"});
 	if(!(this.state.userState.dbUser.id == null || this.state.userState.dbUser.jwt == "")) {
 		var p = this.load();
 		p.then(function(dbData) {
-			haxe_Log.trace(haxe_ds_StringMap.keysIterator(dbData.dataErrors.h).hasNext(),{ fileName : "App.hx", lineNumber : 205, className : "App", methodName : "new"});
+			haxe_Log.trace(haxe_ds_StringMap.keysIterator(dbData.dataErrors.h).hasNext(),{ fileName : "App.hx", lineNumber : 206, className : "App", methodName : "new"});
 			if(!Lambda.empty(dbData.dataErrors) && Object.prototype.hasOwnProperty.call(dbData.dataErrors.h,"jwtError")) {
 				App.store.dispatch(redux_Action.map(action_UserAction.LoginExpired({ waiting : false, loginTask : "Login"})));
 			} else {
@@ -1077,23 +1077,23 @@ var App = function(props) {
 			}
 		});
 	} else {
-		haxe_Log.trace("LOGIN required",{ fileName : "App.hx", lineNumber : 219, className : "App", methodName : "new"});
+		haxe_Log.trace("LOGIN required",{ fileName : "App.hx", lineNumber : 220, className : "App", methodName : "new"});
 		App.store.dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginRequired(react_ReactUtil.copy(this.state.userState,{ waiting : false})))));
 	}
-	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "App.hx", lineNumber : 229, className : "App", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "App.hx", lineNumber : 230, className : "App", methodName : "new"});
 };
 $hxClasses["App"] = App;
 App.__name__ = "App";
 App.startHistoryListener = function(store,history) {
 	store.dispatch(redux_Action.map(action_AppAction.Location(action_LocationAction.InitHistory(history))));
 	return history.listen(function(location,action) {
-		haxe_Log.trace(location.pathname,{ fileName : "App.hx", lineNumber : 158, className : "App", methodName : "startHistoryListener"});
+		haxe_Log.trace(location.pathname,{ fileName : "App.hx", lineNumber : 159, className : "App", methodName : "startHistoryListener"});
 		store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ path : location.pathname, text : ""}))));
 		store.dispatch(redux_Action.map(action_LocationAction.LocationChange(location)));
 	});
 };
 App.edump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 270, className : "App", methodName : "edump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 271, className : "App", methodName : "edump"});
 	return "OK";
 };
 App.await = function(delay,check,cb) {
@@ -1127,7 +1127,7 @@ App.initEState = function(init,comp) {
 	return fS2;
 };
 App.jsxDump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 326, className : "App", methodName : "jsxDump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 327, className : "App", methodName : "jsxDump"});
 	return "OK";
 };
 App.queryString2 = function(params) {
@@ -1154,7 +1154,7 @@ App.queryString2 = function(params) {
 		result[i] = query;
 	}
 	var query = result.join("&");
-	haxe_Log.trace(query,{ fileName : "App.hx", lineNumber : 345, className : "App", methodName : "queryString2"});
+	haxe_Log.trace(query,{ fileName : "App.hx", lineNumber : 346, className : "App", methodName : "queryString2"});
 	return query;
 };
 App.__super__ = React_Component;
@@ -1163,11 +1163,11 @@ App.prototype = $extend(React_Component.prototype,{
 	,tul: null
 	,initStore: function(history) {
 		var userStore = new store_UserStore();
-		haxe_Log.trace(Reflect.fields(userStore),{ fileName : "App.hx", lineNumber : 95, className : "App", methodName : "initStore"});
+		haxe_Log.trace(Reflect.fields(userStore),{ fileName : "App.hx", lineNumber : 96, className : "App", methodName : "initStore"});
 		var appWare = new store_AppStore(userStore);
 		var locationStore = new store_LocationStore(history);
 		var rootReducer = redux_Redux.combineReducers({ config : redux_StoreBuilder.mapReducer(action_ConfigAction,new store_ConfigStore(App.config)), dataStore : redux_StoreBuilder.mapReducer(action_DataAction,new store_DataStore()), locationStore : redux_StoreBuilder.mapReducer(action_LocationAction,locationStore), status : redux_StoreBuilder.mapReducer(action_StatusAction,new store_StatusStore()), userState : redux_StoreBuilder.mapReducer(action_UserAction,userStore)});
-		haxe_Log.trace(rootReducer,{ fileName : "App.hx", lineNumber : 110, className : "App", methodName : "initStore"});
+		haxe_Log.trace(rootReducer,{ fileName : "App.hx", lineNumber : 111, className : "App", methodName : "initStore"});
 		return redux_StoreBuilder.createStore(rootReducer,null,redux_Redux.applyMiddleware(redux_StoreBuilder.mapMiddleware(redux_thunk_Thunk,new redux_thunk_ThunkMiddleware()),redux_StoreBuilder.mapMiddleware(action_AppAction,appWare),redux_StoreBuilder.mapMiddleware(action_LocationAction,locationStore),redux_StoreBuilder.mapMiddleware(action_UserAction,userStore)));
 	}
 	,loadFromLocalStorage: function() {
@@ -1179,7 +1179,7 @@ App.prototype = $extend(React_Component.prototype,{
 			return haxe_Unserializer.run(sState);
 		} catch( _g ) {
 			var e = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(e,{ fileName : "App.hx", lineNumber : 129, className : "App", methodName : "loadFromLocalStorage"});
+			haxe_Log.trace(e,{ fileName : "App.hx", lineNumber : 130, className : "App", methodName : "loadFromLocalStorage"});
 			return { };
 		}
 	}
@@ -1188,33 +1188,33 @@ App.prototype = $extend(React_Component.prototype,{
 			js_Browser.getLocalStorage().setItem("state",haxe_Serializer.run(App.store.getState().dataStore));
 		} catch( _g ) {
 			var e = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(e,{ fileName : "App.hx", lineNumber : 141, className : "App", methodName : "saveToLocalStorage"});
+			haxe_Log.trace(e,{ fileName : "App.hx", lineNumber : 142, className : "App", methodName : "saveToLocalStorage"});
 		}
 	}
 	,load: function() {
 		return App.store.dispatch(redux_Action.map(action_async_UserAccess.verify()));
 	}
 	,gGet: function(key) {
-		haxe_Log.trace(key,{ fileName : "App.hx", lineNumber : 239, className : "App", methodName : "gGet"});
+		haxe_Log.trace(key,{ fileName : "App.hx", lineNumber : 240, className : "App", methodName : "gGet"});
 		return this.globalState.h[key];
 	}
 	,gSet: function(key,val) {
 		this.globalState.h[key] = val;
 	}
 	,componentDidMount: function() {
-		haxe_Log.trace("yeah",{ fileName : "App.hx", lineNumber : 251, className : "App", methodName : "componentDidMount"});
+		haxe_Log.trace("yeah",{ fileName : "App.hx", lineNumber : 252, className : "App", methodName : "componentDidMount"});
 	}
 	,componentDidCatch: function(error,info) {
-		haxe_Log.trace(error,{ fileName : "App.hx", lineNumber : 256, className : "App", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "App.hx", lineNumber : 257, className : "App", methodName : "componentDidCatch"});
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace("...",{ fileName : "App.hx", lineNumber : 261, className : "App", methodName : "componentDidUpdate"});
+		haxe_Log.trace("...",{ fileName : "App.hx", lineNumber : 262, className : "App", methodName : "componentDidUpdate"});
 	}
 	,componentWillUnmount: function() {
 		this.tul();
 	}
 	,render: function() {
-		haxe_Log.trace(this.state.userState,{ fileName : "App.hx", lineNumber : 273, className : "App", methodName : "render"});
+		haxe_Log.trace(this.state.userState,{ fileName : "App.hx", lineNumber : 274, className : "App", methodName : "render"});
 		var tmp = react_ReactType.fromComp(redux_react_Provider);
 		var tmp1 = { store : App.store};
 		var tmp2 = react_ReactType.fromComp(react_intl_comp_IntlProvider);
@@ -2137,54 +2137,54 @@ action_async_CRUD.delete = function() {
 };
 action_async_CRUD.read = function(param) {
 	return redux_thunk_Thunk.Action(function(dispatch,getState) {
-		haxe_Log.trace(param,{ fileName : "action/async/CRUD.hx", lineNumber : 44, className : "action.async.CRUD", methodName : "read"});
+		haxe_Log.trace(param,{ fileName : "action/async/CRUD.hx", lineNumber : 45, className : "action.async.CRUD", methodName : "read"});
 		return new Promise(function(resolve,reject) {
 			if(!param.dbUser.online) {
 				dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ dbUser : param.dbUser, lastError : "Du musst dich neu anmelden!"}))));
-				haxe_Log.trace("LoginError",{ fileName : "action/async/CRUD.hx", lineNumber : 53, className : "action.async.CRUD", methodName : "read"});
+				haxe_Log.trace("LoginError",{ fileName : "action/async/CRUD.hx", lineNumber : 54, className : "action.async.CRUD", methodName : "read"});
 				var _g = new haxe_ds_StringMap();
 				_g.h["LoginError"] = "Du musst dich neu anmelden!";
 				var dbData = shared_DbDataTools.create(_g);
 				resolve(dbData);
 			}
 			var bl = loader_BinaryLoader.dbQuery("" + Std.string(App.config.api),param,function(data) {
-				haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "action/async/CRUD.hx", lineNumber : 62, className : "action.async.CRUD", methodName : "read"});
-				haxe_Log.trace(data.dataRows.length,{ fileName : "action/async/CRUD.hx", lineNumber : 63, className : "action.async.CRUD", methodName : "read"});
+				haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "action/async/CRUD.hx", lineNumber : 63, className : "action.async.CRUD", methodName : "read"});
+				haxe_Log.trace(data.dataRows.length,{ fileName : "action/async/CRUD.hx", lineNumber : 64, className : "action.async.CRUD", methodName : "read"});
 				if(data.dataRows.length > 0) {
 					if(!haxe_ds_StringMap.keysIterator(data.dataErrors.h).hasNext()) {
 						var tmp = data.dataRows[0];
-						haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "action/async/CRUD.hx", lineNumber : 68, className : "action.async.CRUD", methodName : "read"});
+						haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "action/async/CRUD.hx", lineNumber : 69, className : "action.async.CRUD", methodName : "read"});
 						dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ cssClass : "", text : param.resolveMessage == null ? "" : param.resolveMessage.success}))));
 						resolve(data);
 					} else {
-						dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ cssClass : "error", text : "" + data.dataErrors.h[param.action]}))));
+						dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ cssClass : "error", text : JSON.stringify(data.dataErrors)}))));
 						resolve(data);
 					}
 				} else {
-					dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ cssClass : "warn", text : "Keine Daten für " + Std.string(param.filter.toString()) + " gefunden"}))));
+					dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ cssClass : "warn", text : "Keine Daten für " + JSON.stringify(param.filter) + " gefunden"}))));
 				}
 			});
 		});
 	});
 };
 action_async_CRUD.update = function(param) {
-	haxe_Log.trace(param.action,{ fileName : "action/async/CRUD.hx", lineNumber : 100, className : "action.async.CRUD", methodName : "update"});
+	haxe_Log.trace(param.action,{ fileName : "action/async/CRUD.hx", lineNumber : 101, className : "action.async.CRUD", methodName : "update"});
 	return redux_thunk_Thunk.Action(function(dispatch,getState) {
-		haxe_Log.trace(param,{ fileName : "action/async/CRUD.hx", lineNumber : 102, className : "action.async.CRUD", methodName : "update"});
+		haxe_Log.trace(param,{ fileName : "action/async/CRUD.hx", lineNumber : 103, className : "action.async.CRUD", methodName : "update"});
 		var dbData = shared_DbDataTools.create();
 		return new Promise(function(resolve,reject) {
 			if(!param.dbUser.online) {
 				dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ dbUser : param.dbUser, lastError : "Du musst dich neu anmelden!"}))));
-				haxe_Log.trace("LoginError",{ fileName : "action/async/CRUD.hx", lineNumber : 116, className : "action.async.CRUD", methodName : "update"});
+				haxe_Log.trace("LoginError",{ fileName : "action/async/CRUD.hx", lineNumber : 117, className : "action.async.CRUD", methodName : "update"});
 				resolve(null);
 			}
 			var bL = loader_BinaryLoader.dbQuery("" + Std.string(App.config.api),param,function(data) {
-				haxe_Log.trace(data,{ fileName : "action/async/CRUD.hx", lineNumber : 125, className : "action.async.CRUD", methodName : "update"});
+				haxe_Log.trace(data,{ fileName : "action/async/CRUD.hx", lineNumber : 126, className : "action.async.CRUD", methodName : "update"});
 				if(data.dataErrors != null) {
-					haxe_Log.trace(data.dataErrors == null ? "null" : haxe_ds_StringMap.stringify(data.dataErrors.h),{ fileName : "action/async/CRUD.hx", lineNumber : 127, className : "action.async.CRUD", methodName : "update"});
+					haxe_Log.trace(data.dataErrors == null ? "null" : haxe_ds_StringMap.stringify(data.dataErrors.h),{ fileName : "action/async/CRUD.hx", lineNumber : 128, className : "action.async.CRUD", methodName : "update"});
 				}
 				if(data.dataInfo != null && Object.prototype.hasOwnProperty.call(data.dataInfo.h,"dataSource")) {
-					haxe_Log.trace(new haxe_Unserializer(data.dataInfo.h["dataSource"]).unserialize(),{ fileName : "action/async/CRUD.hx", lineNumber : 129, className : "action.async.CRUD", methodName : "update"});
+					haxe_Log.trace(new haxe_Unserializer(data.dataInfo.h["dataSource"]).unserialize(),{ fileName : "action/async/CRUD.hx", lineNumber : 130, className : "action.async.CRUD", methodName : "update"});
 				}
 				if(Object.prototype.hasOwnProperty.call(data.dataErrors.h,"lastError")) {
 					dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ lastError : data.dataErrors.h["lastError"]}))));
@@ -2194,7 +2194,7 @@ action_async_CRUD.update = function(param) {
 					resolve(data);
 				}
 			});
-			haxe_Log.trace(bL,{ fileName : "action/async/CRUD.hx", lineNumber : 147, className : "action.async.CRUD", methodName : "update"});
+			haxe_Log.trace(bL,{ fileName : "action/async/CRUD.hx", lineNumber : 148, className : "action.async.CRUD", methodName : "update"});
 		});
 	});
 };
@@ -2639,7 +2639,6 @@ action_async_LivePBXSync.importDeals = function(props) {
 				dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ cssClass : "error", text : "Fehler " + Std.string(data.dataInfo.h["got"]) + " von " + Std.string(data.dataInfo.h["missing"]) + " Aktualisiert"}))));
 				return;
 			}
-			haxe_Log.trace("got:" + Std.parseInt(666),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 405, className : "action.async.LivePBXSync", methodName : "importDeals"});
 			if(data.dataInfo.h["got"] > 0 && data.dataInfo.h["last_import_cid"] == data.dataInfo.h["max_client_id"]) {
 				dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ cssClass : " ", text : "" + Std.string(data.dataInfo.h["got"]) + " von " + Std.string(data.dataInfo.h["missing"]) + " aktualisiert"}))));
 				return;
@@ -2649,11 +2648,11 @@ action_async_LivePBXSync.importDeals = function(props) {
 				if(!props.onlyNew) {
 					props.offset += data.dataInfo.h["got"];
 				}
-				haxe_Log.trace("next loop:" + Std.string(props),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 425, className : "action.async.LivePBXSync", methodName : "importDeals"});
+				haxe_Log.trace("next loop:" + Std.string(props),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 424, className : "action.async.LivePBXSync", methodName : "importDeals"});
 				dispatch(action_async_LivePBXSync.importAll(props));
 				return;
 			}
-			haxe_Log.trace(data.dataInfo.h["got"] > 0 && data.dataInfo.h["last_import_cid"] != data.dataInfo.h["max_client_id"] ? "loop" : "no",{ fileName : "action/async/LivePBXSync.hx", lineNumber : 428, className : "action.async.LivePBXSync", methodName : "importDeals"});
+			haxe_Log.trace(data.dataInfo.h["got"] > 0 && data.dataInfo.h["last_import_cid"] != data.dataInfo.h["max_client_id"] ? "loop" : "no",{ fileName : "action/async/LivePBXSync.hx", lineNumber : 427, className : "action.async.LivePBXSync", methodName : "importDeals"});
 		});
 		return null;
 	});
@@ -11984,7 +11983,6 @@ loader_BinaryLoader.create = function(url,p,onLoaded) {
 	return loader_BinaryLoader.dbQuery(url,p,onLoaded);
 };
 loader_BinaryLoader.dbQuery = function(url,dbQP,onLoaded) {
-	haxe_Log.trace(dbQP,{ fileName : "loader/BinaryLoader.hx", lineNumber : 39, className : "loader.BinaryLoader", methodName : "dbQuery"});
 	var s = new hxbit_Serializer();
 	var bl = new loader_BinaryLoader(url);
 	var dbQuery = new db_DbQuery(dbQP);
@@ -12341,7 +12339,6 @@ model_ORM.prototype = {
 				}
 			}
 		}
-		haxe_Log.trace(this.id + ":" + Std.string(data.h["id"]),{ fileName : "model/ORM.hx", lineNumber : 72, className : "model.ORM", methodName : "load"});
 		return this;
 	}
 	,allModified: function() {
@@ -12442,7 +12439,7 @@ model_ORM.prototype = {
 };
 var model_Account = function(data) {
 	model_ORM.call(this,data);
-	this.propertyNames = "id,contact,bank_name,bic,account,blz,iban,creditor,sign_date,state,creation_date,edited_by,last_locktime".split(",");
+	this.propertyNames = "contact,bank_name,bic,account,blz,iban,account_holder,sign_date,status,creation_date,edited_by,last_locktime,mandator".split(",");
 };
 $hxClasses["model.Account"] = model_Account;
 model_Account.__name__ = "model.Account";
@@ -12496,13 +12493,13 @@ model_Account.prototype = $extend(model_ORM.prototype,{
 		this.iban = iban;
 		return iban;
 	}
-	,creditor: null
-	,set_creditor: function(creditor) {
-		if(this.initialized("creditor")) {
-			this.modified("creditor");
+	,account_holder: null
+	,set_account_holder: function(account_holder) {
+		if(this.initialized("account_holder")) {
+			this.modified("account_holder");
 		}
-		this.creditor = creditor;
-		return creditor;
+		this.account_holder = account_holder;
+		return account_holder;
 	}
 	,sign_date: null
 	,set_sign_date: function(sign_date) {
@@ -12512,13 +12509,13 @@ model_Account.prototype = $extend(model_ORM.prototype,{
 		this.sign_date = sign_date;
 		return sign_date;
 	}
-	,state: null
-	,set_state: function(state) {
-		if(this.initialized("state")) {
-			this.modified("state");
+	,status: null
+	,set_status: function(status) {
+		if(this.initialized("status")) {
+			this.modified("status");
 		}
-		this.state = state;
-		return state;
+		this.status = status;
+		return status;
 	}
 	,creation_date: null
 	,set_creation_date: function(creation_date) {
@@ -12544,8 +12541,16 @@ model_Account.prototype = $extend(model_ORM.prototype,{
 		this.last_locktime = last_locktime;
 		return last_locktime;
 	}
+	,mandator: null
+	,set_mandator: function(mandator) {
+		if(this.initialized("mandator")) {
+			this.modified("mandator");
+		}
+		this.mandator = mandator;
+		return mandator;
+	}
 	,__class__: model_Account
-	,__properties__: {set_last_locktime:"set_last_locktime",set_edited_by:"set_edited_by",set_creation_date:"set_creation_date",set_state:"set_state",set_sign_date:"set_sign_date",set_creditor:"set_creditor",set_iban:"set_iban",set_blz:"set_blz",set_account:"set_account",set_bic:"set_bic",set_bank_name:"set_bank_name",set_contact:"set_contact"}
+	,__properties__: {set_mandator:"set_mandator",set_last_locktime:"set_last_locktime",set_edited_by:"set_edited_by",set_creation_date:"set_creation_date",set_status:"set_status",set_sign_date:"set_sign_date",set_account_holder:"set_account_holder",set_iban:"set_iban",set_blz:"set_blz",set_account:"set_account",set_bic:"set_bic",set_bank_name:"set_bank_name",set_contact:"set_contact"}
 });
 var model_BankTransfer = function(data) {
 	model_ORM.call(this,data);
@@ -12824,7 +12829,7 @@ model_BankTransfer.prototype = $extend(model_ORM.prototype,{
 });
 var model_Contact = function(data) {
 	model_ORM.call(this,data);
-	this.propertyNames = "id,mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner".split(",");
+	this.propertyNames = "mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner".split(",");
 };
 $hxClasses["model.Contact"] = model_Contact;
 model_Contact.__name__ = "model.Contact";
@@ -13051,7 +13056,7 @@ model_Contact.prototype = $extend(model_ORM.prototype,{
 });
 var model_Deal = function(data) {
 	model_ORM.call(this,data);
-	this.propertyNames = "id,contact,creation_date,account,target_account,start_day,start_date,cycle,amount,product,agent,project,status,pay_method,end_date,end_reason,repeat_date,edited_by,mandator,old_active,cycle_start_date,last_locktime".split(",");
+	this.propertyNames = "contact,creation_date,account,target_account,booking_run,start_date,cycle,amount,product,agent,project,active,pay_method,end_date,end_reason,repeat_date,edited_by,mandator,old_active,cycle_start_date,last_locktime,booking_day".split(",");
 };
 $hxClasses["model.Deal"] = model_Deal;
 model_Deal.__name__ = "model.Deal";
@@ -13089,13 +13094,13 @@ model_Deal.prototype = $extend(model_ORM.prototype,{
 		this.target_account = target_account;
 		return target_account;
 	}
-	,start_day: null
-	,set_start_day: function(start_day) {
-		if(this.initialized("start_day")) {
-			this.modified("start_day");
+	,booking_run: null
+	,set_booking_run: function(booking_run) {
+		if(this.initialized("booking_run")) {
+			this.modified("booking_run");
 		}
-		this.start_day = start_day;
-		return start_day;
+		this.booking_run = booking_run;
+		return booking_run;
 	}
 	,start_date: null
 	,set_start_date: function(start_date) {
@@ -13145,13 +13150,13 @@ model_Deal.prototype = $extend(model_ORM.prototype,{
 		this.project = project;
 		return project;
 	}
-	,status: null
-	,set_status: function(status) {
-		if(this.initialized("status")) {
-			this.modified("status");
+	,active: null
+	,set_active: function(active) {
+		if(this.initialized("active")) {
+			this.modified("active");
 		}
-		this.status = status;
-		return status;
+		this.active = active;
+		return active;
 	}
 	,pay_method: null
 	,set_pay_method: function(pay_method) {
@@ -13225,8 +13230,16 @@ model_Deal.prototype = $extend(model_ORM.prototype,{
 		this.last_locktime = last_locktime;
 		return last_locktime;
 	}
+	,booking_day: null
+	,set_booking_day: function(booking_day) {
+		if(this.initialized("booking_day")) {
+			this.modified("booking_day");
+		}
+		this.booking_day = booking_day;
+		return booking_day;
+	}
 	,__class__: model_Deal
-	,__properties__: {set_last_locktime:"set_last_locktime",set_cycle_start_date:"set_cycle_start_date",set_old_active:"set_old_active",set_mandator:"set_mandator",set_edited_by:"set_edited_by",set_repeat_date:"set_repeat_date",set_end_reason:"set_end_reason",set_end_date:"set_end_date",set_pay_method:"set_pay_method",set_status:"set_status",set_project:"set_project",set_agent:"set_agent",set_product:"set_product",set_amount:"set_amount",set_cycle:"set_cycle",set_start_date:"set_start_date",set_start_day:"set_start_day",set_target_account:"set_target_account",set_account:"set_account",set_creation_date:"set_creation_date",set_contact:"set_contact"}
+	,__properties__: {set_booking_day:"set_booking_day",set_last_locktime:"set_last_locktime",set_cycle_start_date:"set_cycle_start_date",set_old_active:"set_old_active",set_mandator:"set_mandator",set_edited_by:"set_edited_by",set_repeat_date:"set_repeat_date",set_end_reason:"set_end_reason",set_end_date:"set_end_date",set_pay_method:"set_pay_method",set_active:"set_active",set_project:"set_project",set_agent:"set_agent",set_product:"set_product",set_amount:"set_amount",set_cycle:"set_cycle",set_start_date:"set_start_date",set_booking_run:"set_booking_run",set_target_account:"set_target_account",set_account:"set_account",set_creation_date:"set_creation_date",set_contact:"set_contact"}
 });
 var model_accounting_ReturnDebitModel = function() { };
 $hxClasses["model.accounting.ReturnDebitModel"] = model_accounting_ReturnDebitModel;
@@ -18352,12 +18365,12 @@ view_Accounting.prototype = $extend(React_Component.prototype,{
 		var tmp5 = this.props.location.key;
 		var tmp6 = this.props.location.hash;
 		var tmp7 = shared_Utils.extend(this.props.location.state,{ contact : this.props.location.hash});
-		var tmp8 = React.createElement(tmp3,Object.assign({ },tmp4,{ to : { key : tmp5, hash : tmp6, pathname : "/Accounting/Accounts", search : "", state : tmp7}}),"Konten");
+		var tmp8 = React.createElement(tmp3,Object.assign({ },tmp4,{ to : { key : tmp5, hash : tmp6, pathname : "/Accounting/Bookings", search : "", state : tmp7}}),"Buchungen");
 		var tmp3 = React.createElement(react_ReactType.fromComp(view_shared_TabLink),Object.assign({ },this.props,{ to : "/Accounting/Imports"}),"Imports");
 		var tmp4 = React.createElement(tmp1,{ className : "tabNav2"},React.createElement(tmp2,{ className : "is-boxed"},tmp8,tmp3));
 		var tmp1 = react_ReactType.fromString("div");
 		var tmp2 = react_ReactType.fromComp(react_router_Switch);
-		var tmp3 = React.createElement(react_ReactType.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/Accounting/Accounts/:section?/:action?/:id?", component : react_ReactType.fromComp(view_data_Accounts)}));
+		var tmp3 = React.createElement(react_ReactType.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/Accounting/Bookings/:section?/:action?/:id?", component : react_ReactType.fromComp(view_accounting_Bookings)}));
 		var tmp5 = React.createElement(react_ReactType.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/Accounting/Imports/:section?/:action?/:id?", component : react_ReactType.fromComp(view_accounting_Imports)}));
 		var tmp6 = React.createElement(tmp1,{ className : "tabContent2"},React.createElement(tmp2,{ },tmp3,tmp5));
 		var tmp1 = React.createElement(view_StatusBar._renderWrapper,this.props);
@@ -19019,6 +19032,73 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 	}
 	,__class__: view_UiView
 });
+var view_accounting_Bookings = function(props) {
+	React_Component.call(this,props);
+	if(props.match.params.section == null) {
+		if(this._trace) {
+			haxe_Log.trace("reme",{ fileName : "view/accounting/Bookings.hx", lineNumber : 51, className : "view.accounting.Bookings", methodName : "new"});
+		}
+		var baseUrl = props.match.path.split(":section")[0];
+		props.history.push("" + baseUrl + "Create");
+	}
+	this.state = App.initEState({ loading : false},this);
+	haxe_Log.trace(Reflect.fields(props),{ fileName : "view/accounting/Bookings.hx", lineNumber : 59, className : "view.accounting.Bookings", methodName : "new"});
+};
+$hxClasses["view.accounting.Bookings"] = view_accounting_Bookings;
+view_accounting_Bookings.__name__ = "view.accounting.Bookings";
+view_accounting_Bookings.mapStateToProps = function(aState) {
+	return function(aState) {
+		var uState = aState.userState;
+		haxe_Log.trace(uState,{ fileName : "view/accounting/Bookings.hx", lineNumber : 123, className : "view.accounting.Bookings", methodName : "mapStateToProps"});
+		return { userState : uState};
+	};
+};
+view_accounting_Bookings.__super__ = React_Component;
+view_accounting_Bookings.prototype = $extend(React_Component.prototype,{
+	_trace: null
+	,dataDisplay: null
+	,formApi: null
+	,fieldNames: null
+	,dbData: null
+	,dbMetaData: null
+	,createUsers: function(ev) {
+	}
+	,editUsers: function(ev) {
+	}
+	,deleteUsers: function(ev) {
+	}
+	,createUserGroups: function(ev) {
+	}
+	,editUserGroups: function(ev) {
+	}
+	,deleteUserGroups: function(ev) {
+	}
+	,createRoles: function(ev) {
+	}
+	,editRoles: function(ev) {
+	}
+	,deleteRoles: function(ev) {
+	}
+	,importExternalUsers: function(ev) {
+		haxe_Log.trace(ev.currentTarget,{ fileName : "view/accounting/Bookings.hx", lineNumber : 103, className : "view.accounting.Bookings", methodName : "importExternalUsers"});
+		this.props.formApi.requests.push(haxe_ds_Either.Left(loader_AjaxLoader.load("" + Std.string(App.config.api),{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, first_name : this.props.userState.dbUser.first_name, classPath : "admin.CreateUsers", action : "importExternal"},function(data) {
+			haxe_Log.trace(data,{ fileName : "view/accounting/Bookings.hx", lineNumber : 114, className : "view.accounting.Bookings", methodName : "importExternalUsers"});
+		})));
+	}
+	,componentDidMount: function() {
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/accounting/Bookings.hx", lineNumber : 132, className : "view.accounting.Bookings", methodName : "componentDidMount"});
+		this.state.formApi.doAction();
+	}
+	,render: function() {
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/accounting/Bookings.hx", lineNumber : 156, className : "view.accounting.Bookings", methodName : "render"});
+		if(this.props.match.params.section == "Create") {
+			return React.createElement(view_accounting_booking_Create._renderWrapper,Object.assign({ },this.props,{ fullWidth : true, sideMenu : this.state.sideMenu}));
+		} else {
+			return null;
+		}
+	}
+	,__class__: view_accounting_Bookings
+});
 var view_shared_io_FormApi = function(rc,sM) {
 	this.ky = shared_Utils.genKey;
 	this.comp = rc;
@@ -19621,6 +19701,213 @@ view_accounting_Imports.prototype = $extend(React_Component.prototype,{
 	}
 	,__class__: view_accounting_Imports
 });
+var view_accounting_booking_Create = function(props) {
+	this.mounted = false;
+	React_Component.call(this,props);
+	this.baseForm = new view_shared_io_BaseForm(this);
+	haxe_Log.trace(props.match.params,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 89, className : "view.accounting.booking.Create", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(props),{ fileName : "view/accounting/booking/Create.hx", lineNumber : 91, className : "view.accounting.booking.Create", methodName : "new"});
+	if(props.match.params.id == null && new EReg("open(/)*$","").match(props.match.params.action)) {
+		haxe_Log.trace("nothing selected - redirect",{ fileName : "view/accounting/booking/Create.hx", lineNumber : 96, className : "view.accounting.booking.Create", methodName : "new"});
+		var baseUrl = props.match.path.split(":section")[0];
+		props.history.push("" + baseUrl + "List/get");
+		return;
+	}
+	this.dataAccess = model_accounting_ReturnDebitModel.dataAccess;
+	this.fieldNames = this.baseForm.initFieldNames(haxe_ds_StringMap.keysIterator(this.dataAccess.h["open"].view.h));
+	this.dataDisplay = model_accounting_ReturnDebitModel.dataDisplay;
+	this.state = App.initEState({ actualState : null, initialData : null, loading : false, mHandlers : view_accounting_booking_Create.menuItems, selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "data.Bookings", label : "Buchungen", section : "Create", items : view_accounting_booking_Create.menuItems},{ section : props.match.params.section == null ? "Create" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
+	haxe_Log.trace(this.state.initialData,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 130, className : "view.accounting.booking.Create", methodName : "new"});
+	haxe_Log.trace(this.state.loading,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 134, className : "view.accounting.booking.Create", methodName : "new"});
+};
+$hxClasses["view.accounting.booking.Create"] = view_accounting_booking_Create;
+view_accounting_booking_Create.__name__ = "view.accounting.booking.Create";
+view_accounting_booking_Create.mapDispatchToProps = function(dispatch) {
+	haxe_Log.trace("here we should be ready to load",{ fileName : "view/accounting/booking/Create.hx", lineNumber : 138, className : "view.accounting.booking.Create", methodName : "mapDispatchToProps"});
+	return { load : function(param) {
+		return dispatch(redux_Action.map(action_async_CRUD.read(param)));
+	}};
+};
+view_accounting_booking_Create.mapStateToProps = function(aState) {
+	return { userState : aState.userState};
+};
+view_accounting_booking_Create.__super__ = React_Component;
+view_accounting_booking_Create.prototype = $extend(React_Component.prototype,{
+	dataAccess: null
+	,dataDisplay: null
+	,formApi: null
+	,formBuilder: null
+	,formFields: null
+	,formRef: null
+	,fieldNames: null
+	,baseForm: null
+	,deal: null
+	,dbData: null
+	,dbMetaData: null
+	,mounted: null
+	,componentDidMount: function() {
+		this.dataAccess = model_accounting_ReturnDebitModel.dataAccess;
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 154, className : "view.accounting.booking.Create", methodName : "componentDidMount"});
+		this.state.formApi.doAction("get");
+	}
+	,'delete': function(ev) {
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 160, className : "view.accounting.booking.Create", methodName : "delete"});
+		var data = this.state.formApi.selectedRowsMap(this.state);
+	}
+	,get: function(ev) {
+		var _gthis = this;
+		haxe_Log.trace("hi " + Std.string(ev),{ fileName : "view/accounting/booking/Create.hx", lineNumber : 166, className : "view.accounting.booking.Create", methodName : "get"});
+		var offset = 0;
+		if(ev != null && ev.page != null) {
+			offset = this.props.limit * ev.page | 0;
+		}
+		haxe_Log.trace(this.props.userState,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 172, className : "view.accounting.booking.Create", methodName : "get"});
+		var p = this.props.load({ classPath : "data.DebitReturnStatements", action : "get", filter : this.props.match.params.id != null ? { id : this.props.match.params.id, mandator : "1"} : { mandator : "1", processed : "false"}, limit : this.props.limit, offset : offset > 0 ? offset : 0, table : "debit_return_statements", resolveMessage : { success : "Rücklastschriften wurde geladen", failure : "Rücklastschriften konnten nicht geladen werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
+		p.then(function(data) {
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 190, className : "view.accounting.booking.Create", methodName : "get"});
+			_gthis.setState({ loading : false, dataTable : data.dataRows});
+		});
+	}
+	,edit: function(ev) {
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 197, className : "view.accounting.booking.Create", methodName : "edit"});
+	}
+	,update: function() {
+		if(this.state.actualState != null) {
+			haxe_Log.trace(this.state.actualState.fieldsModified.length,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 204, className : "view.accounting.booking.Create", methodName : "update"});
+		}
+		if(this.state.actualState == null || this.state.actualState.fieldsModified.length == 0) {
+			return;
+		}
+		var data2save = this.state.actualState.allModified();
+		var doc = window.document;
+		var aState = react_ReactUtil.copy(this.state.actualState);
+		var dbQ = { classPath : "data.Deals", action : "update", data : data2save, filter : { id : this.state.actualState.id, mandator : 1}, resolveMessage : { success : "Abschluss " + this.state.actualState.id + " wurde aktualisiert", failure : "Abschluss " + this.state.actualState.id + " konnte nicht aktualisiert werden"}, table : "deals", dbUser : this.props.userState.dbUser, devIP : App.devIP};
+		haxe_Log.trace("" + this.props.match.params.action + ": " + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/accounting/booking/Create.hx", lineNumber : 234, className : "view.accounting.booking.Create", methodName : "update"});
+		if(this.state.actualState != null) {
+			haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/accounting/booking/Create.hx", lineNumber : 237, className : "view.accounting.booking.Create", methodName : "update"});
+		}
+		haxe_Log.trace(this.state.actualState.id,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 240, className : "view.accounting.booking.Create", methodName : "update"});
+		if(!this.state.actualState.modified()) {
+			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ cssClass : "", text : "Abschluss wurde nicht geändert"}))));
+			haxe_Log.trace("nothing modified",{ fileName : "view/accounting/booking/Create.hx", lineNumber : 249, className : "view.accounting.booking.Create", methodName : "update"});
+			return;
+		}
+		haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/accounting/booking/Create.hx", lineNumber : 252, className : "view.accounting.booking.Create", methodName : "update"});
+		App.store.dispatch(redux_Action.map(action_async_CRUD.update(dbQ)));
+	}
+	,initStateFromDataTable: function(dt) {
+		var iS = { };
+		var _g = 0;
+		while(_g < dt.length) {
+			var dR = dt[_g];
+			++_g;
+			var rS = { };
+			var k = haxe_ds_StringMap.keysIterator(dR.h);
+			while(k.hasNext()) {
+				var k1 = k.next();
+				haxe_Log.trace(k1,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 265, className : "view.accounting.booking.Create", methodName : "initStateFromDataTable"});
+				if(this.dataDisplay.h["fieldsList"].columns.h[k1].cellFormat == view_shared_Format.formatBool) {
+					rS[k1] = dR.h[k1] == "Y";
+				} else {
+					rS[k1] = dR.h[k1];
+				}
+			}
+			iS[dR.h["id"]] = rS;
+		}
+		haxe_Log.trace(iS,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 275, className : "view.accounting.booking.Create", methodName : "initStateFromDataTable"});
+		return iS;
+	}
+	,loadDealData: function(id) {
+		var _gthis = this;
+		haxe_Log.trace("loading:" + id,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 281, className : "view.accounting.booking.Create", methodName : "loadDealData"});
+		if(id == null) {
+			return;
+		}
+		var p = this.props.load({ classPath : "data.Deals", action : "get", filter : { id : id, mandator : 1}, resolveMessage : { success : "Abschluß " + id + " wurde geladen", failure : "Abschluß " + id + " konnte nicht geladen werden"}, table : "deals", dbUser : this.props.userState.dbUser, devIP : App.devIP});
+		p.then(function(data) {
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 299, className : "view.accounting.booking.Create", methodName : "loadDealData"});
+			if(data.dataRows.length == 1) {
+				var data1 = data.dataRows[0];
+				haxe_Log.trace(data1 == null ? "null" : haxe_ds_StringMap.stringify(data1.h),{ fileName : "view/accounting/booking/Create.hx", lineNumber : 303, className : "view.accounting.booking.Create", methodName : "loadDealData"});
+				var deal = new model_Deal(data1);
+				haxe_Log.trace(deal.id,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 306, className : "view.accounting.booking.Create", methodName : "loadDealData"});
+				_gthis.setState({ loading : false, actualState : deal, initialData : react_ReactUtil.copy(deal)});
+				haxe_Log.trace(_gthis.state.actualState.id + ":" + _gthis.state.actualState.fieldsInitalized.join(","),{ fileName : "view/accounting/booking/Create.hx", lineNumber : 308, className : "view.accounting.booking.Create", methodName : "loadDealData"});
+				haxe_Log.trace(_gthis.props.location.pathname + ":" + _gthis.state.actualState.amount,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 310, className : "view.accounting.booking.Create", methodName : "loadDealData"});
+				var _gthis1 = _gthis.props.history;
+				var tmp = StringTools.replace(_gthis.props.location.pathname,"open","update");
+				_gthis1.replace(tmp);
+			}
+		});
+	}
+	,renderResults: function() {
+		haxe_Log.trace(this.props.match.params.section + ":" + Std.string(this.state.dataTable != null),{ fileName : "view/accounting/booking/Create.hx", lineNumber : 318, className : "view.accounting.booking.Create", methodName : "renderResults"});
+		haxe_Log.trace(Std.string(this.state.loading) + ":" + this.props.match.params.action,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 320, className : "view.accounting.booking.Create", methodName : "renderResults"});
+		if(this.state.loading) {
+			return this.state.formApi.renderWait();
+		}
+		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/accounting/booking/Create.hx", lineNumber : 323, className : "view.accounting.booking.Create", methodName : "renderResults"});
+		switch(this.props.match.params.action) {
+		case "delete":
+			return null;
+		case "insert":
+			haxe_Log.trace(this.dataDisplay.h["fieldsList"],{ fileName : "view/accounting/booking/Create.hx", lineNumber : 349, className : "view.accounting.booking.Create", methodName : "renderResults"});
+			haxe_Log.trace(Std.string(this.state.dataTable[29].h["id"]) + "<<<",{ fileName : "view/accounting/booking/Create.hx", lineNumber : 350, className : "view.accounting.booking.Create", methodName : "renderResults"});
+			return React.createElement(react_ReactType.fromComp(view_table_Table),Object.assign({ },this.props,{ id : "fieldsList", data : this.state.dataTable, dataState : this.dataDisplay.h["fieldsList"], className : "is-striped is-hoverable", fullWidth : true}));
+		case "open":case "update":
+			haxe_Log.trace(this.state.actualState,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 333, className : "view.accounting.booking.Create", methodName : "renderResults"});
+			if(this.state.actualState == null) {
+				return this.state.formApi.renderWait();
+			} else {
+				var tmp = this.state.formBuilder;
+				var tmp1 = this.state.mHandlers;
+				var _g = new haxe_ds_StringMap();
+				var k = haxe_ds_StringMap.keysIterator(this.dataAccess.h["open"].view.h);
+				while(k.hasNext()) {
+					var k1 = k.next();
+					_g.h[k1] = this.dataAccess.h["open"].view.h[k1];
+				}
+				return tmp.renderForm({ mHandlers : tmp1, fields : _g, model : "deal", title : "Bearbeite Abschluß"},this.state.actualState);
+			}
+			break;
+		default:
+			return null;
+		}
+	}
+	,render: function() {
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 367, className : "view.accounting.booking.Create", methodName : "render"});
+		var tmp = this.state.formApi;
+		var tmp1 = react_ReactType.fromComp(React_Fragment);
+		var tmp2 = react_ReactType.fromString("form");
+		var tmp3 = this.renderResults();
+		var tmp4 = React.createElement(tmp2,{ className : "tabComponentForm"},tmp3);
+		return tmp.render(React.createElement(tmp1,{ },tmp4));
+	}
+	,updateMenu: function(viewClassPath) {
+		var sideMenu = this.state.sideMenu;
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/accounting/booking/Create.hx", lineNumber : 379, className : "view.accounting.booking.Create", methodName : "updateMenu"});
+		var _g = 0;
+		var _g1 = sideMenu.menuBlocks.h["Contact"].items;
+		while(_g < _g1.length) {
+			var mI = _g1[_g];
+			++_g;
+			var _g2 = mI.action;
+			if(_g2 != null) {
+				switch(_g2) {
+				case "editTableFields":
+					mI.disabled = this.state.selectedRows.length == 0;
+					break;
+				case "save":
+					mI.disabled = this.state.clean;
+					break;
+				default:
+				}
+			}
+		}
+		return sideMenu;
+	}
+	,__class__: view_accounting_booking_Create
+});
 var view_accounting_imports_Files = function(props) {
 	React_Component.call(this,props);
 	view_accounting_imports_Files._instance = this;
@@ -19630,8 +19917,8 @@ var view_accounting_imports_Files = function(props) {
 	view_accounting_imports_Files.menuItems[0].handler = $bind(this,this.importReturnDebit);
 	var _g = new haxe_ds_StringMap();
 	_g.h["hint"] = "Datei zum Upload auswählen";
-	this.state = App.initEState({ data : _g, sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "admin.ImportCamt", label : "Upload RüLa's", section : "Files", items : view_accounting_imports_Files.menuItems},{ section : props.match.params.section == null ? "Files" : props.match.params.section, sameWidth : true})},this);
-	haxe_Log.trace(props.match.path,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 126, className : "view.accounting.imports.Files", methodName : "new"});
+	this.state = App.initEState({ data : _g, sideMenu : view_shared_io_FormApi.initSideMenu2(this,[{ dataClassPath : "admin.ImportCamt", label : "Upload", section : "Files", items : view_accounting_imports_Files.menuItems},{ dataClassPath : "admin.ImportCamt", label : "Rücklastschriften", section : "List", items : view_accounting_imports_List.menuItems}],{ section : props.match.params.section == null ? "Files" : props.match.params.section, sameWidth : true})},this);
+	haxe_Log.trace(props.match.path,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 134, className : "view.accounting.imports.Files", methodName : "new"});
 };
 $hxClasses["view.accounting.imports.Files"] = view_accounting_imports_Files;
 view_accounting_imports_Files.__name__ = "view.accounting.imports.Files";
@@ -19645,8 +19932,8 @@ view_accounting_imports_Files.mapDispatchToProps = function(dispatch) {
 		if(id == null) {
 			id = -1;
 		}
-		haxe_Log.trace("select:" + id + " selectType:" + selectType,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 144, className : "view.accounting.imports.Files", methodName : "mapDispatchToProps"});
-		haxe_Log.trace(data,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 145, className : "view.accounting.imports.Files", methodName : "mapDispatchToProps"});
+		haxe_Log.trace("select:" + id + " selectType:" + selectType,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 152, className : "view.accounting.imports.Files", methodName : "mapDispatchToProps"});
+		haxe_Log.trace(data,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 153, className : "view.accounting.imports.Files", methodName : "mapDispatchToProps"});
 		dispatch(redux_Action.map(action_async_LiveDataAccess.sSelect({ id : id, data : data, match : match, selectType : selectType})));
 	}};
 };
@@ -19662,44 +19949,50 @@ view_accounting_imports_Files.prototype = $extend(React_Component.prototype,{
 	,contact: null
 	,dbData: null
 	,dbMetaData: null
+	,componentDidMount: function() {
+		this.dataAccess = model_accounting_ReturnDebitModel.dataAccess;
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 162, className : "view.accounting.imports.Files", methodName : "componentDidMount"});
+		this.state.formApi.doAction();
+	}
 	,'delete': function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 153, className : "view.accounting.imports.Files", methodName : "delete"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 168, className : "view.accounting.imports.Files", methodName : "delete"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
-		haxe_Log.trace(data,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 155, className : "view.accounting.imports.Files", methodName : "delete"});
+		haxe_Log.trace(data,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 170, className : "view.accounting.imports.Files", methodName : "delete"});
 	}
 	,importReturnDebit: function(_) {
 		var _gthis = this;
 		var iPromise = new Promise(function(resolve,reject) {
 			var finput = window.document.getElementById("returnDebitFile");
-			haxe_Log.trace(_gthis.props.userState.dbUser.first_name + "::" + finput.files[0],{ fileName : "view/accounting/imports/Files.hx", lineNumber : 162, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
+			haxe_Log.trace(_gthis.props.userState.dbUser.first_name + "::" + finput.files[0],{ fileName : "view/accounting/imports/Files.hx", lineNumber : 177, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
 			var uFile = js_Boot.__cast(finput.files[0] , Blob);
-			haxe_Log.trace(uFile,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 165, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
+			haxe_Log.trace(uFile,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 180, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
 			var fd = new FormData();
 			fd.append("devIP",App.devIP);
+			fd.append("mandator",Std.string(App.mandator));
 			fd.append("action","returnDebitFile");
 			fd.append("returnDebitFile",uFile,finput.value);
 			var xhr = new XMLHttpRequest();
 			xhr.open("POST","" + Std.string(App.config.api),true);
 			xhr.onerror = function(e) {
-				haxe_Log.trace(e,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 173, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
-				haxe_Log.trace(e.type,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 174, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
+				haxe_Log.trace(e,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 189, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
+				haxe_Log.trace(e.type,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 190, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
 				reject({ error : e});
 			};
 			xhr.withCredentials = true;
 			xhr.onload = function(e) {
-				haxe_Log.trace(xhr.status,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 179, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
+				haxe_Log.trace(xhr.status,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 195, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
 				if(xhr.status != 200) {
-					haxe_Log.trace(xhr.statusText,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 181, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
+					haxe_Log.trace(xhr.statusText,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 197, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
 					reject({ error : xhr.statusText});
 				}
-				haxe_Log.trace(xhr.response.length,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 184, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
+				haxe_Log.trace(xhr.response.length,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 200, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
 				resolve(xhr.response);
 			};
 			xhr.send(fd);
 			_gthis.setState({ action : "importReturnDebit", loading : true});
 		});
 		iPromise.then(function(r) {
-			haxe_Log.trace(r,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 193, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
+			haxe_Log.trace(r,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 209, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
 			var rD = JSON.parse(r);
 			var dd = JSON.parse(r);
 			var dT = [];
@@ -19715,12 +20008,12 @@ view_accounting_imports_Files.prototype = $extend(React_Component.prototype,{
 			_gthis.props.history.push("" + baseUrl + "List");
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ text : Lambda.count(dT) + " Rücklastschriften Importiert"}))));
 		},function(r) {
-			haxe_Log.trace(r,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 210, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
+			haxe_Log.trace(r,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 226, className : "view.accounting.imports.Files", methodName : "importReturnDebit"});
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ cssClass : "", text : r.error == null ? "" : r.error}))));
 		});
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 274, className : "view.accounting.imports.Files", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 290, className : "view.accounting.imports.Files", methodName : "render"});
 		var tmp = this.state.formApi;
 		var tmp1 = react_ReactType.fromComp(React_Fragment);
 		var tmp2 = react_ReactType.fromString("form");
@@ -19729,16 +20022,17 @@ view_accounting_imports_Files.prototype = $extend(React_Component.prototype,{
 		return tmp.render(React.createElement(tmp1,{ },tmp4));
 	}
 	,renderResults: function() {
-		haxe_Log.trace(this.props.match.params.action + ":" + Std.string(this.state.dataTable != null),{ fileName : "view/accounting/imports/Files.hx", lineNumber : 285, className : "view.accounting.imports.Files", methodName : "renderResults"});
-		haxe_Log.trace(this.state.loading,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 286, className : "view.accounting.imports.Files", methodName : "renderResults"});
+		haxe_Log.trace(this.props.match.params.action + ":" + Std.string(this.state.dataTable != null),{ fileName : "view/accounting/imports/Files.hx", lineNumber : 301, className : "view.accounting.imports.Files", methodName : "renderResults"});
+		haxe_Log.trace(this.state.loading,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 302, className : "view.accounting.imports.Files", methodName : "renderResults"});
 		if(this.state.loading) {
 			return this.state.formApi.renderWait();
 		}
-		haxe_Log.trace("" + this.state.action + " ###########loading:" + Std.string(this.state.loading),{ fileName : "view/accounting/imports/Files.hx", lineNumber : 289, className : "view.accounting.imports.Files", methodName : "renderResults"});
+		haxe_Log.trace("" + this.state.action + " ###########loading:" + Std.string(this.state.loading),{ fileName : "view/accounting/imports/Files.hx", lineNumber : 305, className : "view.accounting.imports.Files", methodName : "renderResults"});
 		var _g = this.state.action;
 		if(this.state.data != null && Object.prototype.hasOwnProperty.call(this.state.data.h,"hint")) {
-			var tmp = this.state.data.h["hint"];
-			return React.createElement(react_ReactType.fromString("div"),{ 'class' : "hint"},tmp);
+			var tmp = react_ReactType.fromString("div");
+			var tmp1 = this.state.data.h["hint"];
+			return React.createElement(tmp,{ className : "hint"},React.createElement(react_ReactType.fromString("h2"),{ },tmp1));
 		} else {
 			return null;
 		}
@@ -19749,11 +20043,10 @@ var view_accounting_imports_List = function(props) {
 	React_Component.call(this,props);
 	view_accounting_imports_List._instance = this;
 	this.dataDisplay = model_accounting_ReturnDebitModel.dataDisplay;
-	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/accounting/imports/List.hx", lineNumber : 107, className : "view.accounting.imports.List", methodName : "new"});
+	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/accounting/imports/List.hx", lineNumber : 86, className : "view.accounting.imports.List", methodName : "new"});
 	this.baseForm = new view_shared_io_BaseForm(this);
-	view_accounting_imports_List.menuItems[0].handler = $bind(this,this.importReturnDebit);
-	this.state = App.initEState({ sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "admin.ImportCamt", label : "Upload RüLa's", section : "List", items : view_accounting_imports_List.menuItems},{ section : props.match.params.section == null ? "List" : props.match.params.section, sameWidth : true})},this);
-	haxe_Log.trace(props.match.path,{ fileName : "view/accounting/imports/List.hx", lineNumber : 125, className : "view.accounting.imports.List", methodName : "new"});
+	this.state = App.initEState({ sideMenu : view_shared_io_FormApi.initSideMenu2(this,[{ dataClassPath : "admin.ImportCamt", label : "Upload", section : "Files", items : view_accounting_imports_Files.menuItems},{ dataClassPath : "admin.ImportCamt", label : "Rücklastschriften", section : "List", items : view_accounting_imports_List.menuItems}],{ section : props.match.params.section == null ? "List" : props.match.params.section, sameWidth : true})},this);
+	haxe_Log.trace(props.match.path,{ fileName : "view/accounting/imports/List.hx", lineNumber : 112, className : "view.accounting.imports.List", methodName : "new"});
 };
 $hxClasses["view.accounting.imports.List"] = view_accounting_imports_List;
 view_accounting_imports_List.__name__ = "view.accounting.imports.List";
@@ -19762,48 +20055,17 @@ view_accounting_imports_List.mapStateToProps = function(aState) {
 };
 view_accounting_imports_List.mapDispatchToProps = function(dispatch) {
 	return { load : function(param) {
-		return dispatch(redux_Action.map(view_accounting_imports_List.upload(param)));
+		return dispatch(redux_Action.map(action_async_CRUD.read(param)));
 	}, storeData : function(id,action) {
 		dispatch(redux_Action.map(action_async_LiveDataAccess.storeData(id,action)));
 	}, select : function(id,data,match,selectType) {
 		if(id == null) {
 			id = -1;
 		}
-		haxe_Log.trace("select:" + id + " selectType:" + selectType,{ fileName : "view/accounting/imports/List.hx", lineNumber : 144, className : "view.accounting.imports.List", methodName : "mapDispatchToProps"});
-		haxe_Log.trace(data,{ fileName : "view/accounting/imports/List.hx", lineNumber : 145, className : "view.accounting.imports.List", methodName : "mapDispatchToProps"});
+		haxe_Log.trace("select:" + id + " selectType:" + selectType,{ fileName : "view/accounting/imports/List.hx", lineNumber : 131, className : "view.accounting.imports.List", methodName : "mapDispatchToProps"});
+		haxe_Log.trace(data,{ fileName : "view/accounting/imports/List.hx", lineNumber : 132, className : "view.accounting.imports.List", methodName : "mapDispatchToProps"});
 		dispatch(redux_Action.map(action_async_LiveDataAccess.sSelect({ id : id, data : data, match : match, selectType : selectType})));
 	}};
-};
-view_accounting_imports_List.upload = function(param) {
-	haxe_Log.trace(param.action,{ fileName : "view/accounting/imports/List.hx", lineNumber : 218, className : "view.accounting.imports.List", methodName : "upload"});
-	return redux_thunk_Thunk.Action(function(dispatch,getState) {
-		haxe_Log.trace(param,{ fileName : "view/accounting/imports/List.hx", lineNumber : 220, className : "view.accounting.imports.List", methodName : "upload"});
-		var dbData = shared_DbDataTools.create();
-		return new Promise(function(resolve,reject) {
-			if(!param.dbUser.online) {
-				dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ dbUser : param.dbUser, lastError : "Du musst dich neu anmelden!"}))));
-				haxe_Log.trace("LoginError",{ fileName : "view/accounting/imports/List.hx", lineNumber : 231, className : "view.accounting.imports.List", methodName : "upload"});
-				resolve(null);
-			}
-			var bL = loader_BinaryLoader.dbQuery("" + Std.string(App.config.api),param,function(data) {
-				haxe_Log.trace(data,{ fileName : "view/accounting/imports/List.hx", lineNumber : 240, className : "view.accounting.imports.List", methodName : "upload"});
-				if(data.dataErrors != null) {
-					haxe_Log.trace(data.dataErrors == null ? "null" : haxe_ds_StringMap.stringify(data.dataErrors.h),{ fileName : "view/accounting/imports/List.hx", lineNumber : 242, className : "view.accounting.imports.List", methodName : "upload"});
-				}
-				if(data.dataInfo != null && Object.prototype.hasOwnProperty.call(data.dataInfo.h,"dataSource")) {
-					haxe_Log.trace(new haxe_Unserializer(data.dataInfo.h["dataSource"]).unserialize(),{ fileName : "view/accounting/imports/List.hx", lineNumber : 244, className : "view.accounting.imports.List", methodName : "upload"});
-				}
-				if(Object.prototype.hasOwnProperty.call(data.dataErrors.h,"lastError")) {
-					dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ lastError : data.dataErrors.h["lastError"]}))));
-					resolve(null);
-				} else {
-					dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ cssClass : "", text : param.resolveMessage == null ? "" : param.resolveMessage.success}))));
-					resolve(data);
-				}
-			});
-			haxe_Log.trace(bL,{ fileName : "view/accounting/imports/List.hx", lineNumber : 262, className : "view.accounting.imports.List", methodName : "upload"});
-		});
-	});
 };
 view_accounting_imports_List.__super__ = React_Component;
 view_accounting_imports_List.prototype = $extend(React_Component.prototype,{
@@ -19817,63 +20079,32 @@ view_accounting_imports_List.prototype = $extend(React_Component.prototype,{
 	,contact: null
 	,dbData: null
 	,dbMetaData: null
-	,'delete': function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/accounting/imports/List.hx", lineNumber : 153, className : "view.accounting.imports.List", methodName : "delete"});
-		var data = this.state.formApi.selectedRowsMap(this.state);
-		haxe_Log.trace(data,{ fileName : "view/accounting/imports/List.hx", lineNumber : 155, className : "view.accounting.imports.List", methodName : "delete"});
+	,componentDidMount: function() {
+		this.dataAccess = model_accounting_ReturnDebitModel.dataAccess;
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/accounting/imports/List.hx", lineNumber : 141, className : "view.accounting.imports.List", methodName : "componentDidMount"});
+		this.state.formApi.doAction("get");
 	}
-	,importReturnDebit: function(_) {
+	,'delete': function(ev) {
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/accounting/imports/List.hx", lineNumber : 147, className : "view.accounting.imports.List", methodName : "delete"});
+		var data = this.state.formApi.selectedRowsMap(this.state);
+		haxe_Log.trace(data,{ fileName : "view/accounting/imports/List.hx", lineNumber : 149, className : "view.accounting.imports.List", methodName : "delete"});
+	}
+	,get: function(ev) {
 		var _gthis = this;
-		var iPromise = new Promise(function(resolve,reject) {
-			var finput = window.document.getElementById("returnDebitFile");
-			haxe_Log.trace(_gthis.props.userState.dbUser.first_name + "::" + finput.files[0],{ fileName : "view/accounting/imports/List.hx", lineNumber : 162, className : "view.accounting.imports.List", methodName : "importReturnDebit"});
-			var uFile = js_Boot.__cast(finput.files[0] , Blob);
-			haxe_Log.trace(uFile,{ fileName : "view/accounting/imports/List.hx", lineNumber : 165, className : "view.accounting.imports.List", methodName : "importReturnDebit"});
-			var fd = new FormData();
-			fd.append("devIP",App.devIP);
-			fd.append("action","returnDebitFile");
-			fd.append("returnDebitFile",uFile,finput.value);
-			var xhr = new XMLHttpRequest();
-			xhr.open("POST","" + Std.string(App.config.api),true);
-			xhr.onerror = function(e) {
-				haxe_Log.trace(e,{ fileName : "view/accounting/imports/List.hx", lineNumber : 173, className : "view.accounting.imports.List", methodName : "importReturnDebit"});
-				haxe_Log.trace(e.type,{ fileName : "view/accounting/imports/List.hx", lineNumber : 174, className : "view.accounting.imports.List", methodName : "importReturnDebit"});
-				reject({ error : e});
-			};
-			xhr.withCredentials = true;
-			xhr.onload = function(e) {
-				haxe_Log.trace(xhr.status,{ fileName : "view/accounting/imports/List.hx", lineNumber : 179, className : "view.accounting.imports.List", methodName : "importReturnDebit"});
-				if(xhr.status != 200) {
-					haxe_Log.trace(xhr.statusText,{ fileName : "view/accounting/imports/List.hx", lineNumber : 181, className : "view.accounting.imports.List", methodName : "importReturnDebit"});
-					reject({ error : xhr.statusText});
-				}
-				haxe_Log.trace(xhr.response.length,{ fileName : "view/accounting/imports/List.hx", lineNumber : 184, className : "view.accounting.imports.List", methodName : "importReturnDebit"});
-				resolve(xhr.response);
-			};
-			xhr.send(fd);
-			_gthis.setState({ action : "importReturnDebit", loading : true});
-		});
-		iPromise.then(function(r) {
-			haxe_Log.trace(r,{ fileName : "view/accounting/imports/List.hx", lineNumber : 193, className : "view.accounting.imports.List", methodName : "importReturnDebit"});
-			var rD = JSON.parse(r);
-			var dd = JSON.parse(r);
-			var dT = [];
-			var _g = 0;
-			var _g1 = dd.rlData;
-			while(_g < _g1.length) {
-				var dR = _g1[_g];
-				++_g;
-				dT.push(shared_Utils.dynToMap(dR));
-			}
-			_gthis.setState({ dataTable : dT, loading : false});
-			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ text : Lambda.count(dT) + " Rücklastschriften Importiert"}))));
-		},function(r) {
-			haxe_Log.trace(r,{ fileName : "view/accounting/imports/List.hx", lineNumber : 207, className : "view.accounting.imports.List", methodName : "importReturnDebit"});
-			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ cssClass : "", text : r.error == null ? "" : r.error}))));
+		haxe_Log.trace("hi " + Std.string(ev),{ fileName : "view/accounting/imports/List.hx", lineNumber : 154, className : "view.accounting.imports.List", methodName : "get"});
+		var offset = 0;
+		if(ev != null && ev.page != null) {
+			offset = this.props.limit * ev.page | 0;
+		}
+		haxe_Log.trace(this.props.userState,{ fileName : "view/accounting/imports/List.hx", lineNumber : 160, className : "view.accounting.imports.List", methodName : "get"});
+		var p = this.props.load({ classPath : "data.DebitReturnStatements", action : "get", filter : this.props.match.params.id != null ? { id : this.props.match.params.id, mandator : "1"} : { mandator : "1", processed : "false"}, limit : this.props.limit, offset : offset > 0 ? offset : 0, table : "debit_return_statements", resolveMessage : { success : "Rücklastschriften wurde geladen", failure : "Rücklastschriften konnten nicht geladen werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
+		p.then(function(data) {
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/accounting/imports/List.hx", lineNumber : 178, className : "view.accounting.imports.List", methodName : "get"});
+			_gthis.setState({ loading : false, dataTable : data.dataRows});
 		});
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/accounting/imports/List.hx", lineNumber : 271, className : "view.accounting.imports.List", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/accounting/imports/List.hx", lineNumber : 186, className : "view.accounting.imports.List", methodName : "render"});
 		var tmp = this.state.formApi;
 		var tmp1 = react_ReactType.fromComp(React_Fragment);
 		var tmp2 = react_ReactType.fromString("form");
@@ -19882,42 +20113,18 @@ view_accounting_imports_List.prototype = $extend(React_Component.prototype,{
 		return tmp.render(React.createElement(tmp1,{ },tmp4));
 	}
 	,renderResults: function() {
-		haxe_Log.trace(this.props.match.params.action + ":" + Std.string(this.state.dataTable != null),{ fileName : "view/accounting/imports/List.hx", lineNumber : 282, className : "view.accounting.imports.List", methodName : "renderResults"});
-		haxe_Log.trace(this.state.loading,{ fileName : "view/accounting/imports/List.hx", lineNumber : 283, className : "view.accounting.imports.List", methodName : "renderResults"});
+		haxe_Log.trace(this.props.match.params.action + ":" + Std.string(this.state.dataTable != null),{ fileName : "view/accounting/imports/List.hx", lineNumber : 197, className : "view.accounting.imports.List", methodName : "renderResults"});
 		if(this.state.loading) {
 			return this.state.formApi.renderWait();
 		}
-		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/accounting/imports/List.hx", lineNumber : 286, className : "view.accounting.imports.List", methodName : "renderResults"});
+		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/accounting/imports/List.hx", lineNumber : 200, className : "view.accounting.imports.List", methodName : "renderResults"});
 		var _g = this.state.action;
 		if(_g == null) {
-			if(this.state.data != null && Object.prototype.hasOwnProperty.call(this.state.data.h,"hint")) {
-				var tmp = this.state.data.h["hint"];
-				return React.createElement(react_ReactType.fromString("div"),{ 'class' : "hint"},tmp);
-			} else {
-				return null;
-			}
+			return React.createElement(react_ReactType.fromComp(view_table_Table),Object.assign({ },this.props,{ id : "importedReturnDebit", data : this.state.dataTable, dataState : this.dataDisplay.h["rDebitList"], renderPager : ($_=this.baseForm,$bind($_,$_.renderPager)), className : "is-striped is-hoverable", parentComponent : this, fullWidth : true}));
+		} else if(_g == "listReturnDebit") {
+			return null;
 		} else {
-			switch(_g) {
-			case "importClientList":
-				haxe_Log.trace(this.state.actualState,{ fileName : "view/accounting/imports/List.hx", lineNumber : 297, className : "view.accounting.imports.List", methodName : "renderResults"});
-				if(this.state.actualState == null) {
-					return this.state.formApi.renderWait();
-				} else {
-					return this.state.formBuilder.renderForm({ mHandlers : this.state.mHandlers, fields : this.formFields, model : "importClientList", title : "Stammdaten Import"},this.state.actualState);
-				}
-				break;
-			case "importReturnDebit":
-				return React.createElement(react_ReactType.fromComp(view_table_Table),Object.assign({ },this.props,{ id : "importedReturnDebit", data : this.state.dataTable, dataState : this.dataDisplay.h["rDebitList"], renderPager : ($_=this.baseForm,$bind($_,$_.renderPager)), className : "is-striped is-hoverable", parentComponent : this, fullWidth : true}));
-			case "shared.io.DB.editTableFields":
-				return null;
-			default:
-				if(this.state.data != null && Object.prototype.hasOwnProperty.call(this.state.data.h,"hint")) {
-					var tmp = this.state.data.h["hint"];
-					return React.createElement(react_ReactType.fromString("div"),{ 'class' : "hint"},tmp);
-				} else {
-					return null;
-				}
-			}
+			return React.createElement(react_ReactType.fromComp(view_table_Table),Object.assign({ },this.props,{ id : "importedReturnDebit", data : this.state.dataTable, dataState : this.dataDisplay.h["rDebitList"], renderPager : ($_=this.baseForm,$bind($_,$_.renderPager)), className : "is-striped is-hoverable", parentComponent : this, fullWidth : true}));
 		}
 	}
 	,__class__: view_accounting_imports_List
@@ -20664,7 +20871,7 @@ var view_data_Contacts = function(props) {
 				haxe_Log.trace(shared_Utils.keysList(props.dataStore.contactData.keys()),{ fileName : "view/data/Contacts.hx", lineNumber : 87, className : "view.data.Contacts", methodName : "new"});
 			}
 		}
-		props.history.push("" + baseUrl + "List/");
+		props.history.push("" + baseUrl + "List");
 	}
 };
 $hxClasses["view.data.Contacts"] = view_data_Contacts;
@@ -23941,8 +24148,9 @@ App.flat = __webpack_require__("./node_modules/flatpickr/dist/flatpickr.min.css"
 App.sprintf = __webpack_require__("./node_modules/sprintf-js/src/sprintf.js").sprintf;
 App.modalBox = React.createRef();
 App.onResizeComponents = new haxe_ds_List();
-App.maxLoginAttempts = 3;
 App.defaultUrl = "/Data/Contacts/List/get";
+App.mandator = 1;
+App.maxLoginAttempts = 3;
 App.displayName = "App";
 DateTools.DAY_SHORT_NAMES = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 DateTools.DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -24030,14 +24238,14 @@ me_cunity_debug_Out.traceTarget = me_cunity_debug_DebugOutput.NATIVE;
 me_cunity_debug_Out.aStack = haxe_CallStack.callStack;
 model_ORM.__meta__ = { fields : { id : { dataType : ["bigint"]}}};
 model_ORM.dsep = ",";
-model_Account.__meta__ = { fields : { contact : { dataType : ["bigint"]}, bank_name : { dataType : ["character varying(64)"]}, bic : { dataType : ["character varying(11)"]}, account : { dataType : ["character varying(32)"]}, blz : { dataType : ["character varying(12)"]}, iban : { dataType : ["character varying(32)"]}, creditor : { dataType : ["bigint"]}, sign_date : { dataType : ["date"]}, state : { dataType : ["accounts_state"]}, creation_date : { dataType : ["timestamp without time zone"]}, edited_by : { dataType : ["bigint"]}, last_locktime : { dataType : ["timestamp(0) without time zone"]}}};
-model_Account.__rtti = "<class path=\"model.Account\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<contact public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</contact>\n\t<set_contact set=\"method\" line=\"41\"><f a=\"contact\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_contact>\n\t<bank_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</bank_name>\n\t<set_bank_name set=\"method\" line=\"51\"><f a=\"bank_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_bank_name>\n\t<bic public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(11)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</bic>\n\t<set_bic set=\"method\" line=\"61\"><f a=\"bic\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_bic>\n\t<account public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</account>\n\t<set_account set=\"method\" line=\"71\"><f a=\"account\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_account>\n\t<blz public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(12)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</blz>\n\t<set_blz set=\"method\" line=\"81\"><f a=\"blz\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_blz>\n\t<iban public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</iban>\n\t<set_iban set=\"method\" line=\"91\"><f a=\"iban\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_iban>\n\t<creditor public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creditor>\n\t<set_creditor set=\"method\" line=\"101\"><f a=\"creditor\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_creditor>\n\t<sign_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</sign_date>\n\t<set_sign_date set=\"method\" line=\"111\"><f a=\"sign_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_sign_date>\n\t<state public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"accounts_state\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</state>\n\t<set_state set=\"method\" line=\"121\"><f a=\"state\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_state>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"131\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"141\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<last_locktime public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_locktime>\n\t<set_last_locktime set=\"method\" line=\"151\"><f a=\"last_locktime\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_locktime>\n\t<new public=\"1\" set=\"method\" line=\"23\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+model_Account.__meta__ = { fields : { contact : { dataType : ["bigint"]}, bank_name : { dataType : ["character varying(64)"]}, bic : { dataType : ["character varying(11)"]}, account : { dataType : ["character varying(32)"]}, blz : { dataType : ["character varying(12)"]}, iban : { dataType : ["character varying(32)"]}, account_holder : { dataType : ["text"]}, sign_date : { dataType : ["date"]}, status : { dataType : ["accounts_state"]}, creation_date : { dataType : ["timestamp with time zone"]}, edited_by : { dataType : ["bigint"]}, last_locktime : { dataType : ["timestamp with time zone"]}, mandator : { dataType : ["bigint"]}}};
+model_Account.__rtti = "<class path=\"model.Account\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<contact public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</contact>\n\t<set_contact set=\"method\" line=\"31\"><f a=\"contact\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_contact>\n\t<bank_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</bank_name>\n\t<set_bank_name set=\"method\" line=\"41\"><f a=\"bank_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_bank_name>\n\t<bic public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(11)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</bic>\n\t<set_bic set=\"method\" line=\"51\"><f a=\"bic\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_bic>\n\t<account public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</account>\n\t<set_account set=\"method\" line=\"61\"><f a=\"account\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_account>\n\t<blz public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(12)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</blz>\n\t<set_blz set=\"method\" line=\"71\"><f a=\"blz\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_blz>\n\t<iban public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</iban>\n\t<set_iban set=\"method\" line=\"81\"><f a=\"iban\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_iban>\n\t<account_holder public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</account_holder>\n\t<set_account_holder set=\"method\" line=\"91\"><f a=\"account_holder\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_account_holder>\n\t<sign_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</sign_date>\n\t<set_sign_date set=\"method\" line=\"101\"><f a=\"sign_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_sign_date>\n\t<status public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"accounts_state\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</status>\n\t<set_status set=\"method\" line=\"111\"><f a=\"status\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_status>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp with time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"121\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"131\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<last_locktime public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp with time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_locktime>\n\t<set_last_locktime set=\"method\" line=\"141\"><f a=\"last_locktime\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_locktime>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"151\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<new public=\"1\" set=\"method\" line=\"23\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 model_BankTransfer.__meta__ = { fields : { ag_name : { dataType : ["character varying(64)"]}, ag_konto_or_iban : { dataType : ["character varying(32)"]}, ag_blz_or_bic : { dataType : ["character varying(11)"]}, zahlpfl_name : { dataType : ["character varying(21)"]}, zahlpfl_name2 : { dataType : ["character varying(32)"]}, zahlpfl_strasse : { dataType : ["character varying(32)"]}, zahlpfl_name_ort : { dataType : ["character varying(32)"]}, zahlpfl_name_kto_or_iban : { dataType : ["character varying(22)"]}, zahlpfl_name_blz_or_bic : { dataType : ["character varying(11)"]}, betrag : { dataType : ["double precision"]}, currency : { dataType : ["character varying(32)"]}, zahlart : { dataType : ["character varying(5)"]}, termin : { dataType : ["date"]}, vwz1 : { dataType : ["character varying(22)"]}, vwz2 : { dataType : ["character varying(256)"]}, vwz3 : { dataType : ["character varying(64)"]}, vwz4 : { dataType : ["character varying(32)"]}, vwz5 : { dataType : ["character varying(32)"]}, vwz6 : { dataType : ["character varying(32)"]}, vwz7 : { dataType : ["character varying(32)"]}, vwz8 : { dataType : ["character varying(32)"]}, vwz9 : { dataType : ["character varying(32)"]}, ba_id : { dataType : ["bigint"]}, tracking_status : { dataType : ["bank_transfers_tracking_status"]}, anforderungs_datum : { dataType : ["date"]}, rueck_datum : { dataType : ["date"]}, cycle : { dataType : ["character varying(32)"]}, ref_id : { dataType : ["character varying(32)"]}, mandat_id : { dataType : ["character varying(11)"]}, mandat_datum : { dataType : ["date"]}, ag_creditor_id : { dataType : ["character varying(32)"]}, sequenz : { dataType : ["character varying(4)"]}, super_ag_name : { dataType : ["character varying(32)"]}}};
 model_BankTransfer.__rtti = "<class path=\"model.BankTransfer\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<ag_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</ag_name>\n\t<set_ag_name set=\"method\" line=\"51\"><f a=\"ag_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_ag_name>\n\t<ag_konto_or_iban public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</ag_konto_or_iban>\n\t<set_ag_konto_or_iban set=\"method\" line=\"61\"><f a=\"ag_konto_or_iban\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_ag_konto_or_iban>\n\t<ag_blz_or_bic public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(11)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</ag_blz_or_bic>\n\t<set_ag_blz_or_bic set=\"method\" line=\"71\"><f a=\"ag_blz_or_bic\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_ag_blz_or_bic>\n\t<zahlpfl_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(21)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlpfl_name>\n\t<set_zahlpfl_name set=\"method\" line=\"81\"><f a=\"zahlpfl_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlpfl_name>\n\t<zahlpfl_name2 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlpfl_name2>\n\t<set_zahlpfl_name2 set=\"method\" line=\"91\"><f a=\"zahlpfl_name2\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlpfl_name2>\n\t<zahlpfl_strasse public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlpfl_strasse>\n\t<set_zahlpfl_strasse set=\"method\" line=\"101\"><f a=\"zahlpfl_strasse\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlpfl_strasse>\n\t<zahlpfl_name_ort public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlpfl_name_ort>\n\t<set_zahlpfl_name_ort set=\"method\" line=\"111\"><f a=\"zahlpfl_name_ort\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlpfl_name_ort>\n\t<zahlpfl_name_kto_or_iban public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(22)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlpfl_name_kto_or_iban>\n\t<set_zahlpfl_name_kto_or_iban set=\"method\" line=\"121\"><f a=\"zahlpfl_name_kto_or_iban\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlpfl_name_kto_or_iban>\n\t<zahlpfl_name_blz_or_bic public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(11)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlpfl_name_blz_or_bic>\n\t<set_zahlpfl_name_blz_or_bic set=\"method\" line=\"131\"><f a=\"zahlpfl_name_blz_or_bic\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlpfl_name_blz_or_bic>\n\t<betrag public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"double precision\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</betrag>\n\t<set_betrag set=\"method\" line=\"141\"><f a=\"betrag\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_betrag>\n\t<currency public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</currency>\n\t<set_currency set=\"method\" line=\"151\"><f a=\"currency\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_currency>\n\t<zahlart public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(5)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlart>\n\t<set_zahlart set=\"method\" line=\"161\"><f a=\"zahlart\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlart>\n\t<termin public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</termin>\n\t<set_termin set=\"method\" line=\"171\"><f a=\"termin\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_termin>\n\t<vwz1 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(22)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz1>\n\t<set_vwz1 set=\"method\" line=\"181\"><f a=\"vwz1\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz1>\n\t<vwz2 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(256)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz2>\n\t<set_vwz2 set=\"method\" line=\"191\"><f a=\"vwz2\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz2>\n\t<vwz3 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz3>\n\t<set_vwz3 set=\"method\" line=\"201\"><f a=\"vwz3\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz3>\n\t<vwz4 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz4>\n\t<set_vwz4 set=\"method\" line=\"211\"><f a=\"vwz4\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz4>\n\t<vwz5 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz5>\n\t<set_vwz5 set=\"method\" line=\"221\"><f a=\"vwz5\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz5>\n\t<vwz6 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz6>\n\t<set_vwz6 set=\"method\" line=\"231\"><f a=\"vwz6\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz6>\n\t<vwz7 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz7>\n\t<set_vwz7 set=\"method\" line=\"241\"><f a=\"vwz7\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz7>\n\t<vwz8 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz8>\n\t<set_vwz8 set=\"method\" line=\"251\"><f a=\"vwz8\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz8>\n\t<vwz9 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz9>\n\t<set_vwz9 set=\"method\" line=\"261\"><f a=\"vwz9\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz9>\n\t<ba_id public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</ba_id>\n\t<set_ba_id set=\"method\" line=\"271\"><f a=\"ba_id\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_ba_id>\n\t<tracking_status public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bank_transfers_tracking_status\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</tracking_status>\n\t<set_tracking_status set=\"method\" line=\"281\"><f a=\"tracking_status\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_tracking_status>\n\t<anforderungs_datum public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</anforderungs_datum>\n\t<set_anforderungs_datum set=\"method\" line=\"291\"><f a=\"anforderungs_datum\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_anforderungs_datum>\n\t<rueck_datum public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</rueck_datum>\n\t<set_rueck_datum set=\"method\" line=\"301\"><f a=\"rueck_datum\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_rueck_datum>\n\t<cycle public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</cycle>\n\t<set_cycle set=\"method\" line=\"311\"><f a=\"cycle\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_cycle>\n\t<ref_id public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</ref_id>\n\t<set_ref_id set=\"method\" line=\"321\"><f a=\"ref_id\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_ref_id>\n\t<mandat_id public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(11)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandat_id>\n\t<set_mandat_id set=\"method\" line=\"331\"><f a=\"mandat_id\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_mandat_id>\n\t<mandat_datum public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandat_datum>\n\t<set_mandat_datum set=\"method\" line=\"341\"><f a=\"mandat_datum\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_mandat_datum>\n\t<ag_creditor_id public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</ag_creditor_id>\n\t<set_ag_creditor_id set=\"method\" line=\"351\"><f a=\"ag_creditor_id\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_ag_creditor_id>\n\t<sequenz public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(4)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</sequenz>\n\t<set_sequenz set=\"method\" line=\"361\"><f a=\"sequenz\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_sequenz>\n\t<super_ag_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</super_ag_name>\n\t<set_super_ag_name set=\"method\" line=\"371\"><f a=\"super_ag_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_super_ag_name>\n\t<new public=\"1\" set=\"method\" line=\"43\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 model_Contact.__meta__ = { fields : { mandator : { dataType : ["bigint"]}, creation_date : { dataType : ["timestamp(0) without time zone"]}, state : { dataType : ["character varying(64)"]}, use_email : { dataType : ["boolean"]}, company_name : { dataType : ["character varying(64)"]}, co_field : { dataType : ["character varying(100)"]}, phone_code : { dataType : ["character varying(10)"]}, phone_number : { dataType : ["character varying(18)"]}, fax : { dataType : ["character varying(18)"]}, title : { dataType : ["character varying(64)"]}, title_pro : { dataType : ["character varying(64)"]}, first_name : { dataType : ["character varying(32)"]}, last_name : { dataType : ["character varying(32)"]}, address : { dataType : ["character varying(64)"]}, address_2 : { dataType : ["character varying(64)"]}, city : { dataType : ["character varying(50)"]}, postal_code : { dataType : ["character varying(10)"]}, country_code : { dataType : ["character varying(3)"]}, gender : { dataType : ["character varying(64)"]}, date_of_birth : { dataType : ["date"]}, mobile : { dataType : ["character varying(19)"]}, email : { dataType : ["character varying(64)"]}, comments : { dataType : ["character varying(4096)"]}, edited_by : { dataType : ["bigint"]}, merged : { dataType : ["bigint[]"]}, last_locktime : { dataType : ["timestamp(0) without time zone"]}, owner : { dataType : ["bigint"]}}};
-model_Contact.__rtti = "<class path=\"model.Contact\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"56\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"66\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<state public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</state>\n\t<set_state set=\"method\" line=\"76\"><f a=\"state\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_state>\n\t<use_email public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</use_email>\n\t<set_use_email set=\"method\" line=\"86\"><f a=\"use_email\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_use_email>\n\t<company_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</company_name>\n\t<set_company_name set=\"method\" line=\"96\"><f a=\"company_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_company_name>\n\t<co_field public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(100)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</co_field>\n\t<set_co_field set=\"method\" line=\"106\"><f a=\"co_field\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_co_field>\n\t<phone_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_code>\n\t<set_phone_code set=\"method\" line=\"116\"><f a=\"phone_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_code>\n\t<phone_number public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_number>\n\t<set_phone_number set=\"method\" line=\"126\"><f a=\"phone_number\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_number>\n\t<fax public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</fax>\n\t<set_fax set=\"method\" line=\"136\"><f a=\"fax\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_fax>\n\t<title public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</title>\n\t<set_title set=\"method\" line=\"146\"><f a=\"title\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_title>\n\t<title_pro public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</title_pro>\n\t<set_title_pro set=\"method\" line=\"156\"><f a=\"title_pro\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_title_pro>\n\t<first_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</first_name>\n\t<set_first_name set=\"method\" line=\"166\"><f a=\"first_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_first_name>\n\t<last_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_name>\n\t<set_last_name set=\"method\" line=\"176\"><f a=\"last_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_name>\n\t<address public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address>\n\t<set_address set=\"method\" line=\"186\"><f a=\"address\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address>\n\t<address_2 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address_2>\n\t<set_address_2 set=\"method\" line=\"196\"><f a=\"address_2\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address_2>\n\t<city public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(50)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</city>\n\t<set_city set=\"method\" line=\"206\"><f a=\"city\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_city>\n\t<postal_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</postal_code>\n\t<set_postal_code set=\"method\" line=\"216\"><f a=\"postal_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_postal_code>\n\t<country_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(3)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</country_code>\n\t<set_country_code set=\"method\" line=\"226\"><f a=\"country_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_country_code>\n\t<gender public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</gender>\n\t<set_gender set=\"method\" line=\"236\"><f a=\"gender\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_gender>\n\t<date_of_birth public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</date_of_birth>\n\t<set_date_of_birth set=\"method\" line=\"246\"><f a=\"date_of_birth\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_date_of_birth>\n\t<mobile public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(19)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mobile>\n\t<set_mobile set=\"method\" line=\"256\"><f a=\"mobile\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_mobile>\n\t<email public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</email>\n\t<set_email set=\"method\" line=\"266\"><f a=\"email\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_email>\n\t<comments public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(4096)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</comments>\n\t<set_comments set=\"method\" line=\"276\"><f a=\"comments\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_comments>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"286\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<merged public=\"1\" set=\"accessor\">\n\t\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint[]\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</merged>\n\t<set_merged set=\"method\" line=\"296\"><f a=\"merged\">\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n</f></set_merged>\n\t<last_locktime public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_locktime>\n\t<set_last_locktime set=\"method\" line=\"306\"><f a=\"last_locktime\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_locktime>\n\t<owner public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</owner>\n\t<set_owner set=\"method\" line=\"316\"><f a=\"owner\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_owner>\n\t<new public=\"1\" set=\"method\" line=\"38\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
-model_Deal.__meta__ = { fields : { contact : { dataType : ["bigint"]}, creation_date : { dataType : ["timestamp(0) without time zone"]}, account : { dataType : ["bigint"]}, target_account : { dataType : ["bigint"]}, start_day : { dataType : ["character varying(2)"]}, start_date : { dataType : ["date"]}, cycle : { dataType : ["deals_cycle"]}, amount : { dataType : ["numeric(10,2)"]}, product : { dataType : ["bigint"]}, agent : { dataType : ["bigint"]}, project : { dataType : ["bigint"]}, status : { dataType : ["character varying(64)"]}, pay_method : { dataType : ["character varying(64)"]}, end_date : { dataType : ["date"]}, end_reason : { dataType : ["bigint"]}, repeat_date : { dataType : ["date"]}, edited_by : { dataType : ["bigint"]}, mandator : { dataType : ["bigint"]}, old_active : { dataType : ["boolean"]}, cycle_start_date : { dataType : ["date"]}, last_locktime : { dataType : ["timestamp(0) without time zone"]}}};
-model_Deal.__rtti = "<class path=\"model.Deal\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<contact public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</contact>\n\t<set_contact set=\"method\" line=\"50\"><f a=\"contact\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_contact>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"60\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<account public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</account>\n\t<set_account set=\"method\" line=\"70\"><f a=\"account\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_account>\n\t<target_account public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</target_account>\n\t<set_target_account set=\"method\" line=\"80\"><f a=\"target_account\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_target_account>\n\t<start_day public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(2)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</start_day>\n\t<set_start_day set=\"method\" line=\"90\"><f a=\"start_day\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_start_day>\n\t<start_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</start_date>\n\t<set_start_date set=\"method\" line=\"100\"><f a=\"start_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_start_date>\n\t<cycle public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"deals_cycle\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</cycle>\n\t<set_cycle set=\"method\" line=\"110\"><f a=\"cycle\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_cycle>\n\t<amount public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"numeric(10,2)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</amount>\n\t<set_amount set=\"method\" line=\"120\"><f a=\"amount\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_amount>\n\t<product public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</product>\n\t<set_product set=\"method\" line=\"130\"><f a=\"product\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_product>\n\t<agent public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</agent>\n\t<set_agent set=\"method\" line=\"140\"><f a=\"agent\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_agent>\n\t<project public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</project>\n\t<set_project set=\"method\" line=\"150\"><f a=\"project\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_project>\n\t<status public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</status>\n\t<set_status set=\"method\" line=\"160\"><f a=\"status\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_status>\n\t<pay_method public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</pay_method>\n\t<set_pay_method set=\"method\" line=\"170\"><f a=\"pay_method\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_pay_method>\n\t<end_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</end_date>\n\t<set_end_date set=\"method\" line=\"180\"><f a=\"end_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_end_date>\n\t<end_reason public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</end_reason>\n\t<set_end_reason set=\"method\" line=\"190\"><f a=\"end_reason\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_end_reason>\n\t<repeat_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</repeat_date>\n\t<set_repeat_date set=\"method\" line=\"200\"><f a=\"repeat_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_repeat_date>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"210\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"220\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<old_active public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</old_active>\n\t<set_old_active set=\"method\" line=\"230\"><f a=\"old_active\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_old_active>\n\t<cycle_start_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</cycle_start_date>\n\t<set_cycle_start_date set=\"method\" line=\"240\"><f a=\"cycle_start_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_cycle_start_date>\n\t<last_locktime public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_locktime>\n\t<set_last_locktime set=\"method\" line=\"250\"><f a=\"last_locktime\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_locktime>\n\t<new public=\"1\" set=\"method\" line=\"32\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+model_Contact.__rtti = "<class path=\"model.Contact\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"45\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"55\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<state public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</state>\n\t<set_state set=\"method\" line=\"65\"><f a=\"state\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_state>\n\t<use_email public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</use_email>\n\t<set_use_email set=\"method\" line=\"75\"><f a=\"use_email\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_use_email>\n\t<company_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</company_name>\n\t<set_company_name set=\"method\" line=\"85\"><f a=\"company_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_company_name>\n\t<co_field public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(100)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</co_field>\n\t<set_co_field set=\"method\" line=\"95\"><f a=\"co_field\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_co_field>\n\t<phone_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_code>\n\t<set_phone_code set=\"method\" line=\"105\"><f a=\"phone_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_code>\n\t<phone_number public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_number>\n\t<set_phone_number set=\"method\" line=\"115\"><f a=\"phone_number\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_number>\n\t<fax public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</fax>\n\t<set_fax set=\"method\" line=\"125\"><f a=\"fax\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_fax>\n\t<title public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</title>\n\t<set_title set=\"method\" line=\"135\"><f a=\"title\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_title>\n\t<title_pro public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</title_pro>\n\t<set_title_pro set=\"method\" line=\"145\"><f a=\"title_pro\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_title_pro>\n\t<first_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</first_name>\n\t<set_first_name set=\"method\" line=\"155\"><f a=\"first_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_first_name>\n\t<last_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_name>\n\t<set_last_name set=\"method\" line=\"165\"><f a=\"last_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_name>\n\t<address public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address>\n\t<set_address set=\"method\" line=\"175\"><f a=\"address\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address>\n\t<address_2 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address_2>\n\t<set_address_2 set=\"method\" line=\"185\"><f a=\"address_2\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address_2>\n\t<city public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(50)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</city>\n\t<set_city set=\"method\" line=\"195\"><f a=\"city\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_city>\n\t<postal_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</postal_code>\n\t<set_postal_code set=\"method\" line=\"205\"><f a=\"postal_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_postal_code>\n\t<country_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(3)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</country_code>\n\t<set_country_code set=\"method\" line=\"215\"><f a=\"country_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_country_code>\n\t<gender public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</gender>\n\t<set_gender set=\"method\" line=\"225\"><f a=\"gender\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_gender>\n\t<date_of_birth public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</date_of_birth>\n\t<set_date_of_birth set=\"method\" line=\"235\"><f a=\"date_of_birth\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_date_of_birth>\n\t<mobile public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(19)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mobile>\n\t<set_mobile set=\"method\" line=\"245\"><f a=\"mobile\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_mobile>\n\t<email public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</email>\n\t<set_email set=\"method\" line=\"255\"><f a=\"email\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_email>\n\t<comments public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(4096)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</comments>\n\t<set_comments set=\"method\" line=\"265\"><f a=\"comments\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_comments>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"275\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<merged public=\"1\" set=\"accessor\">\n\t\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint[]\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</merged>\n\t<set_merged set=\"method\" line=\"285\"><f a=\"merged\">\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n</f></set_merged>\n\t<last_locktime public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_locktime>\n\t<set_last_locktime set=\"method\" line=\"295\"><f a=\"last_locktime\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_locktime>\n\t<owner public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</owner>\n\t<set_owner set=\"method\" line=\"305\"><f a=\"owner\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_owner>\n\t<new public=\"1\" set=\"method\" line=\"37\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+model_Deal.__meta__ = { fields : { contact : { dataType : ["bigint"]}, creation_date : { dataType : ["timestamp(0) without time zone"]}, account : { dataType : ["bigint"]}, target_account : { dataType : ["bigint"]}, booking_run : { dataType : ["booking_runs"]}, start_date : { dataType : ["date"]}, cycle : { dataType : ["deals_cycle"]}, amount : { dataType : ["numeric(10,2)"]}, product : { dataType : ["bigint"]}, agent : { dataType : ["bigint"]}, project : { dataType : ["bigint"]}, active : { dataType : ["boolean"]}, pay_method : { dataType : ["pay_methods"]}, end_date : { dataType : ["date"]}, end_reason : { dataType : ["bigint"]}, repeat_date : { dataType : ["date"]}, edited_by : { dataType : ["bigint"]}, mandator : { dataType : ["bigint"]}, old_active : { dataType : ["boolean"]}, cycle_start_date : { dataType : ["date"]}, last_locktime : { dataType : ["timestamp(0) without time zone"]}, booking_day : { dataType : ["int4range"]}}};
+model_Deal.__rtti = "<class path=\"model.Deal\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<contact public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</contact>\n\t<set_contact set=\"method\" line=\"40\"><f a=\"contact\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_contact>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"50\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<account public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</account>\n\t<set_account set=\"method\" line=\"60\"><f a=\"account\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_account>\n\t<target_account public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</target_account>\n\t<set_target_account set=\"method\" line=\"70\"><f a=\"target_account\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_target_account>\n\t<booking_run public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"booking_runs\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</booking_run>\n\t<set_booking_run set=\"method\" line=\"80\"><f a=\"booking_run\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_booking_run>\n\t<start_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</start_date>\n\t<set_start_date set=\"method\" line=\"90\"><f a=\"start_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_start_date>\n\t<cycle public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"deals_cycle\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</cycle>\n\t<set_cycle set=\"method\" line=\"100\"><f a=\"cycle\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_cycle>\n\t<amount public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"numeric(10,2)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</amount>\n\t<set_amount set=\"method\" line=\"110\"><f a=\"amount\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_amount>\n\t<product public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</product>\n\t<set_product set=\"method\" line=\"120\"><f a=\"product\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_product>\n\t<agent public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</agent>\n\t<set_agent set=\"method\" line=\"130\"><f a=\"agent\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_agent>\n\t<project public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</project>\n\t<set_project set=\"method\" line=\"140\"><f a=\"project\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_project>\n\t<active public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</active>\n\t<set_active set=\"method\" line=\"150\"><f a=\"active\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_active>\n\t<pay_method public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"pay_methods\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</pay_method>\n\t<set_pay_method set=\"method\" line=\"160\"><f a=\"pay_method\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_pay_method>\n\t<end_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</end_date>\n\t<set_end_date set=\"method\" line=\"170\"><f a=\"end_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_end_date>\n\t<end_reason public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</end_reason>\n\t<set_end_reason set=\"method\" line=\"180\"><f a=\"end_reason\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_end_reason>\n\t<repeat_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</repeat_date>\n\t<set_repeat_date set=\"method\" line=\"190\"><f a=\"repeat_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_repeat_date>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"200\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"210\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<old_active public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</old_active>\n\t<set_old_active set=\"method\" line=\"220\"><f a=\"old_active\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_old_active>\n\t<cycle_start_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</cycle_start_date>\n\t<set_cycle_start_date set=\"method\" line=\"230\"><f a=\"cycle_start_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_cycle_start_date>\n\t<last_locktime public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_locktime>\n\t<set_last_locktime set=\"method\" line=\"240\"><f a=\"last_locktime\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_locktime>\n\t<booking_day public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"int4range\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</booking_day>\n\t<set_booking_day set=\"method\" line=\"250\"><f a=\"booking_day\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_booking_day>\n\t<new public=\"1\" set=\"method\" line=\"32\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 model_accounting_ReturnDebitModel.dataAccess = (function($this) {
 	var $r;
 	var _g = new haxe_ds_StringMap();
@@ -24045,44 +24253,8 @@ model_accounting_ReturnDebitModel.dataAccess = (function($this) {
 		var _g1 = new haxe_ds_StringMap();
 		var _g2 = new haxe_ds_StringMap();
 		_g2.h["filter"] = "id";
-		_g1.h["contacts"] = _g2;
+		_g1.h["debit_return_statements"] = _g2;
 		var _g2 = new haxe_ds_StringMap();
-		var _g3 = new haxe_ds_StringMap();
-		_g3.h[""] = "?";
-		_g3.h["Herr"] = "Herr";
-		_g3.h["Frau"] = "Frau";
-		_g3.h["Familie"] = "Familie";
-		_g3.h["Firma"] = "Firma";
-		_g2.h["title"] = { label : "Anrede", type : "Select", options : _g3};
-		_g2.h["title_pro"] = { label : "Titel"};
-		_g2.h["first_name"] = { label : "Vorname"};
-		_g2.h["last_name"] = { label : "Name"};
-		_g2.h["email"] = { label : "Email"};
-		_g2.h["phone_code"] = { label : "Landesvorwahl"};
-		_g2.h["phone_number"] = { label : "Telefon"};
-		_g2.h["mobile"] = { label : "Mobil"};
-		_g2.h["fax"] = { label : "Fax"};
-		_g2.h["company_name"] = { label : "Firmenname"};
-		_g2.h["address"] = { label : "Straße"};
-		_g2.h["address_2"] = { label : "Hausnummer"};
-		_g2.h["postal_code"] = { label : "PLZ"};
-		_g2.h["city"] = { label : "Ort"};
-		var _g3 = new haxe_ds_StringMap();
-		_g3.h["active"] = "Aktiv";
-		_g3.h["passive"] = "Passiv";
-		_g3.h["blocked"] = "Gesperrt";
-		_g2.h["state"] = { label : "Status", type : "Select", options : _g3};
-		_g2.h["country_code"] = { label : "Land"};
-		_g2.h["co_field"] = { label : "Adresszusatz"};
-		_g2.h["creation_date"] = { label : "Hinzugefügt", type : "DateTimePicker", disabled : true, displayFormat : "d.m.Y H:i:S"};
-		_g2.h["date_of_birth"] = { label : "Geburtsdatum", type : "DatePicker", displayFormat : "d.m.Y"};
-		var _g3 = new haxe_ds_StringMap();
-		_g3.h[""] = "?";
-		_g3.h["M"] = "Männlich";
-		_g3.h["F"] = "Weiblich";
-		_g2.h["gender"] = { label : "Geschlecht", type : "Select", options : _g3};
-		_g2.h["comments"] = { label : "Kommentar"};
-		_g2.h["use_email"] = { label : "Post per Email", type : "Checkbox"};
 		_g2.h["id"] = { type : "Hidden"};
 		_g2.h["edited_by"] = { type : "Hidden"};
 		_g2.h["mandator"] = { type : "Hidden"};
@@ -24095,14 +24267,12 @@ model_accounting_ReturnDebitModel.dataAccess = (function($this) {
 model_accounting_ReturnDebitModel.listColumns = (function($this) {
 	var $r;
 	var _g = new haxe_ds_StringMap();
-	_g.h["id"] = { cellFormat : function(v) {
-		return Std.parseInt(v);
-	}, show : false, useAsIndex : true};
-	_g.h["dealId"] = { label : "VertragsID", flexGrow : 0, className : "tRight"};
-	_g.h["sepaCode"] = { label : "Sepa Code", flexGrow : 0, className : "tRight"};
+	_g.h["id"] = { label : "VertragsID", flexGrow : 0, className : "tRight"};
+	_g.h["reason"] = { label : "Sepa Code", flexGrow : 0, className : "tRight"};
 	_g.h["iban"] = { label : "Iban"};
-	_g.h["baID"] = { label : "Buchungsanforderung ID", flexGrow : 1};
+	_g.h["ba_id"] = { label : "Buchungsanforderung ID", flexGrow : 1};
 	_g.h["amount"] = { label : "Betrag", className : "euro", headerClassName : "tRight"};
+	_g.h["processed"] = { label : "Verarbeitet"};
 	$r = _g;
 	return $r;
 }(this));
@@ -24381,10 +24551,17 @@ view_StatusBar.__jsxStatic = view_StatusBar._renderWrapper;
 view_UiView.displayName = "UiView";
 view_UiView._renderWrapper = (redux_react_ReactRedux.connect(view_UiView.mapStateToProps))(react_ReactTypeOf.fromComp(view_UiView));
 view_UiView.__jsxStatic = view_UiView._renderWrapper;
+view_accounting_Bookings.displayName = "Bookings";
+view_accounting_Bookings._renderWrapper = (redux_react_ReactRedux.connect(view_accounting_Bookings.mapStateToProps))(react_ReactTypeOf.fromComp(view_accounting_Bookings));
+view_accounting_Bookings.__jsxStatic = view_accounting_Bookings._renderWrapper;
 view_accounting_Imports.displayName = "Imports";
 view_accounting_Imports._renderWrapper = (redux_react_ReactRedux.connect(view_accounting_Imports.mapStateToProps,view_accounting_Imports.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_accounting_Imports));
 view_accounting_Imports.__jsxStatic = view_accounting_Imports._renderWrapper;
-view_accounting_imports_Files.menuItems = [{ label : "Datei Rücklastschrift", action : "importReturnDebit", formField : { name : "returnDebitFile", submit : "Importieren", type : "Upload", handleChange : function(evt) {
+view_accounting_booking_Create.menuItems = [{ label : "Anzeigen", action : "get"},{ label : "Download", action : "download"},{ label : "Bearbeiten", action : "edit"}];
+view_accounting_booking_Create.displayName = "Create";
+view_accounting_booking_Create._renderWrapper = (redux_react_ReactRedux.connect(view_accounting_booking_Create.mapStateToProps,view_accounting_booking_Create.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_accounting_booking_Create));
+view_accounting_booking_Create.__jsxStatic = view_accounting_booking_Create._renderWrapper;
+view_accounting_imports_Files.menuItems = [{ label : "Rücklastschriften", action : "importReturnDebit", formField : { name : "returnDebitFile", submit : "Importieren", type : "Upload", handleChange : function(evt) {
 	var finput = window.document.getElementById("returnDebitFile");
 	haxe_Log.trace(finput.value,{ fileName : "view/accounting/imports/Files.hx", lineNumber : 70, className : "view.accounting.imports.Files", methodName : "menuItems"});
 	var val = finput.value == "" ? "" : finput.value.split("\\").pop();
@@ -24402,21 +24579,7 @@ view_accounting_imports_Files.menuItems = [{ label : "Datei Rücklastschrift", a
 view_accounting_imports_Files.displayName = "Files";
 view_accounting_imports_Files._renderWrapper = (redux_react_ReactRedux.connect(view_accounting_imports_Files.mapStateToProps,view_accounting_imports_Files.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_accounting_imports_Files));
 view_accounting_imports_Files.__jsxStatic = view_accounting_imports_Files._renderWrapper;
-view_accounting_imports_List.menuItems = [{ label : "Datei Rücklastschrift", action : "importReturnDebit", formField : { name : "returnDebitFile", submit : "Importieren", type : "Upload", handleChange : function(evt) {
-	var finput = window.document.getElementById("returnDebitFile");
-	haxe_Log.trace(finput.value,{ fileName : "view/accounting/imports/List.hx", lineNumber : 70, className : "view.accounting.imports.List", methodName : "menuItems"});
-	var val = finput.value == "" ? "" : finput.value.split("\\").pop();
-	var tmp = view_accounting_imports_List._instance;
-	var _g = new haxe_ds_StringMap();
-	_g.h["hint"] = "Zum Upload ausgewählt:" + val;
-	tmp.setState({ data : _g});
-}}, handler : function(_) {
-	var finput = window.document.getElementById("returnDebitFile");
-	haxe_Log.trace(finput.files,{ fileName : "view/accounting/imports/List.hx", lineNumber : 80, className : "view.accounting.imports.List", methodName : "menuItems"});
-	haxe_Log.trace(finput.files[0],{ fileName : "view/accounting/imports/List.hx", lineNumber : 81, className : "view.accounting.imports.List", methodName : "menuItems"});
-	console.log(finput.files["returnDebitFile"]);
-	haxe_Log.trace(finput.value,{ fileName : "view/accounting/imports/List.hx", lineNumber : 83, className : "view.accounting.imports.List", methodName : "menuItems"});
-}}];
+view_accounting_imports_List.menuItems = [{ label : "Anzeigen", action : "listReturnDebit"},{ label : "Details", action : "showDetails"}];
 view_accounting_imports_List.displayName = "List";
 view_accounting_imports_List._renderWrapper = (redux_react_ReactRedux.connect(view_accounting_imports_List.mapStateToProps,view_accounting_imports_List.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_accounting_imports_List));
 view_accounting_imports_List.__jsxStatic = view_accounting_imports_List._renderWrapper;

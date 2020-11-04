@@ -87,17 +87,26 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		baseForm = new BaseForm(this);
 		
 		state =  App.initEState({
-			sideMenu:FormApi.initSideMenu( this,			
-			{
-				dataClassPath:'admin.ImportCamt',
-				label:"Rücklastschriften",
-				section: 'List',
-				items: menuItems
-			},
-			{	
-				section: props.match.params.section==null? 'List':props.match.params.section, 
-				sameWidth: true					
-			})
+			sideMenu:FormApi.initSideMenu2( this,			
+				[
+					{
+						dataClassPath:'admin.ImportCamt',
+						label:"Upload",
+						section: 'Files',
+						items: Files.menuItems
+					},
+					{
+						dataClassPath:'admin.ImportCamt',
+						label:"Rücklastschriften",
+						section: 'List',
+						items: List.menuItems
+					},
+				],
+				{	
+					section: props.match.params.section==null? 'List':props.match.params.section, 
+					sameWidth: true					
+				}
+			)
 		},this);
 
 		trace(props.match.path);

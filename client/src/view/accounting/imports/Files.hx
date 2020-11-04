@@ -59,7 +59,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	static var _instance:Files;
 
 	public static var menuItems:Array<MItem> = [		
-		{label:'Datei Rücklastschrift',action:'importReturnDebit',
+		{label:'Rücklastschriften',action:'importReturnDebit',
 			formField:{
 				name:'returnDebitFile',
 				submit:'Importieren',
@@ -70,7 +70,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 					trace(finput.value);
 					//trace(_instance);
 					var val = (finput.value == ''?'':finput.value.split('\\').pop());
-					_instance.setState({data:['hint'=>'Zum Upload ausgewählt:${val}']});
+					Files._instance.setState({data:['hint'=>'Zum Upload ausgewählt:${val}']});
 				}
 			},
 			handler: function(_) {				
@@ -110,13 +110,21 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		menuItems[0].handler = importReturnDebit;
 		state =  App.initEState({
 			data:['hint'=>'Datei zum Upload auswählen'],
-			sideMenu:FormApi.initSideMenu( this,			
-			{
-				dataClassPath:'admin.ImportCamt',
-				label:"Upload RüLa's",
-				section: 'Files',
-				items: menuItems
-			},
+			sideMenu:FormApi.initSideMenu2( this,			
+			[
+				{
+					dataClassPath:'admin.ImportCamt',
+					label:"Upload",
+					section: 'Files',
+					items: Files.menuItems
+				},
+				{
+					dataClassPath:'admin.ImportCamt',
+					label:"Rücklastschriften",
+					section: 'List',
+					items: List.menuItems
+				},
+			],
 			{	
 				section: props.match.params.section==null? 'Files':props.match.params.section, 
 				sameWidth: true					

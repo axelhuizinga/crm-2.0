@@ -14,5 +14,6 @@ abstract FormInputElement(String)
 	var Select;
 	var TextArea;	
 	var NFormat;
+	var File;
 	var Upload;
 }

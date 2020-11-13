@@ -233,57 +233,6 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		
 	}
 
-	/*public static function upload(param:DbQueryParam) 
-	{	trace(param.action);
-		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
-			trace(param);
-			var dbData:DbData = DbDataTools.create();
-
-			return new Promise(function(resolve, reject){
-				if (!param.dbUser.online)
-				{
-					dispatch(User(LoginError(
-					{
-						dbUser:param.dbUser,
-						lastError:'Du musst dich neu anmelden!'
-					})));
-					trace('LoginError');
-					resolve(null);
-				}	
-				
-				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
-					'${App.config.api}', 
-					param,
-					function(data:DbData)
-					{				
-						trace(data);
-						if(data.dataErrors != null)
-							trace(data.dataErrors);
-						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
-							trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
-
-						if(data.dataErrors.exists('lastError'))
-						{
-							dispatch(User(LoginError({lastError: data.dataErrors.get('lastError')})));
-							resolve(null);
-						}
-						else{
-
-							dispatch(Status(Update( 
-								{	cssClass:'',
-									text:(param.resolveMessage==null?'':param.resolveMessage.success)				
-								}
-							)));
-							resolve(data);
-						}
-					}
-				);
-				trace(bL);
-			});	
-		});
-			
-	}*/
-
 	override function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);

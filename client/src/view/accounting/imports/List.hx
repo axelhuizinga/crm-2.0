@@ -60,11 +60,34 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 	public static var menuItems:Array<MItem> = [		
 		{
-			label:'Anzeigen',action:'listReturnDebit'
-		},
+			label:'Auswählen',//action:'loadLocal',
+			formField:{
+				name:'returnDebitFile',
+				submit:'Importieren',
+				type:FormInputElement.File,
+				handleChange: function(evt:Event) {
+					//trace(Reflect.fields(evt));
+					var finput = cast Browser.document.getElementById('returnDebitFile');
+					trace(finput.value);
+					//trace(_instance);
+					var val = (finput.value == ''?'':finput.value.split('\\').pop());
+					List._instance.setState({data:['hint'=>'Zum Laden ausgewählt:${val}']});
+				}
+			},
+			handler: function(_) {_instance.loadLocal();}/*
+				var finput = cast Browser.document.getElementById('returnDebitFile');
+				//var files = php.Lib.hashOfAssociativeArray(finput.files);
+				
+				trace(finput.files);
+				trace(Reflect.fields(finput));
+				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
+				trace(finput.value);
+				//trace(finput.files.get('returnDebitFile'));
+			}*/
+		}/*,
 		{
-			label:'Details',action:'showDetails'
-		}
+			label:'Filtern',action:'loadLocal'
+		}*/
 	];	
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
@@ -90,17 +113,17 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:FormApi.initSideMenu2( this,			
 				[
 					{
-						dataClassPath:'admin.ImportCamt',
-						label:"Upload",
-						section: 'Files',
-						items: Files.menuItems
-					},
-					{
-						dataClassPath:'admin.ImportCamt',
+						//dataClassPath:'admin.ImportCamt',
 						label:"Rücklastschriften",
 						section: 'List',
 						items: List.menuItems
 					},
+					/*{
+						dataClassPath:'admin.ImportCamt',
+						label:"Upload",
+						section: 'Files',
+						items: Files.menuItems
+					},*/
 				],
 				{	
 					section: props.match.params.section==null? 'List':props.match.params.section, 
@@ -139,7 +162,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{	
 		dataAccess = ReturnDebitModel.dataAccess;
 		trace(props.match.params.action);
-		state.formApi.doAction('get');
+		//state.formApi.doAction('get');
 	}
 
 	public function delete(ev:ReactEvent):Void
@@ -180,6 +203,16 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		});
 	}	
 
+	public function loadLocal() {
+		var finput = cast Browser.document.getElementById('returnDebitFile');
+		//var files = php.Lib.hashOfAssociativeArray(finput.files);
+		
+		trace(finput.files);
+		trace(Reflect.fields(finput));
+		js.Syntax.code("console.log({0})",finput.files);
+		trace(finput.value);				
+	}
+
 	override function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
@@ -200,14 +233,15 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading);
 		return switch(state.action)
 		{
-			case 'listReturnDebit':
-				null;			
-			default:
+			case 'listReturnDebit':				
 				jsx('
 					<Table id="importedReturnDebit" data=${state.dataTable}
 					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${baseForm.renderPager} 
 					className="is-striped is-hoverable"  parentComponent=${this} fullWidth=${true}/>
-				');							
+				');					
+			default:
+				state.data==null?null:
+				jsx('<div class="hint">${state.data.get('hint')}</div>');				
 		}
 	}	
 }

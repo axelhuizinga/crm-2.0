@@ -1,4 +1,5 @@
 package model.auth;
+import php.Global;
 import haxe.Json;
 import db.DbUser;
 import comments.CommentString.*;
@@ -237,10 +238,11 @@ class User extends Model
 				//trace(jwt);
 				//trace(JWT.extract(jwt));
 				//Web.setCookie('user.id', me.dbData.dataInfo['user_data'].id, Date.fromTime(d + 86400000));
-				Web.setCookie('user.jwt', jwt, Date.fromTime(d + 86400000));
-				Web.setCookie('user.id', dbData.dataInfo['id'], Date.fromTime(d + 86400000));
-				Web.setCookie('user.last_name', dbData.dataInfo['last_name'], Date.fromTime(d + 86400000));
-				Web.setCookie('user.first_name', dbData.dataInfo['first_name'], Date.fromTime(d + 86400000));
+				var expire:Int = Date.fromTime(d + 86400000).getSeconds();
+				Global.setcookie('user.jwt',jwt,expire,'/','',true);
+				Global.setcookie('user.id', dbData.dataInfo['id'],expire,'/','',true);
+				Global.setcookie('user.last_name', dbData.dataInfo['last_name'], expire,'/','',true);
+				Global.setcookie('user.first_name', dbData.dataInfo['first_name'], expire,'/','',true);
 				//me.dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(me.doSelect()[0]);
 				trace(Type.enumConstructor(uath));
 				dbData.dataInfo['change_pass_required'] = Std.string(Type.enumConstructor(uath) == 'PassChangeRequired');
@@ -258,9 +260,9 @@ class User extends Model
 	{	
 		trace(dbQuery.dbUser);
 		//var me:User = new User(user);		
-		var expiryDate = Date.now().delta(31556926000);//1 year
-		Web.setCookie('user.jwt', '', expiryDate);
-		Web.setCookie('user.id', Std.string(dbQuery.dbUser.id), expiryDate);
+		var expiryDate:Int = Date.now().delta(31556926000).getSeconds();//1 year
+		Global.setcookie('user.jwt','',expiryDate,'/','',true);
+		Global.setcookie('user.id', Std.string(dbQuery.dbUser.id), expiryDate,'/','',true);
 
 		//me.dbData.dataInfo['user_data'].id = jwt;
 		//trace(me.dbData);

@@ -24,7 +24,7 @@ typedef DataFormProps =
     ?formApi:FormApi,
 	?filter:String,
 	?fullWidth:Bool,	
-	?limit:Int,
+	?limit:Int,	
 	?load:DbQueryParam->Promise<DbData>,
 	?parentComponent:Dynamic,
 	?select:Function, // Int->IntMap<Map<String,Dynamic>>->RouterMatch->SelectType,
@@ -36,6 +36,7 @@ typedef DataFormProps =
 	?storeData:String->DataAction->Void,
 	?storeFormChange:String->FormState->Void,
 	?render:FormState->ReactFragment,
+	?update:DbQueryParam->Promise<DbData>,
 	userState:UserState,
 	model:String
 }

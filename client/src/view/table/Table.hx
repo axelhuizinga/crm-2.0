@@ -175,12 +175,12 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			if(props.dataState.columns.get(k).useAsIndex)
 				id = k;
 			fieldNames.push(k);
-		}	
+		}
 		
 		//if(_trace) trace(props);
 		if(_trace) trace(Reflect.fields(props));
 		
-		if(_trace) trace(id);
+		//if(_trace) trace(id);
 		state = {selectedRows:[]};
 	}
 	
@@ -188,7 +188,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	{
 		if(props.data != null)
 		if(_trace) trace(props.data.length);
-		if(_trace) trace(props.className);
+		//if(_trace) trace(props.data);
 		if (props.data == null || props.data.length == 0)
 		{
 			return state.loading ? jsx('

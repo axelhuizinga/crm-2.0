@@ -45,7 +45,7 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 		if (props.match.url == '/Accounting' && props.match.isExact)
 		{
 			if(true) trace('pushing2: /Accounting/Imports/Files');
-			props.history.push('/Accounting/Imports/Files');
+			props.history.push('/Accounting/Imports/List');
 		}		
 	}
 

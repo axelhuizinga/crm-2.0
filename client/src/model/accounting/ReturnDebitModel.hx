@@ -53,11 +53,11 @@ class ReturnDebitModel
 		},*/
 		'id'=>{label:'VertragsID', flexGrow:0, className: 'tRight'},
 		//"baID":"baID 800426553","iban":"DE48150505001233003557","sepaCode":"AC04","mID":"11021389T1","amount":"-65.50"
-		'reason'=>{label:'Sepa Code', flexGrow:0, className: 'tRight'},
+		'sepa_code'=>{label:'Sepa Code', flexGrow:0, className: 'tRight'},
 		'iban'=>{label:'Iban'},				
 		'ba_id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		
 		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
-		'processed'=>{label: 'Verarbeitet'}
+		//'processed'=>{label: 'Verarbeitet'}
 	];	
 
 	public static var dataDisplay:Map<String,DataState> = [

@@ -1,4 +1,5 @@
 package model.data;
+import haxe.Unserializer;
 import php.Lib;
 import php.db.PDOStatement;
 import comments.CommentString.*;
@@ -20,12 +21,15 @@ class DebitReturnStatements extends Model
 	public function new(?param:Map<String,String>) 
 	{
 		super(param);
+		trace(setValues.length);
 		go();
 	}
 
 	function go():Void {
 		trace(action);
 		switch(action ){
+			case 'insert':
+				insert();
 			case 'sync':
 				sync();
 			case _: 
@@ -33,9 +37,72 @@ class DebitReturnStatements extends Model
 		}		
 	}	
 	
-	function sync()
+	function insert():NativeArray
+	{		
+		var iData:Array<Map<String,Dynamic>> = Unserializer.run(dbData.dataInfo.get('data'));
+		trace(iData[0]);
+		if(param.exists('table'))
+			table = param.get('table');
+		if(table != null)
+		{
+			fieldNames = param.exists('fields')? 
+				param.get('fields').split(',').map(function (f)return quoteIdent(f)): 
+				S.tableFields(table).map(function (f)return quoteIdent(f));
+			tableNames = [table];
+			queryFields = fieldNames.join(',');
+			trace(tableNames);
+		}
+		else
+			tableNames = [];
+		var fields:Array<String> = [];
+		for (k in iData[0].keys())
+			fields.push(k);
+		//var dataFields = Reflect.fields(param.get('data'));
+		//fields = S.tableFields(param.get('table'),S.db).filter(function(field) return dataFields.contains(field) ).map(function(field) return '${quoteIdent(field)}');
+		//fields.remove('id');
+		//fieldNames = fields;
+		//buildValues(param.get('data'));
+		trace(setValues.length);
+		var setPlaceholders:Array<String> = [];
+		var rps = fields.map( function(_) return '?').join(',');
+		for(row in iData){
+			setPlaceholders.push('($rps)');
+			for( f in fields){
+				setValues.push(row.get(f));
+			}
+		}
+		trace(setValues.length);
+		//queryFields = fields.map(function (_)return '?').join(',');
+		setSql = 'VALUES ${setPlaceholders.join(",\n")}';			
+		//queryFields += fields.length > 0 ? fields.join(','):'';		
+		//trace(queryFields);
+		//trace(setSql);
+
+		//S.exit({'res':'OK'});
+		var sqlBf:StringBuf = new StringBuf();
+		trace(queryFields);
+		sqlBf.add('INSERT INTO ');
+		/*if (tableNames.length>1)
+		{
+			S.sendErrors(dbData, ['error'=> S.errorInfo('Create with join not supported!')]);
+			return null;
+		}		
+		else
+		{
+			sqlBf.add('${quoteIdent(tableNames[0])} ');
+		}*/
+		sqlBf.add('${quoteIdent(tableNames[0])} (${fields.join(",")}) ${setSql} ON CONFLICT DO NOTHING RETURNING id');
+		if (filterSql != null)
+		{
+			sqlBf.add(filterSql);
+		}		
+		//trace(sqlBf.toString());
+		return execute(sqlBf.toString());
+	}
+
+	function sync()	
 	{
 		trace(param);
 	}
-	
+		
 }

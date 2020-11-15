@@ -174,11 +174,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 						<button style="white-space: nowrap;margin-top:3px;">${field.label}</button>
 						<!-- The file input field used as target for the file upload widget -->
 						<input id="fileupload" type="file" name="${field.name}"  >
-					</div>'
+					</div>' id="${item.formField.name}"
 				);*/				
 				case File:
-					jsx('<div key=${i++}  id="${item.formField.name}"  className="uploadBox" >
-					<input type="file" name=${item.formField.name} onChange=${item.formField.handleChange} className="fileinput"  />
+					jsx('<div key=${i++}  id="uploadForm"   className="uploadBox" >
+					<input  id=${item.formField.name} type="file" name=${item.formField.name} onChange=${item.formField.handleChange} className="fileinput"  />
 					<label htmlFor=${item.formField.name} className="button" >${item.label}</label>
 					<Button onClick=${item.handler} data-action=${item.action}
 				data-section=${item.section} disabled=${item.disabled}>${item.formField.submit}</Button>

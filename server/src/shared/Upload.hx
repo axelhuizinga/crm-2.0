@@ -45,11 +45,11 @@ class Upload {
 				var dRows:Array<Dynamic> = Json.parse(data).rlData;
 				var sql =  comment(unindent, format) /*
 				INSERT INTO debit_return_statements (id,reason,iban,ba_id,amount,mandator) 
-				VALUES(:id,:sepaCode,:iban,:baID,:amount,:mandator)
+				VALUES(:id,:sepa_code,:iban,:baID,:amount,:mandator)
 				ON CONFLICT DO NOTHING
 				*/;
 				trace(sql);
-				var dKeys:Array<String> = 'id,sepaCode,iban,baID,amount'.split(',');
+				var dKeys:Array<String> = 'id,sepa_code,iban,baID,amount'.split(',');
 				var bindVals:Array<String> = new Array();
 				for(r in dRows)
 				{

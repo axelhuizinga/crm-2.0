@@ -223,11 +223,7 @@ class S
 		trace(!headerSent);
 		if (!headerSent)
 		{
-			Web.setHeader('Content-Type', 'application/json');
-			Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
-			Web.setHeader("Access-Control-Allow-Credentials", "true");
-			Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');
-			headerSent = true;
+			setHeader('application/json');
 		}			
 		//var exitValue =  
 		//trace( Syntax.code("json_encode({0})",r.data));
@@ -243,11 +239,7 @@ class S
 	{
 		if (!headerSent)
 		{
-			Web.setHeader('Content-Type', (json?'application/json':'text/plain'));
-			Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
-			Web.setHeader("Access-Control-Allow-Credentials", "true");
-			Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');
-			headerSent = true;
+			setHeader((json?'application/json':'text/plain'));			
 		}			
 		Sys.print(r);
 		trace('client req from ${S.devIP} done at ${Sys.time()-ts} ms');
@@ -321,18 +313,8 @@ class S
 	
 	public static function sendbytes(b:Bytes):Bool
 	{		
-		//Web.setHeader('Content-Type', 'text/plain');
-		//trace(b.toString());
-		/*var s:Serializer = new Serializer();
-		var v:DbData = s.unserialize(b, DbData);
-		trace(v);*/
 		trace('OK ${b.length}');
-		Web.setHeader('Content-Type', 'application/octet-stream');
-		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
-		Web.setHeader("Access-Control-Allow-Credentials", "true");
-		if(S.devIP!=null)
-		Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');
-		
+		setHeader('application/octet-stream');		
 		var out = File.write("php://output", true);
 		out.bigEndian = true;
 		out.write(b);
@@ -342,16 +324,24 @@ class S
 		return true;
 	}
 	
+	public static function setHeader(cType:String) 
+	{
+		Web.setHeader('Content-Type', cType);
+		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
+		Web.setHeader("Access-Control-Allow-Credentials", "true");
+		if(S.devIP!=null)
+		Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
+		headerSent = true;	
+	}
+
 	public static function dump(d:Dynamic):Void
 	{
 		if (!headerSent)
 		{
-			Web.setHeader('Content-Type', 'application/json');
-			headerSent = true;
+			setHeader('application/json');
 		}
 		
 		Lib.println(Json.stringify(d));
-		//Lib.println(TJSON.encode(d));
 	}
 	
 	public static function edump(d:Dynamic):Void

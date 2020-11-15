@@ -38,14 +38,14 @@ class Utils
 
 
 	public static function sKeysList(ki:Iterator<String>):Array<String>
+	{
+		var l:Array<String> = [];
+		for(k in ki)
 		{
-			var l:Array<String> = [];
-			for(k in ki)
-			{
-				l.push(k);
-			}
-			return l;
-		}	
+			l.push(k);
+		}
+		return l;
+	}	
 
 	public static function argList(path:String, keys:Array<String>,del:String='/'):Map<String,Dynamic> {
 		//trace(path);
@@ -116,8 +116,15 @@ class Utils
       	return  [
          	for(f in Reflect.fields(dT))
             	f => dynToMap(Reflect.field(dT, f))
-      	];
-   	}
+      		];
+	   	}
+	   
+	  	public static function dynArray2MapArray(dT:Array<Dynamic>):Array<Map<String,Dynamic>> {
+		    return [
+				for(dR in dT)
+					dynToMap(dR)
+		   	];
+	   	}
 
    	public static function dynToMap(d:Dynamic):Map<String,Dynamic>
    	{

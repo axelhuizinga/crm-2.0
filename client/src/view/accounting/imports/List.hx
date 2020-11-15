@@ -1,5 +1,6 @@
 package view.accounting.imports;
 
+import haxe.Serializer;
 import js.html.Event;
 import action.DataAction;
 import action.DataAction.SelectType;
@@ -61,8 +62,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	public static var menuItems:Array<MItem> = [		
 		{
 			label:'Auswählen',//action:'loadLocal',
-			formField:{
+			formField:{				
 				name:'returnDebitFile',
+				//name:'uploadForm',
 				submit:'Importieren',
 				type:FormInputElement.File,
 				handleChange: function(evt:Event) {
@@ -71,10 +73,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 					trace(finput.value);
 					//trace(_instance);
 					var val = (finput.value == ''?'':finput.value.split('\\').pop());
-					List._instance.setState({data:['hint'=>'Zum Laden ausgewählt:${val}']});
+					_instance.setState({
+						data:['hint'=>'Zum Laden ausgewählt:${val}','files'=>finput.files]
+					});
 				}
 			},
-			handler: function(_) {_instance.loadLocal();}/*
+			handler: function(_) {//_instance.loadLocal();}/*
 				var finput = cast Browser.document.getElementById('returnDebitFile');
 				//var files = php.Lib.hashOfAssociativeArray(finput.files);
 				
@@ -82,12 +86,32 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				trace(Reflect.fields(finput));
 				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
 				trace(finput.value);
+				var reader:FileReader = new FileReader();
+				reader.onload = function(e:Dynamic) {
+					var content = e.target.result;
+					trace(content);
+					var rows = Utils.dynArray2MapArray(Json.parse(content));
+					trace(rows[0]);
+					//### filter old system
+					var allCount:Int = rows.length;
+					rows = rows.filter(function(el:Map<String,Dynamic>)return el.get('ba_id').indexOf('ba')==0);
+					trace(rows[0]);
+					App.store.dispatch(Status(Update( 
+						{	cssClass:'',
+							text:('$allCount RüLa\'s insgesamt - ${rows.length} importiert')
+						}
+					)));
+					_instance.setState({'action':'listReturnDebit','dataTable':rows});
+				}
+				reader.readAsText(_instance.state.data.get('files').item(0));
+				//_instance.state.data.get('files').item(0)));
+				//_instance.setState({dataTable:rows});
 				//trace(finput.files.get('returnDebitFile'));
-			}*/
-		}/*,
+			}
+		},
 		{
-			label:'Filtern',action:'loadLocal'
-		}*/
+			label:'Hochladen',action:'processReturnDebitStatements'
+		}
 	];	
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
@@ -154,7 +178,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				if(true) trace('select:$id selectType:${selectType}');
 				trace(data);
 				dispatch(LiveDataAccess.sSelect({id:id,data:data,match:match,selectType: selectType}));
-			}						
+			},
+			update: function(param:DbQueryParam) return dispatch(CRUD.update(param)),
+
         }
 	}	
 	
@@ -172,34 +198,28 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(data);
 	}
 
-	public function get(ev:Dynamic):Void
+	public function processReturnDebitStatements(_):Void
 	{
-		trace('hi $ev');
-		var offset:Int = 0;
-		if(ev != null && ev.page!=null)
-		{
-			offset = Std.int(props.limit * ev.page);
-		}
-		trace(props.userState);
-		var p:Promise<DbData> = props.load(
+		trace(state.dataTable);
+		var p:Promise<DbData> = props.update(
 			{
 				classPath:'data.DebitReturnStatements',
-				action:'get',
-				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1',processed:'false'}),
-				limit:props.limit,
-				offset:offset>0?offset:0,
+				action:'insert',
+				mandator:1,
+				//data: state.dataTable,//Serializer.run(state.dataTable),
+				data: Serializer.run(state.dataTable),
 				table:'debit_return_statements',
 				resolveMessage:{					
-					success:'Rücklastschriften wurde geladen',
-					failure:'Rücklastschriften konnten nicht geladen werden'
+					success:'Rücklastschriften wurden verarbeitet',
+					failure:'Rücklastschriften konnten nicht verarbeitet werden'
 				},
 				dbUser:props.userState.dbUser,
 				devIP: App.devIP
 			}
 		);
 		p.then(function(data:DbData){
-			trace(data.dataRows.length); 
-			setState({loading:false, dataTable:data.dataRows});
+			trace(data); 
+			//setState({loading:false, dataTable:data.dataRows});
 		});
 	}	
 
@@ -230,7 +250,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.action + ':' + Std.string(state.dataTable != null));
 		if(state.loading)
 			return state.formApi.renderWait();
-		trace('###########loading:' + state.loading);
+		trace('###########loading:' + state.loading +' state.action:' + state.action);
 		return switch(state.action)
 		{
 			case 'listReturnDebit':				
@@ -241,7 +261,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				');					
 			default:
 				state.data==null?null:
-				jsx('<div class="hint">${state.data.get('hint')}</div>');				
+				jsx('<div className="hint">${state.data.get('hint')}</div>');				
 		}
 	}	
 }

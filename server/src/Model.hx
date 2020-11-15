@@ -314,9 +314,9 @@ class Model
 	
 	public function execute(sql:String):NativeArray
 	{
-		trace(sql);	
+		//trace(sql);	
 		if(setValues.length>0)
-		trace(setValues.join(','));
+		trace(setValues.length);
 		if(filterValues.length>0)
 		trace(filterValues[0].toString());
 		var stmt:PDOStatement =  S.dbh.prepare(sql,Syntax.array(null));
@@ -333,12 +333,14 @@ class Model
 		var data:NativeArray = null;
 		var success: Bool;
 		var i:Int = 0;
+		trace(setValues.length);
 		if(setValues.length>0)
 		{
 			for (fV in setValues)
 			{
 				var type:Int = PDO.PARAM_STR; //dbFieldTypes.get(fV[0]);
 				values2bind[i++] = fV;
+				//trace(Std.string(Global.count(values2bind)) +':' + fV);
 				//if (!stmt.bindParam(i, fV[1], type))//TODO: CHECK POSTGRES DRIVER OPTIONS
 				if (!stmt.bindValue(i, fV, type))//TODO: CHECK POSTGRES DRIVER OPTIONS
 				{
@@ -361,7 +363,7 @@ class Model
 				}
 			}	
 		}		
-		trace(values2bind);
+		//trace(values2bind);
 		if(i>0)
 		{
 			success = stmt.execute(values2bind);
@@ -372,7 +374,7 @@ class Model
 			}
 			dbData.dataInfo['count'] = Std.string(stmt.rowCount());			
 			trace('>>$action<<');
-			if(action=='update'||action=='delete')
+			if(action=='update'||action=='delete'||action=='insert')
 			{
 				//EXIT
 				trace('done');
@@ -565,7 +567,7 @@ class Model
 	{
 		var sqlBf:StringBuf = new StringBuf();
 		trace(queryFields);
-		sqlBf.add('INSERT INTO ');
+		sqlBf.add('INSERT IGNORE INTO ');
 		if (tableNames.length>1)
 		{
 			S.sendErrors(dbData, ['error'=> S.errorInfo('Create with join not supported!')]);
@@ -794,6 +796,28 @@ class Model
 		return 'SET ${set.join(',')} ';
 	}
 	
+	public function buildMultiSet(tableName:String,data:Dynamic, ?alias:String):String
+	{
+		alias = alias!=null?'${quoteIdent(alias)}.':'';
+		var defaults:Array<ColDef> = S.columnDefaults(tableName);
+		trace(defaults[0]);		
+		var set:Array<String> = new Array();		
+		trace(Reflect.fields(data).join(','));
+		for(col in defaults)
+		{
+			if(col.column_name == 'creation_date')
+				continue ;
+			var val:String = Reflect.field(data,col.column_name);
+			if(val == null)
+				continue;
+			set.push('${alias}${quoteIdent(col.column_name)}');
+			trace('${col.column_name} $val / default:${col.column_default}');
+			setValues.push(val==null?col.column_default:val);
+		}
+		trace( 'SET ${set.join(',')} ');
+		return 'SET ${set.join(',')} ';
+	}
+
 	public function buildLimit(limitParam:String, sqlBf:StringBuf):Void
 	{
 		sqlBf.add(' LIMIT ' + (limitParam.indexOf(',') > -1 ? limitParam.split(',').map(function(s:String):Int return Std.parseInt(s)).join(',') 
@@ -854,7 +878,7 @@ class Model
 	public function new(?param:Map<String,Dynamic>) 
 	{
 		this.param = param;
-		trace(param);
+		//trace(param);
 		id = param['id'];
 		trace(id);
 		action = param.get('action');

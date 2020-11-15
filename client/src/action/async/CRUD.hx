@@ -100,13 +100,13 @@ class CRUD
 	public static function update(param:DbQueryParam) 
 	{	trace(param.action);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
-			trace(param);
+			//trace(param);
 			//if(param.dataSource != null)
 				//trace(param.dataSource.get('contacts').get('data'));
 			
 			var dbData:DbData = DbDataTools.create();
 			//trace(getState());
-			return new Promise(function(resolve, reject){
+			return new Promise<Dynamic>(function(resolve, reject){
 				if (!param.dbUser.online)
 				{
 					dispatch(User(LoginError(
@@ -133,6 +133,15 @@ class CRUD
 						{
 							dispatch(User(LoginError({lastError: data.dataErrors.get('lastError')})));
 							resolve(null);
+						}
+						if(data.dataErrors != null)
+						{
+							dispatch(Status(Update( 
+								{	cssClass:'red',
+									text:(param.resolveMessage==null?'':param.resolveMessage.failure)				
+								}
+							)));							
+							resolve(param.resolveMessage);
 						}
 						else{
 

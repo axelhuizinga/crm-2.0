@@ -204,7 +204,7 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 		}, function (r:Dynamic) {
 			trace(r);
 			App.store.dispatch(Status(Update( 
-				{	cssClass:'',
+				{	className:'',
 					text:(r.error==null?'':r.error)
 				}
 			)));
@@ -249,7 +249,7 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 						else{
 
 							dispatch(Status(Update( 
-								{	cssClass:'',
+								{	className:'',
 									text:(param.resolveMessage==null?'':param.resolveMessage.success)				
 								}
 							)));

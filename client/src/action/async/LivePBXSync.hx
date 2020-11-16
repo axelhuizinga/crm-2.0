@@ -75,7 +75,7 @@ class LivePBXSync
 						{
 							return dispatch(Status(Update(
 								{
-									cssClass:'error',
+									className:'error',
 									text:data.dataErrors.iterator().next()
 								}							
 							)));
@@ -86,7 +86,7 @@ class LivePBXSync
 						{
 							return dispatch(Status(Update(
 								{
-									cssClass:'error',
+									className:'error',
 									text:'Fehler 0 ${props.classPath} Aktualisiert'})));
 						}
 						else
@@ -95,7 +95,7 @@ class LivePBXSync
 							props.offset = Std.parseInt(data.dataInfo['offset']);
 							return dispatch(Status(Update(
 								{
-									cssClass:' ',
+									className:' ',
 									text:'${props.offset} ${props.classPath} von ${props.maxImport} aktualisiert'})));
 						}
 						trace('${props.offset} < ${props.maxImport}');
@@ -149,7 +149,7 @@ class LivePBXSync
 					{
 						return dispatch(Status(Update(
 							{
-								cssClass:'error',
+								className:'error',
 								text:data.dataErrors.iterator().next()
 							}							
 						)));
@@ -159,7 +159,7 @@ class LivePBXSync
 					{
 						return dispatch(Status(Update(
 							{
-								cssClass:'error',
+								className:'error',
 								text:'Fehler 0 Buchungsanforderungen Aktualisiert'})));
 					}
 					//props.batchCount += data.dataInfo['offset'];
@@ -168,7 +168,7 @@ class LivePBXSync
 						props.offset = Std.parseInt(data.dataInfo['offset']);
 						dispatch(Status(Update(
 							{
-								cssClass:' ',
+								className:' ',
 								text:'${props.offset} Kontakte von ${props.maxImport} aktualisiert'})));
 					}
 					trace('${props.offset} < ${props.maxImport}');
@@ -225,7 +225,7 @@ class LivePBXSync
 					{
 						return dispatch(Status(Update(
 							{
-								cssClass:'error',
+								className:'error',
 								text:data.dataErrors.iterator().next()
 							}							
 						)));
@@ -235,7 +235,7 @@ class LivePBXSync
 					{
 						return dispatch(Status(Update(
 							{
-								cssClass:'error',
+								className:'error',
 								text:'Fehler 0 Kontakte Aktualisiert'})));
 					}
 					//props.batchCount += data.dataInfo['offset'];
@@ -244,7 +244,7 @@ class LivePBXSync
 						props.offset = Std.parseInt(data.dataInfo['offset']);
 						dispatch(Status(Update(
 							{
-								cssClass:'',
+								className:'',
 								text:'${props.offset} Kontakte von ${props.maxImport} aktualisiert'})));
 					}
 					trace('${props.offset} < ${props.maxImport}');
@@ -302,7 +302,7 @@ class LivePBXSync
 						{
 							return dispatch(Status(Update(
 								{
-									cssClass:'error',
+									className:'error',
 									text:data.dataErrors.iterator().next()
 								}							
 							)));
@@ -312,7 +312,7 @@ class LivePBXSync
 						{
 							return dispatch(Status(Update(
 							{
-								cssClass:'error',
+								className:'error',
 								text:'Fehler ${data.dataInfo['got']} von ${data.dataInfo['missing']} Aktualisiert'})));
 							}
 
@@ -321,7 +321,7 @@ class LivePBXSync
 						{
 							return dispatch(Status(Update(
 							{
-								cssClass:' ',
+								className:' ',
 								text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert'
 							})));
 						}	
@@ -330,7 +330,7 @@ class LivePBXSync
 							//LOOP UNTIL LIMIT
 							dispatch(Status(Update(
 								{
-									cssClass:' ',
+									className:' ',
 									text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert - lade weitere'
 								})));
 							if(!props.onlyNew){
@@ -388,7 +388,7 @@ class LivePBXSync
 					{
 						return dispatch(Status(Update(
 							{
-								cssClass:'error',
+								className:'error',
 								text:data.dataErrors.iterator().next()
 							}							
 						)));
@@ -398,7 +398,7 @@ class LivePBXSync
 						{
 							return dispatch(Status(Update(
 							{
-								cssClass:'error',
+								className:'error',
 								text:'Fehler ${data.dataInfo['got']} von ${data.dataInfo['missing']} Aktualisiert'})));
 							}
 
@@ -406,7 +406,7 @@ class LivePBXSync
 						{
 							return dispatch(Status(Update(
 							{
-								cssClass:' ',
+								className:' ',
 								text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert'
 							})));
 						}	
@@ -415,7 +415,7 @@ class LivePBXSync
 							//LOOP UNTIL LIMIT
 							dispatch(Status(Update(
 								{
-									cssClass:' ',
+									className:' ',
 									text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert - lade weitere'
 								})));
 							if(!props.onlyNew){
@@ -431,7 +431,7 @@ class LivePBXSync
 					{
 						return dispatch(Status(Update(
 						{
-							cssClass:'error',
+							className:'error',
 							text:'Fehler 0 Deals Aktualisiert'
 						})));
 					}
@@ -448,7 +448,7 @@ class LivePBXSync
 						trace(nProps);
 						dispatch(Status(Update(
 						{
-							cssClass:' ',
+							className:' ',
 							text:'${nProps.offset} Deals von ${nProps.maxImport} geladen oder aktualisiert'
 						})));
 					}

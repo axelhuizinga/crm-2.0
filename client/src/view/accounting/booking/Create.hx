@@ -242,7 +242,7 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 		{
 			//TODO: NOCHANGE ACTION => Display Feedback nothing to save
 			App.store.dispatch(Status(Update( 
-				{	cssClass:'',
+				{	className:'',
 					text:'Abschluss wurde nicht geändert'			
 				}
 			)));			

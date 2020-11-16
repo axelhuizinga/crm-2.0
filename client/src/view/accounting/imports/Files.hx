@@ -225,7 +225,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		}, function (r:Dynamic) {
 			trace(r);
 			App.store.dispatch(Status(Update( 
-				{	cssClass:'',
+				{	className:'',
 					text:(r.error==null?'':r.error)
 				}
 			)));

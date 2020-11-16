@@ -80,7 +80,7 @@ class DBAccess
 								for(row in data.dataRows)
 									Std.parseInt(row['id']) => row
 							])));//.then(function()trace('yeah'));
-							return dispatch(Status(Update({cssClass:'', text:switch ('${props.classPath}.${props.action}')
+							return dispatch(Status(Update({className:'', text:switch ('${props.classPath}.${props.action}')
 							{
 								case "data.Contacts.get":
 									'Kontakt ${props.filter.substr(3)} geladen';
@@ -95,7 +95,7 @@ class DBAccess
 							//TODO: IMPLEMENT GENERIC FAILURE FEEDBACK
 							return dispatch(Status(Update(
 								{
-									cssClass:'error',
+									className:'error',
 									text:'${data.dataErrors.get(props.action)}',
 								})));
 						
@@ -104,7 +104,7 @@ class DBAccess
 					else
 						return dispatch(Status(Update(
 							{
-								cssClass: 'warn',
+								className: 'warn',
 								text: 'Keine Daten für ${props.filter.substr(3)} gefunden'
 							})));
 				}
@@ -156,7 +156,7 @@ class DBAccess
 				}
 
 				return dispatch(Status(Update({
-					cssClass:'',
+					className:'',
 					text:switch ('${props.classPath}.${props.action}')
 				{
 					case "data.Contacts.edit":
@@ -212,7 +212,7 @@ class DBAccess
 						else{
 
 							dispatch(Status(Update( 
-								{	cssClass:'',
+								{	className:'',
 									text:(param.resolveMessage==null?'':param.resolveMessage.success)				
 								}
 							)));

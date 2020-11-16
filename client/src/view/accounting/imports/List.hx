@@ -97,7 +97,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 					rows = rows.filter(function(el:Map<String,Dynamic>)return el.get('ba_id').indexOf('ba')==0);
 					trace(rows[0]);
 					App.store.dispatch(Status(Update( 
-						{	cssClass:'',
+						{	className:'',
 							text:('$allCount RüLa\'s insgesamt - ${rows.length} importiert')
 						}
 					)));
@@ -217,8 +217,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				devIP: App.devIP
 			}
 		);
-		p.then(function(data:DbData){
-			trace(data); 
+		p.then(function(data:DbData)
+		{			
+			//trace(Unserializer.run(data.dataInfo['data'])); 
+			trace(Utils.getAllByKey(Unserializer.run(data.dataInfo['data']),'ba_id')); 
 			//setState({loading:false, dataTable:data.dataRows});
 		});
 	}	

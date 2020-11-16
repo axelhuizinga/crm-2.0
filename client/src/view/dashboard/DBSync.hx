@@ -216,14 +216,14 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			{
 				return App.store.dispatch(Status(Update(
 				{
-					cssClass:'error',
+					className:'error',
 					text:'Fehler 0 ${data.dataInfo['classPath']} Aktualisiert'}
 				)));
 			}					
 			var offset = Std.parseInt(data.dataInfo['offset']);
 			App.store.dispatch(Status(Update(
 				{
-					cssClass:' ',
+					className:' ',
 					text:'${offset} ${dbQueryParam.classPath} von ${data.dataInfo['maxImport']} aktualisiert'
 				}
 			)));
@@ -238,7 +238,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				setState({loading:false});
 				return App.store.dispatch(Status(Update(
 					{
-						cssClass:' ',
+						className:' ',
 						text:'${offset} ${dbQueryParam.classPath} von ${data.dataInfo['maxImport']} aktualisiert'
 					}
 				)));
@@ -306,7 +306,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			trace(props.userState.dbUser.first_name);
 			App.store.dispatch(Status(Update(
 				{
-					cssClass:' ',
+					className:' ',
 					text:'Importiere Kontakte'})));
 			App.store.dispatch(action.async.LivePBXSync.importAll({
 				limit:1000,
@@ -322,7 +322,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	public function importDeals() {
 		App.store.dispatch(Status(Update(
 			{
-				cssClass:' ',
+				className:' ',
 				text:'Importiere Abschlüsse'})));		
 		App.store.dispatch(LivePBXSync.importDeals({
 			limit: 1000,//00,
@@ -337,7 +337,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	public function syncDeals() {
 		App.store.dispatch(Status(Update(
 		{
-			cssClass:' ',
+			className:' ',
 			text:'Aktualisiere Abschlüsse'
 		})));	
 

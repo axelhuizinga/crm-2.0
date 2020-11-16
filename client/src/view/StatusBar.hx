@@ -105,7 +105,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	{
 		//trace(astate.userState.dbUser.first_name);
 		//trace(Reflect.fields(astate));
-		//trace(astate.status);
+		trace(astate.status);
 		//setState({status:astate.statusBar.status})
 		return {
 			/*date:astate.statusBar.date,*/
@@ -133,7 +133,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		return jsx('
 		<Footer>
 			<div className="statusbar">
-				<span className="column ${props.className}" >${props.path}</span>	
+				<span className="column" >${props.path}</span>	
 				<span className="main column ${props.className}" >${props.text}</span>			
 				<span className="column flex-end">
 				<i className=${userIcon}></i> $display_name</span>

@@ -26,6 +26,14 @@ class Utils
 		}
 	}
 
+	public static function getAllByKey(am:Array<Map<String,String>>, key:String='id'):Array<String> {
+		//return null;
+		return [
+			for(ma in am)
+				ma.get(key)
+		];
+	}
+
 	public static function keysList(ki:Iterator<Int>):Array<Int>
 	{
 		var l:Array<Int> = [];

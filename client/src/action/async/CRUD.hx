@@ -68,7 +68,7 @@ class CRUD
 							{
 								trace(data.dataRows[0]);
 								dispatch(Status(Update( 
-									{	cssClass:'',
+									{	className:'',
 										text:(param.resolveMessage==null?'':param.resolveMessage.success)
 									}
 								)));								
@@ -79,7 +79,7 @@ class CRUD
 								//TODO: IMPLEMENT GENERIC FAILURE FEEDBACK
 								dispatch(Status(Update(
 									{
-										cssClass:'error',
+										className:'error',
 										text:Json.stringify(data.dataErrors),
 									})));
 								resolve(data);
@@ -88,7 +88,7 @@ class CRUD
 						else
 							dispatch(Status(Update(
 							{
-								cssClass: 'warn',
+								className: 'warn',
 								text: 'Keine Daten für ${Json.stringify(param.filter)} gefunden'
 							}))); 
 					}
@@ -134,10 +134,10 @@ class CRUD
 							dispatch(User(LoginError({lastError: data.dataErrors.get('lastError')})));
 							resolve(null);
 						}
-						if(data.dataErrors != null)
+						if(data.dataErrors.toString() != '{}')
 						{
 							dispatch(Status(Update( 
-								{	cssClass:'red',
+								{	className:'error',
 									text:(param.resolveMessage==null?'':param.resolveMessage.failure)				
 								}
 							)));							
@@ -146,7 +146,7 @@ class CRUD
 						else{
 
 							dispatch(Status(Update( 
-								{	cssClass:'',
+								{	className:'',
 									text:(param.resolveMessage==null?'':param.resolveMessage.success)				
 								}
 							)));

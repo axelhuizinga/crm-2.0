@@ -100,10 +100,10 @@ ON ps.client_id = cl.client_id;';
 			trace(S.dbh.errorInfo());
 		}
 		sql = comment(unindent, format)/* 
-		SELECT ARRAY_TO_STRING(array_agg(acid.id),',') from contact_ids acid
+		SELECT ARRAY_TO_STRING(array_agg(cid.id),',') from contact_ids cid
 		left join 
 		(SELECT 1 as gg,id from contacts) c
-		ON acid.id=c.id
+		ON cid.id=c.id
 		where c.id IS NULL
 		GROUP BY gg;
 		*/;

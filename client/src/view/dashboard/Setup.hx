@@ -73,21 +73,6 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 		trace(Reflect.fields(props));		
 	}
 	
-	/*static function mapStateToProps() {
-
-		return function(aState:state.AppState) 
-		{
-			var uState = aState.user;
-			//trace(uState);		
-			return {
-				//appConfig:aState.config,
-				id:uState.id,
-				jwt:uState.jwt,
-				first_name:uState.first_name
-			};
-		};
-	}	*/
-	
 	override function componentDidCatch(error, info) {
 		trace(info);
 		// TODO:Display fallback UI

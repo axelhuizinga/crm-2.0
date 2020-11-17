@@ -54,8 +54,9 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 		super(props);
 		if (props.match.url == '/DashBoard')
 		{
-			props.history.push('/DashBoard/Settings');
-			trace('pushed2: /DashBoard/Settings');
+			//trace('pushed2: /DashBoard/Settings');
+			props.history.push('/DashBoard/Setup/DBSync');
+			//props.history.push('/DashBoard/Settings');
 		}
 	}
 	

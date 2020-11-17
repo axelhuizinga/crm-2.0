@@ -101,32 +101,11 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
         return {
 			load: function(param:DbQueryParam) return dispatch(CRUD.update(param))			
         }
-	}	
-	//,doSyncAll: function(dbQueryParam:DbQueryParam) return dispatch(CRUD.update(dbQueryParam))	
-		
+	}			
 	public function createFieldList(ev:ReactEvent):Void
 	{
 		trace('hi :)');
 		return;
-		/*props.formApi.requests.push(Loader.load(	
-			'${App.config.api}', 
-			{
-				id:props.userState.id,
-				jwt:props.userState.jwt,
-				classPath:'tools.DB',
-				action:'createFieldList',
-				update:'1'
-			},
-			function(data:Map<String,String>)
-			{
-				trace(data);
-				if (data.exists('error'))
-				{
-					trace(data['error']);
-					return;
-				}				 
-				setState({data:data});
-		}));*/
 		trace(props.history);
 		trace(props.match);
 		//setState({viewClassPath:viewClassPath});
@@ -275,20 +254,6 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			classPath:'admin.SyncExternalBookings',
 			action:'syncAll'
 		}));
-		/*p.then(function(dbData:DbData){ 
-			trace(dbData.dataErrors.keys().hasNext());
-			if(!dbData.dataErrors.empty()){
-				
-				//App.store.dispatch(LoginExpired({waiting: false, loginTask: Login}));
-				trace(dbData);
-			}
-			else{
-
-				trace('OK');
-				//state.userState.dbUser.online = true;
-				//App.store.dispatch(LoginComplete({waiting:false}));					
-			}
-		});*/
 	}
 
 	public function importBookingRequests() {
@@ -471,36 +436,16 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
-			/*case 'showUserList':
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["userList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');*/
 			case 'importClientList':
-				//trace(initialState);
 				trace(state.actualState);
-				/*var fields:Map<String,FormField> = [
-					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
-				];*/
 				(state.actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
 					mHandlers:state.mHandlers,
-					fields:formFields,/*[
-						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
-					],*/
+					fields:formFields,
 					model:'importClientList',
-					//ref:formRef,
 					title: 'Stammdaten Import' 
 				},state.actualState));	
-			/*case 'showFieldList2':
-				trace(dataDisplay["fieldsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["fieldsList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>				
-				');	*/
+
 			case 'shared.io.DB.editTableFields':
 				null;
 			default:

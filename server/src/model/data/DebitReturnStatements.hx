@@ -57,11 +57,6 @@ class DebitReturnStatements extends Model
 		var fields:Array<String> = [];
 		for (k in iData[0].keys())
 			fields.push(k);
-		//var dataFields = Reflect.fields(param.get('data'));
-		//fields = S.tableFields(param.get('table'),S.db).filter(function(field) return dataFields.contains(field) ).map(function(field) return '${quoteIdent(field)}');
-		//fields.remove('id');
-		//fieldNames = fields;
-		//buildValues(param.get('data'));
 		trace(setValues.length);
 		var setPlaceholders:Array<String> = [];
 		var rps = fields.map( function(_) return '?').join(',');
@@ -72,31 +67,11 @@ class DebitReturnStatements extends Model
 			}
 		}
 		trace(setValues.length);
-		//queryFields = fields.map(function (_)return '?').join(',');
-		setSql = 'VALUES ${setPlaceholders.join(",\n")}';			
-		//queryFields += fields.length > 0 ? fields.join(','):'';		
-		//trace(queryFields);
-		//trace(setSql);
-
-		//S.exit({'res':'OK'});
+		setSql = 'VALUES ${setPlaceholders.join(",\n")}';
 		var sqlBf:StringBuf = new StringBuf();
 		trace(queryFields);
 		sqlBf.add('INSERT INTO ');
-		/*if (tableNames.length>1)
-		{
-			S.sendErrors(dbData, ['error'=> S.errorInfo('Create with join not supported!')]);
-			return null;
-		}		
-		else
-		{
-			sqlBf.add('${quoteIdent(tableNames[0])} ');
-		}*/
 		sqlBf.add('${quoteIdent(tableNames[0])} (${fields.join(",")}) ${setSql} ON CONFLICT DO NOTHING RETURNING id');
-		if (filterSql != null)
-		{
-			sqlBf.add(filterSql);
-		}		
-		//trace(sqlBf.toString());
 		return execute(sqlBf.toString());
 	}
 

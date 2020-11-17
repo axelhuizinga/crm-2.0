@@ -108,7 +108,7 @@ class Util
 	public static function map2fields(row:NativeArray,keys:Array<String>):Map<String,Dynamic> {
 		
 		//trace(row);
-		trace(keys);
+		//trace(keys);
 		return[
 			for(k in keys.filter(function(k)return Global.array_key_exists(k,row)))
 				k => row[k]				

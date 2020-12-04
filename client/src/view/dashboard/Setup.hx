@@ -131,5 +131,9 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 				null;					
 		}
 	}
+
+	public function syncUserDetails() {
+		trace('ooo');
+	}
 	
 }

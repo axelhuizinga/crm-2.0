@@ -57,7 +57,7 @@ class SyncExternalAccounts extends Model
 SELECT MIN(pay_source_id)sstart, MAX(pay_source_id)send FROM 
 (SELECT pay_source_id FROM clients cl 
 INNER JOIN pay_source ps 
-ON ps.client_id = cl.client_id LIMIT ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])})ss';
+ON ps.client_id = cl.client_id LIMIT  ${Util.limit()} OFFSET ${Std.parseInt(param['offset'])})ss';
 	trace(sql);
         var stmt:PDOStatement = S.syncDbh.query(sql);
 		if(untyped stmt==false)

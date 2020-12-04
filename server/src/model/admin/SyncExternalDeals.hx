@@ -45,9 +45,6 @@ class SyncExternalDeals extends Model
 
 	function importAll(){
 
-/*	}
-
-	function  getMissing() {*/
 		var min_id:Int = S.params.get('offset');
 		var got:Int = 0;
 		var stmt:PDOStatement = S.dbh.query('SELECT MAX(id)max_deal, COUNT(*)previous_count FROM deals');
@@ -68,10 +65,10 @@ class SyncExternalDeals extends Model
 			'DELETE FROM ext_ids WHERE auth_user=${S.dbQuery.dbUser.id} AND action=\'${action}\' AND table_name=\'deals\'');
 		//trace('DELETE FROM ext_ids WHERE auth_user=${S.dbQuery.dbUser.id} AND action=\'${action}\' AND table_name=\'deals\'');
 
-		/*GET NEXT 1000 pay_plan_id's from fly_crm*/			
+		/*GET NEXT  ${Util.limit()} pay_plan_id's from fly_crm*/			
 		var sql:String = '
 		(SELECT pay_plan_id FROM pay_plan 
-		WHERE pay_plan_id>${min_id} LIMIT 1000)
+		WHERE pay_plan_id>${min_id} LIMIT  ${Util.limit()})
 		UNION
 		(SELECT MAX(pay_plan_id) FROM pay_plan)';
 		//trace(sql);

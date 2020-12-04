@@ -71,16 +71,16 @@ class SyncExternal extends Model
 		trace('done');
     }
 
-    public function syncUserDetails(?user:Dynamic):Void
+    public function syncUserDetails():Void
     {
-		var res:NativeArray = fetchAll('SELECT user, full_name, active FROM asterisk.vicidial_users 
-		WHERE CAST(user AS UNSIGNED)>0 AND active="Y"',S.syncDbh,'syncUserDetails',3);
+		var res:NativeArray = fetchAll("SELECT user, full_name, active FROM asterisk.vicidial_users 
+		WHERE CAST(user AS UNSIGNED)>0 AND active='Y'",S.syncDbh,'syncUserDetails',3);
 		trace(res);
 		if(res != null)
 		{
 			//sendRows(res);
 			var updated:Int = syncUserIds(res);
-			S.sendInfo(dbData,['syncUserDetail'=>'DONE $updated']);
+			S.sendInfo(dbData,['updated'=>updated]);
 		}
 			
 		else 
@@ -91,37 +91,22 @@ class SyncExternal extends Model
     function saveUserDetails():DbData
     {
         var updated:Int = 0;
-        //dbData = new DbData();
         var stmt:PDOStatement = null;
         trace(dbData.dataRows[dbData.dataRows.length-2]);
         for(dR in dbData.dataRows)
         {
-           /* var sql:String = 'SELECT external FROM users WHERE user_name = \'${dR['user']}\'';
-            var q:EitherType<PDOStatement,Bool> = S.dbh.query(sql);
-            if(!q)
-            {
-                dbData.dataErrors = ['${action}' => S.dbh.errorInfo()];
-                return dbData;
-            }
-            var eStmt:PDOStatement = cast(q, PDOStatement);
-
-            var external:NativeArray = eStmt.fetch();
-            trace(sql);
-            //trace(Type.typeof(external));
-
-            if(1 == updated++)
-            trace(external);*/
             var external_text = row2jsonb(Lib.objectOfAssociativeArray(Lib.associativeArrayOfHash(dR)));
             var sql = comment(unindent, format) /*
-            UPDATE crm.users SET active='${dR['active']}',edited_by=101, external = jsonb_object('{$external_text}')::jsonb WHERE user_name='${dR['user']}'
+            UPDATE crm.users SET active=${dR['active']='Y'},edited_by=101, external = jsonb_object('{$external_text}')::jsonb WHERE user_name='${dR['user']}'
             */;
-            
+            trace(sql);
             var q:EitherType<PDOStatement,Bool> = S.dbh.query(sql);
             if(!q)
             {
                dbData.dataErrors = ['${action}' => Std.string(S.dbh.errorInfo())];
                return dbData;
-            } 
+			} 
+			updated++;
         }        
         dbData.dataInfo = dbData.dataInfo.copyStringMap(
 			['saveUserDetails' => 'OK', 'updatedRows' => Std.string(updated)]);
@@ -161,7 +146,7 @@ class SyncExternal extends Model
 			trace(
 				comment(unindent,format)/**
 				UPDATE users 
-				SET contact=contacts.id, active=true
+				SET contact=contacts.id, active=${nrow[2]=='Y'}
 				FROM contacts
 				WHERE first_name='${first_name}' AND last_name='${last_name}'
 				AND "users"."mandator"="contacts"."mandator" and user_name='$user';
@@ -170,7 +155,7 @@ class SyncExternal extends Model
 			updated += updateRows(
 				comment(unindent,format)/**
 				UPDATE users 
-				SET contact=contacts.id, active=true
+				SET contact=contacts.id, active=${nrow[2]=='Y'}
 				FROM contacts
 				WHERE first_name='${first_name}' AND last_name='${last_name}'
 				AND "users"."mandator"="contacts"."mandator" and user_name='$user';

@@ -368,6 +368,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			default:
 				"";
 		}
+		trace(props.userState);
 		trace(eStyle);
 		return eStyle;
 	}

@@ -99,7 +99,7 @@ ON ps.client_id = cl.client_id;';
 		{
 			trace(S.dbh.errorInfo());
 		}
-		sql = comment(unindent, format)/* 
+		sql = comment(unindent, format)/*
 		SELECT ARRAY_TO_STRING(array_agg(cid.id),',') from contact_ids cid
 		left join 
 		(SELECT 1 as gg,id from contacts) c
@@ -118,7 +118,7 @@ ON ps.client_id = cl.client_id;';
 			trace(stmt.errorInfo());
 		}
 		var ids:String = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN,0):null);
-		//trace(ids);
+		///trace('missing:' + count(explode(',',ids)));
 		sql = comment(unindent,format)/*
 		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(TO_DAYS(STR_TO_DATE(cl.birth_date, '%Y-%m-%d'))>500000 ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,
 pp.pay_plan_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,IF(pp.product='K',2,3) product ,pp.agent,pp.agency_project project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,
@@ -418,8 +418,8 @@ LIMIT
 */;
 //WHERE cl.client_id>11019219
 		trace('$sql ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');
-        var stmt:PDOStatement = S.syncDbh.query('$sql ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');
-		trace('loading  ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');
+        var stmt:PDOStatement = S.syncDbh.query('$sql ${Util.limit()} OFFSET ${Std.parseInt(param['offset'])}');
+		trace('loading ${Util.limit()} OFFSET ${Std.parseInt(param['offset'])}');
 		if(untyped stmt==false)
 		{
 			trace('$sql ${Std.parseInt(param['limit'])}');

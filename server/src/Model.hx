@@ -486,6 +486,7 @@ class Model
 	public function updateRows(sql:String, dbh:PDO, req:String='', ?pos:PosInfos):Int
 	{
 		var rows:Int = dbh.exec(sql);
+		trace(rows);
 		return rows;
 	}
 

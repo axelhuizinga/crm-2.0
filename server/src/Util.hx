@@ -174,12 +174,6 @@ class Util
 		trace(S.params.get('limit'));
 		return (S.params.exists('limit')&&S.params.get('limit')!=null?S.params.get('limit'):1000);
 	}
-	/*public static function saveExtIDs(rows:NativeArray):Void {
-		var sRows:NativeArray = Syntax.code("array_map(
-			function($row){
-				return array($row[0],)
-			},{0})", );
-	}*/
 	
 	public static inline function randomString(length:Int, ?charactersToUse = "abcdefghijklmnopqrstuvwxyz_§!%ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"):String
 	{

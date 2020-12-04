@@ -22,7 +22,7 @@ import model.admin.CreateHistoryTrigger;
 import model.admin.CreateUsers;
 import model.admin.SyncExternal;
 import model.admin.SyncExternalAccounts;
-import model.admin.SyncExternalContacts;
+//import model.admin.SyncExternalContacts;
 import model.admin.SyncExternalBookings;
 import model.admin.SyncExternalClients;
 import model.roles.Users;
@@ -144,7 +144,7 @@ class S
 		}
 		//trace(Web.getPostData());
 		dbQuery = Model.binary();
-		//trace(dbQuery);
+		trace(dbQuery);
 		//Model.binary(params.get('dbData'));
 		params = dbQuery.dbParams;
 
@@ -162,7 +162,8 @@ class S
 			Syntax.array([PDO.ATTR_PERSISTENT,true]));
 		
 		//trace(dbh);
-		if(params.get('extDB'))
+		trace('connect2syncDB:'+ (params.get('extDB')!=null||params.get('action').indexOf('sync')==0?'Y':'N'));
+		if(params.get('extDB')||params.get('action').indexOf('sync')==0)
 		{
 			//CONNECT DIALER DB	
 			trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM');

@@ -91,7 +91,7 @@ class UserStore implements IReducer<UserAction, UserState>
 	                    
 			case LoginComplete(uState):
 					//trace(uState.id + ':' + uState.online);
-					trace(uState);
+					trace(state);
 					copy(state, uState);                                             
 			case LogOutComplete(uState):
 					trace(uState);

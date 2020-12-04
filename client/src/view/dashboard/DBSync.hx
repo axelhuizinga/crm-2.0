@@ -44,7 +44,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	public static var menuItems:Array<MItem> = [		
 		{label:'BenutzerDaten ',action:'showUserList'},
 		
-		{label:'BenutzerDaten Abgleich',action:'syncUserList'},
+		{label:'BenutzerDaten Abgleich',action:'syncUserDetails'},
 		{label:'BuchungsDaten Abgleich',action:'importAllBookingRequests'},
 		
 		{label:'Stammdaten Import ',action:'importContacts'},
@@ -196,14 +196,14 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				return App.store.dispatch(Status(Update(
 				{
 					className:'error',
-					text:'Fehler 0 ${data.dataInfo['classPath']} Aktualisiert'}
-				)));
+					text:'Fehler 0  Aktualisiert'}
+				)));//${data.dataInfo['classPath']}
 			}					
 			var offset = Std.parseInt(data.dataInfo['offset']);
 			App.store.dispatch(Status(Update(
 				{
 					className:' ',
-					text:'${offset} ${dbQueryParam.classPath} von ${data.dataInfo['maxImport']} aktualisiert'
+					text:'${offset} von ${data.dataInfo['maxImport']} aktualisiert'
 				}
 			)));
 
@@ -218,7 +218,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				return App.store.dispatch(Status(Update(
 					{
 						className:' ',
-						text:'${offset} ${dbQueryParam.classPath} von ${data.dataInfo['maxImport']} aktualisiert'
+						text:'${offset} von ${data.dataInfo['maxImport']} aktualisiert'
 					}
 				)));
 			}
@@ -315,10 +315,11 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		}));
 	}	
 
-	public function syncUserList(_):Void
+	public function syncUserDetails(_):Void
 	{
-		//FormApi.requests.push( 
 		trace(App.config.api);
+		trace(props.userState.dbUser);
+		//FormApi.requests.push( 
 		BinaryLoader.create(
 			'${App.config.api}', 
 			{
@@ -327,16 +328,22 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				fields:'id,table_name,field_name,disabled,element,required,use_as_index',
 				classPath:'admin.SyncExternal',
 				action:'syncUserDetails',
-				devIP:App.devIP
+				devIP:App.devIP,
+				dbUser:props.userState.dbUser
 			},
 			function(data:DbData)
 			{
 				//UserAccess.jwtCheck(data);
-				//trace(data);
+				trace(data);
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				trace(data.dataRows.length);
 				if(data.dataRows.length>0)
 				setState({dataTable:data.dataRows});
+				App.store.dispatch(Status(Update( 
+					{	className:'',
+						text:'aktualisiert: '+ data.dataInfo.get('updated') + ' Benutzer'
+					}
+				)));				
 			}
 		);
 	}

@@ -188,17 +188,12 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		return true;
 	}	
 
-	function resetPassword(_)
-	{
-		trace('OK');
-	}
-
 	public function  renderForm():ReactFragment
 	{		
 		
 		trace(props.redirectAfterLogin);
 		trace(props.userState.dbUser);
-		
+		trace('error_style password:'+errorStyle("password"));
 		//if(props.redirectAfterLogin != null && props.redirectAfterLogin.startsWith('/ResetPassword'))
 		
 		if(props.userState.loginTask == CheckEmail)
@@ -248,7 +243,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		}
 
 		if(props.userState.dbUser.change_pass_required)
-		{
+		{trace('props.userState.dbUser.change_pass_required:'+props.userState.dbUser.change_pass_required);
 			return jsx('
 					<form name="form" onSubmit={handleSubmit} className="login" >
 						<input  name="password" type="hidden" value=${props.userState.dbUser.password} />														
@@ -281,7 +276,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 					</form>'
 				);
 		}		
-
+		trace(props.userState.loginTask);
 		return jsx('
 				  	<form name="form" onSubmit={handleSubmit} className="login" >
 						<div className="formField">
@@ -289,19 +284,20 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 										<span className="hidden">User ID</span>
 								</label>
 								<input id="login_user_name" name="user_name" 
-								className=${errorStyle("user_name") + "form-input"}  
+								className=${errorStyle("user_name") + " form-input"}  
 								placeholder="User ID" value=${props.userState.dbUser.user_name} onChange=${handleChange} />
 						</div>
 						<div className="formField">
 								<label className="fa lockIcon" forhtml="pw">
 										<span className="hidden">Password</span>
 								</label>
-								<input id="pw" className=${errorStyle("password") + "form-input"} name="password" value=${props.userState.dbUser.password} type="password" placeholder="Password" onChange=${handleChange} />
+								<input id="pw" className=${errorStyle("password") + " form-input"} name="password" value=${props.userState.dbUser.password} type="password" placeholder="Password" onChange=${handleChange} />
 						</div>
 						<div className="formField">
 								<input type="submit" style=${{width:'100%'}} value="Login" onClick=${function(){submitValue='Login';return true;}}/>
 						</div>
-						<div className="formField" style=${{display: (props.userState.loginTask == ResetPassword? 'flex':'none')}} 
+						<div className="formField" style=${{display: (
+							props.userState.loginTask == ResetPassword || props.userState.lastError!=null && props.userState.lastError.indexOf("password")>-1 ? 'flex':'none')}} 
 						 onClick=${function(){submitValue='ResetPassword';return true;}}>
 								<input type="submit" value="Passwort vergessen?"/>
 						</div>
@@ -352,18 +348,21 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	
 	function errorStyle(name:String):String
 	{
+		trace(name);
 		var eStyle = switch(name)
 		{
 			case "password":
-				var res = props.userState.lastError == "password"?"error ":"";
+				var res = (props.userState.lastError!=null && props.userState.lastError.indexOf("password")>-1?"error ":"");
 				trace(res);
 				res;
 				
 			case "user_name":
-				props.userState.lastError == "user_name"?"error ":"";
+				var res =  props.userState.lastError!=null && props.userState.lastError.indexOf("user_name")>-1?"error ":"";
+				res;
 			
 			case "new_pass_confirm":
-				props.userState.new_pass != props.userState.new_pass_confirm?"error ":"";
+				var res = props.userState.new_pass != props.userState.new_pass_confirm?"error ":"";
+				res;
 
 			default:
 				"";

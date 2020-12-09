@@ -105,62 +105,6 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{
 		trace(props);
-		//props.formApi.requests.push(
-			/*BinaryLoader.create(
-			'${App.config.api}', 
-			{				
-				id:props.userState.dbUser.id,
-				jwt:props.userState.dbUser.jwt,
-				classPath:'auth.User',
-				action:'update',
-				filter:'id|${props.userState.dbUser.id}',
-				dataSource:Serializer.run(dataAccess['update'].source),
-				devIP:App.devIP	
-			},
-			function(data:DbData)
-			{
-				trace(Reflect.fields(data));
-				//trace(data);
-				UserAccess.jwtCheck(data);
-				trace(Reflect.fields(data.dataRows[0]));
-				if (data.dataRows[0]['change_pass_required'] == '1')
-				{
-					setState({data:data.dataRows[0], action:'changePassword',
-					fields:dataAccess['changePassword'].view,
-					values:props.formApi.createStateValues(data.dataRows[0], 
-					dataAccess['changePassword'].view), loading:false});	
-					App.store.dispatch(AppAction.User(UserAction.User({
-						first_name:data.dataRows[0]['first_name'],
-						last_name:data.dataRows[0]['last_name'],
-						id:props.userState.dbUser.id,
-						email:data.dataRows[0]['email'],
-						pass:'',
-						new_pass:'',
-						new_pass_confirm:'',
-						waiting:false,
-						online: true,
-						last_login:Date.fromString(data.dataRows[0]['last_login']),
-					})));				
-				}
-				else{
-					setState({data:data.dataRows[0], action:'update',
-					fields:dataAccess['update'].view,
-					values:props.formApi.createStateValues(data.dataRows[0], 
-					dataAccess['update'].view), loading:false});	
-					trace(Date.fromString(data.dataRows[0]['last_login']));
-					App.store.dispatch(AppAction.User(UserAction.User({
-						first_name:data.dataRows[0]['first_name'],
-						last_name:data.dataRows[0]['last_name'],
-						id:props.userState.dbUser.id,
-						email:data.dataRows[0]['email'],
-						pass:'',
-						waiting:false,
-						online:false,
-						last_login:Date.fromString(data.dataRows[0]['last_login']),
-					})));
-				} 				
-			}
-		)*/
 	}
 	
 	override public function componentDidUpdate(prevProps:DataFormProps, prevState:FormState):Void 

@@ -37,7 +37,7 @@ class UserAccess {
 					User(LoginError({dbUser:userState.dbUser, lastError:'Neues Passwort eingeben!'})));
 			
 			var aState:AppState = getState();
-			trace('${aState.locationStore.redirectAfterLogin}');
+			trace('aState.locationStore.redirectAfterLogin:${aState.locationStore.redirectAfterLogin}');
 			BinaryLoader.create(
 				'${App.config.api}', 
 				{				
@@ -162,7 +162,7 @@ class UserAccess {
 			if (userState.dbUser.password == '' && userState.dbUser.new_pass == '' || userState.dbUser.user_name == '') 
 				return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:'Passwort und user_name eintragen!'})));
 			//var spin:Dynamic = dispatch(AppAction.AppWait);
-			trace(App.maxLoginAttempts);
+			trace('App.maxLoginAttempts:'+App.maxLoginAttempts);
 			var bL:XMLHttpRequest = null; 
 			userState.dbUser.jwt = '';
 			if(App.maxLoginAttempts-->0)
@@ -190,9 +190,10 @@ class UserAccess {
 			{				
 				trace(data);
 				if (data.dataErrors.keys().hasNext())
-				{
-					if(App.maxLoginAttempts-->0)
-					return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:data.dataErrors.iterator().next()})));
+				{					
+					trace('App.maxLoginAttempts:'+App.maxLoginAttempts);
+					if(App.maxLoginAttempts>0)
+						return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:data.dataErrors.iterator().next()})));
 				}
 				trace(DbUser);
 				var userFields:Array<String> = Type.getInstanceFields(DbUser);

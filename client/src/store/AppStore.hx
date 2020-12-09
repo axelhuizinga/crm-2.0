@@ -124,10 +124,10 @@ class AppStore
 	{
 		trace(Type.enumConstructor(action)+'.'+Type.enumConstructor(Type.enumParameters(action)[0]));
 		trace(Type.enumParameters(action));
-		Type.enumParameters(action).map(function (p) {
+		/*Type.enumParameters(action).map(function (p) {
 			trace(p);
 			return p;
-		});
+		});*/
 		return switch(action)
 		{			
 			/*case GlobalState(key, value):

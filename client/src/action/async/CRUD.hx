@@ -46,6 +46,7 @@ class CRUD
 			return new Promise(function(resolve, reject){
 				if (!param.dbUser.online)
 				{
+					param.dbUser.last_error = 'Du musst dich neu anmelden!';
 					dispatch(User(LoginError(
 					{
 						dbUser:param.dbUser,

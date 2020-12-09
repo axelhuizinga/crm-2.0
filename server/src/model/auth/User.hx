@@ -214,7 +214,7 @@ class User extends Model
 		else
 		{
 			trace(stmt.rowCount+':$sql');
-			S.sendErrors(dbData,['User.userIsAuthorized'=>'user ${user.user_name} not found!']);
+			S.sendErrors(dbData,['User.userIsAuthorized'=>'user_name ${user.user_name} not found!']);
 			return UserAuth.NotOK;
 		}
 	}

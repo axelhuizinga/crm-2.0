@@ -59,63 +59,6 @@ class Bookings extends ReactComponentOf<DataFormProps,FormState>
 		trace(Reflect.fields(props));
 	}
 	
-	public function createUsers(ev:ReactEvent):Void
-	{
-		
-	}
-	public function editUsers(ev:ReactEvent):Void
-	{
-		
-	}
-	public function deleteUsers(ev:ReactEvent):Void
-	{
-		
-	}
-	
-	public function createUserGroups(ev:ReactEvent):Void
-	{
-		
-	}
-	public function editUserGroups(ev:ReactEvent):Void
-	{
-		
-	}
-	public function deleteUserGroups(ev:ReactEvent):Void
-	{
-		
-	}	
-	public function createRoles(ev:ReactEvent):Void
-	{
-		
-	}
-	public function editRoles(ev:ReactEvent):Void
-	{
-		
-	}
-	public function deleteRoles(ev:ReactEvent):Void
-	{
-		
-	}	
-	
-	
-	public function importExternalUsers(ev:ReactEvent):Void
-	{
-		trace(ev.currentTarget);
-		props.formApi.requests.push(AjaxLoader.load(
-			'${App.config.api}', 
-			{
-				id:props.userState.dbUser.id,
-				jwt:props.userState.dbUser.jwt,
-				first_name:props.userState.dbUser.first_name,
-				classPath:'admin.CreateUsers',
-				action:'importExternal'
-			},
-			function(data){
-				trace(data);				
-			}
-		));
-	}
-	
 	static function mapStateToProps(aState:AppState) {
 		return function(aState:AppState) 
 		{

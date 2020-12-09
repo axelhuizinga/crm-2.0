@@ -25,33 +25,8 @@ class UserStore implements IReducer<UserAction, UserState>
 	
 	public var store:StoreMethods<UserState>;
 	
-	public function new() {
-		/*if(Browser.location.pathname.startsWith('/ChangePassword')){
-			var param:Map<String,Dynamic> = Browser.location.pathname.argList(
-					['action','jwt','user_name','opath']
-				);
-			initState = {
-				loginTask:LoginTask.ChangePassword,
-				?new_pass_confirm:String,
-				?waiting:Bool   				
-				dbUser: new DbUser({
-					first_name:Cookie.get('userState.dbUser.first_name')==null?'':Cookie.get('userState.dbUser.first_name'),
-					//id:Cookie.get('userState.dbUser.id')==null?0:Std.parseInt(Cookie.get('userState.dbUser.id')),
-					last_name:Cookie.get('userState.dbUser.last_name')==null?'':Cookie.get('userState.dbUser.last_name'),
-					mandator: Cookie.get('userState.dbUser.mandator')==null?1:Std.parseInt(Cookie.get('userState.dbUser.mandator')),
-					user_name:param.get('user_name'),
-					email:Cookie.get('userState.dbUser.email')==null?'':Cookie.get('userState.dbUser.email'),
-					password:'',				
-					change_pass_required:false,
-					online:false,//Cookie.get('userState.dbUser.jwt')!=null,
-					//loginTask: LoginTask.ChangePassword,
-					//last_login:null,
-					jwt:param.get('jwt'),
-					waiting: false
-				})
-			}
-		}
-		else	*/	
+	public function new() 
+	{		
 		initState =  {
 			loginTask:null,
 			waiting:true,   				
@@ -90,7 +65,8 @@ class UserStore implements IReducer<UserAction, UserState>
 				copy(state, uState);  
 	                    
 			case LoginComplete(uState):
-					//trace(uState.id + ':' + uState.online);
+					if(uState.dbUser != null)
+						trace(uState.dbUser.id + ':' + uState.dbUser.online);
 					trace(state);
 					copy(state, uState);                                             
 			case LogOutComplete(uState):

@@ -183,7 +183,7 @@ module.exports = () =>{
 			cacheGroups: {
 				styles: {
 				name: 'styles',
-				test: /\.css$/,
+				test: /\.(s*)css$/,
 				chunks: 'all',
 				enforce: true,
 				},

@@ -1,4 +1,4 @@
-/*! bulma.io v0.7.1 | MIT License | github.com/jgthms/bulma */
+/*! sass bulma.io v0.7.1 | MIT License | github.com/jgthms/bulma */
 @-webkit-keyframes spinAround {
   from {
     -webkit-transform: rotate(0deg);
@@ -171,9 +171,7 @@
   box-shadow: none;
   display: inline-flex;
   font-size: 1rem;
-  height: 2.25em;
   justify-content: flex-start;
-  line-height: 1.5;
   padding-bottom: calc(0.375em - 1px);
   padding-left: calc(0.625em - 1px);
   padding-right: calc(0.625em - 1px);
@@ -3173,10 +3171,6 @@ a.box:active {
   vertical-align: top;
 }
 
-.select:not(.is-multiple) {
-  height: 2.25em;
-}
-
 .select:not(.is-multiple):not(.is-loading)::after {
   border-color: #3273dc;
   right: 1.125em;
@@ -4177,7 +4171,6 @@ a.box:active {
 
 .control.has-icon .icon {
   color: #dbdbdb;
-  height: 2.25em;
   pointer-events: none;
   position: absolute;
   top: 0;
@@ -8558,17 +8551,17 @@ label.panel-block:hover {
 }
 
 .columns {
-  margin-left: -0.75rem;
-  margin-right: -0.75rem;
-  margin-top: -0.75rem;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
 }
 
 .columns:last-child {
-  margin-bottom: -0.75rem;
+  margin-bottom: 0;
 }
 
 .columns:not(:last-child) {
-  margin-bottom: calc(1.5rem - 0.75rem);
+  margin-bottom: 0;
 }
 
 .columns.is-centered {
@@ -8587,7 +8580,7 @@ label.panel-block:hover {
 }
 
 .columns.is-gapless:not(:last-child) {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
 }
 
 .columns.is-gapless:last-child {
@@ -8620,8 +8613,6 @@ label.panel-block:hover {
 
 .columns.is-variable {
   --columnGap: 0.75rem;
-  margin-left: calc(-1 * var(--columnGap));
-  margin-right: calc(-1 * var(--columnGap));
 }
 
 .columns.is-variable .column {
@@ -8679,11 +8670,11 @@ label.panel-block:hover {
 .tile.is-ancestor {
   margin-left: -0.75rem;
   margin-right: -0.75rem;
-  margin-top: -0.75rem;
+  margin-top: 0;
 }
 
 .tile.is-ancestor:last-child {
-  margin-bottom: -0.75rem;
+  margin-bottom: 0;
 }
 
 .tile.is-ancestor:not(:last-child) {

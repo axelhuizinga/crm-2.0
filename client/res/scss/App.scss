@@ -677,10 +677,10 @@ form{
 }
 .formField select
 {
-	font-size: 1rem;
-	/*box-sizing: content-box;*/
-	margin-top: -1px;
-	margin-bottom: -1px;
+	/*box-sizing: content-box;
+	font-size: 1rem;*/
+	margin-top: auto;
+	margin-bottom: auto;
 }
 
 /*side menu*/

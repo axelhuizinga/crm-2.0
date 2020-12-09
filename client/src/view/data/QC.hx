@@ -104,11 +104,6 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
     {
 		trace('ok');
         return {
-			/*globalState: function (key:String,?data:Dynamic)
-			{
-				trace('$key => $data');
-				dispatch(GlobalState(key,data));
-			},*/
 			storeData:function(id:String, action:DataAction)
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
@@ -120,7 +115,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
 			},
 			//setStateFromChild(cState:FormState)
-			storeActData:function (data:IntMap<Map<String,Dynamic>>)
+			/*:function (data:IntMap<Map<String,Dynamic>>)
 			{
 				dispatch(DataAction.SelectActContacts(data));
 			},		
@@ -129,7 +124,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 				//return null;
 				dispatch(DataAction.ContactsLoaded(data));
 				//dispatch(AppAction.Data(DataAction.ContactsLoaded(data)));
-			}
+			}*/
 		};
     }
 	

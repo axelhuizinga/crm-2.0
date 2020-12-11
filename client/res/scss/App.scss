@@ -15,8 +15,8 @@ $pagination-margin: 0px auto;
 $tooltip-background-opacity: 0.8;
 $tooltip-max-width: 24rem;	 
 
-//@import "../bulma/bulma.sass";
-@import "../../node_modules/react-bulma-components/node_modules/bulma/bulma.sass";
+@import "../../node_modules/bulma/bulma.sass";
+//@import "../../node_modules/react-bulma-components/node_modules/bulma/bulma.sass";
 @import "../../node_modules/bulma-extensions/bulma-accordion/dist/css/bulma-accordion.sass";
 @import "../../node_modules/bulma-extensions/bulma-tooltip/dist/css/bulma-tooltip.sass";
 

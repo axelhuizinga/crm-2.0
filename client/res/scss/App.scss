@@ -7,6 +7,8 @@
 }
 */
 /* bulma preload variables */
+$control-height: auto;
+$control-line-height: 1.0;
 @import "../../node_modules/react-bulma-components/node_modules/bulma/sass/utilities/initial-variables.sass";
 
 $pagination-focus-border-color:$grey-lighter;
@@ -565,7 +567,7 @@ button::-moz-focus-inner {padding:0; border:0}
 }
 .modal-card-title, .tCenter
 {
-	text-align:center;
+	text-align:center!important;
 }
 .modal-card-body{
     display: flex;	

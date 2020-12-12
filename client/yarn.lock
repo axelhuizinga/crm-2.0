@@ -5244,6 +5244,11 @@ react-redux@^5.0.7:
     react-is "^16.6.0"
     react-lifecycles-compat "^3.0.0"
 
+react-router-cache-route@^1.10.1:
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/react-router-cache-route/-/react-router-cache-route-1.10.1.tgz#5e0c593c63ec4cdd586bf355d359fb7158d28483"
+  integrity sha512-fg5wjhi5sKrzk+wRrLg1TQOj9BvVd7TUW+C1oJFhBTmo8EetX7awWeE0oBwnA2+gwYGiYKKj6UfYQD6MQHAjMw==
+
 react-router-dom@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-5.2.0.tgz#9e65a4d0c45e13289e66c7b17c7e175d0ea15662"

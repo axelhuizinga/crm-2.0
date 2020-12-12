@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "/opt/src/crm-2.0/client"
+		},
+		{
+			"path": "res"
 		}
 	],
 	"settings": {

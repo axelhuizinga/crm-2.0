@@ -198,8 +198,12 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					<input id="fileupload" type="file" name="${item.name}"  >
 					</div>
 					');*/
-				default:jsx('<Button key=${i++} onClick=${props.itemHandler} data-action=${item.action}
-				data-section=${item.section} disabled=${item.disabled}>${item.label}</Button>');
+				default:
+					(item.actions.length>0?
+						jsx('<Button key=${i++} onClick=${item.actions[0]} data-action=${item.actions}
+				data-section=${item.section} disabled=${item.disabled}>${item.label}</Button>')
+						:jsx('<Button key=${i++} onClick=${props.itemHandler} data-action=${item.action}
+				data-section=${item.section} disabled=${item.disabled}>${item.label}</Button>'));
 			}
 		}).array();
 	}

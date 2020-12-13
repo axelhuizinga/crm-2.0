@@ -662,8 +662,8 @@ form{
 }
 .formField button
 {
-	padding:0.5rem;
-	font-size:1.1rem;
+	padding:0.3rem 0.5rem 0.4rem;
+	/*font-size:1.1rem;*/
 	margin:0.3rem auto;
 	border-radius: $tableHeader-radius;
 	border:$cell-border;
@@ -1003,7 +1003,8 @@ div.tooltip {
 	shape-rendering: crispEdges;
 }
 .chartBox text{
-	alignment-baseline:central;
+	/*alignment-baseline:central;*/
+	vertical-align: baseline;
 }
 $lightGradient:linear-gradient(0deg $darkBlue, $paleBlue);
 .stop-bottom{

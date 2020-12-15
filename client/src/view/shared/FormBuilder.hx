@@ -124,7 +124,7 @@ class FormBuilder {
 			var value:Dynamic = Reflect.field(initialData,name);
 			if(name=='date_of_birth')trace (field.type +' $name:' + value);
 			if(name=='date_of_birth')trace (field.type +' $name:' + value);
-			trace(field.type);
+			//trace(field.type);
 			switch (field.type)
 			{
 				case FormInputElement.Hidden:
@@ -302,8 +302,12 @@ EOF;
 	function renderButton(mItem:MItem, i:Int):ReactFragment {
 		if(mItem.onlySm)
 			return null;
-		var mHandler:Function = comp.state.formApi.itemHandler;//Reflect.field(comp,mItem.action);
-		return jsx('<$BButton key=${i++} onClick=${itemHandler} data-action=${mItem.action}
+		/*if(mItem.actions != null && mItem.actions.length > 0){
+			return jsx('<$BButton key=${i++} onClick=${mItem.actions[0]} data-actions=${mItem.actions}
+			data-section=${mItem.section} disabled=${mItem.disabled} type="button" >${mItem.label}</$BButton>');
+		}
+		var mHandler:Function = comp.state.formApi.itemHandler;//Reflect.field(comp,mItem.action);*/
+		return jsx('<$BButton key=${i++} onClick=${mItem.handler} 
 		data-section=${mItem.section} disabled=${mItem.disabled} type="button" >${mItem.label}</$BButton>');	
 	}
 

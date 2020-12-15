@@ -24,7 +24,7 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 
 	public function new(history:History) 
 	{
-		_trace = false;
+		_trace = true;
 		initState = {
 			history:history,
 			lastModified:Date.now(),

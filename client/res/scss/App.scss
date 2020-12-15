@@ -7,6 +7,9 @@
 }
 */
 /* bulma preload variables */
+$control-height: auto;
+$control-line-height: 1.0;
+
 @import "../../node_modules/react-bulma-components/node_modules/bulma/sass/utilities/initial-variables.sass";
 
 $pagination-focus-border-color:$grey-lighter;
@@ -565,7 +568,7 @@ button::-moz-focus-inner {padding:0; border:0}
 }
 .modal-card-title, .tCenter
 {
-	text-align:center;
+	text-align:center!important;
 }
 .modal-card-body{
     display: flex;	
@@ -660,8 +663,8 @@ form{
 }
 .formField button
 {
-	padding:0.5rem;
-	font-size:1.1rem;
+	padding:0.3rem 0.5rem 0.4rem;
+	/*font-size:1rem;*/
 	margin:0.3rem auto;
 	border-radius: $tableHeader-radius;
 	border:$cell-border;
@@ -936,7 +939,7 @@ form td, form caption
 {
 	display: flex;
 	align-self: start;
-	height: inherit;
+	height: 1.8rem;
 }
 .g_cell_r{
 	width:auto;
@@ -946,9 +949,38 @@ form td, form caption
 }
 .g_cell_r input[type=checkbox]{
 	justify-self: start;
-	width:auto;
 	margin-left: 1rem;
+	/*visibility: hidden;*/
 }
+/* input[type=checkbox] {
+	visibility: hidden;
+  }
+input:checked ~ .w3docs:after {
+display: block;
+}  
+Creating a custom checkbox based on demand 
+.w3docs {
+position: absolute;
+top: 0;
+left: 0;
+/*height: 1.8rem;
+width: 1.8rem;
+height: 25px;
+width: 25px;
+border-radius: 3px;
+background-color: rgba(0, 0, 0, 0.616);
+}
+.w3docs:after {
+left: 8px;
+bottom: 5px;
+width: 6px;
+height: 12px;
+border: solid white;
+border-width: 0 4px 4px 0;
+-webkit-transform: rotate(45deg);
+-ms-transform: rotate(45deg);
+transform: rotate(45deg);
+}*/
 
 /*
 .fileinput-button input {

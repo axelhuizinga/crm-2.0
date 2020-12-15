@@ -182,11 +182,14 @@ class FormApi
 		var eTarget:Element = cast(e.target, Element);
 		var targetSection = eTarget.dataset.section;
 		trace('>>$targetSection<< ${comp.props.match.params.section}');
+		if(eTarget.dataset.then != null)
+			comp.props.location.state.extend({then:eTarget.dataset.then});
+		trace(comp.props.location.state);		
 		if(targetSection !=null && targetSection != comp.props.match.params.section)
 		{
 			trace('$targetSection.$method');
-			trace(comp.props.location.state);
-			if(method=='restore' && comp.props.location.state!=null&&comp.props.location.state.activeContactUrl!=null)
+
+			if(method=='reset' && comp.props.location.state!=null&&comp.props.location.state.activeContactUrl!=null)
 			{
 				trace('goBack');
 				comp.props.history.goBack();

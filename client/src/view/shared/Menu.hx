@@ -160,22 +160,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			trace(type);
 			return switch(type)
 			{
-				//case Filter: jsx('<$Filter  key=${i++}/>');
-/*
-					jsx('
-					<div key=${ki++} className="g_row_2" role="rowgroup">
-						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r" role="cell">
-							Dummy
-						</div>
-					</div>');
-					jsx('
-					<div id="uploadForm"  class="fileinput-button" >
-						<button style="white-space: nowrap;margin-top:3px;">${field.label}</button>
-						<!-- The file input field used as target for the file upload widget -->
-						<input id="fileupload" type="file" name="${field.name}"  >
-					</div>' id="${item.formField.name}"
-				);*/				
+				//case Filter: jsx('<$Filter  key=${i++}/>');				
 				case File:
 					jsx('<div key=${i++}  id="uploadForm"   className="uploadBox" >
 					<input  id=${item.formField.name} type="file" name=${item.formField.name} onChange=${item.formField.handleChange} className="fileinput"  />
@@ -191,14 +176,8 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					<Button onClick=${item.handler} data-action=${item.action}
 				data-section=${item.section} disabled=${item.disabled}>${item.formField.submit}</Button>
 				</div>');
-					/*jsx('<label for="${item.formField.name} ">+</label>
-					<div key=${i++} id="uploadForm"  class="fileinput-button">
-					<Button style="white-space: nowrap;margin-top:3px;">${item.label}</Button>
-					<!-- The file input field used as target for the file upload widget -->
-					<input id="fileupload" type="file" name="${item.name}"  >
-					</div>
-					');*/
-				default:jsx('<Button key=${i++} onClick=${props.itemHandler} data-action=${item.action}
+
+				default:jsx('<Button key=${i++} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.closeAfter?'close':null}
 				data-section=${item.section} disabled=${item.disabled}>${item.label}</Button>');
 			}
 		}).array();

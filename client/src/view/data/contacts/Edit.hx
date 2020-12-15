@@ -69,7 +69,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Schließen',action:'close'},		
 		{label:'Speichern + Schließen',action:'update', closeAfter:true},
 		{label:'Speichern',action:'update'},
-		{label:'Zurücksetzen',action:'reset',onlySm: true}
+		{label:'Zurücksetzen',action:'reset'}
 	];
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;

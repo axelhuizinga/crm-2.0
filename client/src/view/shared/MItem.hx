@@ -7,6 +7,7 @@ import haxe.Constraints.Function;
 typedef MItem =
 {
 	?action:String,
+	?actions:Array<Function>,
 	?className:String,
 	?formField:FormField,
 	?section:String,
@@ -15,6 +16,6 @@ typedef MItem =
 	?img:String,
 	?info:String,
 	?label:String,
-	?closeAfter:Bool,	
+	?then:String,	
 	?onlySm:Bool	
 }

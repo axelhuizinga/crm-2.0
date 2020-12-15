@@ -45,7 +45,7 @@ import react.intl.ReactIntl;
 import react.intl.comp.IntlProvider;
 import redux.react.Provider;
 import redux.Redux;
-import redux.Store;
+import redux.Store; 
 import redux.StoreBuilder.*;
 import redux.thunk.Thunk;
 import redux.thunk.ThunkMiddleware;
@@ -54,7 +54,7 @@ import view.shared.FormBuilder;
 
 using Lambda;
 using StringTools;
-
+ 
 typedef AppProps =
 {
 	?waiting:Bool

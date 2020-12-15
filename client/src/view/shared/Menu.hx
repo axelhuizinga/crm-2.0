@@ -177,7 +177,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				data-section=${item.section} disabled=${item.disabled}>${item.formField.submit}</Button>
 				</div>');
 
-				default:jsx('<Button key=${i++} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.closeAfter?'close':null}
+				default:jsx('<Button key=${i++} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then}
 				data-section=${item.section} disabled=${item.disabled}>${item.label}</Button>');
 			}
 		}).array();

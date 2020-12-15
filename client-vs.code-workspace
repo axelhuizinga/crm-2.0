@@ -2,7 +2,15 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "client"
+		},
+		{
+			"path": "client/src"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"workbench.settings.enableNaturalLanguageSearch": false
+	}
 }

@@ -67,7 +67,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
 		{label:'Schließen',action:'close'},		
-		{label:'Speichern + Schließen',action:'update', closeAfter:true},
+		{label:'Speichern + Schließen',action:'update', then:'close'},
 		{label:'Speichern',action:'update'},
 		{label:'Zurücksetzen',action:'reset'}
 	];
@@ -87,9 +87,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
+		/*var menuItems:Array<MItem> = [
+			{label:'Schließen',action:'close'},		
+			{label:'Speichern + Schließen',action:'update', actions:[update,close]},
+			{label:'Speichern',action:'update'},
+			{label:'Zurücksetzen',action:'reset',onlySm: false}
+		];		*/
 		baseForm = new BaseForm(this);
 		trace(props.match.params);
-
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/open(\/)*$/.match(props.match.params.action) )
 		{
@@ -287,7 +292,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//trace(Reflect.fields(aState));
 		if(state.actualState != null)
-			trace(state.actualState.fieldsModified.length);
+			trace('length:' + state.actualState.fieldsModified.length + ':' + state.actualState.fieldsModified.join('|') );
 		if(state.actualState == null || state.actualState.fieldsModified.length==0)
 			return;
 		var data2save = state.actualState.allModified();

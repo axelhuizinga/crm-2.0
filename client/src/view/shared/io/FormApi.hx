@@ -602,9 +602,10 @@ class FormApi
 			//trace(comp.state);
 			//trace(Type.getClass(comp.state.values));
 			//trace(comp.state.values != null && comp.state.values.get('loadResult' !=null));
-			//trace(comp.state.values.get('loadResult'));
+			trace(comp.state.values.get('loadResult'));
 			if(comp.state.values != null && comp.state.values.get('loadResult') !=null)
 			{
+				trace(comp.state.values.get('closeAfter')!=-1?'Y':'N');
 				if(comp.state.values.get('closeAfter')!=-1)
 				var t:Timer = Timer.delay(closeWait,
 					(comp.state.values.get('closeAfter')!=null?comp.state.values.get('closeAfter'):8000));

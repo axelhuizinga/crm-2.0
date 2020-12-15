@@ -9,7 +9,6 @@
 /* bulma preload variables */
 $control-height: auto;
 $control-line-height: 1.0;
-
 @import "../../node_modules/react-bulma-components/node_modules/bulma/sass/utilities/initial-variables.sass";
 
 $pagination-focus-border-color:$grey-lighter;
@@ -1033,7 +1032,8 @@ div.tooltip {
 	shape-rendering: crispEdges;
 }
 .chartBox text{
-	alignment-baseline:central;
+	/*alignment-baseline:central;*/
+	vertical-align: baseline;
 }
 $lightGradient:linear-gradient(0deg $darkBlue, $paleBlue);
 .stop-bottom{

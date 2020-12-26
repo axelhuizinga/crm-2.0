@@ -1,4 +1,6 @@
 package model.auth;
+import php.Const;
+import haxe.ds.Either;
 import php.Global;
 import haxe.Json;
 import db.DbUser;
@@ -197,16 +199,17 @@ class User extends Model
 			dbData.dataInfo['loggedIn'] = 'true';
 			trace(res['user_name']+':'+res['change_pass_required']);
 			trace('change_pass_required'+(res['change_pass_required']==true || res['change_pass_required']=='true'?'Y':'N'));
-			if(login){					
+			/*if(login){					
 				// UPDATE LAST_LOGIN
 				var rTime:String = DateTools.format(Date.now(), "'%Y-%m-%d %H:%M:%S'");//,request=?
 				var update:PDOStatement = S.dbh.prepare('UPDATE users SET last_login=${rTime} WHERE id=:id',Syntax.array(null));
 				var success:Bool = Model.paramExecute(update, Lib.associativeArrayOfObject({':id':res['id']}));
 				trace(update.errorCode());
-				//trace(update.errorInfo());
+				trace(res['id']);
+				trace(Std.string(success));
 				dbData.dataInfo['last_login'] = rTime;
 				//UPDATE DONE			
-			}
+			}*/
 			if (res['change_pass_required']==true || res['change_pass_required']=='true')
 				return UserAuth.PassChangeRequired(dbData);
 			return UserAuth.AuthOK(dbData);			
@@ -248,6 +251,16 @@ class User extends Model
 				dbData.dataInfo['change_pass_required'] = Std.string(Type.enumConstructor(uath) == 'PassChangeRequired');
 				//me.dbData.dataInfo['user_data'].id = jwt;
 				dbData.dataInfo['jwt'] = jwt;
+				var u:Int = S.dbh.exec(
+					'UPDATE ${S.dbSchema}.users SET last_login=NOW() WHERE id=${dbData.dataInfo["id"]}');
+				if (u==0)
+				{
+					trace('could not update last_login:' + Const.PHP_EOL 
+						+ S.dbh.errorInfo().nativeArray2String());
+				}
+				else{
+					dbData.dataInfo['last_login'] = DateTools.format(Date.now(), "'%Y-%m-%d %H:%M:%S'");
+				}					
 				//trace(dbData);
 				S.sendInfo(dbData);
 				return true;

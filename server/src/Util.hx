@@ -1,4 +1,5 @@
 package;
+import php.Const;
 import php.Global;
 import shared.DbData;
 import php.db.PDO;
@@ -178,5 +179,15 @@ class Util
 	public static inline function randomString(length:Int, ?charactersToUse = "abcdefghijklmnopqrstuvwxyz_§!%ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"):String
 	{
 		return Random.string(length,charactersToUse);
+	}
+
+	public static function nativeArray2String(n:NativeArray):String {
+		var s:String = '';
+		var ki:KeyValueIterator<String,Dynamic> = n.keyValueIterator();
+		while (ki.hasNext()){
+			var kv = ki.next();
+			s += '${kv.key}=>${kv.value}' + Const.PHP_EOL;
+		}
+		return s;
 	}
 }

@@ -74,15 +74,14 @@ class SyncExternal extends Model
     public function syncUserDetails():Void
     {
 		var res:NativeArray = fetchAll("SELECT user, full_name, active FROM asterisk.vicidial_users 
-		WHERE CAST(user AS UNSIGNED)>0 AND active='Y'",S.syncDbh,'syncUserDetails',3);
+		WHERE CAST(user AS UNSIGNED)>0 AND active='Y'",S.syncDbh,'syncUserDetails',PDO.FETCH_BOTH);
 		trace(res);
 		if(res != null)
 		{
 			//sendRows(res);
 			var updated:Int = syncUserIds(res);
 			S.sendInfo(dbData,['updated'=>updated]);
-		}
-			
+		}			
 		else 
 			S.sendInfo(dbData,['syncUserDetail'=>'no results???']);
 		trace('done');
@@ -146,19 +145,17 @@ class SyncExternal extends Model
 			trace(
 				comment(unindent,format)/**
 				UPDATE users 
-				SET contact=contacts.id, active=${nrow[2]=='Y'}
+				SET active=${nrow[2]=='Y'}
 				FROM contacts
-				WHERE first_name='${first_name}' AND last_name='${last_name}'
-				AND "users"."mandator"="contacts"."mandator" and user_name='$user';
+				WHERE contact=contacts.id;
 			**/
 			);
 			updated += updateRows(
 				comment(unindent,format)/**
 				UPDATE users 
-				SET contact=contacts.id, active=${nrow[2]=='Y'}
+				SET active=${nrow[2]=='Y'}
 				FROM contacts
-				WHERE first_name='${first_name}' AND last_name='${last_name}'
-				AND "users"."mandator"="contacts"."mandator" and user_name='$user';
+				WHERE contact=contacts.id;
 			**/,S.dbh);
 		}
 		return updated;	

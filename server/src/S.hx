@@ -584,7 +584,7 @@ class S
 
 	static function saveRequest(dbQuery:DbQuery):Bool
 	{
-		//trace(Json.stringify(dbQuery));
+		trace(Json.stringify(dbQuery));
 		var stmt:PDOStatement = dbh.prepare(
 			'INSERT INTO activity(action,request,"user") VALUES(:action,:request,:user)' ,Syntax.array(null));
 

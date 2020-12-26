@@ -226,7 +226,7 @@ class FormApi
 			return true;
 		}
 		else 
-			trace(comp+'.$method not found');
+			trace('.$method not found');
 		return false;		
 	}
 

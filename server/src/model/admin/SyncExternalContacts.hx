@@ -30,10 +30,11 @@ using Util;
  * @author axel@bi4.me
  */
 
-class SyncExternalClients extends Model 
+class SyncExternalContacts extends Model 
 {
 	var keys:Array<String>;	
 	var synced:Int;
+
 	public function new(param:Map<String,Dynamic>):Void
 	{
 		super(param);	
@@ -45,12 +46,11 @@ class SyncExternalClients extends Model
 		else synced = 0;
 		keys = S.tableFields('contacts');
         trace('calling ${action}');
-		trace(action);
+		//trace(action);
 		//SWITCH Call either an instance method directly or use the shared Model query execution
 		switch(action ){
-			case 'syncAll':
-				syncAll();
-			
+			case 'importContacts':
+				importContacts();			
 			case 'syncImportDeals':
 				syncImportDeals();
 			case 'mergeContacts':
@@ -61,12 +61,14 @@ class SyncExternalClients extends Model
 	}
 
 	function  getMissing() {
+		var offset:Int = ( param['offset']>0?param['offset']:0);
 		var sql:String = '
 		SELECT DISTINCT(cl.client_id) FROM clients cl 
 INNER JOIN pay_plan pp 
 ON pp.client_id=cl.client_id 
 INNER JOIN pay_source ps 
-ON ps.client_id = cl.client_id;';
+ON ps.client_id = cl.client_id;
+WHERE cl.client_id>$offset';
         var stmt:PDOStatement = S.syncDbh.query(sql);
 		if(untyped stmt==false)
 		{
@@ -81,7 +83,7 @@ ON ps.client_id = cl.client_id;';
 		
 		trace(Syntax.code("count({0})",res));
 				
-		var cleared:Int = S.dbh.exec('TRUNCATE contact_ids');
+		//var cleared:Int = S.dbh.exec('TRUNCATE contact_ids');
 		if(S.dbh.errorCode() !='00000')
 		{
 			trace(S.dbh.errorInfo());
@@ -89,24 +91,18 @@ ON ps.client_id = cl.client_id;';
 		else 	
 			trace('cleared all IDs from contact_ids');
 		var cIDs:NativeArray = Syntax.code("array_map(function($r){return $r[0];}, {0})",res);
+		
 		trace(Syntax.code("print_r({0}[0],1)", cIDs));
-		var ok:Bool = S.dbh.pgsqlCopyFromArray("contact_ids",cIDs);
-		if(!ok)
-		{
-			trace(S.dbh.errorInfo());
-		}
-		if(S.dbh.errorCode() !='00000')
-		{
-			trace(S.dbh.errorInfo());
-		}
-		sql = comment(unindent, format)/*
+		var IDs = Syntax.code("implode(',',{0})", cIDs);
+
+		sql = comment(unindent, format)/**
 		SELECT ARRAY_TO_STRING(array_agg(cid.id),',') from contact_ids cid
 		left join 
 		(SELECT 1 as gg,id from contacts) c
 		ON cid.id=c.id
 		where c.id IS NULL
 		GROUP BY gg;
-		*/;
+		**/;
 		stmt = S.dbh.query(sql);
 		if(untyped stmt==false)
 		{
@@ -153,7 +149,7 @@ LIMIT ${Util.limit()}
 		for(row in res.iterator())
 		{			
 			//trace(row);
-			//S.sendErrors(dbData,['syncAll'=>'NOTOK']);
+			//S.sendErrors(dbData,['importContacts'=>'NOTOK']);
 			var stmt:PDOStatement = upsertClient(row);
 			try{
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
@@ -245,8 +241,53 @@ LIMIT ${Util.limit()}
 		S.sendInfo(dbData,['OK'=> stmt.rowCount()]);
 	}
 
-	function syncAll() {
+	function createOrUpdateAction(){
+		
+		if(param['id']==0)
+		{
+			//GET MAX actions id for user
+			var sql:String = comment(unindent,format)/**
+			SELECT user_max_action_id(actions) FROM users WHERE id=${S.dbQuery.dbUser.id}
+			**/;
+			trace(sql);
+			var stmt:PDOStatement = S.dbh.query(sql);			
+			if(untyped stmt==false)
+			{
+				trace(S.dbh.errorInfo());
+				S.sendErrors(dbData, ['GET MAX actions id for user:'=>S.dbh.errorInfo()]);
+			}
+			if(stmt.errorCode() !='00000')
+			{
+				trace(stmt.errorInfo());
+			}
+			if(stmt.execute()){
+				var res:Dynamic = stmt.fetch(PDO.FETCH_OBJ);
+				trace('result:' + res);
+				param['id'] = (res.user_max_action_id==null?1:res.user_max_action_id+1);
+			}
+			else {
+				trace(stmt.errorInfo());
+			}
+			//PDO.FETCH_COLUMN):null);
+			//S.sendErrors(dbData, ['GOT MAX actions id for user:'=>'OK :)']);
+			//S.send('GOT new action id for user:' + param['id']);
+			dbData.dataInfo.set('id', param['id']);
+			trace(dbData.dataInfo);
+			//S.sendData(dbData, null);
+			S.sendInfo(dbData);			
+			//S.sendInfo(dbData,['id' => param['id']]);			
+			//var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);		
+		}
+
+		var actionFields:Array<String> = [
+			'action','classPath','offset','onlyNew','id','limit','maxImport'//,'totalRecords'
+		];		
+		//return '{"action":${props.action}, "classP}' //DBAccessAction
+	}
+
+	function importContacts() {
 		trace(param);
+		createOrUpdateAction();
 		getMissing();
 		//dbAccessProps = initDbAccessProps();
 		if(param['offset']==null)
@@ -259,7 +300,7 @@ LIMIT ${Util.limit()}
 		}
 		trace(param);
 		importCrmData();
-		S.sendErrors(dbData,['syncAll'=>'NOTOK']);
+		S.sendErrors(dbData,['importContacts'=>'NOTOK']);
 	}
 
     public function importCrmData():Void
@@ -270,7 +311,7 @@ LIMIT ${Util.limit()}
 		for(row in cData.iterator())
 		{			
 			//trace(row);
-			//S.sendErrors(dbData,['syncAll'=>'NOTOK']);
+			//S.sendErrors(dbData,['importContacts'=>'NOTOK']);
 			var stmt:PDOStatement = upsertClient(row);
 			try{
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
@@ -299,7 +340,7 @@ LIMIT ${Util.limit()}
 		for(row in cData.iterator())
 		{			
 			//trace(row);
-			//S.sendErrors(dbData,['syncAll'=>'NOTOK']);
+			//S.sendErrors(dbData,['importContacts'=>'NOTOK']);
 			var stmt:PDOStatement = upsertClient(row);
 			try{
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
@@ -334,11 +375,11 @@ LIMIT ${Util.limit()}
 			].map(function (k) return ' "$k"=:$k').join(',');
 		
         var sql:String = comment(unindent, format) /*
-				INSERT INTO contacts (${cNames.join(',')})
-				VALUES (${cPlaceholders.join(',')})
-				ON CONFLICT (id) DO UPDATE
-				SET $cSet returning id;
-			*/;
+			INSERT INTO contacts (${cNames.join(',')})
+			VALUES (${cPlaceholders.join(',')})
+			ON CONFLICT (id) DO UPDATE
+			SET $cSet returning id;
+		*/;
 		//trace(sql);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		Util.bindClientData('contacts',stmt,rD,dbData);
@@ -385,6 +426,7 @@ LIMIT ${Util.limit()}
 	{		        
 		trace(min_id);
 		//S.sendErrors(null,['devbreak'=>min_id]);
+		var min_age:Int = ( param['min_age']>0?param['min_age']:18);
 		var firstBatch:Bool = (param['offset']=='0');
 		var selectTotalCount:String = '';
 		if(Std.parseInt(param['limit'])>10000)
@@ -399,7 +441,7 @@ LIMIT ${Util.limit()}
 			selectTotalCount = 'SQL_CALC_FOUND_ROWS';
 		}
         var sql = comment(unindent,format)/*
-		SELECT $selectTotalCount cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(TO_DAYS(STR_TO_DATE(cl.birth_date, '%Y-%m-%d'))>500000 ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,
+		SELECT $selectTotalCount cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(YEAR(FROM_DAYS(DATEDIFF(CURDATE(),cl.birth_date)))>$min_age ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,
 pp.pay_plan_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,IF(pp.product='K',2,3) product ,pp.agent,pp.agency_project project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,pp.cycle_start_date,
  ps.pay_source_id,ps.debtor,ps.bank_name,ps.account,ps.blz,ps.iban,ps.sign_date,ps.pay_source_state,ps.creation_date account_creation_date,
 vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,

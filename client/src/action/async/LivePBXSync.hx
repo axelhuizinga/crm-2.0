@@ -1,5 +1,7 @@
 package action.async;
 
+import db.DBAccessProps;
+//import db.DBAccessProps;
 import react.ReactUtil;
 import js.lib.Promise;
 import haxe.ds.IntMap;
@@ -36,8 +38,17 @@ class LivePBXSync
 		
 	}
 
-	public static function syncAll(props:DBAccessProps) 
+	/*static function createOrUpdateAction(props:DBAccessProps):DBAccessAction{
+		
+		var actionFields:Array<String> = [
+			'action','classPath','offset','onlyNew','id','limit','maxImport'//,'totalRecords'
+		];		
+		//return '{"action":${props.action}, "classP}'
+	}*/
+
+	public static function importContacts(props:DBAccessProps) 
 	{
+
 		trace('${props.table} ${props.maxImport} ${props.limit} ${props.offset}');
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
@@ -60,6 +71,7 @@ class LivePBXSync
 						classPath:props.classPath,
 						action:props.action,
 						extDB:true,
+						id:(props.id == null?0:props.id),
 						limit:props.limit,
 						offset:props.offset,
 						table:props.table,
@@ -102,7 +114,7 @@ class LivePBXSync
 						if(props.offset < props.maxImport){
 							//LOOP UNTIL LIMIT
 							trace('next loop:${props}');
-							return dispatch(syncAll(props));
+							return dispatch(importContacts(props));
 						}
 						
 						return null;
@@ -137,7 +149,7 @@ class LivePBXSync
 					limit:props.limit,
 					offset:props.offset,
 					filter:props.filter,
-					firstBatch:props.offset==0, 
+					//firstBatch:props.offset==0, 
 					maxImport:props.maxImport==null?1000:props.maxImport,
 					devIP:App.devIP
 				},
@@ -175,7 +187,7 @@ class LivePBXSync
 					if(props.offset < props.maxImport){
 						//LOOP UNTIL LIMIT
 						trace('next loop:${props}');
-						return dispatch(syncAll(props));
+						return dispatch(importContacts(props));
 					}
 						
 					return null;
@@ -213,7 +225,7 @@ class LivePBXSync
 					limit:props.limit,
 					offset:props.offset,
 					filter:props.filter,
-					firstBatch:props.offset==0, 
+					//firstBatch:props.offset==0, 
 					maxImport:props.maxImport==null?1000:props.maxImport,
 					devIP:App.devIP
 				},
@@ -251,7 +263,7 @@ class LivePBXSync
 					if(props.offset < props.maxImport){
 						//LOOP UNTIL LIMIT
 						trace('next loop:${props}');
-						return dispatch(syncAll(props));
+						return dispatch(importContacts(props));
 					}
 						
 					return null;
@@ -261,8 +273,9 @@ class LivePBXSync
 		});
 	}	
 
-	/* GET NEW CONTACTS FROM OLD fly_crm SYSTEM*/
-	public static function importAll(props:DBAccessProps) 
+	/* GET NEW CONTACTS FROM OLD fly_crm server */
+
+	public static function importContacts2(props:DBAccessProps) 
 	{
 		trace('${props.table} ${props.maxImport} ${props.limit} ${props.offset}');
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
@@ -337,7 +350,7 @@ class LivePBXSync
 								props.offset += data.dataInfo['got'];
 							}																							
 							trace('next loop:${props}');
-							return dispatch(importAll(props));
+							return dispatch(importContacts(props));
 						}
 						trace((data.dataInfo['got'] >0 && data.dataInfo['last_import_cid'] != data.dataInfo['max_client_id'] ? 'loop':'no'));
 						return null;
@@ -346,8 +359,7 @@ class LivePBXSync
 			return null;
 		});
 	}
-
-	
+		
 	public static function importDeals(props:DBAccessProps) 
 	{
 		trace('${props.maxImport} ${props.limit} ${props.offset}');
@@ -376,7 +388,8 @@ class LivePBXSync
 					offset:props.offset,
 					onlyNew:props.onlyNew,
 					filter:props.filter,
-					firstBatch:props.offset==0, 
+					min_age:70,
+					//param['min_age']firstBatch:props.offset==0, 
 					maxImport:props.maxImport==null?1000:props.maxImport,
 					devIP:App.devIP
 				},
@@ -422,7 +435,7 @@ class LivePBXSync
 								props.offset += data.dataInfo['got'];
 							}																							
 							trace('next loop:${props}');
-							return dispatch(importAll(props));
+							return dispatch(importContacts(props));
 						}
 						trace((data.dataInfo['got'] >0 && data.dataInfo['last_import_cid'] != data.dataInfo['max_client_id'] ? 'loop':'no'));
 						return null;

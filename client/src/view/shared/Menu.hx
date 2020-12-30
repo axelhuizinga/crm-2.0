@@ -236,7 +236,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		aW = menuRef.current.getElementsByClassName('panel').item(0).offsetWidth;
 		trace(aW);//
 		if(state.sameWidth==null)
-		setState({sameWidth:aW},function (){
+		this.setState({sameWidth:aW},function (){
 			trace("what's up?");
 		});
 	}

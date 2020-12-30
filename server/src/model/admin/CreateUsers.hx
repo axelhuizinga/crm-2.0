@@ -171,7 +171,7 @@ class CreateUsers extends Model
 			}
 			var initialPass:String = Util.randomString(13);
 			var external_text = row2jsonb(iRow);
-			//id contact last_login password user_name active 	edited_by 	editing 	settings 	external 	user_group 	changePassRequired
+			//id contact last_login password user_name active 	edited_by 	actions 	settings 	external 	user_group 	changePassRequired
 			var sql = comment(unindent, format) /*
 			WITH user_group AS (SELECT id FROM user_groups WHERE name='${iRow.user_group}') 
 			INSERT INTO crm.users VALUES (DEFAULT, $contactId, DEFAULT, CRYPT('$initialPass', gen_salt('bf', 8)), ${iRow.user}, 

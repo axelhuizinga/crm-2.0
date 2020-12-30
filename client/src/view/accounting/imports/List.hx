@@ -19,12 +19,11 @@ import haxe.Unserializer;
 import js.html.XMLHttpRequest;
 import shared.DbDataTools;
 import action.AppAction;
-import db.DbQuery.DbQueryParam;
 import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
 import action.async.CRUD;
 import js.lib.Promise;
-import action.async.DBAccessProps;
+import db.DBAccessProps;
 import action.async.LivePBXSync;
 import state.AppState;
 import haxe.ds.StringMap;
@@ -168,7 +167,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-			load: function(param:DbQueryParam) return dispatch(CRUD.read(param)),
+			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
 			storeData:function(id:String, action:DataAction)
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
@@ -179,7 +178,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				trace(data);
 				dispatch(LiveDataAccess.sSelect({id:id,data:data,match:match,selectType: selectType}));
 			},
-			update: function(param:DbQueryParam) return dispatch(CRUD.update(param)),
+			update: function(param:DBAccessProps) return dispatch(CRUD.update(param)),
 
         }
 	}	

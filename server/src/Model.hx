@@ -944,7 +944,7 @@ class Model
 				}
 				if(tableProps.exists('filter'))
 					filterSql += buildCond(tableProps.get('filter'));
-				trace('filterSql:$filterSql::${}');
+				trace('filterSql:$filterSql::${1}');
 			}			
 			queryFields += fields.length > 0 ? fields.join(','):'';
 		}		

@@ -28,7 +28,7 @@ using Util;
 
 class SyncExternal extends Model 
 {
-	var sEC:SyncExternalClients;
+	var sEC:SyncExternalContacts;
 
 	public function new(param:Map<String,Dynamic>):Void
 	{
@@ -51,7 +51,7 @@ class SyncExternal extends Model
 
 	function syncAll() {
 		trace(param);
-		sEC = new SyncExternalClients(param);
+		sEC = new SyncExternalContacts(param);
 		S.sendErrors(dbData,['syncAll'=>'OK']);
 	}
 

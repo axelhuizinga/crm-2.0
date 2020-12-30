@@ -18,12 +18,12 @@ import haxe.Unserializer;
 import js.html.XMLHttpRequest;
 import shared.DbDataTools;
 import action.AppAction;
-import db.DbQuery.DbQueryParam;
+import db.DbQuery.DBAccessProps;
 import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
 import action.async.CRUD;
 import js.lib.Promise;
-import action.async.DBAccessProps;
+import db.DBAccessProps;
 import action.async.LivePBXSync;
 import state.AppState;
 import haxe.ds.StringMap;
@@ -132,7 +132,7 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-			load: function(param:DbQueryParam) return dispatch(CRUD.read(param)),
+			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
 			storeData:function(id:String, action:DataAction)
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
@@ -212,7 +212,7 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 		
 	}
 
-	public static function upload(param:DbQueryParam) 
+	public static function upload(param:DBAccessProps) 
 	{	trace(param.action);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
 			trace(param);

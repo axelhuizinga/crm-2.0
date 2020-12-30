@@ -1,4 +1,5 @@
 package db;
+import db.DBAccessProps;
 import db.DbUser;
 import db.DbRelation;
 import haxe.ds.Map;
@@ -11,40 +12,13 @@ import state.UserState;
  * @author axel@cunity.me
  */
 
-typedef DbQueryResolveMessage = {
-	?success:String,
-	?failure:String
-}
-typedef DbQueryParam = {
-	?action:String,	
-	?classPath:String,
-	?extDB:Bool,
-	?relations:Map<String,DbRelation>,
-	?dataSource:Map<String,Map<String,Dynamic>>,	
-	?dbUser:DbUser,
-	?devIP:String,	
-	?filter:Dynamic,
-	?data:Dynamic,	
-	?firstBatch:Bool,
-	?onlyNew:Bool,
-	?limit:Int,	
-	?mandator:Int,
-	?maxImport:Int,
-	?pages:Int,
-	?resolveMessage:DbQueryResolveMessage,
-	?offset:Int,
-	?table:String,
-	?totalRecords:Int,
-	?userState:UserState	
-};
-
 class DbQuery implements hxbit.Serializable 
 {
 	@:s public var dbParams:Map<String,Dynamic>;
 	@:s public var relations:Map<String,DbRelation>;
 	@:s public var dbUser:DbUser;
 
-	public function new(?dp:DbQueryParam) 
+	public function new(?dp:DBAccessProps) 
 	{
 		dbParams = new Map();
 		if(dp!=null){
@@ -57,7 +31,8 @@ class DbQuery implements hxbit.Serializable
 					default:
 						var v = Reflect.field(dp,f);
 						//if(v!=null)
-							dbParams.set(f, v);
+						dbParams.set(f, v);
+						//trace(f +':'+dbParams.get(f));
 				}
 			}			
 		}

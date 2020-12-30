@@ -111,7 +111,7 @@ class DataStore
 				store.dispatch(DBAccess.execute(data));
 				//next();
 			case Sync(data):
-				store.dispatch(LivePBXSync.syncAll(data));
+				store.dispatch(LivePBXSync.importContacts(data));
 			default: next();
 		}
 	}	

@@ -1,7 +1,7 @@
 package view.shared.io;
-import db.DbQuery.DbQueryParam;
+
+import db.DBAccessProps;
 import action.DataAction;
-import action.async.DBAccessProps;
 import view.shared.io.FormApi;
 import haxe.Constraints.Function;
 import haxe.ds.IntMap;
@@ -25,7 +25,7 @@ typedef DataFormProps =
 	?filter:String,
 	?fullWidth:Bool,	
 	?limit:Int,	
-	?load:DbQueryParam->Promise<DbData>,
+	?load:DBAccessProps->Promise<DbData>,
 	?parentComponent:Dynamic,
 	?select:Function, // Int->IntMap<Map<String,Dynamic>>->RouterMatch->SelectType,
 	?setStateFromChild:FormState->Void,
@@ -36,7 +36,7 @@ typedef DataFormProps =
 	?storeData:String->DataAction->Void,
 	?storeFormChange:String->FormState->Void,
 	?render:FormState->ReactFragment,
-	?update:DbQueryParam->Promise<DbData>,
+	?update:DBAccessProps->Promise<DbData>,
 	userState:UserState,
 	model:String
 }

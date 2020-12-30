@@ -1,5 +1,6 @@
 package view.accounting.booking;
 
+import db.DBAccessProps;
 import model.accounting.ReturnDebitModel;
 import js.html.HTMLCollection;
 import js.Browser;
@@ -10,7 +11,6 @@ import view.shared.io.BaseForm;
 import redux.Redux.Dispatch;
 import action.AppAction;
 import action.async.CRUD;
-import db.DbQuery.DbQueryParam;
 import model.Deal;
 import state.AppState;
 import haxe.Constraints.Function;
@@ -137,7 +137,7 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		trace('here we should be ready to load');
         return {
-            load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
+            load: function(param:DBAccessProps) return dispatch(CRUD.read(param))
         };
 	}
 	
@@ -218,7 +218,7 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 		//	table:'contacts',
 			userState:props.userState
 		};*/
-		var dbQ:DbQueryParam = {
+		var dbQ:DBAccessProps = {
 			classPath:'data.Deals',
 			action:'update',
 			data:data2save,

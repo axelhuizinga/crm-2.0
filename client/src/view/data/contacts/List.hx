@@ -1,9 +1,9 @@
 package view.data.contacts;
 import action.async.CRUD;
-import db.DbQuery.DbQueryParam;
+import db.DBAccessProps;
 import redux.Redux.Dispatch;
 import js.lib.Promise;
-import action.async.DBAccessProps;
+import db.DBAccessProps;
 import react.router.RouterMatch;
 import js.Browser;
 import js.html.NodeList;
@@ -277,7 +277,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-            load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
+            load: function(param:DBAccessProps) return dispatch(CRUD.read(param))
         };
 	}
 

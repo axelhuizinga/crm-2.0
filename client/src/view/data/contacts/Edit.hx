@@ -1,7 +1,7 @@
 package view.data.contacts;
 import db.DbRelation;
 import db.DbQuery;
-import db.DbQuery.DbQueryParam;
+import db.DBAccessProps;
 import action.async.CRUD;
 import haxe.CallStack;
 import me.cunity.debug.Out;
@@ -13,7 +13,6 @@ import haxe.ds.IntMap;
 import action.AppAction;
 import action.DataAction;
 import action.async.DBAccess;
-import action.async.DBAccessProps;
 import bulma_components.Button;
 import js.html.HTMLOptionsCollection;
 import js.html.HTMLPropertiesCollection;
@@ -309,7 +308,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//	table:'contacts',
 			userState:props.userState
 		};
-		var dbQ:DbQueryParam = {
+		var dbQ:DBAccessProps = {
 			classPath:'data.Contacts',
 			action:'update',
 			data:data2save,
@@ -473,7 +472,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		trace('here we should be ready to load');
         return {
-            load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
+            load: function(param:DBAccessProps) return dispatch(CRUD.read(param))
         };
 	}
 		

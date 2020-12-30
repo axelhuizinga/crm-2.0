@@ -4,8 +4,7 @@ import js.Browser;
 import js.html.NodeList;
 import js.html.TableRowElement;
 import react.router.RouterMatch;
-import db.DbQuery.DbQueryParam;
-import action.async.DBAccessProps;
+import db.DBAccessProps;
 import view.shared.io.BaseForm;
 import redux.Redux.Dispatch;
 import js.lib.Promise;
@@ -95,7 +94,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
     static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-            load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
+            load: function(param:DBAccessProps) return dispatch(CRUD.read(param))
         };
 	}
 		

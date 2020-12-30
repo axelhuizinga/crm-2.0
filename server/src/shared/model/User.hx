@@ -15,8 +15,8 @@ typedef User =
 	?active:String,
 	//{"name":"edited_by","type":"bigint","default":"","attnum":"7","required":false}
 	?edited_by:Int,
-	//{"name":"editing","type":"jsonb","default":"'{}'::jsonb","attnum":"8","required":false}
-	?editing:String,
+	//{"name":"actions","type":"jsonb","default":"'{}'::jsonb","attnum":"8","required":false}
+	?actions:String,
 	//{"name":"settings","type":"jsonb","default":"'{}'::jsonb","attnum":"9","required":false}
 	?settings:String,
 	//{"name":"external","type":"jsonb","default":"'{}'::jsonb","attnum":"10","required":false}

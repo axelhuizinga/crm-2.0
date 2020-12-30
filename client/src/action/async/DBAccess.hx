@@ -1,4 +1,6 @@
 package action.async;
+
+import db.DBAccessProps;
 import haxe.Json;
 import js.lib.Promise;
 import haxe.Unserializer;
@@ -21,8 +23,6 @@ import shared.DbData;
 import loader.BinaryLoader;
 import view.shared.OneOf;
 
-import db.DbQuery.DbQueryParam;
-using action.async.DBAccessProps;
 using shared.Utils;
 /**
  * ...
@@ -172,7 +172,7 @@ class DBAccess
 		});
 	}
 
-	public static function upload(param:DbQueryParam) 
+	public static function upload(param:DBAccessProps) 
 	{	trace(param.action);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
 			trace(param);

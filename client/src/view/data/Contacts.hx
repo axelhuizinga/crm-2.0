@@ -113,10 +113,11 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
     {
 		if(_strace) trace('ok');
         return {
-			storeData:function(id:String, action:DataAction)
+			//sync: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
+			/*storeData:function(id:String, action:DataAction)
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
-			},
+			},*/
 			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
 			{
 				if(_strace) trace('select:$id selectType:${selectType}');
@@ -178,5 +179,36 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	public function setStateFromChild(cState:FormState) {
 		setState(cState);
 	}
+
+	public function importClientList(_):Void
+		{
+			//FormApi.requests.push( 
+			/*BinaryLoader.create(
+				'${App.config.api}', 
+				{
+					id:props.user.id,
+					jwt:props.user.jwt,
+					fields:'id,table_name,field_name,disabled,element,required,use_as_index',
+					classPath:'admin.SyncExternalClients',
+					action:'importClientDetails',
+					devIP:App.devIP
+				},
+				function(data:DbData)
+				{
+					UserAccess.jwtCheck(data);
+					trace(data);
+					//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
+					trace(data.dataErrors.keys().hasNext());
+					if(!data.dataErrors.keys().hasNext())
+					{
+						setState({values: ['loadResult'=>'Verarbeite Importdaten...','closeAfter'=>8000]});
+					}
+					else 
+						setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});
+				}
+			);*/
+			trace('setState loading true => ${state.loading}');
+			setState({loading: true});
+		}
 
 }

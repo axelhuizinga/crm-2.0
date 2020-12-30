@@ -3,11 +3,10 @@ import haxe.Constraints.Function;
 import shared.DbParam;
 import shared.Utils;
 import action.AppAction;
-import db.DbQuery.DbQueryParam;
 import redux.Redux.Dispatch;
 import action.async.CRUD;
 import js.lib.Promise;
-import action.async.DBAccessProps;
+import db.DBAccessProps;
 import action.async.LivePBXSync;
 import state.AppState;
 import haxe.ds.Map;
@@ -48,7 +47,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		{label:'BuchungsDaten Abgleich',action:'importAllBookingRequests'},
 		
 		{label:'Stammdaten Import ',action:'importContacts'},
-		{label:'Stammdaten Update ',action:'importAll'},
+		{label:'Stammdaten Update ',action:'syncContacts'},
 		{label:'Abschlüsse Import ',action:'importDeals'},
 		{label:'Abschlüsse Update ',action:'syncDeals'},
 		{label:'Konten Import ',action:'importAccounts'},
@@ -99,7 +98,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-			load: function(param:DbQueryParam) return dispatch(CRUD.update(param))			
+			load: function(param:DBAccessProps) return dispatch(CRUD.update(param))			
         }
 	}			
 	public function createFieldList(ev:ReactEvent):Void
@@ -174,7 +173,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		doSyncAll(			
 		{
 			classPath:'admin.SyncExternalAccounts',
-			action:'syncAll',
+			action:'importContacts',
 			extDB: true,
 			filter:{mandator:'1'},
 			limit:1000,
@@ -187,7 +186,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		});
 	}
 
-	function doSyncAll(dbQueryParam:DbQueryParam) {
+	function doSyncAll(dbQueryParam:DBAccessProps) {
 		
 		var p:Promise<DbData> = props.load(dbQueryParam);
 		p.then(function(data:DbData){
@@ -228,16 +227,17 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	
-	public function importAll(_):Void
+	public function importContacts(_):Void
 	{
 		trace(props.userState.dbUser.first_name);
-		App.store.dispatch(action.async.LivePBXSync.syncAll({
+		App.store.dispatch(action.async.LivePBXSync.importContacts({
+			devIP:App.devIP,
 			limit:1000,
 			maxImport:4000,
 			userState:props.userState,
 			offset:0,
-			classPath:'admin.SyncExternal',
-			action:'syncAll'
+			classPath:'admin.SyncExternalContacts',
+			action:'importContacts'
 		}));
 	}
 
@@ -245,14 +245,14 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(props.userState.dbUser.first_name);
 		//var p:Promise<DbData> = cast 
-		App.store.dispatch(action.async.LivePBXSync.syncAll({
+		App.store.dispatch(action.async.LivePBXSync.importContacts({
 			limit:50000,
 			maxImport:50000,
 			userState:props.userState,
 			offset:100000,
 			table:'bank_transfers',
 			classPath:'admin.SyncExternalBookings',
-			action:'syncAll'
+			action:'importContacts'
 		}));
 	}
 
@@ -266,23 +266,24 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		}));
 	}	
 
-	public function importContacts():Void
+	/*public function importContacts():Void
+	{
+		trace(props.userState.dbUser.first_name);
+		App.store.dispatch(Status(Update(
 		{
-			trace(props.userState.dbUser.first_name);
-			App.store.dispatch(Status(Update(
-				{
-					className:' ',
-					text:'Importiere Kontakte'})));
-			App.store.dispatch(action.async.LivePBXSync.importAll({
-				limit:1000,
-				//maxImport:4000,
-				userState:props.userState,
-				offset:0,
-				onlyNew: true,
-				classPath:'admin.SyncExternalContacts',
-				action:'importAll'
-			}));
-		}	
+			className:' ',
+			text:'Importiere Kontakte'}
+		)));
+		App.store.dispatch(action.async.LivePBXSync.importAll({
+			limit:1000,
+			//maxImport:4000,
+			userState:props.userState,
+			offset:0,
+			onlyNew: true,
+			classPath:'admin.SyncExternalContacts',
+			action:'importAll'
+		}));
+	}*/
 
 	public function importDeals() {
 		App.store.dispatch(Status(Update(

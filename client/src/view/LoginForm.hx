@@ -90,7 +90,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		//setState({waiting:true});
 		img.onload = function(){
 			trace(state);
-			Timer.delay(function() setState({waiting:false}),500);
+			//Timer.delay(function() setState({waiting:false}),500);
 			trace('ok');
 		}
 		img.src = "img/schutzengelwerk-logo.png";

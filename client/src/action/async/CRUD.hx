@@ -1,6 +1,6 @@
 package action.async;
 import haxe.Json;
-import db.DbQuery.DbQueryParam;
+import db.DBAccessProps;
 import js.lib.Promise;
 import haxe.Unserializer;
 import action.AppAction;
@@ -20,7 +20,7 @@ import loader.BinaryLoader;
 import shared.DbData;
 import shared.DbDataTools;
 import view.shared.OneOf;
-import action.async.DBAccessProps;
+import db.DBAccessProps;
 using shared.Utils;
 /**
  * ...
@@ -38,7 +38,7 @@ class CRUD
 		
 	}
 
-	public static function read(param:DbQueryParam) 
+	public static function read(param:DBAccessProps) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			//trace(getState());
@@ -98,7 +98,7 @@ class CRUD
 		});
 	}
 	
-	public static function update(param:DbQueryParam) 
+	public static function update(param:DBAccessProps) 
 	{	trace(param.action);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
 			//trace(param);

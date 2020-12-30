@@ -24,7 +24,7 @@ import model.admin.SyncExternal;
 import model.admin.SyncExternalAccounts;
 //import model.admin.SyncExternalContacts;
 import model.admin.SyncExternalBookings;
-import model.admin.SyncExternalClients;
+import model.admin.SyncExternalContacts;
 import model.roles.Users;
 import model.stats.History;
 import model.tools.DB;
@@ -591,7 +591,14 @@ class S
 		var success:Bool = Model.paramExecute(stmt, 
 			Lib.associativeArrayOfObject(
 				{':action':params.get('classPath') + '.' + params.get('action'),
-				':user': dbQuery.dbUser.id, ':request': Json.stringify(dbQuery)})			
+				':user': dbQuery.dbUser.id, ':request': Json.stringify(dbQuery, function(key:Dynamic, value:Dynamic) {
+					return switch(key){
+						case 'password'|'new_pass':
+							'XXX';
+						default:
+							value;
+					} 	
+				})})			
 		);
 		if(Std.parseInt(stmt.errorCode())>0)
 			trace(stmt.errorInfo());
@@ -600,14 +607,15 @@ class S
 		
 	static function __init__() {
 		var branch:String = #if dev 'dev' #else 'crm' #end;
+		Syntax.code('require_once({0})', '../.$branch/functions.php');
 		Syntax.code('require_once({0})', '../.$branch/db.php');
 		Syntax.code("file_put_contents($appLog,'.', FILE_APPEND)");
-		Syntax.code('require_once({0})', '../.$branch/functions.php');
 		//Syntax.code('require_once({0})', 'inc/PhpRbac/Rbac.php');
 		Debug.logFile = untyped Syntax.code("$appLog");
 		haxe.Log.trace = Debug._trace;
 		Out.skipFields = ['admin','keyPhrase','pass','password'];
 		//edump(Debug.logFile);
+		trace('run on branch:$branch');
 		db = Syntax.code("$DB");
 		dbSchema = Syntax.code("$DB_schema");
 		dbHost = Syntax.code("$DB_server");

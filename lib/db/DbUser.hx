@@ -7,8 +7,8 @@ class DbUser implements hxbit.Serializable{
 	@:s public var change_pass_required:Bool;
 	@:s public var contact:Int;
 	@:s public var edited_by:Int;
-	@:s public var editing:String;
-	@:s public var email:String;
+	@:s public var actions:String;
+	@:s public var email:String; 
 	@:s public var external:String;
 	@:s public var first_name:String;	
 	@:s public var id:Int;

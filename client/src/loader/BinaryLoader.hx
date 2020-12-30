@@ -1,5 +1,6 @@
 package loader;
 
+import db.DBAccessProps;
 import db.DbQuery;
 import haxe.Json;
 import haxe.CallStack;
@@ -35,7 +36,7 @@ class BinaryLoader {
 		return bl.xhr;
 	}
 
-	public static function dbQuery(url:String,dbQP:DbQueryParam, onLoaded:DbData->Void) {
+	public static function dbQuery(url:String,dbQP:DBAccessProps, onLoaded:DbData->Void) {
 		//trace(dbQP);
 		var s:Serializer = new Serializer();
 		var bl:BinaryLoader = new BinaryLoader(url);
@@ -53,7 +54,7 @@ class BinaryLoader {
 		//bl.param = b.getString(0,b.length); //s.serialize(dbQuery);//.toHex();
 		bl.param = b.getData();
 		//bl.param = new FileReader().readAsBinaryString(s.serialize(new DbQuery(dbQuery)));
-		trace(bl.param);
+		//trace(bl.param);
 		//trace(bl.param.toHex().length + ' :: ' + bl.param.toString().length + ' : ' + bl.param.length);
 		bl.cB = onLoaded;
 		bl.load();

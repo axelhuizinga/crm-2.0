@@ -18,12 +18,11 @@ import haxe.Unserializer;
 import js.html.XMLHttpRequest;
 import shared.DbDataTools;
 import action.AppAction;
-import db.DbQuery.DbQueryParam;
 import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
 import action.async.CRUD;
 import js.lib.Promise;
-import action.async.DBAccessProps;
+import db.DBAccessProps;
 import action.async.LivePBXSync;
 import state.AppState;
 import haxe.ds.StringMap;
@@ -72,7 +71,7 @@ class Imports extends ReactComponentOf<DataFormProps,FormState>
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;	
 
-	public function new(props) 
+	/*public function new(props) 
 	{
 		super(props);
 		//dataDisplay = ReturnDebitModel.dataDisplay;
@@ -92,7 +91,7 @@ class Imports extends ReactComponentOf<DataFormProps,FormState>
 			props.history.push('${baseUrl}Imports/');
 			//props.history.push('${baseUrl}List/get${props.dataStore.contactData.iterator().hasNext()?'/'+props.dataStore.contactData.keys().keysList():''}');
 		}		
-	}
+	}*/
 	
 	static function mapStateToProps(aState:AppState) 
 	{
@@ -103,7 +102,7 @@ class Imports extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-			/*load: function(param:DbQueryParam) return dispatch(Imports.upload(param)),
+			/*load: function(param:DBAccessProps) return dispatch(Imports.upload(param)),
 			storeData:function(id:String, action:DataAction)
 			{
 				dispatch(LiveDataAccess.storeData(id, action));

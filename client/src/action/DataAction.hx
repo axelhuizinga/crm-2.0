@@ -6,7 +6,7 @@ import haxe.ds.IntMap;
 import react.router.RouterMatch;
 import shared.DbData;
 import action.async.DBAccess;
-import action.async.DBAccessProps;
+import db.DBAccessProps;
 /**
  * ...
  * @author axel@cunity.me

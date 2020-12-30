@@ -1,8 +1,9 @@
 package view.data.accounts;
+
+import db.DBAccessProps;
 import action.async.CRUD;
 import haxe.ds.IntMap;
 import redux.Redux.Dispatch;
-import db.DbQuery.DbQueryParam;
 import view.shared.io.BaseForm;
 import js.lib.Promise;
 import state.AppState;
@@ -83,7 +84,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-            load: function(param:DbQueryParam) return dispatch(CRUD.read(param))
+            load: function(param:DBAccessProps) return dispatch(CRUD.read(param))
         };
 	}
 	

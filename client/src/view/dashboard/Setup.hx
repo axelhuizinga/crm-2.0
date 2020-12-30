@@ -92,7 +92,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			trace(props.history.location.pathname);
 			trace('setting section to:DB');
 		}		
-		trace('${}');
+		trace('${1}');
 		//TODO: AUTOMATE CREATE HISTORY TRIGGER IF DB TABLES CHANGED
 		/*AjaxLoader.loadData('${App.config.api}', 
 			{

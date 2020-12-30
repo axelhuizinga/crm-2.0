@@ -6,7 +6,7 @@ typedef UserProps = {
 	?user_name:String,
 	?active:Bool,
 	?edited_by:Int,
-	?editing:String,
+	?actions:String,
 	?settings:String,
 	?external:String,
 	?user_group:Int,
@@ -25,7 +25,7 @@ class User extends ORM
 
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'contact,last_login,user_name,active,edited_by,editing,settings,external,user_group,change_pass_required,online,last_request_time,last_error,mandator,last_locktime,phash'.split(',');
+		propertyNames = 'contact,last_login,user_name,active,edited_by,actions,settings,external,user_group,change_pass_required,online,last_request_time,last_error,mandator,last_locktime,phash'.split(',');
 	}	
 		
 	@dataType("bigint")
@@ -79,13 +79,13 @@ class User extends ORM
 	}	
 		
 	@dataType("jsonb")
-	@:isVar public var editing(default,set):String;
+	@:isVar public var actions(default,set):String;
 
-	function set_editing(editing:String):String{
-		if(initialized('editing'))
-			modified('editing');
-		this.editing = editing ;
-		return editing;
+	function set_actions(actions:String):String{
+		if(initialized('actions'))
+			modified('actions');
+		this.actions = actions ;
+		return actions;
 	}	
 		
 	@dataType("jsonb")

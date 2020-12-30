@@ -48,78 +48,76 @@ class LivePBXSync
 
 	public static function importContacts(props:DBAccessProps) 
 	{
-
 		trace('${props.table} ${props.maxImport} ${props.limit} ${props.offset}');
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var aState:AppState = getState();
 			trace(props.offset);
-			//return new Promise(function(resolve, reject){
-				if (!props.userState.dbUser.online)
+			if (!props.userState.dbUser.online)
+			{
+				return dispatch(User(LoginError(
 				{
-					return dispatch(User(LoginError(
+					dbUser:props.userState.dbUser,
+					lastError:'Du musst dich neu anmelden!'
+				})));
+			}				
+			trace('creating BinaryLoader ${App.config.api}');
+			var bl:XMLHttpRequest = BinaryLoader.dbQuery(
+				'${App.config.api}', 
+				{
+					dbUser:props.userState.dbUser,
+					classPath:props.classPath,
+					action:props.action,
+					extDB:true,
+					id:(props.id == null?0:props.id),
+					limit:props.limit,
+					offset:props.offset,
+					table:props.table,
+					filter:props.filter,
+					maxImport:props.maxImport==null?1000:props.maxImport,
+					devIP:App.devIP
+				},
+				function(data:DbData)
+				{			
+					trace(data.dataInfo);
+					trace(data.dataRows.length);
+					if(data.dataErrors.keys().hasNext())
 					{
-						dbUser:props.userState.dbUser,
-						lastError:'Du musst dich neu anmelden!'
-					})));
-					//resolve(DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']));
-				}				
-				trace('creating BinaryLoader ${App.config.api}');
-				var bl:XMLHttpRequest = BinaryLoader.dbQuery(
-					'${App.config.api}', 
+						trace(data.dataErrors.toString());
+						return dispatch(Status(Update(
+							{
+								className:'error',
+								text:data.dataErrors.iterator().next()
+							}							
+						)));
+						//return resolve(DbDataTools.create(['Error'=>'?']));
+					} 
+					if(data.dataInfo['offset']==null||data.dataInfo['offset']==0)
 					{
-						dbUser:props.userState.dbUser,
-						classPath:props.classPath,
-						action:props.action,
-						extDB:true,
-						id:(props.id == null?0:props.id),
-						limit:props.limit,
-						offset:props.offset,
-						table:props.table,
-						filter:props.filter,
-						maxImport:props.maxImport==null?1000:props.maxImport,
-						devIP:App.devIP
-					},
-					function(data:DbData)
-					{			
-						trace(data.dataInfo);
-						trace(data.dataRows.length);
-						if(data.dataErrors.keys().hasNext())
-						{
-							return dispatch(Status(Update(
-								{
-									className:'error',
-									text:data.dataErrors.iterator().next()
-								}							
-							)));
-							//return resolve(DbDataTools.create(['Error'=>'?']));
-						} 
-						trace(data.dataInfo);
-						if(data.dataInfo['offset']==null)
-						{
-							return dispatch(Status(Update(
-								{
-									className:'error',
-									text:'Fehler 0 ${props.classPath} Aktualisiert'})));
-						}
-						else
-						//if(data.dataInfo['offset']!=null)
-						{
-							props.offset = Std.parseInt(data.dataInfo['offset']);
-							return dispatch(Status(Update(
-								{
-									className:' ',
-									text:'${props.offset} ${props.classPath} von ${props.maxImport} aktualisiert'})));
-						}
-						trace('${props.offset} < ${props.maxImport}');
-						if(props.offset < props.maxImport){
-							//LOOP UNTIL LIMIT
-							trace('next loop:${props}');
-							return dispatch(importContacts(props));
-						}
-						
-						return null;
+						return dispatch(Status(Update(
+							{
+								className:'error',
+								text:'Fehler 0 ${props.classPath} Aktualisiert'})));
 					}
-				);
+					else
+					//if(data.dataInfo['offset']!=null)
+					{
+						props.offset = Std.parseInt(data.dataInfo['offset']);
+						return dispatch(Status(Update(
+						{
+							className:' ',
+							text:'${props.offset} Contacts von ${props.maxImport} aktualisiert'
+						})));
+					}
+					trace('${props.offset} < ${props.maxImport}');
+					if(props.offset < props.maxImport){
+						//LOOP UNTIL LIMIT
+						trace('next loop:${props}');
+						return dispatch(importContacts(props));
+					}
+					
+					return null;
+				}
+			);
 			return null;
 		});
 	}

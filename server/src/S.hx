@@ -312,7 +312,7 @@ class S
 		return sendbytes(s.serialize(dbData));
 	}
 	
-	public static function sendbytes(b:Bytes):Bool
+	public static function sendbytes(b:Bytes, ?loop:Bool):Bool
 	{		
 		trace('OK ${b.length}');
 		setHeader('application/octet-stream');		
@@ -320,6 +320,8 @@ class S
 		out.bigEndian = true;
 		out.write(b);
 		trace('done at ${Sys.time()-ts} ms');
+//		if(loop)
+//			return true;
 		Sys.exit(0);
 		trace('SHOULD NEVER EVER HAPPEN');
 		return true;

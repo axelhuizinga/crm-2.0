@@ -47,11 +47,6 @@ class BinaryLoader {
 		//dbQuery.dump('/tmp/dbQuery.json');
 		//trace(dbQuery);
 		trace('b.length:${b.length}');
-		var blen:Int = b.length;
-		for(i in 0...blen){
-			//trace('$i:${b.get(i)}  ${b.getString(i,1)}');
-		}
-		//bl.param = b.getString(0,b.length); //s.serialize(dbQuery);//.toHex();
 		bl.param = b.getData();
 		//bl.param = new FileReader().readAsBinaryString(s.serialize(new DbQuery(dbQuery)));
 		//trace(bl.param);

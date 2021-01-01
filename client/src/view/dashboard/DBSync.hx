@@ -232,7 +232,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.userState.dbUser.first_name);
 		App.store.dispatch(action.async.LivePBXSync.importContacts({
 			devIP:App.devIP,
-			limit:1000,
+			limit:0,
 			maxImport:4000,
 			userState:props.userState,
 			offset:0,

@@ -199,17 +199,6 @@ class User extends Model
 			dbData.dataInfo['loggedIn'] = 'true';
 			trace(res['user_name']+':'+res['change_pass_required']);
 			trace('change_pass_required'+(res['change_pass_required']==true || res['change_pass_required']=='true'?'Y':'N'));
-			/*if(login){					
-				// UPDATE LAST_LOGIN
-				var rTime:String = DateTools.format(Date.now(), "'%Y-%m-%d %H:%M:%S'");//,request=?
-				var update:PDOStatement = S.dbh.prepare('UPDATE users SET last_login=${rTime} WHERE id=:id',Syntax.array(null));
-				var success:Bool = Model.paramExecute(update, Lib.associativeArrayOfObject({':id':res['id']}));
-				trace(update.errorCode());
-				trace(res['id']);
-				trace(Std.string(success));
-				dbData.dataInfo['last_login'] = rTime;
-				//UPDATE DONE			
-			}*/
 			if (res['change_pass_required']==true || res['change_pass_required']=='true')
 				return UserAuth.PassChangeRequired(dbData);
 			return UserAuth.AuthOK(dbData);			
@@ -328,11 +317,7 @@ class User extends Model
 		var jwt:String = param.get('jwt');		
 		var original_path:String = param.get('original_path');
 		var user_name:String = param.get('user').user_name;
-		var host:String = Syntax.code("$_SERVER['SERVER_NAME']");
-		if(param.get('dev'))
-		{
-			host = '192.168.178.20:9000';			
-		}
+		var host:String = Global.gethostname();
 		var header = comment(unindent, format) /*
 Content-type: text/html; charset=utf-8
 From: SCHUTZENGELWERK crm-2.0 <admin@pitverwaltung.de>

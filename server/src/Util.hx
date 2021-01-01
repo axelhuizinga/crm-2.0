@@ -1,4 +1,8 @@
 package;
+import hxbit.Serializer;
+import haxe.io.Bytes;
+import db.DbQuery;
+import db.DBAccessProps;
 import php.Const;
 import php.Global;
 import shared.DbData;
@@ -7,7 +11,7 @@ import php.db.PDOStatement;
 import php.Syntax;
 import php.NativeArray;
 
-
+using StringTools;
 /**
  * ...
  * @author axel@cunity.me
@@ -97,6 +101,69 @@ class Util
 			}		
 			i++;
 		}
+	}
+
+	/**
+	 * Create jsonb object
+	 * @param keys Array<String>
+	 * @param ob Map<String,Dynamic>
+	 */
+	
+	public  static function buildJsonB(keys:Array<String>, ob:Map<String,Dynamic>):String {
+		var s:String = '{';
+		for(k in keys){
+			if(ob.exists(k)){
+				if(Std.isOfType(ob.get(k), String)){
+					s += '"$k":"${ob.get(k)}", ';
+				}
+				else {
+					s += '"$k":${ob.get(k)}, ';
+				}
+				
+			}
+		}
+		
+		//var r:EReg = ~/,$/;//new EReg(",$");
+		var r:EReg = new EReg(", $","i");
+		s = r.replace(s,'}');
+		return s;
+	}
+
+	/**
+	 * actionFields = [
+			'action','classPath','offset','onlyNew','action_id','limit','maxImport','totalRecords'
+		];
+	 * 				{
+					dbUser:props.userState.dbUser,
+					classPath:props.classPath,
+					action:props.action,
+					extDB:true,
+					action_id:(props.action_id == null?0:props.action_id),
+					limit:props.limit,
+					offset:props.offset,
+					table:props.table,
+					filter:props.filter,
+					maxImport:props.maxImport==null?1000:props.maxImport,
+					devIP:App.devIP
+				},
+	 */
+	public static function buildDbQuery(param:Map<String,Dynamic>):String {
+		S.dbQuery.dbUser.password='XXX';
+		var dbQP:DBAccessProps = {
+			dbUser:S.dbQuery.dbUser,
+			action:param['action'],
+			action_id:param['action_id'],
+			extDB:param['extDB'],
+			filter:param['filter'],
+			offset:param['offset'],
+			limit:param['limit'],
+			maxImport:param['maxImport']
+		};
+		var s:Serializer = new Serializer();
+		var dbQuery = new DbQuery(dbQP);//.toHex();
+		S.saveLog(dbQuery);
+		var b:Bytes = s.serialize(dbQuery);
+		return b.toString();
 	}
 
 	/**

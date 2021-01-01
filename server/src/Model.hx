@@ -1,10 +1,11 @@
 package;
+
+import comments.CommentString.*;
 import php.Global;
 import php.SuperGlobal;
 import db.DbQuery;
 import tjson.TJSON;
 import haxe.Json;
-//import action.async.DBAccessProps;
 import haxe.PosInfos;
 import haxe.Constraints.Function;
 import S.ColDef;
@@ -92,6 +93,7 @@ class Model
 	public var id(default, null):String;
 	public var num_rows(default, null):Int;
 	var action:String;
+	var actionFields:Array<String>;
 	//var dbAccessProps:DBAccessProps;
 	var dbData:DbData;
 	var dParam:DbData;
@@ -868,7 +870,9 @@ class Model
 		trace(SuperGlobal._POST.keyValueIterator().hasNext()?'Y':'N');
 		trace(Std.string(SuperGlobal._POST));
 		//var d:DbQuery = new DbQuery();
-		var pData = Bytes.ofString(Global.file_get_contents('php://input'));
+		var pData = Bytes.ofString( (
+			Lib.isCli()? Sys.args()[0]:
+			Global.file_get_contents('php://input')));
 		//var pData = Bytes.ofString(Web.getPostData());
 		//trace(Web.getPostData());
 		trace(pData.length);
@@ -1004,6 +1008,66 @@ class Model
 		}		
 		//return fields;
 	}
+
+	function createOrUpdateAction(){
+		
+		if(param['action_id']==0)
+		{
+			//GET MAX actions id for user
+			var sql:String = comment(unindent,format)/**
+			SELECT user_max_action_id(actions) FROM users WHERE id=${S.dbQuery.dbUser.id}
+			**/;
+			trace(sql);
+			var stmt:PDOStatement = S.dbh.query(sql);			
+			if(untyped stmt==false)
+			{
+				trace(S.dbh.errorInfo());
+				S.sendErrors(dbData, ['GET MAX actions action_id for user:'=>S.dbh.errorInfo()]);
+			}
+			if(stmt.errorCode() !='00000')
+			{
+				trace(stmt.errorInfo());
+			}
+			if(stmt.execute()){
+				var res:Dynamic = stmt.fetch(PDO.FETCH_OBJ);
+				trace('result:' + res);
+				param['action_id'] = (res.user_max_action_id==null?1:res.user_max_action_id+1);
+			}
+			else {
+				trace(stmt.errorInfo());
+			}
+			// STORE NEW ACTION user_max_action_id(actions) 
+			var action:String = Util.buildJsonB(actionFields, param);
+			trace(action);
+			sql = comment(unindent,format)/**
+			UPDATE users SET actions = actions || '${action}'
+			WHERE id=${S.dbQuery.dbUser.id}
+			**/;
+			stmt = S.dbh.query(sql);			
+			if(untyped stmt==false)
+			{
+				trace(S.dbh.errorInfo());
+				S.sendErrors(dbData, ['STORE NEW ACTION for user:'=>S.dbh.errorInfo()]);
+			}
+			if(stmt.errorCode() !='00000')
+			{
+				trace(stmt.errorInfo());
+			}
+			if(!stmt.execute()){				
+				trace(stmt.errorInfo());
+				trace(S.dbh.errorInfo());
+				S.sendErrors(dbData, ['STORE NEW ACTION for user:'=>stmt.errorInfo()]);
+			}
+
+			dbData.dataInfo.set('action_id', param['action_id']);
+			trace(dbData.dataInfo);
+			//S.sendData(dbData, null);
+			//S.sendInfo(dbData);			
+			//S.sendInfo(dbData,['id' => param['id']]);			
+			//var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);		
+		}
+		//return '{"action":${props.action}, "classP}' //DBAccessAction
+	}
 	
 	public function json_encode():Void
 	{	
@@ -1018,7 +1082,7 @@ class Model
 		return Syntax.code("json_encode({0},{1})", {content:res}, 64);//JSON_UNESCAPED_SLASHES
 	}
 	
-	function getEditorFields(?table_name:String):Map<String,Array<Map<String,String>>>
+	/*function getEditorFields(?table_name:String):Map<String,Array<Map<String,String>>>
 	{
 		var sqlBf:StringBuf = new StringBuf();
 		var filterValues:Array<Array<Dynamic>> = new Array();
@@ -1054,7 +1118,7 @@ class Model
 		}
 		//trace(ret);
 		return ret;
-	}
+	}*/
 		
 	function serializeRows(rows:NativeArray):Bytes
 	{

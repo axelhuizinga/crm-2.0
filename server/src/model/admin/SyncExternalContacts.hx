@@ -1,6 +1,7 @@
 package model.admin;
 
 //import action.async.DBAccessProps;
+import php.Global;
 import php.NativeAssocArray;
 import haxe.macro.Expr.Catch;
 import sys.io.File;
@@ -37,7 +38,10 @@ class SyncExternalContacts extends Model
 
 	public function new(param:Map<String,Dynamic>):Void
 	{
-		super(param);	
+		super(param);
+		actionFields = [
+			'action','classPath','offset','onlyNew','action_id','limit','maxImport','totalRecords'
+		];			
 		//self.table = 'columns';
 		if(param.exists('synced'))
 		{
@@ -58,6 +62,31 @@ class SyncExternalContacts extends Model
 			case _:
 				run();
 		}		
+	}
+
+	function getAll():NativeArray {
+		var offset:Int = ( param['offset']>0?param['offset']:0);
+		var sql:String = 'SELECT DISTINCT(client_id) FROM clients WHERE client_id>$offset';
+		var stmt:PDOStatement = S.syncDbh.query(sql);
+		if(untyped stmt==false)
+		{
+			trace(S.syncDbh.errorInfo());
+			S.sendErrors(dbData, ['getAll query:'=>S.syncDbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+		}
+		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_NUM):null);	
+		
+		trace(Syntax.code("count({0})",res));
+				
+		//var cleared:Int = S.dbh.exec('TRUNCATE contact_ids');
+		if(S.dbh.errorCode() !='00000')
+		{
+			trace(S.dbh.errorInfo());
+		}	
+		return res;	
 	}
 
 	function  getMissing() {
@@ -241,65 +270,37 @@ LIMIT ${Util.limit()}
 		S.sendInfo(dbData,['OK'=> stmt.rowCount()]);
 	}
 
-	function createOrUpdateAction(){
-		
-		if(param['id']==0)
-		{
-			//GET MAX actions id for user
-			var sql:String = comment(unindent,format)/**
-			SELECT user_max_action_id(actions) FROM users WHERE id=${S.dbQuery.dbUser.id}
-			**/;
-			trace(sql);
-			var stmt:PDOStatement = S.dbh.query(sql);			
-			if(untyped stmt==false)
-			{
-				trace(S.dbh.errorInfo());
-				S.sendErrors(dbData, ['GET MAX actions id for user:'=>S.dbh.errorInfo()]);
-			}
-			if(stmt.errorCode() !='00000')
-			{
-				trace(stmt.errorInfo());
-			}
-			if(stmt.execute()){
-				var res:Dynamic = stmt.fetch(PDO.FETCH_OBJ);
-				trace('result:' + res);
-				param['id'] = (res.user_max_action_id==null?1:res.user_max_action_id+1);
-			}
-			else {
-				trace(stmt.errorInfo());
-			}
-			//PDO.FETCH_COLUMN):null);
-			//S.sendErrors(dbData, ['GOT MAX actions id for user:'=>'OK :)']);
-			//S.send('GOT new action id for user:' + param['id']);
-			dbData.dataInfo.set('id', param['id']);
-			trace(dbData.dataInfo);
-			//S.sendData(dbData, null);
-			S.sendInfo(dbData);			
-			//S.sendInfo(dbData,['id' => param['id']]);			
-			//var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);		
-		}
-
-		var actionFields:Array<String> = [
-			'action','classPath','offset','onlyNew','id','limit','maxImport'//,'totalRecords'
-		];		
-		//return '{"action":${props.action}, "classP}' //DBAccessAction
-	}
-
-	function importContacts() {
+	function importContacts() {		
+		//trace(S.params);
 		trace(param);
 		createOrUpdateAction();
-		getMissing();
+		var allCids = getAll();
+		param['totalRecords'] = Global.count(allCids);
+		//getMissing();
 		//dbAccessProps = initDbAccessProps();
 		if(param['offset']==null)
 			param['offset'] = '0';
 		if(param['limit']==null)			
-			param['limit'] = '1000';
-		if(Std.parseInt(param['offset'])+Std.parseInt(param['limit'])>Std.parseInt(param['maxImport']))
+			param['limit'] = param['maxImport'];
+		
+		//if(Std.parseInt(param['offset'])+Std.parseInt(param['limit'])>Std.parseInt(param['maxImport']))
+		if(param['offset']+param['limit']>param['totalRecords'])
 		{
-			param['limit'] = Std.string(Std.parseInt(param['maxImport']) - Std.parseInt(param['offset']));
+			param['limit'] = Std.string(Std.parseInt(param['totalRecords']) - Std.parseInt(param['offset']));
 		}
 		trace(param);
-		importCrmData();
+		if(Lib.isCli()){
+			importCrmData();
+		}
+		else{
+			var cliArg:String = Util.buildDbQuery(param);
+			trace(cliArg);
+			var com:String = 'php ${S.home + "/server.php " + cliArg}';
+			trace(com);
+			Syntax.code("exec('{0} > /dev/null &')", com );
+			S.sendInfo(dbData, ['importContacts'=>'OK']);
+		}
+		
 		S.sendErrors(dbData,['importContacts'=>'NOTOK']);
 	}
 

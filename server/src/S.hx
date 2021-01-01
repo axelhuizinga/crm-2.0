@@ -1,4 +1,6 @@
 package;
+import php.Const;
+import php.Global;
 import php.SuperGlobal;
 import db.DbRelation;
 import db.DbUser;
@@ -74,7 +76,8 @@ class S
 	static var headerSent:Bool = false;
 	static var response:Response;
 	public static var action:String;
-	public static var conf:Map<String,Dynamic>;
+	public static var conf:Map<String,Dynamic>;	
+	public static var home:String;
 	public static var secret:String;
 	public static var dbh:PDO;
 	public static var syncDbh:PDO;
@@ -101,6 +104,15 @@ class S
 	
 	static function main() 
 	{		
+		/*var _server:NativeArray = SuperGlobal._SERVER;
+		var m:String = '';//'${_server.length} ${Const.PHP_EOL}${Global.implode(Const.PHP_EOL, Lib.toPhpArray(_server))}${Const.PHP_EOL}';
+		for(k=>v in _server){
+			m += '${k}=>${v}' + Const.PHP_EOL;
+		}
+		Syntax.code("error_log({0})",m);*/
+		//Syntax.code("error_log({0} {1} {2})",_server.length, Const.PHP_EOL, Global.implode(Const.PHP_EOL, Lib.toPhpArray(_server)));
+		
+		init();
 		//trace(conf.get('ini'));
 		//var ini:NativeArray = S.conf.get('ini');
 		//var vD:NativeArray = ini['vicidial'];
@@ -117,7 +129,7 @@ class S
 		if(Syntax.code("isset($_SERVER['VERIFIED'])"))
 		{trace(Syntax.code("$_SERVER['VERIFIED']"));}
 		//var pd:Dynamic = Web.getPostData();
-
+		
 		response = {content:'',error:''};
 		if(Lib.toHaxeArray(SuperGlobal._FILES).length>0)
 		{
@@ -144,7 +156,7 @@ class S
 		}
 		//trace(Web.getPostData());
 		dbQuery = Model.binary();
-		trace(dbQuery);
+		saveLog(dbQuery);
 		//Model.binary(params.get('dbData'));
 		params = dbQuery.dbParams;
 
@@ -260,6 +272,10 @@ class S
 		
 		//trace(Std.string(dbData).substr(0,250));
 		trace(dbData.dataRows[0]);
+		if(Lib.isCli()){
+			trace(dbData);
+			return false;			 
+		 }		
 		return sendbytes(s.serialize(dbData));
 	}
 
@@ -280,7 +296,11 @@ class S
 
 	public static function sendErrors(dbData:DbData = null, ?err:Map<String,Dynamic>, ?pos:PosInfos):Bool
 	{
-	 	trace('${pos.fileName}::${pos.lineNumber}');
+		 trace('${pos.fileName}::${pos.lineNumber}');
+		 if(Lib.isCli()){
+			trace(err);
+			return false;			 
+		 }
 		if(dbData==null)
 			dbData = new DbData();
 		//trace(dbData);
@@ -315,13 +335,13 @@ class S
 	public static function sendbytes(b:Bytes, ?loop:Bool):Bool
 	{		
 		trace('OK ${b.length}');
+		if(Lib.isCli())
+			return false;		
 		setHeader('application/octet-stream');		
 		var out = File.write("php://output", true);
 		out.bigEndian = true;
 		out.write(b);
 		trace('done at ${Sys.time()-ts} ms');
-//		if(loop)
-//			return true;
 		Sys.exit(0);
 		trace('SHOULD NEVER EVER HAPPEN');
 		return true;
@@ -329,6 +349,8 @@ class S
 	
 	public static function setHeader(cType:String) 
 	{
+		if(Lib.isCli())
+			return;
 		Web.setHeader('Content-Type', cType);
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 		Web.setHeader("Access-Control-Allow-Credentials", "true");
@@ -412,9 +434,16 @@ class S
 		var fields:Array<String> = Reflect.fields(what);
 		for (f in fields)
 		{
-			if(f.indexOf('pass') > -1)
+			if(f.indexOf('pass') > -1 || f.indexOf('__hx')>-1)
 			{
 				continue;
+			}
+			var cName:String = Type.getClassName(Type.getClass(Reflect.field(what,f)));
+			trace(cName);
+			if(cName.indexOf('.')>-1)
+			{
+				trace('recurse4 $cName');
+				return saveLog(Reflect.field(what,f), pos);
 			}
 			trace(Reflect.field(what,f), pos);
 		}
@@ -586,7 +615,8 @@ class S
 
 	static function saveRequest(dbQuery:DbQuery):Bool
 	{
-		trace(Json.stringify(dbQuery));
+		//trace(Json.stringify(dbQuery));
+		saveLog(dbQuery);
 		var stmt:PDOStatement = dbh.prepare(
 			'INSERT INTO activity(action,request,"user") VALUES(:action,:request,:user)' ,Syntax.array(null));
 
@@ -606,14 +636,17 @@ class S
 			trace(stmt.errorInfo());
 		return success;
 	}	
+	//static function __init__() {
+	static function init() {
 		
-	static function __init__() {
 		var branch:String = #if dev 'dev' #else 'crm' #end;
-		Syntax.code('require_once({0})', '../.$branch/functions.php');
-		Syntax.code('require_once({0})', '../.$branch/db.php');
-		Syntax.code("file_put_contents($appLog,'.', FILE_APPEND)");
+		home = Syntax.code("dirname($_SERVER['SCRIPT_FILENAME'])");
+		///opt/src/crm-2.0/server/src/S.hx
+		Syntax.code('require_once({0})', '$home/../.$branch/functions.php');
+		Syntax.code('require_once({0})', '$home/../.$branch/db.php');
+		//Syntax.code("file_put_contents($appLog,'.', FILE_APPEND)");
 		//Syntax.code('require_once({0})', 'inc/PhpRbac/Rbac.php');
-		Debug.logFile = untyped Syntax.code("$appLog");
+		Debug.logFile = Syntax.code("$appLog");
 		haxe.Log.trace = Debug._trace;
 		Out.skipFields = ['admin','keyPhrase','pass','password'];
 		//edump(Debug.logFile);
@@ -628,14 +661,14 @@ class S
 		dbViciBoxDB = Syntax.code("$DB_vicibox_db");
 		dbViciBoxHost = Syntax.code("$DB_vicibox_server");
 		dbViciBoxPass = Syntax.code("$DB_vicibox_pass");
-		host = Web.getHostName();
-		request_scheme = Syntax.code("$_SERVER['REQUEST_SCHEME']");
+		host = Global.gethostname();
+		//request_scheme = Syntax.code("$_SERVER['REQUEST_SCHEME']");
 		secret = Syntax.code("$secret");
 		//edump(Syntax.code("$conf"));
-		conf =  Config.load('appData.js');
+		conf =  Config.load('$home/appData.js');
 		var ini:NativeArray = Syntax.code("$ini");
 		conf.set('ini', ini);		
-		//trace(conf.get('ini'));
+		trace(conf.get('ini'));
 		new DbData();
 		new DbUser(null);
 		new DbRelation(null);

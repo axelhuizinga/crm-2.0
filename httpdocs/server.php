@@ -1,6 +1,7 @@
 <?php
 
 set_include_path(get_include_path().PATH_SEPARATOR.__DIR__.'/lib');
+
 spl_autoload_register(
 	function($class){
 		$file = stream_resolve_include_path(str_replace('\\', '/', $class) .'.php');
@@ -9,5 +10,5 @@ spl_autoload_register(
 		}
 	}
 );
-\php\Boot::__hx__init();
+include('S.php');
 \S::main();

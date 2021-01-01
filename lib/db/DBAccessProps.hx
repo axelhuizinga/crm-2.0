@@ -7,12 +7,12 @@ import state.UserState;
 typedef DBAccessAction = {
 	action:String,
 	?classPath:String,
-	?id:Int,
+	?action_id:Int,
 	?offset:Int,
 	?onlyNew:Bool,
 	?limit:Int,	
 	?maxImport:Int,
-	//?totalRecords:Int
+	?totalRecords:Int
 }
 
 typedef DBAccessResolveMessage = {

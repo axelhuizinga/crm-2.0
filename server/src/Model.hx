@@ -139,7 +139,7 @@ class Model
 	public static function paramExecute(stmt:PDOStatement, ?values:NativeArray):Bool
 	{
 		//S.saveLog(values);
-		trace(values);
+		S.safeLog(values);
 
 		if (!stmt.execute(values))
 		{
@@ -868,7 +868,7 @@ class Model
 	public static function binary():DbQuery
 	{
 		trace(SuperGlobal._POST.keyValueIterator().hasNext()?'Y':'N');
-		trace(Std.string(SuperGlobal._POST));
+		S.safeLog(Std.string(SuperGlobal._POST));
 		//var d:DbQuery = new DbQuery();
 		var pData = Bytes.ofString( (
 			Lib.isCli()? Sys.args()[0]:

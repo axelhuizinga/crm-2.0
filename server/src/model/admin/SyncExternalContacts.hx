@@ -293,11 +293,14 @@ LIMIT ${Util.limit()}
 			importCrmData();
 		}
 		else{
-			var cliArg:String = Util.buildDbQuery(param);
+			param['jwt'] = S.dbQuery.dbUser.jwt;
+			param['user_id'] = S.dbQuery.dbUser.id;			
+			var cliArg:String = Util.cliArgs(param);
 			trace(cliArg);
 			var com:String = 'php ${S.home + "/server.php " + cliArg}';
-			trace(com);
-			Syntax.code("exec('{0} > /dev/null &')", com );
+			trace(com);			
+			trace(Syntax.code("`{0} &`", com ));
+			//Sys.sleep(10);
 			S.sendInfo(dbData, ['importContacts'=>'OK']);
 		}
 		

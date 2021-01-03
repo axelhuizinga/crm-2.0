@@ -1,4 +1,7 @@
 package;
+import haxe.ds.ReadOnlyArray;
+import sys.io.FileOutput;
+import sys.FileSystem;
 import php.Const;
 import php.Global;
 import php.SuperGlobal;
@@ -129,42 +132,51 @@ class S
 		if(Syntax.code("isset($_SERVER['VERIFIED'])"))
 		{trace(Syntax.code("$_SERVER['VERIFIED']"));}
 		//var pd:Dynamic = Web.getPostData();
-		
+		trace(Lib.isCli()?'cli':'web');
+		safeLog(Sys.args());
 		response = {content:'',error:''};
-		if(Lib.toHaxeArray(SuperGlobal._FILES).length>0)
-		{
-			devIP = SuperGlobal._POST['devIP'];
-			dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
-			Syntax.array([PDO.ATTR_PERSISTENT,true]));
-		
-			//trace(dbh);
-			params = Lib.hashOfAssociativeArray(SuperGlobal._POST);
-			if(params.get('extDB'))
-			{
-				//CONNECT DIALER DB	
-				trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM');
-				syncDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM',
-					dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
-				//trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
-			}
-			#if debug
-			dbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);	
-			if(params.get('extDB'))
-				syncDbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
-			#end			
-			Upload.go();
+		if(Lib.isCli()){
+			//Cli.process(Sys.args(), new CliService()).handle(Cli.exit);
+			//trace(Sys.args());
+			params = Cli.parse();
+			action = params.get('action');
 		}
-		//trace(Web.getPostData());
-		dbQuery = Model.binary();
-		saveLog(dbQuery);
-		//Model.binary(params.get('dbData'));
-		params = dbQuery.dbParams;
+		else{
+			if(Lib.toHaxeArray(SuperGlobal._FILES).length>0)
+			{
+				devIP = SuperGlobal._POST['devIP'];
+				dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
+				Syntax.array([PDO.ATTR_PERSISTENT,true]));
+			
+				//trace(dbh);
+				params = Lib.hashOfAssociativeArray(SuperGlobal._POST);
+				if(params.get('extDB'))
+				{
+					//CONNECT DIALER DB	
+					trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM');
+					syncDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM',
+						dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
+					//trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
+				}
+				#if debug
+				dbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);	
+				if(params.get('extDB'))
+					syncDbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
+				#end			
+				Upload.go();
+			}
+			//trace(Web.getPostData());
+			dbQuery = Model.binary();
+			safeLog(dbQuery);
+			//Model.binary(params.get('dbData'));
+			params = dbQuery.dbParams;
 
 
-		devIP = params.get('devIP');
-		trace(params);
+			devIP = params.get('devIP');
+			trace(params);
 
-		action = params.get('action');
+			action = params.get('action');
+		}
 		if (action.length == 0 || params.get('classPath') == null)
 		{
 			exit( { error:"required params action and/or classPath missing" } );
@@ -427,10 +439,10 @@ class S
 		return '${pos.fileName}::${pos.lineNumber}::$m';
 	}
 
-	public static function saveLog(what:Dynamic,?pos:PosInfos):Void
-	{
-		//trace(pos.fileName + ':' + pos.lineNumber + '::' + pos.methodName);
+	public static function safeLog(what:Dynamic,?pos:PosInfos):Void
+	{		
 		//trace(what);
+		// TODO: ADD Const.FILE_APPEND
 		var fields:Array<String> = Reflect.fields(what);
 		for (f in fields)
 		{
@@ -439,13 +451,18 @@ class S
 				continue;
 			}
 			var cName:String = Type.getClassName(Type.getClass(Reflect.field(what,f)));
-			trace(cName);
+			Util.safeLog(cName, pos);
+			if(cName=='Array'){
+				return Util.safeLog(cast(Reflect.field(what,f),Array<Dynamic>).filter(function (f:Dynamic) {
+					return cast(f, String).indexOf('pass') == -1;
+				}).join(','), pos);
+			}
 			if(cName.indexOf('.')>-1)
 			{
-				trace('recurse4 $cName');
-				return saveLog(Reflect.field(what,f), pos);
+				Util.safeLog('recurse4 $cName', pos);
+				return Util.safeLog(Reflect.field(what,f), pos);
 			}
-			trace(Reflect.field(what,f), pos);
+			Util.safeLog(Reflect.field(what,f), pos);
 		}
 		return;
 		dumpNativeArray(what, pos);
@@ -602,7 +619,7 @@ class S
 
 	public static function getViciDialData():Map<String,Dynamic> 
 	{		        
-		S.saveLog(S.conf.get('ini'));
+		Util.safeLog(S.conf.get('ini'));
 		var ini:NativeArray = S.conf.get('ini');
 		ini = ini['vicidial'];
 		var fields:Array<String> = Reflect.fields(Lib.objectOfAssociativeArray(ini));
@@ -613,17 +630,17 @@ class S
 		return info;
 	}
 
-	static function saveRequest(dbQuery:DbQuery):Bool
+	static function saveRequest(req:Dynamic):Bool
 	{
 		//trace(Json.stringify(dbQuery));
-		saveLog(dbQuery);
+		Util.safeLog(req);
 		var stmt:PDOStatement = dbh.prepare(
 			'INSERT INTO activity(action,request,"user") VALUES(:action,:request,:user)' ,Syntax.array(null));
 
 		var success:Bool = Model.paramExecute(stmt, 
 			Lib.associativeArrayOfObject(
 				{':action':params.get('classPath') + '.' + params.get('action'),
-				':user': dbQuery.dbUser.id, ':request': Json.stringify(dbQuery, function(key:Dynamic, value:Dynamic) {
+				':user': req.dbUser.id, ':request': Json.stringify(req, function(key:Dynamic, value:Dynamic) {
 					return switch(key){
 						case 'password'|'new_pass':
 							'XXX';
@@ -642,6 +659,10 @@ class S
 		var branch:String = #if dev 'dev' #else 'crm' #end;
 		home = Syntax.code("dirname($_SERVER['SCRIPT_FILENAME'])");
 		///opt/src/crm-2.0/server/src/S.hx
+		if(Lib.isCli()){
+			//Cli.process(Sys.args(), new CliService()).handle(Cli.exit);
+			trace(Sys.args());
+		}		
 		Syntax.code('require_once({0})', '$home/../.$branch/functions.php');
 		Syntax.code('require_once({0})', '$home/../.$branch/db.php');
 		//Syntax.code("file_put_contents($appLog,'.', FILE_APPEND)");
@@ -668,7 +689,7 @@ class S
 		conf =  Config.load('$home/appData.js');
 		var ini:NativeArray = Syntax.code("$ini");
 		conf.set('ini', ini);		
-		trace(conf.get('ini'));
+		safeLog(conf.get('ini'));
 		new DbData();
 		new DbUser(null);
 		new DbRelation(null);

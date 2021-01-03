@@ -1,4 +1,5 @@
 package model.auth;
+import php.SuperGlobal;
 import php.Const;
 import haxe.ds.Either;
 import php.Global;
@@ -213,8 +214,7 @@ class User extends Model
 	
 	public static function login(user:DbUser):Bool
 	{
-		//var me:User = new User(user);
-		trace(user);
+		S.safeLog(user);
 		switch(userIsAuthorized(user, true))
 		{//TODO:CONFIG JWT DURATION
 			case uath = UserAuth.AuthOK(dbData)|UserAuth.PassChangeRequired(dbData):
@@ -223,7 +223,7 @@ class User extends Model
 				var	jwt = JWT.sign({
 					id:dbData.dataInfo['id'],
 					validUntil:d,
-					ip: Web.getClientIP(),
+					ip: SuperGlobal._SERVER['REMOTE_ADDR'],
 					mandator:dbData.dataInfo['mandator']
 				}, S.secret);						
 				
@@ -242,7 +242,7 @@ class User extends Model
 				dbData.dataInfo['jwt'] = jwt;
 				var u:Int = S.dbh.exec(
 					'UPDATE ${S.dbSchema}.users SET last_login=NOW() WHERE id=${dbData.dataInfo["id"]}');
-				if (u==0)
+				if (u==0) 
 				{
 					trace('could not update last_login:' + Const.PHP_EOL 
 						+ S.dbh.errorInfo().nativeArray2String());
@@ -260,7 +260,7 @@ class User extends Model
 	
 	public static function logout(dbQuery:DbQuery):Bool
 	{	
-		trace(dbQuery.dbUser);
+		S.safeLog(dbQuery.dbUser);
 		//var me:User = new User(user);		
 		var expiryDate:Int = Date.now().delta(31556926000).getSeconds();//1 year
 		Global.setcookie('user.jwt','',expiryDate,'/','',true);
@@ -393,7 +393,7 @@ html,body{
 		//trace(S.dbQuery);
 		trace(Json.stringify(dbQuery));
 		//var request:String = Json.stringify(new hxbit.Dump(new hxbit.Serializer().serialize(dbQuery)).dumpObj());
-		var request:String = Web.getPostData();
+		var request:String = Lib.toHaxeArray(SuperGlobal._POST).join(',');//Web.getPostData();
 		trace( request.length + ' == ' +  Syntax.code('strlen(@iconv("UTF-8", "UTF-8//IGNORE",{0}))',request));
 		//trace(request);
 		var rTime:String = DateTools.format(S.last_request_time, "'%Y-%m-%d %H:%M:%S'");//,request=?

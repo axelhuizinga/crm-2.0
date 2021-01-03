@@ -1,4 +1,5 @@
 package;
+import haxe.PosInfos;
 import hxbit.Serializer;
 import haxe.io.Bytes;
 import db.DbQuery;
@@ -109,7 +110,7 @@ class Util
 	 * @param ob Map<String,Dynamic>
 	 */
 	
-	public  static function buildJsonB(keys:Array<String>, ob:Map<String,Dynamic>):String {
+	 public  static function buildJsonB(keys:Array<String>, ob:Map<String,Dynamic>):String {
 		var s:String = '{';
 		for(k in keys){
 			if(ob.exists(k)){
@@ -126,6 +127,20 @@ class Util
 		//var r:EReg = ~/,$/;//new EReg(",$");
 		var r:EReg = new EReg(", $","i");
 		s = r.replace(s,'}');
+		return s;
+	}
+
+	public  static function cliArgs(arg:Map<String,Dynamic>):String {
+		var s:String = '';
+		for(k=>v in arg.keyValueIterator()){
+			if(Std.isOfType(v, String)){
+				s += '-$k "${v}" ';
+			}
+			else {
+				s += '-$k ${v} ';
+			}				
+		}
+		//s = r.replace(s,'}');
 		return s;
 	}
 
@@ -161,7 +176,7 @@ class Util
 		};
 		var s:Serializer = new Serializer();
 		var dbQuery = new DbQuery(dbQP);//.toHex();
-		S.saveLog(dbQuery);
+		S.safeLog(dbQuery);
 		var b:Bytes = s.serialize(dbQuery);
 		return b.toString();
 	}
@@ -256,5 +271,9 @@ class Util
 			s += '${kv.key}=>${kv.value}' + Const.PHP_EOL;
 		}
 		return s;
+	}
+
+	public static function safeLog(log:String, ?pos:PosInfos) {
+		Global.file_put_contents('/var/www/pitverwaltung.de/log/crm.log',log, 8);
 	}
 }

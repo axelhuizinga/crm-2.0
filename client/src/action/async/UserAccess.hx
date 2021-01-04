@@ -82,7 +82,7 @@ class UserAccess {
 						//return dispatch(LocationAccess.redirect([], aState.app.redirectAfterLogin));
 						Cookie.set('SameSite', 'Strict', null, '/');
 						Cookie.set('userState.dbUser.id', Std.string(aState.userState.dbUser.id), null, '/');
-						Cookie.set('userState.dbUser.jwt',aState.userState.dbUser.jwt, null, '/');						
+						//Cookie.set('userState.dbUser.jwt',aState.userState.dbUser.jwt, null, '/');						
 						return dispatch(User(LoginComplete(aState.userState)));
 					}
 					else trace(data.dataErrors);		
@@ -217,7 +217,7 @@ class UserAccess {
 				Cookie.set('userState.dbUser.id', Std.string(userState.dbUser.id), null, '/');
 				Cookie.set('userState.dbUser.first_name',userState.dbUser.first_name, null, '/');
 				Cookie.set('userState.dbUser.last_name',userState.dbUser.last_name, null, '/');
-				Cookie.set('userState.dbUser.jwt',userState.dbUser.jwt, null, '/');
+				//Cookie.set('userState.dbUser.jwt',userState.dbUser.jwt, null, '/');
 
 				trace(Cookie.get('userState.dbUserState.dbUser.jwt'));
 				userState.dbUser.online = true;
@@ -281,7 +281,7 @@ class UserAccess {
 				} else {
 					userState.dbUser.online = false;
 					//var d:Date = Date.now().delta(31556926000);//ADD one year				
-					Cookie.set('userState.dbUser.jwt', '', 31556926);
+					//Cookie.set('userState.dbUser.jwt', '', 31556926);
 					Cookie.set('userState.dbUser.id', null, null, '/');					
 					trace(Cookie.get('userState.dbUserState.dbUser.jwt'));
 					return dispatch(User(LogOutComplete({dbUser: userState.dbUser, waiting: false})));

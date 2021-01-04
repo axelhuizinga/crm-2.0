@@ -1,6 +1,7 @@
 package model.admin;
 
 //import action.async.DBAccessProps;
+import php.SuperGlobal;
 import php.Global;
 import php.NativeAssocArray;
 import haxe.macro.Expr.Catch;
@@ -293,13 +294,16 @@ LIMIT ${Util.limit()}
 			importCrmData();
 		}
 		else{
+			param['user_name'] = S.dbQuery.dbUser.user_name;			
+			param['id'] = S.dbQuery.dbUser.id;			
+			param['REMOTE_ADDR'] = SuperGlobal._SERVER['REMOTE_ADDR'];			
 			param['jwt'] = S.dbQuery.dbUser.jwt;
-			param['user_id'] = S.dbQuery.dbUser.id;			
+			param['password'] = S.dbQuery.dbUser.password;
 			var cliArg:String = Util.cliArgs(param);
 			trace(cliArg);
 			var com:String = 'php ${S.home + "/server.php " + cliArg}';
 			trace(com);			
-			trace(Syntax.code("`{0} &`", com ));
+			Syntax.code("`{0} &`", com );
 			//Sys.sleep(10);
 			S.sendInfo(dbData, ['importContacts'=>'OK']);
 		}

@@ -147,6 +147,7 @@ class User extends Model
 		user.set('jwt',JWT.sign({
 			user_name:user['user_name'],
 			validUntil:d,
+			ip:SuperGlobal._SERVER['REMOTE_ADDR'],
 			mandator:user['mandator']
 		}, S.secret));
 		sendMail(user);
@@ -170,6 +171,7 @@ class User extends Model
 		var sql:String = 'SELECT user_name FROM ${S.dbSchema}.users WHERE user_name=:user_name AND active=TRUE';
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${user.user_name}'})))
+		//if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':id': '${user.id}'})))		
 		{			
 			trace(stmt.errorInfo());
 			S.sendErrors(dbData,['User.userIsAuthorized' => Std.string(stmt.errorInfo())]);
@@ -199,7 +201,7 @@ class User extends Model
 			//dbData.dataInfo['last_login'] = res['last_login'];
 			dbData.dataInfo['loggedIn'] = 'true';
 			trace(res['user_name']+':'+res['change_pass_required']);
-			trace('change_pass_required'+(res['change_pass_required']==true || res['change_pass_required']=='true'?'Y':'N'));
+			trace('change_pass_required'+(res['change_pass_required']=='true'?'Y':'N'));
 			if (res['change_pass_required']==true || res['change_pass_required']=='true')
 				return UserAuth.PassChangeRequired(dbData);
 			return UserAuth.AuthOK(dbData);			
@@ -218,20 +220,17 @@ class User extends Model
 		switch(userIsAuthorized(user, true))
 		{//TODO:CONFIG JWT DURATION
 			case uath = UserAuth.AuthOK(dbData)|UserAuth.PassChangeRequired(dbData):
+				if(Lib.isCli())
+					return true;
 				var d:Float = DateTools.delta(Date.now(), DateTools.hours(11)).getTime();
 				trace(d + ':' + Date.fromTime(d));
 				var	jwt = JWT.sign({
 					id:dbData.dataInfo['id'],
 					validUntil:d,
-					ip: SuperGlobal._SERVER['REMOTE_ADDR'],
+					ip: (S.dbQuery.dbParams.exists('data') && S.dbQuery.dbParams['data'].REMOTE_ADDR != null ? S.dbQuery.dbParams['data'].REMOTE_ADDR : SuperGlobal._SERVER['REMOTE_ADDR']),
 					mandator:dbData.dataInfo['mandator']
 				}, S.secret);						
-				
-				//trace(jwt);
-				//trace(JWT.extract(jwt));
-				//Web.setCookie('user.id', me.dbData.dataInfo['user_data'].id, Date.fromTime(d + 86400000));
 				var expire:Int = Date.fromTime(d + 86400000).getSeconds();
-				Global.setcookie('user.jwt',jwt,expire,'/','',true);
 				Global.setcookie('user.id', dbData.dataInfo['id'],expire,'/','',true);
 				Global.setcookie('user.last_name', dbData.dataInfo['last_name'], expire,'/','',true);
 				Global.setcookie('user.first_name', dbData.dataInfo['first_name'], expire,'/','',true);
@@ -263,7 +262,6 @@ class User extends Model
 		S.safeLog(dbQuery.dbUser);
 		//var me:User = new User(user);		
 		var expiryDate:Int = Date.now().delta(31556926000).getSeconds();//1 year
-		Global.setcookie('user.jwt','',expiryDate,'/','',true);
 		Global.setcookie('user.id', Std.string(dbQuery.dbUser.id), expiryDate,'/','',true);
 
 		//me.dbData.dataInfo['user_data'].id = jwt;
@@ -326,37 +324,37 @@ X-Mailer: HaxeMail
 		var content:String = comment(unindent, format) /*
 <!DOCTYPE html>
 <html><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Neues Passwort</title>
+	<title>Neues Passwort</title>
 
-<style>
-html,body{
-	height:100%;
-	width:100%;
-	display:flex;
-	margin:0px;
-	padding:0px;
-}
-	div{
-		text-align:center;
-		width:60%;
-		height:40%;
-		margin:auto;		
-	}
-	.center{
-	        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        text-align: center;
-        min-height: 200px;
-        background-color: rgba(33, 33, 33, .3);
-        align-items: center;
-	}
+	<style>
+		html,body{
+			height:100%;
+			width:100%;
+			display:flex;
+			margin:0px;
+			padding:0px;
+		}
+		div{
+			text-align:center;
+			width:60%;
+			height:40%;
+			margin:auto;		
+		}
+		.center{
+				display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			text-align: center;
+			min-height: 200px;
+			background-color: rgba(33, 33, 33, .3);
+			align-items: center;
+		}
     </style>
 </head>
 <body>
@@ -421,8 +419,9 @@ html,body{
 		//trace('$now:$jwt');
 		//trace(dbQuery);
 		try{
-			var userInfo:UserInfo = JWT.extract(jwt);
-			//trace(userInfo);			
+			var userInfo:UserInfo = JWT.extract(jwt);			
+			//S.safeLog(userInfo);		
+			trace(userInfo);		
 			if(userInfo.id==null && userInfo.id ==dbQuery.dbUser.id && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
 				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
@@ -433,7 +432,7 @@ html,body{
 						trace(payload);
 						// JWT INVALID
 						//saveRequest(id, dbQuery);
-						dbData.dataErrors = ['jwtError'=>'Invalid'];
+						dbData.dataErrors = ['jwtError'=>'Invalid payload'];
 						S.sendInfo(dbData, ['loginTask'=>Login]);
 						false;
 					case Valid(payload):
@@ -442,7 +441,7 @@ html,body{
 							dbQuery.dbUser.mandator = userInfo.mandator;
 						//params.set('mandator',userInfo.mandator);
 						//saveRequest(id, dbQuery);	
-						if(S.action=='verify')
+						//if(S.action=='verify')
 							S.sendInfo(dbData, ['verify'=>'OK']);
 						true;
 					default:
@@ -457,7 +456,7 @@ html,body{
 			//trace(':'+(id == userInfo.id));
 			//trace(':'+(userInfo.ip == Web.getClientIP()));
 			//trace(':'+((userInfo.validUntil - Date.now().getTime()) > 0));
-			if (id == userInfo.id && userInfo.ip == Web.getClientIP() && (userInfo.validUntil - Date.now().getTime()) > 0)
+			if (Lib.isCli() || id == userInfo.id && userInfo.ip == SuperGlobal._SERVER['REMOTE_ADDR'] && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
 				trace('calling JWT.verify now...');
 				//trace(JWT.verify(jwt, S.secret));
@@ -495,7 +494,7 @@ html,body{
 		}
 		catch (ex:Dynamic)
 		{
-			trace(ex);
+			S.safeLog(ex);
 			S.exit({error:Std.string(ex)});
 			return false;
 		}

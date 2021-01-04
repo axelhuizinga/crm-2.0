@@ -35,7 +35,7 @@ class UserStore implements IReducer<UserAction, UserState>
 				id:Cookie.get('userState.dbUser.id')==null?0:Std.parseInt(Cookie.get('userState.dbUser.id')),
 				last_name:Cookie.get('userState.dbUser.last_name')==null?'':Cookie.get('userState.dbUser.last_name'),
 				mandator: Cookie.get('userState.dbUser.mandator')==null?1:Std.parseInt(Cookie.get('userState.dbUser.mandator')),
-				user_name:Cookie.get('userState.dbUser.user_name')==null?'':Cookie.get('userState.dbUser.user_name'),
+				user_name:Cookie.get('userState.dbUser.user_name')==null?'':Cookie.get('userState.dbUser.user_name'), 
 				email:Cookie.get('userState.dbUser.email')==null?'':Cookie.get('userState.dbUser.email'),
 				password:'',				
 				change_pass_required:false,

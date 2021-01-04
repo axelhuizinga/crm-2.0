@@ -1,4 +1,5 @@
 package;
+import db.DBAccessProps;
 import haxe.ds.ReadOnlyArray;
 import sys.io.FileOutput;
 import sys.FileSystem;
@@ -133,13 +134,20 @@ class S
 		{trace(Syntax.code("$_SERVER['VERIFIED']"));}
 		//var pd:Dynamic = Web.getPostData();
 		trace(Lib.isCli()?'cli':'web');
-		safeLog(Sys.args());
+		
 		response = {content:'',error:''};
 		if(Lib.isCli()){
-			//Cli.process(Sys.args(), new CliService()).handle(Cli.exit);
-			//trace(Sys.args());
+			safeLog(Sys.args());
 			params = Cli.parse();
 			action = params.get('action');
+			var dbUser:DbUser = new DbUser(
+				{jwt:params['jwt'],id:params['id'],online:true, password:params['password'], user_name:params['user_name']});
+			var dbAccProps:DBAccessProps = {action:action, data:{REMOTE_ADDR:params['REMOTE_ADDR']}, dbUser: dbUser};
+			for(k=>v in params.keyValueIterator())
+			{
+				Reflect.setField(dbAccProps, k, v);
+			}
+			dbQuery = new DbQuery(dbAccProps);
 		}
 		else{
 			if(Lib.toHaxeArray(SuperGlobal._FILES).length>0)
@@ -166,7 +174,8 @@ class S
 				Upload.go();
 			}
 			//trace(Web.getPostData());
-			dbQuery = Model.binary();
+			dbQuery = Model.binary();			
+			//trace(dbQuery);
 			safeLog(dbQuery);
 			//Model.binary(params.get('dbData'));
 			params = dbQuery.dbParams;
@@ -224,8 +233,7 @@ class S
 				exit({'Error':'Model.dispatch ${params.get('classPath')}.$action did not send anything'});
 			}
 
-		}
-	
+		}	
 		User.login(dbQuery.dbUser);		
 		exit(response);
 	}

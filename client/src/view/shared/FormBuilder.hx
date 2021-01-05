@@ -290,11 +290,11 @@ EOF;
 		return jsx('<form name=${props.model} className="tabComponentForm formField">
 				<div className="grid_box" role="table" aria-label="Destinations">
 					<div className="g_caption" >${props.title}</div>	
-					${renderFormInputElements(props.fields, initialState)}
-					<div className="g_footer" >
-					${for (mI in props.mHandlers) renderButton(mI,++sK)}
-					</div>					
+					${renderFormInputElements(props.fields, initialState)}					
 				</div>									
+				<div className="g_footer" >
+				${for (mI in props.mHandlers) renderButton(mI,++sK)}
+				</div>			
 			</form>
 		');
     }	// children=${renderItems(props.mHandlers)}

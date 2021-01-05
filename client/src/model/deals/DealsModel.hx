@@ -12,8 +12,6 @@ import view.shared.FormInputElement;
 
 class DealsModel
 {
-
-	
 	public static var dataAccess:DataAccess = [
 		'open' => {
 			source:[
@@ -22,8 +20,7 @@ class DealsModel
 				//"joins" => []//Array of join parameters
 					],
 				],
-			view:[
-				
+			view:[				
 				'creation_date'=>{label:'Erstellt',type:DatePicker, displayFormat: "d.m.Y", disabled:true},
 				'start_date'=>{label:'Start',type:DatePicker, displayFormat: "d.m.Y"},
 				'booking_run'=>{label:'Buchungslauf',type: Radio,options: ['start'=>'Monatsanfang','middle'=>'Monatsmitte']},

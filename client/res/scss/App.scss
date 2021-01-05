@@ -458,6 +458,7 @@ input::-moz-focus-inner {
 {
 	min-width: 80%;
 	display:flex;	
+	flex-direction: column;
 	flex-grow:1;
 	margin:0.8rem 0 0 0.8rem;	
 	min-height: 0;
@@ -921,6 +922,8 @@ form td, form caption
 	align-content: space-between;
 	justify-content: space-evenly;
 	grid-column: 1/3;
+	/*bottom: 1rem;*/
+	margin-top: auto;
 }
 .g_row_2
 {

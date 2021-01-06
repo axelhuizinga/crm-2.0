@@ -152,7 +152,7 @@ class UserAccess {
 		return null;
 	}
 
-	public static function doLogin(userState:UserState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
+	public static function  doLogin(userState:UserState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			if(userState.dbUser.mandator==null)

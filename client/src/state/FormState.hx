@@ -51,6 +51,7 @@ typedef FormState =
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,
 	?handleChange:InputEvent->Void,
+	?mBHandlers:Array<MItem>,	
 	?mHandlers:Array<MItem>,	
 	?hasError:Bool,
 	?limit:Int,

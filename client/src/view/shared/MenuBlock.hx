@@ -6,7 +6,6 @@ typedef MenuBlock =
 {
 	?dataClassPath:String,
 	?disabled:Bool,
-	//?viewClassPath:String,
 	?className:String,
 	//?handlerInstance:DataAccessForm,
 	?onActivate:Function,

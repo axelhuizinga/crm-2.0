@@ -159,7 +159,7 @@ class AppStore
 				store.dispatch(action);
 			case User(action):
 				store.dispatch(action);
-				next();
+				//next();
 			//default: next();
 			default: 
 				//store.dispatch(action);

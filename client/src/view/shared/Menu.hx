@@ -155,6 +155,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		var i:Int = 1;
 		return items.map(function(item:MItem) 
 		{
+			if(item.separator){ return jsx('<hr className="menuSeparator"/>');}
 			var type:FormInputElement;
 			type = (item.formField==null||item.formField.type==null?Button:item.formField.type);
 			trace(type);

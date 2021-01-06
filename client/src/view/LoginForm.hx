@@ -1,5 +1,8 @@
 package view;
 
+import js.html.HTMLDocument;
+import js.Browser;
+import js.html.Document;
 import action.AppAction;
 import db.LoginTask;
 import js.html.Event;
@@ -8,6 +11,7 @@ import js.html.audio.WaveShaperOptions;
 import action.UserAction;
 import react.ReactComponent.ReactFragment;
 import react.ReactType;
+import js.html.FormElement;
 import js.html.Image;
 import js.html.InputElement;
 import js.html.InputEvent;
@@ -51,8 +55,8 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	public function new(?props:LoginProps)
 	{
 		trace(Reflect.fields(props));
+		trace(props.submitLogin);
 		super(props);
-		trace(props);
 		submitValue = '';
 		state = copy(props.userState,{waiting:false});//{user_name:'',pass:'',new_pass_confirm: '', new_pass: '',waiting:true};
 	}
@@ -94,6 +98,19 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			trace('ok');
 		}
 		img.src = "img/schutzengelwerk-logo.png";
+		if(App.devPassword!='' && App.devUser!=''){
+			var doc:HTMLDocument = Browser.document;
+			var user_name:InputElement = cast(doc.querySelector('input[name="user_name"]'),InputElement);
+			//props.userState.dbUser.user_name = user_name.value = App.devUser;
+			props.userState.dbUser.user_name = App.devUser;
+			var password:InputElement = cast(doc.querySelector('input[name="password"]'),InputElement);
+			var formElement:FormElement = cast(doc.querySelector('form[name="form"]'),FormElement);
+			//props.userState.dbUser.password = password.value = App.devPassword;
+			props.userState.dbUser.password = App.devPassword;
+			//formElement.submit();
+			trace(props.userState);
+			props.submitLogin(props.userState);
+		}
 		trace(props.redirectAfterLogin);
 	}
 	
@@ -140,7 +157,6 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		Reflect.setField((t.name.indexOf('new_pass')==-1? s.dbUser:s), t.name, t.value);
 		props.stateChange(copy(props.userState,s));
 		//trace(props.dispatch + '==' + App.store.dispatch);
-		//trace(props.dispatch == App.store.dispatch);
 		//App.store.dispatch(UserAction.LoginChange(s));
 		//TODO: PUT INTO Global State to avoid rerender
 		//this.setState(s);

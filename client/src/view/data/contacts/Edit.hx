@@ -68,8 +68,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Schließen',action:'close'},		
 		{label:'Speichern + Schließen',action:'update', then:'close'},
 		{label:'Speichern',action:'update'},
-		{label:'Zurücksetzen',action:'reset'}
-	];
+		{label:'Zurücksetzen',action:'reset'},
+		{separator:true},
+		{label:'Aktionen',action:'listDeals', section: 'Edit', classPath:'view.data.contacts.Deals'},	
+		{label:'Konten',action:'listAccounts', section: 'Edit', classPath:'view.data.contacts.Accounts'},
+		{label:'Verlauf',action:'listHistory', section: 'Edit', classPath:'view.data.contacts.History'}
+	];	
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
 	var formApi:FormApi;
@@ -91,7 +95,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			{label:'Speichern + Schließen',action:'update', actions:[update,close]},
 			{label:'Speichern',action:'update'},
 			{label:'Zurücksetzen',action:'reset',onlySm: false}
-		];		*/
+		];*/		
 		baseForm = new BaseForm(this);
 		trace(props.match.params);
 		//REDIRECT WITHOUT ID OR edit action
@@ -113,8 +117,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//dataTable:[],
 			actualState:null,
 			initialData:null,
-			loading:false,
 			mHandlers:menuItems,
+			loading:false,
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
 				{

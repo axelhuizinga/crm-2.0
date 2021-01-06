@@ -9,6 +9,7 @@ typedef MItem =
 	?action:String,
 	?actions:Array<Function>,
 	?className:String,
+	?classPath:String,
 	?formField:FormField,
 	?section:String,
 	?disabled:Bool,	
@@ -16,6 +17,7 @@ typedef MItem =
 	?img:String,
 	?info:String,
 	?label:String,
+	?separator:Bool,	
 	?then:String,	
 	?onlySm:Bool	
 }

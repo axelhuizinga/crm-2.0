@@ -283,7 +283,8 @@ EOF;
 
     public function renderForm(props:FormState, initialState:Dynamic):ReactFragment
     {
-		trace(props.fields);
+		//trace(props.fields);
+		//return null;
 		//trace(props); ref=${props.ref} 
 		var sK:Int = 0;
 		
@@ -293,15 +294,18 @@ EOF;
 					${renderFormInputElements(props.fields, initialState)}					
 				</div>									
 				<div className="g_footer" >
-				${for (mI in props.mHandlers) renderButton(mI,++sK)}
 				</div>			
 			</form>
-		');
-    }	// children=${renderItems(props.mHandlers)}
+		');				
+		}	
+		// children=${renderItems(props.mHandlers)} 
+		//${for (mI in props.mHandlers) renderButton(mI,++sK)}
 
 	function renderButton(mItem:MItem, i:Int):ReactFragment {
 		if(mItem.onlySm)
 			return null;
+		if(mItem.separator)
+			return jsx('<hr className="menuSeparator"/>');
 		return jsx('<$BButton key=${i++} onClick=${mItem.handler} 
 		data-section=${mItem.section} disabled=${mItem.disabled} type="button" >${mItem.label}</$BButton>');	
 	}

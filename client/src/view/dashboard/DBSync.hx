@@ -48,8 +48,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		
 		{label:'Stammdaten Import ',action:'importContacts'},
 		{label:'Stammdaten Update ',action:'syncContacts'},
-		{label:'Abschlüsse Import ',action:'importDeals'},
-		{label:'Abschlüsse Update ',action:'syncDeals'},
+		{label:'Aktionen Import ',action:'importDeals'},
+		{label:'Aktionen Update ',action:'syncDeals'},
 		{label:'Konten Import ',action:'importAccounts'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
@@ -289,7 +289,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(Status(Update(
 			{
 				className:' ',
-				text:'Importiere Abschlüsse'})));		
+				text:'Importiere Aktionen'})));		
 		App.store.dispatch(LivePBXSync.importDeals({
 			limit: 1000,//00,
 			offset:0,
@@ -304,7 +304,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(Status(Update(
 		{
 			className:' ',
-			text:'Aktualisiere Abschlüsse'
+			text:'Aktualisiere Aktionen'
 		})));	
 
 		App.store.dispatch(LivePBXSync.importDeals({

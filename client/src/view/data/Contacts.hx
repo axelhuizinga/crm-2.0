@@ -29,7 +29,6 @@ import redux.Redux.Dispatch;
 import action.async.LiveDataAccess;
 import view.data.contacts.List;
 import view.data.contacts.Edit;
-
 import model.contacts.ContactsModel;
 import action.async.DBAccess;
 import shared.DbData;
@@ -113,11 +112,6 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
     {
 		if(_strace) trace('ok');
         return {
-			//sync: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
-			/*storeData:function(id:String, action:DataAction)
-			{
-				dispatch(LiveDataAccess.storeData(id, action));
-			},*/
 			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
 			{
 				if(_strace) trace('select:$id selectType:${selectType}');
@@ -150,9 +144,9 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	{	
 		if(_trace) trace(props.location.pathname);
 		//setState({mounted:true});
-		return;
+		/*return;
 		var baseUrl:String = props.match.path.split(':section')[0];
-		if(_trace) trace(props.match);
+		if(_trace) trace(props.match);*/
 	}
 	
 	override function render():ReactFragment

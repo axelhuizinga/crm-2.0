@@ -1,4 +1,5 @@
 package view.data.contacts;
+import react.ReactUtil;
 import db.DbRelation;
 import db.DbQuery;
 import db.DBAccessProps;
@@ -32,6 +33,7 @@ import js.html.FormElement;
 import react.router.RouterMatch;
 import state.AppState;
 import haxe.Constraints.Function;
+import react.modal.Modal;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactRef;
@@ -66,7 +68,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
 		{label:'Schließen',action:'close'},		
-		{label:'Speichern + Schließen',action:'update', then:'close'},
+		//{label:'Speichern + Schließen',action:'update', then:'close'},
 		{label:'Speichern',action:'update'},
 		{label:'Zurücksetzen',action:'reset'},
 		{separator:true},
@@ -76,6 +78,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	];	
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
+	var dealsAreOpen:Bool;
 	var formApi:FormApi;
 	var formBuilder:FormBuilder;
 	var formFields:DataView;
@@ -117,6 +120,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//dataTable:[],
 			actualState:null,
 			initialData:null,
+			modals:['deals'=>false,'accounts'=>false,'history'=>false],
 			mHandlers:menuItems,
 			loading:false,
 			selectedRows:[],
@@ -146,6 +150,17 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		// TODO: CHECK IF MODIFIED + ASK FOR SAVING / DISCARDING
 		//var baseUrl:String = props.match.path.split(':section')[0];
 		props.history.push('${props.match.path.split(':section')[0]}List/get');
+	}
+
+	function listDeals() {
+		//trace(state.sideMenu);
+		trace('---');
+		/*for(k=>v in state.modals.keyValueIterator())
+			{
+				if(k)
+			}*/
+		setState({modals:copy(state.modals, ['deals' => true])});
+		//deals = new Deals()
 	}
 
 	function loadContactData(id:Int):Void
@@ -231,7 +246,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(DataAction.SelectActContacts(actData));
 	}
 
-	function mHandlers3(event:Event) {
+	function mHandlers33(event:Event) {
 		//trace(Reflect.fields(event));
 		//trace(Type.typeof(event));
 		event.preventDefault();
@@ -241,53 +256,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(target.value);
 		var dataSet:DOMStringMap = target.dataset;
 		trace(dataSet.action);
-		//var elements:HTMLCollection = target.elements;
-		//trace(elements.each(function(name:String, el:Dynamic)
-		//trace(elements.dynaMap());
-		//trace(state.actualState);
 		trace(state.initialData.id);
-		/*{
-			//trace('$name => $el');
-			//trace(el.value);
-		});		
-		var doc:Document = Browser.window.document;
-
-		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
-		var elements:HTMLCollection = formElement.elements;
-		for(k in dataAccess['open'].view.keys())
-		{
-			if(k=='id')
-				continue;
-			try 
-			{
-				var item:Dynamic = elements.namedItem(k);
-				//trace('$k => ${item.type}:' + item.value);
-				Reflect.setField(actualState, item.name, switch (item.type)
-				{
-					//case DateControl|DateTimrControl:
-
-					case 'checkbox':
-					//trace('${item.name}:${item.checked?true:false}');
-					item.checked?1:0;
-					case 'select-multiple'|'select-one':
-					var sOpts:HTMLOptionsCollection = item.selectedOptions;
-					//trace (sOpts.length);
-					sOpts.length>1 ? [for(o in 0...sOpts.length)sOpts[o].value ].join('|'):item.value;
-					default:
-					//trace('${item.name}:${item.value}');
-					item.value;
-				});			
-			}
-			catch(ex:Dynamic)
-			{
-				trace(ex);
-			}
-		}
-		//setState({actualState: actualState});
-		compareStates();
-		//trace(initialData);
-		//trace(actualState);*/
-		//open();
 	}
 
 
@@ -390,6 +359,26 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//App.store.dispatch(DBAccess.execute(dbaProps));
 	}
 
+	function renderModals():ReactFragment
+	{
+		trace('XXX');
+		var modals:ReactFragment = [for(k=>v in state.modals.keyValueIterator())
+		 switch (k){
+			case 'deals':
+				jsx('<$Modal id="deals" isOpen=${state.modals["deals"]} 
+				parentSelector=${function() {return Browser.document.querySelector('#contact');}}
+				><div >Hello Modal World :)</div></$Modal>');
+			/*case 'accounts':
+				jsx('');
+			case 'history':
+				jsx('');*/
+			default:
+				null;
+		}];
+		trace(untyped modals.length);
+		return modals;
+	}
+
 	function renderResults():ReactFragment
 	{
 		trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.actualState != null));
@@ -436,13 +425,17 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.action);		
 		if(state.initialData==null)
 			return null;
+		trace(state.modals);
 		//trace('state.loading: ${state.loading}');		
 		return switch(props.match.params.action)
 		{	
 			case 'open':
 			 //(state.loading || state.initialData.edited_by==0 ? state.formApi.renderWait():
 				state.formApi.render(jsx('
+					<>
 						${renderResults()}
+						${renderModals()}
+					</>
 				'));	
 			case 'insert':
 				state.formApi.render(jsx('
@@ -450,7 +443,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				'));		
 			default:
 				state.formApi.render(jsx('
-						${renderResults()}
+				<>
+					${renderResults()}
+					${renderModals()}
+				</>
 				'));			
 		}
 	}

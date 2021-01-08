@@ -5,6 +5,13 @@
 
 // extracted by mini-css-extract-plugin
 
+/***/ }),
+
+/***/ "./res/scss/App.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
 /***/ })
 
 }]);

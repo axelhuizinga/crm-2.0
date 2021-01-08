@@ -130,8 +130,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				offset:offset>0?offset:0,
 				table:'deals',
 				resolveMessage:{					
-					success:'Abschlußliste wurde geladen',
-					failure:'Abschlußliste konnte nicht geladen werden'
+					success:'Aktionliste wurde geladen',
+					failure:'Aktionliste konnte nicht geladen werden'
 				},				
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP

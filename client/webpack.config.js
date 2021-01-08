@@ -210,17 +210,17 @@ module.exports = () =>{
 				template: path.resolve(__dirname, 'res/'+(isProd ? 'crm.php' : 'crm.html')),
 				title: (localConf.org ? localConf.org + ' ' : '' ) + 'CRM 2.0'
 			}),
-			new webpack.DefinePlugin(isProd ? {
+			new webpack.DefinePlugin((isProd ? {
 				__host__:JSON.stringify(localConf.host),
-				__devIP__:'',
-				__user_name__:'',
-				__password__:''
+				__devIP__:"'X'",
+				__user_name__:"'X'",
+				__password__:"'X'"
 			}:{
 				__host__:JSON.stringify(localConf.host),
 				__devIP__:JSON.stringify(localConf.ip),
 				__user_name__:JSON.stringify(localConf.user_name),
 				__password__:JSON.stringify(localConf.password)
-			})
+			}))
 		]
 	}
 };

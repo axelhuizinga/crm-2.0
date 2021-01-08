@@ -70,7 +70,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	];*/
 	public static var menuItems:Array<MItem> = [
 		{label:'Schließen',action:'close'},		
-		{label:'Speichern + Schließen',action:'update', then:'close'},
+	//	{label:'Speichern + Schließen',action:'update', then:'close'},
 		{label:'Speichern',action:'update'},
 		{label:'Zurücksetzen',action:'reset',onlySm: false}
 	];	
@@ -306,8 +306,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					action:'get',
 					filter:{id:id,mandator:1},
 					resolveMessage:{
-						success:'Abschluß ${id} wurde geladen',
-						failure:'Abschluß ${id} konnte nicht geladen werden'
+						success:'Aktion ${id} wurde geladen',
+						failure:'Aktion ${id} konnte nicht geladen werden'
 					},
 					table:'deals',
 					dbUser:props.userState.dbUser,
@@ -361,7 +361,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					],
 					model:'deal',
 					//ref:formRef,
-					title: 'Bearbeite Abschluß' 
+					title: 'Bearbeite Aktion' 
 				},state.actualState));
 		
 			case 'insert':

@@ -287,8 +287,8 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 					action:'get',
 					filter:{id:id,mandator:1},
 					resolveMessage:{
-						success:'Abschluß ${id} wurde geladen',
-						failure:'Abschluß ${id} konnte nicht geladen werden'
+						success:'Aktion ${id} wurde geladen',
+						failure:'Aktion ${id} konnte nicht geladen werden'
 					},
 					table:'deals',
 					dbUser:props.userState.dbUser,
@@ -342,7 +342,7 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 					],
 					model:'deal',
 					//ref:formRef,
-					title: 'Bearbeite Abschluß' 
+					title: 'Bearbeite Aktion' 
 				},state.actualState));
 		
 			case 'insert':

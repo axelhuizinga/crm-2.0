@@ -1,5 +1,7 @@
 package view.data;
 
+import action.DataAction.SelectType;
+import haxe.ds.IntMap;
 import react.ReactRef;
 import react.router.RouterMatch;
 import react.router.ReactRouter;
@@ -16,6 +18,9 @@ import react.ReactComponent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
 import react.ReactType;
+import redux.Redux.Dispatch;
+import action.async.LiveDataAccess;
+import model.accounting.ReturnDebitModel;
 import loader.AjaxLoader;
 import view.data.accounts.Edit;
 import view.data.accounts.List;
@@ -32,9 +37,13 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 
+@:connect
 class Accounts extends ReactComponentOf<DataFormProps,FormState>
 {
 	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
+	var _trace:Bool;
+	static  var _strace:Bool;
+
 	public function new(?props:DataFormProps) 
 	{
 		super(props);	
@@ -69,20 +78,18 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		trace(Reflect.fields(props));		
 	}
 	
-	/*static function mapStateToProps() {
-
-		return function(aState:state.AppState) 
-		{
-			var uState = aState.user;
-			//trace(uState);		
-			return {
-				//appConfig:aState.config,
-				id:uState.id,
-				jwt:uState.jwt,
-				first_name:uState.first_name
-			};
+	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
+	{
+		if(_strace) trace('ok');
+		return {
+			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
+			{
+				if(_strace) trace('select:$id selectType:${selectType}');
+				//dispatch(DataAction.CreateSelect(id,data,match));
+				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
+			}
 		};
-	}	*/
+	}
 	
 	override function componentDidCatch(error, info) {
 		// Display fallback UI

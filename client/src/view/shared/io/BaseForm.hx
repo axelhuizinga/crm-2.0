@@ -71,47 +71,6 @@ class BaseForm
 		//trace(comp.state.actualState);
 	}		
 
-	/*function mHandlers(event:Event) {
-
-		event.preventDefault();
-		trace(comp.state.initialState.id);
-		var doc:Document = Browser.window.document;
-		var formElement:FormElement = formRef.current;//cast(doc.querySelector('form[name="contact"]'),FormElement);
-		var elements:HTMLCollection = formElement.elements;
-		for(k in formFields.keys())
-		{
-			if(k=='id')
-				continue;
-			try 
-			{
-				var item:Dynamic = elements.namedItem(k);
-				//trace('$k => ${item.type}:' + item.value);
-				Reflect.setField(comp.state.actualState, item.name, switch (item.type)
-				{
-					//case DateControl|DateTimrControl:
-
-					case 'checkbox':
-					//trace('${item.name}:${item.checked?true:false}');
-					item.checked?1:0;
-					case 'select-multiple'|'select-one':
-					var sOpts:HTMLOptionsCollection = item.selectedOptions;
-					//trace (sOpts.length);
-					sOpts.length>1 ? [for(o in 0...sOpts.length)sOpts[o].value ].join('|'):item.value;
-					default:
-					//trace('${item.name}:${item.value}');
-					item.value;
-				});			
-			}
-			catch(ex:Dynamic)
-			{
-				trace(ex);
-			}
-		}
-		//setState({comp.state.actualState: comp.state.actualState});
-		trace(comp.state.actualState);
-		go(comp.state.actualState);
-	}*/
-
 	public function initFieldNames(keys:Iterator<String>):Array<String> {
 		var fieldNames = new Array();
 		for(k in keys)

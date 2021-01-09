@@ -71,7 +71,7 @@ class Imports extends ReactComponentOf<DataFormProps,FormState>
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;	
 
-	/*public function new(props) 
+	public function new(props) 
 	{
 		super(props);
 		//dataDisplay = ReturnDebitModel.dataDisplay;
@@ -91,7 +91,7 @@ class Imports extends ReactComponentOf<DataFormProps,FormState>
 			props.history.push('${baseUrl}Imports/');
 			//props.history.push('${baseUrl}List/get${props.dataStore.contactData.iterator().hasNext()?'/'+props.dataStore.contactData.keys().keysList():''}');
 		}		
-	}*/
+	}
 	
 	static function mapStateToProps(aState:AppState) 
 	{

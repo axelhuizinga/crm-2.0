@@ -54,7 +54,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		baseForm = new BaseForm(this);
+		//baseForm =new BaseForm(this);
 		dataDisplay = DealsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 
@@ -66,7 +66,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:null,
 			values:new Map<String,Dynamic>()
 		},this);
-		if(props.match.params.action==null)
+		if(false && props.match.params.action==null)
 		{
 			//var sData = App.store.getState().dataStore.contactData;	props.match.params.section==null||		
 			var baseUrl:String = props.match.path.split(':section')[0];
@@ -77,7 +77,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		else 
 		{
 			//
-			trace(props.match.params);
+			trace(props);
 		}		
 		trace(state.loading);
 	}
@@ -199,14 +199,14 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			jsx('
 				<form className="tabComponentForm" >
 					<$Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
-					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${baseForm.renderPager}
+					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${{function()BaseForm.renderPager(this);}}
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				</form>
 			');			
 			/*case 'get':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable} 
-					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${baseForm.renderPager} parentComponent=${this}
+					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${function()BaseForm.renderPager(this)} parentComponent=${this}
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');*/
 			case 'delete':
@@ -220,10 +220,10 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	override function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		trace(props.match.params.section);		
-		return state.formApi.render(jsx('
-				${renderResults()}
-		'));		
+		//return state.formApi.render(jsx('${renderResults()}
+		return jsx('
+				<div className="modal ${props.isActive?'is-active':''}">Hello Modal :)</div>
+		');		
 	}
 	
 	function updateMenu(?viewClassPath:String):MenuProps

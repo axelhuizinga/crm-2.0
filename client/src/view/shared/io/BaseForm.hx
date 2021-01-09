@@ -33,11 +33,11 @@ class BaseForm
 {
 	var comp:ReactComponentOf<DataFormProps,FormState>;
 
-	public function new(comp:Dynamic) {
+	/*public function new(comp:Dynamic) {
 		this.comp = comp;		
-	}
+	}*/
 
-	public function compareStates() {
+	public static function compareStates(comp:Dynamic) {
 		var dObj:ORM = cast(comp.state.actualState, ORM);
 		for(f in Reflect.fields(dObj))
 		{
@@ -45,7 +45,7 @@ class BaseForm
 		}
 	}
 
-	public function doChange(name,value) {
+	public static function doChange(comp:Dynamic,name:String,value:Dynamic) {
 		trace('$name: $value');
 		if(name!=null && name!='')
 		//Reflect.setField(comp.state.actualState,name,value);
@@ -71,7 +71,7 @@ class BaseForm
 		//trace(comp.state.actualState);
 	}		
 
-	public function initFieldNames(keys:Iterator<String>):Array<String> {
+	public static function initFieldNames(keys:Iterator<String>):Array<String> {
 		var fieldNames = new Array();
 		for(k in keys)
 		{
@@ -80,11 +80,11 @@ class BaseForm
 		return fieldNames;
 	}
 	
-	public function sessionStore(classPath:String){
+	/*public function sessionStore(classPath:String){
 		trace(comp.state.actualState);
 		Browser.window.sessionStorage.setItem(classPath,Json.stringify(comp.state.actualState));
 		Browser.window.removeEventListener('beforeunload', sessionStore);
-	}
+	}*/
 
 	public function storeParams(path:String, params:Dynamic):Map<String,Map<String,String>>
 	{
@@ -107,7 +107,7 @@ class BaseForm
 	 * PAGER HANDLING
 	 */
 
-	public function renderPager():ReactFragment
+	public static function renderPager(comp:Dynamic):ReactFragment
 	{
 		trace('pageCount=${comp.state.pageCount}');
 		return jsx('
@@ -123,7 +123,15 @@ class BaseForm
 					pageCount=${comp.state.pageCount}
 					marginPagesDisplayed={2}
 					pageRangeDisplayed={5}
-					onPageChange=${onPageChange}
+					onPageChange=${function(data){
+						trace('${comp.props.match.params.action}  ${data.selected}');
+						var fun:Function = Reflect.field(comp,comp.props.match.params.action);
+						if(Reflect.isFunction(fun))
+						{
+							Reflect.callMethod(comp,fun,[{page:data.selected}]);
+						}
+						//onPageChange(comp);
+					}}
 					containerClassName=${'pagination  is-small'}
 					subContainerClassName=${'pages pagination'}
 					activeLinkClassName=${'is-current'}/>
@@ -132,13 +140,13 @@ class BaseForm
 		');
 	}	
 
-	public function onPageChange(data) {
-		trace('${comp.props.match.params.action}:${data.selected}');
+	/*public static function onPageChange(comp, data) {
+		trace('${comp.props.match.params.action}  ${data.selected}');
 		var fun:Function = Reflect.field(comp,comp.props.match.params.action);
 		if(Reflect.isFunction(fun))
 		{
 			Reflect.callMethod(comp,fun,[{page:data.selected}]);
 		}		
-	}
+	}*/
 	
 }

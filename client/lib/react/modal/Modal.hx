@@ -59,7 +59,7 @@ typedef ModalProps = {
 	?contentElement:Function,//(props, children) => <div {...props}>{children}</div>	
 }
 
-@:jsRequire('react-modal', 'default')
+@:jsRequire('react-modal', 'Modal')
 extern class Modal extends ReactComponent.ReactComponentOfProps<ModalProps>{
 	//public static var defaultStyles:ModalStyle;
 }

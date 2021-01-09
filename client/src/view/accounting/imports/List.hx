@@ -130,7 +130,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = ReturnDebitModel.dataDisplay;
 		
 		trace('...' + Reflect.fields(props));
-		baseForm = new BaseForm(this);
+		//baseForm =new BaseForm(this);
 		
 		state =  App.initEState({
 			sideMenu:FormApi.initSideMenu2( this,			
@@ -246,6 +246,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		</>'));		
 	}
 	
+	function renderPager(){
+
+	}
+	
 	function renderResults():ReactFragment
 	{
 		trace(props.match.params.action + ':' + Std.string(state.dataTable != null));
@@ -257,7 +261,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			case 'listReturnDebit':				
 				jsx('
 					<Table id="importedReturnDebit" data=${state.dataTable}
-					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${baseForm.renderPager} 
+					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${{function()return BaseForm.renderPager(this);}} 
 					className="is-striped is-hoverable"  parentComponent=${this} fullWidth=${true}/>
 				');					
 			default:

@@ -54,7 +54,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		baseForm = new BaseForm(this);
+		//baseForm =new BaseForm(this);
 		dataDisplay = DealsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 
@@ -194,6 +194,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		else 
 			setState({loading: false});*/
 	}
+
+	function renderPager(){
+		BaseForm.renderPager(this);
+	}
 	
 	function renderResults():ReactFragment
 	{
@@ -209,14 +213,14 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			jsx('
 				<form className="tabComponentForm" >
 					<$Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
-					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${baseForm.renderPager}
+					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${renderPager}
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				</form>
 			');			
 			/*case 'get':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable} 
-					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${baseForm.renderPager} parentComponent=${this}
+					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${BaseForm.renderPager} parentComponent=${this}
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');*/
 			case 'delete':

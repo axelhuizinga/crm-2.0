@@ -43,7 +43,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		baseForm = new BaseForm(this);
+		//baseForm =new BaseForm(this);
 		dataDisplay = Accounts.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
@@ -195,7 +195,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			case 'get':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["accountsList"]} renderPager=${baseForm.renderPager}
+					${...props} dataState = ${dataDisplay["accountsList"]} renderPager=${function()BaseForm.renderPager(this)}
 					parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'update':

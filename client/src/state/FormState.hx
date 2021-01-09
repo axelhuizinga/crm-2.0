@@ -1,5 +1,6 @@
 package state;
 
+import react.ReactComponent.ReactFragment;
 import db.DBAccessProps;
 import view.shared.MItem;
 import model.ORM;
@@ -51,7 +52,7 @@ typedef FormState =
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,
 	?handleChange:InputEvent->Void,
-	?modals:Map<String,Bool>,	
+	?modals:ReactFragment,	
 	?mHandlers:Array<MItem>,	
 	?hasError:Bool,
 	?limit:Int,

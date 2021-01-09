@@ -903,12 +903,16 @@ form td, form caption
 	overflow-y: auto;
 	padding-right: 1rem;
 }
-
+.g_block, .g_caption
+{
+	
+	grid-column: 1 / 3;	
+}
 .g_caption
 {
-	/*grid-column: grid-column-start / grid-column-end;*/
+	/*grid-column: grid-column-start / grid-column-end;display: flex;*/
 	text-align: center;
-	grid-column: 1 / 3;
+
 	background-color: $paleBlue;
 	background-image:$darkGradient;
 	border-radius: $tableHeader-radius $tableHeader-radius;

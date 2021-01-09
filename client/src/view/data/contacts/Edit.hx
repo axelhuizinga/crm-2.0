@@ -1,4 +1,6 @@
 package view.data.contacts;
+import haxe.Timer;
+import react.ReactDOM;
 import react.ReactUtil;
 import db.DbRelation;
 import db.DbQuery;
@@ -33,7 +35,6 @@ import js.html.FormElement;
 import react.router.RouterMatch;
 import state.AppState;
 import haxe.Constraints.Function;
-import react.modal.Modal;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactRef;
@@ -88,6 +89,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var contact:Contact;
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
+	var modals:Map<String,Bool>;
 	var mounted:Bool = false;
 
 	public function new(props) 
@@ -99,7 +101,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			{label:'Speichern',action:'update'},
 			{label:'Zurücksetzen',action:'reset',onlySm: false}
 		];*/		
-		baseForm = new BaseForm(this);
+		//baseForm =new BaseForm(this);
+		modals = ['deals'=>false,'accounts'=>false,'history'=>false];
 		trace(props.match.params);
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/open(\/)*$/.match(props.match.params.action) )
@@ -110,7 +113,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			return;
 		}		
 		dataAccess = ContactsModel.dataAccess;
-		fieldNames = baseForm.initFieldNames(dataAccess['open'].view.keys());
+		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
 		dataDisplay = ContactsModel.dataDisplay;
 		
 		if(props.dataStore.contactData != null)
@@ -120,7 +123,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//dataTable:[],
 			actualState:null,
 			initialData:null,
-			modals:['deals'=>false,'accounts'=>false,'history'=>false],
+			modals:null,
 			mHandlers:menuItems,
 			loading:false,
 			selectedRows:[],
@@ -159,7 +162,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			{
 				if(k)
 			}*/
-		setState({modals:copy(state.modals, ['deals' => true])});
+		setState({modals:renderModals('deals')});
+		//modals = copy(modals, ['deals' => true]);
 		//deals = new Deals()
 	}
 
@@ -359,24 +363,22 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//App.store.dispatch(DBAccess.execute(dbaProps));
 	}
 
-	function renderModals():ReactFragment
+	function renderModals(k:String):ReactFragment
 	{
 		trace('XXX');
-		var modals:ReactFragment = [for(k=>v in state.modals.keyValueIterator())
-		 switch (k){
+		//var rM:ReactFragment = [for(k=>v in modals.keyValueIterator())
+		return switch (k){
 			case 'deals':
-				jsx('<$Modal id="deals" isOpen=${state.modals["deals"]} 
-				parentSelector=${function() {return Browser.document.querySelector('#contact');}}
-				><div >Hello Modal World :)</div></$Modal>');
+				jsx('<Deals id="deals" isActive=${true}></Deals>');
 			/*case 'accounts':
 				jsx('');
 			case 'history':
 				jsx('');*/
 			default:
 				null;
-		}];
-		trace(untyped modals.length);
-		return modals;
+		};
+		//trace(untyped rM.length);
+		//return rM;
 	}
 
 	function renderResults():ReactFragment
@@ -399,6 +401,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					fields:[
 						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
+					modals:state.modals,
 					model:'contact',
 					ref:formRef,
 					title: 'Kontakt - Bearbeite Stammdaten' 
@@ -426,48 +429,26 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		if(state.initialData==null)
 			return null;
 		trace(state.modals);
-		//trace('state.loading: ${state.loading}');		
+		//trace('state.loading: ${state.loading}');	
+		
 		return switch(props.match.params.action)
 		{	
 			case 'open':
 			 //(state.loading || state.initialData.edited_by==0 ? state.formApi.renderWait():
 				state.formApi.render(jsx('
-					<>
-						${renderResults()}
-						${renderModals()}
-					</>
+					${renderResults()}
 				'));	
 			case 'insert':
 				state.formApi.render(jsx('
-						${renderResults()}
+					${renderResults()}
 				'));		
 			default:
 				state.formApi.render(jsx('
-				<>
-					${renderResults()}
-					${renderModals()}
-				</>
+					${renderResults()}		
 				'));			
 		}
 	}
-	
-	/*function updateMenu(?viewClassPath:String):MenuProps
-	{
-		var sideMenu = state.sideMenu;
-		trace(sideMenu.section);
-		for(mI in sideMenu.menuBlocks['Contact'].items)
-		{
-			switch(mI.action)
-			{
-				case 'editTableFields':
-					mI.disabled = state.selectedRows.length==0;
-				case 'save':
-					mI.disabled = state.clean;
-				default:
-			}			
-		}
-		return sideMenu;
-	}*/
+
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		trace('here we should be ready to load');

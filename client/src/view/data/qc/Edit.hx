@@ -56,7 +56,7 @@ using Lambda;
  * 
  */
 
-class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
+class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
 		{label:'Schließen',action:'restore',section: 'List'},		
@@ -216,7 +216,7 @@ class Edit extends BaseForm//ReactComponentOf<DataFormProps,FormState>
 		trace('contact.fieldsModified:' + contact.fieldsModified);		
 		initialState = contact.load(data);
 		//initialState = copy(actualState);
-		baseForm.compareStates();	
+		BaseForm.compareStates(this);	
 		//trace(actualState);	
 		//trace(initialState);	
 		/*actualState = view.shared.io.Observer.run(initialState, function(newState){

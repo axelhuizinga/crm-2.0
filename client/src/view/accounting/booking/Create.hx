@@ -84,7 +84,7 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		baseForm = new BaseForm(this);
+		//baseForm =new BaseForm(this);
 		
 		trace(props.match.params);
 		//trace(props.parentComponent);
@@ -99,7 +99,7 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 			return;
 		}		
 		dataAccess = ReturnDebitModel.dataAccess;
-		fieldNames = baseForm.initFieldNames(dataAccess['open'].view.keys());
+		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
 		dataDisplay = ReturnDebitModel.dataDisplay;
 
 				

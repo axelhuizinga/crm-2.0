@@ -103,7 +103,7 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = ReturnDebitModel.dataDisplay;
 		
 		trace('...' + Reflect.fields(props));
-		baseForm = new BaseForm(this);
+		//baseForm =new BaseForm(this);
 		
 		menuItems[0].handler = importReturnDebit;
 		state =  App.initEState({
@@ -287,7 +287,7 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 			case 'importReturnDebit':
 				jsx('
 					<Table id="importedReturnDebit" data=${state.dataTable}
-					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${baseForm.renderPager} 
+					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${function()BaseForm.renderPager(this)} 
 					className="is-striped is-hoverable"  parentComponent=${this} fullWidth=${true}/>
 				');
 			case 'importClientList':

@@ -104,7 +104,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		//formFields = ReturnDebitModel.formFields(props.match.params.action);
 		//trace('...' + Type.getInstanceFields(Type.resolveClass('view.shared.MItem')));
 		trace('...' + Reflect.fields(props));
-		baseForm = new BaseForm(this);
+		//baseForm =new BaseForm(this);
 		
 		menuItems[0].handler = importReturnDebit;
 		state =  App.initEState({
@@ -256,7 +256,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			/*case 'importReturnDebit':
 				jsx('
 					<Table id="importedReturnDebit" data=${state.dataTable}
-					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${baseForm.renderPager} 
+					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${BaseForm.renderPager} 
 					className="is-striped is-hoverable"  parentComponent=${this} fullWidth=${true}/>
 				');
 			case 'importClientList':

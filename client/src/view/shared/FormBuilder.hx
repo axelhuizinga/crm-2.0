@@ -1,6 +1,7 @@
 package view.shared;
 
 //import js.lib.Reflect;
+import view.shared.io.BaseForm;
 import react.NumberFormatProps;
 import react.ReactUtil;
 import js.html.AbortController;
@@ -57,7 +58,7 @@ class FormBuilder {
 		requests = [];
 		if(rc.props != null)
 		{
-			
+			trace(Reflect.fields(comp));
 		}
 		//dbData = new DbData();
 		//trace('>>>${props.match.params.acton}<<<');
@@ -90,12 +91,6 @@ class FormBuilder {
 			renderOption(si++, label,value);
 		}].array();
 	}
-	
-	/*function renderRadioOption(si:Int,label:String,?value:Dynamic) {
-		return	
-			value == null ? jsx('<option>$label</option>'):
-			jsx('<option key=${si} value=${value}>$label</option>');
-	}*/
 
 	function renderRadio(name:String,options:StringMap<String>, actValue:String):ReactFragment
 	{
@@ -245,31 +240,7 @@ class FormBuilder {
 						<div className="g_cell_r" role="cell">
 							Dummy
 						</div>
-					</div>');/*
-					jsx('
-					<div key=${ki++} className="g_row_2" role="rowgroup">
-						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r" role="cell">
-							Dummy
-						</div>
 					</div>');
-					jsx('
-					<div id="uploadForm"  class="fileinput-button" >
-						<button style="white-space: nowrap;margin-top:3px;">${field.label}</button>
-						<!-- The file input field used as target for the file upload widget -->
-						<input id="fileupload" type="file" name="${field.name}"  >
-					</div>'
-				);*/
-
-				/**
-				 * 	function uploadFormRounded($name,$title='Buchungsreport')
-	{
-		return <<<EOF
-
-EOF;
-
-	}
-				 */
 				default:
 					renderElement(
 						jsx('<input name=${name} onChange=${onChange} type="text"  defaultValue=${value} disabled=${field.disabled} required=${field.required}/>'),
@@ -283,18 +254,19 @@ EOF;
 
     public function renderForm(props:FormState, initialState:Dynamic):ReactFragment
     {
-		//trace(props.fields);
-		//return null;
-		//trace(props); ref=${props.ref} 
+		trace(props.modals);
+		//return null;formField<div className="g_block" ></div>
+		//trace(props); ref=${props.ref} <div className="g_footer" ></div>	
 		var sK:Int = 0;
 		
-		return jsx('<form name=${props.model} className="tabComponentForm formField">
+		return jsx('<form name=${props.model} className="tabComponentForm" ref=${props.ref}>
 				<div className="grid_box" role="table" aria-label="Destinations">
-					<div className="g_caption" >${props.title}</div>	
-					${renderFormInputElements(props.fields, initialState)}					
+					<div className="g_caption" >${props.title}</div>						
+					${renderFormInputElements(props.fields, initialState)}						
 				</div>									
-				<div className="g_footer" >
-				</div>			
+				
+				${props.modals}
+										
 			</form>
 		');				
 		}	
@@ -335,7 +307,7 @@ EOF;
 			case 'checkbox':
 				trace('${ev.target.name}:${ev.target.value}:${ev.target.checked?true:false}');
 				//trace('doChange:${Reflect.isFunction(Reflect.field(comp,'doChange'))}');
-				comp.baseForm.doChange(ev.target.name, switch(ev.target.checked)
+				BaseForm.doChange(comp,ev.target.name, switch(ev.target.checked)
 				{
 					case "TRUE"|true|"on"|"1":
 						1;
@@ -348,10 +320,10 @@ EOF;
 				//comp.forceUpdate();
 			case 'select-multiple'|'select-one':
 				//trace (ev.target.selectedOptions.length);
-				comp.baseForm.doChange(ev.target.name, ev.target.value);
+				BaseForm.doChange(comp,ev.target.name, ev.target.value);
 			default:
 				//trace('${ev.target.name}:${ev.target.value}');
-				comp.baseForm.doChange(ev.target.name, ev.target.value);
+				BaseForm.doChange(comp, ev.target.name, ev.target.value);
 		}				
 		
 	}	

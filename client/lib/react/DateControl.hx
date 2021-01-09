@@ -1,5 +1,6 @@
 package react;
 
+import view.shared.io.BaseForm;
 import react.PureComponent.PureComponentOfProps;
 import js.lib.intl.DateTimeFormat;
 import js.html.InputElement;
@@ -65,7 +66,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 	function onChange(_) {
 		if(props.comp != null)
 		{
-			props.comp.baseForm.doChange(props.name, fpInstance.input.value);
+			BaseForm.doChange(props.comp, props.name, fpInstance.input.value);
 		}
 	}
 

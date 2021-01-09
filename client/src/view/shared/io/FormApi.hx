@@ -81,7 +81,7 @@ class FormApi
 		comp = rc;
 		_me = this;
 		//trace(Type.getClass(comp));
-		requests = [];
+		//requests = [];
 		if(rc.props != null)
 		{
 			//trace(rc.props.match);
@@ -90,11 +90,8 @@ class FormApi
 			//trace(rc.props.history);			
 			//trace(this.sM);
 		}
-		//dbData = new DbData();
 		//trace('>>>${props.match.params.action}<<<');
 		trace(Reflect.fields(sM));
-
-        //trace(dbData);
 	}	
 
 	public function doAction(?defaultAction:String):Void
@@ -273,8 +270,11 @@ class FormApi
 	
 	public function render(content:ReactFragment)
 	{
-		if(sM==null)
+		if(sM==null){
+			trace(content);
 			return null;
+		}
+			
 		if(sM.section != null)//TODO: MONITOR PERFORMANCE + INTEGRITY SETTING SUBMENU SECTION HERE
 		{
 			trace(sM.section +':'+ comp.props.match.params.section);
@@ -331,6 +331,7 @@ class FormApi
 		//comp.setState({actualState: actualState});
 		comp.props.parentComponent.props.storeFormChange(comp.state.formStateKey,copy(actualState,{field:val}));			
 	}
+	
 	public function createElementsArray():ReactFragment
 	{
 		if(_fstate.dataTable.empty())

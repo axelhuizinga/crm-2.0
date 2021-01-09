@@ -34,8 +34,8 @@ import view.shared.io.DataAccess;
 import loader.BinaryLoader;
 import view.table.Table;
 
-@:connect
-class Deals extends ReactComponentOf<DataFormProps,FormState>
+//@:connect
+class Deals //extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
 		{label:'Bearbeiten',action:'open',section: 'Edit'},
@@ -66,19 +66,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:null,
 			values:new Map<String,Dynamic>()
 		},this);
-		if(false && props.match.params.action==null)
-		{
-			//var sData = App.store.getState().dataStore.contactData;	props.match.params.section==null||		
-			var baseUrl:String = props.match.path.split(':section')[0];
-			trace('redirecting to ${baseUrl}List/get');
-			props.history.push('${baseUrl}List/get');
-			get(null);
-		}
-		else 
-		{
-			//
-			trace(props);
-		}		
+		get(props.id);	
 		trace(state.loading);
 	}
 	
@@ -101,35 +89,40 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
-	public function get(ev:Dynamic):Void
+	/**
+	 * get all deals with this Contact! id
+	 * @param id 
+	 */
+
+	public function get(contact:Int):Void
 	{
 		trace('hi $ev');
 		var offset:Int = 0;
-		setState({loading:true});
+		state.loading =true;
 		if(ev != null && ev.page!=null)
 		{
 			offset = Std.int(props.limit * ev.page);
 		}		
 		//var contact = (props.location.state.contact);
-		var p:Promise<DbData> = props.load(
+		var p:Promise<DbData> = return App.store.dispatch(CRUD.read(
 			{
 				classPath:'data.Deals',
 				action:'get',
-				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
+				filter:{contact:contact, mandator:'1'}),
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				table:'deals',
 				resolveMessage:{					
-					success:'Aktionliste wurde geladen',
-					failure:'Aktionliste konnte nicht geladen werden'
+					success:'Aktionsliste wurde geladen',
+					failure:'Aktionsliste konnte nicht geladen werden'
 				},				
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP
 			}
-		);
+		));
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
-			setState({loading:false, dataTable:data.dataRows});
+			state = ReactUtil.copy(state, {loading:false, dataTable:data.dataRows});
 		});
 	}
 	

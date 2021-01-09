@@ -1,5 +1,6 @@
 package state;
 
+import haxe.ds.ObjectMap;
 import react.ReactComponent.ReactFragment;
 import db.DBAccessProps;
 import view.shared.MItem;
@@ -52,7 +53,7 @@ typedef FormState =
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,
 	?handleChange:InputEvent->Void,
-	?modals:ReactFragment,	
+	?modals:Map<String,Dynamic>,	
 	?mHandlers:Array<MItem>,	
 	?hasError:Bool,
 	?limit:Int,

@@ -1,4 +1,5 @@
 package view.data.contacts;
+import view.data.contacts.Deals copy.Deals;
 import haxe.Timer;
 import react.ReactDOM;
 import react.ReactUtil;
@@ -123,7 +124,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//dataTable:[],
 			actualState:null,
 			initialData:null,
-			modals:null,
+			modals:['deals'=>new Deals(props.match.params.id)],
 			mHandlers:menuItems,
 			loading:false,
 			selectedRows:[],

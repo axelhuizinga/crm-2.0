@@ -205,6 +205,7 @@ h2{
   border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
   border: 1px solid $border-light;
   min-height: 100%;
+  margin: 0 auto;
   /*margin: 0.8rem 0rem 0.5rem 0.8rem
    /* position: relative;could be absolute or relative */
 }
@@ -459,8 +460,8 @@ input::-moz-focus-inner {
 	min-width: 80%;
 	display:flex;	
 	flex-direction: column;
-	flex-grow:1;
-	margin:0.8rem 0 0 0.8rem;	
+	/*flex-grow:1;*/
+	margin:0.8rem auto;	
 	min-height: 0;
 	overflow-x: auto;
 }
@@ -544,7 +545,13 @@ button::-moz-focus-inner {padding:0; border:0}
 
 }
 
-.table{margin-bottom: 0em;}
+.table{
+	/*margin-bottom: 0em;*/
+	margin:0.8rem auto 0 auto;
+}
+.tableHead{
+	margin:0 auto 0 auto;
+}
 .active
 {
 	color:$darkSun;
@@ -639,7 +646,16 @@ form.modal-card-body{
 	border-bottom-color:$darkSun!important;
 }
 
+/*FORMS * CONTAINER*/
+.formsContainer{
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	margin: 0.8rem 0 0 0.8rem;
+}
+
 /*FORMS * ELEMENTS*/
+
 form{
 	margin:1rem auto;
 }
@@ -770,7 +786,7 @@ label.panel-heading {
 	border:none;
 }
 
-.table.head
+.tableHead.head
 {
 	background-color:transparent!important;
 	text-shadow: 0.2rem 0.2rem 1.1rem #333;
@@ -801,7 +817,7 @@ form table{
 	white-space: nowrap;
 }
 
-.table.head th{
+.tableHead.head th{
 	color: $lightSun;
 	padding:0px;
 	border-left:$borderHeadCol;
@@ -812,7 +828,7 @@ form table{
 	border: none!important;
 }
 
-.table.head th:first-child
+.tableHead.head th:first-child
 {
 	border-left-width:0px!important;
 	border-top-left-radius: $tableHeader-radius;
@@ -968,48 +984,7 @@ form td, form caption
 	margin-left: 1rem;
 	/*visibility: hidden;*/
 }
-/* input[type=checkbox] {
-	visibility: hidden;
-  }
-input:checked ~ .w3docs:after {
-display: block;
-}  
-Creating a custom checkbox based on demand 
-.w3docs {
-position: absolute;
-top: 0;
-left: 0;
-/*height: 1.8rem;
-width: 1.8rem;
-height: 25px;
-width: 25px;
-border-radius: 3px;
-background-color: rgba(0, 0, 0, 0.616);
-}
-.w3docs:after {
-left: 8px;
-bottom: 5px;
-width: 6px;
-height: 12px;
-border: solid white;
-border-width: 0 4px 4px 0;
--webkit-transform: rotate(45deg);
--ms-transform: rotate(45deg);
-transform: rotate(45deg);
-}*/
 
-/*
-.fileinput-button input {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
-    opacity: 0;
-    -ms-filter: 'alpha(opacity=0)';
-    font-size: 200px !important;
-    direction: ltr;
-    cursor: pointer;
-}*/
 .uploadBox{
 	text-align: center;
 	/*margin: auto;

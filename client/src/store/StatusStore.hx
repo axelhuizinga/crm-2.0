@@ -26,7 +26,7 @@ class StatusStore
 		return switch(action)
 		{
 			case Update(status):
-				trace(status);
+				//trace(status);
 				copy(state,status);
 			default:
 				initState;

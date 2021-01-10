@@ -1,5 +1,6 @@
 package state;
 
+import js.Object;
 import haxe.ds.ObjectMap;
 import react.ReactComponent.ReactFragment;
 import db.DBAccessProps;
@@ -42,6 +43,7 @@ typedef FormState =
 	?dataTable:Array<Map<String,Dynamic>>,
 	?dataCount:Int,
 	?dbQueryParam:DBAccessProps,
+	?relatedForms:Map<String,Object>,//classPath(server)=>FormObject
 	?fields:Map<String,FormField>,//VIEW FORMFIELDS
 	?formApi:FormApi,
 	?formBuilder:FormBuilder,
@@ -53,7 +55,6 @@ typedef FormState =
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,
 	?handleChange:InputEvent->Void,
-	?modals:Map<String,Dynamic>,	
 	?mHandlers:Array<MItem>,	
 	?hasError:Bool,
 	?limit:Int,

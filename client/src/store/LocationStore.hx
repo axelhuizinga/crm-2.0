@@ -24,7 +24,7 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 
 	public function new(history:History) 
 	{
-		_trace = true;
+		_trace = false;
 		initState = {
 			history:history,
 			lastModified:Date.now(),
@@ -55,7 +55,7 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 					history:history
 				});
 			case LocationChange(location):
-				if(_trace) trace(location.pathname);
+				if(false&&_trace) trace(location.pathname);
 				copy(state, location);				
 			default:
 				state;

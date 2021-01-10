@@ -1,5 +1,6 @@
 package db;
 
+import shared.DbData;
 import db.DbRelation;
 import db.DbUser;
 import state.UserState;
@@ -34,5 +35,6 @@ typedef DBAccessProps = {
 	?pages:Int,
 	?resolveMessage:DBAccessResolveMessage,
 	?table:String,
+	?then:DbData->Void,
 	?userState:UserState
 }

@@ -69,7 +69,7 @@ class Tr extends ReactComponentOfProps<TrProps>
 		//trace('$id ${match.params.id !=null && match.params.id.indexOf(id)>-1}');
 		//state = {cells:[], selected:match.params.id !=null && match.params.id.indexOf(id)>-1?true:false};	
 		selected = false;
-		if(match.params.id !=null && match.params.id.indexOf(id)>-1)
+		if(match != null && match.params.id !=null && match.params.id.indexOf(id)>-1)
 		//if(match.location.hash !=null && match.params.id.indexOf(id)>-1)
 		{
 			select({select:true});
@@ -78,7 +78,7 @@ class Tr extends ReactComponentOfProps<TrProps>
 		//if(loc.hash != '')
 		//{
 			//trace('id:$id ${loc.hash}');
-		if(props.parentComponent.props.location.hash.indexOf(id)>-1)
+		if(props.parentComponent.props.location != null && props.parentComponent.props.location.hash.indexOf(id)>-1)
 			select({select:true});
 		//}
 	}

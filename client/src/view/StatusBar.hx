@@ -105,7 +105,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	{
 		//trace(astate.userState.dbUser.first_name);
 		//trace(Reflect.fields(astate));
-		trace(astate.status);
+		//trace(astate.status);
 		//setState({status:astate.statusBar.status})
 		return {
 			/*date:astate.statusBar.date,*/

@@ -68,7 +68,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		_strace = _trace = true;
+		_strace = _trace = false;
 		dataAccess = ContactsModel.dataAccess;
 		dataDisplay = ContactsModel.dataDisplay;
 		if(_trace) trace('...' + Reflect.fields(props));

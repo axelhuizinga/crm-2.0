@@ -18,7 +18,7 @@ class TabLink extends ReactComponentOfProps<TabLinkProps>
 {
 	override function render()
 	{
-		trace(Type.typeof(props.to));
+		//trace(Type.typeof(props.to));
 		var toCheck:String = (Type.typeof(props.to)==TObject?untyped props.to.pathname:props.to);
 		return jsx('
 		<li className=${props.location.pathname.indexOf(toCheck) == 0 ?"is-active":""}>

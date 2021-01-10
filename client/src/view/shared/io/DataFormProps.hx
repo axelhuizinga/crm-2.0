@@ -20,6 +20,7 @@ import state.UserState;
 typedef DataFormProps =
 {
 	>ChildrenRouteProps,
+	?action:String,
 	?dataStore:state.DataAccessState,
     ?formApi:FormApi,
 	?filter:String,

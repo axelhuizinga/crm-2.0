@@ -178,9 +178,9 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		}
 		
 		//if(_trace) trace(props);
-		if(_trace) trace(Reflect.fields(props));
+		//if(_trace) trace(Reflect.fields(props));
 		
-		//if(_trace) trace(id);
+		if(_trace) trace(props.parentComponent.props.id);
 		state = {selectedRows:[]};
 	}
 	
@@ -210,7 +210,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		return jsx('		
 					<div className="fixed-grid-container" >
 				<div className="header-background" >
-					<table className="table head">
+					<table className="tableHead head">
 						<thead>
 							<tr ref={fixedHeader}>
 								${renderHeaderDisplay()}

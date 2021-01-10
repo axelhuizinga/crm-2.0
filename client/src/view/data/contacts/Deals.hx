@@ -1,5 +1,6 @@
 package view.data.contacts;
 
+import action.async.LiveDataAccess;
 import js.Browser;
 import js.html.NodeList;
 import js.html.TableRowElement;
@@ -34,27 +35,21 @@ import view.shared.io.DataAccess;
 import loader.BinaryLoader;
 import view.table.Table;
 
-//@:connect
-class Deals //extends ReactComponentOf<DataFormProps,FormState>
+@:connect
+class Deals extends ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<MItem> = [
-		{label:'Bearbeiten',action:'open',section: 'Edit'},
-	//	{label:'Neu', action:'insert',section: 'Edit'},		
-		{label:'Löschen',action:'delete'},
-		{label:'Auswahl aufheben',action:'selectionClear'}
-	];
-	var dataAccess:DataAccess;	
+	var dataAccess:DataAccess;
 	var dataDisplay:Map<String,DataState>;
 	var formFields:DataView;
 	var fieldNames:Array<String>;
-	var baseForm:BaseForm;		
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
 
-	public function new(props) 
+	public function new(props:DataFormProps) 
 	{
 		super(props);
-		//baseForm =new BaseForm(this);
+		dataAccess = DealsModel.dataAccess;
+		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
 		dataDisplay = DealsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 
@@ -66,14 +61,20 @@ class Deals //extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:null,
 			values:new Map<String,Dynamic>()
 		},this);
-		get(props.id);	
+		//get();	
 		trace(state.loading);
 	}
 	
-    static function mapDispatchToProps(dispatch:Dispatch) {
+	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-            load: function(param:DBAccessProps) return dispatch(CRUD.read(param))
-        };
+			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
+			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
+			{
+				if(true) trace('select:$id selectType:${selectType}');
+				//dispatch(DataAction.CreateSelect(id,data,match));
+				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
+			}
+	};
 	}
 		
 	static function mapStateToProps(aState:AppState) 
@@ -87,42 +88,37 @@ class Deals //extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(state.selectedRows.length);
 		var data = state.formApi.selectedRowsMap(state);
-	}
-
+	}	
+	
 	/**
-	 * get all deals with this Contact! id
-	 * @param id 
+	 * get all deals with this Contact id
 	 */
 
-	public function get(contact:Int):Void
+	 public function get():Void
 	{
-		trace('hi $ev');
 		var offset:Int = 0;
-		state.loading =true;
-		if(ev != null && ev.page!=null)
-		{
-			offset = Std.int(props.limit * ev.page);
-		}		
+		trace(props.filter);
+		setState({loading:true});	
 		//var contact = (props.location.state.contact);
-		var p:Promise<DbData> = return App.store.dispatch(CRUD.read(
+		var p:Promise<DbData> = props.load(
 			{
 				classPath:'data.Deals',
 				action:'get',
-				filter:{contact:contact, mandator:'1'}),
+				filter:(props.filter!=null?props.filter:{mandator:'1'}),
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				table:'deals',
 				resolveMessage:{					
-					success:'Aktionsliste wurde geladen',
-					failure:'Aktionsliste konnte nicht geladen werden'
+					success:'Aktionliste wurde geladen',
+					failure:'Aktionliste konnte nicht geladen werden'
 				},				
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP
 			}
-		));
+		);
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
-			state = ReactUtil.copy(state, {loading:false, dataTable:data.dataRows});
+			setState({loading:false, dataTable:data.dataRows});
 		});
 	}
 	
@@ -161,32 +157,23 @@ class Deals //extends ReactComponentOf<DataFormProps,FormState>
 			},
 		];			
 		//
+		trace(props.action);
 		if(props.userState.dbUser != null)
 		trace('yeah: ${props.userState.dbUser.first_name}');
 		//dbData = FormApi.init(this, props);
-		state.formApi.doAction();
-		/*
-		if(props.match.params.action != null)
-		{
-			var fun:Function = Reflect.field(this,props.match.params.action);
-			if(Reflect.isFunction(fun))
-			{
-				Reflect.callMethod(this,fun,null);
-			}
-		}
-		else 
-			setState({loading: false});*/
+		get();
+		//state.formApi.doAction(props.action);
 	}
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
+		//trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
 		trace(state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
-		trace('###########loading:' + state.loading);
-		return switch(props.match.params.action)
+		trace('###########loading:' + state.dataTable);
+		return switch(props.action)
 		{
 			case 'get':
 			jsx('
@@ -210,32 +197,12 @@ class Deals //extends ReactComponentOf<DataFormProps,FormState>
 		return null;
 	}
 	
-	override function render():ReactFragment
+	override public function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		//return state.formApi.render(jsx('${renderResults()}
+		return renderResults();
 		return jsx('
-				<div className="modal ${props.isActive?'is-active':''}">Hello Modal :)</div>
+				<div className="${props.isActive?'is-active':''}">Hello Modal :)</div>
 		');		
 	}
-	
-	function updateMenu(?viewClassPath:String):MenuProps
-	{
-		var sideMenu = state.sideMenu;
-		trace(sideMenu.section);
-		for(mI in sideMenu.menuBlocks['List'].items)
-		{
-			switch(mI.action)
-			{
-				case 'editTableFields':
-					mI.disabled = state.selectedRows.length==0;
-				case 'save':
-					mI.disabled = state.clean;
-				default:
-
-			}			
-		}
-		return sideMenu;
-	}
-
 }

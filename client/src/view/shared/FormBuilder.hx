@@ -1,6 +1,6 @@
 package view.shared;
 
-//import js.lib.Reflect;
+import view.data.contacts.Deals;
 import view.shared.io.BaseForm;
 import react.NumberFormatProps;
 import react.ReactUtil;
@@ -117,8 +117,7 @@ class FormBuilder {
 		return [for(name => field in fields)
 		{
 			var value:Dynamic = Reflect.field(initialData,name);
-			if(name=='date_of_birth')trace (field.type +' $name:' + value);
-			if(name=='date_of_birth')trace (field.type +' $name:' + value);
+			//if(name=='date_of_birth')trace (field.type +' $name:' + value);
 			//trace(field.type);
 			switch (field.type)
 			{
@@ -130,7 +129,7 @@ class FormBuilder {
 					</button>');
 				case FormInputElement.Checkbox:		
 					//trace(field);//disabled=${field.disabled} required=${field.required}//false;//true;
-					trace (field.type +' $name:' + value);
+					//trace (field.type +' $name:' + value);
 					var checked:Bool = switch(value)
 					{
 						case "TRUE"|true|"on"|"1":
@@ -148,7 +147,7 @@ class FormBuilder {
 						ki++, field.label
 					);
 				case Radio:
-					trace (field.type +' $name:' + value);
+					//trace (field.type +' $name:' + value);
 					jsx('<div key=${ki++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r optLabel" role="cell">
@@ -254,8 +253,8 @@ class FormBuilder {
 
     public function renderForm(props:FormState, initialState:Dynamic):ReactFragment
     {
-		trace(props.modals);
-		//return null;formField<div className="g_block" ></div>
+		//trace(props.modals);
+		//return null;formField<div className="g_block" ></div>${renderForms(props.modals)}
 		//trace(props); ref=${props.ref} <div className="g_footer" ></div>	
 		var sK:Int = 0;
 		
@@ -263,15 +262,22 @@ class FormBuilder {
 				<div className="grid_box" role="table" aria-label="Destinations">
 					<div className="g_caption" >${props.title}</div>						
 					${renderFormInputElements(props.fields, initialState)}						
-				</div>									
-				
-				${props.modals}
-										
+				</div>			
 			</form>
 		');				
-		}	
-		// children=${renderItems(props.mHandlers)} 
-		//${for (mI in props.mHandlers) renderButton(mI,++sK)}
+	}	
+
+	/*function renderForms(props:FormState){
+		return 
+			for(m in props.modals)[
+				jsx('<form name=${props.model} className="tabComponentForm" ref=${props.ref}>
+					<div className="grid_box" role="table" aria-label="Destinations">
+						<div className="g_caption" >${props.title}</div>						
+						${renderFormInputElements(props.fields, props.initialState)}						
+					</div>													
+				</form>
+			')];			
+	}*/
 
 	function renderButton(mItem:MItem, i:Int):ReactFragment {
 		if(mItem.onlySm)

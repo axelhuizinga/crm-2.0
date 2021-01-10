@@ -111,7 +111,7 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 				//trace(fpInstance.input.value);
 				var val:String = altInput.value;
 				var pd:Date = fpInstance.parseDate(val, fpInstance.config.altFormat);
-				trace('$val === ${pd.toString()}');
+				//trace('$val === ${pd.toString()}');
 				var fD:String = fpInstance.formatDate(pd, fpInstance.config.altFormat);
 				trace('$val==$fD');
 				if(val==fD)
@@ -178,7 +178,7 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 			trace(null);
 			return null;
 		}
-		trace('${props.name}:${props.value}');
+		//trace('${props.name}:${props.value}');
 		return  jsx('<input className="h100"  name=${props.name} id=${props.name} ref=${fpRef} disabled=${props.disabled}
 			defaultValue=${props.value}/>');
 	}	

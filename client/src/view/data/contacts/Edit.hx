@@ -1,5 +1,5 @@
 package view.data.contacts;
-import view.data.contacts.Deals copy.Deals;
+import view.data.contacts.Deals;
 import haxe.Timer;
 import react.ReactDOM;
 import react.ReactUtil;
@@ -124,7 +124,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//dataTable:[],
 			actualState:null,
 			initialData:null,
-			modals:['deals'=>new Deals(props.match.params.id)],
+//			modals:['deals'=>new Deals(props.match.params.id)],
 			mHandlers:menuItems,
 			loading:false,
 			selectedRows:[],
@@ -163,7 +163,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			{
 				if(k)
 			}*/
-		setState({modals:renderModals('deals')});
+		//setState({modals:renderModals('deals')});
 		//modals = copy(modals, ['deals' => true]);
 		//deals = new Deals()
 	}
@@ -397,16 +397,19 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 				];*/
 				(state.actualState==null ? state.formApi.renderWait():
-				state.formBuilder.renderForm({
+				jsx('<>
+				${state.formBuilder.renderForm({
 					mHandlers:state.mHandlers,
 					fields:[
 						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
-					modals:state.modals,
 					model:'contact',
-					ref:formRef,
+					ref:formRef,					
 					title: 'Kontakt - Bearbeite Stammdaten' 
-				},state.actualState));
+				},state.actualState)} 
+				<Deals id="deals" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>
+				</>
+				'));
 				//null;
 			case 'insert':
 				trace(state.actualState);
@@ -429,7 +432,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.action);		
 		if(state.initialData==null)
 			return null;
-		trace(state.modals);
+		//trace(state.modals);
 		//trace('state.loading: ${state.loading}');	
 		
 		return switch(props.match.params.action)

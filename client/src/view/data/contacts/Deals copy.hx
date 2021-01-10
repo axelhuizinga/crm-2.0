@@ -43,7 +43,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Löschen',action:'delete'},
 		{label:'Auswahl aufheben',action:'selectionClear'}
 	];
-	var dataAccess:DataAccess;	
+	var dataAccess:DataAccess;
 	var dataDisplay:Map<String,DataState>;
 	var formFields:DataView;
 	var fieldNames:Array<String>;
@@ -54,7 +54,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		//baseForm =new BaseForm(this);
+		trace(Reflect.fields(props));
 		dataDisplay = DealsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 
@@ -171,18 +171,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		if(props.userState.dbUser != null)
 		trace('yeah: ${props.userState.dbUser.first_name}');
 		//dbData = FormApi.init(this, props);
-		state.formApi.doAction();
-		/*
-		if(props.match.params.action != null)
-		{
-			var fun:Function = Reflect.field(this,props.match.params.action);
-			if(Reflect.isFunction(fun))
-			{
-				Reflect.callMethod(this,fun,null);
-			}
-		}
-		else 
-			setState({loading: false});*/
+		state.formApi.doAction()
 	}
 	
 	function renderResults():ReactFragment

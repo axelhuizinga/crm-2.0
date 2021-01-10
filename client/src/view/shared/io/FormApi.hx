@@ -283,7 +283,9 @@ class FormApi
 		}
 		return jsx('
 			<div className="columns">
+				<div className="formsContainer">
 				${content}
+				</div>
 				<$Menu className="menu" ${...sM} ${...comp.props} itemHandler=${itemHandler} />
 			</div>			
 		');

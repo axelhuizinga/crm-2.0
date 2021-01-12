@@ -1,4 +1,4 @@
-package model.deals;
+package model.accounting;
 
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
@@ -10,12 +10,12 @@ import view.shared.FormInputElement;
  * @author axel@cunity.me
  */
 
-class DealsModel
+class AccountsModel
 {
 	public static var dataAccess:DataAccess = [
 		'open' => {
 			source:[
-				"deals" => [
+				"accounts" => [
 					"filter" => 'id',
 				//"joins" => []//Array of join parameters
 					],
@@ -42,23 +42,21 @@ class DealsModel
 	];
 
 	public static var listColumns:Map<String,DataColumn> = [
-		'contact'=>{label:'Kontakt',show:true, useAsIndex: true},				
-		'start_date'=>{label:'Seit'},	
-		'end_date'=>{label:'Bis'},	
+		'id'=>{label:'ID',show:false, useAsIndex: true},				
+		'contact'=>{label:'Kontakt',show:false, useAsIndex: false},				
+		'bank_name'=>{label:'Bankname'},	
+		'iban'=>{label:'IBAN'},	
 		'status' => {label:'Aktiv', className: 'tCenter',
 			cellFormat:function(v:String) 
 			{
 				var className = (v=='active'?'active fas fa-heart':'passive far fa-heart');
-				trace('>>>$v<<<');
+				//trace(uState);
 				return jsx('<span className=${className}></span>');
-			}},
-		'cycle' => {label: 'Turnus'},
-		'amount' => {label: 'Betrag'},
-		'id' => {show:false},
+			}}
 		
 	];
 
 	public static var dataDisplay:Map<String,DataState> = [
-		'dealsList' => {columns:listColumns}
+		'accountsList' => {columns:listColumns}
 	];	
 }

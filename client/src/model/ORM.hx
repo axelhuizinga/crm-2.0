@@ -42,35 +42,28 @@ class ORM {
 		fieldsInitalized = new Array();
 		fieldsModified = new Array();
 		propertyNames = Reflect.fields(fields);
-		load(data);
-	}
 
-	public function load(data:Map<String,Dynamic>):ORM {
-		if(data != null)
+		//trace('data.id: ${data.get('id')}');
+		fieldsInitalized = new Array();
+		fieldsModified = new Array();
+		for(f in propertyNames)
 		{
-			//trace('data.id: ${data.get('id')}');
-			fieldsInitalized = new Array();
-			fieldsModified = new Array();
-			for(f in propertyNames)
-			{
-				if(data.exists(f)){
-					var nv:Dynamic = data.get(f);
-					//trace('$f => $nv');
-					Reflect.setProperty(this, f, switch(Reflect.field(fields, f).dataType[0]){				
-						case('bigint[]'):
-							nv==null?[]:nv;
-						case _.indexOf('timestamp') => 0:
-							nv == null? '': nv;
-						case('date'):
-							nv == null? '': nv;
-						default:
-							nv;
-					});				
-				}
+			if(data.exists(f)){
+				var nv:Dynamic = data.get(f);
+				//trace('$f => $nv');
+				Reflect.setProperty(this, f, switch(Reflect.field(fields, f).dataType[0]){				
+					case('bigint[]'):
+						nv==null?[]:nv;
+					case _.indexOf('timestamp') => 0:
+						nv == null? '': nv;
+					case('date'):
+						nv == null? '': nv;
+					default:
+						nv;
+				});				
 			}
 		}
 		//trace(this.id +':' + data.get('id'));
-		return this;
 	}
 
 	public function allModified():Dynamic {

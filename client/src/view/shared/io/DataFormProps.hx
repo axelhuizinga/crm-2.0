@@ -1,5 +1,7 @@
 package view.shared.io;
 
+import js.html.FormElement;
+import react.ReactRef;
 import db.DBAccessProps;
 import action.DataAction;
 import view.shared.io.FormApi;
@@ -29,6 +31,7 @@ typedef DataFormProps =
 	?limit:Int,	
 	?load:DBAccessProps->Promise<DbData>,
 	?parentComponent:Dynamic,
+	?formRef:ReactRef<FormElement>,
 	?select:Function, // Int->IntMap<Map<String,Dynamic>>->RouterMatch->SelectType,
 	?setStateFromChild:FormState->Void,
 	?setFormState:FormState->Void,

@@ -122,7 +122,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		{
 			//trace(block.handlerInstance);
 			panels.push( jsx('	
-				<div className="panel" key=${i} style=${style}>
+				<div className="panel" key=${"pa"+i} style=${style}>
 				<label className="panel-heading" htmlFor=${"sMenuPanel-"+i}>${block.label}</label>
 				<div id=${"pblock" + i} className=${"panel-block body-"+(i++)} children=${renderItems(block.items)}/>
 				</div>		
@@ -163,7 +163,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			{
 				//case Filter: jsx('<$Filter  key=${i++}/>');				
 				case File:
-					jsx('<div key=${i++}  id="uploadForm"   className="uploadBox" >
+					jsx('<div key=${"uf"+(i++)}  id="uploadForm"   className="uploadBox" >
 					<input  id=${item.formField.name} type="file" name=${item.formField.name} onChange=${item.formField.handleChange} className="fileinput"  />
 					<label htmlFor=${item.formField.name} className="button" >${item.label}</label>
 					<Button onClick=${item.handler} data-action=${item.action}
@@ -171,7 +171,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				</div>');
 				case Upload:
 					//trace(item.formField.handleChange);
-					jsx('<div key=${i++}  id="uploadForm"  className="uploadBox" >
+					jsx('<div key=${"up"+(i++)}  id="uploadForm"  className="uploadBox" >
 					<input id=${item.formField.name} type="file" name=${item.formField.name} onChange=${item.formField.handleChange} className="fileinput"  />
 					<label htmlFor=${item.formField.name} className="button" >${item.label}</label>
 					<Button onClick=${item.handler} data-action=${item.action}

@@ -32,7 +32,7 @@ $borderCol:$borderSmallWidth dotted #eee;
 $buttonSun:#ffdd57;
 $cell-border: 1px solid #ccc;
 $cellPadding: 0px 0.75rem;
-$headPadding: 0.5rem 0.75rem;
+$headPadding: 0.75rem 0.75rem 0.25rem 0.75rem;
 $ePad:0.3rem 1rem;
 $darkBlue: rgb(10,20,60);
 $strongViolet:#6b6ab3;
@@ -235,8 +235,8 @@ h2{
   background-image:$darkGradient;
   border-color:$border-light;
   border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
-  border-style: solid solid none solid;
-  border-width: 1px 1px 0px 1px;  
+  /*border-style: solid solid none solid;
+  border-width: 1px 1px 0px 1px;  */
 }
 	
 .gridHeadItem:hover
@@ -461,9 +461,9 @@ input::-moz-focus-inner {
 	display:flex;	
 	flex-direction: column;
 	/*flex-grow:1;*/
-	margin:0.8rem auto;	
-	min-height: 0;
-	overflow-x: auto;
+	margin:0 auto 0.8rem auto;	
+	/*min-height: 0;
+	overflow-x: auto;*/
 }
 .tabComponentForm table,
 .tabComponentForm caption
@@ -652,6 +652,7 @@ form.modal-card-body{
 	flex-direction: column;
 	flex-grow: 1;
 	margin: 0.8rem 0 0 0.8rem;
+	overflow-y: auto;
 }
 
 /*FORMS * ELEMENTS*/
@@ -976,8 +977,12 @@ form td, form caption
 .g_cell_r{
 	width:auto;
 }
-.g_cell_r input{
+.g_cell_r input[type=text]{
 	border: none;
+	width:100%;
+	font-size: 1rem;
+	padding-left: 0.64rem;
+	border-radius:0 4px 4px 0;
 }
 .g_cell_r input[type=checkbox]{
 	justify-self: start;

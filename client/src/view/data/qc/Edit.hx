@@ -214,7 +214,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//trace('Rtti:' + Rtti.getRtti(Contact).fields[0].meta);
 		trace(contact.fieldsModified);		
 		trace('contact.fieldsModified:' + contact.fieldsModified);		
-		initialState = contact.load(data);
 		//initialState = copy(actualState);
 		BaseForm.compareStates(this);	
 		//trace(actualState);	

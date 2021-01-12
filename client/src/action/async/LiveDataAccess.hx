@@ -84,6 +84,7 @@ class LiveDataAccess
 				case 'Contacts':
 					sData = aState.dataStore.contactData;
 					//trace(sData);
+					trace(Type.getInstanceFields(Type.getClass(sData)));
 					sData = selectType(props.id, props.data, sData, props.selectType);
 					trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
 					trace(sData);
@@ -107,7 +108,7 @@ class LiveDataAccess
 	}
 
 	static function selectType(id:Dynamic,data:IntMap<Map<String,Dynamic>>,sData:IntMap<Map<String,Dynamic>>, sT:SelectType):IntMap<Map<String,Dynamic>>
-	{
+	{	trace(Type.getInstanceFields(Type.getClass(sData)));
 		return switch(sT)
 		{
 			case All:

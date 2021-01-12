@@ -100,10 +100,10 @@ class Tr extends ReactComponentOfProps<TrProps>
 			trace('oops...');
 			return null;
 		}
-		if(props.row==3)
+		if(props.row==1)
 		{
 			//trace(props.columns);
-			//trace(rdMap);
+			trace(rdMap);
 		}
 		var column:Int = 0;
 		var reported:Bool = false;
@@ -158,7 +158,7 @@ class Tr extends ReactComponentOfProps<TrProps>
 		{
 			return null;
 		}		
-		if(props.row==3)
+		if(props.row==0)
 		{
 			trace(props.data);
 		}		
@@ -207,12 +207,17 @@ class Tr extends ReactComponentOfProps<TrProps>
 				//trace(props.parentComponent.props.select);
 				trace(Type.typeof(props.parentComponent));
 				trace(props.data['id']);
-				var data:StringMap<StringMap<Dynamic>> = [props.data['id']=>props.data];
-				props.parentComponent.props.select(props.data['id'], 
+				if(props.parentComponent.props.match==null){
+					props.parentComponent.props.select(props.data['id'], props.parentComponent.props.userState.dbUser);
+				}
+				else {
+					var data:StringMap<StringMap<Dynamic>> = [props.data['id']=>props.data];
+					props.parentComponent.props.select(props.data['id'], 
 					//[Std.int(props.data['id'])=>props.data], 
 					data,//[props.data['id']=>props.data], 
 					props.parentComponent.props.match);
-			}//
+				}				
+			}
 			else
 			{
 				props.parentComponent.props.select(props.data['id'], null,props.parentComponent.props.match, Unselect);

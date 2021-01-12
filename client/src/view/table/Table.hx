@@ -176,10 +176,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 				id = k;
 			fieldNames.push(k);
 		}
-		
-		//if(_trace) trace(props);
-		//if(_trace) trace(Reflect.fields(props));
-		
+
 		if(_trace) trace(props.parentComponent.props.id);
 		state = {selectedRows:[]};
 	}
@@ -219,7 +216,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 					</table>				
 				</div>				
 				<div className="grid-container-inner" >							
-					<table className=${"table " + props.className} ref={tableRef}>
+					<table id=${props.id}className=${"table " + props.className} ref={tableRef}>
 						<thead>
 							<tr ref=${tHeadRef}>
 								${renderHeaderRow()}
@@ -311,7 +308,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		for (dR in dRows)
 		{			
 			var fRRef:ReactRef<TableRowElement> = (row==0?firstRowRef:null);
-			if(row==1)
+			if(row==0)
 				trace('$id key=' + dR);
 			dRs.push(
 			jsx('<$Tr key=${dR.get("id")} columns=${props.dataState.columns} data=${dR} firstTableRow=${fRRef} fieldNames=${fieldNames} row=${row++} parentComponent=${props.parentComponent}/>')

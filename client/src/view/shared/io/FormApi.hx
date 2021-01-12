@@ -271,7 +271,7 @@ class FormApi
 	public function render(content:ReactFragment)
 	{
 		if(sM==null){
-			trace(content);
+			//trace(content);
 			return null;
 		}
 			
@@ -324,7 +324,7 @@ class FormApi
 		return elements;
 	}
 	
-	public function storeFormState(field:String, val:Dynamic) {
+	/*public function storeFormState(field:String, val:Dynamic) {
 		var match:RouterMatch = comp.props.match;
 		var baseUrl:String = match.path.split(':section')[0];
 		baseUrl = '${baseUrl}${match.params.section}/${match.params.action}';	
@@ -332,7 +332,7 @@ class FormApi
 		//Reflect.setField(actualState, field, val);
 		//comp.setState({actualState: actualState});
 		comp.props.parentComponent.props.storeFormChange(comp.state.formStateKey,copy(actualState,{field:val}));			
-	}
+	}*/
 	
 	public function createElementsArray():ReactFragment
 	{

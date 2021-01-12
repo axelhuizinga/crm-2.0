@@ -1,5 +1,6 @@
 package view.data.contacts;
 
+import db.DbUser;
 import action.async.LiveDataAccess;
 import js.Browser;
 import js.html.NodeList;
@@ -56,25 +57,27 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		state =  App.initEState({
 			dataTable:[],
 			loading:false,
-			dealsData:new IntMap(),			
+			dealsData:new IntMap(),	
+			model:'deals',
 			selectedRows:[],
 			sideMenu:null,
 			values:new Map<String,Dynamic>()
 		},this);
 		//get();	
+		//props.parentComponent.registerOrmRef(this);
 		trace(state.loading);
 	}
 	
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
 			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
-			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
+			select:function(id:Int = -1, dbUser:DbUser)
 			{
-				if(true) trace('select:$id selectType:${selectType}');
+				if(true) trace('select:$id dbUser:${dbUser}');
 				//dispatch(DataAction.CreateSelect(id,data,match));
-				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
+				//dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
 			}
-	};
+		};
 	}
 		
 	static function mapStateToProps(aState:AppState) 
@@ -94,7 +97,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	 * get all deals with this Contact id
 	 */
 
-	 public function get():Void
+	public function get():Void
 	{
 		var offset:Int = 0;
 		trace(props.filter);
@@ -107,7 +110,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				filter:(props.filter!=null?props.filter:{mandator:'1'}),
 				limit:props.limit,
 				offset:offset>0?offset:0,
-				table:'deals',
+				table:state.model,
 				resolveMessage:{					
 					success:'Aktionliste wurde geladen',
 					failure:'Aktionliste konnte nicht geladen werden'
@@ -161,34 +164,27 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		if(props.userState.dbUser != null)
 		trace('yeah: ${props.userState.dbUser.first_name}');
 		//dbData = FormApi.init(this, props);
+		props.parentComponent.registerOrmRef(this);
 		get();
 		//state.formApi.doAction(props.action);
 	}
 	
 	function renderResults():ReactFragment
 	{
-		//trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
+		trace(props.action);
 		//trace(dataDisplay["userList"]);
 		trace(state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
-		trace('###########loading:' + state.dataTable);
+		//trace('###########loading:' + state.dataTable);
 		return switch(props.action)
 		{
 			case 'get':
-			jsx('
-				<form className="tabComponentForm" >
-					<$Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
+			jsx('				
+					<$Table id="dealsList" data=${state.dataTable}  parentComponent=${this}
 					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${{function()BaseForm.renderPager(this);}}
 					className="is-striped is-hoverable" fullWidth=${true}/>
-				</form>
 			');			
-			/*case 'get':
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable} 
-					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${function()BaseForm.renderPager(this)} parentComponent=${this}
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');*/
 			case 'delete':
 				null;
 			default:
@@ -200,9 +196,8 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	override public function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		return renderResults();
-		return jsx('
-				<div className="${props.isActive?'is-active':''}">Hello Modal :)</div>
-		');		
+		return jsx('<form className="tabComponentForm" ref=${props.formRef} name="dealsList" > 
+			${renderResults()}
+		</form>');
 	}
 }

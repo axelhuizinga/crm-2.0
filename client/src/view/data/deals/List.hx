@@ -211,7 +211,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'get':
 			jsx('
-				<form className="tabComponentForm" >
+				<form className="tabComponentForm" ref=${props.formRef}>
 					<$Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
 					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${renderPager}
 					className="is-striped is-hoverable" fullWidth=${true}/>

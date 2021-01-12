@@ -402,7 +402,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],
 					model:'contact',
-					ref:formRef,
+					formRef:formRef,
 					title: 'Kontakt - Bearbeite Stammdaten' 
 				},actualState));
 				//null;
@@ -414,7 +414,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
 					],
 					model:'contact',
-					ref:formRef,
+					formRef:formRef,
 					title: 'Kontakt - Neue Stammdaten' 
 				},actualState);
 			default:

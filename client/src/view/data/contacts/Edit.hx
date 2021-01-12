@@ -1,4 +1,6 @@
 package view.data.contacts;
+import react.ReactNode.ReactNodeOf;
+import view.data.contacts.Accounts;
 import view.data.contacts.Deals;
 import haxe.Timer;
 import react.ReactDOM;
@@ -24,8 +26,9 @@ import me.cunity.debug.Out.DebugOutput;
 import js.html.Document;
 import js.Browser;
 import js.html.Window;
-import js.html.HTMLCollection;
 import js.html.HTMLFormControlsCollection;
+import js.html.FormElement;
+import js.html.HTMLCollection;
 import js.html.SelectElement;
 import haxe.macro.Type.Ref;
 import js.html.InputElement;
@@ -84,8 +87,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var formApi:FormApi;
 	var formBuilder:FormBuilder;
 	var formFields:DataView;
+	var dealsFormRef:ReactRef<FormElement>;
 	var formRef:ReactRef<FormElement>;
 	var fieldNames:Array<String>;
+	var ormRefs:Map<String,ORMComps>;
+	public var registerOrmRef:Function;//ReactRef<FormElement>;
+	var accountsFormRef:ReactRef<FormElement>;
+	var historyFormRef:ReactRef<FormElement>;
 	var baseForm:BaseForm;
 	var contact:Contact;
 	var dbData: shared.DbData;
@@ -96,14 +104,44 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		/*var menuItems:Array<MItem> = [
-			{label:'Schließen',action:'close'},		
-			{label:'Speichern + Schließen',action:'update', actions:[update,close]},
-			{label:'Speichern',action:'update'},
-			{label:'Zurücksetzen',action:'reset',onlySm: false}
-		];*/		
-		//baseForm =new BaseForm(this);
-		modals = ['deals'=>false,'accounts'=>false,'history'=>false];
+		ormRefs = new Map();
+		dealsFormRef = React.createRef();
+		formRef = React.createRef();
+		/*dealsRef = function(fNode) {
+			trace(fNode);
+			return fNode;
+		}*/// React.createRef();
+		registerOrmRef = function(ref:Dynamic) {
+			trace(Type.typeof(ref));
+			switch(Type.typeof(ref)){
+				case TNull:
+					//do nothing
+				case TObject: //ReactComp
+					trace(Reflect.fields(ref));					
+					trace(Type.getClass(ref));					
+					trace(ref.props);
+					trace(ref.state);
+					trace(ref.state.model);
+					if(ref.props !=null && ref.props.model!= null){						
+						ormRefs[ref.props.model] = ref;
+						//ormRefs[ref.props.model] = ref.props.formRef.current;
+					}
+						
+
+				case TClass(func):
+					trace(func);
+					//trace(Type.getClassName(Type.getClass(ref)));
+					
+					//trace(ref.props);
+					//trace(ref.state);
+					default:
+					trace(ref);
+					//trace(Reflect)
+					//$type(ref);
+			}
+		};
+		accountsFormRef = React.createRef();
+		historyFormRef = React.createRef();
 		trace(props.match.params);
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/open(\/)*$/.match(props.match.params.action) )
@@ -116,7 +154,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		dataAccess = ContactsModel.dataAccess;
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
 		dataDisplay = ContactsModel.dataDisplay;
-		
 		if(props.dataStore.contactData != null)
 			trace(props.dataStore.contactData.keys().next());
 				
@@ -124,9 +161,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//dataTable:[],
 			actualState:null,
 			initialData:null,
-//			modals:['deals'=>new Deals(props.match.params.id)],
 			mHandlers:menuItems,
 			loading:false,
+			model:'contacts',
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
 				{
@@ -158,7 +195,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function listDeals() {
 		//trace(state.sideMenu);
-		trace('---');
+		//Browser.document.querySelector('#deals').scrollIntoView();
+		//trace(Reflect.fields(dealsRef.current));
+		//dealsRef.scrollIntoView();
+		trace('---' + Type.typeof(ormRefs['deals']));
+		trace(ormRefs);
+		trace(dealsFormRef);
+		dealsFormRef.current.scrollIntoView();
 		/*for(k=>v in state.modals.keyValueIterator())
 			{
 				if(k)
@@ -205,14 +248,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		});
 	}
 	
-	/*static function mapStateToProps(aState:AppState) 
-	{
-		trace(aState);
-		return {
-			userState:aState.user
-		};
-	}*/
-	
 	public function delete(ev:ReactEvent):Void
 	{
 		trace(state.selectedRows.length);
@@ -229,7 +264,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{	
 		trace('mounted:' + mounted);
 		mounted = true;
+		trace(untyped props.children);
 		loadContactData(Std.parseInt(props.match.params.id));
+		trace(untyped props.children);
+
 		//initSession();
 	}
 	
@@ -364,24 +402,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//App.store.dispatch(DBAccess.execute(dbaProps));
 	}
 
-	function renderModals(k:String):ReactFragment
-	{
-		trace('XXX');
-		//var rM:ReactFragment = [for(k=>v in modals.keyValueIterator())
-		return switch (k){
-			case 'deals':
-				jsx('<Deals id="deals" isActive=${true}></Deals>');
-			/*case 'accounts':
-				jsx('');
-			case 'history':
-				jsx('');*/
-			default:
-				null;
-		};
-		//trace(untyped rM.length);
-		//return rM;
-	}
-
 	function renderResults():ReactFragment
 	{
 		trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.actualState != null));
@@ -404,10 +424,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
 					model:'contact',
-					ref:formRef,					
+					ref:registerOrmRef,					
 					title: 'Kontakt - Bearbeite Stammdaten' 
 				},state.actualState)} 
-				<Deals id="deals" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>
+				<Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>
+				
 				</>
 				'));
 				//null;
@@ -419,13 +440,16 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
 					model:'contact',
-					ref:formRef,
+					ref:registerOrmRef,
 					title: 'Kontakt - Neue Stammdaten' 
 				},state.actualState);
 			default:
 				null;
 		}
 	}
+	/**
+	 * <Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Accounts>
+	 */
 	
 	override function render():ReactFragment
 	{

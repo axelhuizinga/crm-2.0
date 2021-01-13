@@ -53,11 +53,11 @@ typedef  TrState =
 	var selected:Bool;
 };
 
-class Tr extends ReactComponentOfProps<TrProps>
+class Tr extends ReactComponentOf<TrProps, TrState>
 {
 	public var me:ReactFragment;
 	var id:String;
-	var selected:Bool;
+	//var selected:Bool;
 	var ref:ReactRef<TableRowElement>;
 
 	public function new(?props:TrProps)
@@ -67,8 +67,10 @@ class Tr extends ReactComponentOfProps<TrProps>
 		var match:RouterMatch = props.parentComponent.props.match;
 		id = props.data != null ? props.data.get('id'): '';
 		//trace('$id ${match.params.id !=null && match.params.id.indexOf(id)>-1}');
-		//state = {cells:[], selected:match.params.id !=null && match.params.id.indexOf(id)>-1?true:false};	
-		selected = false;
+		state = {
+			cells:[], 
+			selected:match != null && match.params.id !=null && match.params.id.indexOf(id)>-1?true:false};	
+		//selected = false;
 		if(match != null && match.params.id !=null && match.params.id.indexOf(id)>-1)
 		//if(match.location.hash !=null && match.params.id.indexOf(id)>-1)
 		{
@@ -146,12 +148,12 @@ class Tr extends ReactComponentOfProps<TrProps>
 		if(props.row==0)
 		{
 			//trace(props.data);setFormState
-			trace(props.row);
+			//trace(props.row);
 			ref = props.firstTableRow;
 		}
 		//else selected = props.parentComponent.props.match.params.id !=null && props.parentComponent.props.match.params.id.indexOf(id)>-1;		
-		else selected = props.parentComponent.props.location.hash.indexOf(id)>-1;
-		var cl:String =  selected ? 'is-selected' : '';
+		//else selected = props.parentComponent.props.location.hash.indexOf(id)>-1;
+		var cl:String =  state.selected ? 'is-selected' : '';
 		
 		//trace('$id == ${props.parentComponent.props.match.id} class:$cl');
 		if(props.data==null)
@@ -162,7 +164,7 @@ class Tr extends ReactComponentOfProps<TrProps>
 		{
 			trace(props.data);
 		}		
-		//var makeRef:String = selected && props.row>0?'ref=${ref}':'';
+		trace('className:' + cl);
 		//trace('	<tr className=${cl} data-id=${props.data["id"]} data-row=${props.row} title=${props.data["id"]} ref=${ref} onClick=${select}>');
 		//
 		return jsx('
@@ -177,7 +179,7 @@ class Tr extends ReactComponentOfProps<TrProps>
 	public function select(mEvOrID:Dynamic)
 	{
 		//trace('select from contructor:${mEvOrID.select}');
-		trace('${props.data['id']} selected:$selected');
+		trace('${props.data['id']} selected:${state.selected}');
 		trace(Reflect.fields(props));
 		//trace(props.row +':' + props.data.toString());
 		if(mEvOrID.select == null)
@@ -202,30 +204,29 @@ class Tr extends ReactComponentOfProps<TrProps>
 		}
 		if(props.parentComponent != null)
 		{
-			if(!selected)
+			if(!state.selected)
 			{
-				//trace(props.parentComponent.props.select);
-				trace(Type.typeof(props.parentComponent));
-				trace(props.data['id']);
+				//trace(Type.typeof(props.parentComponent));
+				trace(props.data['id'] + ':' + props.parentComponent.props.match);
 				if(props.parentComponent.props.match==null){
 					props.parentComponent.props.select(props.data['id'], props.parentComponent.props.userState.dbUser);
 				}
 				else {
 					var data:StringMap<StringMap<Dynamic>> = [props.data['id']=>props.data];
 					props.parentComponent.props.select(props.data['id'], 
-					//[Std.int(props.data['id'])=>props.data], 
 					data,//[props.data['id']=>props.data], 
 					props.parentComponent.props.match);
 				}				
 			}
 			else
 			{
+				trace('unselect');
 				props.parentComponent.props.select(props.data['id'], null,props.parentComponent.props.match, Unselect);
 			}	
 			
 		}
-		selected = mEvOrID.select ? true:!selected;
-		trace('selected:$selected');
+		setState({selected: mEvOrID.select ? true:!state.selected});
+		trace('selected:${state.selected}');
 		//if(!mEvOrID.select)
 			//forceUpdate();
 	}

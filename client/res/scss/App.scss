@@ -33,7 +33,7 @@ $buttonSun:#ffdd57;
 $cell-border: 1px solid #ccc;
 $cellPadding: 0px 0.75rem;
 $headPadding: 0.75rem 0.75rem 0.25rem 0.75rem;
-$ePad:0.3rem 1rem;
+$ePad:0.3rem 0.64rem;
 $darkBlue: rgb(10,20,60);
 $strongViolet:#6b6ab3;
 $disabled: rgb(80,80,80);
@@ -335,12 +335,11 @@ h2{
   border-radius: $tableHeader-radius;
   border:1px solid #ccc;
   padding: $ePad;
-  color: #3A3F44;  
+  /*color: #3A3F44;  */
   
 }
-.formField .g_cell input[type=text],.formField .g_cell_r input[type=text], .login input {
+.formField .g_cell input[type="text"],.formField .g_cell_r input[type="text"], .login input {
   width: 100%;
-  /*padding:1rem;*/
   background-color: #fafafa;
   border-left-style:none;
   border-bottom-left-radius: 0;
@@ -977,23 +976,16 @@ form td, form caption
 .g_cell_r{
 	width:auto;
 }
-.g_cell_r input[type=text]{
+.g_cell_r input{
 	border: none;
-	width:100%;
-	font-size: 1rem;
-	padding-left: 0.64rem;
-	border-radius:0 4px 4px 0;
 }
 .g_cell_r input[type=checkbox]{
 	justify-self: start;
-	margin-left: 1rem;
-	/*visibility: hidden;*/
+	margin: auto 0.64rem;
 }
 
 .uploadBox{
 	text-align: center;
-	/*margin: auto;
-	display: inline-block;*/
 }
 .fileinput {
 	width: 0.1px;

@@ -12,7 +12,7 @@ import view.table.Table.DataState;
 class Accounts
 {
 	public static var listColumns:Map<String,DataColumn> = [
-		'contact'=>{label:'Kontakt'},
+		'contact'=>{label:'Kontakt',show:false},
 		'account_holder'=>{label:'Kontoinhaber', flexGrow:1},
 		'bank_name'=>{label:'Bankname', flexGrow:1},
 		'blz'=>{label:'BLZ'},		
@@ -21,7 +21,7 @@ class Accounts
 		'status' => {label:'Aktiv', className: 'tCenter',		
 			cellFormat:function(v:String) 
 			{
-				var aState = (v=='active'?'fa-check':'passive fa-check');
+				var aState = (v=='active'?'fa-heart':'passive fa-heart');
 				//trace(uState);
 				return jsx('<span className="fa $aState"></span>');
 			}},

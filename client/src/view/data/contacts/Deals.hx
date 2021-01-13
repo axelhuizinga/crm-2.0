@@ -196,7 +196,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	override public function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		return jsx('<form className="tabComponentForm" ref=${props.formRef} name="dealsList" > 
+		return jsx('<form className="tabComponentForm formField" ref=${props.formRef} name="dealsList" > 
 			${renderResults()}
 		</form>');
 	}

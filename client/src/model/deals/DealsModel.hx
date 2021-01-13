@@ -42,19 +42,18 @@ class DealsModel
 	];
 
 	public static var listColumns:Map<String,DataColumn> = [
-		'contact'=>{label:'Kontakt',show:true, useAsIndex: true},				
+		'id'=>{label:'ID',show:false},				
 		'start_date'=>{label:'Seit'},	
 		'end_date'=>{label:'Bis'},	
-		'status' => {label:'Aktiv', className: 'tCenter',
-			cellFormat:function(v:String) 
+		'active' => {label:'Aktiv', className: 'tCenter',
+			cellFormat:function(v:Bool) 
 			{
-				var className = (v=='active'?'active fas fa-heart':'passive far fa-heart');
+				var className = (v?'active fas fa-heart':'passive far fa-heart');
 				trace('>>>$v<<<');
 				return jsx('<span className=${className}></span>');
 			}},
 		'cycle' => {label: 'Turnus'},
 		'amount' => {label: 'Betrag'},
-		'id' => {show:false},
 		
 	];
 

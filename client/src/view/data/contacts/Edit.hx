@@ -426,9 +426,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					model:'contact',
 					ref:registerOrmRef,					
 					title: 'Kontakt - Bearbeite Stammdaten' 
-				},state.actualState)} 
-				<Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>
-				
+				},state.actualState)}
+				${relData()}
 				</>
 				'));
 				//null;
@@ -447,8 +446,17 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				null;
 		}
 	}
-	/**
-	 * <Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Accounts>
+
+	function relData() {
+		return jsx('
+			<>
+			<Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>
+			<Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Accounts>
+			</>
+		');
+	}
+	/**				//${relData()} 
+
 	 */
 	
 	override function render():ReactFragment

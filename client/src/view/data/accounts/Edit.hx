@@ -1,4 +1,5 @@
 package view.data.accounts;
+import action.async.CRUD;
 import hxbit.NetworkHost.NetworkClient;
 import haxe.Json;
 import js.lib.Promise;
@@ -27,7 +28,7 @@ import shared.DBMetaData;
 import view.shared.FormBuilder;
 import view.shared.FormField;
 import state.FormState;
-import model.contacts.ContactsModel;
+import model.accounting.AccountsModel;
 import view.shared.MItem;
 import view.shared.MenuProps;
 import view.shared.io.FormApi;
@@ -67,7 +68,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		trace(props.match.params);
-		dataAccess = ContactsModel.dataAccess;
+		dataAccess = AccountsModel.dataAccess;
 		initialState = null;/*new Contact({
 			id:null,//2000328,
 			edited_by: props.userState.dbUser.id,
@@ -75,7 +76,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}, dataAccess['update'].view);	*/
 
 		//REDIRECT WITHOUT ID OR edit action
-		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
+		if(props.match.params.id==null && ~/update(\/)*$/.match(props.match.params.action) )
 		{
 			trace('nothing selected - redirect');
 			var baseUrl:String = props.match.path.split(':section')[0];
@@ -83,14 +84,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			return;
 		}		
 		fieldNames = new Array();
-		for(k in dataAccess['update'].view.keys())
+		for(k in dataAccess['open'].view.keys())
 		{
 			fieldNames.push(k);
 		}	
-		dataDisplay = ContactsModel.dataDisplay;
+		dataDisplay = AccountsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		formRef = React.createRef();
-		if(props.match.params.id!=null)
+	/*	if(props.match.params.id!=null)
 			initialState.id = Std.parseInt(props.match.params.id);
 			
 		
@@ -110,7 +111,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		else {			
 			//actualState = copy(initialState);
 			trace(actualState);
-		}
+		}*/
 		
 		state =  App.initEState({
 			dataTable:[],
@@ -120,7 +121,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
 				{
-					dataClassPath:'data.Contacts',
+					dataClassPath:'data.Accounts',
 					label:'Bearbeiten',
 					section: 'Edit',
 					items: menuItems
@@ -134,7 +135,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			}),*/
 			values:new Map<String,Dynamic>()
 		},this);
-		trace(state.initialState.id);
+		//trace(state.initialState.id);
+	/**
+	 * 
+	 */
 	}
 
 	function loadContactData(id:Int)
@@ -156,6 +160,105 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		return c;*/
 		return null;
 	}
+
+	function update()
+	{
+		//trace(Reflect.fields(aState));
+		if(state.actualState != null)
+			trace('length:' + state.actualState.fieldsModified.length + ':' + state.actualState.fieldsModified.join('|') );
+		if(state.actualState == null || state.actualState.fieldsModified.length==0)
+			return;
+		var data2save = state.actualState.allModified();
+		var doc:Document = Browser.window.document;
+
+		//var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
+		//var elements:HTMLCollection = formElement.elements;
+		var aState:Dynamic = copy(state.actualState);
+		var dbaProps:DBAccessProps = 
+		{
+			action:'update',
+			classPath:'data.Accounts',
+			dataSource:null,
+		//	table:'contacts',
+			userState:props.userState
+		};
+		var dbQ:DBAccessProps = {
+			classPath:'data.Accounts',
+			action:'update',
+			data:data2save,
+			filter:{id:state.actualState.id,mandator:1},
+			resolveMessage:{
+				success:'Konto ${state.actualState.id} wurde aktualisiert',
+				failure:'Konto ${state.actualState.id} konnte nicht aktualisiert werden'
+			},
+			table:'accounts',
+			dbUser:props.userState.dbUser,
+			devIP:App.devIP
+		}
+		trace(props.match.params.action);
+		switch (props.match.params.action)
+		//switch ('update')
+		{
+			case 'insert':
+				for(f in fieldNames)
+				{
+					trace('$f =>${Reflect.field(aState,f)}<=');
+					if(Reflect.field(aState,f)=='')
+						Reflect.deleteField(aState,f);
+				}
+				//Reflect.deleteField(aState,'id');
+				//Reflect.deleteField(aState,'creation_date');				
+				/*dbaProps.dataSource = [
+					"contacts" => [
+						"data" => aState,
+						"fields" => contact.fieldsModified
+					]
+				];*/
+			case 'delete'|'get':
+				dbaProps.dataSource = [
+					"contacts" => [
+						"filter" => {id:state.initialData.id}
+					]
+				];	
+			case 'update':
+				//Reflect.deleteField(aState,'creation_date');
+				trace('${state.initialData.id} :: creation_date: ${aState.creation_date} ${state.initialData.creation_date}');
+				//var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialData.id);
+				//trace();
+				if(state.actualState != null)
+				trace(state.actualState.modified() + ':${state.actualState.fieldsModified}');
+				/*for(f in fieldNames)
+				{
+					//UPDATE FIELDS WITH VALUES CHANGED
+					if(Reflect.field(aState,f)!=Reflect.field(state.initialData,f))
+					{
+						trace('$f:${Reflect.field(aState,f)}==${Reflect.field(state.initialData,f)}<<');
+						Reflect.setProperty(contact, f, Reflect.field(aState,f));
+						contact.modified(f);
+					}						
+				}*/
+				//trace(aState);
+				trace(state.actualState.id);
+				if(!state.actualState.modified())
+				{
+					//TODO: NOCHANGE ACTION => Display Feedback nothing to save
+					trace('nothing modified');
+					return;
+				}
+				trace(state.actualState.allModified());
+				dbaProps.dataSource = [
+					"contacts" => [
+						"data" => state.actualState.allModified(),
+						"filter" => {id:state.actualState.id}
+					]
+				];
+				trace(dbaProps.dataSource["contacts"]["filter"]);
+		}
+		//App.store.dispatch(CRUD.update(dbaProps));
+		App.store.dispatch(CRUD.update(dbQ));
+		
+		//App.store.dispatch(DBAccess.execute(dbaProps));
+	}	
 	
 	static function mapStateToProps(aState:AppState) 
 	{
@@ -174,11 +277,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{	
 		Browser.window.addEventListener('beforeunload', sessionStore);
-		var sessContacts = Browser.window.sessionStorage.getItem('contacts');
-		if(sessContacts != null)
+		var sessAccounts = Browser.window.sessionStorage.getItem('contacts');
+		if(sessAccounts != null)
 		{
-			trace(Json.parse(sessContacts));
-			actualState = Json.parse(sessContacts);
+			trace(Json.parse(sessAccounts));
+			actualState = Json.parse(sessAccounts);
 			trace(actualState);
 			forceUpdate();
 		}
@@ -187,7 +290,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//DATA NOT IN STORE - LOAD IT
 			App.store.dispatch(DBAccess.get({
 				action:'get',
-				classPath:'data.Contacts',
+				classPath:'data.Accounts',
 				table:'contacts',
 				filter:	'id|${initialState.id}',
 				userState:App.store.getState().userState
@@ -242,7 +345,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			f => Reflect.field(actualState,f)		
 		]];
 		trace(actData);
-		App.store.dispatch(DataAction.SelectActContacts(actData));
+		App.store.dispatch(DataAction.SelectAccounts(actData));
 	}
 
 	function sessionStore(){
@@ -333,7 +436,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var dbaProps:DBAccessProps = 
 		{
 			action:props.match.params.action,
-			classPath:'data.Contacts',
+			classPath:'data.Accounts',
 			dataSource:null,
 			table:'contacts',
 			userState:props.userState

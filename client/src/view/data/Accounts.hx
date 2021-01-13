@@ -47,6 +47,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	public function new(?props:DataFormProps) 
 	{
 		super(props);	
+		_strace = true;
 		trace(Reflect.fields(props));
 		trace(props.match.params.section);
 		state = {
@@ -82,11 +83,16 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	{
 		if(_strace) trace('ok');
 		return {
+			/**
+			 * select(props.data['id'], 
+					data,//[props.data['id']=>props.data], 
+					props.parentComponent.props.match);
+			 */
 			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
 			{
 				if(_strace) trace('select:$id selectType:${selectType}');
 				//dispatch(DataAction.CreateSelect(id,data,match));
-				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
+				//dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
 			}
 		};
 	}

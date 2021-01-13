@@ -1,5 +1,6 @@
 package view.data.accounts;
 
+import js.Browser;
 import db.DBAccessProps;
 import action.async.CRUD;
 import haxe.ds.IntMap;
@@ -30,7 +31,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
 		{label:'Anzeigen',action:'get'},
-		{label:'Bearbeiten',action:'update'},
+		{label:'Bearbeiten',action:'edit'},
 		//{label:'Finden',action:'get'},
 		{label:'Neu', action:'insert'},
 		{label:'Löschen',action:'delete'}
@@ -84,7 +85,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-            load: function(param:DBAccessProps) return dispatch(CRUD.read(param))
+			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
+			//select:
         };
 	}
 	
@@ -133,10 +135,15 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function edit(ev:ReactEvent):Void
 	{
+		trace(ev);
 		trace(state.selectedRows.length);				
+		var selected = Browser.document.querySelector('tr.is-selected');
+		trace(selected.dataset.id);
+		var baseUrl:String = props.match.path.split(':section')[0];
+		props.history.push('${baseUrl}Edit/update/${selected.dataset.id}');
 	}
 
-	function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
+	/*function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
 	{
 		var iS:Dynamic = {};
 		for(dR in dt)
@@ -145,7 +152,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			for(k in dR.keys())
 			{
 				trace(k);
-				if(dataDisplay['fieldsList'].columns[k].cellFormat == view.shared.Format.formatBool)
+				if(dataDisplay['accountsList'].columns[k].cellFormat == view.shared.Format.formatBool)
 				{
 					Reflect.setField(rS,k, dR[k] == 'Y');
 				}
@@ -156,7 +163,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		}
 		trace(iS);
 		return iS;
-	}
+	}*/
 		
 	override public function componentDidMount():Void 
 	{	
@@ -194,22 +201,22 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'get':
 				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
+					<Table id="accountsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} renderPager=${function()BaseForm.renderPager(this)}
 					parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'update':
 				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
+					<Table id="accountsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["clientList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');			
 			case 'insert':
-				trace(dataDisplay["fieldsList"]);
+				trace(dataDisplay["accountsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
 				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["fieldsList"]} 
+					<Table id="accountsList" data=${state.dataTable}
+					${...props} dataState = ${dataDisplay["accountsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>				
 				');	
 			case 'delete':

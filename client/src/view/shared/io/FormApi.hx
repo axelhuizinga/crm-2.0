@@ -223,7 +223,7 @@ class FormApi
 			return true;
 		}
 		else 
-			trace('.$method not found');
+			trace('$method not found');
 		return false;		
 	}
 

@@ -155,7 +155,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	var id:String;
 	var tHeadRef:ReactRef<TableRowElement>;
 	var visibleColumns:Int;
-	var headerUpdated:Bool;
+	var headerUpdated(default, set):Bool;
 	var _timer:Timer;
 	var _trace:Bool;
 	var trs:Array<Tr>;
@@ -180,13 +180,26 @@ class Table extends ReactComponentOf<TableProps, TableState>
 
 		if(_trace) trace(props.parentComponent.props.id);
 		state = {selectedRows:[]};
+
+		tableRef = React.createRef();
+		fixedHeader = React.createRef();
+		tHeadRef = React.createRef();
+		//trace(tHeadRef);
+		firstRowRef = React.createRef();		
 	}
 	
+	function set_headerUpdated(hU) {
+		trace(hU);
+		//if(hU)
+		//	Out.dumpStack(Out.aStack());
+		return headerUpdated = hU;
+	}
+
 	override public function render():ReactFragment
 	{
-		if(props.data != null)
-		if(_trace) trace(props.data.length);
-		if(_trace) trace(props.renderPager());
+		if(_trace && props.data != null)
+		 trace(props.data.length);
+		if(_trace && props.renderPager !=null) props.renderPager();
 		if (props.data == null || props.data.length == 0)
 		{
 			return state.loading ? jsx('
@@ -198,11 +211,8 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			'): null;					
 		}		
 		//if(_trace) trace(props.data);
-		tableRef = React.createRef();
-		fixedHeader = React.createRef();
-		tHeadRef = React.createRef();
-		firstRowRef = React.createRef();
-		var comp = props.parentComponent;
+
+		//var comp = props.parentComponent;
 		/**
 		 * 				
 		 */
@@ -236,9 +246,8 @@ class Table extends ReactComponentOf<TableProps, TableState>
 
 	public function renderPager(comp:Dynamic):ReactFragment
 	{
-		trace('pageCount=${comp.state.pageCount}');
-		
-		trace(comp.props);
+		trace('pageCount=${comp.state.pageCount}');		
+		//trace(comp.props);
 		//trace(props);
 		//trace(jsx('<div className="paginationContainer">React Paginate</div>'));
 		return jsx('
@@ -469,7 +478,9 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			{
 				if(_max--<0)
 					return -1;
-				if(_trace) trace(_max);
+				if(_trace){
+					trace(_max);
+				} 
 				return tHeadRef != null && tHeadRef.current != null;
 			}, layOut);
 			return;

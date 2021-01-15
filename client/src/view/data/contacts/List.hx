@@ -64,7 +64,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		//trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			dataTable:[],
-			loading:false,
+			loading:true,
 			contactData:new IntMap(),			
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
@@ -237,7 +237,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				jsx('
 					<form className="tabComponentForm" >
 						<$Table id="contactsList" data=${state.dataTable}  parentComponent=${this}
-						${...props} dataState = ${dataDisplay["contactList"]} renderPager=${{function()BaseForm.renderPager(this);}}
+						${...props} dataState=${dataDisplay["contactList"]} renderPager=${{function()trace(Reflect.fields(props));}}
 						className="is-striped is-hoverable" fullWidth=${true}/>
 					</form>
 				');

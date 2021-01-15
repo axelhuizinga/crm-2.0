@@ -58,9 +58,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = DealsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 
-		state =  App.initEState({
+		state = App.initEState({
 			dataTable:[],
-			loading:false,
+			loading:true,
 			dealsData:new IntMap(),			
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
@@ -115,7 +115,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace('hi $ev');
 		var offset:Int = 0;
-		setState({loading:true});
 		if(ev != null && ev.page!=null)
 		{
 			offset = Std.int(props.limit * ev.page);
@@ -188,21 +187,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace('yeah: ${props.userState.dbUser.first_name}');
 		//dbData = FormApi.init(this, props);
 		state.formApi.doAction();
-		/*
-		if(props.match.params.action != null)
-		{
-			var fun:Function = Reflect.field(this,props.match.params.action);
-			if(Reflect.isFunction(fun))
-			{
-				Reflect.callMethod(this,fun,null);
-			}
-		}
-		else 
-			setState({loading: false});*/
 	}
 
 	function renderPager(){
-		BaseForm.renderPager(this);
+		return BaseForm.renderPager(this);
 	}
 	
 	function renderResults():ReactFragment
@@ -219,16 +207,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			jsx('
 				<form className="tabComponentForm" ref=${props.formRef}>
 					<$Table id="dealsList" data=${state.dataTable}  parentComponent=${this}
-					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${renderPager}
+					${...props} dataState=${dataDisplay["dealsList"]} renderPager=${{function() 
+						trace(Reflect.fields(props));
+					}}
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				</form>
 			');			
-			/*case 'get':
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable} 
-					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${BaseForm.renderPager} parentComponent=${this}
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				');*/
 			case 'delete':
 				null;
 			default:

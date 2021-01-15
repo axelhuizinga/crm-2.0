@@ -188,7 +188,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			case 'get':
 			jsx('				
 					<$Table id="dealsList" data=${state.dataTable}  parentComponent=${this}
-					${...props} dataState = ${dataDisplay.get("listColumns")} renderPager=${{function()BaseForm.renderPager(this);}}
+					${...props} dataState = ${dataDisplay.get("dealsList")} renderPager=${{function()BaseForm.renderPager(this);}}
 					className="is-striped is-hoverable" fullWidth=${true}/>
 			');			
 			case 'delete':

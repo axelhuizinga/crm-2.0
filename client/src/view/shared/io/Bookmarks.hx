@@ -116,8 +116,8 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 		trace(state);
 		//var NewLayoutInstance = React.createElement(NewLayout);;
 		//trace(data);
-		trace(props.match.params.section);
-		
+		trace(props.match.params);
+
 		return jsx('
 			<div className="tabComponentForm"  >
 				dummy	

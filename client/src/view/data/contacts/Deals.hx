@@ -121,7 +121,13 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		);
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
-			setState({loading:false, dataTable:data.dataRows});
+			//setState({loading:false, dataTable:data.dataRows});
+			setState({
+				loading:false,
+				dataTable:data.dataRows,
+				dataCount:Std.parseInt(data.dataInfo['count']),
+				pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
+			});			
 		});
 	}
 	
@@ -182,7 +188,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			case 'get':
 			jsx('				
 					<$Table id="dealsList" data=${state.dataTable}  parentComponent=${this}
-					${...props} dataState = ${dataDisplay["dealsList"]} renderPager=${{function()BaseForm.renderPager(this);}}
+					${...props} dataState = ${dataDisplay.get("listColumns")} renderPager=${{function()BaseForm.renderPager(this);}}
 					className="is-striped is-hoverable" fullWidth=${true}/>
 			');			
 			case 'delete':

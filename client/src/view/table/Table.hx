@@ -1,5 +1,6 @@
 package view.table;
 
+import view.shared.io.BaseForm;
 import react.ReactPaginate;
 import js.Browser;
 import haxe.Constraints.Function;
@@ -185,7 +186,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	{
 		if(props.data != null)
 		if(_trace) trace(props.data.length);
-		//if(_trace) trace(props.data);
+		if(_trace) trace(props.renderPager());
 		if (props.data == null || props.data.length == 0)
 		{
 			return state.loading ? jsx('
@@ -201,6 +202,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		fixedHeader = React.createRef();
 		tHeadRef = React.createRef();
 		firstRowRef = React.createRef();
+		var comp = props.parentComponent;
 		/**
 		 * 				
 		 */
@@ -227,12 +229,48 @@ class Table extends ReactComponentOf<TableProps, TableState>
 						</tbody>
 					</table>					
 				</div>
-				${props.renderPager()}
+				${renderPager(props.parentComponent)}	
 			</div>
 		');		
 	}
+
+	public function renderPager(comp:Dynamic):ReactFragment
+	{
+		trace('pageCount=${comp.state.pageCount}');
+		
+		trace(comp.props);
+		//trace(props);
+		//trace(jsx('<div className="paginationContainer">React Paginate</div>'));
+		return jsx('
+		<div id="pct" className="paginationContainer">
+			<nav>
+				<$ReactPaginate previousLabel=${'<'} breakLinkClassName=${'pagination-link'}
+					pageLinkClassName=${'pagination-link'}					
+					nextLinkClassName=${'pagination-next'}
+					previousLinkClassName=${'pagination-previous'}
+					nextLabel=${'>'}
+					breakLabel=${'...'}
+					breakClassName=${'break-me'}
+					pageCount=${comp.state.pageCount}
+					marginPagesDisplayed={2}
+					pageRangeDisplayed={5}
+					onPageChange=${function(data){
+						trace('${comp.props.match.params.action}  ${data.selected}');
+						var fun:Function = Reflect.field(comp,comp.props.match.params.action);
+						if(Reflect.isFunction(fun))
+						{
+							Reflect.callMethod(comp,fun,[{page:data.selected}]);
+						}
+					}}
+					containerClassName=${'pagination is-small'}
+					subContainerClassName=${'pages pagination'}
+					activeLinkClassName=${'is-current'}/>
+			</nav>	
+		</div>		
+		');
+	}
 			
-	/**
+	/**${props.renderPager()}
 	   @return
 	**/
 
@@ -417,8 +455,10 @@ class Table extends ReactComponentOf<TableProps, TableState>
 
 	public function layOut():Void
 	{
-		if(_trace) trace('firstCall: $headerUpdated $tHeadRef: ${tHeadRef != null && tHeadRef.current != null}');
+		if(_trace) trace('firstCall: ${props.id + " " + props.fullWidth} $headerUpdated $tHeadRef: ${tHeadRef != null && tHeadRef.current != null}');
 		//return;
+		var freeWidth:Float = 0;
+
 		if(tHeadRef == null || tHeadRef.current == null)
 		{
 			if(_trace) trace('$tHeadRef: ${tHeadRef != null && tHeadRef.current != null}');
@@ -440,14 +480,14 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		//var leftMargin:Int = 
 		var scrollBarWidth:Float = App.config.getScrollbarWidth(true);
 		//
-		var hasScrollbar:Bool = tableRef.current.parentElement.offsetHeight < (tableRef.current.parentElement.offsetHeight-tHeadRef.current.offsetHeight);
-		var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - (hasScrollbar?scrollBarWidth:0);
+		var hasScrollbar:Bool = false;//tableRef.current.parentElement.offsetHeight < (tableRef.current.parentElement.offsetHeight-tHeadRef.current.offsetHeight);
+		freeWidth = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - (hasScrollbar?scrollBarWidth:0);
 		freeWidth = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth;
 		//if(_trace) trace('table.offsetWidth: ${tableRef.current.offsetWidth} parentElement.offsetWidth: ${tableRef.current.parentElement.offsetWidth} ');
 		//if(_trace) trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
 		if(_trace) trace('firstRowRef.current.offsetWidth:${firstRowRef.current.offsetWidth} scrollBarWidth:$scrollBarWidth');
 		tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
-						
+					
 		var i:Int = 0;
 		var grow:Array<Int> = [];
 		if (props.fullWidth)
@@ -481,7 +521,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 					}
 				}					
 			}	
-		}
+		//}
 		i = 0;
 		for (cell in tHeadRef.current.children)
 		{
@@ -490,14 +530,16 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			var fixedHeaderCell = cast(fixedHeader.current.childNodes[i],Element);
 			fixedHeaderCell.setAttribute('style', 'width:${i==0?w+1:w}px');
 			i++;
-		}
+		}}
 		//if(_trace) trace('table.offsetWidth: ${tableRef.current.offsetWidth} tHeadRef.offsetWidth: ${tHeadRef.current.offsetWidth} ');
 		var firstSelectedRow = firstRowRef.current.parentElement.querySelector('[class="is-selected"]');
 		if(firstSelectedRow!=null)
 		{
 			//Browser.document.querySelector('[class="grid-container-inner"]').scrollTo(0,0);
 			if(_trace) trace(firstSelectedRow.offsetTop);
-			Browser.document.querySelector('[class="grid-container-inner"]').scrollTop = firstSelectedRow.offsetTop - 100;
+			//Browser.document.querySelector('[class="grid-container-inner"]').scrollTop = firstSelectedRow.offsetTop - 100;
+			firstSelectedRow.scrollIntoView();
+
 		}
 	}
 	

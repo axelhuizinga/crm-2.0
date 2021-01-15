@@ -110,6 +110,8 @@ class BaseForm
 	public static function renderPager(comp:Dynamic):ReactFragment
 	{
 		trace('pageCount=${comp.state.pageCount}');
+		
+		//trace(jsx('<div className="paginationContainer">React Paginate</div>'));
 		return jsx('
 		<div className="paginationContainer">
 			<nav>
@@ -138,15 +140,6 @@ class BaseForm
 			</nav>	
 		</div>		
 		');
-	}	
-
-	/*public static function onPageChange(comp, data) {
-		trace('${comp.props.match.params.action}  ${data.selected}');
-		var fun:Function = Reflect.field(comp,comp.props.match.params.action);
-		if(Reflect.isFunction(fun))
-		{
-			Reflect.callMethod(comp,fun,[{page:data.selected}]);
-		}		
-	}*/
+	}
 	
 }

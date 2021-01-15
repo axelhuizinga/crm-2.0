@@ -6,6 +6,7 @@ import view.table.Table.DataColumn;
 import view.table.Table.DataState;
 import view.shared.FormInputElement;
 
+using StringTools;
 /**
  * @author axel@cunity.me
  */
@@ -17,7 +18,8 @@ class DealsModel
 			source:[
 				"deals" => [
 					"filter" => 'id',
-				//"joins" => []//Array of join parameters
+					//"joins" => []//Array of join parameters
+					"title" => 'id'
 					],
 				],
 			view:[				
@@ -41,6 +43,24 @@ class DealsModel
 		}
 	];
 
+	public static var shortListColumns:Map<String,DataColumn> = [
+		'id'=>{label:'ID',show:false},				
+		'start_date'=>{label:'Seit'},	
+		'end_date'=>{label:'Bis'},	
+		'active' => {label:'Aktiv', className: 'tCenter',
+			cellFormat:function(v:Bool) 
+			{
+				var className = (v?'active fas fa-heart':'passive far fa-heart');
+				//trace('>>>$v<<<');
+				return jsx('<span className=${className}></span>');
+			}},
+		'cycle' => {label: 'Turnus'},
+		'amount' => {label: 'Betrag', cellFormat: function(v) {
+			return App.sprintf('%01.2f €',v).replace('.',',');
+		},className: 'tRight'},
+		
+	];
+
 	public static var listColumns:Map<String,DataColumn> = [
 		'id'=>{label:'ID',show:false},				
 		'start_date'=>{label:'Seit'},	
@@ -53,11 +73,14 @@ class DealsModel
 				return jsx('<span className=${className}></span>');
 			}},
 		'cycle' => {label: 'Turnus'},
-		'amount' => {label: 'Betrag'},
+		'amount' => {label: 'Betrag',cellFormat: function(v) {
+			return App.sprintf('%01.2f €',v).replace('.',',');
+		},className: 'tRight'},
 		
 	];
 
 	public static var dataDisplay:Map<String,DataState> = [
-		'dealsList' => {columns:listColumns}
+		'dealsList' => {columns:shortListColumns},
+		'dealsFull' => {columns:listColumns}
 	];	
 }

@@ -105,7 +105,7 @@ class Tr extends ReactComponentOf<TrProps, TrState>
 		if(props.row==1)
 		{
 			//trace(props.columns);
-			trace(rdMap);
+			//trace(rdMap);
 		}
 		var column:Int = 0;
 		var reported:Bool = false;
@@ -164,7 +164,7 @@ class Tr extends ReactComponentOf<TrProps, TrState>
 		{
 			trace(props.data);
 		}		
-		trace('className:' + cl);
+		//trace('className:' + cl);
 		//trace('	<tr className=${cl} data-id=${props.data["id"]} data-row=${props.row} title=${props.data["id"]} ref=${ref} onClick=${select}>');
 		//
 		return jsx('

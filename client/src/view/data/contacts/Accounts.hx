@@ -47,7 +47,6 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:null,
 			values:new Map<String,Dynamic>()
 		},this);
-		props.parentComponent.registerOrmRef(this);
 		trace(state.loading);	
 	}
 
@@ -141,6 +140,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		get();
 	}
 	
+	//renderPager=${function()BaseForm.renderPager(this)}
 	function renderResults():ReactFragment
 	{
 		trace(state.loading);
@@ -152,7 +152,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 			case 'get':
 				jsx('
 					<Table id="accountsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["accountsList"]} renderPager=${function()BaseForm.renderPager(this)}
+					${...props} dataState = ${dataDisplay["accountsList"]} 
 					parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'update':

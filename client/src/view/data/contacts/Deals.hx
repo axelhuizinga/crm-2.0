@@ -182,13 +182,13 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
-		//trace('###########loading:' + state.dataTable);
+		//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}
 		return switch(props.action)
 		{
 			case 'get':
 			jsx('				
 					<$Table id="dealsList" data=${state.dataTable}  parentComponent=${this}
-					${...props} dataState = ${dataDisplay.get("dealsList")} renderPager=${{function()BaseForm.renderPager(this);}}
+					${...props} dataState=${dataDisplay.get("dealsList")} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 			');			
 			case 'delete':

@@ -122,10 +122,10 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		{
 			//trace(block.handlerInstance);
 			panels.push( jsx('	
-				<div className="panel" key=${"pa"+i} style=${style}>
+			<div className="panel" key=${"pa"+i} style=${style}>
 				<label className="panel-heading" htmlFor=${"sMenuPanel-"+i}>${block.label}</label>
-				<div id=${"pblock" + i} className=${"panel-block body-"+(i++)} children=${renderItems(block.items)}/>
-				</div>		
+				<div id=${"pblock" + i} className=${"panel-block body-"+(i++)} children=${renderItems(block.items)}></div>
+			</div>		
 			'));
 		} );
 		//trace(panels.length);

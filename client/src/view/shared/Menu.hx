@@ -158,7 +158,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			if(item.separator){ return jsx('<hr className="menuSeparator"/>');}
 			var type:FormInputElement;
 			type = (item.formField==null||item.formField.type==null?Button:item.formField.type);
-			trace(type);
+			trace(i + ':' + type);
 			return switch(type)
 			{
 				//case Filter: jsx('<$Filter  key=${i++}/>');				
@@ -178,8 +178,10 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				data-section=${item.section} disabled=${item.disabled}>${item.formField.submit}</Button>
 				</div>');
 
-				default:jsx('<Button key=${i++} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then}
-				data-section=${item.section} disabled=${item.disabled}>${item.label}</Button>');
+				default:
+					trace('key:${"bu"+(i)}');
+					jsx('<Button key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then}
+					data-section=${item.section} disabled=${item.disabled}>${item.label}</Button>');
 			}
 		}).array();
 	}

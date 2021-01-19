@@ -40,7 +40,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			dataTable:[],
-			loading:false,
+			loading:true,
 			model:'accounts',
 			accountsData:new IntMap(),			
 			selectedRows:[],
@@ -57,8 +57,9 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 	static function mapStateToProps(aState:AppState) 
-	{
-		trace(aState.userState);
+	{		
+		//trace(aState.userState);
+		trace(Reflect.fields(aState));
 		return {
 			userState:aState.userState
 		};
@@ -72,7 +73,8 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 
 	public function get():Void
 	{
-		trace('hi :)');
+		//trace('hi :)');
+		trace(props.filter);
 		var offset:Int = 0;
 		setState({loading:true});
 		//var contact = (props.location.state.contact);
@@ -143,13 +145,14 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	//renderPager=${function()BaseForm.renderPager(this)}
 	function renderResults():ReactFragment
 	{
-		trace(state.loading);
+		trace(state.loading + ':' + props.action);
 		if(state.loading)
 			return state.formApi.renderWait();
 		trace('###########loading:' + props.action);
 		return switch(props.action)
 		{
 			case 'get':
+				trace(state.dataTable);
 				jsx('
 					<Table id="accountsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} 

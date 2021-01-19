@@ -1,5 +1,6 @@
 package shared;
 
+import php.Lib;
 import haxe.DynamicAccess;
 import comments.CommentString.*;
 import php.db.PDOStatement;
@@ -11,8 +12,9 @@ import sys.io.File;
 import php.Web;
 
 class Upload {
-	public static function go() {
-		var rData = Web.getMultipart(10*1024*1024);
+	public static function go() {		
+		//var rData = Web.getMultipart(10*1024*1024);
+		var rData = Lib.hashOfAssociativeArray(SuperGlobal._POST);
 		var rKes:Array<String>=[];
 		for(k in rData.keys()){
 			if(k.indexOf('File')>-1)
@@ -24,13 +26,13 @@ class Upload {
 			case 'returnDebitFile':
 			if(rData.exists('returnDebitFile')){
 				var rDF:NativeAssocArray<String> =  SuperGlobal._FILES['returnDebitFile'];
-				var name = "/var/www/vhosts/pitverwaltung.de/files/" + rDF['name'];
+				var name = "/var/www/pitverwaltung.de/files/" + rDF['name'];
 				Global.move_uploaded_file(rDF['tmp_name'],name);
 				var result:String = Global.file_get_contents('https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file=$name');
 				trace('https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file=$name');
 				trace(result);
 				dbStore(rData.get('action'), result);
-				Global.unlink('/var/www/vhosts/pitverwaltung.de/files/*');
+				Global.unlink('/var/www/pitverwaltung.de/files/*');
 				S.send(result,true);
 			}
 			S.send(Json.stringify({error:'No File uploaded'}),true);

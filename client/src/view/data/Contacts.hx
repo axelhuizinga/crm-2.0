@@ -136,7 +136,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			//idLoaded:aState.dataStore.contactData.keys().next()
 		};
 		//if(_strace) trace(bState);
-		if(_strace) trace(bState.dataStore.contactData);
+		if(_strace) trace(bState.dataStore.contactData.keys().hasNext()?bState.dataStore.contactData.keys().next():null);
 		return bState;
 	}
 		

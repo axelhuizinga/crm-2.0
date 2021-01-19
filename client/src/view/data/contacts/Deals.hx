@@ -82,6 +82,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		
 	static function mapStateToProps(aState:AppState) 
 	{
+		trace(Reflect.fields(aState));
 		return {
 			userState:aState.userState
 		};
@@ -186,6 +187,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.action)
 		{
 			case 'get':
+			trace(state.dataTable);
 			jsx('				
 					<$Table id="dealsList" data=${state.dataTable}  parentComponent=${this}
 					${...props} dataState=${dataDisplay.get("dealsList")} 

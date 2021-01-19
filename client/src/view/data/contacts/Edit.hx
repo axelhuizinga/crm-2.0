@@ -112,7 +112,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			return fNode;
 		}*/// React.createRef();
 		registerOrmRef = function(ref:Dynamic) {
-			trace(Type.typeof(ref));
+			//trace(Type.typeof(ref));
 			switch(Type.typeof(ref)){
 				case TNull:
 					//do nothing
@@ -449,14 +449,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function relData() {
 		return jsx('
-			<>
-			<Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>
-			<Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Accounts>
+			<>			
+<Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Accounts>
 			</>
 		');
 	}
 	/**				//${relData()} 
-
+			<Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>
 	 */
 	
 	override function render():ReactFragment

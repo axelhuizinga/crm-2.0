@@ -167,6 +167,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		fieldNames = [];
 		trs = [];
 		_trace = true;
+		//if(_trace) trace(props.parentComponent);
 		id = 'id';
 		if(props.dataState!=null)
 		for (k in props.dataState.columns.keys())
@@ -177,8 +178,8 @@ class Table extends ReactComponentOf<TableProps, TableState>
 				id = k;
 			fieldNames.push(k);
 		}
-
 		if(_trace) trace(props.parentComponent.props.id);
+
 		state = {selectedRows:[]};
 
 		tableRef = React.createRef();
@@ -247,6 +248,8 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	public function renderPager(comp:Dynamic):ReactFragment
 	{
 		trace('pageCount=${comp.state.pageCount}');		
+		if(Math.isNaN(comp.state.pageCount) || comp.state.pageCount<2)
+			return null;
 		//trace(comp.props);
 		//trace(props);
 		//trace(jsx('<div className="paginationContainer">React Paginate</div>'));
@@ -556,6 +559,9 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	
 	override function componentDidMount()//,snapshot:Dynamic
 	{
+		if(_trace && props.parentComponent.props.formRef!=null && props.parentComponent.props.formRef.current!=null) trace(props.parentComponent.props.formRef.current.name);	
+		if(_trace && props.data!=null && props.data[0]!=null)
+			trace(props.data[0].get('id'));
 		//App.onResizeComponents.add(this);//TODO: IMPLEMENT LISTENER
 		Browser.window.requestAnimationFrame(function (t:Float)
 		{

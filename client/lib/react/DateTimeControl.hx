@@ -3,7 +3,7 @@ package react;
 import js.lib.intl.DateTimeFormat;
 import js.html.InputElement;
 import js.html.KeyboardEvent;
-import js.lib.Date;
+//import js.lib.Date;
 import react.ReactComponent.ReactFragment;
 import react.ReactRef;
 import react.ReactMacro.jsx;
@@ -37,7 +37,7 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 	{
 		var fP:Dynamic = App.flatpickr;
 		var val:Date = (props.value == null ? null:parseTimestampz(props.value));
-		trace('${props.value} $val ${props.options.dateFormat}');
+		trace('given:${props.value} got:$val format:${props.options.dateFormat}');
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
@@ -56,7 +56,9 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 		//trace(untyped  fpRef.current.value);
 		if(!props.disabled)
 		{
-			altInput.value = props.value == null? '': fpInstance.formatDate(new Date(props.value), fpInstance.config.altFormat);
+		//	altInput.value = props.value == null? '': fpInstance.formatDate(new Date(props.value), 
+			altInput.value = props.value == null? '': fpInstance.formatDate(Date.fromString(props.value), 
+			fpInstance.config.altFormat);
 			trace(fpInstance.input.value);			
 			altInput.addEventListener('keyup', function(ev:KeyboardEvent){
 				//trace(ev.key);
@@ -131,11 +133,13 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 		b[6] = 0;//Math.floor(b[6].substr(0,3);
 		trace(b.join('-'));
 		b.pop();
-		trace(Reflect.field(DateTools, 'makeUtc'));
-		return new Date('05.05.1954');
-		//return Date.fromTime(Reflect.callMethod(DateTools, Reflect.field(DateTools, 'makeUtc'),b));
-	}
+		trace('DateTools has makeUtc:' + (Type.getClassFields(DateTools).contains('makeUtc')?'Y':'N'));
+		return Date.fromTime(Reflect.callMethod(DateTools, Reflect.field(DateTools, 'makeUtc'),b));
+		//return Date.fromTime(DateTools.makeUtc(b));
+		//return new Date('05.05.1954');
 
+	}
+ 
 	function onChange(_) {
 		if(props.comp != null)
 		{

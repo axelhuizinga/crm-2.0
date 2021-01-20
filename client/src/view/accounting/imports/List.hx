@@ -69,9 +69,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				handleChange: function(evt:Event) {
 					//trace(Reflect.fields(evt));
 					var finput = cast Browser.document.getElementById('returnDebitFile');
-					trace(finput.value);
 					//trace(_instance);
-					var val = (finput.value == ''?'':finput.value.split('\\').pop());
+					trace(finput.files[0].name);
+					//trace(Reflect.fields(finput.files[0]));
+					var val = (finput.value == ''?'':finput.files[0].name);
+					trace(val);
 					_instance.setState({
 						data:['hint'=>'Zum Laden ausgewählt:${val}','files'=>finput.files]
 					});
@@ -260,7 +262,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'listReturnDebit':				
 				jsx('
-					<Table id="importedReturnDebit" data=${state.dataTable}
+					<Table id="importedReturnDebit" data=${state.dataTable} selectAble=${false}
 					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${{function()return BaseForm.renderPager(this);}} 
 					className="is-striped is-hoverable"  parentComponent=${this} fullWidth=${true}/>
 				');					

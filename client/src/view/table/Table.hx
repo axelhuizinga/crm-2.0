@@ -129,6 +129,7 @@ typedef TableProps =
 	?parentComponent:Dynamic,
 	?primary:String,//defaults to 'id'
 	?renderPager:Function,
+	?selectAble:Bool,
 	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>,
 	//?setStateFromChild:FormState->Void,
 }
@@ -159,9 +160,12 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	var _timer:Timer;
 	var _trace:Bool;
 	var trs:Array<Tr>;
+	var defaultProps:Dynamic;
 	
 	public function new(?props:TableProps)
 	{
+		defaultProps = {selectAble:true};
+		//props.selectAble = props.selectAble == null ? true:props.selectAble;
 		super(props);		
 		headerUpdated = false;
 		fieldNames = [];
@@ -361,7 +365,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			if(row==0)
 				trace('$id key=' + dR);
 			dRs.push(
-			jsx('<$Tr key=${dR.get("id")} columns=${props.dataState.columns} data=${dR} firstTableRow=${fRRef} fieldNames=${fieldNames} row=${row++} parentComponent=${props.parentComponent}/>')
+			jsx('<$Tr key=${dR.get("id")} columns=${props.dataState.columns} data=${dR} firstTableRow=${fRRef} fieldNames=${fieldNames} selectAble=${props.selectAble!=false} row=${row++} parentComponent=${props.parentComponent}/>')
 			);//
 		}
 		if(_trace) trace(dRs.length);

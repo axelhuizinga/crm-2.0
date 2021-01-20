@@ -43,8 +43,9 @@ typedef TrProps =
 	var columns:Map<String,DataColumn>;
 	var fieldNames:Array<String>;
 	@:optional var firstTableRow:ReactRef<TableRowElement>;
-	@:optional var data:Map<String,Dynamic>;
 	@:optional var parentComponent:Dynamic;
+	@:optional var selectAble:Bool;
+	@:optional var data:Map<String,Dynamic>;
 };
 
 typedef  TrState = 
@@ -69,7 +70,7 @@ class Tr extends ReactComponentOf<TrProps, TrState>
 		//trace('$id ${match.params.id !=null && match.params.id.indexOf(id)>-1}');
 		state = {
 			cells:[], 
-			selected:match != null && match.params.id !=null && match.params.id.indexOf(id)>-1?true:false};	
+			selected:(props.parentComponent.props.selectAble && match != null && match.params.id !=null && match.params.id.indexOf(id)>-1?true:false)};	
 		//selected = false;
 		if(match != null && match.params.id !=null && match.params.id.indexOf(id)>-1)
 		//if(match.location.hash !=null && match.params.id.indexOf(id)>-1)
@@ -180,6 +181,8 @@ class Tr extends ReactComponentOf<TrProps, TrState>
 	{
 		//trace('select from contructor:${mEvOrID.select}');
 		trace('${props.data['id']} selected:${state.selected}');
+		if(!props.selectAble)
+			return;
 		trace(Reflect.fields(props));
 		//trace(props.row +':' + props.data.toString());
 		if(mEvOrID.select == null)

@@ -2,6 +2,7 @@ package view.data.contacts;
 import react.ReactNode.ReactNodeOf;
 import view.data.contacts.Accounts;
 import view.data.contacts.Deals;
+import haxe.ds.StringMap;
 import haxe.Timer;
 import react.ReactDOM;
 import react.ReactUtil;
@@ -81,6 +82,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Konten',action:'listAccounts', section: 'Edit', classPath:'view.data.contacts.Accounts'},
 		{label:'Verlauf',action:'listHistory', section: 'Edit', classPath:'view.data.contacts.History'}
 	];	
+	public static var classPath = Type.getClassName(Edit);
+
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
 	var dealsAreOpen:Bool;
@@ -98,8 +101,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var contact:Contact;
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
-	var modals:Map<String,Bool>;
+	var modals:Map<String,Bool>;	
 	var mounted:Bool = false;
+	var _trace:Bool = false;
 
 	public function new(props) 
 	{
@@ -107,10 +111,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		ormRefs = new Map();
 		dealsFormRef = React.createRef();
 		formRef = React.createRef();
-		/*dealsRef = function(fNode) {
-			trace(fNode);
-			return fNode;
-		}*/// React.createRef();
+		_trace = true;
 		registerOrmRef = function(ref:Dynamic) {
 			//trace(Type.typeof(ref));
 			switch(Type.typeof(ref)){
@@ -259,6 +260,19 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var data2save = state.actualState.allModified();
 		//{edited_by:props.userState.dbUser.id}
 	}
+
+	override function componentDidCatch(error, info) {
+		// Display fallback UI
+		//if(state.mounted)
+		try{
+			this.setState({ hasError: true });
+		}
+		catch(ex:Dynamic)
+		{if(_trace) trace(ex);}
+		
+		if(_trace) trace(error);
+		Out.dumpStack(CallStack.callStack());
+	}		
 		
 	override public function componentDidMount():Void 
 	{	
@@ -449,13 +463,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function relData() {
 		return jsx('
-			<>			
-<Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Accounts>
-			</>
+		<>		
+			<Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get"  filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>	
+			<Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" action="get"  filter=${{contact:props.match.params.id, mandator:'1'}}></Accounts>
+		</>
 		');
 	}
 	/**				//${relData()} 
-			<Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" isActive=${true} filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>
+			isActive=${true}
 	 */
 	
 	override function render():ReactFragment
@@ -484,6 +499,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
+	public function select(id:Int, 
+		?data:StringMap<StringMap<Dynamic>>, 
+		?match:RouterMatch) {
+		trace(id);
+	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		trace('here we should be ready to load');

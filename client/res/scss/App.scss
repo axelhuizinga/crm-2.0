@@ -849,6 +849,19 @@ form table{
 	background-color:#ddd;
 }
 
+.t_caption
+{
+	text-align: center;
+	background-color:transparent;// #fff;
+	border-radius: $tableHeader-radius $tableHeader-radius 0 0;
+	padding: 0.35rem 2rem 0.3rem 2rem;
+	/*font-weight: bold;*/
+	font-size: 0.8rem;
+	color:#111;
+	width: 50%;
+	margin:auto;
+}
+
 form td, form caption
 {
 	padding: 0.32rem;

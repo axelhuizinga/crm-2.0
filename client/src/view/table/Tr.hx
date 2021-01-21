@@ -205,14 +205,16 @@ class Tr extends ReactComponentOf<TrProps, TrState>
 				trace(ex);
 			}
 		}
-		if(props.parentComponent != null)
+
+		if(props.parentComponent != null && props.parentComponent.props.select != null)
 		{
 			if(!state.selected)
 			{
+				//trace(props.data['id'] + ':' + props.parentComponent.props.match);
+				trace(props.data['id'] + ':' + Type.getClassName(Type.getClass(props.parentComponent)));
 				//trace(Type.typeof(props.parentComponent));
-				trace(props.data['id'] + ':' + props.parentComponent.props.match);
 				if(props.parentComponent.props.match==null){
-					props.parentComponent.props.select(props.data['id'], props.parentComponent.props.userState.dbUser);
+					props.parentComponent.props.select(props.data['id'], props.parentComponent);
 				}
 				else {
 					var data:StringMap<StringMap<Dynamic>> = [props.data['id']=>props.data];
@@ -224,12 +226,20 @@ class Tr extends ReactComponentOf<TrProps, TrState>
 			else
 			{
 				trace('unselect');
+				if(props.parentComponent.props.match==null){
+					props.parentComponent.props.select(props.data['id'], props.parentComponent, Unselect);
+				}
+				else {
 				props.parentComponent.props.select(props.data['id'], null,props.parentComponent.props.match, Unselect);
+				}
 			}	
 			
 		}
-		setState({selected: mEvOrID.select ? true:!state.selected});
+		if(props.selectAble)
+			setState({selected: mEvOrID.select ? true:!state.selected});
 		trace('selected:${state.selected}');
+		//trace(props.parentComponent.props.classPath);
+		if(true) trace('props.parentComponent.props.classPath:${Type.getClassName(Type.getClass(props.parentComponent))}');
 		//if(!mEvOrID.select)
 			//forceUpdate();
 	}

@@ -130,12 +130,12 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 	public static function parseTimestampz(tz:String):Date {
 		var b:Array<Int> = ~/[^0-9]/g.split(tz).map(function(t) return Std.parseInt(t));
 		b[1] = b[1]-1;
-		b[6] = 0;//Math.floor(b[6].substr(0,3);
+		//b[6] = 0;//Math.floor(b[6].substr(0,3);
 		trace(b.join('-'));
 		b.pop();
 		trace('DateTools has makeUtc:' + (Type.getClassFields(DateTools).contains('makeUtc')?'Y':'N'));
-		return Date.fromTime(Reflect.callMethod(DateTools, Reflect.field(DateTools, 'makeUtc'),b));
-		//return Date.fromTime(DateTools.makeUtc(b));
+		//return Date.fromTime(Reflect.callMethod(DateTools, Reflect.field(DateTools, 'makeUtc'),b));
+		return Date.fromTime(DateTools.makeUtc(b[0],b[1],b[2],b[3],b[4],b[5]));
 		//return new Date('05.05.1954');
 
 	}

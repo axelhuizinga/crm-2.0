@@ -39,6 +39,8 @@ import view.table.Table;
 @:connect
 class Deals extends ReactComponentOf<DataFormProps,FormState>
 {
+	public static var classPath = Type.getClassName(Deals);
+
 	var dataAccess:DataAccess;
 	var dataDisplay:Map<String,DataState>;
 	var formFields:DataView;
@@ -71,9 +73,10 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
 			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
-			select:function(id:Int = -1, dbUser:DbUser)
+			select:function(id:Int = -1, me:Dynamic, ?sType:SelectType)
 			{
-				if(true) trace('select:$id dbUser:${dbUser}');
+				//if(true) trace('select:$id dbUser:${dbUser}');
+				if(true) trace('select:$id me:${Type.getClassName(Type.getClass(me))} SelectType:${sType}');
 				//dispatch(DataAction.CreateSelect(id,data,match));
 				//dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
 			}
@@ -204,8 +207,10 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	override public function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		return jsx('<form className="tabComponentForm formField" ref=${props.formRef} name="dealsList" > 
+		return jsx('
+		<div class="t_caption">Aktionen
+		<form className="tabComponentForm formField" ref=${props.formRef} name="dealsList" > 			
 			${renderResults()}
-		</form>');
+		</form></div>');
 	}
 }

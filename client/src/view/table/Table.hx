@@ -160,11 +160,12 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	var _timer:Timer;
 	var _trace:Bool;
 	var trs:Array<Tr>;
-	var defaultProps:Dynamic;
+	//var defaultProps:Dynamic;
 	
 	public function new(?props:TableProps)
 	{
-		defaultProps = {selectAble:true};
+		//defaultProps = {selectAble:true};
+		//trace(props);
 		//props.selectAble = props.selectAble == null ? true:props.selectAble;
 		super(props);		
 		headerUpdated = false;

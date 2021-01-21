@@ -1,5 +1,6 @@
 package view.data.contacts;
 
+import action.DataAction.SelectType;
 import db.DBAccessProps;
 import action.async.CRUD;
 import haxe.ds.IntMap;
@@ -27,6 +28,7 @@ import model.accounting.AccountsModel;
 @:connect
 class Accounts extends ReactComponentOf<DataFormProps,FormState>
 {
+	public static var classPath = Type.getClassName(Accounts);	
 	var dataDisplay:Map<String,DataState>;
 	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
@@ -52,7 +54,14 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-            load: function(param:DBAccessProps) return dispatch(CRUD.read(param))
+			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
+			select:function(id:Int = -1, me:Dynamic, ?sType:SelectType)
+				{
+					//if(true) trace('select:$id dbUser:${dbUser}');
+					if(true) trace('select:$id me:${Type.getClassName(Type.getClass(me))} SelectType:${sType}');
+				//dispatch(DataAction.CreateSelect(id,data,match));
+				//dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
+			}
         };
 	}
 	
@@ -153,6 +162,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'get':
 				trace(state.dataTable);
+				//jsx('<div>dummy</div>');
 				jsx('
 					<Table id="accountsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} 
@@ -183,12 +193,15 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	override function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		trace(props.action);		
-		return state.formApi.render(jsx('
-			<form className="tabComponentForm" name="accountsList" >
+		trace(props.action);				
+		//return state.formApi.render(jsx('
+		return jsx('
+		<div class="t_caption">Konten
+			<form className="tabComponentForm" name="accountsList" >				
 				${renderResults()}
 			</form>
-		'));		
+		</div>
+		');		
 	}
 	
 	function updateMenu(?viewClassPath:String):MenuProps

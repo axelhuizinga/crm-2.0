@@ -464,12 +464,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	function relData() {
 		return jsx('
 		<>		
-			<Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get"  filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>	
+			
 			<Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" action="get"  filter=${{contact:props.match.params.id, mandator:'1'}}></Accounts>
 		</>
 		');
 	}
 	/**				//${relData()} 
+	 * <Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get"  filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>	
 			isActive=${true}
 	 */
 	

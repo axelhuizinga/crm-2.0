@@ -22,7 +22,8 @@ import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import loader.BinaryLoader;
-import view.table.Table;
+import view.grid.Grid;
+//import view.table.Table;
 import model.accounting.AccountsModel;
 
 @:connect
@@ -38,7 +39,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		//baseForm =new BaseForm(this);
-		dataDisplay = AccountsModel.dataDisplay;
+		dataDisplay = AccountsModel.dataGridDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			dataTable:[],
@@ -85,7 +86,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		//trace('hi :)');
 		trace(props.filter);
 		var offset:Int = 0;
-		setState({loading:true});
+		//setState({loading:true});
 		//var contact = (props.location.state.contact);
 		trace(props.userState);
 		var p:Promise<DbData> = props.load(
@@ -124,7 +125,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 			for(k in dR.keys())
 			{
 				trace(k);
-				if(dataDisplay['fieldsList'].columns[k].cellFormat == view.shared.Format.formatBool)
+				if(dataDisplay['fieldsList'].columns.get(k).cellFormat == view.shared.Format.formatBool)
 				{
 					Reflect.setField(rS,k, dR[k] == 'Y');
 				}
@@ -147,6 +148,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 				view:[]
 			},
 		];			
+		trace('ok');
 		props.parentComponent.registerOrmRef(this);
 		get();
 	}
@@ -164,13 +166,13 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 				trace(state.dataTable);
 				//jsx('<div>dummy</div>');
 				jsx('
-					<Table id="accountsList" data=${state.dataTable}
+					<Grid id="accountsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} 
 					parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'update':
 				jsx('
-					<Table id="accountsList" data=${state.dataTable}
+					<Grid id="accountsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');			
@@ -178,7 +180,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 				trace(dataDisplay["accountsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
 				jsx('
-					<Table id="accountsList" data=${state.dataTable}
+					<Grid id="accountsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>				
 				');	

@@ -32,6 +32,7 @@ $borderCol:$borderSmallWidth dotted #eee;
 $buttonSun:#ffdd57;
 $cell-border: 1px solid #ccc;
 $cellPadding: 0px 0.75rem;
+$gridPadding: 0.1rem 0.8rem 0.2rem 0.8rem;
 $headPadding: 0.75rem 0.75rem 0.25rem 0.75rem;
 $ePad:0.3rem 0.64rem;
 $darkBlue: rgb(10,20,60);
@@ -210,6 +211,18 @@ h2{
    /* position: relative;could be absolute or relative */
 }
 
+.grid-container 
+{
+	display: grid;
+	grid-auto-rows: minmax(min-content, max-content);
+	
+	align-items: start;
+	/*align-content: center;
+	gap: 4px;
+	grid-auto-flow: row;*/
+	justify-content: center;
+}
+
 .grid-container-inner {
 /*margin-bottom:-2.5rem;*/
 	overflow-x: hidden;
@@ -226,6 +239,18 @@ h2{
 	flex-grow:1 0 auto;
 	justify-content:space-between;*/
 }
+.gridItem{
+	
+	padding: $gridPadding!important;
+	display: inline-block;
+	/*border:1px solid red;*/
+	text-align: left;
+	/*align-items: center;
+	vertical-align: middle;*/
+}
+/*.gridColFit{
+
+}*/
 
 .header-background, .ReactVirtualized__Table__headerRow {
   /*background-color: #D5ECFF;#eee;flex: 1 0 auto;background-color: $darkRed;

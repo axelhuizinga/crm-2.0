@@ -42,7 +42,6 @@ typedef DataColumn =
 	@:optional var cellFormat:Function;
 	@:value('')
 	@:optional var className:String;
-	@:optional var displayFormat:String;
 	@:optional var editable:Bool;
 	@:optional var flexGrow:Int;
 	@:value('')
@@ -54,7 +53,6 @@ typedef DataColumn =
 	@:optional var search:SortDirection;
 	@:value(true)
 	@:optional var show:Bool;
-	@:optional var useAsIndex:Bool;
 	@:optional var style:Dynamic;
 }
 
@@ -99,7 +97,7 @@ typedef SortProps =
 	direction:SortDirection
 }
 
-typedef GridProps =
+typedef TableProps =
 {
 	?className:String,
 	data:Array<Dynamic>,
@@ -107,16 +105,15 @@ typedef GridProps =
 	?disableHeader:Bool,
 	?oddClassName: String,
     ?evenClassName:String,	
-	?defaultSort:Dynamic,	
+	?defaultSort:Dynamic,
 	?defaultSortDescending:Bool,
-	?fullWidth:Bool,
 	?filterable:Dynamic,
 	?id:String,
 	?itemsPerPage:Int,
 	?onFilter:String->Void,
 	?onPageChange:SortProps->Void,
 	?onSort:Int->Void,
-	?parentComponent:Dynamic,
+	?pageButtonLimit:Int,
 	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>
 }
 
@@ -130,7 +127,7 @@ typedef GridState =
 	?_selecting:Bool
 }
 
-class Grid extends ReactComponentOf<GridProps, GridState>
+class Grid extends ReactComponentOf<TableProps, GridState>
 {
 	var fieldNames:Array<String>;
 	var gridRef:ReactRef<DivElement>;
@@ -142,7 +139,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	var headerUpdated:Bool;
 	var _state:GridState;
 	
-	public function new(?props:GridProps)
+	public function new(?props:TableProps)
 	{
 		super(props);		
 		headerUpdated = false;
@@ -168,7 +165,6 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		if(props.data != null)
 		trace(props.data.length);
 		trace(props.className);
-		
 		if (props.data == null || props.data.length == 0)
 		{
 			return jsx('
@@ -180,22 +176,25 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			');					
 		}		
 		//className="${props.className} sort-decoration"
-		//return jsx('<div>1</div>');
 		gridRef = React.createRef();
 		fixedHeader = React.createRef();
 		gridHead = React.createRef();
 		rowRef = React.createRef();
-		//renderRows();
-		//var rows:ReactFragment = jsx('<div>1</div>');// ${renderHeaderDisplay()}		
-		var headerRows:ReactFragment = renderHeaderDisplay();
-		//return headerRows;
-		//var rows:ReactFragment = renderHeaderDisplay();
-		trace(gridStyle);
-		//return rows; style="{{grid-template-columns:$gridStyle}}"
 		return jsx('		
-			<div className="grid-container" ref=${gridRef}>			
-					${headerRows}
-					${renderRows()}
+			<div className="fixed-grid-container" >
+				<div className="header-background" >
+					<div className="grid head" ref={fixedHeader}>
+					${renderHeaderDisplay()}
+					</div>				
+				</div>				
+				<div className="${props.className} grid-container-inner">							
+					<div className="grid body" ref={gridRef}>
+						${renderHeaderRow()}
+						${renderRows()}
+					</div>
+				</div>
+				<div className="pager">
+				</div>
 			</div>					
 		');		
 	}
@@ -241,41 +240,34 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	{
 		if(props.dataState==null)
 			return null;
-		var headerRow:Array<ReactFragment> = [];
-		//var headerRow:String = '';
 		//trace(props.dataState.columns.keys());
-		gridStyle = '';
+		var headerRow:Array<ReactFragment> = [];
 		for (field in props.dataState.columns.keys())
 		{
 			var hC:DataColumn = props.dataState.columns.get(field);
 			if (hC.show == false)
 				continue;
 			visibleColumns++;
-			gridStyle +=  (hC.flexGrow !=null ?' ${hC.flexGrow}fr':' max-content');
 			headerRow.push(jsx('	
-			<div key={field} className=${"gridHeadItem " + (hC.headerClassName != null? hC.headerClassName :hC.className)}>
-			${hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
+			<div key={field} className={"gridHeadItem " + (hC.headerClassName != null? hC.headerClassName :hC.className)}>
+			{hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
 			</div>
 			'));
 		}
 		return headerRow;
 	}	
 
-	function renderCells(rdMap:Map<String,Dynamic>, row:Int):ReactFragment
+	function renderCells(rD:Dynamic, row:Int):ReactFragment
 	{
 		//@:arrayAccess
-		//trace(rD);
-		//var rdMap:Map<String,Dynamic> = Utils.dynaMap(rD);
-		trace(fieldNames.join('|'));
-		//trace('|'+rdMap['h'].keys().next()+'|');
+		var rdMap:Map<String,Dynamic> = Utils.dynaMap(rD);
 		var column:Int = 0;
-		var rowClass = (row % 2 == 0?'gridItem even':'gridItem odd');
+		var rowClass = (row % 2 == 0?'even':'odd');
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
 			var columnDataState:DataColumn = props.dataState.columns.get(fN);
-			trace(fN + '::' + rdMap[fN]);
 			var cD:DataCell = {
 				cellFormat:columnDataState.cellFormat,
-				className:(columnDataState.className==null?rowClass:columnDataState.className +' '+ rowClass),
+				className:'${columnDataState.className==null?'':columnDataState.className} ${rowClass}',
 				data:rdMap[fN],
 				dataDisplay:columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap[fN]):rdMap[fN],
 				name:fN,
@@ -287,7 +279,6 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		var rCs:Array<ReactFragment> = [];
 		for (cD in cells)
 		{
-			//trace(cD);
 			if (!cD.show)
 			 continue;
 			rCs.push(
@@ -306,20 +297,17 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		var row:Int = 0;
 		for (dR in dRows)
 		{			
-			dRs.push(renderCells(dR, row++));
+			dRs.push(
+			jsx('
+				${renderCells(dR, row++)}				
+			'));
 		}//
 		return dRs;
 	}
-	override function componentDidMount() {
-		trace('ok');
-		var grid:Element = gridRef.current;
-		grid.style.setProperty('grid-template-columns', gridStyle);
-	}
-
-	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)	
+	
+	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)
 	{
 		trace(headerUpdated+ ':' + gridHead); 
-		//return;
 
 		if (gridHead != null)
 		{
@@ -334,15 +322,14 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			var gridHeight:Float = gridRef.current.clientHeight;
 			var scrollBarWidth = gridRef.current.parentElement.offsetWidth - gridRef.current.offsetWidth;
 			trace('$scrollBarWidth ${gridRef.current.parentElement.offsetWidth} ${gridRef.current.offsetWidth}');
-			//fixedHeader.current.style.setProperty('padding-right', '${scrollBarWidth}px');
+			fixedHeader.current.style.setProperty('padding-right', '${scrollBarWidth}px');
 			trace('gridHeight:$gridHeight');
 			trace(gridRef.current + 'visibleColumns:$visibleColumns children:${gridRef.current.children.length}');
 
-			//fixedHeader.current.style.setProperty('grid-template-columns', gridStyle);
+			fixedHeader.current.style.setProperty('grid-template-columns', gridStyle);
 			var grid:Element = gridRef.current;
 			grid.style.setProperty('grid-template-columns', gridStyle);
-			return;
-			//grid.style.setProperty('grid-template-rows', '0px auto');
+			grid.style.setProperty('grid-template-rows', '0px auto');
 			var gH:Element = gridHead.current;
 			gridHead.current.style.visibility = "collapse";	
 			trace(gH.offsetWidth + ':' + gH.clientWidth);

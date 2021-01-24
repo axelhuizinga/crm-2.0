@@ -205,6 +205,12 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		</div>
 		');		
 	}
+
+	public function select(mEvOrID:Dynamic)
+	{		
+		trace(Reflect.fields(props));
+		trace(mEvOrID);
+	}	
 	
 	function updateMenu(?viewClassPath:String):MenuProps
 	{

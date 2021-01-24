@@ -234,7 +234,7 @@ h2{
 .gridHeadItem
 {
 	font-weight:bold;
-	padding: $headPadding!important;
+	padding: $gridPadding!important;
 	/*display:flex;
 	flex-grow:1 0 auto;
 	justify-content:space-between;*/
@@ -267,6 +267,9 @@ h2{
 .gridHeadItem:hover
 {
 	color: $sun;
+}
+.gridItem.selected{
+	background-color: $sun;
 }
     
 .sort-box

@@ -1,5 +1,6 @@
 package action.async;
 
+import me.cunity.debug.Out;
 import js.lib.Promise;
 import db.DbRelation;
 import db.DbUser;
@@ -157,7 +158,7 @@ class UserAccess {
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			if(userState.dbUser.mandator==null)
 				userState.dbUser.mandator=1;
-			trace(userState);
+			Out.dumpObject(userState);
 			//trace(getState());
 			if (userState.dbUser.password == '' && userState.dbUser.new_pass == '' || userState.dbUser.user_name == '') 
 				return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:'Passwort und user_name eintragen!'})));
@@ -223,7 +224,7 @@ class UserAccess {
 				userState.dbUser.online = true;
 				//if(uState.dbUser.change_pass_required)
 				//	uState.pass = userState.dbUser.pass;
-				trace(userState);
+				Out.dumpObject(userState);
 				//trace(dispatch);
 				return dispatch(User(LoginComplete(userState)));
 				//return dispatch(AppAction.LoginComplete(

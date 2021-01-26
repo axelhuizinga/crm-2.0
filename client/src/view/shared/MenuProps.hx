@@ -13,6 +13,7 @@ typedef MenuProps =
 	?basePath:String,
 	?hidden:Bool,
 	?menuBlocks:Map<String,MenuBlock>,
+	?parentComponent:Dynamic,
 	?section:String,
 	?switchSection:Function,
 	?items:Array<MItem>,

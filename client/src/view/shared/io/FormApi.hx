@@ -286,10 +286,10 @@ class FormApi
 				<div className="formsContainer">
 				${content}
 				</div>
-				<$Menu className="menu" ${...sM} ${...comp.props} itemHandler=${itemHandler} />
+				<$Menu className="menu" ${...sM} parentComponent=${comp} itemHandler=${itemHandler} />
 			</div>			
 		');
-	}
+	}///${...comp.props}
 	
 	public function renderField(name:String, k:Int, state:FormState):ReactFragment
 	{

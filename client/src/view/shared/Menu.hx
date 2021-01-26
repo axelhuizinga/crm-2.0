@@ -155,10 +155,10 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		var i:Int = 1;
 		return items.map(function(item:MItem) 
 		{
-			if(item.separator){ return jsx('<hr className="menuSeparator"/>');}
+			if(item.separator){ return jsx('<hr key=${i++} className="menuSeparator"/>');}
 			var type:FormInputElement;
 			type = (item.formField==null||item.formField.type==null?Button:item.formField.type);
-			trace(i + ':' + type);
+			//trace(i + ':' + type);
 			return switch(type)
 			{
 				//case Filter: jsx('<$Filter  key=${i++}/>');				
@@ -179,7 +179,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				</div>');
 
 				default:
-					trace('key:${"bu"+(i)}');
+					//trace('key:${"bu"+(i)}');
 					jsx('<Button key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then}
 					data-section=${item.section} disabled=${item.disabled}>${item.label}</Button>');
 			}
@@ -188,10 +188,13 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	
 	override public function render()
 	{
-		trace(Reflect.fields(props));
+		//trace(Reflect.fields(props));
 		if(props.menuBlocks == null)
 		return null;
-		trace(props.menuBlocks.keys().next);
+		if(props.parentComponent != null)
+			trace(Type.getClassName(Type.getClass(props.parentComponent)));
+		//trace(props.menuBlocks.keys().next);
+		//trace(props.basePath);
 		menuRef = React.createRef();
 		var style:Dynamic = null;
 		if(true&&props.sameWidth && state.sameWidth == null)//sameWidth

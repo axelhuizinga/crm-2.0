@@ -1,4 +1,5 @@
 package action.async;
+import me.cunity.debug.Out;
 import haxe.Json;
 import db.DBAccessProps;
 import js.lib.Promise;
@@ -42,7 +43,7 @@ class CRUD
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			//trace(getState());
-			trace(param);
+			Out.dumpObject(param);
 			return new Promise(function(resolve, reject){
 				if (!param.dbUser.online)
 				{

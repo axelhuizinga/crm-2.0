@@ -5,6 +5,7 @@ import js.Browser;
 import action.async.UserAccess;
 import action.UserAction;
 import js.Cookie;
+import me.cunity.debug.Out;
 import react.ReactUtil.copy;
 import redux.IReducer;
 import redux.IMiddleware;
@@ -45,35 +46,35 @@ class UserStore implements IReducer<UserAction, UserState>
 			})
 		};
 		trace(initState);
-		trace(store);
+		Out.dumpObject(store);
 	}
 	
 	public function reduce(state:UserState, action:UserAction):UserState
 	{
-		trace(action);
+		Out.dumpObject(action);
 		return switch(action)
 		{
 			case LoginChange(uState)|LoginRequired(uState):
-				trace(uState);
+				Out.dumpObject(uState);
 				copy(state, uState);                             					
 			case LoginError(err):
 				trace(err);
 				//if(err.id==state.user.id)
 				copy(state, err);   
 			case LoginExpired(uState):
-				trace(uState);
+				Out.dumpObject(uState);
 				copy(state, uState);  
 	                    
 			case LoginComplete(uState):
 					if(uState.dbUser != null)
 						trace(uState.dbUser.id + ':' + uState.dbUser.online);
-					trace(state);
+					Out.dumpObject(state);
 					copy(state, uState);                                             
 			case LogOutComplete(uState):
-					trace(uState);
+				Out.dumpObject(uState);
 					copy(state, uState);   					
 			case LogOut(uState):
-					trace(uState);
+				Out.dumpObject(uState);
 					copy(state, uState);      		
 			default:
 				state;

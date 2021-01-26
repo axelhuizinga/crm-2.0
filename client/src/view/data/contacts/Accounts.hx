@@ -1,5 +1,6 @@
 package view.data.contacts;
 
+import me.cunity.debug.Out;
 import action.DataAction.SelectType;
 import db.DBAccessProps;
 import action.async.CRUD;
@@ -88,7 +89,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		var offset:Int = 0;
 		//setState({loading:true});
 		//var contact = (props.location.state.contact);
-		trace(props.userState);
+		Out.dumpObject(props.userState);
 		var p:Promise<DbData> = props.load(
 			{
 				classPath:'data.Accounts',
@@ -198,7 +199,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.action);				
 		//return state.formApi.render(jsx('
 		return jsx('
-		<div class="t_caption">Konten
+		<div className="t_caption">Konten
 			<form className="tabComponentForm" name="accountsList" >				
 				${renderResults()}
 			</form>

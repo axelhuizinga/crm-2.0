@@ -1,5 +1,6 @@
 package view;
 
+import me.cunity.debug.Out;
 import js.html.HTMLDocument;
 import js.Browser;
 import js.html.Document;
@@ -93,7 +94,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		var img = new Image();
 		//setState({waiting:true});
 		img.onload = function(){
-			trace(state);
+			Out.dumpObject(state);
 			//Timer.delay(function() setState({waiting:false}),500);
 			trace('ok');
 		}
@@ -108,7 +109,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			//props.userState.dbUser.password = password.value = App.devPassword;
 			props.userState.dbUser.password = App.devPassword;
 			//formElement.submit();
-			trace(props.userState);
+			Out.dumpObject(props.userState);
 			props.submitLogin(props.userState);
 		}
 		trace(props.redirectAfterLogin);
@@ -120,7 +121,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		{
 			var uState = aState.userState;
 			trace(aState.locationStore.redirectAfterLogin);
-			trace(uState);		
+			Out.dumpObject(uState);		
 			if(uState.loginTask == LoginTask.ChangePassword)
 			{
 				var rAL:String = aState.locationStore.redirectAfterLogin;
@@ -208,7 +209,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	{		
 		
 		trace(props.redirectAfterLogin);
-		trace(props.userState.dbUser);
+		Out.dumpObject(props.userState.dbUser);
 		trace('error_style password:'+errorStyle("password"));
 		//if(props.redirectAfterLogin != null && props.redirectAfterLogin.startsWith('/ResetPassword'))
 		
@@ -383,7 +384,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			default:
 				"";
 		}
-		trace(props.userState);
+		Out.dumpObject(props.userState);
 		trace(eStyle);
 		return eStyle;
 	}

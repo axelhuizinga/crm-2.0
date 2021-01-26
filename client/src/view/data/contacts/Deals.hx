@@ -34,7 +34,7 @@ import view.shared.FormBuilder;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import loader.BinaryLoader;
-import view.table.Table;
+import view.grid.Grid;
 
 @:connect
 class Deals extends ReactComponentOf<DataFormProps,FormState>
@@ -53,7 +53,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		dataAccess = DealsModel.dataAccess;
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
-		dataDisplay = DealsModel.dataDisplay;
+		dataDisplay = DealsModel.dataGridDisplay;
 		trace('...' + Reflect.fields(props));
 
 		state =  App.initEState({
@@ -192,9 +192,10 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			case 'get':
 			trace(state.dataTable);
 			jsx('				
-					<$Table id="dealsList" data=${state.dataTable}  parentComponent=${this}
-					${...props} dataState=${dataDisplay.get("dealsList")} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
+			<Grid id="dealsList" data=${state.dataTable}
+			${...props} dataState = ${dataDisplay["dealsList"]} 
+			parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
+					
 			');			
 			case 'delete':
 				null;
@@ -203,12 +204,16 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		}
 		return null;
 	}
-	
+	/**
+	 * <$Table id="dealsList" data=${state.dataTable}  parentComponent=${this}
+					${...props} dataState=${dataDisplay.get("dealsList")} 
+					className="is-striped is-hoverable" fullWidth=${true}/>
+	 */
 	override public function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		return jsx('
-		<div class="t_caption">Aktionen
+		<div className="t_caption">Aktionen
 		<form className="tabComponentForm formField" ref=${props.formRef} name="dealsList" > 			
 			${renderResults()}
 		</form></div>');

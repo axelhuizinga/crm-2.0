@@ -1,5 +1,6 @@
 package view.table;
 
+import react.ReactUtil;
 import js.html.Location;
 import js.html.History;
 import js.html.Element;
@@ -235,8 +236,9 @@ class Tr extends ReactComponentOf<TrProps, TrState>
 			}	
 			
 		}
-		if(props.selectAble)
-			setState({selected: mEvOrID.select ? true:!state.selected});
+		if(props.selectAble)			
+			state = ReactUtil.copy(state, {selected: mEvOrID.select ? true:!state.selected});
+			//setState({selected: mEvOrID.select ? true:!state.selected});
 		trace('selected:${state.selected}');
 		//trace(props.parentComponent.props.classPath);
 		if(true) trace('props.parentComponent.props.classPath:${Type.getClassName(Type.getClass(props.parentComponent))}');

@@ -43,10 +43,15 @@ class DealsModel
 		}
 	];
 
-	public static var shortListColumns:Map<String,DataColumn> = [
+	public static var gridColumns:Map<String,view.grid.Grid.DataColumn> = [
+	//public static var shortListColumns:Map<String,DataColumn> = [
 		'id'=>{label:'ID',show:false},				
-		'start_date'=>{label:'Seit'},	
-		'end_date'=>{label:'Bis'},	
+		'start_date'=>{label:'Seit',cellFormat:function(v:String) return DateTools.format(Date.fromString(v), "%d.%m.%Y")},	
+		'end_date'=>{label:'Bis',cellFormat:function(v:String){
+			if(v==null)
+				return null;
+			 return DateTools.format(Date.fromString(v), "%d.%m.%Y");
+			}},	
 		'active' => {label:'Aktiv', className: 'tCenter',
 			cellFormat:function(v:Bool) 
 			{
@@ -63,8 +68,8 @@ class DealsModel
 
 	public static var listColumns:Map<String,DataColumn> = [
 		'id'=>{label:'ID',show:false},				
-		'start_date'=>{label:'Seit'},	
-		'end_date'=>{label:'Bis'},	
+		'start_date'=>{label:'Seit',cellFormat:function(v:String) return DateTools.format(Date.fromString(v), "%d.%m.%Y")},	
+		'end_date'=>{label:'Bis',cellFormat:function(v:String) return DateTools.format(Date.fromString(v), "%d.%m.%Y")},	
 		'active' => {label:'Aktiv', className: 'tCenter',
 			cellFormat:function(v:Bool) 
 			{
@@ -80,7 +85,10 @@ class DealsModel
 	];
 
 	public static var dataDisplay:Map<String,DataState> = [
-		'dealsList' => {columns:shortListColumns},
 		'dealsFull' => {columns:listColumns}
+	];	
+
+	public static var dataGridDisplay:Map<String,view.grid.Grid.DataState> = [
+		'dealsList' => {columns:gridColumns}
 	];	
 }

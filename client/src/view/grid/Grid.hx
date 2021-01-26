@@ -41,23 +41,24 @@ typedef DataState =
 
 typedef DataColumn = 
 {
-	@:optional var cellFormat:Function;
-	@:value('')
-	@:optional var className:String;
-	@:optional var displayFormat:String;
-	@:optional var editable:Bool;
-	@:optional var flexGrow:Int;
-	@:value('')
-	@:optional var headerClassName:String;
-	@:optional var headerFormat:Function;
-	@:optional var headerStyle:Dynamic;
-	@:optional var label:String;
-	@:optional var name:String;
-	@:optional var search:SortDirection;
-	@:value(true)
-	@:optional var show:Bool;
-	@:optional var useAsIndex:Bool;
-	@:optional var style:Dynamic;
+	?altGroupPos:Int,
+	?cellFormat:Function,
+	//@:value('')
+	?className:String,
+	?displayFormat:String,
+	?editable:Bool,
+	?flexGrow:Int,
+	//@:value('')
+	?headerClassName:String,
+	?headerFormat:Function,
+	?headerStyle:Dynamic,
+	?label:String,
+	?name:String,
+	?search:SortDirection,
+	//@:value(true)
+	?show:Bool,
+	?useAsIndex:Bool,
+	?style:Dynamic,
 }
 
 typedef DataCellPos =
@@ -73,7 +74,7 @@ typedef DataCell =
 	@:optional var dataDisplay:Dynamic;// CELL CONTENT DISPLAY VALUE
 	@:optional var dataType:Dynamic;// CELL CONTENT VALUE TYPE
 	@:optional var name:String;
-	@:optional var id:Int;
+	var id:Int;
 	@:optional var pos:DataCellPos;
 	@:optional var show:Bool;
 	@:value(true)
@@ -258,11 +259,25 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		return headerRow;
 	}	
 
+	function map2DataCell(rdMap:Map<String,Dynamic>,fN:String, column:Int, row:Int, rowClass:String):DataCell {
+		var columnDataState:DataColumn = props.dataState.columns.get(fN);
+		//if(rdMap[fN]==null)
+		//	rdMap[fN] = '';
+		trace(fN + '::' + rdMap[fN] + '::' + columnDataState.cellFormat);
+		return {
+			cellFormat:columnDataState.cellFormat,
+			className:(columnDataState.className==null?rowClass:columnDataState.className +' '+ rowClass),
+			data:rdMap[fN],
+			dataDisplay:columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap[fN]):rdMap[fN],
+			id:rdMap['id'],
+			name:fN,
+			pos:{column:column, row:row},
+			show:columnDataState.show != false
+		};
+	}
+
 	function renderCells(rdMap:Map<String,Dynamic>, row:Int):ReactFragment
 	{
-		//@:arrayAccess
-		//trace(rD);
-		//var rdMap:Map<String,Dynamic> = Utils.dynaMap(rD);
 		trace(fieldNames.join('|'));
 		//trace('|'+rdMap['h'].keys().next()+'|');
 		trace(state.selectedRows.toString());
@@ -270,30 +285,21 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		var isSelected:Bool = state.selectedRows.exists(row);
 		var rowClass = (row % 2 == 0?'gridItem even':'gridItem odd');
 		if(isSelected)
-			rowClass += ' selected';
+			rowClass += ' selected';		
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
-			var columnDataState:DataColumn = props.dataState.columns.get(fN);
-			trace(fN + '::' + rdMap[fN]);
-			var cD:DataCell = {
-				cellFormat:columnDataState.cellFormat,
-				className:(columnDataState.className==null?rowClass:columnDataState.className +' '+ rowClass),
-				data:rdMap[fN],
-				dataDisplay:columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap[fN]):rdMap[fN],
-				name:fN,
-				pos:{column:column++, row:row},
-				show:columnDataState.show != false
-			};
-			return cD;					
+			return map2DataCell(rdMap, fN, column++, row, rowClass);
 		});
 		var rCs:Array<ReactFragment> = [];
+		trace(cells.length);
 		for (cD in cells)
 		{
-			//trace(cD);
+			//trace(cD);"r"+cD.pos.row+"c"+cD.pos.column
+			trace(row + ':' + cD.id + '_' + cD.pos.column);
 			if (!cD.show)
 			 continue;
 			rCs.push(
-			jsx('<div className=${cD.className} key=${"r"+cD.pos.row+"c"+cD.pos.column} data-value=${cD.cellFormat!=null?cD.data:null} data-gridpos=${cD.pos.row+"_"+cD.pos.column} onClick=${highLightRow} >
-				${cD.dataDisplay}
+			jsx('<div className=${cD.className} key=${cD.id + '_' + cD.name} data-value=${cD.cellFormat!=null?cD.data:''} data-gridpos=${cD.pos.row+"_"+cD.pos.column} onClick=${highLightRow} >
+				${(cD.dataDisplay==null?<span>&nbsp;</span>:cD.dataDisplay)}
 			</div>'));
 		}
 		return rCs;
@@ -309,10 +315,14 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		{			
 			trace(dR);
 			dRs.push(renderCells(dR, row++));
-		}//
+		}
 		return dRs;
 	}
 	override function componentDidMount() {
+		if(gridRef == null){
+			trace(Type.getClassName(Type.getClass(props.parentComponent)));
+			return;
+		}
 		trace('ok');
 		var grid:Element = gridRef.current;
 		grid.style.setProperty('grid-template-columns', gridStyle);
@@ -321,60 +331,6 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)	
 	{
 		trace(headerUpdated+ ':' + headerRef); 
-		//return;
-
-		/*if (gridHead != null)
-		{
-			if (headerUpdated)
-				return;
-			headerUpdated = true;	
-			trace(gridRef.current.children)	;
-			for (child in gridRef.current.children)
-			{
-				child.onmouseleave = leaveRow;
-				child.onmouseenter = highLightRow;
-			}
-			var gridHeight:Float = gridRef.current.clientHeight;
-			var scrollBarWidth = gridRef.current.parentElement.offsetWidth - gridRef.current.offsetWidth;
-			trace('$scrollBarWidth ${gridRef.current.parentElement.offsetWidth} ${gridRef.current.offsetWidth}');
-			//headerRef.current.style.setProperty('padding-right', '${scrollBarWidth}px');
-			trace('gridHeight:$gridHeight');
-			trace(gridRef.current + 'visibleColumns:$visibleColumns children:${gridRef.current.children.length}');
-
-			//headerRef.current.style.setProperty('grid-template-columns', gridStyle);
-			var grid:Element = gridRef.current;
-			grid.style.setProperty('grid-template-columns', gridStyle);
-			return;
-			//grid.style.setProperty('grid-template-rows', '0px auto');
-			var gH:Element = gridHead.current;
-			gridHead.current.style.visibility = "collapse";	
-			trace(gH.offsetWidth + ':' + gH.clientWidth);
-			var rowRects:Array<DOMRect> = [gH.getBoundingClientRect()];
-			gH.style.setProperty('visibility', "collapse");			
-			for (i in 1...visibleColumns) 
-			{
-				trace(i);
-				gH = gH.nextElementSibling;
-				rowRects.push(gH.getBoundingClientRect());
-				gH.style.setProperty('visibility', 'collapse');
-				//trace(gH);
-			}
-			trace(headerRef);
-			trace(gridHead);
-			//return;
-			var i = 0;
-			for (fixedHeaderCell in headerRef.current.children)
-			{
-				trace(fixedHeaderCell);
-				var r:DOMRect = rowRects.shift();
-				fixedHeaderCell.setAttribute('style', 'width:${r.width}px;');
-				i++;
-				//x += w;left:${r.left}px;
-				//trace(fixedHeaderCell.getAttribute('style'));
-			}
-			//showDims(gridHead);
-			//nodeDims(headerRef.current);
-		}*/
 	}
 	
 	function leaveRow(evt:MouseEvent)
@@ -396,11 +352,11 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	
 	function highLightRow(evt:MouseEvent)
 	{
-		trace (state._selecting + ':' + evt.altKey);
-
+		trace (state._selecting + ':' + evt.ctrlKey);
+		var el:Element = cast (evt.target, Element);
 		//state._selecting = true;
-		trace(cast (evt.target, Element).dataset.gridpos);
-		_selectRowOfCell(cast (evt.target, Element));
+		//trace(el.dataset.gridpos + ':' + props.parentComponent.props);
+		_selectRowOfCell(el);
 		//Out.dumpObject(evt);
 	}
 	

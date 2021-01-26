@@ -199,7 +199,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			},250);
 		}
 		//trace(store);
-		trace(state.userState);
+		Out.dumpObject(state.userState);
 		//CState.init(store);		
 		if (!(state.userState.dbUser.id == null || state.userState.dbUser.jwt == ''))
 		{			
@@ -273,7 +273,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	public static function edump(el:Dynamic){Out.dumpObject(el); return 'OK'; };
 
   	override function render() {
-		trace(state.userState);
+		//Out.dumpObject(state.userState);
 		//trace(state.history.location.pathname);	store={store}	<UiView/>	<div>more soon...</div>
         return jsx('
 			<$Provider store={store}>

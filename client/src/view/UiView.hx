@@ -160,7 +160,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		if(props.userState.dbUser.jwt == null || props.userState.dbUser.jwt == '' || !props.userState.dbUser.online || props.userState.dbUser.change_pass_required)//
 		{
 			// WE NEED TO LOGIN FIRST
-			trace(props.userState.dbUser);
+			//Out.dumpObject(props.userState.dbUser);
 			//return null;
 			return jsx('<$LoginForm userState=${props.userState}/>');
 		}

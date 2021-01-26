@@ -109,8 +109,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		ormRefs = new Map();
-		dealsFormRef = React.createRef();
-		formRef = React.createRef();
 		_trace = true;
 		registerOrmRef = function(ref:Dynamic) {
 			//trace(Type.typeof(ref));
@@ -142,6 +140,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			}
 		};
 		accountsFormRef = React.createRef();
+		dealsFormRef = React.createRef();
+		formRef = React.createRef();
 		historyFormRef = React.createRef();
 		trace(props.match.params);
 		//REDIRECT WITHOUT ID OR edit action
@@ -464,13 +464,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	function relData() {
 		return jsx('
 		<>		
-			
+			<Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get"  filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>
 			<Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" action="get"  filter=${{contact:props.match.params.id, mandator:'1'}}></Accounts>
 		</>
 		');
 	}
 	/**				//${relData()} 
-	 * <Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get"  filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>	
+	 * 	
 			isActive=${true}
 	 */
 	

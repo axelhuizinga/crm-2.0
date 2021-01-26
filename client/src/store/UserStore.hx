@@ -55,6 +55,7 @@ class UserStore implements IReducer<UserAction, UserState>
 		return switch(action)
 		{
 			case LoginChange(uState)|LoginRequired(uState):
+				trace('...');
 				Out.dumpObject(uState);
 				copy(state, uState);                             					
 			case LoginError(err):
@@ -83,7 +84,7 @@ class UserStore implements IReducer<UserAction, UserState>
 
 	public function middleware(action:UserAction, next:Void -> Dynamic)
 	{
-		//trace(store);
+		trace(store);
 		return switch(action)
 		{		
 			//case LoginError(state):

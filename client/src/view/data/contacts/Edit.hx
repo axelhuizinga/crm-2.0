@@ -418,15 +418,15 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.actualState != null));
+		//trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.actualState != null));
 		//trace('###########loading:' + state.loading);
-		trace('########### action:' + props.match.params.action);
+		//trace('########### action:' + props.match.params.action);
 
 		return switch(props.match.params.action)
 		{
 			case 'open'|'update':
 				//trace(state.mHandlers);
-				trace(state.actualState.id);
+				//trace(state.actualState.id);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 				];*/
@@ -446,7 +446,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				'));
 				//null;
 			case 'insert':
-				trace(state.actualState);
+				//trace(state.actualState);
 				state.formBuilder.renderForm({
 					mHandlers:state.mHandlers,
 					fields:[

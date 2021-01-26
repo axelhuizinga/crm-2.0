@@ -263,7 +263,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		var columnDataState:DataColumn = props.dataState.columns.get(fN);
 		//if(rdMap[fN]==null)
 		//	rdMap[fN] = '';
-		trace(fN + '::' + rdMap[fN] + '::' + columnDataState.cellFormat);
+		//trace(fN + '::' + rdMap[fN] + '::' + columnDataState.cellFormat);
 		return {
 			cellFormat:columnDataState.cellFormat,
 			className:(columnDataState.className==null?rowClass:columnDataState.className +' '+ rowClass),
@@ -278,9 +278,9 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 
 	function renderCells(rdMap:Map<String,Dynamic>, row:Int):ReactFragment
 	{
-		trace(fieldNames.join('|'));
+		//trace(fieldNames.join('|'));
 		//trace('|'+rdMap['h'].keys().next()+'|');
-		trace(state.selectedRows.toString());
+		//trace(state.selectedRows.toString());
 		var column:Int = 0;
 		var isSelected:Bool = state.selectedRows.exists(row);
 		var rowClass = (row % 2 == 0?'gridItem even':'gridItem odd');
@@ -290,11 +290,11 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			return map2DataCell(rdMap, fN, column++, row, rowClass);
 		});
 		var rCs:Array<ReactFragment> = [];
-		trace(cells.length);
+		//trace(cells.length);
 		for (cD in cells)
 		{
 			//trace(cD);"r"+cD.pos.row+"c"+cD.pos.column
-			trace(row + ':' + cD.id + '_' + cD.pos.column);
+			//trace(row + ':' + cD.id + '_' + cD.pos.column);
 			if (!cD.show)
 			 continue;
 			rCs.push(
@@ -313,7 +313,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		var row:Int = 0;
 		for (dR in dRows)
 		{			
-			trace(dR);
+			//trace(dR);
 			dRs.push(renderCells(dR, row++));
 		}
 		return dRs;

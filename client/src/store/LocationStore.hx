@@ -1,5 +1,6 @@
 package store;
 
+import me.cunity.debug.Out;
 import history.Location;
 import history.History;
 import js.Browser;
@@ -39,7 +40,7 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 			}
 			// (Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname)
 		};	
-		trace(initState);
+		Out.dumpObject(initState);
 	}
 
 	public function reduce(state:LocationState, action:LocationAction):LocationState
@@ -50,7 +51,7 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 		return switch(action)
 		{
 			case InitHistory(history):
-				if(_trace) trace(state);
+				if(_trace) Out.dumpObject(state);
 				copy(state, {
 					history:history
 				});

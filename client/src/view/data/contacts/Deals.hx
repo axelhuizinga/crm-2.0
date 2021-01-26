@@ -181,16 +181,16 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.action);
+		//trace(props.action);
 		//trace(dataDisplay["userList"]);
-		trace(state.loading);
+		//trace(state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
 		//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}
 		return switch(props.action)
 		{
 			case 'get':
-			trace(state.dataTable);
+			//trace(state.dataTable);
 			jsx('				
 			<Grid id="dealsList" data=${state.dataTable}
 			${...props} dataState = ${dataDisplay["dealsList"]} 

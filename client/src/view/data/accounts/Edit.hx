@@ -320,11 +320,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				//doChange(ev.target.name,ev.target.value);
 			});
 		}
-	}
-	
-	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
-		trace('propsChanged:${nextProps!=props}');
-		trace('stateChanged:${nextState!=state}');
 		if(props.dataStore != null && actualState == null)
 		{
 			actualState = loadContactData(initialState.id);
@@ -332,7 +327,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				initialState:actualState,
 				actualState:actualState
 			});
-		}		
+		}				
+	}
+	
+	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
+		trace('propsChanged:${nextProps!=props}');
+		trace('stateChanged:${nextState!=state}');
+
 		if(nextState!=state)
 			return true;
 		return nextProps!=props;
@@ -486,9 +487,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.dataTable != null));
+		//trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.dataTable != null));
 		//trace('###########loading:' + state.loading);
-		trace('########### action:' + props.match.params.action);
+		//trace('########### action:' + props.match.params.action);
 
 		return switch(props.match.params.action)
 		{

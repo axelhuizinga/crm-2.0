@@ -125,18 +125,18 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//if(_strace) trace(aState.dataStore.contactData);
 		if(_strace) trace(Reflect.fields(aState));
-		if(aState.dataStore.contactData != null)
-		if(_strace) trace(aState.dataStore.contactData.keys().next());
-		if(aState.dataStore.contactsDbData != null)
+		//if(aState.dataStore.contactData != null)
+		//if(_strace) trace(aState.dataStore.contactData.keys().next());
+		/*if(aState.dataStore.contactsDbData != null)
 		if(_strace) trace(aState.dataStore.contactsDbData.dataRows[0]);
-		if(_strace) trace(App.store.getState().dataStore.contactsDbData);
+		if(_strace) trace(App.store.getState().dataStore.contactsDbData);*/
 		var bState =  {
 			dataStore:aState.dataStore,
 			userState:aState.userState,
 			//idLoaded:aState.dataStore.contactData.keys().next()
 		};
 		//if(_strace) trace(bState);
-		if(_strace) trace(bState.dataStore.contactData.keys().hasNext()?bState.dataStore.contactData.keys().next():null);
+		//if(_strace) trace(bState.dataStore.contactData.keys().hasNext()?bState.dataStore.contactData.keys().next():null);
 		return bState;
 	}
 		

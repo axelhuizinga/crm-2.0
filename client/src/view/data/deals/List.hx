@@ -82,7 +82,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			var baseUrl:String = props.match.path.split(':section')[0];
 			trace('redirecting to ${baseUrl}List/get');
 			props.history.push('${baseUrl}List/get');
-			get(null);
+			//get(null);
 		}
 		else 
 		{
@@ -196,11 +196,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	function renderResults():ReactFragment
 	{
 		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
-		//trace(dataDisplay["userList"]);
+		trace(dataDisplay["dealsList"]);
 		trace(state.loading);
-		if(state.loading)
+		if(state.loading || state.dataTable == null || state.dataTable.length == 0)
 			return state.formApi.renderWait();
-		trace('###########loading:' + state.loading);
+		trace('###########loading:' + state.dataTable.length);
 		return switch(props.match.params.action)
 		{
 			case 'get':

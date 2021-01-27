@@ -111,12 +111,13 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
     {
 		if(_strace) trace('ok');
-        return {
-			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
+        return {			
+			//select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
+			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,component:Contacts, ?selectType:SelectType)			
 			{
 				if(_strace) trace('select:$id selectType:${selectType}');
 				//dispatch(DataAction.CreateSelect(id,data,match));
-				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
+				dispatch(LiveDataAccess.select({id:id,data:data,match:component.props.match,selectType: selectType}));
 			}
 		};
     }

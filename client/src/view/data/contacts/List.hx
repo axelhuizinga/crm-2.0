@@ -29,8 +29,9 @@ import view.shared.io.BaseForm;
 import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
+import view.grid.Grid;
+//import view.table.Table;
 import loader.BinaryLoader;
-import view.table.Table;
 import model.Contact;
 
 @:connect
@@ -60,7 +61,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		//baseForm =new BaseForm(this);
-		dataDisplay = ContactsModel.dataDisplay;
+		dataDisplay = ContactsModel.dataGridDisplay;
 		//trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			dataTable:[],
@@ -234,13 +235,19 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{//  ${...props}
 			case 'get':
+				jsx('				
+				<Grid id="dealsList" data=${state.dataTable}
+				${...props} dataState = ${dataDisplay["contactList"]} 
+				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
+						
+				');			/*				
 				jsx('
 					<form className="tabComponentForm" >
 						<$Table id="contactsList" data=${state.dataTable}  parentComponent=${this}
 						${...props} dataState=${dataDisplay["contactList"]} renderPager=${{function()trace(Reflect.fields(props));}}
 						className="is-striped is-hoverable" fullWidth=${true}/>
 					</form>
-				');
+				');*/
 			default:
 				null;
 		}

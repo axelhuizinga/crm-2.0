@@ -62,6 +62,26 @@ class ContactsModel
 		}
 	];
 
+	public static var gridColumns:Map<String,view.grid.Grid.DataColumn> = [
+		'first_name'=>{label:'Vorname', flexGrow:0},
+		'last_name'=>{label:'Name', flexGrow:0},
+		//'email'=>{label:'Email'},
+		'phone_number'=>{label:'Telefon'},				
+		'address'=>{label: 'Straße'},		
+		'address_2'=>{label: 'Hausnummer'},		
+		'co_field'=>{label: 'Adresszusatz', flexGrow:1},
+		'postal_code'=>{label: 'PLZ'},
+		'city'=>{label: 'Ort'},
+		'state' => {label:'Status', className: 'tCenter',
+			cellFormat:function(v:String) 
+			{
+				var uState = (v=='active'?'user':'user-slash');
+				//trace(uState);
+				return jsx('<span className="fa fa-$uState"></span>');
+			}},
+		'id' => {show:false}
+	];
+	
 	public static var listColumns:Map<String,DataColumn> = [
 		'first_name'=>{label:'Vorname', flexGrow:0},
 		'last_name'=>{label:'Name', flexGrow:0},
@@ -84,5 +104,9 @@ class ContactsModel
 
 	public static var dataDisplay:Map<String,DataState> = [
 		'contactList' => {columns:listColumns}
+	];	
+
+	public static var dataGridDisplay:Map<String,view.grid.Grid.DataState> = [
+		'contactList' => {columns:gridColumns}
 	];	
 }

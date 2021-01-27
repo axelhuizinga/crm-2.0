@@ -62,8 +62,7 @@ class AccountsModel
 				var className = (v=='active'?'active fas fa-heart':'passive far fa-heart');
 				//trace(uState);
 				return jsx('<span className=${className}></span>');
-			}}
-		
+			}}		
 	];
 
 	public static var listColumns:Map<String,DataColumn> = [

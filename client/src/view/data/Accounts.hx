@@ -92,7 +92,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 			{
 				if(_strace) trace('select:$id selectType:${selectType}');
 				//dispatch(DataAction.CreateSelect(id,data,match));
-				//dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
+				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
 			}
 		};
 	}

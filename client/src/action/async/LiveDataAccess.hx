@@ -117,8 +117,9 @@ class LiveDataAccess
 					sData.set(k,v);
 				sData;
 			case One:
-				sData.set(id,data.get(id));
-				sData;
+				/*sData.set(id,data.get(id));
+				sData;*/
+				[id => data.get(id)];
 			case Unselect:
 				sData.remove(id);
 				sData;

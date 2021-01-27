@@ -235,6 +235,7 @@ h2{
 {
 	font-weight:bold;
 	padding: $gridPadding!important;
+	white-space: nowrap;
 	/*display:flex;
 	flex-grow:1 0 auto;
 	justify-content:space-between;*/
@@ -245,6 +246,7 @@ h2{
 	display: inline-block;
 	/*border:1px solid red;*/
 	text-align: left;
+	white-space: nowrap;
 	/*align-items: center;
 	vertical-align: middle;*/
 }

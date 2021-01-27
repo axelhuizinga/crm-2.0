@@ -1,5 +1,7 @@
 package view.grid;
 
+import js.Syntax;
+import action.DataAction.SelectType;
 import haxe.ds.IntMap;
 import js.Browser;
 import haxe.Constraints.Function;
@@ -261,8 +263,8 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 
 	function map2DataCell(rdMap:Map<String,Dynamic>,fN:String, column:Int, row:Int, rowClass:String):DataCell {
 		var columnDataState:DataColumn = props.dataState.columns.get(fN);
-		//if(rdMap[fN]==null)
-		//	rdMap[fN] = '';
+		if(rdMap[fN]=='')
+			rdMap[fN] = null;
 		//trace(fN + '::' + rdMap[fN] + '::' + columnDataState.cellFormat);
 		return {
 			cellFormat:columnDataState.cellFormat,
@@ -298,7 +300,9 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			if (!cD.show)
 			 continue;
 			rCs.push(
-			jsx('<div className=${cD.className} key=${cD.id + '_' + cD.name} data-value=${cD.cellFormat!=null?cD.data:''} data-gridpos=${cD.pos.row+"_"+cD.pos.column} onClick=${highLightRow} >
+			jsx('<div className=${cD.className} key=${cD.id + '_' + cD.name} data-value=${cD.data} 
+			data-id=${cD.id} data-name=${cD.name} 
+			data-gridpos=${cD.pos.row+"_"+cD.pos.column} onClick=${highLightRow} >
 				${(cD.dataDisplay==null?<span>&nbsp;</span>:cD.dataDisplay)}
 			</div>'));
 		}
@@ -330,7 +334,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)	
 	{
-		trace(headerUpdated+ ':' + headerRef); 
+		trace(headerUpdated+ ':' + headerRef +' cmp state:' + (prevState==state?'Y':'N')); 
 	}
 	
 	function leaveRow(evt:MouseEvent)
@@ -350,101 +354,42 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		}
 	}
 	
-	function highLightRow(evt:MouseEvent)
-	{
-		trace (state._selecting + ':' + evt.ctrlKey);
-		var el:Element = cast (evt.target, Element);
-		//state._selecting = true;
-		//trace(el.dataset.gridpos + ':' + props.parentComponent.props);
-		_selectRowOfCell(el);
-		//Out.dumpObject(evt);
-	}
-	
-	/*public function select(mEvOrID:Dynamic)
-	{
-		//trace('select from contructor:${mEvOrID.select}');
-		trace('${props.data['id']} selected:${state.selected}');
-		if(!props.selectAble)
-			return;
-		trace(Reflect.fields(props));
-		//trace(props.row +':' + props.data.toString());
-		if(mEvOrID.select == null)
-		{
-			try{
-				var evt:ReactMouseEvent = cast(mEvOrID);
-				
-				var tEl:Element = cast(mEvOrID.target,Element);
-				trace(tEl.closest('table'));
-				//trace(Browser.window.document.querySelector('table'));
-				//TODO: IMPLEMENT MODIFIERS				
-				//var mEvt:MouseEvent = cast(evt.nativeEvent, MouseEvent);
-			}
-			catch(ex:Dynamic)
-			{
-				trace(ex);
-			}
-		}
-
-		if(props.parentComponent != null && props.parentComponent.props.select != null)
-		{
-			if(!state.selected)
-			{
-				//trace(props.data['id'] + ':' + props.parentComponent.props.match);
-				trace(props.data['id'] + ':' + Type.getClassName(Type.getClass(props.parentComponent)));
-				//trace(Type.typeof(props.parentComponent));
-				if(props.parentComponent.props.match==null){
-					props.parentComponent.props.select(props.data['id'], props.parentComponent);
-				}
-				else {
-					var data:StringMap<StringMap<Dynamic>> = [props.data['id']=>props.data];
-					props.parentComponent.props.select(props.data['id'], 
-					data,//[props.data['id']=>props.data], 
-					props.parentComponent.props.match);
-				}				
-			}
-			else
-			{
-				trace('unselect');
-				if(props.parentComponent.props.match==null){
-					props.parentComponent.props.select(props.data['id'], props.parentComponent, Unselect);
-				}
-				else {
-				props.parentComponent.props.select(props.data['id'], null,props.parentComponent.props.match, Unselect);
-				}
-			}	
-			
-		}
-		if(props.selectAble)
-			setState({selected: mEvOrID.select ? true:!state.selected});
-		trace('selected:${state.selected}');
-		//trace(props.parentComponent.props.classPath);
-		if(true) trace('props.parentComponent.props.classPath:${Type.getClassName(Type.getClass(props.parentComponent))}');
-		//if(!mEvOrID.select)
-			//forceUpdate();
-	}*/
-		
-	function _selectRowOfCell(el:Element)
+	function highLightRow(evtOrId:Dynamic)
 	{
 		if (state._selecting)
-			return;		
-		state._rowCells = [];
-		state._selectedCells = [];				
+			return;
 		state._selecting = true;
-		var eCol:Int;
-		var pos:Array<Int> = cast el.dataset.gridpos.split("_");
-		state.enteredRow = pos[0];
-		state.selectedRows.set(state.enteredRow, true);
-		trace(state.selectedRows.get(state.enteredRow));
-		var rowCells = Browser.window.document.querySelectorAll('.gridItem[data-gridpos^="${state.enteredRow}"]');
-		trace(rowCells.length);
-		var aCol = eCol = pos[1];
-		while (aCol > 0)
-		{
-			el = el.previousElementSibling;
-			aCol--;
+		//trace(evtOrId);
+		var el:Element = (Std.is(evtOrId, Int)?
+		Browser.window.document.querySelector('.gridItem[data-id="${evtOrId}"]'):
+		cast (evtOrId._targetInst.stateNode, Element));
+		var rN:Int = null;
+		var selectedNow:IntMap<Bool> = state.selectedRows.copy();
+
+		trace (el.dataset.id + ':' + state._selecting + ' ctrlKey:' + evtOrId.ctrlKey);
+		rN = Std.parseInt(el.dataset.gridpos.split("_")[0]);
+		if(!evtOrId.ctrlKey && !evtOrId.shiftKey){
+			//clear selection only
+			state.selectedRows = new IntMap();	
+			if(selectedNow.exists(rN)){
+				setState({selectedRows:state.selectedRows});		
+				state._selecting = false;
+				return;				
+			}
+			else{
+				state.selectedRows.set(rN, true);
+			}
 		}
-		trace(pos);
+		else {
+			//TODO: HANDLE SELECTION WITH MODIFIERS
+		}
+		
+		var rowCells = Browser.window.document.querySelectorAll('.gridItem[data-id="${el.dataset.id}"]');
+		//trace(rowCells.length + ':' + untyped rowCells.item(0).innerHTML);
+		var rowEls:Array<Element> = Syntax.code("Array.from({0})",rowCells);
 		setState({selectedRows:state.selectedRows});
+		trace(el.dataset.id + ':' + rowEls[0].innerHTML + getRowData(rowEls).toString());
+		props.parentComponent.props.select(el.dataset.id,[el.dataset.id => getRowData(rowEls)], props.parentComponent, SelectType.One);
 		state._selecting = false;
 	}
 	
@@ -476,28 +421,16 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		trace(' sum:$s');
 	}
 	
-}
-
-	/*function createColumns():ReactFragment
-	{
-		if(state.data.length>0)
-			trace(Reflect.fields(state.data[0]));
-		trace(Reflect.fields(props.headerColumns));
-		var cols:Array<ReactFragment> = [];
-		for (field in props.headerColumns.keys())
-		{
-			var hC:DataCell = props.headerColumns.get(field);
-			cols.push(jsx('	
-				<Column
-					label=${field.substr(0, 1).toUpperCase() + field.substr(1).toLowerCase()}
-					dataKey={field}
-					key={field}
-					width = {122}
-					className = {hC.className}
-					flexGrow = {hC.flexGrow}
-				/>
-				')
-			);
+	//function getRowData(rCs:NodeList):StringMap<Dynamic> {
+	function getRowData(rCs:Array<Element>):StringMap<Dynamic> {
+		if(rCs.length==0)
+			return null;
+		for (el in rCs){
+			trace(el.dataset.id+':'+el.innerHTML);
 		}
-		return cols;
-	}*/
+		return [
+			for (el in rCs)
+				el.dataset.name => el.dataset.value
+		];
+	}
+}

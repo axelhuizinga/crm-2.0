@@ -57,11 +57,11 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
 			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
-			select:function(id:Int = -1, me:Dynamic, ?sType:SelectType)
+			select:function(id:Int = -1, me:Dynamic, pComp:Dynamic, ?sType:SelectType)
 				{
 					//if(true) trace('select:$id dbUser:${dbUser}');
-					if(true) trace('select:$id me:${Type.getClassName(Type.getClass(me))} SelectType:${sType}');
-				//dispatch(DataAction.CreateSelect(id,data,match));
+					if(true) trace('select:$id me:${Type.getClassName(Type.getClass(me))} SelectType:${sType} parentComponent:${Type.getClassName(Type.getClass(pComp.props.parentComponent))}');
+				//dispatch(DataAction.CreateSelect(id,data,match));${Type.typeof(me)}
 				//dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
 			}
         };

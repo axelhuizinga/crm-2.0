@@ -1,4 +1,5 @@
 package view.data.contacts;
+import haxe.Exception;
 import react.ReactNode.ReactNodeOf;
 import view.data.contacts.Accounts;
 import view.data.contacts.Deals;
@@ -115,7 +116,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			switch(Type.typeof(ref)){
 				case TNull:
 					//do nothing
-				case TObject: //ReactComp
+				case TObject:
 					trace(Reflect.fields(ref));					
 					trace(Type.getClass(ref));					
 					trace(ref.props);
@@ -127,12 +128,27 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					}
 						
 
-				case TClass(func):
-					trace(func);
-					//trace(Type.getClassName(Type.getClass(ref)));
-					
-					//trace(ref.props);
-					//trace(ref.state);
+				case TClass(func)://matches component classes, i.e. ReactComponentOf<DataFormProps,FormState>
+					//trace(func);
+					var cL:Dynamic = Type.getClass(ref);
+					if(cL!=null){
+						trace(Type.getClassName(cL));
+						try{
+							trace(Reflect.fields(ref.props));
+							trace(Reflect.fields(ref.state));
+							trace(ref.state.model);
+							if(ref.props !=null && ref.props.model!= null){						
+								ormRefs[ref.props.model] = {
+									compRef:ref,
+									orm:null
+								}
+							}
+						}
+						catch(ex:Exception){
+							trace(ex);
+						}
+
+					}
 					default:
 					trace(ref);
 					//trace(Reflect)
@@ -165,6 +181,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			mHandlers:menuItems,
 			loading:false,
 			model:'contacts',
+			relatedForms:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
 				{
@@ -180,7 +197,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			/*storeListener:App.store.subscribe(function(){
 				trace(App.store.getState().dataStore);
 			}),*/
-			values:new Map<String,Dynamic>()
+			values:new Map<String,ReactComponentOf<DataFormProps,FormState>>()
 		},this);
 		
 		trace(state.initialData);

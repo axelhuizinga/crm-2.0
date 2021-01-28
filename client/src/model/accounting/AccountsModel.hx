@@ -56,13 +56,13 @@ class AccountsModel
 		'sign_date'=>{label:'Erteilt',cellFormat:function(v:String) return DateTools.format(Date.fromString(v), "%d.%m.%Y")},	
 		'contact'=>{label:'Kontakt',show:false, useAsIndex: false},				
 		'iban'=>{label:'IBAN'},	
-		'status' => {label:'Aktiv', className: 'tCenter',
+		'status' => {label:'Status', className: 'tCenter',
 			cellFormat:function(v:String) 
 			{
 				var className = (v=='active'?'active fas fa-heart':'passive far fa-heart');
 				//trace(uState);
 				return jsx('<span className=${className}></span>');
-			}}		
+			}}
 	];
 
 	public static var listColumns:Map<String,DataColumn> = [

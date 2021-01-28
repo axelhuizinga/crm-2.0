@@ -61,6 +61,7 @@ typedef DataColumn =
 	?show:Bool,
 	?useAsIndex:Bool,
 	?style:Dynamic,
+	?tip:String
 }
 
 typedef DataCellPos =
@@ -388,7 +389,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		//trace(rowCells.length + ':' + untyped rowCells.item(0).innerHTML);
 		var rowEls:Array<Element> = Syntax.code("Array.from({0})",rowCells);
 		setState({selectedRows:state.selectedRows});
-		trace(el.dataset.id + ':' + rowEls[0].innerHTML + getRowData(rowEls).toString());
+		//trace(el.dataset.id + ':' + rowEls[0].innerHTML + getRowData(rowEls).toString());
 		props.parentComponent.props.select(el.dataset.id,[el.dataset.id => getRowData(rowEls)], props.parentComponent, SelectType.One);
 		state._selecting = false;
 	}
@@ -425,9 +426,9 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	function getRowData(rCs:Array<Element>):StringMap<Dynamic> {
 		if(rCs.length==0)
 			return null;
-		for (el in rCs){
+		/*for (el in rCs){
 			trace(el.dataset.id+':'+el.innerHTML);
-		}
+		}*/
 		return [
 			for (el in rCs)
 				el.dataset.name => el.dataset.value

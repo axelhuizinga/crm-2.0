@@ -48,7 +48,7 @@ typedef FormState =
 	?dataTable:Array<Map<String,Dynamic>>,
 	?dataCount:Int,
 	?dbQueryParam:DBAccessProps,
-	//?ormRefs:Map<String,ORMComps>,//classPath(server)=>FormObject
+	?ormRefs:Map<String,ORMComps>,//classPath(server)=>FormObject
 	?fields:Map<String,FormField>,//VIEW FORMFIELDS
 	?formApi:FormApi,
 	?formBuilder:FormBuilder,
@@ -71,6 +71,7 @@ typedef FormState =
 	?modelClass:Dynamic,
 	?valuesArray:Array<Map<String,Dynamic>>,//FORMATTED DISPLAY VALUES
 	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES
+	?relatedForms:Map<String,Dynamic>,
 	?rows:Array<Dynamic>,
 	?section:String,
 	?sideMenu:MenuProps,

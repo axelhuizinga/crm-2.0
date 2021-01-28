@@ -52,7 +52,7 @@ class DealsModel
 				return null;
 			 return DateTools.format(Date.fromString(v), "%d.%m.%Y");
 			}},	
-		'active' => {label:'Aktiv', className: 'tCenter',
+		'active' => {label:'Status', className: 'tCenter',
 			cellFormat:function(v:Bool) 
 			{
 				var className = (v?'active fas fa-heart':'passive far fa-heart');

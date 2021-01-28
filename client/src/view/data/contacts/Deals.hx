@@ -179,6 +179,33 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		//state.formApi.doAction(props.action);
 	}
 	
+	
+	function renderForm():ReactFragment
+	{
+		//trace(props.action);
+		//trace(dataDisplay["userList"]);
+		//trace(state.loading);
+		if(state.loading)
+			return state.formApi.renderWait();
+		//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}
+		return switch(props.action)
+		{
+			case 'get':
+			//trace(state.dataTable);
+			jsx('				
+			<Grid id="dealsList" data=${state.dataTable}
+			${...props} dataState = ${dataDisplay["dealsList"]} 
+			parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
+					
+			');			
+			case 'delete':
+				null;
+			default:
+				null;
+		}
+		return null;
+	}
+	
 	function renderResults():ReactFragment
 	{
 		//trace(props.action);

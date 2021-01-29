@@ -1,6 +1,7 @@
 package model.admin;
 
 //import action.async.DBAccessProps;
+import php.Exception;
 import php.SuperGlobal;
 import php.Global;
 import php.NativeAssocArray;
@@ -291,7 +292,15 @@ LIMIT ${Util.limit()}
 		}
 		trace(param);
 		if(Lib.isCli()){
-			importCrmData();
+			while(param['totalRecords']>0 && param['offset']<param['totalRecords']){
+				importCrmData();
+				allCids = getAll();
+				trace('totalRecords:'+ Global.count(allCids));
+				param['totalRecords'] = Global.count(allCids);
+				trace(param);
+			}
+			trace('done');
+			S.sendInfo(dbData, ['importContacts'=>'OK']);
 		}
 		else{
 			param['user_name'] = S.dbQuery.dbUser.user_name;			
@@ -334,6 +343,10 @@ LIMIT ${Util.limit()}
 				]);}		
 			}
 		}		
+		if(Lib.isCli()){
+			param['offset'] += synced;
+			return;
+		}
         trace('done');
 		dbData.dataInfo['offset'] = param['offset'] + synced;
 		trace(dbData.dataInfo);
@@ -391,12 +404,20 @@ LIMIT ${Util.limit()}
 		//trace(sql);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		Util.bindClientData('contacts',stmt,rD,dbData);
-		if(!stmt.execute()){
+		try{
+			if(!stmt.execute()){
+				trace(rD);
+				trace(stmt.errorInfo());
+				S.sendErrors(dbData, ['execute'=>Lib.hashOfAssociativeArray(stmt.errorInfo()),
+				'sql'=>sql,
+				'id'=>Std.string(Syntax.code("{0}['id']",rD))]);
+			}
+		}
+		catch(ex:Exception){
+			trace(ex);
+			trace(sql);
 			trace(rD);
-			trace(stmt.errorInfo());
-			S.sendErrors(dbData, ['execute'=>Lib.hashOfAssociativeArray(stmt.errorInfo()),
-			'sql'=>sql,
-			'id'=>Std.string(Syntax.code("{0}['id']",rD))]);
+			Sys.exit(666);
 		}
 		//trace(stmt.columnCount());
 		//dbData.dataInfo['synced'] = ++synced;
@@ -464,11 +485,11 @@ INNER JOIN asterisk.vicidial_list vl
 ON vl.vendor_lead_code=cl.client_id
 WHERE cl.client_id>${min_id}
 ORDER BY cl.client_id 
-LIMIT 
+LIMIT  ${Util.limit()}
 */;
 //WHERE cl.client_id>11019219
 		trace('$sql ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');
-        var stmt:PDOStatement = S.syncDbh.query('$sql ${Util.limit()} OFFSET ${Std.parseInt(param['offset'])}');
+        var stmt:PDOStatement = S.syncDbh.query('$sql OFFSET ${Std.parseInt(param['offset'])}');
 		trace('loading ${Util.limit()} OFFSET ${Std.parseInt(param['offset'])}');
 		if(untyped stmt==false)
 		{

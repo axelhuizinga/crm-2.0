@@ -267,6 +267,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		if(rdMap[fN]=='')
 			rdMap[fN] = null;
 		//trace(fN + '::' + rdMap[fN] + '::' + columnDataState.cellFormat);
+		trace(rdMap);
 		return {
 			cellFormat:columnDataState.cellFormat,
 			className:(columnDataState.className==null?rowClass:columnDataState.className +' '+ rowClass),
@@ -336,23 +337,6 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)	
 	{
 		trace(headerUpdated+ ':' + headerRef +' cmp state:' + (prevState==state?'Y':'N')); 
-	}
-	
-	function leaveRow(evt:MouseEvent)
-	{
-		if (state.enteredRow != null)
-		{
-			var pos:Array<Any> = cast (cast (evt.target, Element).dataset.gridpos.split("_"));
-			trace (pos[0] +"==" + state.enteredRow +  ':' + state._rowCells.length);
-			if (pos[0] == state.enteredRow)
-			{
-				return;//	SAME ROW
-			}
-			for (c in state._rowCells)
-			{
-				c.style.removeProperty('background-color'); 
-			}
-		}
 	}
 	
 	function highLightRow(evtOrId:Dynamic)

@@ -296,41 +296,41 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	function loadDealData(id:Int):Void
-		{
-			trace('loading:$id');
-			if(id == null)
-				return;
-			var p:Promise<DbData> = props.load(
-				{
-					classPath:'data.Deals',
-					action:'get',
-					filter:{id:id,mandator:1},
-					resolveMessage:{
-						success:'Aktion ${id} wurde geladen',
-						failure:'Aktion ${id} konnte nicht geladen werden'
-					},
-					table:'deals',
-					dbUser:props.userState.dbUser,
-					devIP:App.devIP
-				}
-			);
-			p.then(function(data:DbData){
-				trace(data.dataRows.length); 
-				if(data.dataRows.length==1)
-				{
-					var data = data.dataRows[0];
-					trace(data);	
-					//if( mounted)
-					var deal:Deal = new Deal(data);
-					trace(deal.id);
-					setState({loading:false, actualState:deal, initialData: copy(deal)});
-					trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
-					//setState({});
-					trace(props.location.pathname + ':' + untyped state.actualState.amount);
-					props.history.replace(props.location.pathname.replace('open','update'));
-				}
-			});
-		}
+	{
+		trace('loading:$id');
+		if(id == null)
+			return;
+		var p:Promise<DbData> = props.load(
+			{
+				classPath:'data.Deals',
+				action:'get',
+				filter:{id:id,mandator:1},
+				resolveMessage:{
+					success:'Aktion ${id} wurde geladen',
+					failure:'Aktion ${id} konnte nicht geladen werden'
+				},
+				table:'deals',
+				dbUser:props.userState.dbUser,
+				devIP:App.devIP
+			}
+		);
+		p.then(function(data:DbData){
+			trace(data.dataRows.length); 
+			if(data.dataRows.length==1)
+			{
+				var data = data.dataRows[0];
+				trace(data);	
+				//if( mounted)
+				var deal:Deal = new Deal(data);
+				trace(deal.id);
+				setState({loading:false, actualState:deal, initialData: copy(deal)});
+				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
+				//setState({});
+				trace(props.location.pathname + ':' + untyped state.actualState.amount);
+				props.history.replace(props.location.pathname.replace('open','update'));
+			}
+		});
+	}
 	
 	function renderResults():ReactFragment
 	{

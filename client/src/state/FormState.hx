@@ -71,7 +71,7 @@ typedef FormState =
 	?modelClass:Dynamic,
 	?valuesArray:Array<Map<String,Dynamic>>,//FORMATTED DISPLAY VALUES
 	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES
-	?relatedForms:Map<String,Dynamic>,
+//	?relatedForms:Map<String,Dynamic>,
 	?rows:Array<Dynamic>,
 	?section:String,
 	?sideMenu:MenuProps,

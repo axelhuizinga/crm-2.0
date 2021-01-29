@@ -1,5 +1,6 @@
 package view.data.contacts;
 
+import model.Deal;
 import db.DbUser;
 import action.async.LiveDataAccess;
 import js.Browser;
@@ -20,7 +21,7 @@ import me.cunity.debug.Out;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
-import react.ReactUtil;
+import react.ReactUtil.copy;
 import shared.DbData;
 import shared.DBMetaData;
 //import view.data.deals.model.Deals;
@@ -36,6 +37,7 @@ import view.shared.io.DataAccess;
 import loader.BinaryLoader;
 import view.grid.Grid;
 
+using StringTools;
 @:connect
 class Deals extends ReactComponentOf<DataFormProps,FormState>
 {
@@ -53,7 +55,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		dataAccess = DealsModel.dataAccess;
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
-		dataDisplay = DealsModel.dataGridDisplay;
+		dataDisplay = DealsModel.dataGridDisplay;		
 		trace('...' + Reflect.fields(props));
 
 		state =  App.initEState({
@@ -73,10 +75,11 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
 			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
-			select:function(id:Int = -1, me:Dynamic, ?sType:SelectType)
+			select:function(id:Int = -1, data:Dynamic, me:Dynamic, ?sType:SelectType)
 			{
 				//if(true) trace('select:$id dbUser:${dbUser}');
 				if(true) trace('select:$id me:${Type.getClassName(Type.getClass(me))} SelectType:${sType}');
+				me.loadDealData(id);
 				//dispatch(DataAction.CreateSelect(id,data,match));
 				//dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
 			}
@@ -105,7 +108,8 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	{
 		var offset:Int = 0;
 		trace(props.filter);
-		setState({loading:true});	
+		//setState({loading:true});	
+		state.loading=true;	
 		//var contact = (props.location.state.contact);
 		var p:Promise<DbData> = props.load(
 			{
@@ -125,6 +129,8 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		);
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
+			if(data.dataRows.length>0)
+				trace(data.dataRows[0]);
 			//setState({loading:false, dataTable:data.dataRows});
 			setState({
 				loading:false,
@@ -141,7 +147,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	public function selectionClear() {
-		var match:RouterMatch = ReactUtil.copy(props.match);
+		var match:RouterMatch = copy(props.match);
 		match.params.action = 'get';
 		trace(state.dataTable.length);
 		props.select(1, null,match, UnselectAll);	
@@ -179,31 +185,75 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		//state.formApi.doAction(props.action);
 	}
 	
+	function loadDealData(id:Int):Void
+	{
+		trace('loading:$id');
+		if(id == null)
+			return;
+		var p:Promise<DbData> = props.load(
+			{
+				classPath:'data.Deals',
+				action:'get',
+				filter:{id:id,mandator:1},
+				resolveMessage:{
+					success:'Aktion ${id} wurde geladen',
+					failure:'Aktion ${id} konnte nicht geladen werden'
+				},
+				table:'deals',
+				dbUser:props.userState.dbUser,
+				devIP:App.devIP
+			}
+		);
+		p.then(function(data:DbData){
+			trace(data.dataRows.length); 
+			if(data.dataRows.length==1)
+			{
+				var data = data.dataRows[0];
+				trace(data);	
+				//if( mounted)
+				var deal:Deal = new Deal(data);
+				trace(deal.id);				
+				//setState({loading:false, actualState:deal, initialData: copy(deal)});
+				state = copy(state, {loading:false, actualState:deal, initialData:deal});
+				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
+				//setState({});
+				trace(props.location.pathname + ':' + untyped state.actualState.amount);
+				props.history.replace(props.location.pathname.replace('open','update'));
+			}
+		});
+	}	
 	
 	function renderForm():ReactFragment
 	{
 		//trace(props.action);
 		//trace(dataDisplay["userList"]);
-		//trace(state.loading);
+		trace(state.loading + ':' + props.parentComponent.props.match.params.action);
 		if(state.loading)
 			return state.formApi.renderWait();
-		//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}
-		return switch(props.action)
+		trace('###########loading:' + state.loading);
+		//return null;
+		return switch(props.parentComponent.props.match.params.action)
 		{
-			case 'get':
-			//trace(state.dataTable);
-			jsx('				
-			<Grid id="dealsList" data=${state.dataTable}
-			${...props} dataState = ${dataDisplay["dealsList"]} 
-			parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
-					
-			');			
-			case 'delete':
-				null;
+			case 'open2'|'update2':
+				trace(state.actualState);
+				/*var fields:Map<String,FormField> = [
+					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
+				];*/
+				(state.actualState==null ? state.formApi.renderWait():
+				state.formBuilder.renderForm({
+					mHandlers:state.mHandlers,
+					fields:[
+						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
+					],
+					model:'deal',
+					//ref:formRef,
+					title: 'Bearbeite Aktion' 
+				},state.actualState));
 			default:
+				trace('>>>${props.parentComponent.props.match.params.action}<<<');
 				null;
 		}
-		return null;
+		//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}
 	}
 	
 	function renderResults():ReactFragment
@@ -213,16 +263,19 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		//trace(state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
-		//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}
+		//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}		
+		trace(props.action);
 		return switch(props.action)
 		{
 			case 'get':
 			//trace(state.dataTable);
-			jsx('				
+			jsx('
+			<>
 			<Grid id="dealsList" data=${state.dataTable}
 			${...props} dataState = ${dataDisplay["dealsList"]} 
 			parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
-					
+			${renderForm()}		
+			</>			
 			');			
 			case 'delete':
 				null;

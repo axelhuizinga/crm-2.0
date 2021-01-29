@@ -38,8 +38,9 @@ class Util
 			if(!Global.array_key_exists(k,row))
 				continue;
 			var kv:Dynamic = row[k];			
-			var pdoType:Int = v['pdo_type'];
-			if(kv==null||kv.indexOf('0000-00-00')==0||kv=='')
+			var pdoType:Int = v['pdo_type'];			
+			//if(kv==null||kv.indexOf('0000-00-00')==0||kv=='')
+			if(kv==null||kv.indexOf('0000-')==0||kv=='')
 			{
 				//trace (v['native_type']);
 				switch (v['native_type'])

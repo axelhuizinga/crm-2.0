@@ -140,8 +140,9 @@ class S
 			safeLog(Sys.args());
 			params = Cli.parse();
 			action = params.get('action');
-			var dbUser:DbUser = new DbUser(
-				{jwt:params['jwt'],id:params['id'],online:true, password:params['password'], user_name:params['user_name']});
+			var dbUser:DbUser = new DbUser(				
+				{jwt:'jwt',id:100,online:true, password:'password', user_name:'sysadmin'});
+				//{jwt:params['jwt'],id:params['id'],online:true, password:params['password'], user_name:params['user_name']});
 			var dbAccProps:DBAccessProps = {action:action, data:{REMOTE_ADDR:params['REMOTE_ADDR']}, dbUser: dbUser};
 			for(k=>v in params.keyValueIterator())
 			{
@@ -202,7 +203,7 @@ class S
 			trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM');
 			syncDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM',
 				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
-			//trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
+			trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
 		}
 		#if debug
 		dbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
@@ -222,7 +223,7 @@ class S
 		trace(jwt.length +':' + (jwt != null));
 		if (jwt.length > 0)
 		{
-			if(User.verify(dbQuery))
+			if(Lib.isCli() || User.verify(dbQuery))
 			{
 				if(action=='returnDebitFile')
 				{
@@ -293,8 +294,8 @@ class S
 		//trace(Std.string(dbData).substr(0,250));
 		trace(dbData.dataRows[0]);
 		if(Lib.isCli()){
-			trace(dbData);
-			return false;			 
+			trace(dbData.dataRows.length);
+			return true;			 
 		 }		
 		return sendbytes(s.serialize(dbData));
 	}

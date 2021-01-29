@@ -123,7 +123,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					trace(ref.state);
 					trace(ref.state.model);
 					if(ref.props !=null && ref.props.model!= null){						
-						ormRefs[ref.props.model] = ref;
+						//ormRefs[ref.props.model] = ref;
 						//ormRefs[ref.props.model] = ref.props.formRef.current;
 					}
 						
@@ -181,7 +181,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			mHandlers:menuItems,
 			loading:false,
 			model:'contacts',
-			relatedForms:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
+			ormRefs:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
+			//relatedForms:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
 				{
@@ -256,8 +257,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				trace(data);	
 				//if( mounted)
 				var contact:Contact = new Contact(data);
+				if(mounted)
+					setState({loading:false, actualState:contact, initialData:copy(contact)});
+				//state = copy({loading:false, actualState:contact, initialData:contact});
 				trace(contact.id);
-				setState({loading:false, actualState:contact, initialData:copy(contact)});
 				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
 				//setState({initialData:copy(state.actualState)});
 				trace(props.location.pathname + ':' + untyped state.actualState.date_of_birth);
@@ -455,7 +458,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
 					model:'contact',
-					ref:registerOrmRef,					
+					ref:null,					
 					title: 'Kontakt - Bearbeite Stammdaten' 
 				},state.actualState)}
 				${relData()}

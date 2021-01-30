@@ -68,7 +68,7 @@ class SyncExternalContacts extends Model
 
 	function getAll():NativeArray {
 		var offset:Int = ( param['offset']>0?param['offset']:0);
-		var sql:String = 'SELECT DISTINCT(client_id) FROM clients WHERE client_id>$offset';
+		var sql:String = 'SELECT DISTINCT(client_id) FROM clients ORDER BY client_id';
 		var stmt:PDOStatement = S.syncDbh.query(sql);
 		if(untyped stmt==false)
 		{
@@ -92,14 +92,14 @@ class SyncExternalContacts extends Model
 	}
 
 	function  getMissing() {
-		var offset:Int = ( param['offset']>0?param['offset']:0);
+		//var offset:Int = ( param['offset']>0?param['offset']:0);
 		var sql:String = '
 		SELECT DISTINCT(cl.client_id) FROM clients cl 
 INNER JOIN pay_plan pp 
 ON pp.client_id=cl.client_id 
 INNER JOIN pay_source ps 
 ON ps.client_id = cl.client_id;
-WHERE cl.client_id>$offset';
+WHERE cl.client_id>${offset.int}';
         var stmt:PDOStatement = S.syncDbh.query(sql);
 		if(untyped stmt==false)
 		{
@@ -161,7 +161,7 @@ INNER JOIN asterisk.vicidial_list vl
 ON (vl.lead_id=cl.lead_id )
 WHERE cl.client_id IN($ids)
 ORDER BY cl.client_id  
-LIMIT ${Util.limit()}
+${limit.sql}
 */;
 
         stmt = S.syncDbh.query(sql);
@@ -274,33 +274,24 @@ LIMIT ${Util.limit()}
 
 	function importContacts() {		
 		//trace(S.params);
-		trace(param);
+		//trace(param);
 		createOrUpdateAction();
 		var allCids = getAll();
 		param['totalRecords'] = Global.count(allCids);
-		//getMissing();
-		//dbAccessProps = initDbAccessProps();
-		if(param['offset']==null)
-			param['offset'] = '0';
-		if(param['limit']==null)			
-			param['limit'] = param['maxImport'];
-		
 		//if(Std.parseInt(param['offset'])+Std.parseInt(param['limit'])>Std.parseInt(param['maxImport']))
-		if(param['offset']+param['limit']>param['totalRecords'])
+		if(offset.int+limit.int>param['totalRecords'])
 		{
-			param['limit'] = Std.string(Std.parseInt(param['totalRecords']) - Std.parseInt(param['offset']));
+			limit = Util.limit(param['totalRecords'] - offset.int);
 		}
 		trace(param);
 		if(Lib.isCli()){
-			while(param['totalRecords']>0 && param['offset']<param['totalRecords']){
-				importCrmData();
-				allCids = getAll();
-				trace('totalRecords:'+ Global.count(allCids));
-				param['totalRecords'] = Global.count(allCids);
+			while(synced<param['totalRecords']){
+				importCrmContacts();
+				trace('offset:'+ offset.int);
 				trace(param);
 			}
 			trace('done');
-			S.sendInfo(dbData, ['importContacts'=>'OK']);
+			Sys.exit(S.sendInfo(dbData, ['importContacts'=>'OK'])?1:0);
 		}
 		else{
 			param['user_name'] = S.dbQuery.dbUser.user_name;			
@@ -318,6 +309,48 @@ LIMIT ${Util.limit()}
 		}
 		
 		S.sendErrors(dbData,['importContacts'=>'NOTOK']);
+	}
+
+	public function importCrmContacts():Void
+	{
+		var cData:NativeArray = getCrmClients();
+		//trace(cData[0]);        
+		var _1st:Bool = true;
+		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
+		for(row in cData.iterator())
+		{			
+			//trace(row);
+			//S.sendErrors(dbData,['importContacts'=>'NOTOK']);
+			var stmt:PDOStatement = upsertClient(row);
+			try{
+				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);	
+				if(_1st){
+					_1st=false;
+					trace(res);
+				}
+			}
+			catch(e:Dynamic)
+			{
+				{S.sendErrors(dbData, [
+					'dbError'=>S.dbh.errorInfo(),
+					'upsertClient'=>S.errorInfo(row),
+					'exception'=>e
+				]);}		
+			}
+		}		
+		if(Lib.isCli()){
+			trace('${offset.int} + ${synced}');
+			offset = Util.offset(synced);
+			if(offset.int+limit.int>param['totalRecords'])
+			{
+				limit = Util.limit(param['totalRecords'] - offset.int);
+			}			
+			return;
+		}
+		trace('done');
+		dbData.dataInfo['offset'] = offset.int;//param['offset'] + synced;
+		trace(dbData.dataInfo);
+		S.sendData(dbData, null);
 	}
 
     public function importCrmData():Void
@@ -344,7 +377,7 @@ LIMIT ${Util.limit()}
 			}
 		}		
 		if(Lib.isCli()){
-			param['offset'] += synced;
+			offset = Util.offset(synced);
 			return;
 		}
         trace('done');
@@ -382,8 +415,7 @@ LIMIT ${Util.limit()}
         S.sendData(dbData, null);
     }	
     
-    inline function testValue(v:Dynamic):Bool return cast v;
-    //inline function testValue(v:Dynamic):Bool return cast v != null && v != false;
+    //inline function testValue(v:Dynamic):Bool return cast v;
 
     function upsertClient(rD:NativeArray):PDOStatement
     {
@@ -449,14 +481,55 @@ LIMIT ${Util.limit()}
         dbData.dataInfo = ['saveClientDetails' => 'OK', 'updatedRows' => Std.string(updated)];
         trace(dbData.dataInfo);
 		return dbData; 
-    }
+	}
+	
+	public function getCrmClients():NativeArray
+	{		        
+		if(limit.int>10000)
+		{
+			Syntax.code("ini_set('max_execution_time',3600)");
+			Syntax.code("ini_set('memory_limit','1G')");			
+			trace(Syntax.code("ini_get('memory_limit')"));
+		}
+		trace('offset:${param['offset']}::${offset.sql}<<<');
+
+		var sql = comment(unindent,format)/*
+SELECT * FROM clients
+ORDER BY client_id 
+${limit.sql} ${offset.sql}
+*/;
+		trace('$sql');
+		var stmt:PDOStatement = S.syncDbh.query(sql);
+		trace('loading ${limit} ${offset}');
+		if(untyped stmt==false)
+		{
+			trace('$sql ${limit}');
+			S.sendErrors(dbData, ['getCrmClients query:'=>S.syncDbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+		}
+		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		//trace(res);
+		if(offset.int==0)
+		{
+			stmt = S.syncDbh.query('SELECT FOUND_ROWS()');
+			var totalRes = stmt.fetchColumn();
+			//trace(totalRes);
+			dbData.dataInfo['totalRecords'] = totalRes;
+			trace(dbData.dataInfo);
+		}
+		return res;
+	}
+	
 
     public function getCrmData(?min_id=9999999):NativeArray
 	{		        
 		trace(min_id);
 		//S.sendErrors(null,['devbreak'=>min_id]);
 		var min_age:Int = ( param['min_age']>0?param['min_age']:18);
-		var firstBatch:Bool = (param['offset']=='0');
+		var firstBatch:Bool = offset.sql == '';
 		var selectTotalCount:String = '';
 		if(Std.parseInt(param['limit'])>10000)
 		{
@@ -464,13 +537,10 @@ LIMIT ${Util.limit()}
 			Syntax.code("ini_set('memory_limit','1G')");			
 			trace(Syntax.code("ini_get('memory_limit')"));
 		}
-		trace('offset:${param['offset']} firstBatch:$firstBatch ');
-		if(firstBatch)
-		{
-			selectTotalCount = 'SQL_CALC_FOUND_ROWS';
-		}
+		trace('offset:${offset} firstBatch:${firstBatch} ');
+
         var sql = comment(unindent,format)/*
-		SELECT $selectTotalCount cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(YEAR(FROM_DAYS(DATEDIFF(CURDATE(),cl.birth_date)))>$min_age ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,
+		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(YEAR(FROM_DAYS(DATEDIFF(CURDATE(),cl.birth_date)))>$min_age ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,
 pp.pay_plan_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,IF(pp.product='K',2,3) product ,pp.agent,pp.agency_project project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,pp.cycle_start_date,
  ps.pay_source_id,ps.debtor,ps.bank_name,ps.account,ps.blz,ps.iban,ps.sign_date,ps.pay_source_state,ps.creation_date account_creation_date,
 vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
@@ -485,12 +555,12 @@ INNER JOIN asterisk.vicidial_list vl
 ON vl.vendor_lead_code=cl.client_id
 WHERE cl.client_id>${min_id}
 ORDER BY cl.client_id 
-LIMIT  ${Util.limit()}
+${Util.limit()} ${Util.offset()}
 */;
-//WHERE cl.client_id>11019219
-		trace('$sql ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');
-        var stmt:PDOStatement = S.syncDbh.query('$sql OFFSET ${Std.parseInt(param['offset'])}');
-		trace('loading ${Util.limit()} OFFSET ${Std.parseInt(param['offset'])}');
+
+		trace('$sql');
+        var stmt:PDOStatement = S.syncDbh.query(sql);
+		trace('loading ${Util.limit()} ${Util.offset()}');
 		if(untyped stmt==false)
 		{
 			trace('$sql ${Std.parseInt(param['limit'])}');

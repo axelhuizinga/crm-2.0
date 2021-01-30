@@ -22,6 +22,7 @@ import php.db.PDO;
 import php.db.PDOStatement;
 import shared.DbData;
 import sys.io.File;
+import Util.IntString;
 
 using Lambda;
 using Util;
@@ -101,7 +102,14 @@ class Model
 	var relations:Map<String,DbQuery>;// EACH KEY IS A TABLE NAME
 	var dataSourceSql:String;
 	var param:Map<String, Dynamic>;
+	/**
+	 * variables limit,offset
+	 * 
+	 */
 	
+	var limit:IntString;	
+	var offset:IntString;		
+
 	public static function dispatch(dbQuery:DbQuery):Void
 	{
 		var param:Map<String,Dynamic> = dbQuery.dbParams;
@@ -263,10 +271,10 @@ class Model
 		}
 		if (order != null)
 			buildOrder(order, sqlBf);
-		var limit:String = param.get('limit');
-		buildLimit((limit == null?'150':limit), sqlBf);	//	TODO: CONFIG LIMIT DEFAULT
-		if(param.get('offset')!=null)
-		buildOffset(param.get('offset'),sqlBf);
+		if(limit.int>0)
+			buildLimit(sqlBf);
+		if(offset.int>0)
+			buildOffset(sqlBf);
 		//trace(sqlBf.toString());
 		return execute(sqlBf.toString());
 		//return execute(sqlBf.toString(), q,filterValuess);
@@ -821,15 +829,18 @@ class Model
 		return 'SET ${set.join(',')} ';
 	}
 
-	public function buildLimit(limitParam:String, sqlBf:StringBuf):Void
+	public function buildLimit(sqlBf:StringBuf):Void
 	{
-		sqlBf.add(' LIMIT ' + (limitParam.indexOf(',') > -1 ? limitParam.split(',').map(function(s:String):Int return Std.parseInt(s)).join(',') 
+		sqlBf.add(limit.sql);
+	/**
+	 * sqlBf.add(' LIMIT ' + (limitParam.indexOf(',') > -1 ? limitParam.split(',').map(function(s:String):Int return Std.parseInt(s)).join(',') 
 			: Std.string(Std.parseInt(limitParam))));
+	 */
 	}
 	
-	public function buildOffset(offsetParam:String, sqlBf:StringBuf):Void
+	public function buildOffset(sqlBf:StringBuf):Void
 	{
-		sqlBf.add(' OFFSET $offsetParam');
+		sqlBf.add(offset.sql);
 	}
 
 	function quoteIdent(f : String):String 
@@ -887,8 +898,9 @@ class Model
 		id = param['id'];
 		trace(id);
 		action = param.get('action');
-		
 		data = {};
+		limit = Util.limit();
+		offset = Util.offset();
 		data.rows = new NativeArray();
 		dbData = new DbData();
 		dbData.dataInfo = dbData.dataInfo.copyStringMap(param);
@@ -897,6 +909,8 @@ class Model
 		setValues = new Array();
 		queryFields = setSql = '';
 		tableNames = new Array();
+		trace(offset);
+		//Sys.exit(333);
 		//trace('exists dbData:' + (param.exists('dbData')?'Y':'N'));
 	}
 
@@ -1011,7 +1025,7 @@ class Model
 
 	function createOrUpdateAction(){
 		
-		if(param['action_id']==0)
+		if(param['action_id']==0||param['action_id']==null)
 		{
 			//GET MAX actions id for user
 			var sql:String = comment(unindent,format)/**

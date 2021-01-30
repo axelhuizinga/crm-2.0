@@ -17,6 +17,12 @@ using StringTools;
  * ...
  * @author axel@cunity.me
  */
+
+typedef IntString = {
+	int:Int,
+	sql:String
+}
+
 class Util
 {
 
@@ -254,11 +260,28 @@ class Util
 			9999999);
 	}
 
-	public static function limit() {
-		trace(S.params.get('limit'));
-		return (S.params.exists('limit')&&S.params.get('limit')!=null?S.params.get('limit'):1000);
+	public static function limit(?v:Int):IntString {
+		if (v == null)
+			v = Std.parseInt(S.params.get('limit'));
+		trace(v);
+
+		return {
+			int:v,
+			sql:(v>0 ? 'LIMIT ' + v:'')
+		};
 	}
 	
+	public static function offset(?v:Int):IntString {
+		if (v == null)
+			v = Std.parseInt(S.params.get('offset'));
+		trace(v);
+
+		return {
+			int:v,
+			sql:(v>0 ? 'OFFSET ' + v:'')
+		};
+	}
+
 	public static inline function randomString(length:Int, ?charactersToUse = "abcdefghijklmnopqrstuvwxyz_§!%ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"):String
 	{
 		return Random.string(length,charactersToUse);

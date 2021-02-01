@@ -26,6 +26,10 @@ typedef IntString = {
 class Util
 {
 
+	public static function actionPath(ins:Dynamic) {
+		return '\'${Type.getClassName(Type.getClass(ins)) + '.' + S.action}\'';
+	}
+
 	public static inline function any2bool(v:Dynamic) :Bool
 	{
 		return (v != null && v != 0 && v !='');

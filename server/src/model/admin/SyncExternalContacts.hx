@@ -60,20 +60,20 @@ class SyncExternalContacts extends Model
 			case 'syncImportDeals':
 				syncImportDeals();
 			case 'mergeContacts':
-				mergeContacts();
+				//mergeContacts();
 			case _:
 				run();
 		}		
 	}
 
-	function getAll():NativeArray {
+	function getAllExtIds():NativeArray {
 		var offset:Int = ( param['offset']>0?param['offset']:0);
 		var sql:String = 'SELECT client_id FROM clients ORDER BY client_id';
 		var stmt:PDOStatement = S.syncDbh.query(sql);
 		if(untyped stmt==false)
 		{
 			trace(S.syncDbh.errorInfo());
-			S.sendErrors(dbData, ['getAll query:'=>S.syncDbh.errorInfo()]);
+			S.sendErrors(dbData, ['getAllExtIds query:'=>S.syncDbh.errorInfo()]);
 		}
 		if(stmt.errorCode() !='00000')
 		{
@@ -94,11 +94,11 @@ class SyncExternalContacts extends Model
 
 	function  getMissingClients() {
 
-		var cIDs:Array<Dynamic> = Lib.toHaxeArray(getAll());			
+		var cIDs:Array<Dynamic> = Lib.toHaxeArray(getAllExtIds());			
 		trace('got:' +cIDs.length + ' client_ids');
 		//trace('got:' + Syntax.code("count({0})",cIDs) +' client_ids');		
 
-		/*var cleared:Int = S.dbh.exec('DELETE FROM ext_ids WHERE table_name=\'contacts\'');
+		var cleared:Int = S.dbh.exec('DELETE FROM ext_ids WHERE auth_user=${S.dbQuery.dbUser.id} AND table_name=\'contacts\' AND action=${Util.actionPath(this)}');
 		if(S.dbh.errorCode() !='00000')
 		{
 			trace(S.dbh.errorInfo());var madded:Int = 0;
@@ -110,7 +110,7 @@ class SyncExternalContacts extends Model
 			var stored:Int = S.dbh.exec(
 				'INSERT INTO ext_ids VALUES(
 					$cid, ${S.dbQuery.dbUser.id},
-					\'${Type.getClassName(Type.getClass(this)) +'.' + action}\',\'contacts\')');
+					${Util.actionPath(this)},\'contacts\') ON CONFLICT DO NOTHING');
 		}
 		if(S.dbh.errorCode() !='00000')
 		{
@@ -118,14 +118,15 @@ class SyncExternalContacts extends Model
 		}
 		else 	
 			trace('stored all client_ids to ext_ids');
-*/
+
 		var sql:String = comment(unindent, format)/**
-		SELECT ARRAY_TO_STRING(array_agg(cid.ext_id),',') from ext_ids cid
-		left join 
-		(SELECT 1 as gg,id from contacts) c
-		ON cid.ext_id=c.id
-		where c.id IS NULL
-		GROUP BY gg;
+		SELECT eid.ext_id from ext_ids eid
+		LEFT JOIN 
+		contacts c
+		ON eid.ext_id=c.id
+		WHERE eid.table_name='contacts' 
+		AND eid.action=${Util.actionPath(this)}
+		AND c.id IS NULL
 		**/;
 		var stmt:PDOStatement = S.dbh.query(sql);
 		if(untyped stmt==false)
@@ -138,8 +139,10 @@ class SyncExternalContacts extends Model
 			trace(stmt.errorInfo());
 		}
 		var ids:String = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN,0):null);
-		var missing_client_ids:Array<Dynamic> = ids.split(',');
+		var missing_client_ids:Array<Dynamic> = Lib.toHaxeArray(stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN,0):null);
+		//var missing_client_ids:Array<Dynamic> = ids.split(',');
 		trace(param['totalRecords'] + ' - missing:' + missing_client_ids.length);
+		//trace(param['totalRecords'] + ' - missing:' + missing_client_ids);
 		var madded:Int = 0;
 		while(offset.int<param['totalRecords']){
 			var cData:Array<NativeArray> = cast( Lib.toHaxeArray(getCrmClients()));
@@ -148,11 +151,16 @@ class SyncExternalContacts extends Model
 			//for(mcid in missing_client_ids)
 			for(row in cData)
 			{			
-				if(_1st)
-					trace(row);
+				//if(_1st)
+					//trace(row);
 				//S.sendErrors(dbData,['importContacts'=>'NOTOK']);
-				if(!missing_client_ids.contains(Std.parseInt(row['id'])))
+				if(!missing_client_ids.contains(Std.parseInt(row['id']))){
+					trace(Std.parseInt(row['id']) + ':' + (
+						missing_client_ids.contains(Std.parseInt(row['id']))?'Y':'N'));
+					//trace(missing_client_ids);
+					//Sys.exit(333);
 					continue;
+				}
 				var stmt:PDOStatement = upsertClient(row);
 				try{
 					var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
@@ -205,7 +213,7 @@ class SyncExternalContacts extends Model
 		SyncExternalDeals.importDeals(S.dbh, dbData, getCrmData(max_id));
 	}
 
-	function mergeContacts() {
+	/*function mergeContacts() {
 		var sql:String = 
 		"SELECT array_to_string(array(SELECT unnest(merged) from contacts group by merged), ',')";
 		var stmt:PDOStatement = S.dbh.query(sql);
@@ -223,7 +231,7 @@ class SyncExternalContacts extends Model
 		sql = comment(unindent,format)/*
 			UPDATE contacts SET state='merged' WHERE id IN($merged_ids)
 		*/;
-		stmt = S.dbh.query(sql);
+		/*stmt = S.dbh.query(sql);
 		if(untyped stmt==false)
 		{
 			trace('$sql');
@@ -251,13 +259,13 @@ class SyncExternalContacts extends Model
 		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		trace(Lib.toHaxeArray(res)[0]);
 		S.sendInfo(dbData,['OK'=> stmt.rowCount()]);
-	}
+	}*/
 
 	function importContacts() {		
 		//trace(S.params);
 		//trace(param);
 		createOrUpdateAction();
-		var allCids = getAll();
+		var allCids = getAllExtIds();
 		param['totalRecords'] = Global.count(allCids);
 		//if(Std.parseInt(param['offset'])+Std.parseInt(param['limit'])>Std.parseInt(param['maxImport']))
 		if(offset.int+limit.int>param['totalRecords'])
@@ -294,11 +302,11 @@ class SyncExternalContacts extends Model
 
 	public function importCrmContacts():Void
 	{
-		var cData:NativeArray = getCrmClients();
+		var cData:Array<NativeArray> = cast( Lib.toHaxeArray(getCrmClients()));
 		//trace(cData[0]);        
 		var _1st:Bool = true;
 		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
-		for(row in cData.iterator())
+		for(row in cData)
 		{			
 			//trace(row);
 			//S.sendErrors(dbData,['importContacts'=>'NOTOK']);
@@ -336,7 +344,7 @@ class SyncExternalContacts extends Model
 
     public function importCrmData():Void
     {
-        var cData:NativeArray = getCrmData();
+        var cData:NativeArray = getCrmClients();
         //trace(cData[0]);        
 		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
 		for(row in cData.iterator())
@@ -400,7 +408,7 @@ class SyncExternalContacts extends Model
 
     function upsertClient(rD:NativeArray):PDOStatement
     {		
-		//trace(rD);
+		trace(rD);
 		//trace(Syntax.code("implode({0})",rD));
 		var cD:Map<String,Dynamic> = Util.map2fields(rD, keys);
         var cNames:Array<String> = [for(k in cD.keys()) k];
@@ -416,7 +424,7 @@ class SyncExternalContacts extends Model
 			ON CONFLICT (id) DO UPDATE
 			SET $cSet returning id;
 		*/;
-		trace(sql);
+		//trace(sql);
 		//Sys.exit(333);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		Util.bindClientData('contacts',stmt,rD,dbData);
@@ -504,7 +512,7 @@ ${limit.sql} ${offset.sql}
 			trace(dbData.dataInfo);
 		}
 
-		offset = Util.offset(offset.int + Syntax.code("array_count({0})",res));
+		offset = Util.offset(offset.int + Syntax.code("count({0})",res));
 
 		return res;
 	}

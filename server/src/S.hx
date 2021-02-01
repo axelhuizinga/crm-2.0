@@ -1,4 +1,5 @@
 package;
+import haxe.CallStack;
 import db.DBAccessProps;
 import haxe.ds.ReadOnlyArray;
 import sys.io.FileOutput;
@@ -134,12 +135,13 @@ class S
 		{trace(Syntax.code("$_SERVER['VERIFIED']"));}
 		//var pd:Dynamic = Web.getPostData();
 		trace(Lib.isCli()?'cli':'web');
-		
+
 		response = {content:'',error:''};
 		if(Lib.isCli()){
 			safeLog(Sys.args());
 			params = Cli.parse();
-			action = params.get('action');
+			action = params.get('action');		
+			trace(params);
 			var dbUser:DbUser = new DbUser(				
 				{jwt:'jwt',id:100,online:true, password:'password', user_name:'sysadmin'});
 				//{jwt:params['jwt'],id:params['id'],online:true, password:params['password'], user_name:params['user_name']});
@@ -149,6 +151,7 @@ class S
 				Reflect.setField(dbAccProps, k, v);
 			}
 			dbQuery = new DbQuery(dbAccProps);
+			//trace(dbQuery);
 		}
 		else{
 			if(Lib.toHaxeArray(SuperGlobal._FILES).length>0)
@@ -159,6 +162,7 @@ class S
 			
 				//trace(dbh);
 				params = Lib.hashOfAssociativeArray(SuperGlobal._POST);
+				action = params.get('action');		
 				if(params.get('extDB'))
 				{
 					//CONNECT DIALER DB	
@@ -177,15 +181,13 @@ class S
 			//trace(Web.getPostData());
 			dbQuery = Model.binary();			
 			//trace(dbQuery);
-			safeLog(dbQuery);
 			//Model.binary(params.get('dbData'));
 			params = dbQuery.dbParams;
-
-
-			devIP = params.get('devIP');
 			trace(params);
+			safeLog(dbQuery);
+			devIP = params.get('devIP');
+			//trace(params);
 
-			action = params.get('action');
 		}
 		if (action.length == 0 || params.get('classPath') == null)
 		{
@@ -254,19 +256,22 @@ class S
 	
 	public static function exit(r:Dynamic):Void
 	{
-		trace(!headerSent);
-		if (!headerSent)
-		{
-			setHeader('application/json');
-		}			
-		//var exitValue =  
-		//trace( Syntax.code("json_encode({0})",r.data));
-		trace(Json.stringify(r));
-		//trace( Syntax.code("json_encode({0})",r));
-		//Sys.print(Syntax.code("json_encode({0})",r));
-		Sys.print(Json.stringify(r));
+		if(!Lib.isCli()){
+			if (!headerSent)
+			{
+				setHeader('application/json');
+			}			
+			//var exitValue =  
+			//trace( Syntax.code("json_encode({0})",r.data));
+			trace(Json.stringify(r));
+			//trace( Syntax.code("json_encode({0})",r));
+			//Sys.print(Syntax.code("json_encode({0})",r));
+			Sys.print(Json.stringify(r));			
+		}
 		trace('done at ${Sys.time()-ts} ms');
-		Sys.exit(0);		
+		trace(r);
+		Out.dumpStack(CallStack.callStack());
+		Sys.exit(untyped Std.string(r));		
 	}
 	
 	public static function send(r:String, ?json:Bool = false)
@@ -320,6 +325,7 @@ class S
 		 trace('${pos.fileName}::${pos.lineNumber}');
 		 if(Lib.isCli()){
 			trace(err);
+			Sys.exit(666);
 			return false;			 
 		 }
 		if(dbData==null)
@@ -364,7 +370,6 @@ class S
 		out.write(b);
 		trace('done at ${Sys.time()-ts} ms');
 		Sys.exit(0);
-		trace('SHOULD NEVER EVER HAPPEN');
 		return true;
 	}
 	
@@ -433,11 +438,6 @@ class S
 		var d:String = '';
 		trace(Reflect.fields(a),i);
 		trace(Type.getClass(a),i);
-		//var m:Map<String,Dynamic>
-		//names = (Type.getClass(ob) != null) ?
-			//Type.getInstanceFields(Type.getClass(ob)):
-			//Reflect.fields(ob);
-		//if (Type.getClass(ob) != null)
 		return d;
 	}
 
@@ -450,7 +450,6 @@ class S
 
 	public static function safeLog(what:Dynamic,?pos:PosInfos):Void
 	{		
-		//trace(what);
 		// TODO: ADD Const.FILE_APPEND
 		var fields:Array<String> = Reflect.fields(what);
 		for (f in fields)
@@ -473,6 +472,7 @@ class S
 			}
 			Util.safeLog(Reflect.field(what,f), pos);
 		}
+		//trace(what);
 		return;
 		dumpNativeArray(what, pos);
 	}

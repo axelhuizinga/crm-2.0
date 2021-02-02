@@ -51,28 +51,36 @@ class SyncExternalAccounts extends Model
 		}		
 	}
 
-	public function getMissing():Map<String,Int> {
-		//GET ALL client_id's from ViciBox fly_crm db accounts
-		var sql:String = '
-SELECT MIN(pay_source_id)sstart, MAX(pay_source_id)send FROM 
-(SELECT pay_source_id FROM clients cl 
-INNER JOIN pay_source ps 
-ON ps.client_id = cl.client_id   ${limit.sql}  ${offset.sql}';
-	trace(sql);
-        var stmt:PDOStatement = S.syncDbh.query(sql);
+	function getAllExtIds():NativeArray {
+		var offset:Int = ( param['offset']>0?param['offset']:0);
+		var sql:String = 'SELECT pay_source_id id FROM pay_source ORDER BY pay_source_id';
+		var stmt:PDOStatement = S.syncDbh.query(sql);
 		if(untyped stmt==false)
 		{
 			trace(S.syncDbh.errorInfo());
-			S.sendErrors(dbData, ['getMissing query:'=>S.syncDbh.errorInfo()]);
+			S.sendErrors(dbData, ['getAllExtIds query:'=>S.syncDbh.errorInfo()]);
 		}
 		if(stmt.errorCode() !='00000')
 		{
 			trace(stmt.errorInfo());
 		}
-		var res:NativeArray = (stmt.execute()?stmt.fetch(PDO.FETCH_ASSOC):null);	
+		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN):null);	
 		
-		trace(Syntax.code("print_r({0},1)",res));
-		return Lib.hashOfAssociativeArray(res);
+		param['totalRecords'] = Syntax.code("count({0})",res);
+		trace('all:' + param['totalRecords']);
+				
+		//var cleared:Int = S.dbh.exec('TRUNCATE contact_ids');
+		if(S.dbh.errorCode() !='00000')
+		{
+			trace(S.dbh.errorInfo());
+		}	
+		return res;	
+	}
+
+	public function getMissing():Map<String,Int> {
+		
+		//return Lib.hashOfAssociativeArray(res);
+		return null;
 	}
 
 	/**
@@ -80,55 +88,53 @@ I kno	 * Import or Update accounts
 	 */
 
 	function syncAll() {
-		trace(param);
-		if(param['offset']==null)
-			param['offset'] = '0';
-		if(param['limit']==null)			
-			param['limit'] = '1000';
-		if(Std.parseInt(param['offset'])+Std.parseInt(param['limit'])>Std.parseInt(param['maxImport']))
+		var start = Sys.time();
+		getAllExtIds();
+		trace('$start $synced ${param['totalRecords']}');
+		if(offset.int+limit.int>param['totalRecords'])
 		{
-			param['limit'] = Std.string(Std.parseInt(param['maxImport']) - Std.parseInt(param['offset']));
+			limit = Util.limit(param['totalRecords'] - offset.int);
+		}		
+
+		while(synced<param['totalRecords']){
+			importExtAccounts();
+			trace('offset:'+ offset.int);
+			trace(param);
 		}
-		trace(param);		
-		var ids:Map<String,Int> = getMissing();
+		trace('done:' + Std.string(Sys.time()-start));
+		Sys.exit(untyped ['syncAccounts'=>'OK']);
+	}		
+		//var ids:Map<String,Int> = getMissing();
+	function importExtAccounts() {
 		// GET ViciBox fly_crm db account data
 		var sql:String = comment(unindent,format)/*
-		SELECT id, contact, account_holder,bank_name,account,blz bic,blz,iban,sign_date, status,IF(pcd LIKE '0000%', creation_date, pcd)creation_date, 100 edited_by FROM 
-		(SELECT pay_source_id id, ps.client_id contact,debtor account_holder,bank_name,account,blz bic,blz,iban,sign_date,pay_source_state status,cl.creation_date, ps.creation_date pcd, 100 edited_by FROM pay_source ps
-		INNER JOIN clients cl ON cl.client_id=ps.client_id
-		WHERE pay_source_id BETWEEN ${ids['sstart']} AND ${ids['send']}
-		ORDER BY cl.client_id ) sj
-*/;
-	trace('$sql ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');
+		SELECT pay_source_id id, client_id contact, debtor account_holder,bank_name,account,blz bic,iban,sign_date, pay_source_state status,creation_date, ${S.dbQuery.dbUser.id} edited_by FROM pay_source 
+		ORDER BY id 
+		${limit.sql} ${offset.sql}		
+		*/;
 		var stmt:PDOStatement = S.syncDbh.query(sql);
-		trace('loading  ${Std.parseInt(param['limit'])} OFFSET ${Std.parseInt(param['offset'])}');		
-		if(untyped stmt==false)
-		{
-			trace(sql);
-			S.sendErrors(dbData, ['getMissingAccounts data:'=>S.syncDbh.errorInfo()]);
-		}
-		if(stmt.errorCode() !='00000')
-		{
-			S.sendErrors(dbData,['getMissingAccounts data'=>stmt.errorInfo()]);
-		}
+		trace('loading  ${limit.sql} ${offset.sql}');		
+		S.checkStmt(S.syncDbh, stmt,'importExtAccounts data:');
 		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
-		var got:Int = Syntax.code("count({0})",res);
-		trace(sql.substr(0,180) + '::' + got);
-		var cD:Map<String,Dynamic> = Util.map2fields(res[0], Global.array_keys(res[0]));
-		trace(cD);
-		if(cD.get('creation_date')=='null')
-			cD.remove('creation_date');
-		//if(cD.get('last_locktime')=='null')
-			//cD.remove('last_locktime');
+		offset = Util.offset(offset.int + Syntax.code("count({0})",res));
+		//return res;
+		trace('id:' + Type.typeof(untyped res[0]['id']));
+		var cD:Map<String,Dynamic> = Util.map2fields(res[0], keys);
+		//trace(cD);
 		var cNames:Array<String> = [for(k in cD.keys()) k];
-		trace(cNames);
+		//trace(cNames);
+		var _1st:Bool = true;
 		for(row in res.iterator())
 		{			
-			//trace(row);
-			//S.sendErrors(dbData,['syncAll'=>'NOTOK']);
-			var stmt:PDOStatement = upsertAccount(row, cD, cNames);
+			stmt = upsertAccount(row, cD, cNames);
 			try{
-				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
+				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);
+				if(_1st){
+					_1st=false;
+					trace(row);
+					trace(res);
+					//Sys.exit(333);
+				}		
 				//trace(res);
 			}
 			catch(e:Dynamic)
@@ -140,15 +146,13 @@ I kno	 * Import or Update accounts
 				]);}		
 			}
 		}		
-		trace('synced: $synced');
-		dbData.dataInfo['offset'] = param['offset'] + synced;
-		trace(dbData.dataInfo);
-		S.sendData(dbData, null);		
-		//trace(dbData.dataInfo);
-
-		//importAccountData(res);
-		S.sendErrors(dbData,['syncAccounts'=>'NOTOK']);				
-		S.sendInfo(dbData,['syncUserDetail'=>'no results???']);
+		trace('${offset.int} + ${synced}');
+		offset = Util.offset(synced);
+		if(offset.int+limit.int>param['totalRecords'])
+		{
+			limit = Util.limit(param['totalRecords'] - offset.int);
+			trace('${offset.int} + ${synced}');
+		}			
 	}
 
 	public function syncBankTransferRequests():Void
@@ -198,28 +202,25 @@ I kno	 * Import or Update accounts
 	
 	function upsertAccount(rD:NativeArray, cD:Map<String,Dynamic>, cNames:Array<String>):PDOStatement
 	{
-		//var cD:Map<String,Dynamic> = Util.map2fields(rD, S.syncTableFields('pay_source'));
-		//trace(cD);
-		//var cNames:Array<String> = [for(k in cD.keys()) k];
-		//trace(rD);
 		//var cVals:String =  [for(v in cD.iterator()) v].map(function (v) return '\'$v\'').join(',');
 		//for(k in cNames.filter(function(k)return k!='id')) k
 		var cPlaceholders:Array<String> =  [for(k in cNames) k].map(function (k) return ':$k');
 		var cSet:String = [
-			for(k in cNames) k
+			for(k in cNames.filter(function(k)return k!='id')) k
 			].map(function (k) {
 				return (k=='merged'?
 				'"$k"=:IF(array_length("merged",1)>0 THEN "merged" ELSE $k)'
 				:' "$k"=:$k');}).join(',');
 		
 		var sql:String = comment(unindent, format) /*
-				INSERT INTO accounts (${cNames.join(',')})
-				VALUES (${cPlaceholders.join(',')})
-				ON CONFLICT (id) DO UPDATE
-				SET $cSet returning id;	
-			*/;
+			INSERT INTO accounts (${cNames.join(',')})
+			VALUES (${cPlaceholders.join(',')})
+			ON CONFLICT (id) DO UPDATE
+			SET $cSet returning id;	
+		*/;
 		//trace(sql);
 		//trace(cSet);
+		//trace(Lib.toHaxeArray(rD).length);
 
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		Util.bindClientData('accounts',stmt,rD,dbData);

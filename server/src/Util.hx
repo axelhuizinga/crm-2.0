@@ -1,4 +1,6 @@
 package;
+import haxe.exceptions.PosException;
+import me.cunity.debug.Out;
 import haxe.PosInfos;
 import hxbit.Serializer;
 import haxe.io.Bytes;
@@ -42,12 +44,16 @@ class Util
 		//Syntax.code("error_log({0})", table);
 		//Syntax.code("error_log({0})", Std.string(row));
 		//trace(meta);
+		//Out.dumpVar(meta);
 
 		for(k => v in meta.keyValueIterator())
 		{
-			if(!Global.array_key_exists(k,row))
+			if(!Global.array_key_exists(k,row)){
+				//trace('$k missing@ $row["id"]');
 				continue;
-			var kv:Dynamic = row[k];			
+			}
+				
+			var kv:Dynamic = row[k];		
 			var pdoType:Int = v['pdo_type'];			
 			//if(kv==null||kv.indexOf('0000-00-00')==0||kv=='')
 			if(kv==null||kv.indexOf('0000-')==0||kv=='')
@@ -59,10 +65,10 @@ class Util
 						pdoType = PDO.PARAM_NULL;
 					case 'timestamptz':
 						pdoType = PDO.PARAM_STR;
-						trace(pdoType);
-						pdoType = PDO.PARAM_INT;
+						//trace(pdoType);
+						pdoType = PDO.PARAM_NULL;
 						trace(pdoType);	
-						continue;		
+						//continue;		
 						//kv = 0;
 					case 'text'|'varchar':
 						kv = '';
@@ -70,7 +76,7 @@ class Util
 						kv = 0;
 				}
 			}
-			//trace('$k => ${v['native_type']} :: $pdoType:${kv}');
+			//trace('$k => ${v['native_type']} ::$pdoType:$kv');
 			if(!stmt.bindValue(':$k',kv, pdoType))//kv==null?1:
 			{
 				//trace('$k => $v');

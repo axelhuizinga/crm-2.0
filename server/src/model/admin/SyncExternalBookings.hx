@@ -97,12 +97,6 @@ class SyncExternalBookings extends Model{
 	{		        
 		var firstBatch:Bool = (param['offset']=='0');
 		var selectTotalCount:String = '';
-		if(Std.parseInt(param['limit'])>10000)
-		{
-			Syntax.code("ini_set('max_execution_time',3600)");
-			Syntax.code("ini_set('memory_limit','1G')");			
-			trace(Syntax.code("ini_get('memory_limit')"));
-		}
 		trace('offset:${param['offset']} firstBatch:$firstBatch ');
 		if(firstBatch)
 		{

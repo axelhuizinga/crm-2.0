@@ -1,4 +1,5 @@
 package model.admin;
+import me.cunity.debug.Out;
 import php.Global;
 import comments.CommentString.*;
 import php.db.PDO;
@@ -124,43 +125,45 @@ class SyncExternalDeals extends Model
 
 	function importAll(){
 
-		var got:Int = 0;
-		var stmt:PDOStatement = null;
 		var start = Sys.time();
 		trace('$start $synced ${param['totalRecords']}');
-		if(Lib.isCli()){
-			getAllExtIds();
-			while(synced<param['totalRecords']){
-				importExtDeals();
-				trace('offset:'+ offset.int);
-				trace(param);
-			}
-			trace('done:' + Std.string(Sys.time()-start));
-			Sys.exit(S.sendInfo(dbData, ['importContacts'=>'OK'])?1:0);
+		
+		getAllExtIds();
+		while(synced<param['totalRecords']){
+			importExtDeals();
+			trace('offset:'+ offset.int);
+			trace(param);
 		}
+		trace('done:' + Std.string(Sys.time()-start));
+		Sys.exit(S.sendInfo(dbData, ['importContacts'=>'OK'])?1:0);
+		
 		
 	}
 
 	function importExtDeals() {
 		/*GET DATA FROM fly_crm */
+		var edited_by:Int = S.dbQuery.dbUser.id;
 		var sql:String = comment(unindent,format)/*
-		SELECT pay_plan_id id,client_id contact,creation_date,pay_source_id,target_id target_account,start_day,start_date,buchungs_tag booking_day,IF(start_day='1','start','middle') booking_run,cycle,amount,IF(product='K',2,3) product ,agent,agency_project project,pay_plan_state,pay_method,end_date,end_reason,repeat_date,cycle_start_date from pay_plan 
+		SELECT $edited_by edited_by,pay_plan_id id,client_id contact,creation_date,pay_source_id,target_id target_account,start_day,start_date,buchungs_tag booking_day,IF(start_day='1','start','middle') booking_run,cycle,amount,IF(product='K',2,3) product ,agent,agency_project project,pay_plan_state,pay_method,end_date,end_reason,repeat_date,cycle_start_date from pay_plan 
 		ORDER BY pay_plan_id  
+		${limit.sql} ${offset.sql}		
 		*/;
 		var stmt = S.syncDbh.query(sql);
-		S.checkStmt(S.syncDbh,stmt,'getAllCrmData deals');
+		S.checkStmt(S.syncDbh,stmt,'importExtDeals deals');
 				
-		var dData:Array<Dynamic> = Lib.toHaxeArray(stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
-		
+		//var dData:Array<NativeArray> = cast(Lib.toHaxeArray(stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null));
+		var dData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		//param['totalRecords'] = dData.length;
 		trace('all:' + param['totalRecords']);
 		var start = Sys.time();
-		
+		var cD:Map<String,Dynamic> = Util.map2fields(dData[0], keys);
+		//trace(cD);
+		var cNames:Array<String> = [for(k in cD.keys()) k];		
 		/* STORE fetched data in new crm */
 		var _1st:Bool = true;
 		for(row in dData)
 		{			
-			var stmt:PDOStatement = upsertDeal(row);
+			var stmt:PDOStatement = upsertDeal(row, cD, cNames);
 			try{
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);	
 				if(_1st){
@@ -240,11 +243,11 @@ class SyncExternalDeals extends Model
 		S.sendInfo(dbData,['imported'=>'OK:' + stmt.rowCount()]);
 	}
 	
-	function upsertDeal(rD:NativeArray):PDOStatement
+	function upsertDeal(rD:NativeArray, cD:Map<String,Dynamic>, cNames:Array<String>):PDOStatement
 	{
-		var cD:Map<String,Dynamic> = Util.map2fields(rD, keys);
-		trace(cD);
-		var cNames:Array<String> = [for(k in cD.keys()) k];
+		//var cD:Map<String,Dynamic> = Util.map2fields(rD, keys);
+		//trace(cD);
+		//var cNames:Array<String> = [for(k in cD.keys()) k];
 		//var cVals:String =  [for(v in cD.iterator()) v].map(function (v) return '\'$v\'').join(',');
 		var cPlaceholders:Array<String> =  [for(k in cNames) k].map(function (k) return ':$k');
 		var cSet:String = [
@@ -258,7 +261,8 @@ class SyncExternalDeals extends Model
 				SET $cSet returning id;
 			*/;
 		//trace(sql);
-		trace(rD);
+		//trace(rD);
+		//Out.dumpObject(DebugOutput.CONSOLE);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		Util.bindClientData('deals',stmt,rD,dbData);
 		if(!stmt.execute()){

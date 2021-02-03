@@ -46,7 +46,7 @@ class BinaryLoader {
 		//trace(dbQuery.relations.get('contacts').fields);
 		//dbQuery.dump('/tmp/dbQuery.json');
 		//trace(dbQuery);
-		trace('b.length:${b.length}');
+		//trace('b.length:${b.length}');
 		bl.param = b.getData();
 		//bl.param = new FileReader().readAsBinaryString(s.serialize(new DbQuery(dbQuery)));
 		//trace(bl.param);
@@ -72,7 +72,7 @@ class BinaryLoader {
 
 	//public dynamic function onLoaded( bytes : haxe.io.Bytes ) {
 	public function onLoaded( bytes : haxe.io.Bytes ) {
-		trace(bytes.length);
+		//trace(bytes.length);
 		var u:Serializer = new Serializer();
 		var data:DbData = u.unserialize(bytes, DbData);
 		cB(data);
@@ -100,12 +100,12 @@ class BinaryLoader {
 		}
 		xhr.withCredentials = true;
 		xhr.onload = function(e) {
-			trace(xhr.status);
+			//trace(xhr.status);
 			if (xhr.status != 200) {
 				onError(xhr.statusText);
 				return;
 			}
-			trace(xhr.response.length);
+			//trace(xhr.response.length);
 			onLoaded(haxe.io.Bytes.ofData(xhr.response));
 		}
 		

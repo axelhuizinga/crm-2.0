@@ -90,7 +90,7 @@ class SyncExternalContacts extends Model
 		return res;	
 	}
 
-	function  getMissingClients() {
+	function  getMissing() {
 		var updateExtIds:Bool= param.exists('updateExtIds')? true:false;
 		if(updateExtIds){
 			var cIDs:Array<Dynamic> = Lib.toHaxeArray(getAllExtIds());			

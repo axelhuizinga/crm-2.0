@@ -41,18 +41,22 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	static var _instance:DBSync;
 
 	public static var menuItems:Array<MItem> = [		
-		{label:'BenutzerDaten ',action:'showUserList'},
+		//{label:'BenutzerDaten ',action:'showUserList'},
 		
-		{label:'BenutzerDaten Abgleich',action:'syncUserDetails'},
-		{label:'BuchungsDaten Abgleich',action:'importAllBookingRequests'},
+		//{label:'BenutzerDaten Abgleich',action:'syncUserDetails'},
+		//{label:'BuchungsDaten',action:'importAllBookingRequests'},
 		
-		{label:'Stammdaten Import ',action:'importContacts'},
-		{label:'Stammdaten Update ',action:'syncContacts'},
-		{label:'Aktionen Import ',action:'importDeals'},
+		//{label:'Stammdaten Import ',action:'importContacts'},
+		
+		{label:'Kontakt Daten ',action:'checkContacts'},
+		{label:'Spenden Daten ',action:'checkDeals'},
+		{label:'Konto Daten ',action:'checkAccounts'}
+		
+		/*{label:'Aktionen Import ',action:'importDeals'},
 		{label:'Aktionen Update ',action:'syncDeals'},
 		{label:'Konten Import ',action:'importAccounts'},
 		{label:'Speichern', action:'save'},
-		{label:'Löschen',action:'delete'}
+		{label:'Löschen',action:'delete'}*/
 	];
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
@@ -166,11 +170,11 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		)*/null);
 	}
 	
-	public function importAccounts(_):Void
+	public function importAccounts2(_):Void
 	{
 		trace(props.userState.dbUser.first_name);
 		setState({loading:true});
-		doSyncAll(			
+		doSyncAll2(			
 		{
 			classPath:'admin.SyncExternalAccounts',
 			action:'importContacts',
@@ -186,7 +190,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		});
 	}
 
-	function doSyncAll(dbQueryParam:DBAccessProps) {
+	function doSyncAll2(dbQueryParam:DBAccessProps) {
 		
 		var p:Promise<DbData> = props.load(dbQueryParam);
 		p.then(function(data:DbData){
@@ -210,7 +214,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			if(offset < data.dataInfo['maxImport']){
 				//LOOP UNTIL LIMIT
 				trace('next loop:${data.dataInfo}');
-				return doSyncAll(cast data.dataInfo);
+				return doSyncAll2(cast data.dataInfo);
 			}					
 			else{
 				setState({loading:false});
@@ -227,7 +231,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	
-	public function importContacts(_):Void
+	public function importContacts2(_):Void
 	{
 		trace(props.userState.dbUser.first_name);
 		App.store.dispatch(action.async.LivePBXSync.importContacts({
@@ -241,7 +245,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		}));
 	}
 
-	public function importAllBookingRequests(_):Void
+	public function importAllBookingRequests2(_):Void
 	{
 		trace(props.userState.dbUser.first_name);
 		//var p:Promise<DbData> = cast 
@@ -256,7 +260,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		}));
 	}
 
-	public function importBookingRequests() {
+	public function importBookingRequests2() {
 		App.store.dispatch(LivePBXSync.importBookingRequests({
 			limit: 25000,
 			offset:0,
@@ -266,26 +270,106 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		}));
 	}	
 
-	/*public function importContacts():Void
+	public function checkAccounts():Void
 	{
-		trace(props.userState.dbUser.first_name);
+		App.store.dispatch(Status(Update(
+		{
+			className:'',
+			text:'Aktualisiere Kontakte, Aktionen + Konten'}
+		)));
+		var pro:Promise<Dynamic> = action.async.LivePBXSync.check({
+			limit:1000,
+			userState:props.userState,
+			offset:0,
+			//onlyNew: true,
+			classPath:'admin.SyncExternalAccounts',
+			action:'checkAll'
+		});
+		pro.then(function(props:DbData) {
+			trace(props);
+		},function(whatever:Dynamic) {
+			trace(whatever);
+		});
+	}
+
+	public function checkContacts():Void
+	{
+		App.store.dispatch(Status(Update(
+		{
+			className:'',
+			text:'Aktualisiere Kontakte, Aktionen + Konten'}
+		)));
+		var pro:Promise<Dynamic> = action.async.LivePBXSync.check({
+			limit:1000,
+			userState:props.userState,
+			offset:0,
+			//onlyNew: true,
+			classPath:'admin.SyncExternalContacts',
+			action:'checkAll'
+		});
+		pro.then(function(props:DbData) {
+			trace(props);
+		},function(whatever:Dynamic) {
+			trace(whatever);
+		});
+	}
+
+	public function checkDeals():Void
+	{
+		App.store.dispatch(Status(Update(
+		{
+			className:'',
+			text:'Aktualisiere Kontakte, Aktionen + Konten'}
+		)));
+		var pro:Promise<DbData> = action.async.LivePBXSync.check({
+			limit:1000,
+			userState:props.userState,
+			offset:0,
+			//onlyNew: true,
+			classPath:'admin.SyncExternalDeals',
+			action:'checkAll'
+		});
+		pro.then(function(props:DbData) {
+			trace(props);
+		},function(whatever:Dynamic) {
+			trace(whatever);
+			App.store.dispatch(User(LoginError(
+			{
+				dbUser:props.userState.dbUser,
+				lastError:'Du musst dich neu anmelden!'
+			})));			
+		});
+	}
+	
+	public function checkAll():Void
+	{
+		//trace(props.userState.dbUser.first_name);
 		App.store.dispatch(Status(Update(
 		{
 			className:' ',
-			text:'Importiere Kontakte'}
+			text:'Synchronisiere Kontakte, Aktionen + Konten'}
 		)));
-		App.store.dispatch(action.async.LivePBXSync.importAll({
+		var pro:Promise<Dynamic> = App.store.dispatch(action.async.LivePBXSync.checkAll({
 			limit:1000,
 			//maxImport:4000,
 			userState:props.userState,
 			offset:0,
-			onlyNew: true,
-			classPath:'admin.SyncExternalContacts',
-			action:'importAll'
+			//onlyNew: true,
+			classPath:'admin.SyncExternal',
+			action:'checkAll'
 		}));
-	}*/
+		pro.then(function(props:DBAccessProps) {
+			trace(props);
+		},function(whatever:Dynamic) {
+			trace(whatever);
+		});
+	}
 
-	public function importDeals() {
+	public function displaySummary() {
+		
+	}
+
+	public function importDeals2() {
 		App.store.dispatch(Status(Update(
 			{
 				className:' ',
@@ -300,7 +384,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		}));
 	}
 
-	public function syncDeals() {
+	public function syncDeals2() {
 		App.store.dispatch(Status(Update(
 		{
 			className:' ',
@@ -316,7 +400,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		}));
 	}	
 
-	public function syncUserDetails(_):Void
+	public function syncUserDetails2(_):Void
 	{
 		trace(App.config.api);
 		trace(props.userState.dbUser);
@@ -429,7 +513,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
 		<>
-			<form className="tabComponentForm"  >
+			<form className="tabComponentForm" >
 				${renderResults()}
 			</form>
 		</>'));		

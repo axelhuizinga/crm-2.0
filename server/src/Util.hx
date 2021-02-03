@@ -277,7 +277,7 @@ class Util
 
 		return {
 			int:v,
-			sql:(v>0 ? 'LIMIT ' + v:'')
+			sql:(v>0 ? ' LIMIT ' + v:'')
 		};
 	}
 	
@@ -288,7 +288,7 @@ class Util
 
 		return {
 			int:v,
-			sql:(v>0 ? 'OFFSET ' + v:'')
+			sql:(v>0 ? ' OFFSET ' + v:'')
 		};
 	}
 

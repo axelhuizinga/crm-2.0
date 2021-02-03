@@ -1,6 +1,5 @@
 package action.async;
 
-import thx.fp.TreeBag;
 import db.DBAccessProps;
 //import db.DBAccessProps;
 import react.ReactUtil;
@@ -272,28 +271,27 @@ class LivePBXSync
 		});
 	}	
 
-	/* CHECK ( AND SYNC ) ALL DATA FROM OLD fly_crm server */
+	/* GET NEW CONTACTS FROM OLD fly_crm server */
 
 	public static function checkAll(props:DBAccessProps) 
 	{
 		trace('${props.table} ${props.maxImport} ${props.limit} ${props.offset}');
-		return Thunk.Action(
-			function(dispatch:Dispatch, getState:Void->AppState){
-				var aState:AppState = getState();
-				trace(props.offset);
-				return new Promise<DbData>(function(resolve, reject){
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+			var aState:AppState = getState();
+			trace(props.offset);
+			//return new Promise(function(resolve, reject){
 				if (!props.userState.dbUser.online)
 				{
-					reject(DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']));
 					return dispatch(User(LoginError(
 					{
 						dbUser:props.userState.dbUser,
 						lastError:'Du musst dich neu anmelden!'
 					})));
+					//resolve(DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']));
 				}				
 				trace('creating BinaryLoader ${App.config.api}');
 				var bl:XMLHttpRequest = BinaryLoader.dbQuery(
-					App.config.api,
+					'${App.config.api}',
 					{
 						dbUser:props.userState.dbUser,
 						classPath:props.classPath,
@@ -313,20 +311,16 @@ class LivePBXSync
 						//trace(data.dataRows.length);
 						if(data.dataErrors.keys().hasNext())
 						{
-							var err:String = data.dataErrors.iterator().next();
-							reject(DbDataTools.create([props.classPath=>err]));
 							return dispatch(Status(Update(
 								{
 									className:'error',
-									text:err
+									text:data.dataErrors.iterator().next()
 								}							
 							)));
 						} 
 						trace(data.dataInfo);
 						if(data.dataInfo['missing'] >0 && data.dataInfo['got'] != data.dataInfo['missing'])
 						{
-							resolve(data);
-							trace('...');
 							return dispatch(Status(Update(
 							{
 								className:'error',
@@ -336,8 +330,6 @@ class LivePBXSync
 						trace('got:' + Std.parseInt(untyped 666));
 						if(data.dataInfo['got']>0 && data.dataInfo['last_import_cid'] == data.dataInfo['max_client_id'])
 						{
-							resolve(data);
-							trace('...');
 							return dispatch(Status(Update(
 							{
 								className:' ',
@@ -356,55 +348,12 @@ class LivePBXSync
 								props.offset += data.dataInfo['got'];
 							}																							
 							trace('next loop:${props}');
-							return dispatch(checkAll(props));
+							return dispatch(importContacts(props));
 						}
 						trace((data.dataInfo['got'] >0 && data.dataInfo['last_import_cid'] != data.dataInfo['max_client_id'] ? 'loop':'no'));
-						resolve(data);
 						return null;
 					}
 				);
-				return null;
-			});
-		});
-	}
-
-	public static function check(props:DBAccessProps) {
-		return new Promise<DbData>(function(resolve, reject){
-			if (!props.userState.dbUser.online)
-			{
-				reject(DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']));
-
-			}				
-			trace('creating BinaryLoader ${App.config.api}');
-			var bl:XMLHttpRequest = BinaryLoader.dbQuery(
-				App.config.api,
-				{
-					dbUser:props.userState.dbUser,
-					classPath:props.classPath,
-					action:props.action,
-					extDB:true,
-					limit:props.limit,
-					offset:props.offset,
-					onlyNew:props.onlyNew,
-					table:props.table,
-					filter:props.filter,
-					maxImport:props.maxImport==null?1000:props.maxImport,
-					devIP:App.devIP
-				},
-				function(data:DbData)
-				{			
-					trace(data.dataInfo);
-					//trace(data.dataRows.length);
-					if(data.dataErrors.keys().hasNext())
-					{
-						var err:String = data.dataErrors.iterator().next();
-						reject(DbDataTools.create([props.classPath=>err]));
-
-					} 
-					trace(data.dataInfo);
-					resolve(data);
-				}
-			);
 			return null;
 		});
 	}

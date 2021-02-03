@@ -55,7 +55,7 @@ class CRUD
 					})));
 					trace('LoginError');
 					var dbData:DbData = DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']);
-					resolve(dbData);
+					reject(dbData);
 				}
 				var bl:XMLHttpRequest = BinaryLoader.dbQuery(
 					'${App.config.api}', 
@@ -84,7 +84,7 @@ class CRUD
 										className:'error',
 										text:Json.stringify(data.dataErrors),
 									})));
-								resolve(data);
+								reject(data);
 							}				
 						}
 						else

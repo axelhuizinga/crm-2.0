@@ -1,5 +1,6 @@
 package view.shared;
 
+//import js.lib.Reflect;
 import state.AppState;
 import action.LocationAction;
 import js.html.ButtonElement;
@@ -38,8 +39,8 @@ using Lambda;
 
  typedef Filter = ReactType;
 
-@:connect
-//@:wrap(react.router.ReactRouter.withRouter)
+//@:connect
+@:wrap(react.router.ReactRouter.withRouter)
 //@:wrap(ReactRedux.connect(null,mapDispatchToProps))
 class Menu extends ReactComponentOf<MenuProps,MenuState>
 
@@ -69,6 +70,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	{
 		super(props);
 		//trace(props.menuBlocks);
+		trace(Reflect.fields(props));
 		state = {
 			hidden:props.hidden||false
 		};

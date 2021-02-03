@@ -112,6 +112,7 @@ I kno	 * Import or Update accounts
 		ORDER BY id 
 		${limit.sql} ${offset.sql}		
 		*/;
+		trace(sql);
 		var stmt:PDOStatement = S.syncDbh.query(sql);
 		trace('loading  ${limit.sql} ${offset.sql}');		
 		S.checkStmt(S.syncDbh, stmt,'importExtAccounts data:');

@@ -45,18 +45,18 @@ class UserStore implements IReducer<UserAction, UserState>
 				jwt:(Cookie.get('userState.dbUser.jwt')==null?'':Cookie.get('userState.dbUser.jwt'))
 			})
 		};
-		trace(initState);
-		Out.dumpObject(store);
+		//trace(initState);
+		//Out.dumpObject(store);
 	}
 	
 	public function reduce(state:UserState, action:UserAction):UserState
 	{
-		Out.dumpObject(action);
+		//Out.dumpObject(action);
 		return switch(action)
 		{
 			case LoginChange(uState)|LoginRequired(uState):
 				trace('...');
-				Out.dumpObject(uState);
+				//Out.dumpObject(uState);
 				copy(state, uState);                             					
 			case LoginError(err):
 				trace(err);
@@ -69,13 +69,13 @@ class UserStore implements IReducer<UserAction, UserState>
 			case LoginComplete(uState):
 					if(uState.dbUser != null)
 						trace(uState.dbUser.id + ':' + uState.dbUser.online);
-					Out.dumpObject(state);
+					//Out.dumpObject(state);
 					copy(state, uState);                                             
 			case LogOutComplete(uState):
-				Out.dumpObject(uState);
+				//Out.dumpObject(uState);
 					copy(state, uState);   					
 			case LogOut(uState):
-				Out.dumpObject(uState);
+				//Out.dumpObject(uState);
 					copy(state, uState);      		
 			default:
 				state;

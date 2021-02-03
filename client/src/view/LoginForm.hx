@@ -94,9 +94,9 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		var img = new Image();
 		//setState({waiting:true});
 		img.onload = function(){
-			Out.dumpObject(state);
+			//Out.dumpObject(state);
 			//Timer.delay(function() setState({waiting:false}),500);
-			trace('ok');
+			trace('img.onload:ok');
 		}
 		img.src = "img/schutzengelwerk-logo.png";
 		if(App.devPassword!='' && App.devUser!=''){

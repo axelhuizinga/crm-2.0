@@ -56,7 +56,7 @@ class UserAccess {
 				{
 					//UserAccess.jwtCheck(data);
 					trace(Reflect.fields(data));
-					trace(data);
+					//trace(data);
 					if (data.dataErrors.keys().hasNext())
 					{
 						trace(data.dataErrors.toString());
@@ -70,7 +70,7 @@ class UserAccess {
 					}
 					if (data.dataInfo['online'])
 					{
-						trace(aState.userState);			
+						//trace(aState.userState);			
 						aState.userState.new_pass = '';
 						//aState.userState.dbUser.loginTask = Login;
 						aState.userState.dbUser.first_name = data.dataInfo['first_name'];
@@ -158,7 +158,7 @@ class UserAccess {
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			if(userState.dbUser.mandator==null)
 				userState.dbUser.mandator=1;
-			Out.dumpObject(userState);
+			//Out.dumpObject(userState);
 			//trace(getState());
 			if (userState.dbUser.password == '' && userState.dbUser.new_pass == '' || userState.dbUser.user_name == '') 
 				return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:'Passwort und user_name eintragen!'})));
@@ -189,19 +189,22 @@ class UserAccess {
 			},
 			function(data:DbData)
 			{				
-				trace(data);
+				if (data.dataInfo.exists('loggedIn'))
+					trace('loggedIn:${data.dataInfo.get("loggedIn")}');
+				//trace(data);
 				if (data.dataErrors.keys().hasNext())
 				{					
 					trace('App.maxLoginAttempts:'+App.maxLoginAttempts);
 					if(App.maxLoginAttempts>0)
 						return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:data.dataErrors.iterator().next()})));
 				}
-				trace(DbUser);
+				//trace(DbUser);
 				var userFields:Array<String> = Type.getInstanceFields(DbUser);
 				//var uProps:UserState = {};
+
 				for(k=>v in data.dataInfo.keyValueIterator())
 				{
-					trace('$k => $v');
+					//trace('$k => $v');
 					switch (k)
 					{
 						case 'online'|'change_pass_required':
@@ -224,7 +227,7 @@ class UserAccess {
 				userState.dbUser.online = true;
 				//if(uState.dbUser.change_pass_required)
 				//	uState.pass = userState.dbUser.pass;
-				Out.dumpObject(userState);
+				//Out.dumpObject(userState);
 				//trace(dispatch);
 				return dispatch(User(LoginComplete(userState)));
 				//return dispatch(AppAction.LoginComplete(
@@ -240,8 +243,8 @@ class UserAccess {
 	public static function loginReq(userState:UserState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			trace(userState);
-			trace(getState().userState.dbUser);
+			trace(Reflect.fields(userState));
+			//trace(getState().userState.dbUser);
 			if (userState.lastError != null) 
 				return dispatch(User(LoginRequired(userState)));
 			//var spin:Dynamic = dispatch(AppAction.AppWait);

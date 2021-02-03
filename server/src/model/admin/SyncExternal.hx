@@ -38,11 +38,20 @@ class SyncExternal extends Model
 		//trace(action);
 		//SWITCH Call either an instance method directly or use the shared Model query execution
 		switch(action ){
+			case 'checkAll':
+				checkAll();			
 			case 'syncAll':
 				syncAll();
 			case _:
 				run();
 		}		
+	}
+
+	function checkAll() {
+		trace(param);
+		param.set('action','getMissing');
+		sEC = new SyncExternalContacts(param);
+		S.sendErrors(dbData,['syncAll'=>'OK']);
 	}
 
 	/**
@@ -51,6 +60,7 @@ class SyncExternal extends Model
 
 	function syncAll() {
 		trace(param);
+		//param.set('action','getMissing');
 		sEC = new SyncExternalContacts(param);
 		S.sendErrors(dbData,['syncAll'=>'OK']);
 	}

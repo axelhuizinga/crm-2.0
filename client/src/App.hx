@@ -204,14 +204,13 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		if (!(state.userState.dbUser.id == null || state.userState.dbUser.jwt == ''))
 		{			
 			var p:Promise<DbData> = load();
-			p.then(function(dbData:DbData){ 
+			p.then(function(dbData:DbData){
 				trace(dbData.dataErrors.keys().hasNext());
 				if(!dbData.dataErrors.empty() && dbData.dataErrors.exists('jwtError')){
-					
+					//reject()					
 					store.dispatch(LoginExpired({waiting: false, loginTask: Login}));
 				}
 				else{
-
 					state.userState.dbUser.online = true;
 					store.dispatch(LoginComplete({waiting:false}));					
 				}

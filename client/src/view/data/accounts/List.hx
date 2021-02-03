@@ -108,7 +108,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace('hi :)');
 		var offset:Int = 0;
-		setState({loading:true});
+		state.loading = true;
+		//setState({loading:true});
 		if(ev != null && ev.page!=null)
 		{
 			offset = Std.int(props.limit * ev.page);

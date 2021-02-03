@@ -189,7 +189,7 @@ class S
 			//trace(params);
 
 		}
-		if (action.length == 0 || params.get('classPath') == null)
+		if (params.get('action') == null || params.get('classPath') == null)
 		{
 			exit( { error:"required params action and/or classPath missing" } );
 		}

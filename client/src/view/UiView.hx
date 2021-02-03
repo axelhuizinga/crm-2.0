@@ -169,12 +169,12 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 			trace('render Router ' + browserHistory.location.pathname);
 			trace('render Router ' + App.store.getState().locationStore.history.location.pathname);
 			//trace(App.store.getState());
-			trace(App.store.getState().locationStore.history == browserHistory);
+			//trace(App.store.getState().locationStore.history == browserHistory);//TRUE
 			if(browserHistory.location.pathname!=App.store.getState().locationStore.redirectAfterLogin)
 			{
 				trace('Redirect to: ${App.store.getState().locationStore.redirectAfterLogin}');
 				 browserHistory.push(App.store.getState().locationStore.redirectAfterLogin);
-				 setState({rFlag:state.rFlag+1});
+				 //setState({rFlag:state.rFlag+1});
 			/*	return jsx('<$Router history=${browserHistory} >
 					<Redirect to=${App.store.getState().locationStore.redirectAfterLogin}/>
 				</$Router>'
@@ -194,7 +194,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 				</div>
 				
 				<div className="tabComponent" id="development">
-					<$Route path="/"  render={renderRedirect} exact={true}/>									
+					<$Route path="/"  render=${renderRedirect} exact={true}/>									
 					<$Route path="/DashBoard*" component=${DashBoard}/>
 					<$Route path="/Data" component=${Data}/>
 					<$Route path="/Accounting" component=${Accounting}/>					
@@ -215,7 +215,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 					<$Route path="/Reports" {...props} component=${NavTabs}/>
 				</div>
 				<div className="tabComponent">
-					<$Route path="/"  render={renderRedirect} exact={true}/>									
+					<$Route path="/"  render=${renderRedirect} exact={true}/>									
 					<$Route path="/DashBoard*" component=${Bundle.load(DashBoard)}/>
 					<$Route path="/Data" component=${Bundle.load(Data)}/>
 					<$Route path="/Accounting" component=${Bundle.load(Accounting)}/>					

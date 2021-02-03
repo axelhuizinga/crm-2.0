@@ -53,16 +53,16 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:FormApi.initSideMenu2( this,
 				[
 					{
-						dataClassPath:'tools.DB',
-						label:'DB Design',
-						section: 'DB',
-						items: DB.menuItems
-					},
-					{
 						dataClassPath:'admin.SyncExternal',
 						label:'DB Abgleich',
 						section: 'DBSync',
 						items: DBSync.menuItems
+					},
+					{
+						dataClassPath:'tools.DB',
+						label:'DB Design',
+						section: 'DB',
+						items: DB.menuItems
 					}
 				]
 				,{	

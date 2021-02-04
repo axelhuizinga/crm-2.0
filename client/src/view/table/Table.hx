@@ -205,7 +205,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	{
 		if(_trace && props.data != null)
 		 trace(props.data.length);
-		if(_trace && props.renderPager !=null) props.renderPager();
+		if(props.renderPager !=null) props.renderPager();
 		if (props.data == null || props.data.length == 0)
 		{
 			return state.loading ? jsx('

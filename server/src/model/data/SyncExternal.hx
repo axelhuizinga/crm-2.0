@@ -1,4 +1,4 @@
-package model.contacts;
+package model.data;
 
 import shared.DbData;
 import haxe.macro.Type.Ref;
@@ -35,6 +35,35 @@ class SyncExternal extends Model
 		Reflect.callMethod(self, Reflect.field(self,param.get("action")), [param]);
 	}	
 
+	public function accountsCount() {
+		var stmt:PDOStatement = S.syncDbh.query('SELECT COUNT(*) FROM pay_source');
+		S.checkStmt(S.syncDbh, stmt, 'pay_sourceCount query:'+Std.string(S.syncDbh.errorInfo()));			
+		dbData.dataInfo.set('pay_sourceCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
+		stmt = S.dbh.query('SELECT COUNT(*) FROM accounts');
+		S.checkStmt(S.dbh, stmt, 'get accounts count query:'+Std.string(S.dbh.errorInfo()));
+		dbData.dataInfo.set('accountsCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
+		S.sendInfo(dbData);	
+	}
+
+	public function clientsCount() {
+		var stmt:PDOStatement = S.syncDbh.query('SELECT COUNT(*) FROM clients');
+		S.checkStmt(S.syncDbh, stmt, 'clientsCount query:'+Std.string(S.syncDbh.errorInfo()));			
+		dbData.dataInfo.set('clientsCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
+		stmt = S.dbh.query('SELECT COUNT(*) FROM contacts WHERE id>9999999');
+		S.checkStmt(S.dbh, stmt, 'get contacts count query:'+Std.string(S.dbh.errorInfo()));
+		dbData.dataInfo.set('contactsCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
+		S.sendInfo(dbData);	
+	}
+
+	public function dealsCount() {
+		var stmt:PDOStatement = S.syncDbh.query('SELECT COUNT(*) FROM pay_plan');
+		S.checkStmt(S.syncDbh, stmt, 'getExtIds count query:'+Std.string(S.syncDbh.errorInfo()));			
+		dbData.dataInfo.set('pay_planCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
+		stmt = S.dbh.query('SELECT COUNT(*) FROM deals');
+		S.checkStmt(S.dbh, stmt, 'get deals count query:'+Std.string(S.dbh.errorInfo()));
+		dbData.dataInfo.set('dealsCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
+		S.sendInfo(dbData);	
+	}
     /*public function syncContactDetails(?contact:Dynamic):Void
     {
         var info:Map<String,Dynamic>  = getViciDialData();
@@ -105,7 +134,7 @@ class SyncExternal extends Model
             trace(external);*/
             var external_text = row2jsonb(Lib.objectOfAssociativeArray(Lib.associativeArrayOfHash(dR)));
             var sql = comment(unindent, format) /*
-            UPDATE crm.users SET active='${dR['active']}',edited_by=101, external = jsonb_object('{$external_text}')::jsonb WHERE user_name='${dR['user']}'
+            UPDATE crm.users SET active='${dR['active']}',edited_by=${S.dbQuery.dbUser.id}, external = jsonb_object('{$external_text}')::jsonb WHERE user_name='${dR['user']}'
             */;
             
             var q:EitherType<PDOStatement,Bool> = S.dbh.query(sql);

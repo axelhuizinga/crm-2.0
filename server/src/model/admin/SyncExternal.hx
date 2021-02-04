@@ -106,7 +106,7 @@ class SyncExternal extends Model
         {
             var external_text = row2jsonb(Lib.objectOfAssociativeArray(Lib.associativeArrayOfHash(dR)));
             var sql = comment(unindent, format) /*
-            UPDATE crm.users SET active=${dR['active']='Y'},edited_by=101, external = jsonb_object('{$external_text}')::jsonb WHERE user_name='${dR['user']}'
+            UPDATE crm.users SET active=${dR['active']='Y'},edited_by=${S.dbQuery.dbUser.id}, external = jsonb_object('{$external_text}')::jsonb WHERE user_name='${dR['user']}'
             */;
             trace(sql);
             var q:EitherType<PDOStatement,Bool> = S.dbh.query(sql);

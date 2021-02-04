@@ -7,16 +7,15 @@ typedef MandatorProps = {
 	?any:String,
 	?edited_by:Int,
 	?parent:Int,
-	?last_locktime:String
+	?last_updated:String
 };
 
 @:rtti
 class Mandator extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'contact,name,description,any,edited_by,parent,last_locktime'.split(',');
+		
 	}	
 		
 	@dataType("bigint")
@@ -79,14 +78,14 @@ class Mandator extends ORM
 		return parent;
 	}	
 		
-	@dataType("timestamp without time zone")
-	@:isVar public var last_locktime(default,set):String;
+	@dataType("timestamp with time zone")
+	@:isVar public var last_updated(default,set):String;
 
-	function set_last_locktime(last_locktime:String):String{
-		if(initialized('last_locktime'))
-			modified('last_locktime');
-		this.last_locktime = last_locktime ;
-		return last_locktime;
+	function set_last_updated(last_updated:String):String{
+		if(initialized('last_updated'))
+			modified('last_updated');
+		this.last_updated = last_updated ;
+		return last_updated;
 	}	
 	
 }

@@ -5,16 +5,16 @@ typedef RoleProps = {
 	?description:String,
 	?permissions:String,
 	?edited_by:Int,
-	?mandator:Int
+	?mandator:Int,
+	?last_updated:String
 };
 
 @:rtti
 class Role extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'name,description,permissions,edited_by,mandator'.split(',');
+		
 	}	
 		
 	@dataType("character varying(64)")
@@ -65,6 +65,16 @@ class Role extends ORM
 			modified('mandator');
 		this.mandator = mandator ;
 		return mandator;
+	}	
+		
+	@dataType("timestamp with time zone")
+	@:isVar public var last_updated(default,set):String;
+
+	function set_last_updated(last_updated:String):String{
+		if(initialized('last_updated'))
+			modified('last_updated');
+		this.last_updated = last_updated ;
+		return last_updated;
 	}	
 	
 }

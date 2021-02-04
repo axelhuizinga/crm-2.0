@@ -5,16 +5,16 @@ typedef UserGroupProps = {
 	?description:String,
 	?can:String,
 	?mandator:Int,
-	?edited_by:Int
+	?edited_by:Int,
+	?last_updated:String
 };
 
 @:rtti
 class UserGroup extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'name,description,can,mandator,edited_by'.split(',');
+		
 	}	
 		
 	@dataType("character varying(64)")
@@ -65,6 +65,16 @@ class UserGroup extends ORM
 			modified('edited_by');
 		this.edited_by = edited_by ;
 		return edited_by;
+	}	
+		
+	@dataType("timestamp with time zone")
+	@:isVar public var last_updated(default,set):String;
+
+	function set_last_updated(last_updated:String):String{
+		if(initialized('last_updated'))
+			modified('last_updated');
+		this.last_updated = last_updated ;
+		return last_updated;
 	}	
 	
 }

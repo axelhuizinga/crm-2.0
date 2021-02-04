@@ -10,10 +10,9 @@ typedef ActivityProps = {
 @:rtti
 class Activity extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'action,request,user,date'.split(',');
+		
 	}	
 		
 	@dataType("character varying(64)")
@@ -26,7 +25,7 @@ class Activity extends ORM
 		return action;
 	}	
 		
-	@dataType("text")
+	@dataType("jsonb")
 	@:isVar public var request(default,set):String;
 
 	function set_request(request:String):String{

@@ -14,10 +14,9 @@ typedef UserInterfaceProps = {
 @:rtti
 class UserInterface extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'key,content,classPath,component,edited_by,updated_at,locale,mandator'.split(',');
+		
 	}	
 		
 	@dataType("character varying(64)")

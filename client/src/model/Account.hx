@@ -5,24 +5,22 @@ typedef AccountProps = {
 	?bank_name:String,
 	?bic:String,
 	?account:String,
-	?blz:String,
 	?iban:String,
 	?account_holder:String,
 	?sign_date:String,
 	?status:String,
 	?creation_date:String,
 	?edited_by:Int,
-	?last_locktime:String,
+	?last_updated:String,
 	?mandator:Int
 };
 
 @:rtti
 class Account extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'contact,bank_name,bic,account,blz,iban,account_holder,sign_date,status,creation_date,edited_by,last_locktime,mandator'.split(',');
+		
 	}	
 		
 	@dataType("bigint")
@@ -63,16 +61,6 @@ class Account extends ORM
 			modified('account');
 		this.account = account ;
 		return account;
-	}	
-		
-	@dataType("character varying(12)")
-	@:isVar public var blz(default,set):String;
-
-	function set_blz(blz:String):String{
-		if(initialized('blz'))
-			modified('blz');
-		this.blz = blz ;
-		return blz;
 	}	
 		
 	@dataType("character varying(32)")
@@ -136,13 +124,13 @@ class Account extends ORM
 	}	
 		
 	@dataType("timestamp with time zone")
-	@:isVar public var last_locktime(default,set):String;
+	@:isVar public var last_updated(default,set):String;
 
-	function set_last_locktime(last_locktime:String):String{
-		if(initialized('last_locktime'))
-			modified('last_locktime');
-		this.last_locktime = last_locktime ;
-		return last_locktime;
+	function set_last_updated(last_updated:String):String{
+		if(initialized('last_updated'))
+			modified('last_updated');
+		this.last_updated = last_updated ;
+		return last_updated;
 	}	
 		
 	@dataType("bigint")

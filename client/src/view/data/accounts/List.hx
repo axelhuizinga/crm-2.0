@@ -131,7 +131,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
 			if(data.dataRows != null && data.dataRows.length > 0)
-			setState({loading:false, dataTable:data.dataRows});
+			setState({loading:false, dataTable:data.dataRows, pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)});
 		});
 	}
 	

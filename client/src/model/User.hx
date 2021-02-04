@@ -15,17 +15,16 @@ typedef UserProps = {
 	?last_request_time:String,
 	?last_error:String,
 	?mandator:Int,
-	?last_locktime:String,
+	?last_updated:String,
 	?phash:String
 };
 
 @:rtti
 class User extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'contact,last_login,user_name,active,edited_by,actions,settings,external,user_group,change_pass_required,online,last_request_time,last_error,mandator,last_locktime,phash'.split(',');
+		
 	}	
 		
 	@dataType("bigint")
@@ -38,7 +37,7 @@ class User extends ORM
 		return contact;
 	}	
 		
-	@dataType("timestamp(0) without time zone")
+	@dataType("timestamp with time zone")
 	@:isVar public var last_login(default,set):String;
 
 	function set_last_login(last_login:String):String{
@@ -138,7 +137,7 @@ class User extends ORM
 		return online;
 	}	
 		
-	@dataType("timestamp without time zone")
+	@dataType("timestamp with time zone")
 	@:isVar public var last_request_time(default,set):String;
 
 	function set_last_request_time(last_request_time:String):String{
@@ -168,14 +167,14 @@ class User extends ORM
 		return mandator;
 	}	
 		
-	@dataType("timestamp(0) without time zone")
-	@:isVar public var last_locktime(default,set):String;
+	@dataType("timestamp with time zone")
+	@:isVar public var last_updated(default,set):String;
 
-	function set_last_locktime(last_locktime:String):String{
-		if(initialized('last_locktime'))
-			modified('last_locktime');
-		this.last_locktime = last_locktime ;
-		return last_locktime;
+	function set_last_updated(last_updated:String):String{
+		if(initialized('last_updated'))
+			modified('last_updated');
+		this.last_updated = last_updated ;
+		return last_updated;
 	}	
 		
 	@dataType("character varying(64)")

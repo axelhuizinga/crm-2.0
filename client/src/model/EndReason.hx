@@ -9,10 +9,9 @@ typedef EndReasonProps = {
 @:rtti
 class EndReason extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'reason,edited_by,mandator'.split(',');
+		
 	}	
 		
 	@dataType("character varying(64)")

@@ -275,18 +275,23 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(Status(Update(
 		{
 			className:'',
-			text:'Aktualisiere Kontakte, Aktionen + Konten'}
+			text:'Aktualisiere Konten'}
 		)));
 		var pro:Promise<Dynamic> = action.async.LivePBXSync.check({
 			limit:1000,
 			userState:props.userState,
 			offset:0,
 			//onlyNew: true,
-			classPath:'admin.SyncExternalAccounts',
-			action:'checkAll'
+			classPath:'data.SyncExternal',
+			action:'accountsCount'
 		});
 		pro.then(function(props:DbData) {
 			trace(props);
+			setState({data:[
+				'action'=>'accountsCount',
+				'pay_sourceCount'=>props.dataInfo.get('pay_sourceCount'),
+				'accountsCount'=>props.dataInfo.get('accountsCount')
+			]});
 		},function(whatever:Dynamic) {
 			trace(whatever);
 		});
@@ -297,18 +302,23 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(Status(Update(
 		{
 			className:'',
-			text:'Aktualisiere Kontakte, Aktionen + Konten'}
+			text:'Aktualisiere Kontakte'}
 		)));
 		var pro:Promise<Dynamic> = action.async.LivePBXSync.check({
 			limit:1000,
 			userState:props.userState,
 			offset:0,
 			//onlyNew: true,
-			classPath:'admin.SyncExternalContacts',
-			action:'checkAll'
+			classPath:'data.SyncExternal',
+			action:'clientsCount'
 		});
 		pro.then(function(props:DbData) {
 			trace(props);
+			setState({data:[
+				'action'=>'contactsCount',
+				'clientsCount'=>props.dataInfo.get('clientsCount'),
+				'contactsCount'=>props.dataInfo.get('contactsCount')
+			]});		
 		},function(whatever:Dynamic) {
 			trace(whatever);
 		});
@@ -319,18 +329,23 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(Status(Update(
 		{
 			className:'',
-			text:'Aktualisiere Kontakte, Aktionen + Konten'}
+			text:'Aktualisiere Aktionen'}
 		)));
 		var pro:Promise<DbData> = action.async.LivePBXSync.check({
 			limit:1000,
 			userState:props.userState,
 			offset:0,
 			//onlyNew: true,
-			classPath:'admin.SyncExternalDeals',
-			action:'checkAll'
+			classPath:'data.SyncExternal',
+			action:'dealsCount'
 		});
 		pro.then(function(props:DbData) {
 			trace(props);
+			setState({data:[
+				'action'=>'dealsCount',
+				'pay_planCount'=>props.dataInfo.get('pay_planCount'),
+				'dealsCount'=>props.dataInfo.get('dealsCount')
+			]});
 		},function(whatever:Dynamic) {
 			trace(whatever);
 			App.store.dispatch(User(LoginError(
@@ -523,10 +538,10 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(props.match.params.action + ':' + Std.string(state.dataTable != null));
 		trace(state.loading);
-		if(state.loading)
-			return state.formApi.renderWait();
+		if(state.data==null)
+			return jsx('<div className="flex0 cCenter">${state.formApi.renderWait()}</div>');
 		trace('###########loading:' + state.loading);
-		return switch(props.match.params.action)
+		return switch(state.data.get('action'))
 		{
 			case 'importClientList':
 				trace(state.actualState);
@@ -538,8 +553,36 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 					title: 'Stammdaten Import' 
 				},state.actualState));	
 
-			case 'shared.io.DB.editTableFields':
-				null;
+			case 'accountsCount':
+				(state.data.get('accountsCount')==null ? state.formApi.renderWait():
+				jsx('<div className="flex0 cCenter">
+					<ul>					
+					<li><h3>Konten</h3></li>
+					<li><div>Live System:</div><div className="tRight">${state.data.get('pay_sourceCount')}</div></li>
+					<li><div>Neues System:</div><div className="tRight">${state.data.get('accountsCount')}</div></li>
+					</ul>
+				</div>')
+				);
+			case 'contactsCount':
+				(state.data.get('contactsCount')==null ? state.formApi.renderWait():
+				jsx('<div className="flex0 cCenter">
+					<ul>					
+					<li><h3>Kontakte</h3></li>
+					<li><div>Live System:</div><div className="tRight">${state.data.get('clientsCount')}</div></li>
+					<li><div>Neues System:</div><div className="tRight">${state.data.get('contactsCount')}</div></li>
+					</ul>
+				</div>')
+				);
+			case 'dealsCount':
+				(state.data.get('dealsCount')==null ? state.formApi.renderWait():
+				jsx('<div className="flex0 cCenter">
+					<ul>					
+					<li><h3>Spenden</h3></li>
+					<li><div>Live System:</div><div className="tRight">${state.data.get('pay_planCount')}</div></li>
+					<li><div>Neues System:</div><div className="tRight">${state.data.get('dealsCount')}</div></li>
+					</ul>
+				</div>')
+				);				
 			default:
 				null;
 		}

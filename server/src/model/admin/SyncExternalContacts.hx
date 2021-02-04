@@ -395,7 +395,7 @@ class SyncExternalContacts extends Model
 
     function upsertClient(rD:NativeArray, cD:Map<String,Dynamic>, cNames:Array<String>):PDOStatement
     {		
-		trace(rD);
+		//trace(rD);
 		//trace(Syntax.code("implode({0})",rD));
 		//var cD:Map<String,Dynamic> = Util.map2fields(rD, keys);
         //var cNames:Array<String> = [for(k in cD.keys()) k];
@@ -411,8 +411,8 @@ class SyncExternalContacts extends Model
 			ON CONFLICT (id) DO UPDATE
 			SET $cSet returning id;
 		*/;
-		trace(sql);
-		trace(rD);
+		//trace(sql);
+		//trace(rD);
 		//Sys.exit(333);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		Util.bindClientData('contacts',stmt,rD,dbData);
@@ -448,7 +448,7 @@ class SyncExternalContacts extends Model
         {
             var external_text = row2jsonb(Lib.objectOfAssociativeArray(Lib.associativeArrayOfHash(dR)));
             var sql = comment(unindent, format) /*
-            UPDATE crm.users SET active='${dR['active']}',edited_by=101, external = jsonb_object('{$external_text}')::jsonb WHERE user_name='${dR['user']}'
+            UPDATE crm.users SET active='${dR['active']}',edited_by=${S.dbQuery.dbUser.id}, external = jsonb_object('{$external_text}')::jsonb WHERE user_name='${dR['user']}'
             */;//TODO: ADD MANDATOR
             
             var q:EitherType<PDOStatement,Bool> = S.dbh.query(sql);
@@ -467,11 +467,15 @@ class SyncExternalContacts extends Model
 	{		        
 
 		var sql = comment(unindent,format)/*
-SELECT cl.client_id id, cl.* FROM fly_crm.clients cl 
+SELECT cl.client_id id, cl.*,1 mandator,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
+IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner
+FROM fly_crm.clients cl 
+INNER JOIN asterisk.vicidial_list vl
+ON vl.lead_id=cl.lead_id
 ORDER BY client_id
 ${limit.sql} ${offset.sql}
 */;
-		trace('$sql');
+		//trace(sql);
 		var stmt:PDOStatement = S.syncDbh.query(sql);
 		trace('loading ${limit} ${offset}');
 		S.checkStmt(S.syncDbh, stmt,'getCrmClients query:');
@@ -491,11 +495,11 @@ ${limit.sql} ${offset.sql}
 		var selectTotalCount:String = '';
 
         var sql = comment(unindent,format)/*
-		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(YEAR(FROM_DAYS(DATEDIFF(CURDATE(),cl.birth_date)))>$min_age ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,
+		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.care_of,cl.storno_grund,IF(YEAR(FROM_DAYS(DATEDIFF(CURDATE(),cl.birth_date)))>$min_age ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,
 pp.pay_plan_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,IF(pp.product='K',2,3) product ,pp.agent,pp.agency_project project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,pp.cycle_start_date,
  ps.pay_source_id,ps.debtor,ps.bank_name,ps.account,ps.blz,ps.iban,ps.sign_date,ps.pay_source_state,ps.creation_date account_creation_date,
 vl.entry_date,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
-IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner,vl.entry_list_id, 1 mandator, 100 edited_by, '' company_name
+IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner,vl.entry_list_id, ${S.dbQuery.dbUser.id} edited_by, '' company_name
 , cl.client_id contact,target_id target_account
 FROM clients cl
 INNER JOIN pay_plan pp

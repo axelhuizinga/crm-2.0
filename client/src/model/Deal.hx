@@ -3,7 +3,7 @@ package model;
 typedef DealProps = {
 	?contact:Int,
 	?creation_date:String,
-	?account:Int,
+	?iban:String,
 	?target_account:Int,
 	?booking_run:String,
 	?start_date:String,
@@ -21,17 +21,16 @@ typedef DealProps = {
 	?mandator:Int,
 	?old_active:Bool,
 	?cycle_start_date:String,
-	?last_locktime:String,
+	?last_updated:String,
 	?booking_day:String
 };
 
 @:rtti
 class Deal extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'contact,creation_date,account,target_account,booking_run,start_date,cycle,amount,product,agent,project,active,pay_method,end_date,end_reason,repeat_date,edited_by,mandator,old_active,cycle_start_date,last_locktime,booking_day'.split(',');
+		
 	}	
 		
 	@dataType("bigint")
@@ -54,14 +53,14 @@ class Deal extends ORM
 		return creation_date;
 	}	
 		
-	@dataType("bigint")
-	@:isVar public var account(default,set):Int;
+	@dataType("character varying(32)")
+	@:isVar public var iban(default,set):String;
 
-	function set_account(account:Int):Int{
-		if(initialized('account'))
-			modified('account');
-		this.account = account ;
-		return account;
+	function set_iban(iban:String):String{
+		if(initialized('iban'))
+			modified('iban');
+		this.iban = iban ;
+		return iban;
 	}	
 		
 	@dataType("bigint")
@@ -235,16 +234,16 @@ class Deal extends ORM
 	}	
 		
 	@dataType("timestamp(0) without time zone")
-	@:isVar public var last_locktime(default,set):String;
+	@:isVar public var last_updated(default,set):String;
 
-	function set_last_locktime(last_locktime:String):String{
-		if(initialized('last_locktime'))
-			modified('last_locktime');
-		this.last_locktime = last_locktime ;
-		return last_locktime;
+	function set_last_updated(last_updated:String):String{
+		if(initialized('last_updated'))
+			modified('last_updated');
+		this.last_updated = last_updated ;
+		return last_updated;
 	}	
 		
-	@dataType("int4range")
+	@dataType("deals_booking_day")
 	@:isVar public var booking_day(default,set):String;
 
 	function set_booking_day(booking_day:String):String{

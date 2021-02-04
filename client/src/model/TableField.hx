@@ -16,10 +16,9 @@ typedef TableFieldProps = {
 @:rtti
 class TableField extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'table_name,mandator,field_name,readonly,element,any,required,use_as_index,admin_only,field_type'.split(',');
+		
 	}	
 		
 	@dataType("character varying")

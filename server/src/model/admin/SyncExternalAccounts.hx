@@ -108,7 +108,7 @@ I kno	 * Import or Update accounts
 	function importExtAccounts() {
 		// GET ViciBox fly_crm db account data
 		var sql:String = comment(unindent,format)/*
-		SELECT pay_source_id id, client_id contact, debtor account_holder,bank_name,account,blz bic,iban,sign_date, pay_source_state status,creation_date, ${S.dbQuery.dbUser.id} edited_by FROM pay_source 
+		SELECT pay_source_id id, client_id contact, debtor account_holder,bank_name,account,blz bic,iban,sign_date, pay_source_state status,creation_date, ${S.dbQuery.dbUser.id} edited_by,1 mandator FROM pay_source 
 		ORDER BY id 
 		${limit.sql} ${offset.sql}		
 		*/;

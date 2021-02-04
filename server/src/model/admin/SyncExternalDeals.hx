@@ -123,11 +123,10 @@ class SyncExternalDeals extends Model
 		return ids;
 	}
 
-	function importAll(){
+	function importAll(){ 
 
 		var start = Sys.time();
-		trace('$start $synced ${param['totalRecords']}');
-		
+		trace('$start $synced ${param['totalRecords']}');		
 		getAllExtIds();
 		while(synced<param['totalRecords']){
 			importExtDeals();
@@ -142,21 +141,19 @@ class SyncExternalDeals extends Model
 
 	function importExtDeals() {
 		/*GET DATA FROM fly_crm */
-		var edited_by:Int = S.dbQuery.dbUser.id;
 		var sql:String = comment(unindent,format)/*
-		SELECT $edited_by edited_by,pay_plan_id id,client_id contact,creation_date,pay_source_id,target_id target_account,start_day,start_date,buchungs_tag booking_day,IF(start_day='1','start','middle') booking_run,cycle,amount,IF(product='K',2,3) product ,agent,agency_project project,pay_plan_state,pay_method,end_date,end_reason,repeat_date,cycle_start_date from pay_plan 
+		SELECT IF(pay_plan_state='active',TRUE,FALSE) active, ${S.dbQuery.dbUser.id} edited_by,1 mandator, pay_plan_id id,client_id contact,creation_date,pay_source_id account,target_id target_account,start_day,start_date,buchungs_tag booking_day,IF(start_day='1','start','middle') booking_run,cycle,amount,IF(product='K',2,3) product ,agent,agency_project project,pay_plan_state,pay_method,end_date,end_reason,repeat_date,cycle_start_date from pay_plan 
 		ORDER BY pay_plan_id  
 		${limit.sql} ${offset.sql}		
 		*/;
 		var stmt = S.syncDbh.query(sql);
 		S.checkStmt(S.syncDbh,stmt,'importExtDeals deals');
-				
-		//var dData:Array<NativeArray> = cast(Lib.toHaxeArray(stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null));
+
 		var dData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
-		//param['totalRecords'] = dData.length;
 		trace('all:' + param['totalRecords']);
 		var start = Sys.time();
 		var cD:Map<String,Dynamic> = Util.map2fields(dData[0], keys);
+		//trace(dData);
 		//trace(cD);
 		var cNames:Array<String> = [for(k in cD.keys()) k];		
 		/* STORE fetched data in new crm */
@@ -168,6 +165,7 @@ class SyncExternalDeals extends Model
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);	
 				if(_1st){
 					_1st=false;
+					trace(row);
 					trace(res);
 				}
 			}

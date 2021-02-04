@@ -46,7 +46,7 @@ class DealsModel
 	public static var gridColumns:Map<String,view.grid.Grid.DataColumn> = [
 	//public static var shortListColumns:Map<String,DataColumn> = [
 		'id'=>{label:'ID',show:false},				
-		'start_date'=>{label:'Seit',cellFormat:function(v:String) return DateTools.format(Date.fromString(v), "%d.%m.%Y")},	
+		'start_date'=>{label:'Seit',cellFormat:function(v:String) return DateTools.format(Date.fromString(v), "%d.%m.%Y"), className: 'tableNums'},	
 		'end_date'=>{label:'Bis',cellFormat:function(v:String){
 			if(v==null)
 				return null;
@@ -62,7 +62,7 @@ class DealsModel
 		'cycle' => {label: 'Turnus'},
 		'amount' => {label: 'Betrag', cellFormat: function(v) {
 			return App.sprintf('%01.2f €',v).replace('.',',');
-		},className: 'tRight'},
+		},className: 'tRight tableNums'},
 		
 	];
 

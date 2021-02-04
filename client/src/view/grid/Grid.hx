@@ -267,7 +267,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		if(rdMap[fN]=='')
 			rdMap[fN] = null;
 		//trace(fN + '::' + rdMap[fN] + '::' + columnDataState.cellFormat);
-		trace(rdMap);
+		//trace(rdMap);
 		return {
 			cellFormat:columnDataState.cellFormat,
 			className:(columnDataState.className==null?rowClass:columnDataState.className +' '+ rowClass),

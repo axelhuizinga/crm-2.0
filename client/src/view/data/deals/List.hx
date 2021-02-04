@@ -32,7 +32,7 @@ import view.shared.FormBuilder;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import loader.BinaryLoader;
-import view.table.Table;
+import view.grid.Grid;
 
 @:connect
 class List extends ReactComponentOf<DataFormProps,FormState>
@@ -55,7 +55,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		//baseForm =new BaseForm(this);
-		dataDisplay = DealsModel.dataDisplay;
+		dataDisplay = DealsModel.dataGridDisplay;
 		trace('...' + Reflect.fields(props));
 
 		state = App.initEState({
@@ -82,7 +82,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			var baseUrl:String = props.match.path.split(':section')[0];
 			trace('redirecting to ${baseUrl}List/get');
 			props.history.push('${baseUrl}List/get');
-			//get(null);
+			get(null);
 		}
 		else 
 		{
@@ -204,7 +204,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{
 			case 'get':
-			jsx('
+				jsx('				
+				<Grid id="dealsList" data=${state.dataTable}
+				${...props} dataState = ${dataDisplay["dealsList"]} 
+				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
+				');
+			/*jsx('
 				<form className="tabComponentForm" ref=${props.formRef}>
 					<$Table id="dealsList" data=${state.dataTable}  parentComponent=${this}
 					${...props} dataState=${dataDisplay["dealsList"]} renderPager=${{function() 
@@ -212,7 +217,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 					}}
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				</form>
-			');			
+			');	*/		
 			case 'delete':
 				null;
 			default:

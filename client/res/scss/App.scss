@@ -79,7 +79,14 @@ html,body {
 	line-height:1;
 	border-color:$border-light;
 } 
-
+li div{
+	display: inline-block;
+	margin:0.25rem 0.8rem;
+}
+li div.tRight{
+	float: right;
+	padding-left: 1rem;
+}
 .rootBox
 {	
 	height:100%;
@@ -90,6 +97,11 @@ html,body {
 h1 {
 	margin: 10px;
 } 
+h3{
+	margin: 0.8rem;
+	text-align: center;
+	font-weight: bold;
+}
 .autoscroll
 {
 	overflow:auto;
@@ -113,6 +125,8 @@ h1 {
 .flex0
 {
 	display:flex;
+	height:80vh;
+	align-items: center;
 }
 .flex1
 {
@@ -572,6 +586,9 @@ button::-moz-focus-inner {padding:0; border:0}
 
     border-color:$danger transparent transparent transparent;
 
+}
+.tableNums{
+	font-variant-numeric: tabular-nums;
 }
 
 .table{

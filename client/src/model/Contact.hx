@@ -6,12 +6,11 @@ typedef ContactProps = {
 	?state:String,
 	?use_email:Bool,
 	?company_name:String,
-	?co_field:String,
+	?care_of:String,
 	?phone_code:String,
 	?phone_number:String,
 	?fax:String,
 	?title:String,
-	?title_pro:String,
 	?first_name:String,
 	?last_name:String,
 	?address:String,
@@ -26,17 +25,16 @@ typedef ContactProps = {
 	?comments:String,
 	?edited_by:Int,
 	?merged:Array<Int>,
-	?last_locktime:String,
+	?last_updated:String,
 	?owner:Int
 };
 
 @:rtti
 class Contact extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'mandator,creation_date,state,use_email,company_name,co_field,phone_code,phone_number,fax,title,title_pro,first_name,last_name,address,address_2,city,postal_code,country_code,gender,date_of_birth,mobile,email,comments,edited_by,merged,last_locktime,owner'.split(',');
+		
 	}	
 		
 	@dataType("bigint")
@@ -90,13 +88,13 @@ class Contact extends ORM
 	}	
 		
 	@dataType("character varying(100)")
-	@:isVar public var co_field(default,set):String;
+	@:isVar public var care_of(default,set):String;
 
-	function set_co_field(co_field:String):String{
-		if(initialized('co_field'))
-			modified('co_field');
-		this.co_field = co_field ;
-		return co_field;
+	function set_care_of(care_of:String):String{
+		if(initialized('care_of'))
+			modified('care_of');
+		this.care_of = care_of ;
+		return care_of;
 	}	
 		
 	@dataType("character varying(10)")
@@ -137,16 +135,6 @@ class Contact extends ORM
 			modified('title');
 		this.title = title ;
 		return title;
-	}	
-		
-	@dataType("character varying(64)")
-	@:isVar public var title_pro(default,set):String;
-
-	function set_title_pro(title_pro:String):String{
-		if(initialized('title_pro'))
-			modified('title_pro');
-		this.title_pro = title_pro ;
-		return title_pro;
 	}	
 		
 	@dataType("character varying(32)")
@@ -290,13 +278,13 @@ class Contact extends ORM
 	}	
 		
 	@dataType("timestamp(0) without time zone")
-	@:isVar public var last_locktime(default,set):String;
+	@:isVar public var last_updated(default,set):String;
 
-	function set_last_locktime(last_locktime:String):String{
-		if(initialized('last_locktime'))
-			modified('last_locktime');
-		this.last_locktime = last_locktime ;
-		return last_locktime;
+	function set_last_updated(last_updated:String):String{
+		if(initialized('last_updated'))
+			modified('last_updated');
+		this.last_updated = last_updated ;
+		return last_updated;
 	}	
 		
 	@dataType("bigint")

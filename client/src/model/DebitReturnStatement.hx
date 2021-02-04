@@ -1,29 +1,31 @@
 package model;
 
 typedef DebitReturnStatementProps = {
-	?reason:String,
+	?sepa_code:String,
 	?iban:String,
 	?ba_id:String,
-	?amount:String
+	?amount:String,
+	?mandator:Int,
+	?last_modified:String,
+	?processed:Bool
 };
 
 @:rtti
 class DebitReturnStatement extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'reason,iban,ba_id,amount'.split(',');
+		
 	}	
 		
 	@dataType("text")
-	@:isVar public var reason(default,set):String;
+	@:isVar public var sepa_code(default,set):String;
 
-	function set_reason(reason:String):String{
-		if(initialized('reason'))
-			modified('reason');
-		this.reason = reason ;
-		return reason;
+	function set_sepa_code(sepa_code:String):String{
+		if(initialized('sepa_code'))
+			modified('sepa_code');
+		this.sepa_code = sepa_code ;
+		return sepa_code;
 	}	
 		
 	@dataType("character varying")
@@ -54,6 +56,36 @@ class DebitReturnStatement extends ORM
 			modified('amount');
 		this.amount = amount ;
 		return amount;
+	}	
+		
+	@dataType("bigint")
+	@:isVar public var mandator(default,set):Int;
+
+	function set_mandator(mandator:Int):Int{
+		if(initialized('mandator'))
+			modified('mandator');
+		this.mandator = mandator ;
+		return mandator;
+	}	
+		
+	@dataType("timestamp with time zone")
+	@:isVar public var last_modified(default,set):String;
+
+	function set_last_modified(last_modified:String):String{
+		if(initialized('last_modified'))
+			modified('last_modified');
+		this.last_modified = last_modified ;
+		return last_modified;
+	}	
+		
+	@dataType("boolean")
+	@:isVar public var processed(default,set):Bool;
+
+	function set_processed(processed:Bool):Bool{
+		if(initialized('processed'))
+			modified('processed');
+		this.processed = processed ;
+		return processed;
 	}	
 	
 }

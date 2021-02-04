@@ -39,10 +39,9 @@ typedef BankTransferProps = {
 @:rtti
 class BankTransfer extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'ag_name,ag_konto_or_iban,ag_blz_or_bic,zahlpfl_name,zahlpfl_name2,zahlpfl_strasse,zahlpfl_name_ort,zahlpfl_name_kto_or_iban,zahlpfl_name_blz_or_bic,betrag,currency,zahlart,termin,vwz1,vwz2,vwz3,vwz4,vwz5,vwz6,vwz7,vwz8,vwz9,ba_id,tracking_status,anforderungs_datum,rueck_datum,cycle,ref_id,mandat_id,mandat_datum,ag_creditor_id,sequenz,super_ag_name'.split(',');
+		
 	}	
 		
 	@dataType("character varying(64)")

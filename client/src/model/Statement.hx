@@ -36,10 +36,9 @@ typedef StatementProps = {
 @:rtti
 class Statement extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,aa,processed,edited_by,mandator'.split(',');
+		
 	}	
 		
 	@dataType("bigint")

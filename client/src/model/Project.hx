@@ -7,16 +7,16 @@ typedef ProjectProps = {
 	?edited_by:Int,
 	?provision_percent:String,
 	?cancellation_liable:String,
-	?target_account:Int
+	?target_account:Int,
+	?last_updated:String
 };
 
 @:rtti
 class Project extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'mandator,name,description,edited_by,provision_percent,cancellation_liable,target_account'.split(',');
+		
 	}	
 		
 	@dataType("bigint")
@@ -87,6 +87,16 @@ class Project extends ORM
 			modified('target_account');
 		this.target_account = target_account ;
 		return target_account;
+	}	
+		
+	@dataType("timestamp with time zone")
+	@:isVar public var last_updated(default,set):String;
+
+	function set_last_updated(last_updated:String):String{
+		if(initialized('last_updated'))
+			modified('last_updated');
+		this.last_updated = last_updated ;
+		return last_updated;
 	}	
 	
 }

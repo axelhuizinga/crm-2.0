@@ -9,10 +9,9 @@ typedef SepaReturnCodeProps = {
 @:rtti
 class SepaReturnCode extends ORM
 {
-
 	public function new(data:Map<String,String>) {
 		super(data);
-		propertyNames = 'code,description,locale'.split(',');
+		
 	}	
 		
 	@dataType("character varying")

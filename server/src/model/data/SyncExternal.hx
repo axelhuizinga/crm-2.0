@@ -45,6 +45,16 @@ class SyncExternal extends Model
 		S.sendInfo(dbData);	
 	}
 
+	public function bookingRequestsCount() {
+		var stmt:PDOStatement = S.syncDbh.query('SELECT COUNT(*) FROM buchungs_anforderungen');
+		S.checkStmt(S.syncDbh, stmt, 'buchungsAnforderungenCount:'+Std.string(S.syncDbh.errorInfo()));
+		dbData.dataInfo.set('buchungsAnforderungenCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
+		stmt = S.dbh.query('SELECT COUNT(*) FROM booking_requests');
+		S.checkStmt(S.dbh, stmt, 'booking_requests count:'+Std.string(S.dbh.errorInfo()));
+		dbData.dataInfo.set('bookingRequestsCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
+		S.sendInfo(dbData);			
+	}
+
 	public function clientsCount() {
 		var stmt:PDOStatement = S.syncDbh.query('SELECT COUNT(*) FROM clients');
 		S.checkStmt(S.syncDbh, stmt, 'clientsCount query:'+Std.string(S.syncDbh.errorInfo()));			

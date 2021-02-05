@@ -42,9 +42,11 @@ class SyncExternalContacts extends Model
 	{
 		super(param);
 		actionFields = [
-			'action','classPath','offset','onlyNew','action_id','limit','maxImport','totalRecords'
+			'action','classPath','offset','onlyNew','action_id','limit','maxImport','totalCount'
 		];			
-		//self.table = 'columns';
+		tableNames[0] = 'clients';
+		totalCount = count();
+		trace(totalCount);
 		if(param.exists('synced'))
 		{
 			synced = cast param['synced'];
@@ -57,11 +59,15 @@ class SyncExternalContacts extends Model
 		switch(action ){
 			case 'importContacts':
 				importContacts();			
-			case 'mergeContacts':
-				//mergeContacts();
+			case 'dev':
+				dev();
 			case _:
 				run();
 		}		
+	}
+
+	function dev() {
+		Sys.exit(0);
 	}
 
 	function getAllExtIds():NativeArray {
@@ -79,8 +85,7 @@ class SyncExternalContacts extends Model
 		}
 		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN):null);	
 		
-		param['totalRecords'] = Syntax.code("count({0})",res);
-		trace('all:' + param['totalRecords']);
+		trace('all:' + totalCount);
 				
 		//var cleared:Int = S.dbh.exec('TRUNCATE contact_ids');
 		if(S.dbh.errorCode() !='00000')
@@ -142,10 +147,10 @@ class SyncExternalContacts extends Model
 
 		var missing_client_ids:Array<Dynamic> = Lib.toHaxeArray(stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN,0):null);
 		//var missing_client_ids:Array<Dynamic> = ids.split(',');
-		trace(param['totalRecords'] + ' - missing:' + missing_client_ids.length);
+		trace(totalCount + ' - missing:' + missing_client_ids.length);
 		//trace(param['totalRecords'] + ' - missing:' + missing_client_ids);
 		var madded:Int = 0;
-		while(offset.int<param['totalRecords'] && madded<missing_client_ids.length){
+		while(offset.int<totalCount && madded<missing_client_ids.length){
 			//var cData:Array<NativeArray> = cast( Lib.toHaxeArray(getCrmClients()));
 			var cData:NativeArray = getCrmClients();
 			var cD:Map<String,Dynamic> = Util.map2fields(cData[0], keys);
@@ -191,67 +196,18 @@ class SyncExternalContacts extends Model
 		Sys.exit(0);
 	}
 
-	/*function mergeContacts() {
-		var sql:String = 
-		"SELECT array_to_string(array(SELECT unnest(merged) from contacts group by merged), ',')";
-		var stmt:PDOStatement = S.dbh.query(sql);
-		if(untyped stmt==false)
-		{
-			trace('$sql ${Std.parseInt(param['limit'])}');
-			S.sendErrors(dbData, ['getMergedIDs query:'=>S.dbh.errorInfo()]);
-		}
-		if(stmt.errorCode() !='00000')
-		{
-			trace(stmt.errorInfo());
-		}
-		var merged_ids:String = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN,0):null);
-		trace(merged_ids.substr(0, 40) + '...');		
-		sql = comment(unindent,format)/*
-			UPDATE contacts SET state='merged' WHERE id IN($merged_ids)
-		*/;
-		/*stmt = S.dbh.query(sql);
-		if(untyped stmt==false)
-		{
-			trace('$sql');
-			S.sendErrors(dbData, ['updateMergedIDs query:'=>S.dbh.errorInfo()]);
-		}		
-		if(stmt.errorCode() !='00000')
-		{
-			trace(stmt.errorInfo());
-		}
-		var updated_ids:Bool = stmt.execute();
-		trace(updated_ids ? 'OK:' + stmt.rowCount() :'$sql');
-		//S.sendInfo(dbData,['updated_ids'=>'$updated_ids']);
-		sql = "SELECT id, merged from contacts WHERE merged IS NOT NULL";
-		stmt = S.dbh.query(sql);
-		if(untyped stmt==false)
-		{
-			trace('$sql ${Std.parseInt(param['limit'])}');
-			S.sendErrors(dbData, ['getMergedIDs query:'=>S.dbh.errorInfo()]);
-		}
-		if(stmt.errorCode() !='00000')
-		{
-			trace(stmt.errorInfo());
-			S.sendErrors(dbData, ['getMergedIDs query:'=>stmt.errorInfo()]);
-		}
-		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
-		trace(Lib.toHaxeArray(res)[0]);
-		S.sendInfo(dbData,['OK'=> stmt.rowCount()]);
-	}*/
-
-	function importContacts() {		
-		//trace(S.params);
-		//trace(param);
-		createOrUpdateAction();
+	function importContacts() 
+	{
+		//createOrUpdateAction();
 		var allCids = getAllExtIds();
 		
-		if(offset.int+limit.int>param['totalRecords'])
+		if(offset.int+limit.int>totalCount)
 		{
-			limit = Util.limit(param['totalRecords'] - offset.int);
+			limit = Util.limit(totalCount - offset.int);
 		}
 		trace(param);
 		if(Lib.isCli()){
-			while(synced<param['totalRecords']){
+			while(synced<totalCount){
 				importCrmContacts();
 				trace('offset:'+ offset.int);
 				trace(param);
@@ -279,23 +235,17 @@ class SyncExternalContacts extends Model
 
 	public function importCrmContacts():Void
 	{
-		//trace(cData[0]);        
-		//var cData:Array<NativeArray> = cast( Lib.toHaxeArray(getCrmClients()));
 		var cData:NativeArray = getCrmClients();
 		var cD:Map<String,Dynamic> = Util.map2fields(cData[0], keys);
 			//trace(cD);
 		var cNames:Array<String> = [for(k in cD.keys()) k];
-		var _1st:Bool = true;
 		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
 		for(row in cData)
 		{			
-			//trace(row);
-			//S.sendErrors(dbData,['importContacts'=>'NOTOK']);
 			var stmt:PDOStatement = upsertClient(row, cD, cNames);
 			try{
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);	
-				if(_1st){
-					_1st=false;
+				if(!(offset.int>0)){
 					trace(res);
 				}
 			}
@@ -311,14 +261,14 @@ class SyncExternalContacts extends Model
 		if(Lib.isCli()){
 			trace('${offset.int} + ${synced}');
 			offset = Util.offset(synced);
-			if(offset.int+limit.int>param['totalRecords'])
+			if(offset.int+limit.int>totalCount)
 			{
-				limit = Util.limit(param['totalRecords'] - offset.int);
+				limit = Util.limit(totalCount - offset.int);
 			}			
 			return;
 		}
 		trace('done');
-		dbData.dataInfo['offset'] = offset.int;//param['offset'] + synced;
+		dbData.dataInfo['offset'] = offset.int;
 		trace(dbData.dataInfo);
 		S.sendData(dbData, null);
 	}
@@ -358,41 +308,7 @@ class SyncExternalContacts extends Model
 		trace(dbData.dataInfo);
         S.sendData(dbData, null);
     }
-
-    public function importDealData2():Void
-    {
-		var cData:NativeArray = getCrmData();
-		var cD:Map<String,Dynamic> = Util.map2fields(cData[0], keys);
-			//trace(cD);
-		var cNames:Array<String> = [for(k in cD.keys()) k];
-        //trace(cData[0]);        
-		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
-		for(row in cData.iterator())
-		{			
-			//trace(row);
-			//S.sendErrors(dbData,['importContacts'=>'NOTOK']);
-			var stmt:PDOStatement = upsertClient(row, cD, cNames);	
-			try{
-				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
-				//trace(res);
-			}
-			catch(e:Dynamic)
-			{
-				{S.sendErrors(dbData, [
-					'dbError'=>S.dbh.errorInfo(),
-					'upsertClient'=>S.errorInfo(row),
-					'exception'=>e
-				]);}		
-			}
-		}		
-        trace('done');
-		dbData.dataInfo['offset'] = param['offset'] + synced;
-		trace(dbData.dataInfo);
-        S.sendData(dbData, null);
-    }	
     
-    //inline function testValue(v:Dynamic):Bool return cast v;
-
     function upsertClient(rD:NativeArray, cD:Map<String,Dynamic>, cNames:Array<String>):PDOStatement
     {		
 		//trace(rD);
@@ -491,10 +407,7 @@ ${limit.sql} ${offset.sql}
 		trace(min_id);
 		//S.sendErrors(null,['devbreak'=>min_id]);
 		var min_age:Int = ( param['min_age']>0?param['min_age']:18);
-		var firstBatch:Bool = offset.sql == '';
-		var selectTotalCount:String = '';
-
-        var sql = comment(unindent,format)/*
+        var sql:String = comment(unindent,format)/*
 		SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.care_of,cl.storno_grund,IF(YEAR(FROM_DAYS(DATEDIFF(CURDATE(),cl.birth_date)))>$min_age ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,
 pp.pay_plan_id,pp.creation_date,pp.pay_source_id,pp.target_id,pp.start_day,pp.start_date,pp.buchungs_tag,pp.cycle,pp.amount,IF(pp.product='K',2,3) product ,pp.agent,pp.agency_project project,pp.pay_plan_state,pp.pay_method,pp.end_date,pp.end_reason,pp.repeat_date,pp.cycle_start_date,
  ps.pay_source_id,ps.debtor,ps.bank_name,ps.account,ps.blz,ps.iban,ps.sign_date,ps.pay_source_state,ps.creation_date account_creation_date,
@@ -509,16 +422,14 @@ ON ps.client_id=cl.client_id
 INNER JOIN asterisk.vicidial_list vl
 ON vl.vendor_lead_code=cl.client_id
 WHERE cl.client_id>${min_id}
-ORDER BY cl.client_id 
-${Util.limit()} ${Util.offset()}
 */;
-
 		trace('$sql');
-        var stmt:PDOStatement = S.syncDbh.query(sql);
+        var stmt:PDOStatement = S.syncDbh.query(
+			'$sql ORDER BY cl.client_id ${Util.limit()} ${Util.offset()}');
 		trace('loading ${Util.limit()} ${Util.offset()}');
 		if(untyped stmt==false)
 		{
-			trace('$sql ${Std.parseInt(param['limit'])}');
+			trace('$sql ORDER BY cl.client_id ${Util.limit()} ${Util.offset()}');
 			S.sendErrors(dbData, ['getCrmData query:'=>S.syncDbh.errorInfo()]);
 		}
 		if(stmt.errorCode() !='00000')
@@ -526,15 +437,16 @@ ${Util.limit()} ${Util.offset()}
 			trace(stmt.errorInfo());
 		}
 		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
-		//trace(res);
-		if(firstBatch)
+		if(!(offset.int>0))
 		{
-			stmt = S.syncDbh.query('SELECT FOUND_ROWS()');
-			var totalRes = stmt.fetchColumn();
-			trace(totalRes);
-			dbData.dataInfo['totalRecords'] = totalRes;
+			dbData.dataInfo['totalRecords'] = count();
 		}
 		return res;
+	}
+
+	override function count():Int {
+		var stmt:PDOStatement = S.syncDbh.query('SELECT COUNT(*) FROM clients');
+		return Std.parseInt(stmt.fetchColumn());
 	}
 
 }

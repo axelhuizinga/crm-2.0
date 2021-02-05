@@ -47,8 +47,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		//{label:'BuchungsDaten',action:'importAllBookingRequests'},
 		
 		//{label:'Stammdaten Import ',action:'importContacts'},
-		
-		{label:'Kontakt Daten ',action:'checkContacts'},
+		{label:'BuchungsAnforderungen ',action:'checkBookingRequests'},
+		{label:'Kontakt Daten ',action:'checkContacts'},		
 		{label:'Spenden Daten ',action:'checkDeals'},
 		{label:'Konto Daten ',action:'checkAccounts'}
 		
@@ -269,6 +269,34 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			userState:props.userState
 		}));
 	}	
+
+	public function checkBookingRequests():Void
+	{
+		App.store.dispatch(Status(Update(
+		{
+			className:'',
+			text:'Aktualisiere Buchungsanforderungen'}
+		)));
+		var pro:Promise<Dynamic> = action.async.LivePBXSync.check({
+			limit:1000,
+			userState:props.userState,
+			offset:0,
+			//onlyNew: true,
+			classPath:'data.SyncExternal',
+			action:'bookingRequestsCount'
+		});
+		pro.then(function(props:DbData) {
+			trace(props);
+			setState({data:[
+				'action'=>'bookingRequestsCount',
+				'buchungsAnforderungenCount'=>props.dataInfo.get('buchungsAnforderungenCount'),
+				'bookingRequestsCount'=>props.dataInfo.get('bookingRequestsCount')
+			]});
+			trace(state.data);
+		},function(whatever:Dynamic) {
+			trace(whatever);
+		});
+	}
 
 	public function checkAccounts():Void
 	{
@@ -536,7 +564,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.action + ':' + Std.string(state.dataTable != null));
+		if(state.data!=null)
+			trace(state.data.get('action') + ':' );
 		trace(state.loading);
 		if(state.data==null)
 			return jsx('<div className="flex0 cCenter">${state.formApi.renderWait()}</div>');
@@ -552,7 +581,16 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 					model:'importClientList',
 					title: 'Stammdaten Import' 
 				},state.actualState));	
-
+			case 'bookingRequestsCount':
+				(state.data.get('bookingRequestsCount')==null ? state.formApi.renderWait():
+				jsx('<div className="flex0 cCenter">
+					<ul>					
+					<li><h3>BuchungsAnforderungen</h3></li>
+					<li><div>Live System:</div><div className="tRight">${state.data.get('buchungsAnforderungenCount')}</div></li>
+					<li><div>Neues System:</div><div className="tRight">${state.data.get('bookingRequestsCount')}</div></li>
+					</ul>
+				</div>')
+				);
 			case 'accountsCount':
 				(state.data.get('accountsCount')==null ? state.formApi.renderWait():
 				jsx('<div className="flex0 cCenter">

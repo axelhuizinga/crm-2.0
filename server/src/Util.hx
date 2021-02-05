@@ -285,7 +285,6 @@ class Util
 		if (v == null)
 			v = Std.parseInt(S.params.get('offset'));
 		trace(v);
-
 		return {
 			int:v,
 			sql:(v>0 ? ' OFFSET ' + v:'')

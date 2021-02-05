@@ -119,24 +119,20 @@ I kno	 * Import or Update accounts
 		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		offset = Util.offset(offset.int + Syntax.code("count({0})",res));
 		//return res;
-		trace('id:' + Type.typeof(untyped res[0]['id']));
+		trace('id:' + untyped res[0]['id']);
 		var cD:Map<String,Dynamic> = Util.map2fields(res[0], keys);
 		//trace(cD);
 		var cNames:Array<String> = [for(k in cD.keys()) k];
 		//trace(cNames);
-		var _1st:Bool = true;
 		for(row in res.iterator())
 		{			
 			stmt = upsertAccount(row, cD, cNames);
 			try{
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);
-				if(_1st){
-					_1st=false;
+				if(!(offset.int>0)){
 					trace(row);
 					trace(res);
-					//Sys.exit(333);
 				}		
-				//trace(res);
 			}
 			catch(e:Dynamic)
 			{
@@ -165,41 +161,11 @@ I kno	 * Import or Update accounts
 			//sendRows(res);
 			var updated:Int = 0;//syncUserIds(res);
 			S.sendInfo(dbData,['syncUserDetail'=>'DONE $updated']);
-		}
-			
+		}			
 		else 
 			S.sendInfo(dbData,['syncUserDetail'=>'no results???']);
 		trace('done');
 	}
-	
-	/*public function importAccountData(cData:NativeArray):Void
-	{
-		//var cData:NativeArray = getAccountData();
-		//trace(cData[0]);        
-		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
-		for(row in cData.iterator())
-		{			
-			//trace(row);
-			//S.sendErrors(dbData,['syncAll'=>'NOTOK']);
-			var stmt:PDOStatement = upsertAccount(row);
-			try{
-				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
-				//trace(res);
-			}
-			catch(e:Dynamic)
-			{
-				{S.sendErrors(dbData, [
-					'dbError'=>S.dbh.errorInfo(),
-					'upsertClient'=>S.errorInfo(row),
-					'exception'=>e
-				]);}		
-			}
-		}		
-		trace('done');
-		dbData.dataInfo['offset'] = param['offset'] + synced;
-		trace(dbData.dataInfo);
-		S.sendData(dbData, null);
-	}*/
 	
 	function upsertAccount(rD:NativeArray, cD:Map<String,Dynamic>, cNames:Array<String>):PDOStatement
 	{
@@ -232,11 +198,9 @@ I kno	 * Import or Update accounts
 			'sql'=>sql,
 			'id'=>Std.string(Syntax.code("{0}['id']",rD))]);
 		}
-		//trace(stmt.columnCount());
-		//dbData.dataInfo['synced'] = ++synced;
+		
 		synced++;
 		return stmt;
-		//return S.dbh.query(sql, PDO.FETCH_ASSOC);
 	}
 	
 }

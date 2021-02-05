@@ -157,13 +157,13 @@ class SyncExternalDeals extends Model
 		//trace(cD);
 		var cNames:Array<String> = [for(k in cD.keys()) k];		
 		/* STORE fetched data in new crm */
-		var _1st:Bool = true;
+		var _1st:Bool = !(offset.int>0);
 		for(row in dData)
 		{			
 			var stmt:PDOStatement = upsertDeal(row, cD, cNames);
 			try{
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);	
-				if(_1st){
+				if(!(offset.int>0)){
 					_1st=false;
 					trace(row);
 					trace(res);

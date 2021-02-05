@@ -74,7 +74,7 @@ class DealsModel
 			cellFormat:function(v:Bool) 
 			{
 				var className = (v?'active fas fa-heart':'passive far fa-heart');
-				trace('>>>$v<<<');
+				//trace('>>>$v<<<');
 				return jsx('<span className=${className}></span>');
 			}},
 		'cycle' => {label: 'Turnus'},

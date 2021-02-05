@@ -109,6 +109,7 @@ class Model
 	
 	var limit:IntString;	
 	var offset:IntString;		
+	var totalCount:Int;
 
 	public static function dispatch(dbQuery:DbQuery):Void
 	{
@@ -178,7 +179,6 @@ class Model
 		}
 		var res:NativeArray = execute(sqlBf.toString());
 		return Lib.hashOfAssociativeArray(res[0]).get('count');
-		return Lib.hashOfAssociativeArray(execute(sqlBf.toString())[0]).get('count');
 	}
 	
 	public function buildJoin():String
@@ -923,26 +923,25 @@ class Model
 
 	function run(){
 
-			if(param.exists('table'))
-				table = param.get('table');
-			if(table != null)
-			{
-				fieldNames = param.exists('fields')? 
-					param.get('fields').split(',').map(function (f)return quoteIdent(f)): 
-					S.tableFields(table).map(function (f)return quoteIdent(f));
-				tableNames = [table];
-				queryFields = fieldNames.join(',');
-				trace(tableNames);
-			}
-			else
-				tableNames = [];
-			var fields:Array<String> = [];
-			if(param.get('dataSource') != null)
-			{
-				dataSource = Unserializer.run(param.get('dataSource'));
-				//dataSource = TJSON.parse(param.get('dataSource'));
-			}
-		//}
+		if(param.exists('table'))
+			table = param.get('table');
+		if(table != null)
+		{
+			fieldNames = param.exists('fields')? 
+				param.get('fields').split(',').map(function (f)return quoteIdent(f)): 
+				S.tableFields(table).map(function (f)return quoteIdent(f));
+			tableNames = [table];
+			queryFields = fieldNames.join(',');
+			trace(tableNames);
+		}
+		else
+			tableNames = [];
+		var fields:Array<String> = [];
+		if(param.get('dataSource') != null)
+		{
+			dataSource = Unserializer.run(param.get('dataSource'));
+			//dataSource = TJSON.parse(param.get('dataSource'));
+		}
 		var fields:Array<String> = [];
 		if(dataSource != null)
 		{
@@ -1030,14 +1029,14 @@ class Model
 		//return fields;
 	}
 
-	function createOrUpdateAction(){
+	/*function createOrUpdateAction(){
 		
 		if(param['action_id']==0||param['action_id']==null)
 		{
 			//GET MAX actions id for user
 			var sql:String = comment(unindent,format)/**
 			SELECT user_max_action_id(actions) FROM users WHERE id=${S.dbQuery.dbUser.id}
-			**/;
+			**//*;
 			trace(sql);
 			var stmt:PDOStatement = S.dbh.query(sql);			
 			if(untyped stmt==false)
@@ -1063,7 +1062,7 @@ class Model
 			sql = comment(unindent,format)/**
 			UPDATE users SET actions = actions || '${action}'
 			WHERE id=${S.dbQuery.dbUser.id}
-			**/;
+			**//*;
 			stmt = S.dbh.query(sql);			
 			if(untyped stmt==false)
 			{
@@ -1088,7 +1087,7 @@ class Model
 			//var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);		
 		}
 		//return '{"action":${props.action}, "classP}' //DBAccessAction
-	}
+	}*/
 	
 	public function json_encode():Void
 	{	

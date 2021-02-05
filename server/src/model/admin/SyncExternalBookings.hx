@@ -95,13 +95,6 @@ class SyncExternalBookings extends Model{
 	
 	public function getCrmData():NativeArray
 	{		        
-		var firstBatch:Bool = (param['offset']=='0');
-		var selectTotalCount:String = '';
-		trace('offset:${param['offset']} firstBatch:$firstBatch ');
-		if(firstBatch)
-		{
-			selectTotalCount = 'SQL_CALC_FOUND_ROWS';
-		}
         var sql = comment(unindent,format)/*
 		SELECT * FROM buchungs_anforderungen
 ORDER BY Termin  
@@ -120,9 +113,9 @@ LIMIT
 		}
 		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_NUM):null);
 		//trace(res);
-		if(firstBatch)
+		if(param['offset']=='0')
 		{
-			stmt = S.syncDbh.query('SELECT FOUND_ROWS()');
+			stmt = S.syncDbh.query('SELECT COUNT(*) FROM buchungs_anforderungen');
 			var totalRes = stmt.fetchColumn();
 			trace(totalRes);
 			dbData.dataInfo['totalRecords'] = totalRes;

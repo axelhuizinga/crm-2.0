@@ -253,7 +253,8 @@ class FormBuilder {
 
     public function renderForm(props:FormState, initialState:Dynamic):ReactFragment
     {
-		//trace(props.modals);
+		//trace(props.fields.toString());
+		trace(Std.string(props.fields));
 		//return null;formField<div className="g_block" ></div>${renderForms(props.modals)}
 		//trace(props); ref=${props.ref} <div className="g_footer" ></div>	
 		var sK:Int = 0;

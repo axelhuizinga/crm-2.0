@@ -1,4 +1,6 @@
 package view.dashboard;
+import action.AppAction;
+import action.StatusAction;
 
 import state.AppState;
 import js.html.AreaElement;
@@ -13,6 +15,7 @@ import loader.BinaryLoader;
 import js.html.FormData;
 import js.html.FormDataIterator;
 import js.html.HTMLCollection;
+import js.lib.Promise;
 import me.cunity.debug.Out;
 import react.ReactComponent;
 import react.ReactEvent;
@@ -49,17 +52,19 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
+		trace('action:' + props.match.params.action);
 
-		dataDisplay = DBFormsModel.dataDisplay;
+		dataDisplay = null;//DBFormsModel.dataDisplay;
 		//var sideMenu = updateMenu('DB'); //state.sideMenu;
 		//state = {hasError:false, sideMenu:updateMenu('DB')};		
 		state = {formApi:new FormApi(this), hasError:false, sideMenu:props.sideMenu};		
 	}
 	
 	public static var menuItems:Array<MItem> = [
-		{label:'Create Fields Table',action:'createFieldList'},
-		{label:'Table Fields',action:'showFieldList'},
-		{label:'Bearbeiten',action:'editTableFields'},
+		{label:'getView',action:'getView'},
+		{label:'Formulare',action:'listForms'},
+		//{label:'Create Fields Table',action:'createFieldList'},
+		{label:'Bearbeiten',action:'edit'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -99,6 +104,48 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match);
 		//setState({viewClassPath:viewClassPath});
 	}
+
+	public function getView():Void
+	{
+		App.store.dispatch(Status(Update(
+		{
+			className:'',
+			text:'Load deals.DealsModel'}
+		)));
+		var pro:Promise<Dynamic> = action.async.LivePBXSync.check({
+			limit:100,
+			userState:props.userState,
+			offset:0,
+			//onlyNew: true,
+			classPath:'tools.Jsonb',
+			action:'getView'
+		});
+		pro.then(function(props:DbData) {
+			trace(props);
+			for(row in props.dataRows){
+				trace(row);
+			}
+			//for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
+			var fields:Map<String,FormField> = [
+				for(row in props.dataRows) row.get('key') => untyped row.get('content')
+			];
+			setState({data:[
+				'action'=>'getView',
+				'fieldsCount'=>props.dataInfo.get('count')
+				],
+				fields:fields
+			});		
+			trace(state);
+		},function(whatever:Dynamic) {
+			trace(whatever);
+		});
+	}
+	/**
+	 * fields:[
+						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
+					],
+	 * @param ev 
+	 */
 
 	public function delete(ev:ReactEvent):Void
 	{
@@ -269,7 +316,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 					${...props} dataState = ${dataDisplay["fieldsList"]}
 					className = "is-striped is-hoverable" fullWidth=${true}/>				
 				');	
-			case 'editTableFields':
+			case 'editForm':
 				null;
 			default:
 				null;

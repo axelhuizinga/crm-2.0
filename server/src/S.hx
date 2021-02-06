@@ -35,6 +35,7 @@ import model.admin.SyncExternalDeals;
 import model.roles.Users;
 import model.stats.History;
 import model.tools.DB;
+import model.tools.Jsonb;
 import Model.MData;
 import Model.RData;
 //import model.QC;

@@ -34,30 +34,20 @@ import shared.Utils;
  * @author axel@cunity.me
  */
 
-typedef DataState =
-{
-	columns:StringMap<DataColumn>,
-	?defaultSearch:StringMap<DataColumn>,
-	?search:StringMap<DataColumn>
-}
-
 typedef DataColumn = 
 {
 	?altGroupPos:Int,
 	?cellFormat:Function,
-	//@:value('')
 	?className:String,
 	?displayFormat:String,
 	?editable:Bool,
 	?flexGrow:Int,
-	//@:value('')
 	?headerClassName:String,
 	?headerFormat:Function,
 	?headerStyle:Dynamic,
 	?label:String,
 	?name:String,
 	?search:SortDirection,
-	//@:value(true)
 	?show:Bool,
 	?useAsIndex:Bool,
 	?style:Dynamic,
@@ -84,6 +74,13 @@ typedef DataCell =
 	@:optional var style:Dynamic;
 	@:optional var title:String;
 	@:optional var flexGrow:Int;
+}
+
+typedef DataState =
+{
+	columns:StringMap<DataColumn>,
+	?defaultSearch:StringMap<DataColumn>,
+	?search:StringMap<DataColumn>
 }
 
 typedef Size =
@@ -324,6 +321,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		}
 		return dRs;
 	}
+	
 	override function componentDidMount() {
 		if(gridRef == null){
 			trace(Type.getClassName(Type.getClass(props.parentComponent)));

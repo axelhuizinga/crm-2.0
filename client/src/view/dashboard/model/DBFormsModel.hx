@@ -1,5 +1,6 @@
 package view.dashboard.model;
 
+import view.grid.Grid;
 import haxe.ds.Map;
 import state.FormState;
 import shared.DBMetaData;
@@ -11,18 +12,16 @@ import shared.DBMetaData;
 
 import haxe.ds.StringMap;
 import view.shared.FormInputElement;
-//import view.shared.io.DataAccessForm;
-import view.table.Table.DataColumn;
-import view.table.Table.DataState;
+
 
 class DBFormsModel 
 {
 	public static var formatBool = function(v:Dynamic) {return (v?'Y':'N'); }
 	public static var formatElementSelection = function(v:Dynamic) {return (v?'Y':'N'); }
-	public static var fieldsListColumns:Map<String,DataColumn> =  [
-		'table_name'=>{label:'Tabelle',editable:false},
+	public static var fieldsListColumns:Map<String, DataColumn> =  [
+		/*'table_name'=>{label:'Tabelle',editable:false},
 		'field_name'=>{label:'Feldname',editable:false, flexGrow:1},
-		'format_display'=>{label:'Anzeige', title:'Anzeigeformat'},
+	//	'format_display'=>{label:'Anzeige', title:'Anzeigeformat'},
 		'format_store'=>{label:'DB', title:'Speicherformat'},
 		'element'=>{label:'Form', title:'Eingabefeld'},
 		'admin_only'=>{label:'AO', title:'Admin',cellFormat:formatBool},
@@ -31,13 +30,13 @@ class DBFormsModel
 		//'primary'=>{label:'PID', title: 'Is Primary ID',cellFormat:formatBool},
 		'use_as_index'=>{label:'ID', cellFormat:formatBool},
 		//'any'=>{label:'Eigenschaften', flexGrow:1},
-		'id'=>{label: 'ID', show:false}
+		'id'=>{label: 'ID', show:false}*/
 	];
 	
 	//public static function dataDisplay(?parentForm:DataAccessForm):StringMap<DataState> 
 	public static var dataDisplay:Map<String,DataState> =
 		[
-			'fieldsList' => {altGroupPos:0,columns:fieldsListColumns}
+			//'fieldsList' => {altGroupPos:0,columns:fieldsListColumns}
 		];
 	
 	public static function dbMetaToState(dbMeta:Array<Map<String,Dynamic>>):Array<Map<String,Dynamic>>

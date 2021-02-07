@@ -3,7 +3,7 @@ package model;
 typedef DealProps = {
 	?contact:Int,
 	?creation_date:String,
-	?iban:String,
+	?account:Int,
 	?target_account:Int,
 	?booking_run:String,
 	?start_date:String,
@@ -53,14 +53,14 @@ class Deal extends ORM
 		return creation_date;
 	}	
 		
-	@dataType("character varying(32)")
-	@:isVar public var iban(default,set):String;
+	@dataType("bigint")
+	@:isVar public var account(default,set):Int;
 
-	function set_iban(iban:String):String{
-		if(initialized('iban'))
-			modified('iban');
-		this.iban = iban ;
-		return iban;
+	function set_account(account:Int):Int{
+		if(initialized('account'))
+			modified('account');
+		this.account = account ;
+		return account;
 	}	
 		
 	@dataType("bigint")

@@ -12,8 +12,9 @@ abstract FormInputElement(String)
 	var Checkbox;
 	var Radio;
 	var Select;
-	var TextArea;	
+	var None;
 	var NFormat;
+	var TextArea;	
 	var File;
 	var Upload;
 }

@@ -285,7 +285,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			trace(actualState);
 			forceUpdate();
 		}
-		else if((initialState.id!=null && !App.store.getState().dataStore.contactData.exists(initialState.id)))
+		/*else if((initialState.id!=null && !App.store.getState().dataStore.contactData.exists(initialState.id)))
 		{
 			//DATA NOT IN STORE - LOAD IT
 			App.store.dispatch(DBAccess.get({
@@ -299,7 +299,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//App.store.dispatch(AppAction.GlobalState('contacts',initialState.id));
 			//untyped props.globalState('contacts',initialState.id);
 			
-		}
+		}*/
 		else if(actualState==null){
 			actualState = copy(initialState);
 			actualState = view.shared.io.Observer.run(actualState, function(newState){

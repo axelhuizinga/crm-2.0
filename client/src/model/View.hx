@@ -1,18 +1,18 @@
 package model;
 
-typedef UserInterfaceProps = {
+typedef ViewProps = {
 	?key:String,
-	?content:String,
 	?classPath:String,
 	?component:String,
 	?edited_by:String,
-	?updated_at:String,
+	?last_updated:String,
 	?locale:String,
-	?mandator:Int
+	?mandator:Int,
+	?content:String
 };
 
 @:rtti
-class UserInterface extends ORM
+class View extends ORM
 {
 	public function new(data:Map<String,String>) {
 		super(data);
@@ -27,16 +27,6 @@ class UserInterface extends ORM
 			modified('key');
 		this.key = key ;
 		return key;
-	}	
-		
-	@dataType("character varying(64)")
-	@:isVar public var content(default,set):String;
-
-	function set_content(content:String):String{
-		if(initialized('content'))
-			modified('content');
-		this.content = content ;
-		return content;
 	}	
 		
 	@dataType("character varying(512)")
@@ -69,14 +59,14 @@ class UserInterface extends ORM
 		return edited_by;
 	}	
 		
-	@dataType("timestamp without time zone")
-	@:isVar public var updated_at(default,set):String;
+	@dataType("timestamp with time zone")
+	@:isVar public var last_updated(default,set):String;
 
-	function set_updated_at(updated_at:String):String{
-		if(initialized('updated_at'))
-			modified('updated_at');
-		this.updated_at = updated_at ;
-		return updated_at;
+	function set_last_updated(last_updated:String):String{
+		if(initialized('last_updated'))
+			modified('last_updated');
+		this.last_updated = last_updated ;
+		return last_updated;
 	}	
 		
 	@dataType("character varying(8)")
@@ -97,6 +87,16 @@ class UserInterface extends ORM
 			modified('mandator');
 		this.mandator = mandator ;
 		return mandator;
+	}	
+		
+	@dataType("jsonb")
+	@:isVar public var content(default,set):String;
+
+	function set_content(content:String):String{
+		if(initialized('content'))
+			modified('content');
+		this.content = content ;
+		return content;
 	}	
 	
 }

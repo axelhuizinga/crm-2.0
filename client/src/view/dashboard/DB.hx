@@ -1,7 +1,7 @@
 package view.dashboard;
 import action.AppAction;
 import action.StatusAction;
-
+import db.DBAccessProps;
 import state.AppState;
 import js.html.AreaElement;
 import haxe.Json;
@@ -11,7 +11,8 @@ import haxe.io.Bytes;
 import haxe.http.HttpJs;
 import js.html.XMLHttpRequest;
 import hxbit.Serializer;
-import loader.BinaryLoader;
+import loader.ConfigLoader;
+import json2object.JsonParser;
 import js.html.FormData;
 import js.html.FormDataIterator;
 import js.html.HTMLCollection;
@@ -20,9 +21,10 @@ import me.cunity.debug.Out;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
-import react.ReactUtil;
 import shared.DbData;
+import shared.DbDataTools;
 import shared.DBMetaData;
+import react.ReactUtil;
 import state.FormState;
 import view.dashboard.model.DBFormsModel;
 import view.shared.FormField;
@@ -60,8 +62,9 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		state = {formApi:new FormApi(this), hasError:false, sideMenu:props.sideMenu};		
 	}
 	
-	public static var menuItems:Array<MItem> = [
+	public static var menuItems:Array<MItem> = [		
 		{label:'getView',action:'getView'},
+		{label:'setView',action:'setView'},
 		{label:'Formulare',action:'listForms'},
 		//{label:'Create Fields Table',action:'createFieldList'},
 		{label:'Bearbeiten',action:'edit'},
@@ -104,7 +107,9 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match);
 		//setState({viewClassPath:viewClassPath});
 	}
+	public function setView():Void{
 
+	}
 	public function getView():Void
 	{
 		App.store.dispatch(Status(Update(
@@ -112,33 +117,59 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			className:'',
 			text:'Load deals.DealsModel'}
 		)));
+
+		var pro:Promise<Dynamic> = new Promise<DbData>(function(resolve, reject){
+			if (!props.userState.dbUser.online)
+			{
+				reject(DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']));
+
+			}				
+			trace('creating ConfigLoader ${App.config.api}');
+			ConfigLoader.go(App.config.api,{
+				limit:100,
+				userState:props.userState,
+				//offset:0,
+				classPath:'tools.Jsonb',
+				action:'getView'
+			},function (res:DBAccessJsonResponse) {
+				trace(res);
+			});
+		});
+
+		pro.then(function(jsonData:String) {
+			trace(jsonData);
+			var parser = new JsonParser<BaseView>();
+
+			var dA:BaseView = parser.fromJson(jsonData);
+		},function(whatever:Dynamic) {
+			trace(whatever);
+		});
+	}
+
+	public function createOrUpdateView():Void
+	{
+		App.store.dispatch(Status(Update(
+		{
+			className:'',
+			text:'Update deals.DealsModel'
+		})));
+/*
 		var pro:Promise<Dynamic> = action.async.LivePBXSync.check({
 			limit:100,
 			userState:props.userState,
 			offset:0,
 			//onlyNew: true,
 			classPath:'tools.Jsonb',
-			action:'getView'
+			action:'createOrUpdateView'
 		});
-		pro.then(function(props:DbData) {
-			trace(props);
-			for(row in props.dataRows){
-				trace(row);
-			}
-			//for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
-			var fields:Map<String,FormField> = [
-				for(row in props.dataRows) row.get('key') => untyped row.get('content')
-			];
-			setState({data:[
-				'action'=>'getView',
-				'fieldsCount'=>props.dataInfo.get('count')
-				],
-				fields:fields
-			});		
-			trace(state);
+
+		pro.then(function(jsonData:String) {
+			trace(jsonData);
+			var parser = new JsonParser<BaseView>();
+			var dA:DataAccess = parser.fromJson(jsonData, 'parsed.json');
 		},function(whatever:Dynamic) {
 			trace(whatever);
-		});
+		});*/
 	}
 	/**
 	 * fields:[

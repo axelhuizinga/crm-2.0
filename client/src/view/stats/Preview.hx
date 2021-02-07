@@ -24,7 +24,6 @@
 package view.stats;
 
 import view.shared.io.BaseForm;
-import model.BankTransfer;
 import react.Partial;
 import redux.Redux.Dispatch;
 import state.AppState;

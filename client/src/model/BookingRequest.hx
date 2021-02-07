@@ -1,6 +1,6 @@
 package model;
 
-typedef BankTransferProps = {
+typedef BookingRequestProps = {
 	?ag_name:String,
 	?ag_konto_or_iban:String,
 	?ag_blz_or_bic:String,
@@ -37,7 +37,7 @@ typedef BankTransferProps = {
 };
 
 @:rtti
-class BankTransfer extends ORM
+class BookingRequest extends ORM
 {
 	public function new(data:Map<String,String>) {
 		super(data);

@@ -3,26 +3,32 @@ import haxe.Constraints.Function;
 import js.html.InputEvent;
 import view.shared.FormInputElement;
 
-typedef FormField =
+typedef BaseField =
 {
 	?className:String,
 	?classPath:String,
 	?name:String,
 	?label:String,
 	?dataBase:String, 
-	?options:Dynamic,
-	?value:Dynamic,
+	?options:Map<String,String>,
+	?value:String,
 	?dataTable:String,
 	?dataField:String,
-	?preset:Any,
+	?preset:Bool,
 	?displayFormat:String,
 	?type:FormInputElement,
 	?primary:Bool,
 	?disabled:Bool,
 	?multiple:Bool,
 	?required:Bool,
-	?handleChange:Function,
+	//?handleChange:Function,
 	?placeholder:String,
 	?submit:String,
+}
+
+typedef FormField = {
+	>BaseField,
+	?handleChange:Function,
 	?validate:String->Bool
+
 }

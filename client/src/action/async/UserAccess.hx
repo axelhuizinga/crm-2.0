@@ -362,7 +362,6 @@ class UserAccess {
 					trace(state.userState.dbUser.jwt);
 					dispatch(User(LoginComplete(state.userState)));
 					return resolve(data);
-					//return dispatch(User(LoginComplete(state.userState)));			
 				});
 			});
 		});	

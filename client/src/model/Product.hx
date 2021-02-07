@@ -3,7 +3,7 @@ package model;
 typedef ProductProps = {
 	?name:String,
 	?description:String,
-	?value:String,
+	?price:String,
 	?attributes:String,
 	?mandator:Int,
 	?active:Bool,
@@ -40,13 +40,13 @@ class Product extends ORM
 	}	
 		
 	@dataType("numeric(10,2)")
-	@:isVar public var value(default,set):String;
+	@:isVar public var price(default,set):String;
 
-	function set_value(value:String):String{
-		if(initialized('value'))
-			modified('value');
-		this.value = value ;
-		return value;
+	function set_price(price:String):String{
+		if(initialized('price'))
+			modified('price');
+		this.price = price ;
+		return price;
 	}	
 		
 	@dataType("jsonb")

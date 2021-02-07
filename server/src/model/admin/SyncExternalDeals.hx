@@ -45,21 +45,21 @@ class SyncExternalDeals extends Model
 	}
 
 	function updateExtIds():Array<Int> {
-		/*CLEAR fly_crm pay_plan_id's from ext_ids table*/
+		/*CLEAR fly_crm pay_plan_id's from ext_ids_ table*/
 		var action = S.params["classPath"]+'.'+S.params["action"];
 		var cleared:Int = S.dbh.exec(
-			'DELETE FROM ext_ids WHERE auth_user=${S.dbQuery.dbUser.id} AND action=\'${Util.actionPath(this)}\' AND table_name=\'deals\'');
-		//trace('DELETE FROM ext_ids WHERE auth_user=${S.dbQuery.dbUser.id} AND action=\'${action}\' AND table_name=\'deals\'');
+			'DELETE FROM ext_ids_ WHERE auth_user=${S.dbQuery.dbUser.id} AND action=\'${Util.actionPath(this)}\' AND table_name=\'deals\'');
+		//trace('DELETE FROM ext_ids_ WHERE auth_user=${S.dbQuery.dbUser.id} AND action=\'${action}\' AND table_name=\'deals\'');
 		//S.checkStmt(S.syncDbh, stmt, 'updateExtIds-pay_plan_ids');
 		var cids:Array<Int> = untyped Lib.toHaxeArray(getAllExtIds());	
 		var start = Sys.time();
 		for(cid in cids){
 			var sti:PDOStatement = S.dbh.prepare(
-				'INSERT INTO ext_ids VALUES(?,?,?,?) ON CONFLICT DO NOTHING');			
+				'INSERT INTO ext_ids_ VALUES(?,?,?,?) ON CONFLICT DO NOTHING');			
 			if(untyped sti==false)
 			{
 				trace(S.dbh.errorInfo);
-				//trace('INSERT INTO ext_ids VALUES(${cid}, ${S.dbQuery.dbUser.id}, \'${Util.actionPath(this)}\',\'deals\')');
+				//trace('INSERT INTO ext_ids_ VALUES(${cid}, ${S.dbQuery.dbUser.id}, \'${Util.actionPath(this)}\',\'deals\')');
 				Sys.exit(untyped '666');
 			}
 			//var args:Array<Dynamic> = [cid[0], S.dbQuery.dbUser.id, action,'deals'];
@@ -104,7 +104,7 @@ class SyncExternalDeals extends Model
 		var start = Sys.time();
 		// GET MISSING  ${onlyNew}
 		var sql = comment(unindent, format)/* 
-		SELECT eid.ext_id from ext_ids eid
+		SELECT eid.ext_id from ext_ids_ eid
 		left join 
 		deals d
 		ON eid.ext_id=d.id

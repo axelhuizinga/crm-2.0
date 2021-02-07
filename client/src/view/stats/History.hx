@@ -23,7 +23,6 @@
 
 package view.stats;
 
-import model.BankTransfer;
 import react.Partial;
 import redux.Redux.Dispatch;
 import state.AppState;
@@ -51,9 +50,6 @@ class History extends ReactComponentOf<DataFormProps,FormState>
 	//var dataDisplay:Map<String,DataSt>;
 	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
-	//var dbMetaData:shared.DBMetaData;
-	
-	public static var initialState:BankTransfer;
 
 	public function new(props) 
 	{

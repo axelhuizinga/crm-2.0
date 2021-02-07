@@ -21,6 +21,11 @@ typedef DBAccessResolveMessage = {
 	?failure:String
 }
 
+typedef DBAccessJsonResponse = {
+	?data:String,
+	?message:DBAccessResolveMessage
+}
+
 typedef DBAccessProps = {	
 	>DBAccessAction,	
 	?relations:Map<String,DbRelation>,
@@ -28,9 +33,9 @@ typedef DBAccessProps = {
 	?dbUser:DbUser,
 	?devIP:String,	
 	?extDB:Bool,	
-	//?firstBatch:Bool,
 	?filter:Dynamic,
 	?data:Dynamic,	
+	?jThen:DBAccessJsonResponse->Void,
 	?mandator:Int,
 	?pages:Int,
 	?resolveMessage:DBAccessResolveMessage,

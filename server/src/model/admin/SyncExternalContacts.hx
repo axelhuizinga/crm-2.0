@@ -102,17 +102,17 @@ class SyncExternalContacts extends Model
 			trace('got:' +cIDs.length + ' client_ids');
 			//trace('got:' + Syntax.code("count({0})",cIDs) +' client_ids');		
 	
-			var cleared:Int = S.dbh.exec('DELETE FROM ext_ids WHERE auth_user=${S.dbQuery.dbUser.id} AND table_name=\'contacts\' AND action=${Util.actionPath(this)}');
+			var cleared:Int = S.dbh.exec('DELETE FROM ext_ids_ WHERE auth_user=${S.dbQuery.dbUser.id} AND table_name=\'contacts\' AND action=${Util.actionPath(this)}');
 			if(S.dbh.errorCode() !='00000')
 			{
 				trace(S.dbh.errorInfo());var madded:Int = 0;
 			}
 			else 	
-				trace('cleared all contacts IDs from ext_ids');
+				trace('cleared all contacts IDs from ext_ids_');
 	
 			for(cid in cIDs){
 				var stored:Int = S.dbh.exec(
-					'INSERT INTO ext_ids VALUES(
+					'INSERT INTO ext_ids_ VALUES(
 						$cid, ${S.dbQuery.dbUser.id},
 						${Util.actionPath(this)},\'contacts\') ON CONFLICT DO NOTHING');
 			}
@@ -121,10 +121,10 @@ class SyncExternalContacts extends Model
 				trace(S.dbh.errorInfo());
 			}
 			else 	
-				trace('stored all client_ids to ext_ids');
+				trace('stored all client_ids to ext_ids_');
 		}
 		else{
-			var stmt:PDOStatement = S.dbh.query('SELECT COUNT(*) FROM ext_ids');
+			var stmt:PDOStatement = S.dbh.query('SELECT COUNT(*) FROM ext_ids_');
 			S.checkStmt(S.dbh, stmt, 'getAllExtIds query:'+Std.string(S.dbh.errorInfo()));
 			
 			param['totalRecords'] = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null);	
@@ -134,7 +134,7 @@ class SyncExternalContacts extends Model
 		}
 
 		var sql:String = comment(unindent, format)/**
-		SELECT eid.ext_id from ext_ids eid
+		SELECT eid.ext_id from ext_ids_ eid
 		LEFT JOIN 
 		contacts c
 		ON eid.ext_id=c.id

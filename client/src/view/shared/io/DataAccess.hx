@@ -9,6 +9,8 @@ import haxe.ds.Map;
 
 import view.shared.FormField;
 
+typedef BaseView = Map<String,BaseField>;
+
 /**
    keys = tablenames[?'alias',?'fields',?'jCond',?'filter']:String
 **/

@@ -369,7 +369,7 @@ class FormApi
 					className:fF.className,
 					name:name,
 					//?label:String,
-					value: dR[name],
+					value: untyped dR[name],
 					//value:fF.displayFormat == null?dR[name]: fF.displayFormat(dR[name]),
 					//?dataBase:String, 
 					//?dataTable:String,
@@ -378,7 +378,7 @@ class FormApi
 					type:fF.type,
 					disabled:fF.disabled,
 					required:fF.required,
-					handleChange:fF.handleChange,
+					//handleChange:fF.handleChange,
 					placeholder:fF.placeholder,
 					validate:fF.validate
 				});
@@ -440,7 +440,7 @@ class FormApi
 		return switch(fF.type)
 		{
 			case Checkbox:
-			trace(fF.value);
+			//trace(fF.value);
 				jsx('<input key=${Utils.genKey(k++)} name=${model}  disabled=${fF.disabled}/>');
 			case Hidden:
 				fF.primary ? null:
@@ -448,7 +448,7 @@ class FormApi
 			case FormInputElement.Select:
 				jsx('
 				<select name=${model}>
-				${renderSelectOptions(fF.value)}
+				${renderSelectOptions(cast(fF.value))}
 				</select>
 				');
 			default:

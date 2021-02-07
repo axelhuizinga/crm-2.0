@@ -179,7 +179,7 @@ class DBAccess
 			//if(param.dataSource != null)
 				//trace(param.dataSource.get('contacts').get('data'));
 			
-			var dbData:DbData = DbDataTools.create();
+			//var dbData:DbData = DbDataTools.create();
 			//trace(getState());
 			return new Promise(function(resolve, reject){
 				if (!param.dbUser.online)

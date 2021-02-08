@@ -121,11 +121,13 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		var pro:Promise<Dynamic> = new Promise<DbData>(function(resolve, reject){
 			if (!props.userState.dbUser.online)
 			{
+				trace('LoginError');
 				reject(DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']));
-
 			}				
 			trace('creating ConfigLoader ${App.config.api}');
-			ConfigLoader.go(App.config.api,{
+			
+			var cL:ConfigLoader = ConfigLoader.go(App.config.api,{
+			//var xhr:HttpJs = Loader.load(App.config.api,{
 				limit:100,
 				userState:props.userState,
 				//offset:0,
@@ -134,6 +136,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			},function (res:DBAccessJsonResponse) {
 				trace(res);
 			});
+			//cL.xhr.send(cL.param);
 		});
 
 		pro.then(function(jsonData:String) {

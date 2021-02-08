@@ -90,7 +90,7 @@ class BinaryLoader {
 	public function load() {
 		xhr.open('POST', url, true);
 		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
-		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+		//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
 		xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;
 		
 		//xhr.onerror = function(e) onError(xhr.statusText);

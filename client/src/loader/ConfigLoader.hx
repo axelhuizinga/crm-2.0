@@ -18,26 +18,44 @@ import js.html.XMLHttpRequest;
 
 class ConfigLoader {
 
-	public static function go(url:String, p:Dynamic, onLoaded:DBAccessJsonResponse->Void):XMLHttpRequest
+	public static function go(url:String, p:Dynamic, onLoaded:DBAccessJsonResponse->Void):ConfigLoader
 	{
 		//trace(dbQP);
-		var cL:ConfigLoader = new ConfigLoader(url);
-		cL.param = p;
+		var cL:ConfigLoader = new ConfigLoader(url,p);
+		//cL.param = p;
 		cL.cB = onLoaded;
-		cL.load();
-		return cL.xhr;
+		//cL.load();
+		var fD:FormData = new FormData();
+		for(f in Reflect.fields(p))
+		{
+			fD.append(f, Reflect.field(p,f));
+		}
+		cL.param = fD;
+		//cL.xhr.send(fD);
+		return cL;
 	}
 	var cB:DBAccessJsonResponse->Void;	
-	var param:Dynamic;
+	public var param:FormData;
 	//var param:String;
 	public var xhr:XMLHttpRequest;
 	
 	public var url(default, null) : String;
 
-	public function new( url : String ) {
+	public function new( url : String, ?p:Dynamic ) {
 		this.url = url;
 		xhr = new js.html.XMLHttpRequest();
-		xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+
+		xhr.onreadystatechange = function() {
+			trace(xhr.readyState);
+			switch (xhr.readyState){
+				case XMLHttpRequest.OPENED:
+					trace(p);
+					
+				case XMLHttpRequest.HEADERS_RECEIVED:
+					//xhr.send(p);
+			}
+		}
+		load();		
 	}
 
 	//public dynamic function onLoaded( bytes : haxe.io.Bytes ) {
@@ -55,10 +73,12 @@ class ConfigLoader {
 	}
 
 	public function load() {
+		trace(url);
 		xhr.open('POST', url, true);
+		//xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
 		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
-		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
-		xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;
+		//xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;
 		
 		//xhr.onerror = function(e) onError(xhr.statusText);
 		xhr.onerror = function(e) {
@@ -79,15 +99,11 @@ class ConfigLoader {
 			//trace(xhr.response.length);
 		}
 		
-	/*	xhr.onprogress = function(e) {
-			#if (haxe_ver >= 4)
+		xhr.onprogress = function(e) {
 			trace('${e.loaded} :: ${e.total}');
 			//onProgress(Std.int(js.Syntax.code("{0}.loaded || {0}.position", e)), Std.int(js.Syntax.code("{0}.total || {0}.totalSize", e)));
-			#else
-			onProgress(Std.int(untyped __js__("{0}.loaded || {0}.position", e)), Std.int(untyped __js__("{0}.total || {0}.totalSize", e)));
-			#end
-		}*/
-		xhr.send(param);
+		}
+		//xhr.send(param);
 	}
 
 }

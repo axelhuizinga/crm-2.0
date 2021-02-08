@@ -422,7 +422,7 @@ X-Mailer: HaxeMail
 			var userInfo:UserInfo = JWT.extract(jwt);			
 			//S.safeLog(userInfo);		
 			trace(userInfo);		
-			if(userInfo.id==null && userInfo.id ==dbQuery.dbUser.id && (userInfo.validUntil - Date.now().getTime()) > 0)
+			/*if(userInfo.id==null && userInfo.id ==dbQuery.dbUser.id && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
 				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
 				trace(jRes);
@@ -450,7 +450,7 @@ X-Mailer: HaxeMail
 						false;
 				}
 
-			}
+			}*/
 			//trace('$id==${userInfo.id}::${userInfo.ip}::${Web.getClientIP()}:' + Date.fromTime(userInfo.validUntil) + ':${userInfo.validUntil} - $now:' + cast( userInfo.validUntil - now) + (userInfo.validUntil - Date.now().getTime()) > 0?'Y':'N');
 			
 			//trace(':'+(id == userInfo.id));

@@ -113,7 +113,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "7fc2a5a795ef3173b8f9";
+/******/ 	var hotCurrentHash = "e0d29699a0a53d5f49b9";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1048,8 +1048,8 @@ var App = function(props) {
 	var ti = null;
 	App.store = this.initStore(history_BrowserHistory.createBrowserHistory({ basename : "/", getUserConfirmation : state_CState.confirmTransition}));
 	this.state = App.store.getState();
-	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "App.hx", lineNumber : 177, className : "App", methodName : "new"});
-	haxe_Log.trace(App.devIP,{ fileName : "App.hx", lineNumber : 179, className : "App", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "App.hx", lineNumber : 176, className : "App", methodName : "new"});
+	haxe_Log.trace(App.devIP,{ fileName : "App.hx", lineNumber : 178, className : "App", methodName : "new"});
 	this.tul = App.startHistoryListener(App.store,this.state.locationStore.history);
 	window.onresize = function() {
 		if(ti != null) {
@@ -1063,11 +1063,11 @@ var App = function(props) {
 			while(cpi.hasNext()) cpi.next().layOut();
 		},250);
 	};
-	me_cunity_debug_Out.dumpObject(this.state.userState,{ fileName : "App.hx", lineNumber : 202, className : "App", methodName : "new"});
+	me_cunity_debug_Out.dumpObject(this.state.userState,{ fileName : "App.hx", lineNumber : 201, className : "App", methodName : "new"});
 	if(!(this.state.userState.dbUser.id == null || this.state.userState.dbUser.jwt == "")) {
 		var p = this.load();
 		p.then(function(dbData) {
-			haxe_Log.trace(haxe_ds_StringMap.keysIterator(dbData.dataErrors.h).hasNext(),{ fileName : "App.hx", lineNumber : 208, className : "App", methodName : "new"});
+			haxe_Log.trace(haxe_ds_StringMap.keysIterator(dbData.dataErrors.h).hasNext(),{ fileName : "App.hx", lineNumber : 207, className : "App", methodName : "new"});
 			if(!Lambda.empty(dbData.dataErrors) && Object.prototype.hasOwnProperty.call(dbData.dataErrors.h,"jwtError")) {
 				App.store.dispatch(redux_Action.map(action_UserAction.LoginExpired({ waiting : false, loginTask : "Login"})));
 			} else {
@@ -1076,10 +1076,10 @@ var App = function(props) {
 			}
 		});
 	} else {
-		haxe_Log.trace("LOGIN required",{ fileName : "App.hx", lineNumber : 221, className : "App", methodName : "new"});
+		haxe_Log.trace("LOGIN required",{ fileName : "App.hx", lineNumber : 220, className : "App", methodName : "new"});
 		App.store.dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginRequired(react_ReactUtil.copy(this.state.userState,{ waiting : false})))));
 	}
-	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "App.hx", lineNumber : 231, className : "App", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "App.hx", lineNumber : 230, className : "App", methodName : "new"});
 };
 $hxClasses["App"] = App;
 App.__name__ = "App";
@@ -1089,13 +1089,13 @@ App.store = null;
 App.startHistoryListener = function(store,history) {
 	store.dispatch(redux_Action.map(action_AppAction.Location(action_LocationAction.InitHistory(history))));
 	return history.listen(function(location,action) {
-		haxe_Log.trace(location.pathname,{ fileName : "App.hx", lineNumber : 161, className : "App", methodName : "startHistoryListener"});
+		haxe_Log.trace(location.pathname,{ fileName : "App.hx", lineNumber : 160, className : "App", methodName : "startHistoryListener"});
 		store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ path : location.pathname, text : ""}))));
 		store.dispatch(redux_Action.map(action_LocationAction.LocationChange(location)));
 	});
 };
 App.edump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 272, className : "App", methodName : "edump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 271, className : "App", methodName : "edump"});
 	return "OK";
 };
 App.await = function(delay,check,cb) {
@@ -1129,7 +1129,7 @@ App.initEState = function(init,comp) {
 	return fS2;
 };
 App.jsxDump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 328, className : "App", methodName : "jsxDump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 327, className : "App", methodName : "jsxDump"});
 	return "OK";
 };
 App.queryString2 = function(params) {
@@ -1156,7 +1156,7 @@ App.queryString2 = function(params) {
 		result[i] = query;
 	}
 	var query = result.join("&");
-	haxe_Log.trace(query,{ fileName : "App.hx", lineNumber : 347, className : "App", methodName : "queryString2"});
+	haxe_Log.trace(query,{ fileName : "App.hx", lineNumber : 346, className : "App", methodName : "queryString2"});
 	return query;
 };
 App.__super__ = React_Component;
@@ -1165,11 +1165,11 @@ App.prototype = $extend(React_Component.prototype,{
 	,tul: null
 	,initStore: function(history) {
 		var userStore = new store_UserStore();
-		haxe_Log.trace(Reflect.fields(userStore),{ fileName : "App.hx", lineNumber : 98, className : "App", methodName : "initStore"});
+		haxe_Log.trace(Reflect.fields(userStore),{ fileName : "App.hx", lineNumber : 97, className : "App", methodName : "initStore"});
 		var appWare = new store_AppStore(userStore);
 		var locationStore = new store_LocationStore(history);
 		var rootReducer = redux_Redux.combineReducers({ config : redux_StoreBuilder.mapReducer(action_ConfigAction,new store_ConfigStore(App.config)), dataStore : redux_StoreBuilder.mapReducer(action_DataAction,new store_DataStore()), locationStore : redux_StoreBuilder.mapReducer(action_LocationAction,locationStore), status : redux_StoreBuilder.mapReducer(action_StatusAction,new store_StatusStore()), userState : redux_StoreBuilder.mapReducer(action_UserAction,userStore)});
-		haxe_Log.trace(rootReducer,{ fileName : "App.hx", lineNumber : 113, className : "App", methodName : "initStore"});
+		haxe_Log.trace(rootReducer,{ fileName : "App.hx", lineNumber : 112, className : "App", methodName : "initStore"});
 		return redux_StoreBuilder.createStore(rootReducer,null,redux_Redux.applyMiddleware(redux_StoreBuilder.mapMiddleware(redux_thunk_Thunk,new redux_thunk_ThunkMiddleware()),redux_StoreBuilder.mapMiddleware(action_AppAction,appWare),redux_StoreBuilder.mapMiddleware(action_LocationAction,locationStore),redux_StoreBuilder.mapMiddleware(action_UserAction,userStore)));
 	}
 	,loadFromLocalStorage: function() {
@@ -1182,7 +1182,7 @@ App.prototype = $extend(React_Component.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var e = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(e,{ fileName : "App.hx", lineNumber : 132, className : "App", methodName : "loadFromLocalStorage"});
+			haxe_Log.trace(e,{ fileName : "App.hx", lineNumber : 131, className : "App", methodName : "loadFromLocalStorage"});
 			return { };
 		}
 	}
@@ -1192,27 +1192,27 @@ App.prototype = $extend(React_Component.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var e = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(e,{ fileName : "App.hx", lineNumber : 144, className : "App", methodName : "saveToLocalStorage"});
+			haxe_Log.trace(e,{ fileName : "App.hx", lineNumber : 143, className : "App", methodName : "saveToLocalStorage"});
 		}
 	}
 	,load: function() {
 		return App.store.dispatch(redux_Action.map(action_async_UserAccess.verify()));
 	}
 	,gGet: function(key) {
-		haxe_Log.trace(key,{ fileName : "App.hx", lineNumber : 241, className : "App", methodName : "gGet"});
+		haxe_Log.trace(key,{ fileName : "App.hx", lineNumber : 240, className : "App", methodName : "gGet"});
 		return this.globalState.h[key];
 	}
 	,gSet: function(key,val) {
 		this.globalState.h[key] = val;
 	}
 	,componentDidMount: function() {
-		haxe_Log.trace("yeah",{ fileName : "App.hx", lineNumber : 253, className : "App", methodName : "componentDidMount"});
+		haxe_Log.trace("yeah",{ fileName : "App.hx", lineNumber : 252, className : "App", methodName : "componentDidMount"});
 	}
 	,componentDidCatch: function(error,info) {
-		haxe_Log.trace(error,{ fileName : "App.hx", lineNumber : 258, className : "App", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "App.hx", lineNumber : 257, className : "App", methodName : "componentDidCatch"});
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace("...",{ fileName : "App.hx", lineNumber : 263, className : "App", methodName : "componentDidUpdate"});
+		haxe_Log.trace("...",{ fileName : "App.hx", lineNumber : 262, className : "App", methodName : "componentDidUpdate"});
 	}
 	,componentWillUnmount: function() {
 		this.tul();
@@ -1507,6 +1507,564 @@ HxOverrides.remove = function(a,obj) {
 HxOverrides.now = function() {
 	return Date.now();
 };
+var json2object_reader_BaseParser = function(errors,putils,errorType) {
+	this.errors = errors;
+	this.putils = putils;
+	this.errorType = errorType;
+};
+$hxClasses["json2object.reader.BaseParser"] = json2object_reader_BaseParser;
+json2object_reader_BaseParser.__name__ = "json2object.reader.BaseParser";
+json2object_reader_BaseParser.prototype = {
+	value: null
+	,errors: null
+	,errorType: null
+	,putils: null
+	,fromJson: function(jsonString,filename) {
+		if(filename == null) {
+			filename = "";
+		}
+		this.putils = new json2object_PositionUtils(jsonString);
+		this.errors = [];
+		try {
+			var json = new hxjsonast_Parser(jsonString,filename).parseRec();
+			this.loadJson(json);
+		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
+			var _g1 = haxe_Exception.caught(_g).unwrap();
+			if(((_g1) instanceof hxjsonast_Error)) {
+				var e = _g1;
+				this.errors.push(json2object_Error.ParserError(e.message,this.putils.convertPosition(e.pos)));
+			} else {
+				throw _g;
+			}
+		}
+		return this.value;
+	}
+	,loadJson: function(json,variable) {
+		if(variable == null) {
+			variable = "";
+		}
+		var pos = this.putils.convertPosition(json.pos);
+		var _g = json.value;
+		switch(_g._hx_index) {
+		case 0:
+			var s = _g.s;
+			this.loadJsonString(s,pos,variable);
+			break;
+		case 1:
+			var n = _g.s;
+			this.loadJsonNumber(n,pos,variable);
+			break;
+		case 2:
+			var o = _g.fields;
+			this.loadJsonObject(o,pos,variable);
+			break;
+		case 3:
+			var a = _g.values;
+			this.loadJsonArray(a,pos,variable);
+			break;
+		case 4:
+			var b = _g.b;
+			this.loadJsonBool(b,pos,variable);
+			break;
+		case 5:
+			this.loadJsonNull(pos,variable);
+			break;
+		}
+		return this.value;
+	}
+	,loadJsonNull: function(pos,variable) {
+		this.onIncorrectType(pos,variable);
+	}
+	,loadJsonString: function(s,pos,variable) {
+		this.onIncorrectType(pos,variable);
+	}
+	,loadString: function(s,pos,variable,validValues,defaultValue) {
+		if(validValues.indexOf(s) != -1) {
+			return s;
+		}
+		this.onIncorrectType(pos,variable);
+		return defaultValue;
+	}
+	,loadJsonNumber: function(f,pos,variable) {
+		this.onIncorrectType(pos,variable);
+	}
+	,loadJsonUInt: function(f,pos,variable,value) {
+		var uint = 0;
+		f = StringTools.trim(f);
+		var neg = f.charAt(0) == "-";
+		if(neg) {
+			f = HxOverrides.substr(f,1,null);
+		}
+		var hex = StringTools.startsWith(f,"0x");
+		if(hex) {
+			f = HxOverrides.substr(f,2,null);
+		}
+		var base = hex ? 16 : 10;
+		var pow = 1;
+		var i = f.length - 1;
+		while(i >= 0) {
+			var cur = hex ? Std.parseInt("0x" + f.charAt(i)) : Std.parseInt(f.charAt(i));
+			if(cur == null) {
+				this.onIncorrectType(pos,variable);
+				return value;
+			}
+			uint = uint + pow * cur;
+			pow *= base;
+			--i;
+		}
+		return uint;
+	}
+	,loadJsonInt: function(f,pos,variable,value) {
+		if(Std.parseInt(f) != null && Std.parseInt(f) == parseFloat(f)) {
+			return Std.parseInt(f);
+		}
+		this.onIncorrectType(pos,variable);
+		return value;
+	}
+	,loadJsonFloat: function(f,pos,variable,value) {
+		if(Std.parseInt(f) != null) {
+			return parseFloat(f);
+		}
+		this.onIncorrectType(pos,variable);
+		return value;
+	}
+	,loadJsonBool: function(b,pos,variable) {
+		this.onIncorrectType(pos,variable);
+	}
+	,loadJsonArray: function(a,pos,variable) {
+		this.onIncorrectType(pos,variable);
+	}
+	,loadJsonArrayValue: function(a,loadJsonFn,variable) {
+		var _g = [];
+		var _g1 = 0;
+		while(_g1 < a.length) {
+			var j = a[_g1];
+			++_g1;
+			var tmp;
+			try {
+				tmp = loadJsonFn(j,variable);
+			} catch( _g2 ) {
+				haxe_NativeStackTrace.lastError = _g2;
+				var _g3 = haxe_Exception.caught(_g2).unwrap();
+				if(js_Boot.__instanceof(_g3,json2object_InternalError)) {
+					var e = _g3;
+					if(e != json2object_InternalError.ParsingThrow) {
+						throw haxe_Exception.thrown(e);
+					}
+					continue;
+				} else {
+					throw _g2;
+				}
+			}
+			_g.push(tmp);
+		}
+		return _g;
+	}
+	,loadJsonObject: function(o,pos,variable) {
+		this.onIncorrectType(pos,variable);
+	}
+	,loadObjectField: function(loadJsonFn,field,name,assigned,defaultValue,pos) {
+		try {
+			var ret = loadJsonFn(field.value,field.name);
+			this.mapSet(assigned,name,true);
+			return ret;
+		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
+			var _g1 = haxe_Exception.caught(_g).unwrap();
+			if(js_Boot.__instanceof(_g1,json2object_InternalError)) {
+				var e = _g1;
+				if(e != json2object_InternalError.ParsingThrow) {
+					throw haxe_Exception.thrown(e);
+				}
+			} else {
+				var e = _g1;
+				this.errors.push(json2object_Error.CustomFunctionException(e,pos));
+			}
+		}
+		return defaultValue;
+	}
+	,loadObjectFieldReflect: function(loadJsonFn,field,name,assigned,pos) {
+		try {
+			this.value[name] = loadJsonFn(field.value,field.name);
+			this.mapSet(assigned,name,true);
+		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
+			var _g1 = haxe_Exception.caught(_g).unwrap();
+			if(js_Boot.__instanceof(_g1,json2object_InternalError)) {
+				var e = _g1;
+				if(e != json2object_InternalError.ParsingThrow) {
+					throw haxe_Exception.thrown(e);
+				}
+			} else {
+				var e = _g1;
+				this.errors.push(json2object_Error.CustomFunctionException(e,pos));
+			}
+		}
+	}
+	,objectSetupAssign: function(assigned,keys,values) {
+		var _g = 0;
+		var _g1 = keys.length;
+		while(_g < _g1) {
+			var i = _g++;
+			this.mapSet(assigned,keys[i],values[i]);
+		}
+	}
+	,objectErrors: function(assigned,pos) {
+		var lastPos = this.putils.convertPosition(new hxjsonast_Position(pos.file,pos.max - 1,pos.max - 1));
+		var s = haxe_ds_StringMap.keysIterator(assigned.h);
+		while(s.hasNext()) {
+			var s1 = s.next();
+			if(!assigned.h[s1]) {
+				this.errors.push(json2object_Error.UninitializedVariable(s1,lastPos));
+			}
+		}
+	}
+	,onIncorrectType: function(pos,variable) {
+		this.parsingThrow();
+	}
+	,parsingThrow: function() {
+		if(this.errorType != 0) {
+			throw haxe_Exception.thrown(json2object_InternalError.ParsingThrow);
+		}
+	}
+	,objectThrow: function(pos,variable) {
+		if(this.errorType == 2) {
+			throw haxe_Exception.thrown(json2object_InternalError.ParsingThrow);
+		}
+		if(this.errorType == 1) {
+			this.errors.push(json2object_Error.UninitializedVariable(variable,pos));
+		}
+	}
+	,mapSet: function(map,key,value) {
+		map.h[key] = value;
+	}
+	,__class__: json2object_reader_BaseParser
+};
+var JsonParser_$1 = function(errors,putils,errorType) {
+	if(errorType == null) {
+		errorType = 0;
+	}
+	json2object_reader_BaseParser.call(this,errors,putils,errorType);
+};
+$hxClasses["JsonParser_1"] = JsonParser_$1;
+JsonParser_$1.__name__ = "JsonParser_1";
+JsonParser_$1.__super__ = json2object_reader_BaseParser;
+JsonParser_$1.prototype = $extend(json2object_reader_BaseParser.prototype,{
+	onIncorrectType: function(pos,variable) {
+		this.errors.push(json2object_Error.IncorrectType(variable,"haxe.ds.Map<String, view.shared.BaseField>",pos));
+		json2object_reader_BaseParser.prototype.onIncorrectType.call(this,pos,variable);
+	}
+	,loadJsonNull: function(pos,variable) {
+		this.value = null;
+	}
+	,loadJsonObject: function(o,pos,variable) {
+		this.value = new haxe_ds_StringMap();
+		var _g = 0;
+		while(_g < o.length) {
+			var field = o[_g];
+			++_g;
+			var this1 = this.value;
+			var key;
+			try {
+				var key1 = new JsonParser_$2(this.errors,this.putils,2);
+				var _this = this.putils;
+				key = key1.loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JString(field.name),new hxjsonast_Position(pos.file,pos.min - 1,pos.max - 1)),variable);
+			} catch( _g1 ) {
+				haxe_NativeStackTrace.lastError = _g1;
+				var _g2 = haxe_Exception.caught(_g1).unwrap();
+				if(js_Boot.__instanceof(_g2,json2object_InternalError)) {
+					var e = _g2;
+					if(e != json2object_InternalError.ParsingThrow) {
+						throw haxe_Exception.thrown(e);
+					}
+					continue;
+				} else {
+					throw _g1;
+				}
+			}
+			var value;
+			try {
+				value = new JsonParser_$4(this.errors,this.putils,2).loadJson(field.value,field.name);
+			} catch( _g3 ) {
+				haxe_NativeStackTrace.lastError = _g3;
+				var _g4 = haxe_Exception.caught(_g3).unwrap();
+				if(js_Boot.__instanceof(_g4,json2object_InternalError)) {
+					var e1 = _g4;
+					if(e1 != json2object_InternalError.ParsingThrow) {
+						throw haxe_Exception.thrown(e1);
+					}
+					continue;
+				} else {
+					throw _g3;
+				}
+			}
+			this1.h[key] = value;
+		}
+	}
+	,getAuto: function() {
+		return new JsonParser_$1([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1)));
+	}
+	,__class__: JsonParser_$1
+});
+var JsonParser_$11 = function(errors,putils,errorType) {
+	if(errorType == null) {
+		errorType = 0;
+	}
+	json2object_reader_BaseParser.call(this,errors,putils,errorType);
+};
+$hxClasses["JsonParser_11"] = JsonParser_$11;
+JsonParser_$11.__name__ = "JsonParser_11";
+JsonParser_$11.__super__ = json2object_reader_BaseParser;
+JsonParser_$11.prototype = $extend(json2object_reader_BaseParser.prototype,{
+	onIncorrectType: function(pos,variable) {
+		this.errors.push(json2object_Error.IncorrectType(variable,"haxe.ds.Map<String, String>",pos));
+		json2object_reader_BaseParser.prototype.onIncorrectType.call(this,pos,variable);
+	}
+	,loadJsonNull: function(pos,variable) {
+		this.value = null;
+	}
+	,loadJsonObject: function(o,pos,variable) {
+		this.value = new haxe_ds_StringMap();
+		var _g = 0;
+		while(_g < o.length) {
+			var field = o[_g];
+			++_g;
+			var this1 = this.value;
+			var key;
+			try {
+				var key1 = new JsonParser_$2(this.errors,this.putils,2);
+				var _this = this.putils;
+				key = key1.loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JString(field.name),new hxjsonast_Position(pos.file,pos.min - 1,pos.max - 1)),variable);
+			} catch( _g1 ) {
+				haxe_NativeStackTrace.lastError = _g1;
+				var _g2 = haxe_Exception.caught(_g1).unwrap();
+				if(js_Boot.__instanceof(_g2,json2object_InternalError)) {
+					var e = _g2;
+					if(e != json2object_InternalError.ParsingThrow) {
+						throw haxe_Exception.thrown(e);
+					}
+					continue;
+				} else {
+					throw _g1;
+				}
+			}
+			var value;
+			try {
+				value = new JsonParser_$2(this.errors,this.putils,2).loadJson(field.value,field.name);
+			} catch( _g3 ) {
+				haxe_NativeStackTrace.lastError = _g3;
+				var _g4 = haxe_Exception.caught(_g3).unwrap();
+				if(js_Boot.__instanceof(_g4,json2object_InternalError)) {
+					var e1 = _g4;
+					if(e1 != json2object_InternalError.ParsingThrow) {
+						throw haxe_Exception.thrown(e1);
+					}
+					continue;
+				} else {
+					throw _g3;
+				}
+			}
+			this1.h[key] = value;
+		}
+	}
+	,getAuto: function() {
+		return new JsonParser_$11([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1)));
+	}
+	,__class__: JsonParser_$11
+});
+var JsonParser_$13 = function(errors,putils,errorType) {
+	if(errorType == null) {
+		errorType = 0;
+	}
+	json2object_reader_BaseParser.call(this,errors,putils,errorType);
+};
+$hxClasses["JsonParser_13"] = JsonParser_$13;
+JsonParser_$13.__name__ = "JsonParser_13";
+JsonParser_$13.__super__ = json2object_reader_BaseParser;
+JsonParser_$13.prototype = $extend(json2object_reader_BaseParser.prototype,{
+	onIncorrectType: function(pos,variable) {
+		this.value = "Button";
+		this.errors.push(json2object_Error.IncorrectType(variable,"view.shared.FormInputElement",pos));
+		this.objectThrow(pos,variable);
+	}
+	,loadJsonNull: function(pos,variable) {
+		this.value = null;
+	}
+	,loadJsonString: function(s,pos,variable) {
+		this.value = this.loadString(s,pos,variable,["Button","Hidden","DatePicker","DateTimePicker","Input","Password","Checkbox","Radio","Select","None","NFormat","TextArea","File","Upload"],"Button");
+	}
+	,getAuto: function() {
+		return new JsonParser_$13([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1)));
+	}
+	,__class__: JsonParser_$13
+});
+var JsonParser_$2 = function(errors,putils,errorType) {
+	if(errorType == null) {
+		errorType = 0;
+	}
+	json2object_reader_BaseParser.call(this,errors,putils,errorType);
+};
+$hxClasses["JsonParser_2"] = JsonParser_$2;
+JsonParser_$2.__name__ = "JsonParser_2";
+JsonParser_$2.__super__ = json2object_reader_BaseParser;
+JsonParser_$2.prototype = $extend(json2object_reader_BaseParser.prototype,{
+	onIncorrectType: function(pos,variable) {
+		this.errors.push(json2object_Error.IncorrectType(variable,"String",pos));
+		json2object_reader_BaseParser.prototype.onIncorrectType.call(this,pos,variable);
+	}
+	,loadJsonNull: function(pos,variable) {
+		this.value = null;
+	}
+	,loadJsonString: function(s,pos,variable) {
+		this.value = s;
+	}
+	,getAuto: function() {
+		return new JsonParser_$2([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1)));
+	}
+	,__class__: JsonParser_$2
+});
+var JsonParser_$4 = function(errors,putils,errorType) {
+	if(errorType == null) {
+		errorType = 0;
+	}
+	json2object_reader_BaseParser.call(this,errors,putils,errorType);
+};
+$hxClasses["JsonParser_4"] = JsonParser_$4;
+JsonParser_$4.__name__ = "JsonParser_4";
+JsonParser_$4.__super__ = json2object_reader_BaseParser;
+JsonParser_$4.prototype = $extend(json2object_reader_BaseParser.prototype,{
+	onIncorrectType: function(pos,variable) {
+		this.errors.push(json2object_Error.IncorrectType(variable,"{ ?value : Null<String>, ?type : Null<view.shared.FormInputElement>, ?submit : Null<String>, ?required : Null<Bool>, ?primary : Null<Bool>, ?preset : Null<Bool>, ?placeholder : Null<String>, ?options : Null<Map<String, String>>, ?name : Null<String>, ?multiple : Null<Bool>, ?label : Null<String>, ?displayFormat : Null<String>, ?disabled : Null<Bool>, ?dataTable : Null<String>, ?dataField : Null<String>, ?dataBase : Null<String>, ?classPath : Null<String>, ?className : Null<String> }",pos));
+		json2object_reader_BaseParser.prototype.onIncorrectType.call(this,pos,variable);
+	}
+	,loadJsonNull: function(pos,variable) {
+		this.value = null;
+	}
+	,loadJsonObject: function(o,pos,variable) {
+		var assigned = new haxe_ds_StringMap();
+		this.objectSetupAssign(assigned,["className","classPath","dataBase","dataField","dataTable","disabled","displayFormat","label","multiple","name","options","placeholder","preset","primary","required","submit","type","value"],[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true]);
+		this.value = this.getAuto();
+		var _g = 0;
+		while(_g < o.length) {
+			var field = o[_g];
+			++_g;
+			switch(field.name) {
+			case "className":
+				this.value.className = this.loadObjectField(($_=new JsonParser_$6(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"className",assigned,this.value.className,pos);
+				break;
+			case "classPath":
+				this.value.classPath = this.loadObjectField(($_=new JsonParser_$6(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"classPath",assigned,this.value.classPath,pos);
+				break;
+			case "dataBase":
+				this.value.dataBase = this.loadObjectField(($_=new JsonParser_$6(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"dataBase",assigned,this.value.dataBase,pos);
+				break;
+			case "dataField":
+				this.value.dataField = this.loadObjectField(($_=new JsonParser_$6(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"dataField",assigned,this.value.dataField,pos);
+				break;
+			case "dataTable":
+				this.value.dataTable = this.loadObjectField(($_=new JsonParser_$6(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"dataTable",assigned,this.value.dataTable,pos);
+				break;
+			case "disabled":
+				this.value.disabled = this.loadObjectField(($_=new JsonParser_$8(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"disabled",assigned,this.value.disabled,pos);
+				break;
+			case "displayFormat":
+				this.value.displayFormat = this.loadObjectField(($_=new JsonParser_$6(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"displayFormat",assigned,this.value.displayFormat,pos);
+				break;
+			case "label":
+				this.value.label = this.loadObjectField(($_=new JsonParser_$6(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"label",assigned,this.value.label,pos);
+				break;
+			case "multiple":
+				this.value.multiple = this.loadObjectField(($_=new JsonParser_$8(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"multiple",assigned,this.value.multiple,pos);
+				break;
+			case "name":
+				this.value.name = this.loadObjectField(($_=new JsonParser_$6(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"name",assigned,this.value.name,pos);
+				break;
+			case "options":
+				this.value.options = this.loadObjectField(($_=new JsonParser_$11(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"options",assigned,this.value.options,pos);
+				break;
+			case "placeholder":
+				this.value.placeholder = this.loadObjectField(($_=new JsonParser_$6(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"placeholder",assigned,this.value.placeholder,pos);
+				break;
+			case "preset":
+				this.value.preset = this.loadObjectField(($_=new JsonParser_$8(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"preset",assigned,this.value.preset,pos);
+				break;
+			case "primary":
+				this.value.primary = this.loadObjectField(($_=new JsonParser_$8(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"primary",assigned,this.value.primary,pos);
+				break;
+			case "required":
+				this.value.required = this.loadObjectField(($_=new JsonParser_$8(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"required",assigned,this.value.required,pos);
+				break;
+			case "submit":
+				this.value.submit = this.loadObjectField(($_=new JsonParser_$6(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"submit",assigned,this.value.submit,pos);
+				break;
+			case "type":
+				this.value.type = this.loadObjectField(($_=new JsonParser_$13(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"type",assigned,this.value.type,pos);
+				break;
+			case "value":
+				this.value.value = this.loadObjectField(($_=new JsonParser_$6(this.errors,this.putils,1),$bind($_,$_.loadJson)),field,"value",assigned,this.value.value,pos);
+				break;
+			default:
+				this.errors.push(json2object_Error.UnknownVariable(field.name,this.putils.convertPosition(field.namePos)));
+			}
+		}
+		this.objectErrors(assigned,pos);
+	}
+	,getAuto: function() {
+		return { className : new JsonParser_$6([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), classPath : new JsonParser_$6([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), dataBase : new JsonParser_$6([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), dataField : new JsonParser_$6([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), dataTable : new JsonParser_$6([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), disabled : new JsonParser_$8([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), displayFormat : new JsonParser_$6([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), label : new JsonParser_$6([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), multiple : new JsonParser_$8([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), name : new JsonParser_$6([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), options : new JsonParser_$11([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), placeholder : new JsonParser_$6([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), preset : new JsonParser_$8([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), primary : new JsonParser_$8([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), required : new JsonParser_$8([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), submit : new JsonParser_$6([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), type : new JsonParser_$13([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1))), value : new JsonParser_$6([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1)))};
+	}
+	,__class__: JsonParser_$4
+});
+var JsonParser_$6 = function(errors,putils,errorType) {
+	if(errorType == null) {
+		errorType = 0;
+	}
+	json2object_reader_BaseParser.call(this,errors,putils,errorType);
+};
+$hxClasses["JsonParser_6"] = JsonParser_$6;
+JsonParser_$6.__name__ = "JsonParser_6";
+JsonParser_$6.__super__ = json2object_reader_BaseParser;
+JsonParser_$6.prototype = $extend(json2object_reader_BaseParser.prototype,{
+	onIncorrectType: function(pos,variable) {
+		this.errors.push(json2object_Error.IncorrectType(variable,"String",pos));
+		json2object_reader_BaseParser.prototype.onIncorrectType.call(this,pos,variable);
+	}
+	,loadJsonNull: function(pos,variable) {
+		this.value = null;
+	}
+	,loadJsonString: function(s,pos,variable) {
+		this.value = s;
+	}
+	,getAuto: function() {
+		return new JsonParser_$6([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1)));
+	}
+	,__class__: JsonParser_$6
+});
+var JsonParser_$8 = function(errors,putils,errorType) {
+	if(errorType == null) {
+		errorType = 0;
+	}
+	json2object_reader_BaseParser.call(this,errors,putils,errorType);
+};
+$hxClasses["JsonParser_8"] = JsonParser_$8;
+JsonParser_$8.__name__ = "JsonParser_8";
+JsonParser_$8.__super__ = json2object_reader_BaseParser;
+JsonParser_$8.prototype = $extend(json2object_reader_BaseParser.prototype,{
+	onIncorrectType: function(pos,variable) {
+		this.errors.push(json2object_Error.IncorrectType(variable,"Bool",pos));
+		json2object_reader_BaseParser.prototype.onIncorrectType.call(this,pos,variable);
+	}
+	,loadJsonNull: function(pos,variable) {
+		this.value = null;
+	}
+	,loadJsonBool: function(b,pos,variable) {
+		this.value = b;
+	}
+	,getAuto: function() {
+		return new JsonParser_$8([],this.putils,0).loadJson(new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position("",0,1)));
+	}
+	,__class__: JsonParser_$8
+});
 var JsxStaticInit_$_$ = function() { };
 $hxClasses["JsxStaticInit__"] = JsxStaticInit_$_$;
 JsxStaticInit_$_$.__name__ = "JsxStaticInit__";
@@ -2419,7 +2977,6 @@ action_async_DBAccess.upload = function(param) {
 	haxe_Log.trace(param.action,{ fileName : "action/async/DBAccess.hx", lineNumber : 176, className : "action.async.DBAccess", methodName : "upload"});
 	return redux_thunk_Thunk.Action(function(dispatch,getState) {
 		haxe_Log.trace(param,{ fileName : "action/async/DBAccess.hx", lineNumber : 178, className : "action.async.DBAccess", methodName : "upload"});
-		var dbData = shared_DbDataTools.create();
 		return new Promise(function(resolve,reject) {
 			if(!param.dbUser.online) {
 				dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ dbUser : param.dbUser, lastError : "Du musst dich neu anmelden!"}))));
@@ -6255,6 +6812,7 @@ haxe_IMap.prototype = {
 	,remove: null
 	,keys: null
 	,iterator: null
+	,toString: null
 	,__class__: haxe_IMap
 };
 var haxe_Exception = function(message,previous,native) {
@@ -7747,6 +8305,13 @@ haxe_ds_BalancedTree.prototype = {
 	,compare: function(k1,k2) {
 		return Reflect.compare(k1,k2);
 	}
+	,toString: function() {
+		if(this.root == null) {
+			return "{}";
+		} else {
+			return "{" + this.root.toString() + "}";
+		}
+	}
 	,__class__: haxe_ds_BalancedTree
 };
 var haxe_ds_TreeNode = function(l,k,v,r,h) {
@@ -7781,6 +8346,9 @@ haxe_ds_TreeNode.prototype = {
 	,key: null
 	,value: null
 	,_height: null
+	,toString: function() {
+		return (this.left == null ? "" : this.left.toString() + ", ") + ("" + Std.string(this.key) + "=" + Std.string(this.value)) + (this.right == null ? "" : ", " + this.right.toString());
+	}
 	,__class__: haxe_ds_TreeNode
 };
 var haxe_ds_Either = $hxEnums["haxe.ds.Either"] = { __ename__ : "haxe.ds.Either", __constructs__ : ["Left","Right"]
@@ -7880,6 +8448,23 @@ haxe_ds_IntMap.prototype = {
 		}
 		return copied;
 	}
+	,toString: function() {
+		var s_b = "";
+		s_b += "{";
+		var it = this.keys();
+		var i = it;
+		while(i.hasNext()) {
+			var i1 = i.next();
+			s_b += i1 == null ? "null" : "" + i1;
+			s_b += " => ";
+			s_b += Std.string(Std.string(this.h[i1]));
+			if(it.hasNext()) {
+				s_b += ", ";
+			}
+		}
+		s_b += "}";
+		return s_b;
+	}
 	,__class__: haxe_ds_IntMap
 };
 var haxe_ds__$List_ListNode = function(item,next) {
@@ -7958,6 +8543,23 @@ haxe_ds_ObjectMap.prototype = {
 			var i = this.it.next();
 			return this.ref[i.__id__];
 		}};
+	}
+	,toString: function() {
+		var s_b = "";
+		s_b += "{";
+		var it = this.keys();
+		var i = it;
+		while(i.hasNext()) {
+			var i1 = i.next();
+			s_b += Std.string(Std.string(i1));
+			s_b += " => ";
+			s_b += Std.string(Std.string(this.h[i1.__id__]));
+			if(it.hasNext()) {
+				s_b += ", ";
+			}
+		}
+		s_b += "}";
+		return s_b;
 	}
 	,__class__: haxe_ds_ObjectMap
 };
@@ -8043,6 +8645,9 @@ haxe_ds_StringMap.prototype = {
 	}
 	,iterator: function() {
 		return haxe_ds_StringMap.valueIterator(this.h);
+	}
+	,toString: function() {
+		return haxe_ds_StringMap.stringify(this.h);
 	}
 	,__class__: haxe_ds_StringMap
 };
@@ -12110,6 +12715,395 @@ hxbit_enumSer_Hxbit_$PropTypeDesc.getSchema = function() {
 	s.fieldsNames.push("PStruct");
 	return s;
 };
+var hxjsonast_Error = function(message,pos) {
+	this.message = message;
+	this.pos = pos;
+};
+$hxClasses["hxjsonast.Error"] = hxjsonast_Error;
+hxjsonast_Error.__name__ = "hxjsonast.Error";
+hxjsonast_Error.prototype = {
+	message: null
+	,pos: null
+	,__class__: hxjsonast_Error
+};
+var hxjsonast_Json = function(value,pos) {
+	this.value = value;
+	this.pos = pos;
+};
+$hxClasses["hxjsonast.Json"] = hxjsonast_Json;
+hxjsonast_Json.__name__ = "hxjsonast.Json";
+hxjsonast_Json.prototype = {
+	value: null
+	,pos: null
+	,__class__: hxjsonast_Json
+};
+var hxjsonast_JsonValue = $hxEnums["hxjsonast.JsonValue"] = { __ename__ : "hxjsonast.JsonValue", __constructs__ : ["JString","JNumber","JObject","JArray","JBool","JNull"]
+	,JString: ($_=function(s) { return {_hx_index:0,s:s,__enum__:"hxjsonast.JsonValue",toString:$estr}; },$_.__params__ = ["s"],$_)
+	,JNumber: ($_=function(s) { return {_hx_index:1,s:s,__enum__:"hxjsonast.JsonValue",toString:$estr}; },$_.__params__ = ["s"],$_)
+	,JObject: ($_=function(fields) { return {_hx_index:2,fields:fields,__enum__:"hxjsonast.JsonValue",toString:$estr}; },$_.__params__ = ["fields"],$_)
+	,JArray: ($_=function(values) { return {_hx_index:3,values:values,__enum__:"hxjsonast.JsonValue",toString:$estr}; },$_.__params__ = ["values"],$_)
+	,JBool: ($_=function(b) { return {_hx_index:4,b:b,__enum__:"hxjsonast.JsonValue",toString:$estr}; },$_.__params__ = ["b"],$_)
+	,JNull: {_hx_index:5,__enum__:"hxjsonast.JsonValue",toString:$estr}
+};
+var hxjsonast_JObjectField = function(name,namePos,value) {
+	this.name = name;
+	this.namePos = namePos;
+	this.value = value;
+};
+$hxClasses["hxjsonast.JObjectField"] = hxjsonast_JObjectField;
+hxjsonast_JObjectField.__name__ = "hxjsonast.JObjectField";
+hxjsonast_JObjectField.prototype = {
+	name: null
+	,namePos: null
+	,value: null
+	,__class__: hxjsonast_JObjectField
+};
+var hxjsonast_Parser = function(source,filename) {
+	this.source = source;
+	this.filename = filename;
+	this.pos = 0;
+};
+$hxClasses["hxjsonast.Parser"] = hxjsonast_Parser;
+hxjsonast_Parser.__name__ = "hxjsonast.Parser";
+hxjsonast_Parser.parse = function(source,filename) {
+	return new hxjsonast_Parser(source,filename).parseRec();
+};
+hxjsonast_Parser.prototype = {
+	source: null
+	,filename: null
+	,pos: null
+	,parseRec: function() {
+		while(true) {
+			var c = this.source.charCodeAt(this.pos++);
+			switch(c) {
+			case 9:case 10:case 13:case 32:
+				break;
+			case 34:
+				var save = this.pos;
+				var s = this.parseString();
+				return new hxjsonast_Json(hxjsonast_JsonValue.JString(s),new hxjsonast_Position(this.filename,save - 1,this.pos));
+			case 45:case 48:case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:
+				var start = this.pos - 1;
+				var minus = c == 45;
+				var digit = !minus;
+				var zero = c == 48;
+				var point = false;
+				var e = false;
+				var pm = false;
+				var end = false;
+				while(true) {
+					switch(this.source.charCodeAt(this.pos++)) {
+					case 43:case 45:
+						if(!e || pm) {
+							this.invalidNumber(start);
+						}
+						digit = false;
+						pm = true;
+						break;
+					case 46:
+						if(minus || point) {
+							this.invalidNumber(start);
+						}
+						digit = false;
+						point = true;
+						break;
+					case 48:
+						if(zero && !point) {
+							this.invalidNumber(start);
+						}
+						if(minus) {
+							minus = false;
+							zero = true;
+						}
+						digit = true;
+						break;
+					case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:
+						if(zero && !point) {
+							this.invalidNumber(start);
+						}
+						if(minus) {
+							minus = false;
+						}
+						digit = true;
+						zero = false;
+						break;
+					case 69:case 101:
+						if(minus || zero || e) {
+							this.invalidNumber(start);
+						}
+						digit = false;
+						e = true;
+						break;
+					default:
+						if(!digit) {
+							this.invalidNumber(start);
+						}
+						this.pos--;
+						end = true;
+					}
+					if(end) {
+						break;
+					}
+				}
+				var s1 = HxOverrides.substr(this.source,start,this.pos - start);
+				return new hxjsonast_Json(hxjsonast_JsonValue.JNumber(s1),new hxjsonast_Position(this.filename,start,this.pos));
+			case 91:
+				var values = [];
+				var comma = null;
+				var startPos = this.pos - 1;
+				while(true) switch(this.source.charCodeAt(this.pos++)) {
+				case 9:case 10:case 13:case 32:
+					break;
+				case 44:
+					if(comma) {
+						comma = false;
+					} else {
+						this.invalidChar();
+					}
+					break;
+				case 93:
+					if(comma == false) {
+						this.invalidChar();
+					}
+					return new hxjsonast_Json(hxjsonast_JsonValue.JArray(values),new hxjsonast_Position(this.filename,startPos,this.pos));
+				default:
+					if(comma) {
+						this.invalidChar();
+					}
+					this.pos--;
+					values.push(this.parseRec());
+					comma = true;
+				}
+				break;
+			case 102:
+				var save1 = this.pos;
+				if(this.source.charCodeAt(this.pos++) != 97 || this.source.charCodeAt(this.pos++) != 108 || this.source.charCodeAt(this.pos++) != 115 || this.source.charCodeAt(this.pos++) != 101) {
+					this.pos = save1;
+					this.invalidChar();
+				}
+				return new hxjsonast_Json(hxjsonast_JsonValue.JBool(false),new hxjsonast_Position(this.filename,save1 - 1,this.pos));
+			case 110:
+				var save2 = this.pos;
+				if(this.source.charCodeAt(this.pos++) != 117 || this.source.charCodeAt(this.pos++) != 108 || this.source.charCodeAt(this.pos++) != 108) {
+					this.pos = save2;
+					this.invalidChar();
+				}
+				return new hxjsonast_Json(hxjsonast_JsonValue.JNull,new hxjsonast_Position(this.filename,save2 - 1,this.pos));
+			case 116:
+				var save3 = this.pos;
+				if(this.source.charCodeAt(this.pos++) != 114 || this.source.charCodeAt(this.pos++) != 117 || this.source.charCodeAt(this.pos++) != 101) {
+					this.pos = save3;
+					this.invalidChar();
+				}
+				return new hxjsonast_Json(hxjsonast_JsonValue.JBool(true),new hxjsonast_Position(this.filename,save3 - 1,this.pos));
+			case 123:
+				var fields = [];
+				var names_h = Object.create(null);
+				var field = null;
+				var fieldPos = null;
+				var comma1 = null;
+				var startPos1 = this.pos - 1;
+				while(true) switch(this.source.charCodeAt(this.pos++)) {
+				case 9:case 10:case 13:case 32:
+					break;
+				case 34:
+					if(comma1) {
+						this.invalidChar();
+					}
+					var fieldStartPos = this.pos - 1;
+					field = this.parseString();
+					fieldPos = new hxjsonast_Position(this.filename,fieldStartPos,this.pos);
+					if(Object.prototype.hasOwnProperty.call(names_h,field)) {
+						throw haxe_Exception.thrown(new hxjsonast_Error("Duplicate field name \"" + field + "\"",fieldPos));
+					} else {
+						names_h[field] = true;
+					}
+					break;
+				case 44:
+					if(comma1) {
+						comma1 = false;
+					} else {
+						this.invalidChar();
+					}
+					break;
+				case 58:
+					if(field == null) {
+						this.invalidChar();
+					}
+					fields.push(new hxjsonast_JObjectField(field,fieldPos,this.parseRec()));
+					field = null;
+					fieldPos = null;
+					comma1 = true;
+					break;
+				case 125:
+					if(field != null || comma1 == false) {
+						this.invalidChar();
+					}
+					return new hxjsonast_Json(hxjsonast_JsonValue.JObject(fields),new hxjsonast_Position(this.filename,startPos1,this.pos));
+				default:
+					this.invalidChar();
+				}
+				break;
+			default:
+				this.invalidChar();
+			}
+		}
+	}
+	,parseString: function() {
+		var start = this.pos;
+		var buf = null;
+		while(true) {
+			var c = this.source.charCodeAt(this.pos++);
+			if(c == 34) {
+				break;
+			}
+			if(c == 92) {
+				if(buf == null) {
+					buf = new StringBuf();
+				}
+				var s = this.source;
+				var len = this.pos - start - 1;
+				buf.b += len == null ? HxOverrides.substr(s,start,null) : HxOverrides.substr(s,start,len);
+				c = this.source.charCodeAt(this.pos++);
+				switch(c) {
+				case 34:case 47:case 92:
+					buf.b += String.fromCodePoint(c);
+					break;
+				case 98:
+					buf.b += String.fromCodePoint(8);
+					break;
+				case 102:
+					buf.b += String.fromCodePoint(12);
+					break;
+				case 110:
+					buf.b += String.fromCodePoint(10);
+					break;
+				case 114:
+					buf.b += String.fromCodePoint(13);
+					break;
+				case 116:
+					buf.b += String.fromCodePoint(9);
+					break;
+				case 117:
+					var uc = Std.parseInt("0x" + HxOverrides.substr(this.source,this.pos,4));
+					this.pos += 4;
+					buf.b += String.fromCodePoint(uc);
+					break;
+				default:
+					throw haxe_Exception.thrown(new hxjsonast_Error("Invalid escape sequence \\" + String.fromCodePoint(c),new hxjsonast_Position(this.filename,this.pos - 2,this.pos)));
+				}
+				start = this.pos;
+			} else if(c != c) {
+				this.pos--;
+				throw haxe_Exception.thrown(new hxjsonast_Error("Unclosed string",new hxjsonast_Position(this.filename,start - 1,this.pos)));
+			}
+		}
+		if(buf == null) {
+			return HxOverrides.substr(this.source,start,this.pos - start - 1);
+		} else {
+			var s = this.source;
+			var len = this.pos - start - 1;
+			buf.b += len == null ? HxOverrides.substr(s,start,null) : HxOverrides.substr(s,start,len);
+			return buf.b;
+		}
+	}
+	,parseNumber: function(c) {
+		var start = this.pos - 1;
+		var minus = c == 45;
+		var digit = !minus;
+		var zero = c == 48;
+		var point = false;
+		var e = false;
+		var pm = false;
+		var end = false;
+		while(true) {
+			switch(this.source.charCodeAt(this.pos++)) {
+			case 43:case 45:
+				if(!e || pm) {
+					this.invalidNumber(start);
+				}
+				digit = false;
+				pm = true;
+				break;
+			case 46:
+				if(minus || point) {
+					this.invalidNumber(start);
+				}
+				digit = false;
+				point = true;
+				break;
+			case 48:
+				if(zero && !point) {
+					this.invalidNumber(start);
+				}
+				if(minus) {
+					minus = false;
+					zero = true;
+				}
+				digit = true;
+				break;
+			case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:
+				if(zero && !point) {
+					this.invalidNumber(start);
+				}
+				if(minus) {
+					minus = false;
+				}
+				digit = true;
+				zero = false;
+				break;
+			case 69:case 101:
+				if(minus || zero || e) {
+					this.invalidNumber(start);
+				}
+				digit = false;
+				e = true;
+				break;
+			default:
+				if(!digit) {
+					this.invalidNumber(start);
+				}
+				this.pos--;
+				end = true;
+			}
+			if(end) {
+				break;
+			}
+		}
+		var s = HxOverrides.substr(this.source,start,this.pos - start);
+		return new hxjsonast_Json(hxjsonast_JsonValue.JNumber(s),new hxjsonast_Position(this.filename,start,this.pos));
+	}
+	,nextChar: function() {
+		return this.source.charCodeAt(this.pos++);
+	}
+	,mk: function(pos,value) {
+		return new hxjsonast_Json(value,pos);
+	}
+	,mkPos: function(min,max) {
+		return new hxjsonast_Position(this.filename,min,max);
+	}
+	,invalidChar: function() {
+		this.pos--;
+		throw haxe_Exception.thrown(new hxjsonast_Error("Invalid character: " + this.source.charAt(this.pos),new hxjsonast_Position(this.filename,this.pos,this.pos + 1)));
+	}
+	,invalidNumber: function(start) {
+		throw haxe_Exception.thrown(new hxjsonast_Error("Invalid number: " + this.source.substring(start,this.pos),new hxjsonast_Position(this.filename,start,this.pos)));
+	}
+	,__class__: hxjsonast_Parser
+};
+var hxjsonast_Position = function(file,min,max) {
+	this.file = file;
+	this.min = min;
+	this.max = max;
+};
+$hxClasses["hxjsonast.Position"] = hxjsonast_Position;
+hxjsonast_Position.__name__ = "hxjsonast.Position";
+hxjsonast_Position.prototype = {
+	file: null
+	,min: null
+	,max: null
+	,__class__: hxjsonast_Position
+};
 var js_Boot = function() { };
 $hxClasses["js.Boot"] = js_Boot;
 js_Boot.__name__ = "js.Boot";
@@ -12400,6 +13394,121 @@ js_lib__$ArrayBuffer_ArrayBufferCompat.sliceImpl = function(begin,end) {
 	resultArray.set(u);
 	return resultArray.buffer;
 };
+var json2object_Error = $hxEnums["json2object.Error"] = { __ename__ : "json2object.Error", __constructs__ : ["IncorrectType","IncorrectEnumValue","InvalidEnumConstructor","UninitializedVariable","UnknownVariable","ParserError","CustomFunctionException"]
+	,IncorrectType: ($_=function(variable,expected,pos) { return {_hx_index:0,variable:variable,expected:expected,pos:pos,__enum__:"json2object.Error",toString:$estr}; },$_.__params__ = ["variable","expected","pos"],$_)
+	,IncorrectEnumValue: ($_=function(value,expected,pos) { return {_hx_index:1,value:value,expected:expected,pos:pos,__enum__:"json2object.Error",toString:$estr}; },$_.__params__ = ["value","expected","pos"],$_)
+	,InvalidEnumConstructor: ($_=function(value,expected,pos) { return {_hx_index:2,value:value,expected:expected,pos:pos,__enum__:"json2object.Error",toString:$estr}; },$_.__params__ = ["value","expected","pos"],$_)
+	,UninitializedVariable: ($_=function(variable,pos) { return {_hx_index:3,variable:variable,pos:pos,__enum__:"json2object.Error",toString:$estr}; },$_.__params__ = ["variable","pos"],$_)
+	,UnknownVariable: ($_=function(variable,pos) { return {_hx_index:4,variable:variable,pos:pos,__enum__:"json2object.Error",toString:$estr}; },$_.__params__ = ["variable","pos"],$_)
+	,ParserError: ($_=function(message,pos) { return {_hx_index:5,message:message,pos:pos,__enum__:"json2object.Error",toString:$estr}; },$_.__params__ = ["message","pos"],$_)
+	,CustomFunctionException: ($_=function(e,pos) { return {_hx_index:6,e:e,pos:pos,__enum__:"json2object.Error",toString:$estr}; },$_.__params__ = ["e","pos"],$_)
+};
+var json2object_InternalError = $hxEnums["json2object.InternalError"] = { __ename__ : "json2object.InternalError", __constructs__ : ["AbstractNoJsonRepresentation","CannotGenerateSchema","HandleExpr","ParsingThrow","UnsupportedAbstractEnumType","UnsupportedEnumAbstractValue","UnsupportedMapKeyType","UnsupportedSchemaObjectType","UnsupportedSchemaType"]
+	,AbstractNoJsonRepresentation: ($_=function(name) { return {_hx_index:0,name:name,__enum__:"json2object.InternalError",toString:$estr}; },$_.__params__ = ["name"],$_)
+	,CannotGenerateSchema: ($_=function(name) { return {_hx_index:1,name:name,__enum__:"json2object.InternalError",toString:$estr}; },$_.__params__ = ["name"],$_)
+	,HandleExpr: {_hx_index:2,__enum__:"json2object.InternalError",toString:$estr}
+	,ParsingThrow: {_hx_index:3,__enum__:"json2object.InternalError",toString:$estr}
+	,UnsupportedAbstractEnumType: ($_=function(name) { return {_hx_index:4,name:name,__enum__:"json2object.InternalError",toString:$estr}; },$_.__params__ = ["name"],$_)
+	,UnsupportedEnumAbstractValue: ($_=function(name) { return {_hx_index:5,name:name,__enum__:"json2object.InternalError",toString:$estr}; },$_.__params__ = ["name"],$_)
+	,UnsupportedMapKeyType: ($_=function(name) { return {_hx_index:6,name:name,__enum__:"json2object.InternalError",toString:$estr}; },$_.__params__ = ["name"],$_)
+	,UnsupportedSchemaObjectType: ($_=function(name) { return {_hx_index:7,name:name,__enum__:"json2object.InternalError",toString:$estr}; },$_.__params__ = ["name"],$_)
+	,UnsupportedSchemaType: ($_=function(type) { return {_hx_index:8,type:type,__enum__:"json2object.InternalError",toString:$estr}; },$_.__params__ = ["type"],$_)
+};
+var json2object_CustomFunctionError = function(message) {
+	this.message = message;
+};
+$hxClasses["json2object.CustomFunctionError"] = json2object_CustomFunctionError;
+json2object_CustomFunctionError.__name__ = "json2object.CustomFunctionError";
+json2object_CustomFunctionError.prototype = {
+	message: null
+	,__class__: json2object_CustomFunctionError
+};
+var json2object_JsonParser = function() { };
+$hxClasses["json2object.JsonParser"] = json2object_JsonParser;
+json2object_JsonParser.__name__ = "json2object.JsonParser";
+var json2object_PositionUtils = function(content) {
+	this.linesInfo = [];
+	var s = 0;
+	var e = 0;
+	var i = 0;
+	var lineCount = 0;
+	while(i < content.length) switch(content.charAt(i)) {
+	case "\n":
+		e = i;
+		this.linesInfo.push({ number : lineCount, start : s, end : e});
+		++lineCount;
+		++i;
+		s = i;
+		break;
+	case "\r":
+		e = i;
+		if(content.charAt(i + 1) == "\n") {
+			++e;
+		}
+		this.linesInfo.push({ number : lineCount, start : s, end : e});
+		++lineCount;
+		i = e + 1;
+		s = i;
+		break;
+	default:
+		++i;
+	}
+	this.linesInfo.push({ number : lineCount, start : s, end : i});
+};
+$hxClasses["json2object.PositionUtils"] = json2object_PositionUtils;
+json2object_PositionUtils.__name__ = "json2object.PositionUtils";
+json2object_PositionUtils.prototype = {
+	linesInfo: null
+	,convertPosition: function(position) {
+		var file = position.file;
+		var min = position.min;
+		var max = position.max;
+		var pos = { file : file, min : min + 1, max : max + 1, lines : []};
+		var lastLine = this.linesInfo.length - 1;
+		var bounds_min = 0;
+		var bounds_max = lastLine;
+		if(min > this.linesInfo[0].end) {
+			while(bounds_max > bounds_min) {
+				var i = (bounds_min + bounds_max) / 2 | 0;
+				var line = this.linesInfo[i];
+				if(line.start == min) {
+					bounds_min = i;
+					bounds_max = i;
+				}
+				if(line.end < min) {
+					bounds_min = i + 1;
+				}
+				if(line.start > min || line.end >= min && line.start < min) {
+					bounds_max = i;
+				}
+			}
+		}
+		var _g = bounds_min;
+		var _g1 = this.linesInfo.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var line = this.linesInfo[i];
+			if(line.start <= min && line.end >= max) {
+				pos.lines.push({ number : line.number + 1, start : min - line.start + 1, end : max - line.start + 1});
+				break;
+			}
+			if(line.start <= min && min <= line.end) {
+				pos.lines.push({ number : line.number + 1, start : min - line.start + 1, end : line.end + 1});
+			}
+			if(line.start <= max && max <= line.end) {
+				pos.lines.push({ number : line.number + 1, start : line.start + 1, end : max - line.start + 1});
+			}
+			if(line.start >= max || line.end >= max) {
+				break;
+			}
+		}
+		return pos;
+	}
+	,revert: function(position) {
+		return new hxjsonast_Position(position.file,position.min - 1,position.max - 1);
+	}
+	,__class__: json2object_PositionUtils
+};
 var loader_AjaxLoader = function(cb,p,r) {
 	this.cB = cb;
 	this.params = p;
@@ -12555,6 +13664,77 @@ loader_BinaryLoader.prototype = {
 		this.xhr.send(this.param);
 	}
 	,__class__: loader_BinaryLoader
+};
+var loader_ConfigLoader = function(url,p) {
+	var _gthis = this;
+	this.url = url;
+	this.xhr = new XMLHttpRequest();
+	this.xhr.onreadystatechange = function() {
+		haxe_Log.trace(_gthis.xhr.readyState,{ fileName : "loader/ConfigLoader.hx", lineNumber : 49, className : "loader.ConfigLoader", methodName : "new"});
+		switch(_gthis.xhr.readyState) {
+		case 1:
+			haxe_Log.trace(p,{ fileName : "loader/ConfigLoader.hx", lineNumber : 52, className : "loader.ConfigLoader", methodName : "new"});
+			break;
+		case 2:
+			break;
+		}
+	};
+	this.load();
+};
+$hxClasses["loader.ConfigLoader"] = loader_ConfigLoader;
+loader_ConfigLoader.__name__ = "loader.ConfigLoader";
+loader_ConfigLoader.go = function(url,p,onLoaded) {
+	var cL = new loader_ConfigLoader(url,p);
+	cL.cB = onLoaded;
+	var fD = new FormData();
+	var _g = 0;
+	var _g1 = Reflect.fields(p);
+	while(_g < _g1.length) {
+		var f = _g1[_g];
+		++_g;
+		fD.append(f,Reflect.field(p,f));
+	}
+	cL.param = fD;
+	return cL;
+};
+loader_ConfigLoader.prototype = {
+	cB: null
+	,param: null
+	,xhr: null
+	,url: null
+	,onLoaded: function(got) {
+		haxe_Log.trace(got,{ fileName : "loader/ConfigLoader.hx", lineNumber : 63, className : "loader.ConfigLoader", methodName : "onLoaded"});
+	}
+	,onProgress: function(cur,max) {
+	}
+	,onError: function(msg) {
+		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "loader/ConfigLoader.hx", lineNumber : 70, className : "loader.ConfigLoader", methodName : "onError"});
+		haxe_Log.trace(msg,{ fileName : "loader/ConfigLoader.hx", lineNumber : 71, className : "loader.ConfigLoader", methodName : "onError"});
+		throw haxe_Exception.thrown(msg);
+	}
+	,load: function() {
+		var _gthis = this;
+		haxe_Log.trace(this.url,{ fileName : "loader/ConfigLoader.hx", lineNumber : 76, className : "loader.ConfigLoader", methodName : "load"});
+		this.xhr.open("POST",this.url,true);
+		this.xhr.onerror = function(e) {
+			haxe_Log.trace(e,{ fileName : "loader/ConfigLoader.hx", lineNumber : 85, className : "loader.ConfigLoader", methodName : "load"});
+			haxe_Log.trace(e.type,{ fileName : "loader/ConfigLoader.hx", lineNumber : 86, className : "loader.ConfigLoader", methodName : "load"});
+		};
+		this.xhr.withCredentials = true;
+		this.xhr.onload = function(e) {
+			haxe_Log.trace(_gthis.xhr.readyState,{ fileName : "loader/ConfigLoader.hx", lineNumber : 91, className : "loader.ConfigLoader", methodName : "load"});
+			haxe_Log.trace(_gthis.xhr.status,{ fileName : "loader/ConfigLoader.hx", lineNumber : 92, className : "loader.ConfigLoader", methodName : "load"});
+			if(_gthis.xhr.status != 200) {
+				_gthis.onError(_gthis.xhr.statusText);
+				return;
+			}
+			_gthis.onLoaded(_gthis.xhr.response);
+		};
+		this.xhr.onprogress = function(e) {
+			haxe_Log.trace("" + e.loaded + " :: " + e.total,{ fileName : "loader/ConfigLoader.hx", lineNumber : 103, className : "loader.ConfigLoader", methodName : "load"});
+		};
+	}
+	,__class__: loader_ConfigLoader
 };
 var macrotools_AbstractEnumTools = function() { };
 $hxClasses["macrotools.AbstractEnumTools"] = macrotools_AbstractEnumTools;
@@ -13100,280 +14280,6 @@ model_Account.prototype = $extend(model_ORM.prototype,{
 	,__class__: model_Account
 	,__properties__: {set_mandator:"set_mandator",set_last_updated:"set_last_updated",set_edited_by:"set_edited_by",set_creation_date:"set_creation_date",set_status:"set_status",set_sign_date:"set_sign_date",set_account_holder:"set_account_holder",set_iban:"set_iban",set_account:"set_account",set_bic:"set_bic",set_bank_name:"set_bank_name",set_contact:"set_contact"}
 });
-var model_BankTransfer = function(data) {
-	model_ORM.call(this,data);
-};
-$hxClasses["model.BankTransfer"] = model_BankTransfer;
-model_BankTransfer.__name__ = "model.BankTransfer";
-model_BankTransfer.__super__ = model_ORM;
-model_BankTransfer.prototype = $extend(model_ORM.prototype,{
-	ag_name: null
-	,set_ag_name: function(ag_name) {
-		if(this.initialized("ag_name")) {
-			this.modified("ag_name");
-		}
-		this.ag_name = ag_name;
-		return ag_name;
-	}
-	,ag_konto_or_iban: null
-	,set_ag_konto_or_iban: function(ag_konto_or_iban) {
-		if(this.initialized("ag_konto_or_iban")) {
-			this.modified("ag_konto_or_iban");
-		}
-		this.ag_konto_or_iban = ag_konto_or_iban;
-		return ag_konto_or_iban;
-	}
-	,ag_blz_or_bic: null
-	,set_ag_blz_or_bic: function(ag_blz_or_bic) {
-		if(this.initialized("ag_blz_or_bic")) {
-			this.modified("ag_blz_or_bic");
-		}
-		this.ag_blz_or_bic = ag_blz_or_bic;
-		return ag_blz_or_bic;
-	}
-	,zahlpfl_name: null
-	,set_zahlpfl_name: function(zahlpfl_name) {
-		if(this.initialized("zahlpfl_name")) {
-			this.modified("zahlpfl_name");
-		}
-		this.zahlpfl_name = zahlpfl_name;
-		return zahlpfl_name;
-	}
-	,zahlpfl_name2: null
-	,set_zahlpfl_name2: function(zahlpfl_name2) {
-		if(this.initialized("zahlpfl_name2")) {
-			this.modified("zahlpfl_name2");
-		}
-		this.zahlpfl_name2 = zahlpfl_name2;
-		return zahlpfl_name2;
-	}
-	,zahlpfl_strasse: null
-	,set_zahlpfl_strasse: function(zahlpfl_strasse) {
-		if(this.initialized("zahlpfl_strasse")) {
-			this.modified("zahlpfl_strasse");
-		}
-		this.zahlpfl_strasse = zahlpfl_strasse;
-		return zahlpfl_strasse;
-	}
-	,zahlpfl_name_ort: null
-	,set_zahlpfl_name_ort: function(zahlpfl_name_ort) {
-		if(this.initialized("zahlpfl_name_ort")) {
-			this.modified("zahlpfl_name_ort");
-		}
-		this.zahlpfl_name_ort = zahlpfl_name_ort;
-		return zahlpfl_name_ort;
-	}
-	,zahlpfl_name_kto_or_iban: null
-	,set_zahlpfl_name_kto_or_iban: function(zahlpfl_name_kto_or_iban) {
-		if(this.initialized("zahlpfl_name_kto_or_iban")) {
-			this.modified("zahlpfl_name_kto_or_iban");
-		}
-		this.zahlpfl_name_kto_or_iban = zahlpfl_name_kto_or_iban;
-		return zahlpfl_name_kto_or_iban;
-	}
-	,zahlpfl_name_blz_or_bic: null
-	,set_zahlpfl_name_blz_or_bic: function(zahlpfl_name_blz_or_bic) {
-		if(this.initialized("zahlpfl_name_blz_or_bic")) {
-			this.modified("zahlpfl_name_blz_or_bic");
-		}
-		this.zahlpfl_name_blz_or_bic = zahlpfl_name_blz_or_bic;
-		return zahlpfl_name_blz_or_bic;
-	}
-	,betrag: null
-	,set_betrag: function(betrag) {
-		if(this.initialized("betrag")) {
-			this.modified("betrag");
-		}
-		this.betrag = betrag;
-		return betrag;
-	}
-	,currency: null
-	,set_currency: function(currency) {
-		if(this.initialized("currency")) {
-			this.modified("currency");
-		}
-		this.currency = currency;
-		return currency;
-	}
-	,zahlart: null
-	,set_zahlart: function(zahlart) {
-		if(this.initialized("zahlart")) {
-			this.modified("zahlart");
-		}
-		this.zahlart = zahlart;
-		return zahlart;
-	}
-	,termin: null
-	,set_termin: function(termin) {
-		if(this.initialized("termin")) {
-			this.modified("termin");
-		}
-		this.termin = termin;
-		return termin;
-	}
-	,vwz1: null
-	,set_vwz1: function(vwz1) {
-		if(this.initialized("vwz1")) {
-			this.modified("vwz1");
-		}
-		this.vwz1 = vwz1;
-		return vwz1;
-	}
-	,vwz2: null
-	,set_vwz2: function(vwz2) {
-		if(this.initialized("vwz2")) {
-			this.modified("vwz2");
-		}
-		this.vwz2 = vwz2;
-		return vwz2;
-	}
-	,vwz3: null
-	,set_vwz3: function(vwz3) {
-		if(this.initialized("vwz3")) {
-			this.modified("vwz3");
-		}
-		this.vwz3 = vwz3;
-		return vwz3;
-	}
-	,vwz4: null
-	,set_vwz4: function(vwz4) {
-		if(this.initialized("vwz4")) {
-			this.modified("vwz4");
-		}
-		this.vwz4 = vwz4;
-		return vwz4;
-	}
-	,vwz5: null
-	,set_vwz5: function(vwz5) {
-		if(this.initialized("vwz5")) {
-			this.modified("vwz5");
-		}
-		this.vwz5 = vwz5;
-		return vwz5;
-	}
-	,vwz6: null
-	,set_vwz6: function(vwz6) {
-		if(this.initialized("vwz6")) {
-			this.modified("vwz6");
-		}
-		this.vwz6 = vwz6;
-		return vwz6;
-	}
-	,vwz7: null
-	,set_vwz7: function(vwz7) {
-		if(this.initialized("vwz7")) {
-			this.modified("vwz7");
-		}
-		this.vwz7 = vwz7;
-		return vwz7;
-	}
-	,vwz8: null
-	,set_vwz8: function(vwz8) {
-		if(this.initialized("vwz8")) {
-			this.modified("vwz8");
-		}
-		this.vwz8 = vwz8;
-		return vwz8;
-	}
-	,vwz9: null
-	,set_vwz9: function(vwz9) {
-		if(this.initialized("vwz9")) {
-			this.modified("vwz9");
-		}
-		this.vwz9 = vwz9;
-		return vwz9;
-	}
-	,ba_id: null
-	,set_ba_id: function(ba_id) {
-		if(this.initialized("ba_id")) {
-			this.modified("ba_id");
-		}
-		this.ba_id = ba_id;
-		return ba_id;
-	}
-	,tracking_status: null
-	,set_tracking_status: function(tracking_status) {
-		if(this.initialized("tracking_status")) {
-			this.modified("tracking_status");
-		}
-		this.tracking_status = tracking_status;
-		return tracking_status;
-	}
-	,anforderungs_datum: null
-	,set_anforderungs_datum: function(anforderungs_datum) {
-		if(this.initialized("anforderungs_datum")) {
-			this.modified("anforderungs_datum");
-		}
-		this.anforderungs_datum = anforderungs_datum;
-		return anforderungs_datum;
-	}
-	,rueck_datum: null
-	,set_rueck_datum: function(rueck_datum) {
-		if(this.initialized("rueck_datum")) {
-			this.modified("rueck_datum");
-		}
-		this.rueck_datum = rueck_datum;
-		return rueck_datum;
-	}
-	,cycle: null
-	,set_cycle: function(cycle) {
-		if(this.initialized("cycle")) {
-			this.modified("cycle");
-		}
-		this.cycle = cycle;
-		return cycle;
-	}
-	,ref_id: null
-	,set_ref_id: function(ref_id) {
-		if(this.initialized("ref_id")) {
-			this.modified("ref_id");
-		}
-		this.ref_id = ref_id;
-		return ref_id;
-	}
-	,mandat_id: null
-	,set_mandat_id: function(mandat_id) {
-		if(this.initialized("mandat_id")) {
-			this.modified("mandat_id");
-		}
-		this.mandat_id = mandat_id;
-		return mandat_id;
-	}
-	,mandat_datum: null
-	,set_mandat_datum: function(mandat_datum) {
-		if(this.initialized("mandat_datum")) {
-			this.modified("mandat_datum");
-		}
-		this.mandat_datum = mandat_datum;
-		return mandat_datum;
-	}
-	,ag_creditor_id: null
-	,set_ag_creditor_id: function(ag_creditor_id) {
-		if(this.initialized("ag_creditor_id")) {
-			this.modified("ag_creditor_id");
-		}
-		this.ag_creditor_id = ag_creditor_id;
-		return ag_creditor_id;
-	}
-	,sequenz: null
-	,set_sequenz: function(sequenz) {
-		if(this.initialized("sequenz")) {
-			this.modified("sequenz");
-		}
-		this.sequenz = sequenz;
-		return sequenz;
-	}
-	,super_ag_name: null
-	,set_super_ag_name: function(super_ag_name) {
-		if(this.initialized("super_ag_name")) {
-			this.modified("super_ag_name");
-		}
-		this.super_ag_name = super_ag_name;
-		return super_ag_name;
-	}
-	,__class__: model_BankTransfer
-	,__properties__: {set_super_ag_name:"set_super_ag_name",set_sequenz:"set_sequenz",set_ag_creditor_id:"set_ag_creditor_id",set_mandat_datum:"set_mandat_datum",set_mandat_id:"set_mandat_id",set_ref_id:"set_ref_id",set_cycle:"set_cycle",set_rueck_datum:"set_rueck_datum",set_anforderungs_datum:"set_anforderungs_datum",set_tracking_status:"set_tracking_status",set_ba_id:"set_ba_id",set_vwz9:"set_vwz9",set_vwz8:"set_vwz8",set_vwz7:"set_vwz7",set_vwz6:"set_vwz6",set_vwz5:"set_vwz5",set_vwz4:"set_vwz4",set_vwz3:"set_vwz3",set_vwz2:"set_vwz2",set_vwz1:"set_vwz1",set_termin:"set_termin",set_zahlart:"set_zahlart",set_currency:"set_currency",set_betrag:"set_betrag",set_zahlpfl_name_blz_or_bic:"set_zahlpfl_name_blz_or_bic",set_zahlpfl_name_kto_or_iban:"set_zahlpfl_name_kto_or_iban",set_zahlpfl_name_ort:"set_zahlpfl_name_ort",set_zahlpfl_strasse:"set_zahlpfl_strasse",set_zahlpfl_name2:"set_zahlpfl_name2",set_zahlpfl_name:"set_zahlpfl_name",set_ag_blz_or_bic:"set_ag_blz_or_bic",set_ag_konto_or_iban:"set_ag_konto_or_iban",set_ag_name:"set_ag_name"}
-});
 var model_Contact = function(data) {
 	model_ORM.call(this,data);
 };
@@ -13615,13 +14521,13 @@ model_Deal.prototype = $extend(model_ORM.prototype,{
 		this.creation_date = creation_date;
 		return creation_date;
 	}
-	,iban: null
-	,set_iban: function(iban) {
-		if(this.initialized("iban")) {
-			this.modified("iban");
+	,account: null
+	,set_account: function(account) {
+		if(this.initialized("account")) {
+			this.modified("account");
 		}
-		this.iban = iban;
-		return iban;
+		this.account = account;
+		return account;
 	}
 	,target_account: null
 	,set_target_account: function(target_account) {
@@ -13776,7 +14682,7 @@ model_Deal.prototype = $extend(model_ORM.prototype,{
 		return booking_day;
 	}
 	,__class__: model_Deal
-	,__properties__: {set_booking_day:"set_booking_day",set_last_updated:"set_last_updated",set_cycle_start_date:"set_cycle_start_date",set_old_active:"set_old_active",set_mandator:"set_mandator",set_edited_by:"set_edited_by",set_repeat_date:"set_repeat_date",set_end_reason:"set_end_reason",set_end_date:"set_end_date",set_pay_method:"set_pay_method",set_active:"set_active",set_project:"set_project",set_agent:"set_agent",set_product:"set_product",set_amount:"set_amount",set_cycle:"set_cycle",set_start_date:"set_start_date",set_booking_run:"set_booking_run",set_target_account:"set_target_account",set_iban:"set_iban",set_creation_date:"set_creation_date",set_contact:"set_contact"}
+	,__properties__: {set_booking_day:"set_booking_day",set_last_updated:"set_last_updated",set_cycle_start_date:"set_cycle_start_date",set_old_active:"set_old_active",set_mandator:"set_mandator",set_edited_by:"set_edited_by",set_repeat_date:"set_repeat_date",set_end_reason:"set_end_reason",set_end_date:"set_end_date",set_pay_method:"set_pay_method",set_active:"set_active",set_project:"set_project",set_agent:"set_agent",set_product:"set_product",set_amount:"set_amount",set_cycle:"set_cycle",set_start_date:"set_start_date",set_booking_run:"set_booking_run",set_target_account:"set_target_account",set_account:"set_account",set_creation_date:"set_creation_date",set_contact:"set_contact"}
 });
 var react_ReactType = {};
 react_ReactType.fromString = function(s) {
@@ -28360,7 +29266,7 @@ view_shared_io_FormApi.mHandlers = function(e) {
 };
 view_shared_io_FormApi.renderSelectOptions = function(fel) {
 	var sel = fel;
-	var _this = ["Button","Hidden","DatePicker","DateTimePicker","Input","Password","Checkbox","Radio","Select","TextArea","NFormat","File","Upload"];
+	var _this = ["Button","Hidden","DatePicker","DateTimePicker","Input","Password","Checkbox","Radio","Select","None","NFormat","TextArea","File","Upload"];
 	var result = new Array(_this.length);
 	var _g = 0;
 	var _g1 = _this.length;
@@ -28674,7 +29580,7 @@ view_shared_io_FormApi.prototype = {
 					continue;
 				}
 				var fF = this._fstate.fields.h[name1];
-				this.formColElements.h[name1].push({ className : fF.className, name : name1, value : dR.h[name1], displayFormat : fF.displayFormat, type : fF.type, disabled : fF.disabled, required : fF.required, handleChange : fF.handleChange, placeholder : fF.placeholder, validate : fF.validate});
+				this.formColElements.h[name1].push({ className : fF.className, name : name1, value : dR.h[name1], displayFormat : fF.displayFormat, type : fF.type, disabled : fF.disabled, required : fF.required, placeholder : fF.placeholder, validate : fF.validate});
 			}
 		}
 		return this.renderColumns();
@@ -28726,7 +29632,6 @@ view_shared_io_FormApi.prototype = {
 		} else {
 			switch(_g) {
 			case "Checkbox":
-				haxe_Log.trace(fF.value,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 443, className : "view.shared.io.FormApi", methodName : "renderRowCell"});
 				return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 444, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, disabled : fF.disabled});
 			case "Hidden":
 				if(fF.primary) {
@@ -29369,7 +30274,8 @@ view_accounting_imports_List.prototype = $extend(React_Component.prototype,{
 });
 var view_dashboard_DB = function(props) {
 	React_Component.call(this,props);
-	this.dataDisplay = view_dashboard_model_DBFormsModel.dataDisplay;
+	haxe_Log.trace("action:" + props.match.params.action,{ fileName : "view/dashboard/DB.hx", lineNumber : 57, className : "view.dashboard.DB", methodName : "new"});
+	this.dataDisplay = null;
 	this.state = { formApi : new view_shared_io_FormApi(this), hasError : false, sideMenu : props.sideMenu};
 };
 $hxClasses["view.dashboard.DB"] = view_dashboard_DB;
@@ -29383,28 +30289,56 @@ view_dashboard_DB.prototype = $extend(React_Component.prototype,{
 	,dataAccess: null
 	,createFieldList: function(ev) {
 		var _gthis = this;
-		haxe_Log.trace("hi :)",{ fileName : "view/dashboard/DB.hx", lineNumber : 76, className : "view.dashboard.DB", methodName : "createFieldList"});
+		haxe_Log.trace("hi :)",{ fileName : "view/dashboard/DB.hx", lineNumber : 84, className : "view.dashboard.DB", methodName : "createFieldList"});
 		this.state.formApi.requests.push(haxe_ds_Either.Left(view_shared_io_Loader.load("" + Std.string(App.config.api),{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, classPath : "tools.DB", action : "createFieldList", update : "1"},function(data) {
-			haxe_Log.trace(data == null ? "null" : haxe_ds_StringMap.stringify(data.h),{ fileName : "view/dashboard/DB.hx", lineNumber : 88, className : "view.dashboard.DB", methodName : "createFieldList"});
+			haxe_Log.trace(data == null ? "null" : haxe_ds_StringMap.stringify(data.h),{ fileName : "view/dashboard/DB.hx", lineNumber : 96, className : "view.dashboard.DB", methodName : "createFieldList"});
 			if(Object.prototype.hasOwnProperty.call(data.h,"error")) {
-				haxe_Log.trace(data.h["error"],{ fileName : "view/dashboard/DB.hx", lineNumber : 92, className : "view.dashboard.DB", methodName : "createFieldList"});
+				haxe_Log.trace(data.h["error"],{ fileName : "view/dashboard/DB.hx", lineNumber : 100, className : "view.dashboard.DB", methodName : "createFieldList"});
 				return;
 			}
 			_gthis.setState({ data : data});
 		})));
-		haxe_Log.trace(this.props.history,{ fileName : "view/dashboard/DB.hx", lineNumber : 98, className : "view.dashboard.DB", methodName : "createFieldList"});
-		haxe_Log.trace(this.props.match,{ fileName : "view/dashboard/DB.hx", lineNumber : 99, className : "view.dashboard.DB", methodName : "createFieldList"});
+		haxe_Log.trace(this.props.history,{ fileName : "view/dashboard/DB.hx", lineNumber : 106, className : "view.dashboard.DB", methodName : "createFieldList"});
+		haxe_Log.trace(this.props.match,{ fileName : "view/dashboard/DB.hx", lineNumber : 107, className : "view.dashboard.DB", methodName : "createFieldList"});
+	}
+	,setView: function() {
+	}
+	,getView: function() {
+		var _gthis = this;
+		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Load deals.DealsModel"}))));
+		var pro = new Promise(function(resolve,reject) {
+			if(!_gthis.props.userState.dbUser.online) {
+				haxe_Log.trace("LoginError",{ fileName : "view/dashboard/DB.hx", lineNumber : 124, className : "view.dashboard.DB", methodName : "getView"});
+				var _g = new haxe_ds_StringMap();
+				_g.h["LoginError"] = "Du musst dich neu anmelden!";
+				reject(shared_DbDataTools.create(_g));
+			}
+			haxe_Log.trace("creating ConfigLoader " + Std.string(App.config.api),{ fileName : "view/dashboard/DB.hx", lineNumber : 127, className : "view.dashboard.DB", methodName : "getView"});
+			var cL = loader_ConfigLoader.go(App.config.api,{ limit : 100, userState : _gthis.props.userState, classPath : "tools.Jsonb", action : "getView"},function(res) {
+				haxe_Log.trace(res,{ fileName : "view/dashboard/DB.hx", lineNumber : 137, className : "view.dashboard.DB", methodName : "getView"});
+			});
+		});
+		pro.then(function(jsonData) {
+			haxe_Log.trace(jsonData,{ fileName : "view/dashboard/DB.hx", lineNumber : 143, className : "view.dashboard.DB", methodName : "getView"});
+			var parser = new JsonParser_$1();
+			var dA = parser.fromJson(jsonData);
+		},function(whatever) {
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DB.hx", lineNumber : 148, className : "view.dashboard.DB", methodName : "getView"});
+		});
+	}
+	,createOrUpdateView: function() {
+		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Update deals.DealsModel"}))));
 	}
 	,'delete': function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DB.hx", lineNumber : 105, className : "view.dashboard.DB", methodName : "delete"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DB.hx", lineNumber : 186, className : "view.dashboard.DB", methodName : "delete"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
 	}
 	,editTableFields: function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DB.hx", lineNumber : 112, className : "view.dashboard.DB", methodName : "editTableFields"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DB.hx", lineNumber : 193, className : "view.dashboard.DB", methodName : "editTableFields"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
 		var view = haxe_ds_StringMap.createCopy(this.dataAccess.h["editTableFields"].view.h);
-		haxe_Log.trace(this.dataAccess.h["editTableFields"].view.h["table_name"],{ fileName : "view/dashboard/DB.hx", lineNumber : 115, className : "view.dashboard.DB", methodName : "editTableFields"});
-		haxe_Log.trace(data[0].h["id"] + "<",{ fileName : "view/dashboard/DB.hx", lineNumber : 116, className : "view.dashboard.DB", methodName : "editTableFields"});
+		haxe_Log.trace(this.dataAccess.h["editTableFields"].view.h["table_name"],{ fileName : "view/dashboard/DB.hx", lineNumber : 196, className : "view.dashboard.DB", methodName : "editTableFields"});
+		haxe_Log.trace(data[0].h["id"] + "<",{ fileName : "view/dashboard/DB.hx", lineNumber : 197, className : "view.dashboard.DB", methodName : "editTableFields"});
 	}
 	,initStateFromDataTable: function(dt) {
 		var iS = { };
@@ -29416,7 +30350,7 @@ view_dashboard_DB.prototype = $extend(React_Component.prototype,{
 			var k = haxe_ds_StringMap.keysIterator(dR.h);
 			while(k.hasNext()) {
 				var k1 = k.next();
-				haxe_Log.trace(k1,{ fileName : "view/dashboard/DB.hx", lineNumber : 142, className : "view.dashboard.DB", methodName : "initStateFromDataTable"});
+				haxe_Log.trace(k1,{ fileName : "view/dashboard/DB.hx", lineNumber : 223, className : "view.dashboard.DB", methodName : "initStateFromDataTable"});
 				if(this.dataDisplay.h["fieldsList"].columns.h[k1].cellFormat == view_dashboard_model_DBFormsModel.formatBool) {
 					rS[k1] = dR.h[k1] == "Y";
 				} else {
@@ -29425,17 +30359,17 @@ view_dashboard_DB.prototype = $extend(React_Component.prototype,{
 			}
 			iS[dR.h["id"]] = rS;
 		}
-		haxe_Log.trace(iS,{ fileName : "view/dashboard/DB.hx", lineNumber : 152, className : "view.dashboard.DB", methodName : "initStateFromDataTable"});
+		haxe_Log.trace(iS,{ fileName : "view/dashboard/DB.hx", lineNumber : 233, className : "view.dashboard.DB", methodName : "initStateFromDataTable"});
 		return iS;
 	}
 	,saveTableFields: function(vA) {
-		haxe_Log.trace(vA,{ fileName : "view/dashboard/DB.hx", lineNumber : 158, className : "view.dashboard.DB", methodName : "saveTableFields"});
+		haxe_Log.trace(vA,{ fileName : "view/dashboard/DB.hx", lineNumber : 239, className : "view.dashboard.DB", methodName : "saveTableFields"});
 	}
 	,showFieldList: function(_) {
 		this.state.formApi.requests.push(null);
 	}
 	,componentDidMount: function() {
-		haxe_Log.trace("Ok",{ fileName : "view/dashboard/DB.hx", lineNumber : 227, className : "view.dashboard.DB", methodName : "componentDidMount"});
+		haxe_Log.trace("Ok",{ fileName : "view/dashboard/DB.hx", lineNumber : 308, className : "view.dashboard.DB", methodName : "componentDidMount"});
 		var _g = new haxe_ds_StringMap();
 		var _g1 = new haxe_ds_StringMap();
 		_g1.h["selectedRows"] = null;
@@ -29456,10 +30390,10 @@ view_dashboard_DB.prototype = $extend(React_Component.prototype,{
 	,renderResults: function() {
 		if(this.state.dataTable != null) {
 			switch(this.props.match.params.action) {
-			case "editTableFields":
+			case "editForm":
 				return null;
 			case "showFieldList":
-				haxe_Log.trace(Std.string(this.state.dataTable[29].h["id"]) + "<<<",{ fileName : "view/dashboard/DB.hx", lineNumber : 266, className : "view.dashboard.DB", methodName : "renderResults"});
+				haxe_Log.trace(Std.string(this.state.dataTable[29].h["id"]) + "<<<",{ fileName : "view/dashboard/DB.hx", lineNumber : 347, className : "view.dashboard.DB", methodName : "renderResults"});
 				return React.createElement(react_ReactType.fromComp(view_table_Table),Object.assign({ },this.props,{ id : "fieldsList", data : this.state.dataTable, dataState : this.dataDisplay.h["fieldsList"], className : "is-striped is-hoverable", fullWidth : true}));
 			default:
 				return null;
@@ -29469,9 +30403,9 @@ view_dashboard_DB.prototype = $extend(React_Component.prototype,{
 	}
 	,render: function() {
 		if(this.state.values != null) {
-			haxe_Log.trace(this.state.values == null ? "null" : haxe_ds_StringMap.stringify(this.state.values.h),{ fileName : "view/dashboard/DB.hx", lineNumber : 283, className : "view.dashboard.DB", methodName : "render"});
+			haxe_Log.trace(this.state.values == null ? "null" : haxe_ds_StringMap.stringify(this.state.values.h),{ fileName : "view/dashboard/DB.hx", lineNumber : 364, className : "view.dashboard.DB", methodName : "render"});
 		}
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DB.hx", lineNumber : 284, className : "view.dashboard.DB", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DB.hx", lineNumber : 365, className : "view.dashboard.DB", methodName : "render"});
 		var tmp = this.state.formApi;
 		var tmp1 = react_ReactType.fromString("form");
 		var tmp2 = React.createElement(react_ReactType.fromString("div"),{ className : "caption"},"DB");
@@ -29601,12 +30535,29 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	,importBookingRequests2: function() {
 		App.store.dispatch(redux_Action.map(action_async_LivePBXSync.importBookingRequests({ limit : 25000, offset : 0, classPath : "admin.SyncExternalBookings", action : "syncBookingRequests", userState : this.props.userState})));
 	}
+	,checkBookingRequests: function() {
+		var _gthis = this;
+		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Buchungsanforderungen"}))));
+		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "bookingRequestsCount"});
+		pro.then(function(props) {
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 289, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+			var _gthis1 = _gthis;
+			var _g = new haxe_ds_StringMap();
+			_g.h["action"] = "bookingRequestsCount";
+			_g.h["buchungsAnforderungenCount"] = props.dataInfo.h["buchungsAnforderungenCount"];
+			_g.h["bookingRequestsCount"] = props.dataInfo.h["bookingRequestsCount"];
+			_gthis1.setState({ data : _g});
+			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 295, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+		},function(whatever) {
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 297, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+		});
+	}
 	,checkAccounts: function() {
 		var _gthis = this;
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Konten"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "accountsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 289, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 317, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "accountsCount";
@@ -29614,7 +30565,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["accountsCount"] = props.dataInfo.h["accountsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 296, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 324, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
 		});
 	}
 	,checkContacts: function() {
@@ -29622,7 +30573,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Kontakte"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "clientsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 316, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 344, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "contactsCount";
@@ -29630,7 +30581,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["contactsCount"] = props.dataInfo.h["contactsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 323, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 351, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 		});
 	}
 	,checkDeals: function() {
@@ -29638,7 +30589,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Aktionen"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "dealsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 343, className : "view.dashboard.DBSync", methodName : "checkDeals"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 371, className : "view.dashboard.DBSync", methodName : "checkDeals"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "dealsCount";
@@ -29646,7 +30597,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["dealsCount"] = props.dataInfo.h["dealsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 350, className : "view.dashboard.DBSync", methodName : "checkDeals"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 378, className : "view.dashboard.DBSync", methodName : "checkDeals"});
 			App.store.dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ dbUser : _gthis.props.userState.dbUser, lastError : "Du musst dich neu anmelden!"}))));
 		});
 	}
@@ -29654,9 +30605,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "Synchronisiere Kontakte, Aktionen + Konten"}))));
 		var pro = App.store.dispatch(action_async_LivePBXSync.checkAll({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "admin.SyncExternal", action : "checkAll"}));
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 377, className : "view.dashboard.DBSync", methodName : "checkAll"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 405, className : "view.dashboard.DBSync", methodName : "checkAll"});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 379, className : "view.dashboard.DBSync", methodName : "checkAll"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 407, className : "view.dashboard.DBSync", methodName : "checkAll"});
 		});
 	}
 	,displaySummary: function() {
@@ -29671,11 +30622,11 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,syncUserDetails2: function(_) {
 		var _gthis = this;
-		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 420, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
-		haxe_Log.trace(this.props.userState.dbUser,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 421, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 448, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+		haxe_Log.trace(this.props.userState.dbUser,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 449, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
 		loader_BinaryLoader.create("" + Std.string(App.config.api),{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, fields : "id,table_name,field_name,disabled,element,required,use_as_index", classPath : "admin.SyncExternal", action : "syncUserDetails", devIP : App.devIP, dbUser : this.props.userState.dbUser},function(data) {
-			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 437, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 439, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 465, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 467, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
 			if(data.dataRows.length > 0) {
 				_gthis.setState({ dataTable : data.dataRows});
 			}
@@ -29684,9 +30635,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,proxy_showUserList: function(_) {
 		var _gthis = this;
-		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 454, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
+		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 482, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
 		loader_BinaryLoader.create("https://pitverwaltung.de/sync/proxy.php",{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, fields : "id,table_name,field_name,disabled,element,required,use_as_index", classPath : "admin.SyncExternal", action : "syncUserDetails", target : "syncUsers.php", devIP : App.devIP},function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 472, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 500, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
 			if(data.dataRows.length > 0) {
 				_gthis.setState({ dataTable : data.dataRows});
 			}
@@ -29694,11 +30645,11 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,componentDidMount: function() {
 		if(this.props.userState != null) {
-			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 489, className : "view.dashboard.DBSync", methodName : "componentDidMount"});
+			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 517, className : "view.dashboard.DBSync", methodName : "componentDidMount"});
 		}
 	}
 	,go: function(aState) {
-		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 494, className : "view.dashboard.DBSync", methodName : "go"});
+		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 522, className : "view.dashboard.DBSync", methodName : "go"});
 		var dbaProps_action = this.props.match.params.action;
 		var dbaProps_classPath = "data.Contacts";
 		var dbaProps_dataSource = null;
@@ -29713,7 +30664,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			while(_g < _g1.length) {
 				var f = _g1[_g];
 				++_g;
-				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 508, className : "view.dashboard.DBSync", methodName : "go"});
+				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 536, className : "view.dashboard.DBSync", methodName : "go"});
 				if(Reflect.field(aState,f) == "") {
 					Reflect.deleteField(aState,f);
 				}
@@ -29731,7 +30682,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 528, className : "view.dashboard.DBSync", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 556, className : "view.dashboard.DBSync", methodName : "render"});
 		var tmp = this.state.formApi;
 		var tmp1 = react_ReactType.fromComp(React_Fragment);
 		var tmp2 = react_ReactType.fromString("form");
@@ -29740,12 +30691,14 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		return tmp.render(React.createElement(tmp1,{ },tmp4));
 	}
 	,renderResults: function() {
-		haxe_Log.trace(this.props.match.params.action + ":" + Std.string(this.state.dataTable != null),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 539, className : "view.dashboard.DBSync", methodName : "renderResults"});
-		haxe_Log.trace(this.state.loading,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 540, className : "view.dashboard.DBSync", methodName : "renderResults"});
+		if(this.state.data != null) {
+			haxe_Log.trace(Std.string(this.state.data.h["action"]) + ":",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 568, className : "view.dashboard.DBSync", methodName : "renderResults"});
+		}
+		haxe_Log.trace(this.state.loading,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 569, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		if(this.state.data == null) {
 			return React.createElement(react_ReactType.fromString("div"),{ className : "flex0 cCenter"},this.state.formApi.renderWait());
 		}
-		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 543, className : "view.dashboard.DBSync", methodName : "renderResults"});
+		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 572, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		var _g = this.state.data.h["action"];
 		if(_g == null) {
 			return null;
@@ -29765,6 +30718,23 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 					var tmp3 = react_ReactType.fromString("li");
 					var tmp4 = React.createElement(react_ReactType.fromString("div"),{ },"Neues System:");
 					var tmp5 = this.state.data.h["accountsCount"];
+					return React.createElement(tmp,{ className : "flex0 cCenter"},React.createElement(tmp1,{ },tmp2,tmp6,React.createElement(tmp3,{ },tmp4,React.createElement(react_ReactType.fromString("div"),{ className : "tRight"},tmp5))));
+				}
+				break;
+			case "bookingRequestsCount":
+				if(this.state.data.h["bookingRequestsCount"] == null) {
+					return this.state.formApi.renderWait();
+				} else {
+					var tmp = react_ReactType.fromString("div");
+					var tmp1 = react_ReactType.fromString("ul");
+					var tmp2 = React.createElement(react_ReactType.fromString("li"),{ },React.createElement(react_ReactType.fromString("h3"),{ },"BuchungsAnforderungen"));
+					var tmp3 = react_ReactType.fromString("li");
+					var tmp4 = React.createElement(react_ReactType.fromString("div"),{ },"Live System:");
+					var tmp5 = this.state.data.h["buchungsAnforderungenCount"];
+					var tmp6 = React.createElement(tmp3,{ },tmp4,React.createElement(react_ReactType.fromString("div"),{ className : "tRight"},tmp5));
+					var tmp3 = react_ReactType.fromString("li");
+					var tmp4 = React.createElement(react_ReactType.fromString("div"),{ },"Neues System:");
+					var tmp5 = this.state.data.h["bookingRequestsCount"];
 					return React.createElement(tmp,{ className : "flex0 cCenter"},React.createElement(tmp1,{ },tmp2,tmp6,React.createElement(tmp3,{ },tmp4,React.createElement(react_ReactType.fromString("div"),{ className : "tRight"},tmp5))));
 				}
 				break;
@@ -29803,7 +30773,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 				}
 				break;
 			case "importClientList":
-				haxe_Log.trace(this.state.actualState,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 547, className : "view.dashboard.DBSync", methodName : "renderResults"});
+				haxe_Log.trace(this.state.actualState,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 576, className : "view.dashboard.DBSync", methodName : "renderResults"});
 				if(this.state.actualState == null) {
 					return this.state.formApi.renderWait();
 				} else {
@@ -29817,7 +30787,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,updateMenu: function(viewClassPath) {
 		var sideMenu = this.state.sideMenu;
-		haxe_Log.trace(sideMenu.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 596, className : "view.dashboard.DBSync", methodName : "updateMenu"});
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 634, className : "view.dashboard.DBSync", methodName : "updateMenu"});
 		var _g = 0;
 		var _g1 = sideMenu.menuBlocks.h["DBSync"].items;
 		while(_g < _g1.length) {
@@ -30361,7 +31331,7 @@ view_data_Deals.mapDispatchToProps = function(dispatch) {
 	}
 	return { storeData : function(id,action) {
 		dispatch(redux_Action.map(action_async_LiveDataAccess.storeData(id,action)));
-	}, select : function(id,data,match,selectType) {
+	}, select : function(id,data,component,selectType) {
 		if(id == null) {
 			id = -1;
 		}
@@ -30369,7 +31339,7 @@ view_data_Deals.mapDispatchToProps = function(dispatch) {
 			haxe_Log.trace("select:" + id + " selectType:" + selectType,{ fileName : "view/data/Deals.hx", lineNumber : 115, className : "view.data.Deals", methodName : "mapDispatchToProps"});
 		}
 		haxe_Log.trace(data,{ fileName : "view/data/Deals.hx", lineNumber : 116, className : "view.data.Deals", methodName : "mapDispatchToProps"});
-		dispatch(redux_Action.map(action_async_LiveDataAccess.select({ id : id, data : data, match : match, selectType : selectType})));
+		dispatch(redux_Action.map(action_async_LiveDataAccess.select({ id : id, data : data, match : component.props.match, selectType : selectType})));
 	}};
 };
 view_data_Deals.__super__ = React_Component;
@@ -30594,8 +31564,6 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 			this.actualState = JSON.parse(sessAccounts);
 			haxe_Log.trace(this.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 285, className : "view.data.accounts.Edit", methodName : "componentDidMount"});
 			this.forceUpdate();
-		} else if(this.initialState.id != null && !App.store.getState().dataStore.contactData.h.hasOwnProperty(this.initialState.id)) {
-			App.store.dispatch(redux_Action.map(action_async_DBAccess.get({ action : "get", classPath : "data.Accounts", table : "contacts", filter : "id|" + Std.string(this.initialState.id), userState : App.store.getState().userState})));
 		} else if(this.actualState == null) {
 			this.actualState = react_ReactUtil.copy(this.initialState);
 			this.actualState = view_shared_io_Observer.run(this.actualState,function(newState) {
@@ -32083,7 +33051,7 @@ var view_grid_Grid = function(props) {
 		var k1 = k.next();
 		this.fieldNames.push(k1);
 	}
-	haxe_Log.trace(this.fieldNames,{ fileName : "view/grid/Grid.hx", lineNumber : 159, className : "view.grid.Grid", methodName : "new"});
+	haxe_Log.trace(this.fieldNames,{ fileName : "view/grid/Grid.hx", lineNumber : 156, className : "view.grid.Grid", methodName : "new"});
 	this.state = { _selecting : false, selectedRow : null, selectedRows : new haxe_ds_IntMap(), _rowCells : [], _selectedCells : []};
 };
 $hxClasses["view.grid.Grid"] = view_grid_Grid;
@@ -32098,9 +33066,9 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 	,headerUpdated: null
 	,render: function() {
 		if(this.props.data != null) {
-			haxe_Log.trace(this.props.data.length,{ fileName : "view/grid/Grid.hx", lineNumber : 172, className : "view.grid.Grid", methodName : "render"});
+			haxe_Log.trace(this.props.data.length,{ fileName : "view/grid/Grid.hx", lineNumber : 169, className : "view.grid.Grid", methodName : "render"});
 		}
-		haxe_Log.trace(this.props.className,{ fileName : "view/grid/Grid.hx", lineNumber : 173, className : "view.grid.Grid", methodName : "render"});
+		haxe_Log.trace(this.props.className,{ fileName : "view/grid/Grid.hx", lineNumber : 170, className : "view.grid.Grid", methodName : "render"});
 		if(this.props.data == null || this.props.data.length == 0) {
 			var tmp = react_ReactType.fromString("section");
 			var tmp1 = react_ReactType.fromString("div");
@@ -32109,7 +33077,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		this.gridRef = React.createRef();
 		this.headerRef = React.createRef();
 		var headerRows = this.renderHeaderDisplay();
-		haxe_Log.trace(this.gridStyle,{ fileName : "view/grid/Grid.hx", lineNumber : 194, className : "view.grid.Grid", methodName : "render"});
+		haxe_Log.trace(this.gridStyle,{ fileName : "view/grid/Grid.hx", lineNumber : 191, className : "view.grid.Grid", methodName : "render"});
 		return React.createElement(react_ReactType.fromString("div"),{ ref : this.gridRef, className : "grid-container"},headerRows,this.renderRows());
 	}
 	,renderHeaderDisplay: function() {
@@ -32185,15 +33153,15 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 	,componentDidMount: function() {
 		if(this.gridRef == null) {
 			var c = js_Boot.getClass(this.props.parentComponent);
-			haxe_Log.trace(c.__name__,{ fileName : "view/grid/Grid.hx", lineNumber : 329, className : "view.grid.Grid", methodName : "componentDidMount"});
+			haxe_Log.trace(c.__name__,{ fileName : "view/grid/Grid.hx", lineNumber : 327, className : "view.grid.Grid", methodName : "componentDidMount"});
 			return;
 		}
-		haxe_Log.trace("ok",{ fileName : "view/grid/Grid.hx", lineNumber : 332, className : "view.grid.Grid", methodName : "componentDidMount"});
+		haxe_Log.trace("ok",{ fileName : "view/grid/Grid.hx", lineNumber : 330, className : "view.grid.Grid", methodName : "componentDidMount"});
 		var grid = react_ReactRef.get_current(this.gridRef);
 		grid.style.setProperty("grid-template-columns",this.gridStyle);
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace(Std.string(this.headerUpdated) + ":" + Std.string(this.headerRef) + " cmp state:" + (prevState == this.state ? "Y" : "N"),{ fileName : "view/grid/Grid.hx", lineNumber : 339, className : "view.grid.Grid", methodName : "componentDidUpdate"});
+		haxe_Log.trace(Std.string(this.headerUpdated) + ":" + Std.string(this.headerRef) + " cmp state:" + (prevState == this.state ? "Y" : "N"),{ fileName : "view/grid/Grid.hx", lineNumber : 337, className : "view.grid.Grid", methodName : "componentDidUpdate"});
 	}
 	,highLightRow: function(evtOrId) {
 		if(this.state._selecting) {
@@ -32203,7 +33171,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		var el = typeof(evtOrId) == "number" && ((evtOrId | 0) === evtOrId) ? window.document.querySelector(".gridItem[data-id=\"" + Std.string(evtOrId) + "\"]") : js_Boot.__cast(evtOrId._targetInst.stateNode , HTMLElement);
 		var rN = null;
 		var selectedNow = this.state.selectedRows.copy();
-		haxe_Log.trace(el.dataset.id + ":" + Std.string(this.state._selecting) + " ctrlKey:" + Std.string(evtOrId.ctrlKey),{ fileName : "view/grid/Grid.hx", lineNumber : 354, className : "view.grid.Grid", methodName : "highLightRow"});
+		haxe_Log.trace(el.dataset.id + ":" + Std.string(this.state._selecting) + " ctrlKey:" + Std.string(evtOrId.ctrlKey),{ fileName : "view/grid/Grid.hx", lineNumber : 352, className : "view.grid.Grid", methodName : "highLightRow"});
 		rN = Std.parseInt(el.dataset.gridpos.split("_")[0]);
 		if(!evtOrId.ctrlKey && !evtOrId.shiftKey) {
 			this.state.selectedRows = new haxe_ds_IntMap();
@@ -32235,10 +33203,10 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		while(_g < cells.length) {
 			var cell = cells[_g];
 			++_g;
-			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "view/grid/Grid.hx", lineNumber : 388, className : "view.grid.Grid", methodName : "showDims"});
+			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "view/grid/Grid.hx", lineNumber : 386, className : "view.grid.Grid", methodName : "showDims"});
 			s += cell.getBoundingClientRect().width;
 		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "view/grid/Grid.hx", lineNumber : 391, className : "view.grid.Grid", methodName : "showDims"});
+		haxe_Log.trace(" sum:" + s,{ fileName : "view/grid/Grid.hx", lineNumber : 389, className : "view.grid.Grid", methodName : "showDims"});
 	}
 	,nodeDims: function(n) {
 		var i = 0;
@@ -32249,10 +33217,10 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 			var cell = cells[_g];
 			++_g;
 			var dRect = (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().toJSON();
-			haxe_Log.trace(dRect,{ fileName : "view/grid/Grid.hx", lineNumber : 402, className : "view.grid.Grid", methodName : "nodeDims"});
+			haxe_Log.trace(dRect,{ fileName : "view/grid/Grid.hx", lineNumber : 400, className : "view.grid.Grid", methodName : "nodeDims"});
 			s += (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().width;
 		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "view/grid/Grid.hx", lineNumber : 406, className : "view.grid.Grid", methodName : "nodeDims"});
+		haxe_Log.trace(" sum:" + s,{ fileName : "view/grid/Grid.hx", lineNumber : 404, className : "view.grid.Grid", methodName : "nodeDims"});
 	}
 	,getRowData: function(rCs) {
 		if(rCs.length == 0) {
@@ -32434,6 +33402,7 @@ view_shared_FormBuilder.prototype = {
 		return Lambda.array(_g);
 	}
 	,renderForm: function(props,initialState) {
+		haxe_Log.trace(props.fields.toString(),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 257, className : "view.shared.FormBuilder", methodName : "renderForm"});
 		var sK = 0;
 		var tmp = react_ReactType.fromString("form");
 		var tmp1 = { ref : props.formRef, name : props.model, className : "tabComponentForm formField"};
@@ -32454,7 +33423,7 @@ view_shared_FormBuilder.prototype = {
 	,itemHandler: function(e) {
 		e.preventDefault();
 		var action = (js_Boot.__cast(e.target , HTMLElement)).getAttribute("data-action");
-		haxe_Log.trace(action,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 297, className : "view.shared.FormBuilder", methodName : "itemHandler"});
+		haxe_Log.trace(action,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 298, className : "view.shared.FormBuilder", methodName : "itemHandler"});
 		var mP = Reflect.field(this.comp.state.formApi,"callMethod");
 		mP.apply(this.comp.state.formApi,[action,e]);
 	}
@@ -32462,10 +33431,10 @@ view_shared_FormBuilder.prototype = {
 		return React.createElement(react_ReactType.fromString("input"),{ type : "hidden", name : cm});
 	}
 	,onChange: function(ev) {
-		haxe_Log.trace(ev.target.type,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 310, className : "view.shared.FormBuilder", methodName : "onChange"});
+		haxe_Log.trace(ev.target.type,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 311, className : "view.shared.FormBuilder", methodName : "onChange"});
 		switch(ev.target.type) {
 		case "checkbox":
-			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 314, className : "view.shared.FormBuilder", methodName : "onChange"});
+			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 315, className : "view.shared.FormBuilder", methodName : "onChange"});
 			var tmp;
 			switch(ev.target.checked) {
 			case "1":case "TRUE":case "on":case true:
@@ -32475,7 +33444,7 @@ view_shared_FormBuilder.prototype = {
 				tmp = 0;
 			}
 			view_shared_io_BaseForm.doChange(this.comp,ev.target.name,tmp);
-			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 324, className : "view.shared.FormBuilder", methodName : "onChange"});
+			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 325, className : "view.shared.FormBuilder", methodName : "onChange"});
 			break;
 		case "select-multiple":case "select-one":
 			view_shared_io_BaseForm.doChange(this.comp,ev.target.name,ev.target.value);
@@ -33307,10 +34276,10 @@ view_shared_io_Users.prototype = $extend(React_Component.prototype,{
 });
 var view_stats_History = function(props) {
 	React_Component.call(this,props);
-	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/stats/History.hx", lineNumber : 63, className : "view.stats.History", methodName : "new"});
-	haxe_Log.trace(props.match.params,{ fileName : "view/stats/History.hx", lineNumber : 64, className : "view.stats.History", methodName : "new"});
+	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/stats/History.hx", lineNumber : 59, className : "view.stats.History", methodName : "new"});
+	haxe_Log.trace(props.match.params,{ fileName : "view/stats/History.hx", lineNumber : 60, className : "view.stats.History", methodName : "new"});
 	if(props.match.params.section == null) {
-		haxe_Log.trace("reme",{ fileName : "view/stats/History.hx", lineNumber : 68, className : "view.stats.History", methodName : "new"});
+		haxe_Log.trace("reme",{ fileName : "view/stats/History.hx", lineNumber : 64, className : "view.stats.History", methodName : "new"});
 		var baseUrl = props.match.path.split(":section")[0];
 		props.history.push("" + baseUrl + "Charts/get");
 	}
@@ -33318,26 +34287,25 @@ var view_stats_History = function(props) {
 };
 $hxClasses["view.stats.History"] = view_stats_History;
 view_stats_History.__name__ = "view.stats.History";
-view_stats_History.initialState = null;
 view_stats_History.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace("ok",{ fileName : "view/stats/History.hx", lineNumber : 103, className : "view.stats.History", methodName : "mapDispatchToProps"});
+	haxe_Log.trace("ok",{ fileName : "view/stats/History.hx", lineNumber : 99, className : "view.stats.History", methodName : "mapDispatchToProps"});
 	return { };
 };
 view_stats_History.mapStateToProps = function(aState) {
-	haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/stats/History.hx", lineNumber : 112, className : "view.stats.History", methodName : "mapStateToProps"});
+	haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/stats/History.hx", lineNumber : 108, className : "view.stats.History", methodName : "mapStateToProps"});
 	if(aState.dataStore.contactData != null) {
-		haxe_Log.trace(aState.dataStore.contactData.keys().next(),{ fileName : "view/stats/History.hx", lineNumber : 114, className : "view.stats.History", methodName : "mapStateToProps"});
+		haxe_Log.trace(aState.dataStore.contactData.keys().next(),{ fileName : "view/stats/History.hx", lineNumber : 110, className : "view.stats.History", methodName : "mapStateToProps"});
 	}
 	if(aState.dataStore.contactsDbData != null) {
 		var tmp = aState.dataStore.contactsDbData.dataRows[0];
-		haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/stats/History.hx", lineNumber : 116, className : "view.stats.History", methodName : "mapStateToProps"});
+		haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/stats/History.hx", lineNumber : 112, className : "view.stats.History", methodName : "mapStateToProps"});
 	} else {
-		haxe_Log.trace(aState.dataStore,{ fileName : "view/stats/History.hx", lineNumber : 119, className : "view.stats.History", methodName : "mapStateToProps"});
-		haxe_Log.trace(Reflect.fields(aState.dataStore),{ fileName : "view/stats/History.hx", lineNumber : 120, className : "view.stats.History", methodName : "mapStateToProps"});
+		haxe_Log.trace(aState.dataStore,{ fileName : "view/stats/History.hx", lineNumber : 115, className : "view.stats.History", methodName : "mapStateToProps"});
+		haxe_Log.trace(Reflect.fields(aState.dataStore),{ fileName : "view/stats/History.hx", lineNumber : 116, className : "view.stats.History", methodName : "mapStateToProps"});
 	}
-	haxe_Log.trace(App.store.getState().dataStore.contactsDbData,{ fileName : "view/stats/History.hx", lineNumber : 122, className : "view.stats.History", methodName : "mapStateToProps"});
+	haxe_Log.trace(App.store.getState().dataStore.contactsDbData,{ fileName : "view/stats/History.hx", lineNumber : 118, className : "view.stats.History", methodName : "mapStateToProps"});
 	var bState = { dataStore : aState.dataStore, userState : aState.userState};
-	haxe_Log.trace(bState.dataStore.contactData,{ fileName : "view/stats/History.hx", lineNumber : 129, className : "view.stats.History", methodName : "mapStateToProps"});
+	haxe_Log.trace(bState.dataStore.contactData,{ fileName : "view/stats/History.hx", lineNumber : 125, className : "view.stats.History", methodName : "mapStateToProps"});
 	return bState;
 };
 view_stats_History.__super__ = React_Component;
@@ -33350,15 +34318,15 @@ view_stats_History.prototype = $extend(React_Component.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var ex = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(ex,{ fileName : "view/stats/History.hx", lineNumber : 87, className : "view.stats.History", methodName : "componentDidCatch"});
+			haxe_Log.trace(ex,{ fileName : "view/stats/History.hx", lineNumber : 83, className : "view.stats.History", methodName : "componentDidCatch"});
 		}
-		haxe_Log.trace(error,{ fileName : "view/stats/History.hx", lineNumber : 89, className : "view.stats.History", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "view/stats/History.hx", lineNumber : 85, className : "view.stats.History", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
-		haxe_Log.trace(this.props.location.pathname,{ fileName : "view/stats/History.hx", lineNumber : 135, className : "view.stats.History", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.location.pathname,{ fileName : "view/stats/History.hx", lineNumber : 131, className : "view.stats.History", methodName : "componentDidMount"});
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/stats/History.hx", lineNumber : 146, className : "view.stats.History", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/stats/History.hx", lineNumber : 142, className : "view.stats.History", methodName : "render"});
 		if(this.props.match.params.section == "Charts") {
 			return React.createElement(react_ReactType.fromComp(view_stats_history_Charts),Object.assign({ },this.props,{ limit : 100, parentComponent : this, formApi : this.state.formApi, fullWidth : true, sideMenu : this.state.sideMenu}));
 		} else {
@@ -33375,7 +34343,7 @@ view_stats_Performance.__name__ = "view.stats.Performance";
 view_stats_Performance.__super__ = React_Component;
 view_stats_Performance.prototype = $extend(React_Component.prototype,{
 	render: function() {
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/stats/Performance.hx", lineNumber : 27, className : "view.stats.Performance", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/stats/Performance.hx", lineNumber : 26, className : "view.stats.Performance", methodName : "render"});
 		if(this.props.match.params.section == "Charts") {
 			return React.createElement(react_ReactType.fromComp(view_stats_history_Charts),Object.assign({ },this.props,{ limit : 100, parentComponent : this, formApi : this.state.formApi, fullWidth : true, sideMenu : this.state.sideMenu}));
 		} else {
@@ -33392,7 +34360,7 @@ view_stats_Preview.__name__ = "view.stats.Preview";
 view_stats_Preview.__super__ = React_Component;
 view_stats_Preview.prototype = $extend(React_Component.prototype,{
 	render: function() {
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/stats/Preview.hx", lineNumber : 50, className : "view.stats.Preview", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/stats/Preview.hx", lineNumber : 49, className : "view.stats.Preview", methodName : "render"});
 		if(this.props.match.params.section == "Charts") {
 			return React.createElement(react_ReactType.fromComp(view_stats_history_Charts),Object.assign({ },this.props,{ limit : 100, parentComponent : this, formApi : this.state.formApi, fullWidth : true, sideMenu : this.state.sideMenu}));
 		} else {
@@ -34170,7 +35138,7 @@ App.modalBox = React.createRef();
 App.onResizeComponents = new haxe_ds_List();
 App.defaultUrl = "/Data/Contacts/List/get";
 App.mandator = 1;
-App.maxLoginAttempts = 3;
+App.maxLoginAttempts = 8;
 App.displayName = "App";
 DateTools.DAY_SHORT_NAMES = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 DateTools.DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -34270,12 +35238,10 @@ model_ORM.__meta__ = { fields : { id : { dataType : ["bigint"]}}};
 model_ORM.dsep = ",";
 model_Account.__meta__ = { fields : { contact : { dataType : ["bigint"]}, bank_name : { dataType : ["character varying(64)"]}, bic : { dataType : ["character varying(11)"]}, account : { dataType : ["character varying(32)"]}, iban : { dataType : ["character varying(32)"]}, account_holder : { dataType : ["text"]}, sign_date : { dataType : ["date"]}, status : { dataType : ["accounts_state"]}, creation_date : { dataType : ["timestamp with time zone"]}, edited_by : { dataType : ["bigint"]}, last_updated : { dataType : ["timestamp with time zone"]}, mandator : { dataType : ["bigint"]}}};
 model_Account.__rtti = "<class path=\"model.Account\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<contact public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</contact>\n\t<set_contact set=\"method\" line=\"29\"><f a=\"contact\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_contact>\n\t<bank_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</bank_name>\n\t<set_bank_name set=\"method\" line=\"39\"><f a=\"bank_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_bank_name>\n\t<bic public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(11)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</bic>\n\t<set_bic set=\"method\" line=\"49\"><f a=\"bic\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_bic>\n\t<account public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</account>\n\t<set_account set=\"method\" line=\"59\"><f a=\"account\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_account>\n\t<iban public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</iban>\n\t<set_iban set=\"method\" line=\"69\"><f a=\"iban\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_iban>\n\t<account_holder public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</account_holder>\n\t<set_account_holder set=\"method\" line=\"79\"><f a=\"account_holder\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_account_holder>\n\t<sign_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</sign_date>\n\t<set_sign_date set=\"method\" line=\"89\"><f a=\"sign_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_sign_date>\n\t<status public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"accounts_state\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</status>\n\t<set_status set=\"method\" line=\"99\"><f a=\"status\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_status>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp with time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"109\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"119\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<last_updated public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp with time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_updated>\n\t<set_last_updated set=\"method\" line=\"129\"><f a=\"last_updated\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_updated>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"139\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<new public=\"1\" set=\"method\" line=\"21\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
-model_BankTransfer.__meta__ = { fields : { ag_name : { dataType : ["character varying(64)"]}, ag_konto_or_iban : { dataType : ["character varying(32)"]}, ag_blz_or_bic : { dataType : ["character varying(11)"]}, zahlpfl_name : { dataType : ["character varying(21)"]}, zahlpfl_name2 : { dataType : ["character varying(32)"]}, zahlpfl_strasse : { dataType : ["character varying(32)"]}, zahlpfl_name_ort : { dataType : ["character varying(32)"]}, zahlpfl_name_kto_or_iban : { dataType : ["character varying(22)"]}, zahlpfl_name_blz_or_bic : { dataType : ["character varying(11)"]}, betrag : { dataType : ["double precision"]}, currency : { dataType : ["character varying(32)"]}, zahlart : { dataType : ["character varying(5)"]}, termin : { dataType : ["date"]}, vwz1 : { dataType : ["character varying(22)"]}, vwz2 : { dataType : ["character varying(256)"]}, vwz3 : { dataType : ["character varying(64)"]}, vwz4 : { dataType : ["character varying(32)"]}, vwz5 : { dataType : ["character varying(32)"]}, vwz6 : { dataType : ["character varying(32)"]}, vwz7 : { dataType : ["character varying(32)"]}, vwz8 : { dataType : ["character varying(32)"]}, vwz9 : { dataType : ["character varying(32)"]}, ba_id : { dataType : ["bigint"]}, tracking_status : { dataType : ["bank_transfers_tracking_status"]}, anforderungs_datum : { dataType : ["date"]}, rueck_datum : { dataType : ["date"]}, cycle : { dataType : ["character varying(32)"]}, ref_id : { dataType : ["character varying(32)"]}, mandat_id : { dataType : ["character varying(11)"]}, mandat_datum : { dataType : ["date"]}, ag_creditor_id : { dataType : ["character varying(32)"]}, sequenz : { dataType : ["character varying(4)"]}, super_ag_name : { dataType : ["character varying(32)"]}}};
-model_BankTransfer.__rtti = "<class path=\"model.BankTransfer\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<ag_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</ag_name>\n\t<set_ag_name set=\"method\" line=\"50\"><f a=\"ag_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_ag_name>\n\t<ag_konto_or_iban public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</ag_konto_or_iban>\n\t<set_ag_konto_or_iban set=\"method\" line=\"60\"><f a=\"ag_konto_or_iban\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_ag_konto_or_iban>\n\t<ag_blz_or_bic public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(11)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</ag_blz_or_bic>\n\t<set_ag_blz_or_bic set=\"method\" line=\"70\"><f a=\"ag_blz_or_bic\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_ag_blz_or_bic>\n\t<zahlpfl_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(21)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlpfl_name>\n\t<set_zahlpfl_name set=\"method\" line=\"80\"><f a=\"zahlpfl_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlpfl_name>\n\t<zahlpfl_name2 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlpfl_name2>\n\t<set_zahlpfl_name2 set=\"method\" line=\"90\"><f a=\"zahlpfl_name2\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlpfl_name2>\n\t<zahlpfl_strasse public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlpfl_strasse>\n\t<set_zahlpfl_strasse set=\"method\" line=\"100\"><f a=\"zahlpfl_strasse\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlpfl_strasse>\n\t<zahlpfl_name_ort public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlpfl_name_ort>\n\t<set_zahlpfl_name_ort set=\"method\" line=\"110\"><f a=\"zahlpfl_name_ort\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlpfl_name_ort>\n\t<zahlpfl_name_kto_or_iban public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(22)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlpfl_name_kto_or_iban>\n\t<set_zahlpfl_name_kto_or_iban set=\"method\" line=\"120\"><f a=\"zahlpfl_name_kto_or_iban\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlpfl_name_kto_or_iban>\n\t<zahlpfl_name_blz_or_bic public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(11)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlpfl_name_blz_or_bic>\n\t<set_zahlpfl_name_blz_or_bic set=\"method\" line=\"130\"><f a=\"zahlpfl_name_blz_or_bic\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlpfl_name_blz_or_bic>\n\t<betrag public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"double precision\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</betrag>\n\t<set_betrag set=\"method\" line=\"140\"><f a=\"betrag\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_betrag>\n\t<currency public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</currency>\n\t<set_currency set=\"method\" line=\"150\"><f a=\"currency\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_currency>\n\t<zahlart public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(5)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</zahlart>\n\t<set_zahlart set=\"method\" line=\"160\"><f a=\"zahlart\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_zahlart>\n\t<termin public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</termin>\n\t<set_termin set=\"method\" line=\"170\"><f a=\"termin\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_termin>\n\t<vwz1 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(22)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz1>\n\t<set_vwz1 set=\"method\" line=\"180\"><f a=\"vwz1\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz1>\n\t<vwz2 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(256)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz2>\n\t<set_vwz2 set=\"method\" line=\"190\"><f a=\"vwz2\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz2>\n\t<vwz3 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz3>\n\t<set_vwz3 set=\"method\" line=\"200\"><f a=\"vwz3\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz3>\n\t<vwz4 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz4>\n\t<set_vwz4 set=\"method\" line=\"210\"><f a=\"vwz4\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz4>\n\t<vwz5 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz5>\n\t<set_vwz5 set=\"method\" line=\"220\"><f a=\"vwz5\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz5>\n\t<vwz6 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz6>\n\t<set_vwz6 set=\"method\" line=\"230\"><f a=\"vwz6\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz6>\n\t<vwz7 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz7>\n\t<set_vwz7 set=\"method\" line=\"240\"><f a=\"vwz7\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz7>\n\t<vwz8 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz8>\n\t<set_vwz8 set=\"method\" line=\"250\"><f a=\"vwz8\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz8>\n\t<vwz9 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</vwz9>\n\t<set_vwz9 set=\"method\" line=\"260\"><f a=\"vwz9\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_vwz9>\n\t<ba_id public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</ba_id>\n\t<set_ba_id set=\"method\" line=\"270\"><f a=\"ba_id\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_ba_id>\n\t<tracking_status public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bank_transfers_tracking_status\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</tracking_status>\n\t<set_tracking_status set=\"method\" line=\"280\"><f a=\"tracking_status\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_tracking_status>\n\t<anforderungs_datum public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</anforderungs_datum>\n\t<set_anforderungs_datum set=\"method\" line=\"290\"><f a=\"anforderungs_datum\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_anforderungs_datum>\n\t<rueck_datum public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</rueck_datum>\n\t<set_rueck_datum set=\"method\" line=\"300\"><f a=\"rueck_datum\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_rueck_datum>\n\t<cycle public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</cycle>\n\t<set_cycle set=\"method\" line=\"310\"><f a=\"cycle\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_cycle>\n\t<ref_id public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</ref_id>\n\t<set_ref_id set=\"method\" line=\"320\"><f a=\"ref_id\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_ref_id>\n\t<mandat_id public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(11)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandat_id>\n\t<set_mandat_id set=\"method\" line=\"330\"><f a=\"mandat_id\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_mandat_id>\n\t<mandat_datum public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandat_datum>\n\t<set_mandat_datum set=\"method\" line=\"340\"><f a=\"mandat_datum\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_mandat_datum>\n\t<ag_creditor_id public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</ag_creditor_id>\n\t<set_ag_creditor_id set=\"method\" line=\"350\"><f a=\"ag_creditor_id\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_ag_creditor_id>\n\t<sequenz public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(4)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</sequenz>\n\t<set_sequenz set=\"method\" line=\"360\"><f a=\"sequenz\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_sequenz>\n\t<super_ag_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</super_ag_name>\n\t<set_super_ag_name set=\"method\" line=\"370\"><f a=\"super_ag_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_super_ag_name>\n\t<new public=\"1\" set=\"method\" line=\"42\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 model_Contact.__meta__ = { fields : { mandator : { dataType : ["bigint"]}, creation_date : { dataType : ["timestamp(0) without time zone"]}, state : { dataType : ["character varying(64)"]}, use_email : { dataType : ["boolean"]}, company_name : { dataType : ["character varying(64)"]}, care_of : { dataType : ["character varying(100)"]}, phone_code : { dataType : ["character varying(10)"]}, phone_number : { dataType : ["character varying(18)"]}, fax : { dataType : ["character varying(18)"]}, title : { dataType : ["character varying(64)"]}, first_name : { dataType : ["character varying(32)"]}, last_name : { dataType : ["character varying(32)"]}, address : { dataType : ["character varying(64)"]}, address_2 : { dataType : ["character varying(64)"]}, city : { dataType : ["character varying(50)"]}, postal_code : { dataType : ["character varying(10)"]}, country_code : { dataType : ["character varying(3)"]}, gender : { dataType : ["character varying(64)"]}, date_of_birth : { dataType : ["date"]}, mobile : { dataType : ["character varying(19)"]}, email : { dataType : ["character varying(64)"]}, comments : { dataType : ["character varying(4096)"]}, edited_by : { dataType : ["bigint"]}, merged : { dataType : ["bigint[]"]}, last_updated : { dataType : ["timestamp(0) without time zone"]}, owner : { dataType : ["bigint"]}}};
 model_Contact.__rtti = "<class path=\"model.Contact\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"43\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"53\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<state public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</state>\n\t<set_state set=\"method\" line=\"63\"><f a=\"state\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_state>\n\t<use_email public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</use_email>\n\t<set_use_email set=\"method\" line=\"73\"><f a=\"use_email\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_use_email>\n\t<company_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</company_name>\n\t<set_company_name set=\"method\" line=\"83\"><f a=\"company_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_company_name>\n\t<care_of public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(100)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</care_of>\n\t<set_care_of set=\"method\" line=\"93\"><f a=\"care_of\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_care_of>\n\t<phone_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_code>\n\t<set_phone_code set=\"method\" line=\"103\"><f a=\"phone_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_code>\n\t<phone_number public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_number>\n\t<set_phone_number set=\"method\" line=\"113\"><f a=\"phone_number\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_number>\n\t<fax public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</fax>\n\t<set_fax set=\"method\" line=\"123\"><f a=\"fax\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_fax>\n\t<title public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</title>\n\t<set_title set=\"method\" line=\"133\"><f a=\"title\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_title>\n\t<first_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</first_name>\n\t<set_first_name set=\"method\" line=\"143\"><f a=\"first_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_first_name>\n\t<last_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_name>\n\t<set_last_name set=\"method\" line=\"153\"><f a=\"last_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_name>\n\t<address public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address>\n\t<set_address set=\"method\" line=\"163\"><f a=\"address\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address>\n\t<address_2 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address_2>\n\t<set_address_2 set=\"method\" line=\"173\"><f a=\"address_2\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address_2>\n\t<city public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(50)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</city>\n\t<set_city set=\"method\" line=\"183\"><f a=\"city\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_city>\n\t<postal_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</postal_code>\n\t<set_postal_code set=\"method\" line=\"193\"><f a=\"postal_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_postal_code>\n\t<country_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(3)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</country_code>\n\t<set_country_code set=\"method\" line=\"203\"><f a=\"country_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_country_code>\n\t<gender public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</gender>\n\t<set_gender set=\"method\" line=\"213\"><f a=\"gender\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_gender>\n\t<date_of_birth public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</date_of_birth>\n\t<set_date_of_birth set=\"method\" line=\"223\"><f a=\"date_of_birth\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_date_of_birth>\n\t<mobile public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(19)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mobile>\n\t<set_mobile set=\"method\" line=\"233\"><f a=\"mobile\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_mobile>\n\t<email public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</email>\n\t<set_email set=\"method\" line=\"243\"><f a=\"email\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_email>\n\t<comments public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(4096)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</comments>\n\t<set_comments set=\"method\" line=\"253\"><f a=\"comments\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_comments>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"263\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<merged public=\"1\" set=\"accessor\">\n\t\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint[]\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</merged>\n\t<set_merged set=\"method\" line=\"273\"><f a=\"merged\">\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n</f></set_merged>\n\t<last_updated public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_updated>\n\t<set_last_updated set=\"method\" line=\"283\"><f a=\"last_updated\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_updated>\n\t<owner public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</owner>\n\t<set_owner set=\"method\" line=\"293\"><f a=\"owner\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_owner>\n\t<new public=\"1\" set=\"method\" line=\"35\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
-model_Deal.__meta__ = { fields : { contact : { dataType : ["bigint"]}, creation_date : { dataType : ["timestamp(0) without time zone"]}, iban : { dataType : ["character varying(32)"]}, target_account : { dataType : ["bigint"]}, booking_run : { dataType : ["booking_runs"]}, start_date : { dataType : ["date"]}, cycle : { dataType : ["deals_cycle"]}, amount : { dataType : ["numeric(10,2)"]}, product : { dataType : ["bigint"]}, agent : { dataType : ["bigint"]}, project : { dataType : ["bigint"]}, active : { dataType : ["boolean"]}, pay_method : { dataType : ["pay_methods"]}, end_date : { dataType : ["date"]}, end_reason : { dataType : ["bigint"]}, repeat_date : { dataType : ["date"]}, edited_by : { dataType : ["bigint"]}, mandator : { dataType : ["bigint"]}, old_active : { dataType : ["boolean"]}, cycle_start_date : { dataType : ["date"]}, last_updated : { dataType : ["timestamp(0) without time zone"]}, booking_day : { dataType : ["deals_booking_day"]}}};
-model_Deal.__rtti = "<class path=\"model.Deal\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<contact public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</contact>\n\t<set_contact set=\"method\" line=\"39\"><f a=\"contact\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_contact>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"49\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<iban public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</iban>\n\t<set_iban set=\"method\" line=\"59\"><f a=\"iban\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_iban>\n\t<target_account public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</target_account>\n\t<set_target_account set=\"method\" line=\"69\"><f a=\"target_account\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_target_account>\n\t<booking_run public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"booking_runs\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</booking_run>\n\t<set_booking_run set=\"method\" line=\"79\"><f a=\"booking_run\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_booking_run>\n\t<start_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</start_date>\n\t<set_start_date set=\"method\" line=\"89\"><f a=\"start_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_start_date>\n\t<cycle public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"deals_cycle\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</cycle>\n\t<set_cycle set=\"method\" line=\"99\"><f a=\"cycle\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_cycle>\n\t<amount public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"numeric(10,2)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</amount>\n\t<set_amount set=\"method\" line=\"109\"><f a=\"amount\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_amount>\n\t<product public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</product>\n\t<set_product set=\"method\" line=\"119\"><f a=\"product\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_product>\n\t<agent public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</agent>\n\t<set_agent set=\"method\" line=\"129\"><f a=\"agent\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_agent>\n\t<project public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</project>\n\t<set_project set=\"method\" line=\"139\"><f a=\"project\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_project>\n\t<active public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</active>\n\t<set_active set=\"method\" line=\"149\"><f a=\"active\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_active>\n\t<pay_method public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"pay_methods\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</pay_method>\n\t<set_pay_method set=\"method\" line=\"159\"><f a=\"pay_method\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_pay_method>\n\t<end_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</end_date>\n\t<set_end_date set=\"method\" line=\"169\"><f a=\"end_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_end_date>\n\t<end_reason public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</end_reason>\n\t<set_end_reason set=\"method\" line=\"179\"><f a=\"end_reason\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_end_reason>\n\t<repeat_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</repeat_date>\n\t<set_repeat_date set=\"method\" line=\"189\"><f a=\"repeat_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_repeat_date>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"199\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"209\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<old_active public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</old_active>\n\t<set_old_active set=\"method\" line=\"219\"><f a=\"old_active\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_old_active>\n\t<cycle_start_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</cycle_start_date>\n\t<set_cycle_start_date set=\"method\" line=\"229\"><f a=\"cycle_start_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_cycle_start_date>\n\t<last_updated public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_updated>\n\t<set_last_updated set=\"method\" line=\"239\"><f a=\"last_updated\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_updated>\n\t<booking_day public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"deals_booking_day\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</booking_day>\n\t<set_booking_day set=\"method\" line=\"249\"><f a=\"booking_day\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_booking_day>\n\t<new public=\"1\" set=\"method\" line=\"31\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+model_Deal.__meta__ = { fields : { contact : { dataType : ["bigint"]}, creation_date : { dataType : ["timestamp(0) without time zone"]}, account : { dataType : ["bigint"]}, target_account : { dataType : ["bigint"]}, booking_run : { dataType : ["booking_runs"]}, start_date : { dataType : ["date"]}, cycle : { dataType : ["deals_cycle"]}, amount : { dataType : ["numeric(10,2)"]}, product : { dataType : ["bigint"]}, agent : { dataType : ["bigint"]}, project : { dataType : ["bigint"]}, active : { dataType : ["boolean"]}, pay_method : { dataType : ["pay_methods"]}, end_date : { dataType : ["date"]}, end_reason : { dataType : ["bigint"]}, repeat_date : { dataType : ["date"]}, edited_by : { dataType : ["bigint"]}, mandator : { dataType : ["bigint"]}, old_active : { dataType : ["boolean"]}, cycle_start_date : { dataType : ["date"]}, last_updated : { dataType : ["timestamp(0) without time zone"]}, booking_day : { dataType : ["deals_booking_day"]}}};
+model_Deal.__rtti = "<class path=\"model.Deal\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<contact public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</contact>\n\t<set_contact set=\"method\" line=\"39\"><f a=\"contact\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_contact>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"49\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<account public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</account>\n\t<set_account set=\"method\" line=\"59\"><f a=\"account\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_account>\n\t<target_account public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</target_account>\n\t<set_target_account set=\"method\" line=\"69\"><f a=\"target_account\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_target_account>\n\t<booking_run public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"booking_runs\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</booking_run>\n\t<set_booking_run set=\"method\" line=\"79\"><f a=\"booking_run\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_booking_run>\n\t<start_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</start_date>\n\t<set_start_date set=\"method\" line=\"89\"><f a=\"start_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_start_date>\n\t<cycle public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"deals_cycle\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</cycle>\n\t<set_cycle set=\"method\" line=\"99\"><f a=\"cycle\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_cycle>\n\t<amount public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"numeric(10,2)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</amount>\n\t<set_amount set=\"method\" line=\"109\"><f a=\"amount\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_amount>\n\t<product public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</product>\n\t<set_product set=\"method\" line=\"119\"><f a=\"product\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_product>\n\t<agent public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</agent>\n\t<set_agent set=\"method\" line=\"129\"><f a=\"agent\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_agent>\n\t<project public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</project>\n\t<set_project set=\"method\" line=\"139\"><f a=\"project\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_project>\n\t<active public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</active>\n\t<set_active set=\"method\" line=\"149\"><f a=\"active\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_active>\n\t<pay_method public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"pay_methods\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</pay_method>\n\t<set_pay_method set=\"method\" line=\"159\"><f a=\"pay_method\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_pay_method>\n\t<end_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</end_date>\n\t<set_end_date set=\"method\" line=\"169\"><f a=\"end_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_end_date>\n\t<end_reason public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</end_reason>\n\t<set_end_reason set=\"method\" line=\"179\"><f a=\"end_reason\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_end_reason>\n\t<repeat_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</repeat_date>\n\t<set_repeat_date set=\"method\" line=\"189\"><f a=\"repeat_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_repeat_date>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"199\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"209\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<old_active public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</old_active>\n\t<set_old_active set=\"method\" line=\"219\"><f a=\"old_active\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_old_active>\n\t<cycle_start_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</cycle_start_date>\n\t<set_cycle_start_date set=\"method\" line=\"229\"><f a=\"cycle_start_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_cycle_start_date>\n\t<last_updated public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_updated>\n\t<set_last_updated set=\"method\" line=\"239\"><f a=\"last_updated\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_updated>\n\t<booking_day public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"deals_booking_day\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</booking_day>\n\t<set_booking_day set=\"method\" line=\"249\"><f a=\"booking_day\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_booking_day>\n\t<new public=\"1\" set=\"method\" line=\"31\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 model_accounting_AccountsModel.dataAccess = (function($this) {
 	var $r;
 	var _g = new haxe_ds_StringMap();
@@ -34529,10 +35495,11 @@ model_deals_DealsModel.dataAccess = (function($this) {
 		_g2.h["cycle"] = { label : "Turnus", type : "Radio", options : _g3};
 		_g2.h["amount"] = { label : "Betrag", type : "NFormat"};
 		var _g3 = new haxe_ds_StringMap();
-		_g3.h["1"] = "Kinderhilfe";
-		_g3.h["2"] = "Tierhilfe";
+		_g3.h["2"] = "Kinderhilfe";
+		_g3.h["3"] = "Tierhilfe";
 		_g2.h["produkt"] = { label : "Produkt", type : "Select", options : _g3};
 		_g2.h["end_date"] = { label : "Beendet zum", type : "DatePicker", displayFormat : "d.m.Y"};
+		_g2.h["cycle_start_date"] = { label : "Turnus Startdatum", type : "DatePicker", displayFormat : "d.m.Y"};
 		_g2.h["id"] = { type : "Hidden"};
 		_g2.h["edited_by"] = { type : "Hidden"};
 		_g2.h["mandator"] = { type : "Hidden"};
@@ -34577,7 +35544,6 @@ model_deals_DealsModel.listColumns = (function($this) {
 	}};
 	_g.h["active"] = { label : "Aktiv", className : "tCenter", cellFormat : function(v) {
 		var className = v ? "active fas fa-heart" : "passive far fa-heart";
-		haxe_Log.trace(">>>" + (v == null ? "null" : "" + v) + "<<<",{ fileName : "model/deals/DealsModel.hx", lineNumber : 77, className : "model.deals.DealsModel", methodName : "listColumns"});
 		return React.createElement(react_ReactType.fromString("span"),{ className : className});
 	}};
 	_g.h["cycle"] = { label : "Turnus"};
@@ -34863,11 +35829,11 @@ view_accounting_imports_List.menuItems = [{ label : "Auswählen", formField : { 
 view_accounting_imports_List.displayName = "List";
 view_accounting_imports_List._renderWrapper = (redux_react_ReactRedux.connect(view_accounting_imports_List.mapStateToProps,view_accounting_imports_List.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_accounting_imports_List));
 view_accounting_imports_List.__jsxStatic = view_accounting_imports_List._renderWrapper;
-view_dashboard_DB.menuItems = [{ label : "Create Fields Table", action : "createFieldList"},{ label : "Table Fields", action : "showFieldList"},{ label : "Bearbeiten", action : "editTableFields"},{ label : "Speichern", action : "save"},{ label : "Löschen", action : "delete"}];
+view_dashboard_DB.menuItems = [{ label : "getView", action : "getView"},{ label : "setView", action : "setView"},{ label : "Formulare", action : "listForms"},{ label : "Bearbeiten", action : "edit"},{ label : "Speichern", action : "save"},{ label : "Löschen", action : "delete"}];
 view_dashboard_DB.displayName = "DB";
 view_dashboard_DB._renderWrapper = (redux_react_ReactRedux.connect(view_dashboard_DB.mapStateToProps))(react_ReactTypeOf.fromComp(view_dashboard_DB));
 view_dashboard_DB.__jsxStatic = view_dashboard_DB._renderWrapper;
-view_dashboard_DBSync.menuItems = [{ label : "Kontakt Daten ", action : "checkContacts"},{ label : "Spenden Daten ", action : "checkDeals"},{ label : "Konto Daten ", action : "checkAccounts"}];
+view_dashboard_DBSync.menuItems = [{ label : "BuchungsAnforderungen ", action : "checkBookingRequests"},{ label : "Kontakt Daten ", action : "checkContacts"},{ label : "Spenden Daten ", action : "checkDeals"},{ label : "Konto Daten ", action : "checkAccounts"}];
 view_dashboard_DBSync.displayName = "DBSync";
 view_dashboard_DBSync._renderWrapper = (redux_react_ReactRedux.connect(view_dashboard_DBSync.mapStateToProps,view_dashboard_DBSync.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_dashboard_DBSync));
 view_dashboard_DBSync.__jsxStatic = view_dashboard_DBSync._renderWrapper;
@@ -34876,29 +35842,8 @@ view_dashboard_Roles._renderWrapper = (redux_react_ReactRedux.connect(view_dashb
 view_dashboard_Roles.__jsxStatic = view_dashboard_Roles._renderWrapper;
 view_dashboard_Settings.displayName = "Settings";
 view_dashboard_Setup.displayName = "Setup";
-view_dashboard_model_DBFormsModel.fieldsListColumns = (function($this) {
-	var $r;
-	var _g = new haxe_ds_StringMap();
-	_g.h["table_name"] = { label : "Tabelle", editable : false};
-	_g.h["field_name"] = { label : "Feldname", editable : false, flexGrow : 1};
-	_g.h["format_display"] = { label : "Anzeige", title : "Anzeigeformat"};
-	_g.h["format_store"] = { label : "DB", title : "Speicherformat"};
-	_g.h["element"] = { label : "Form", title : "Eingabefeld"};
-	_g.h["admin_only"] = { label : "AO", title : "Admin", cellFormat : view_dashboard_model_DBFormsModel.formatBool};
-	_g.h["readonly"] = { label : "RO", title : "Nur Lesen", cellFormat : view_dashboard_model_DBFormsModel.formatBool};
-	_g.h["required"] = { label : "RQ", title : "Pflichtfeld", cellFormat : view_dashboard_model_DBFormsModel.formatBool};
-	_g.h["use_as_index"] = { label : "ID", cellFormat : view_dashboard_model_DBFormsModel.formatBool};
-	_g.h["id"] = { label : "ID", show : false};
-	$r = _g;
-	return $r;
-}(this));
-view_dashboard_model_DBFormsModel.dataDisplay = (function($this) {
-	var $r;
-	var _g = new haxe_ds_StringMap();
-	_g.h["fieldsList"] = { altGroupPos : 0, columns : view_dashboard_model_DBFormsModel.fieldsListColumns};
-	$r = _g;
-	return $r;
-}(this));
+view_dashboard_model_DBFormsModel.fieldsListColumns = new haxe_ds_StringMap();
+view_dashboard_model_DBFormsModel.dataDisplay = new haxe_ds_StringMap();
 view_dashboard_model_DBSyncModel.clientListColumns = (function($this) {
 	var $r;
 	var _g = new haxe_ds_StringMap();

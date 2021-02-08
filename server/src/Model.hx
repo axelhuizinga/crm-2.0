@@ -878,8 +878,11 @@ class Model
 
 	public static function binary():DbQuery
 	{
-		trace(SuperGlobal._POST.keyValueIterator().hasNext()?'Y':'N');
-		S.safeLog(Std.string(SuperGlobal._POST));
+		//S.safeLog(Std.string(SuperGlobal._POST));
+		var postKV = SuperGlobal._POST.keyValueIterator();
+		trace(postKV.hasNext()?'Y':'N');
+		if(postKV.hasNext())
+			return json(postKV);
 		//var d:DbQuery = new DbQuery();
 		var pData = Bytes.ofString( (
 			Lib.isCli()? Sys.args()[0]:
@@ -890,6 +893,15 @@ class Model
 		var s:Serializer = new Serializer();
 		return s.unserialize(pData, DbQuery);
 	}
+
+	public static function json(pKV:KeyValueIterator<String,String>):DbQuery
+	{
+		trace(pKV.hasNext()?'Y':'N');
+		for(k=>v in pKV){
+			trace('$k => $v');
+		}
+		return null;//s.unserialize(pData, DbQuery);
+	}	
 	
 	public function new(?param:Map<String,Dynamic>) 
 	{

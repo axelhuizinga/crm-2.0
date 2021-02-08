@@ -182,6 +182,7 @@ class S
 			//trace(Web.getPostData());
 			dbQuery = Model.binary();			
 			//trace(dbQuery);
+			//send("dev end");
 			//Model.binary(params.get('dbData'));
 			params = dbQuery.dbParams;
 			trace(params);
@@ -381,7 +382,7 @@ class S
 		Web.setHeader('Content-Type', cType);
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 		Web.setHeader("Access-Control-Allow-Credentials", "true");
-		if(S.devIP!=null)
+		if(S.devIP!=null&&S.devIP!='')
 		Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
 		headerSent = true;	
 	}

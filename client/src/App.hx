@@ -69,8 +69,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	public static var browserHistory:History;
 	
 	public static var store:Store<AppState>;
-	//public static var config:ConfigState = Webpack.require('../../httpdocs/config.js').config;
-	//public static var env:Dynamic = Webpack.require('../webpack.local.js')();
+
 	public static var config:ConfigState = js.Lib.require('config.js').config;
 	public static var devIP = (untyped __devIP__ == 'X'?'':__devIP__);
 	public static var devUser = (untyped __user_name__ == 'X' ? '' : __user_name__);
@@ -87,7 +86,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	public static var onResizeComponents:List<Dynamic> = new List();
 	public static var defaultUrl = '/Data/Contacts/List/get';
 	public static var mandator:Int = 1;
-	public static var maxLoginAttempts:Int = 3;
+	public static var maxLoginAttempts:Int = 8;
 
 	var globalState:Map<String,Dynamic>;
 	var tul:TUnlisten;

@@ -199,6 +199,21 @@ class Util
 	}
 
 	/**
+	 * Convert Map to Object
+	 * @param map Map<T>
+	 * @return  Dynamic	 
+	 */
+
+	public static function map2dyn<V>(map: Map<String,V>) {
+		var ob:Dynamic = {};
+		for(k=>v in map.keyValueIterator())
+		{
+			Reflect.setField(ob,k,v);
+		}
+		return ob;
+	}
+
+	/**
 	 * Convert NativeArray to Map
 	 * @param row NativeArray
 	 * @param keys Array<String>

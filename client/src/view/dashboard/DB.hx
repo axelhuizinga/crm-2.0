@@ -54,7 +54,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		trace('action:' + props.match.params.action);
+		trace('${App.devIP} action:' + props.match.params.action);
 
 		dataDisplay = null;//DBFormsModel.dataDisplay;
 		//var sideMenu = updateMenu('DB'); //state.sideMenu;
@@ -127,7 +127,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			trace('creating ConfigLoader ${App.config.api}');
 			
 			var cL:ConfigLoader = ConfigLoader.go(App.config.api,{
-			//var xhr:HttpJs = Loader.load(App.config.api,{
+				devIP:App.devIP,
 				limit:100,
 				userState:props.userState,
 				//offset:0,

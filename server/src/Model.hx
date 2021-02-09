@@ -1,5 +1,6 @@
 package;
 
+import db.DBAccessProps;
 import comments.CommentString.*;
 import php.Global;
 import php.SuperGlobal;
@@ -884,12 +885,17 @@ class Model
 		if(postKV.hasNext())
 			return json(postKV);
 		//var d:DbQuery = new DbQuery();
-		var pData = Bytes.ofString( (
+		var pData = Bytes.ofString((
 			Lib.isCli()? Sys.args()[0]:
 			Global.file_get_contents('php://input')));
 		//var pData = Bytes.ofString(Web.getPostData());
 		//trace(Web.getPostData());
 		trace(pData.length);
+		if(pData.length==0)
+		{
+			S.send('got no pData');
+			return null;
+		}
 		var s:Serializer = new Serializer();
 		return s.unserialize(pData, DbQuery);
 	}
@@ -897,9 +903,16 @@ class Model
 	public static function json(pKV:KeyValueIterator<String,String>):DbQuery
 	{
 		trace(pKV.hasNext()?'Y':'N');
+		Syntax.foreach(SuperGlobal._POST, function(key:String, value:Dynamic) {
+			trace(key +':'+ value);
+		});
+		var dbAP:DBAccessProps = {action:''};
 		for(k=>v in pKV){
 			trace('$k => $v');
+			Reflect.setField(dbAP,k,v);
 		}
+		trace(dbAP);
+		return new DbQuery( dbAP);
 		return null;//s.unserialize(pData, DbQuery);
 	}	
 	

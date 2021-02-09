@@ -130,8 +130,8 @@ class SyncExternalDeals extends Model
 		getAllExtIds();
 		while(synced<param['totalRecords']){
 			importExtDeals();
-			trace('offset:'+ offset.int);
-			trace(param);
+			//trace('offset:'+ offset.int);
+			//trace(param);
 		}
 		trace('done:' + Std.string(Sys.time()-start));
 		Sys.exit(S.sendInfo(dbData, ['importContacts'=>'OK'])?1:0);
@@ -157,14 +157,12 @@ class SyncExternalDeals extends Model
 		//trace(cD);
 		var cNames:Array<String> = [for(k in cD.keys()) k];		
 		/* STORE fetched data in new crm */
-		var _1st:Bool = !(offset.int>0);
 		for(row in dData)
 		{			
 			var stmt:PDOStatement = upsertDeal(row, cD, cNames);
 			try{
 				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);	
-				if(!(offset.int>0)){
-					_1st=false;
+				if(!(synced>1)){
 					trace(row);
 					trace(res);
 				}

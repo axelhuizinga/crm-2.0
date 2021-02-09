@@ -453,12 +453,12 @@ X-Mailer: HaxeMail
 			}*/
 			//trace('$id==${userInfo.id}::${userInfo.ip}::${Web.getClientIP()}:' + Date.fromTime(userInfo.validUntil) + ':${userInfo.validUntil} - $now:' + cast( userInfo.validUntil - now) + (userInfo.validUntil - Date.now().getTime()) > 0?'Y':'N');
 			
-			//trace(':'+(id == userInfo.id));
+			trace('$id:'+(id == userInfo.id) + ' ${userInfo.validUntil} - ${Date.now().getTime()} > 0)' + (userInfo.validUntil - Date.now().getTime() > 0));
 			//trace(':'+(userInfo.ip == Web.getClientIP()));
 			//trace(':'+((userInfo.validUntil - Date.now().getTime()) > 0));
 			if (Lib.isCli() || id == userInfo.id && userInfo.ip == SuperGlobal._SERVER['REMOTE_ADDR'] && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
-				trace('calling JWT.verify now...');
+				trace('${S.action} calling JWT.verify now...');
 				//trace(JWT.verify(jwt, S.secret));
 				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
 				//trace(jRes);

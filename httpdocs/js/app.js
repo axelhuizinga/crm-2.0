@@ -113,7 +113,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "e0d29699a0a53d5f49b9";
+/******/ 	var hotCurrentHash = "6cc3eb08284b781a4d3f";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -13710,7 +13710,6 @@ loader_ConfigLoader.prototype = {
 	,onError: function(msg) {
 		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "loader/ConfigLoader.hx", lineNumber : 70, className : "loader.ConfigLoader", methodName : "onError"});
 		haxe_Log.trace(msg,{ fileName : "loader/ConfigLoader.hx", lineNumber : 71, className : "loader.ConfigLoader", methodName : "onError"});
-		throw haxe_Exception.thrown(msg);
 	}
 	,load: function() {
 		var _gthis = this;
@@ -28895,12 +28894,12 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 		var tmp2 = React.createElement(react_ReactType.fromString("label"),{ className : "fa userIcon", forhtml : "login_user_name"},React.createElement(react_ReactType.fromString("span"),{ className : "hidden"},"User ID"));
 		var tmp3 = react_ReactType.fromString("input");
 		var tmp4 = this.errorStyle("user_name") + " form-input";
-		var tmp5 = React.createElement(tmp1,{ className : "formField"},tmp2,React.createElement(tmp3,{ id : "login_user_name", name : "user_name", className : tmp4, placeholder : "User ID", value : this.props.userState.dbUser.user_name, onChange : $bind(this,this.handleChange)}));
+		var tmp5 = React.createElement(tmp1,{ className : "formField"},tmp2,React.createElement(tmp3,{ id : "login_user_name", name : "user_name", autocomplete : "username", className : tmp4, placeholder : "User ID", value : this.props.userState.dbUser.user_name, onChange : $bind(this,this.handleChange)}));
 		var tmp1 = react_ReactType.fromString("div");
 		var tmp2 = React.createElement(react_ReactType.fromString("label"),{ className : "fa lockIcon", forhtml : "pw"},React.createElement(react_ReactType.fromString("span"),{ className : "hidden"},"Password"));
 		var tmp3 = react_ReactType.fromString("input");
 		var tmp4 = this.errorStyle("password") + " form-input";
-		var tmp6 = React.createElement(tmp1,{ className : "formField"},tmp2,React.createElement(tmp3,{ id : "pw", className : tmp4, name : "password", value : this.props.userState.dbUser.password, type : "password", placeholder : "Password", onChange : $bind(this,this.handleChange)}));
+		var tmp6 = React.createElement(tmp1,{ className : "formField"},tmp2,React.createElement(tmp3,{ id : "pw", className : tmp4, name : "password", autocomplete : "current-password", type : "password", placeholder : "Password", onChange : $bind(this,this.handleChange)}));
 		var tmp1 = React.createElement(react_ReactType.fromString("div"),{ className : "formField"},React.createElement(react_ReactType.fromString("input"),{ type : "submit", style : { width : "100%"}, value : "Login", onClick : function() {
 			_gthis.submitValue = "Login";
 			return true;
@@ -28913,9 +28912,9 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 		return React.createElement(tmp,{ name : "form", onSubmit : $bind(this,this.handleSubmit), className : "login"},tmp5,tmp6,tmp1,React.createElement(tmp2,tmp3,React.createElement(react_ReactType.fromString("input"),{ type : "submit", value : "Passwort vergessen?"})));
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "view/LoginForm.hx", lineNumber : 328, className : "view.LoginForm", methodName : "render"});
-		haxe_Log.trace(this.props.userState.lastError,{ fileName : "view/LoginForm.hx", lineNumber : 329, className : "view.LoginForm", methodName : "render"});
-		haxe_Log.trace(this.state.waiting,{ fileName : "view/LoginForm.hx", lineNumber : 330, className : "view.LoginForm", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "view/LoginForm.hx", lineNumber : 329, className : "view.LoginForm", methodName : "render"});
+		haxe_Log.trace(this.props.userState.lastError,{ fileName : "view/LoginForm.hx", lineNumber : 330, className : "view.LoginForm", methodName : "render"});
+		haxe_Log.trace(this.state.waiting,{ fileName : "view/LoginForm.hx", lineNumber : 331, className : "view.LoginForm", methodName : "render"});
 		var style = { maxWidth : "32rem"};
 		if(this.state.waiting) {
 			var tmp = react_ReactType.fromString("section");
@@ -28933,7 +28932,7 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 		return React.createElement(tmp,{ className : "hero is-alt is-fullheight"},React.createElement(tmp1,{ className : "formContainer"},React.createElement(tmp2,{ className : "formBox is-rounded", style : style},tmp5,React.createElement(tmp3,{ className : "form2"},tmp4))));
 	}
 	,errorStyle: function(name) {
-		haxe_Log.trace(name,{ fileName : "view/LoginForm.hx", lineNumber : 368, className : "view.LoginForm", methodName : "errorStyle"});
+		haxe_Log.trace(name,{ fileName : "view/LoginForm.hx", lineNumber : 369, className : "view.LoginForm", methodName : "errorStyle"});
 		var eStyle;
 		switch(name) {
 		case "new_pass_confirm":
@@ -28942,7 +28941,7 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 			break;
 		case "password":
 			var res = this.props.userState.lastError != null && this.props.userState.lastError.indexOf("password") > -1 ? "error " : "";
-			haxe_Log.trace(res,{ fileName : "view/LoginForm.hx", lineNumber : 373, className : "view.LoginForm", methodName : "errorStyle"});
+			haxe_Log.trace(res,{ fileName : "view/LoginForm.hx", lineNumber : 374, className : "view.LoginForm", methodName : "errorStyle"});
 			eStyle = res;
 			break;
 		case "user_name":
@@ -28952,8 +28951,8 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 		default:
 			eStyle = "";
 		}
-		me_cunity_debug_Out.dumpObject(this.props.userState,{ fileName : "view/LoginForm.hx", lineNumber : 387, className : "view.LoginForm", methodName : "errorStyle"});
-		haxe_Log.trace(eStyle,{ fileName : "view/LoginForm.hx", lineNumber : 388, className : "view.LoginForm", methodName : "errorStyle"});
+		me_cunity_debug_Out.dumpObject(this.props.userState,{ fileName : "view/LoginForm.hx", lineNumber : 388, className : "view.LoginForm", methodName : "errorStyle"});
+		haxe_Log.trace(eStyle,{ fileName : "view/LoginForm.hx", lineNumber : 389, className : "view.LoginForm", methodName : "errorStyle"});
 		return eStyle;
 	}
 	,__class__: view_LoginForm
@@ -30317,6 +30316,7 @@ view_dashboard_DB.prototype = $extend(React_Component.prototype,{
 			var cL = loader_ConfigLoader.go(App.config.api,{ limit : 100, userState : _gthis.props.userState, classPath : "tools.Jsonb", action : "getView"},function(res) {
 				haxe_Log.trace(res,{ fileName : "view/dashboard/DB.hx", lineNumber : 137, className : "view.dashboard.DB", methodName : "getView"});
 			});
+			cL.xhr.send(cL.param);
 		});
 		pro.then(function(jsonData) {
 			haxe_Log.trace(jsonData,{ fileName : "view/dashboard/DB.hx", lineNumber : 143, className : "view.dashboard.DB", methodName : "getView"});

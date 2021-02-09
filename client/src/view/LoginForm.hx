@@ -300,7 +300,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								<label className="fa userIcon" forhtml="login_user_name">
 										<span className="hidden">User ID</span>
 								</label>
-								<input id="login_user_name" name="user_name" 
+								<input id="login_user_name" name="user_name"  autoComplete="username"
 								className=${errorStyle("user_name") + " form-input"}  
 								placeholder="User ID" value=${props.userState.dbUser.user_name} onChange=${handleChange} />
 						</div>
@@ -308,7 +308,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								<label className="fa lockIcon" forhtml="pw">
 										<span className="hidden">Password</span>
 								</label>
-								<input id="pw" className=${errorStyle("password") + " form-input"} name="password" value=${props.userState.dbUser.password} type="password" placeholder="Password" onChange=${handleChange} />
+								<input id="pw" className=${errorStyle("password") + " form-input"} name="password"  autoComplete="current-password"  type="password" placeholder="Password" onChange=${handleChange} />
 						</div>
 						<div className="formField">
 								<input type="submit" style=${{width:'100%'}} value="Login" onClick=${function(){submitValue='Login';return true;}}/>
@@ -321,6 +321,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 					</form>
 		');
 		return null;
+		//value=${props.userState.dbUser.password}
 	}
 
 	override public function render()

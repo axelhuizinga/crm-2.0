@@ -81,8 +81,8 @@ class UserAccess {
 						aState.userState.dbUser.password = '';
 						aState.userState.dbUser.change_pass_required = false;						
 						//return dispatch(LocationAccess.redirect([], aState.app.redirectAfterLogin));
-						Cookie.set('SameSite', 'Strict', null, '/');
-						Cookie.set('userState.dbUser.id', Std.string(aState.userState.dbUser.id), null, '/');
+						//Cookie.set('SameSite', 'Strict', null, '/');
+						//Cookie.set('userState.dbUser.id', Std.string(aState.userState.dbUser.id), null, '/');
 						//Cookie.set('userState.dbUser.jwt',aState.userState.dbUser.jwt, null, '/');						
 						return dispatch(User(LoginComplete(aState.userState)));
 					}
@@ -221,7 +221,7 @@ class UserAccess {
 				Cookie.set('userState.dbUser.id', Std.string(userState.dbUser.id), null, '/');
 				Cookie.set('userState.dbUser.first_name',userState.dbUser.first_name, null, '/');
 				Cookie.set('userState.dbUser.last_name',userState.dbUser.last_name, null, '/');
-				//Cookie.set('userState.dbUser.jwt',userState.dbUser.jwt, null, '/');
+				Cookie.set('userState.dbUser.jwt',userState.dbUser.jwt, null, '/');
 
 				trace(Cookie.get('userState.dbUserState.dbUser.jwt'));
 				userState.dbUser.online = true;

@@ -136,7 +136,7 @@ class S
 		{trace(Syntax.code("$_SERVER['VERIFIED']"));}
 		//var pd:Dynamic = Web.getPostData();
 		trace(Lib.isCli()?'cli':'web');
-
+		//devIP = SuperGlobal._POST['devIP'];
 		response = {content:'',error:''};
 		if(Lib.isCli()){
 			safeLog(Sys.args());
@@ -156,8 +156,7 @@ class S
 		}
 		else{
 			if(Lib.toHaxeArray(SuperGlobal._FILES).length>0)
-			{
-				devIP = SuperGlobal._POST['devIP'];
+			{				
 				dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
 				Syntax.array([PDO.ATTR_PERSISTENT,true]));
 			
@@ -181,16 +180,19 @@ class S
 			}
 			//trace(Web.getPostData());
 			dbQuery = Model.binary();			
-			//trace(dbQuery);
-			//send("dev end");
+			trace(dbQuery);
+			if(dbQuery==null)
+				send("dev end");
 			//Model.binary(params.get('dbData'));
 			params = dbQuery.dbParams;
 			trace(params);
 			safeLog(dbQuery);
-			devIP = params.get('devIP');
+			//devIP = params.get('devIP');
 			//trace(params);
 
 		}
+		action = params.get('action');
+		devIP = params.get('devIP');
 		if (params.get('action') == null || params.get('classPath') == null)
 		{
 			exit( { error:"required params action and/or classPath missing" } );
@@ -222,9 +224,10 @@ class S
 			exit(response);
 		}
 
-		var jwt:String = dbQuery.dbUser.jwt;
+		var jwt:String = (dbQuery.dbUser!=null?dbQuery.dbUser.jwt:'');
 		//var id:String = params.get('id');
-		trace(jwt.length +':' + (jwt != null));
+		if(jwt != null)
+		trace('jwt.length:' +jwt.length);
 		if (jwt.length > 0)
 		{
 			if(Lib.isCli() || User.verify(dbQuery))
@@ -280,10 +283,20 @@ class S
 	{
 		if (!headerSent)
 		{
-			setHeader((json?'application/json':'text/plain'));			
+			//setHeader((json?'application/json':'text/plain'));		
+			//Web.setHeader('Content-Type', cType);
+			Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
+			Web.setHeader("Access-Control-Allow-Credentials", "true");
+			if(S.devIP!=null&&S.devIP!=''){
+				Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
+				trace('https://${S.devIP}:9000');
+			}
+			else {
+				trace('no devIP? ${S.devIP}<<<');
+			}	
 		}			
 		Sys.print(r);
-		trace('client req from ${S.devIP} done at ${Sys.time()-ts} ms');
+		trace('client req from ${params.get('devIP')} done at ${Sys.time()-ts} ms');
 		Sys.exit(0);
 	}
 	
@@ -382,8 +395,13 @@ class S
 		Web.setHeader('Content-Type', cType);
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 		Web.setHeader("Access-Control-Allow-Credentials", "true");
-		if(S.devIP!=null&&S.devIP!='')
-		Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
+		if(S.devIP!=null&&S.devIP!=''){
+			Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
+			trace('https://${S.devIP}:9000');
+		}
+		else {
+			trace('no devIP? ${S.devIP}<<<');
+		}
 		headerSent = true;	
 	}
 
@@ -645,6 +663,7 @@ class S
 	{
 		//trace(Json.stringify(dbQuery));
 		Util.safeLog(req);
+		return true;
 		var stmt:PDOStatement = dbh.prepare(
 			'INSERT INTO activity(action,request,"user") VALUES(:action,:request,:user)' ,Syntax.array(null));
 

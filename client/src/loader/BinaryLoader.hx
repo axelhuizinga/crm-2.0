@@ -37,10 +37,11 @@ class BinaryLoader {
 	}
 
 	public static function dbQuery(url:String,dbQP:DBAccessProps, onLoaded:DbData->Void) {
-		//trace(dbQP);
+		trace(dbQP);
 		var s:Serializer = new Serializer();
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbQP);//.toHex();
+		trace(dbQuery);
 		var b:Bytes = s.serialize(dbQuery);
 		//trace(dbQuery.getSerializeSchema());
 		//trace(dbQuery.relations.get('contacts').fields);
@@ -73,9 +74,14 @@ class BinaryLoader {
 	//public dynamic function onLoaded( bytes : haxe.io.Bytes ) {
 	public function onLoaded( bytes : haxe.io.Bytes ) {
 		//trace(bytes.length);
-		var u:Serializer = new Serializer();
-		var data:DbData = u.unserialize(bytes, DbData);
-		cB(data);
+		if(bytes!=null && bytes.length>0){
+			var u:Serializer = new Serializer();
+			var data:DbData = u.unserialize(bytes, DbData);
+			cB(data);			
+		}
+		else 
+			trace('got nothing');
+
 	}
 
 	public dynamic function onProgress( cur : Int, max : Int ) {

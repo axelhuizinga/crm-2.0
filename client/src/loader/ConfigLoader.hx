@@ -28,6 +28,10 @@ class ConfigLoader {
 		var fD:FormData = new FormData();
 		for(f in Reflect.fields(p))
 		{
+			if(f=='userState'){
+				//Out.dumpObject(Reflect.field(p,f));
+			}
+			else 
 			fD.append(f, Reflect.field(p,f));
 		}
 		cL.param = fD;
@@ -44,13 +48,15 @@ class ConfigLoader {
 	public function new( url : String, ?p:Dynamic ) {
 		this.url = url;
 		xhr = new js.html.XMLHttpRequest();
-
+		trace(xhr.readyState);
+		xhr.withCredentials = true;
 		xhr.onreadystatechange = function() {
 			trace(xhr.readyState);
 			switch (xhr.readyState){
-				case XMLHttpRequest.OPENED:
-					trace(p);
-					
+				case XMLHttpRequest.OPENED:					
+					xhr.send(p);
+				case XMLHttpRequest.LOADING:
+					//
 				case XMLHttpRequest.HEADERS_RECEIVED:
 					//xhr.send(p);
 			}
@@ -69,23 +75,23 @@ class ConfigLoader {
 	public dynamic function onError( msg : String ) {
 		Out.dumpStack(CallStack.callStack());
 		trace(msg);
-		throw msg;
+		//throw msg;
 	}
 
 	public function load() {
 		trace(url);
 		xhr.open('POST', url, true);
-		//xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+		//xhr.setRequestHeader("Content-type", "multipart/form-data");
+		//xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
-		//xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;
+		//xhr.responseType = js.html.XMLHttpRequestResponseType.JSON;
 		
 		//xhr.onerror = function(e) onError(xhr.statusText);
 		xhr.onerror = function(e) {
-			trace(e);
+			Out.dumpObject(e);
 			trace(e.type);
 		}
-		xhr.withCredentials = true;
 		xhr.onload = function(e) {
 			
 			trace(xhr.readyState);

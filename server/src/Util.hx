@@ -49,12 +49,14 @@ class Util
 		for(k => v in meta.keyValueIterator())
 		{
 			if(!Global.array_key_exists(k,row)){
-				//trace('$k missing@ $row["id"]');
+				trace('$k missing@ $row["id"]');
 				continue;
 			}				
-			var kv:Dynamic = row[k];		
+			
+			//var kv:Dynamic = (v['native_type']=='bytea'?Bytes.ofString(row[k]).:row[k]);	
+			var kv:Dynamic = row[k];
 			var pdoType:Int = v['pdo_type'];			
-			trace('$pdoType: $k => $kv');
+			trace('$pdoType::${v['native_type']}: $k => $kv');
 			//if(kv==null||kv.indexOf('0000-00-00')==0||kv=='')
 			if(kv==null||kv==''||pdoType>1&&kv.indexOf('0000-')==0)
 			{

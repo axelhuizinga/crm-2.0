@@ -29,7 +29,7 @@ class DealsModel
 					'once'=>'Einmal','monthly'=>'Monatlich','quarterly'=>'Vierteljährlich',
 					'semiannual'=>'Halbjährlich', 'annual'=>'Jährlich']},
 				'amount'=>{label:'Betrag', type:NFormat},
-				'produkt'=>{label:'Produkt',type:Select,options:['2'=>'Kinderhilfe','3'=>'Tierhilfe']},
+				'product'=>{label:'Produkt',type:Select,options:['2'=>'Kinderhilfe','3'=>'Tierhilfe']},
 				//'agent'=>{label:'Agent'},
 				//'end_reason'=>{label:'Kündigungsgrund',type:DatePicker, displayFormat: "d.m.Y"},
 				'end_date'=>{label:'Beendet zum',type:DatePicker, displayFormat: "d.m.Y"},				

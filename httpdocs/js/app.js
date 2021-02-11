@@ -28408,7 +28408,7 @@ view_accounting_imports_List.prototype = $extend(React_Component.prototype,{
 });
 var view_dashboard_DB = function(props) {
 	React_Component.call(this,props);
-	haxe_Log.trace("" + App.devIP + " action:" + props.match.params.action,{ fileName : "view/dashboard/DB.hx", lineNumber : 56, className : "view.dashboard.DB", methodName : "new"});
+	haxe_Log.trace("" + App.devIP + " action:" + props.match.params.action,{ fileName : "view/dashboard/DB.hx", lineNumber : 57, className : "view.dashboard.DB", methodName : "new"});
 	this.dataDisplay = null;
 	this.state = { formApi : new view_shared_io_FormApi(this), hasError : false, sideMenu : props.sideMenu};
 };
@@ -28423,17 +28423,17 @@ view_dashboard_DB.prototype = $extend(React_Component.prototype,{
 	,dataAccess: null
 	,createFieldList: function(ev) {
 		var _gthis = this;
-		haxe_Log.trace("hi :)",{ fileName : "view/dashboard/DB.hx", lineNumber : 83, className : "view.dashboard.DB", methodName : "createFieldList"});
+		haxe_Log.trace("hi :)",{ fileName : "view/dashboard/DB.hx", lineNumber : 84, className : "view.dashboard.DB", methodName : "createFieldList"});
 		this.state.formApi.requests.push(haxe_ds_Either.Left(view_shared_io_Loader.load("" + Std.string(App.config.api),{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, classPath : "tools.DB", action : "createFieldList", update : "1"},function(data) {
-			haxe_Log.trace(data == null ? "null" : haxe_ds_StringMap.stringify(data.h),{ fileName : "view/dashboard/DB.hx", lineNumber : 95, className : "view.dashboard.DB", methodName : "createFieldList"});
+			haxe_Log.trace(data == null ? "null" : haxe_ds_StringMap.stringify(data.h),{ fileName : "view/dashboard/DB.hx", lineNumber : 96, className : "view.dashboard.DB", methodName : "createFieldList"});
 			if(Object.prototype.hasOwnProperty.call(data.h,"error")) {
-				haxe_Log.trace(data.h["error"],{ fileName : "view/dashboard/DB.hx", lineNumber : 99, className : "view.dashboard.DB", methodName : "createFieldList"});
+				haxe_Log.trace(data.h["error"],{ fileName : "view/dashboard/DB.hx", lineNumber : 100, className : "view.dashboard.DB", methodName : "createFieldList"});
 				return;
 			}
 			_gthis.setState({ data : data});
 		})));
-		haxe_Log.trace(this.props.history,{ fileName : "view/dashboard/DB.hx", lineNumber : 105, className : "view.dashboard.DB", methodName : "createFieldList"});
-		haxe_Log.trace(this.props.match,{ fileName : "view/dashboard/DB.hx", lineNumber : 106, className : "view.dashboard.DB", methodName : "createFieldList"});
+		haxe_Log.trace(this.props.history,{ fileName : "view/dashboard/DB.hx", lineNumber : 106, className : "view.dashboard.DB", methodName : "createFieldList"});
+		haxe_Log.trace(this.props.match,{ fileName : "view/dashboard/DB.hx", lineNumber : 107, className : "view.dashboard.DB", methodName : "createFieldList"});
 	}
 	,setView: function() {
 		this.createOrUpdateView();
@@ -28442,19 +28442,20 @@ view_dashboard_DB.prototype = $extend(React_Component.prototype,{
 		var _gthis = this;
 		var pro = new Promise(function(resolve,reject) {
 			if(!_gthis.props.userState.dbUser.online) {
-				haxe_Log.trace("LoginError",{ fileName : "view/dashboard/DB.hx", lineNumber : 118, className : "view.dashboard.DB", methodName : "getView"});
+				haxe_Log.trace("LoginError",{ fileName : "view/dashboard/DB.hx", lineNumber : 119, className : "view.dashboard.DB", methodName : "getView"});
 				var _g = new haxe_ds_StringMap();
 				_g.h["LoginError"] = "Du musst dich neu anmelden!";
 				reject(shared_DbDataTools.create(_g));
 			}
 			var bl = loader_BinaryLoader.dbQuery("" + Std.string(App.config.api),{ devIP : App.devIP, dbUser : _gthis.props.userState.dbUser, data : { ux_class_path : "model.deals.DealsModel"}, classPath : "view.Forms", action : "getView"},function(res) {
-				haxe_Log.trace(res,{ fileName : "view/dashboard/DB.hx", lineNumber : 134, className : "view.dashboard.DB", methodName : "getView"});
+				haxe_Log.trace(res,{ fileName : "view/dashboard/DB.hx", lineNumber : 135, className : "view.dashboard.DB", methodName : "getView"});
+				resolve(haxe_Unserializer.run(res.dataRows[0].h["hx_serial"]));
 			});
 		});
-		pro.then(function(jsonData) {
-			haxe_Log.trace(jsonData,{ fileName : "view/dashboard/DB.hx", lineNumber : 140, className : "view.dashboard.DB", methodName : "getView"});
+		pro.then(function(viewData) {
+			haxe_Log.trace(viewData == null ? "null" : haxe_ds_StringMap.stringify(viewData.h),{ fileName : "view/dashboard/DB.hx", lineNumber : 142, className : "view.dashboard.DB", methodName : "getView"});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DB.hx", lineNumber : 142, className : "view.dashboard.DB", methodName : "getView"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DB.hx", lineNumber : 144, className : "view.dashboard.DB", methodName : "getView"});
 		});
 	}
 	,createOrUpdateView: function() {
@@ -28462,31 +28463,31 @@ view_dashboard_DB.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "update model.deals.DealsModel"}))));
 		var pro = new Promise(function(resolve,reject) {
 			if(!_gthis.props.userState.dbUser.online) {
-				haxe_Log.trace("LoginError",{ fileName : "view/dashboard/DB.hx", lineNumber : 156, className : "view.dashboard.DB", methodName : "createOrUpdateView"});
+				haxe_Log.trace("LoginError",{ fileName : "view/dashboard/DB.hx", lineNumber : 158, className : "view.dashboard.DB", methodName : "createOrUpdateView"});
 				var _g = new haxe_ds_StringMap();
 				_g.h["LoginError"] = "Du musst dich neu anmelden!";
 				reject(shared_DbDataTools.create(_g));
 			}
-			var bl = loader_BinaryLoader.dbQuery("" + Std.string(App.config.api),{ devIP : App.devIP, dbUser : _gthis.props.userState.dbUser, classPath : "view.Forms", data : { ux_class_path : "model.deals.DealsModel", hxbytes : haxe_Serializer.run(model_deals_DealsModel.dataAccess.h["open"].view)}, action : "setView"},function(res) {
-				haxe_Log.trace(res,{ fileName : "view/dashboard/DB.hx", lineNumber : 172, className : "view.dashboard.DB", methodName : "createOrUpdateView"});
+			var bl = loader_BinaryLoader.dbQuery("" + Std.string(App.config.api),{ devIP : App.devIP, dbUser : _gthis.props.userState.dbUser, classPath : "view.Forms", data : { ux_class_path : "model.deals.DealsModel", hx_serial : haxe_Serializer.run(model_deals_DealsModel.dataAccess.h["open"].view)}, action : "setView"},function(res) {
+				haxe_Log.trace(res,{ fileName : "view/dashboard/DB.hx", lineNumber : 174, className : "view.dashboard.DB", methodName : "createOrUpdateView"});
 			});
 		});
 		pro.then(function(jsonData) {
-			haxe_Log.trace(jsonData,{ fileName : "view/dashboard/DB.hx", lineNumber : 178, className : "view.dashboard.DB", methodName : "createOrUpdateView"});
+			haxe_Log.trace(jsonData,{ fileName : "view/dashboard/DB.hx", lineNumber : 180, className : "view.dashboard.DB", methodName : "createOrUpdateView"});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DB.hx", lineNumber : 180, className : "view.dashboard.DB", methodName : "createOrUpdateView"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DB.hx", lineNumber : 182, className : "view.dashboard.DB", methodName : "createOrUpdateView"});
 		});
 	}
 	,'delete': function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DB.hx", lineNumber : 192, className : "view.dashboard.DB", methodName : "delete"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DB.hx", lineNumber : 194, className : "view.dashboard.DB", methodName : "delete"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
 	}
 	,editTableFields: function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DB.hx", lineNumber : 199, className : "view.dashboard.DB", methodName : "editTableFields"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DB.hx", lineNumber : 201, className : "view.dashboard.DB", methodName : "editTableFields"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
 		var view = haxe_ds_StringMap.createCopy(this.dataAccess.h["editTableFields"].view.h);
-		haxe_Log.trace(this.dataAccess.h["editTableFields"].view.h["table_name"],{ fileName : "view/dashboard/DB.hx", lineNumber : 202, className : "view.dashboard.DB", methodName : "editTableFields"});
-		haxe_Log.trace(data[0].h["id"] + "<",{ fileName : "view/dashboard/DB.hx", lineNumber : 203, className : "view.dashboard.DB", methodName : "editTableFields"});
+		haxe_Log.trace(this.dataAccess.h["editTableFields"].view.h["table_name"],{ fileName : "view/dashboard/DB.hx", lineNumber : 204, className : "view.dashboard.DB", methodName : "editTableFields"});
+		haxe_Log.trace(data[0].h["id"] + "<",{ fileName : "view/dashboard/DB.hx", lineNumber : 205, className : "view.dashboard.DB", methodName : "editTableFields"});
 	}
 	,initStateFromDataTable: function(dt) {
 		var iS = { };
@@ -28498,7 +28499,7 @@ view_dashboard_DB.prototype = $extend(React_Component.prototype,{
 			var k = haxe_ds_StringMap.keysIterator(dR.h);
 			while(k.hasNext()) {
 				var k1 = k.next();
-				haxe_Log.trace(k1,{ fileName : "view/dashboard/DB.hx", lineNumber : 229, className : "view.dashboard.DB", methodName : "initStateFromDataTable"});
+				haxe_Log.trace(k1,{ fileName : "view/dashboard/DB.hx", lineNumber : 231, className : "view.dashboard.DB", methodName : "initStateFromDataTable"});
 				if(this.dataDisplay.h["fieldsList"].columns.h[k1].cellFormat == view_dashboard_model_DBFormsModel.formatBool) {
 					rS[k1] = dR.h[k1] == "Y";
 				} else {
@@ -28507,17 +28508,17 @@ view_dashboard_DB.prototype = $extend(React_Component.prototype,{
 			}
 			iS[dR.h["id"]] = rS;
 		}
-		haxe_Log.trace(iS,{ fileName : "view/dashboard/DB.hx", lineNumber : 239, className : "view.dashboard.DB", methodName : "initStateFromDataTable"});
+		haxe_Log.trace(iS,{ fileName : "view/dashboard/DB.hx", lineNumber : 241, className : "view.dashboard.DB", methodName : "initStateFromDataTable"});
 		return iS;
 	}
 	,saveTableFields: function(vA) {
-		haxe_Log.trace(vA,{ fileName : "view/dashboard/DB.hx", lineNumber : 245, className : "view.dashboard.DB", methodName : "saveTableFields"});
+		haxe_Log.trace(vA,{ fileName : "view/dashboard/DB.hx", lineNumber : 247, className : "view.dashboard.DB", methodName : "saveTableFields"});
 	}
 	,showFieldList: function(_) {
 		this.state.formApi.requests.push(null);
 	}
 	,componentDidMount: function() {
-		haxe_Log.trace("Ok",{ fileName : "view/dashboard/DB.hx", lineNumber : 314, className : "view.dashboard.DB", methodName : "componentDidMount"});
+		haxe_Log.trace("Ok",{ fileName : "view/dashboard/DB.hx", lineNumber : 316, className : "view.dashboard.DB", methodName : "componentDidMount"});
 		var _g = new haxe_ds_StringMap();
 		var _g1 = new haxe_ds_StringMap();
 		_g1.h["selectedRows"] = null;
@@ -28541,7 +28542,7 @@ view_dashboard_DB.prototype = $extend(React_Component.prototype,{
 			case "editForm":
 				return null;
 			case "showFieldList":
-				haxe_Log.trace(Std.string(this.state.dataTable[29].h["id"]) + "<<<",{ fileName : "view/dashboard/DB.hx", lineNumber : 353, className : "view.dashboard.DB", methodName : "renderResults"});
+				haxe_Log.trace(Std.string(this.state.dataTable[29].h["id"]) + "<<<",{ fileName : "view/dashboard/DB.hx", lineNumber : 355, className : "view.dashboard.DB", methodName : "renderResults"});
 				return React.createElement(react_ReactType.fromComp(view_table_Table),Object.assign({ },this.props,{ id : "fieldsList", data : this.state.dataTable, dataState : this.dataDisplay.h["fieldsList"], className : "is-striped is-hoverable", fullWidth : true}));
 			default:
 				return null;
@@ -28551,9 +28552,9 @@ view_dashboard_DB.prototype = $extend(React_Component.prototype,{
 	}
 	,render: function() {
 		if(this.state.values != null) {
-			haxe_Log.trace(this.state.values == null ? "null" : haxe_ds_StringMap.stringify(this.state.values.h),{ fileName : "view/dashboard/DB.hx", lineNumber : 370, className : "view.dashboard.DB", methodName : "render"});
+			haxe_Log.trace(this.state.values == null ? "null" : haxe_ds_StringMap.stringify(this.state.values.h),{ fileName : "view/dashboard/DB.hx", lineNumber : 372, className : "view.dashboard.DB", methodName : "render"});
 		}
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DB.hx", lineNumber : 371, className : "view.dashboard.DB", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DB.hx", lineNumber : 373, className : "view.dashboard.DB", methodName : "render"});
 		var tmp = this.state.formApi;
 		var tmp1 = react_ReactType.fromString("form");
 		var tmp2 = React.createElement(react_ReactType.fromString("div"),{ className : "caption"},"DB");

@@ -1,4 +1,5 @@
 package;
+import haxe.Exception;
 import haxe.CallStack;
 import db.DBAccessProps;
 import haxe.ds.ReadOnlyArray;
@@ -186,6 +187,8 @@ class S
 				send("dev end");
 			//Model.binary(params.get('dbData'));
 			params = dbQuery.dbParams;
+			params.set('mandator',dbQuery.dbUser.mandator);
+			user_id = dbQuery.dbUser.id;
 			trace(params);
 			safeLog(dbQuery);
 			//devIP = params.get('devIP');
@@ -313,7 +316,16 @@ class S
 		}
 		
 		//trace(Std.string(dbData).substr(0,250));
-		trace(dbData.dataRows[0]);
+		if(dbData.dataRows.length>0){
+			try{
+				trace(dbData.dataRows[0]);
+
+			}
+			catch(ex:Exception){
+				//trace(ex);
+				trace(CallStack.callStack());
+			}
+		}
 		if(Lib.isCli()){
 			trace(dbData.dataRows.length);
 			return true;			 

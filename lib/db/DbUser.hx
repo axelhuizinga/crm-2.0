@@ -1,4 +1,5 @@
 package db;
+import me.cunity.debug.Out;
 import hxbit.Serializable;
 
 class DbUser implements hxbit.Serializable{
@@ -26,7 +27,9 @@ class DbUser implements hxbit.Serializable{
 	@:s public var user_group:Int;
 	@:s public var user_name:String;
 
-	public function new(p:Dynamic){
+	public function new(p:Dynamic){		
+		trace(p);
+		//Out.dumpVar(p);
 		for(f in Type.getInstanceFields(Type.getClass(this))){
 			switch (f){
 				case '__uid'|'getCLID'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':

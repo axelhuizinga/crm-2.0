@@ -487,6 +487,8 @@ X-Mailer: HaxeMail
 			}
 			else{
 				// expired - TODO: configure error messages
+				if(S.action=='logout')
+					return true;
 				dbData.dataErrors = ['jwtError'=>'${DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")}<${DateTools.format(Date.fromTime(now),"%d.%m.%y %H:%M:%S")}'];
 				S.sendInfo(dbData, ['loginTask'=>Login]);
 				//S.sendInfo(new DbData(), ['jwtExpired'=>'Das Login war nur bis ${DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")} gültig - bitte neu anmelden!']);		

@@ -217,8 +217,11 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				state = copy(state, {loading:false, actualState:deal, initialData:deal});
 				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
 				//setState({});
-				trace(props.location.pathname + ':' + untyped state.actualState.amount);
-				props.history.replace(props.location.pathname.replace('open','update'));
+				trace(props.match);
+				//trace(props.location.pathname + ':' + untyped state.actualState.amount);
+				trace(Reflect.fields(props));
+				trace(Reflect.fields(props.parentComponent.props));
+				//props.history.replace(props.location.pathname.replace('open','update'));
 			}
 		});
 	}	

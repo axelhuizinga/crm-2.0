@@ -1,4 +1,5 @@
 package view.dashboard;
+import haxe.Unserializer;
 import model.deals.DealsModel;
 import loader.BinaryLoader;
 import action.AppAction;
@@ -112,7 +113,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	}
 	public function getView():Void
 	{
-		var pro:Promise<Dynamic> = new Promise<DbData>(function(resolve, reject){
+		var pro:Promise<Dynamic> = new Promise<DataView>(function(resolve, reject){
 			if (!props.userState.dbUser.online)
 			{
 				trace('LoginError');
@@ -132,12 +133,13 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 				},			
 				function (res:DbData) {
 					trace(res);
+					resolve(Unserializer.run(res.dataRows[0].get('hx_serial')));
 				}
 			);
 		});
 
-		pro.then(function(jsonData:String) {
-			trace(jsonData);
+		pro.then(function(viewData:DataView) {
+			trace(viewData);
 		},function(whatever:Dynamic) {
 			trace(whatever);
 		});
@@ -164,7 +166,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 					classPath:'view.Forms',
 					data:{
 						ux_class_path:'model.deals.DealsModel',
-						hxbytes:haxe.Serializer.run(DealsModel.dataAccess['open'].view)
+						hx_serial:haxe.Serializer.run(DealsModel.dataAccess['open'].view)
 					},
 					action:'setView'
 				},			

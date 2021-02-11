@@ -195,18 +195,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			return;
 		var data2save = state.actualState.allModified();
 		var doc:Document = Browser.window.document;
-
-		/*var formElement:FormElement = cast(doc.querySelector('form[name="deal"]'),FormElement);
-		var elements:HTMLCollection = formElement.elements;*/
 		var aState:Dynamic = copy(state.actualState);
-		/*var dbaProps:DBAccessProps = 
-		{
-			action:'update',
-			classPath:'data.Deals',
-			dataSource:null,
-		//	table:'contacts',
-			userState:props.userState
-		};*/
+
 		var dbQ:DBAccessProps = {
 			classPath:'data.Deals',
 			action:'update',

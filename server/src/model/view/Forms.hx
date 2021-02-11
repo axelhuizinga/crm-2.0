@@ -41,9 +41,9 @@ class Forms extends Model
 	{
 		
 		var sql =  comment(unindent, format) /*
-				SELECT encode(hxbytes, 'hex') hxbytes FROM ux_config 
+				SELECT hx_serial FROM ux_config 
 				WHERE ux_class_path = 'model.deals.DealsModel'
-				AND mandator = ${param.get('dbUser').mandator}
+				AND mandator = ${S.params.get('mandator')}
 				*/;
 		trace(sql);
 		var stmt:PDOStatement = S.dbh.query(sql, PDO.FETCH_ASSOC);
@@ -52,19 +52,22 @@ class Forms extends Model
 			trace(S.dbh.errorInfo());
 			//S.send(Serializer.run(['error'=>S.dbh.errorInfo()]));
 		}
-		var viewFields:NativeArray = stmt.fetch(PDO.FETCH_ASSOC);//DB.serializeRows(
-		for(col=>v in viewFields.keyValueIterator()){
+		var viewFields:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);//DB.serializeRows(
+		/*for(col=>v in viewFields.keyValueIterator()){
 			trace('$col => $v');
-		}
+		}*/
 		//var hFields:Array<Dynamic> = Lib.toHaxeArray(viewFields);
 		trace('viewFields found: ' + stmt.rowCount());		
 		var rData:RData =  {
-			info:['count'=>Std.string(Global.count(viewFields))],
-			rows: Syntax.array(viewFields)
+			info:['count'=>Std.string(Global.count(viewFields))],			
+			rows:viewFields
+			//rows: Syntax.array(viewFields)
 		};
 		trace(rData);
 		trace(dbData);
-		S.sendData(dbData, rData);
+		
+		S.sendData(new DbData(), rData);
+		//S.sendData(dbData, rData);
 	}
 	
 	public function setView()
@@ -73,16 +76,26 @@ class Forms extends Model
 		var dbUser:DbUser = param.get('dbUser');
 		var data:Dynamic = param.get('data');
 		var rD = Lib.associativeArrayOfObject({
-			edited_by:dbUser.id,
+			edited_by:S.user_id,
 			ux_class_path:data.ux_class_path,
-			hxbytes:data.hxbytes,
-			mandator:dbUser.mandator
+			hx_serial:data.hx_serial,
+			mandator:S.params.get('mandator')
 		});
-		var cNames:Array<String> = ['ux_class_path','edited_by','mandator','hxbytes'];
-		var cPlaceholders:Array<String> =  [for(k in cNames) k].map(function (k) return ':$k');
+		var cNames:Array<String> = ['ux_class_path','edited_by','mandator','hx_serial'];
+		var cPlaceholders:Array<String> =  [for(k in cNames) k].map(function (k){
+			if(k=='hxbytes')
+				return 'encode(:$k, \'hex\')';
+			else 
+				return ':$k';
+		});
 		var cSet:String = [
 			for(k in cNames.filter(function(k)return k!='id')) k
-			].map(function (k) return ' "$k"=:$k').join(',');
+			].map(function (k) {
+				if(k=='hxbytes')
+					return ' "$k"=encode(:$k, \'hex\')';
+				else
+					return ' "$k"=:$k';
+			}).join(',');
 
 		var sql:String = comment(unindent, format) /*
 			INSERT INTO "crm"."ux_config" (${cNames.join(',')})

@@ -41,6 +41,7 @@ import Model.RData;
 //import model.QC;
 //import model.Select;
 import model.auth.User;
+import model.view.Forms;
 import php.Lib;
 import me.cunity.php.Debug;
 import php.NativeArray;
@@ -202,7 +203,7 @@ class S
 			Syntax.array([PDO.ATTR_PERSISTENT,true]));
 		
 		//trace(dbh);
-		trace('connect2syncDB:'+ (params.get('extDB')!=null||params.get('action').indexOf('sync')==0?'Y':'N'));
+		trace('$devIP connect2syncDB:'+ (params.get('extDB')!=null||params.get('action').indexOf('sync')==0?'Y':'N'));
 		if(params.get('extDB')||params.get('action').indexOf('sync')==0)
 		{
 			//CONNECT DIALER DB	
@@ -400,6 +401,7 @@ class S
 			trace('https://${S.devIP}:9000');
 		}
 		else {
+			Web.setHeader("Access-Control-Allow-Origin", '*');
 			trace('no devIP? ${S.devIP}<<<');
 		}
 		headerSent = true;	

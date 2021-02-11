@@ -1,21 +1,20 @@
 package view.dashboard;
+import model.deals.DealsModel;
+import loader.BinaryLoader;
 import action.AppAction;
 import action.StatusAction;
 import db.DBAccessProps;
 import state.AppState;
-import js.html.AreaElement;
 import haxe.Json;
-import haxe.Unserializer;
+//import haxe.Unserializer;
 import haxe.ds.Map;
 import haxe.io.Bytes;
-import haxe.http.HttpJs;
 import js.html.XMLHttpRequest;
 import hxbit.Serializer;
-import loader.ConfigLoader;
 import json2object.JsonParser;
-import js.html.FormData;
+/*import js.html.FormData;
 import js.html.FormDataIterator;
-import js.html.HTMLCollection;
+import js.html.HTMLCollection;*/
 import js.lib.Promise;
 import me.cunity.debug.Out;
 import react.ReactComponent;
@@ -108,42 +107,37 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		//setState({viewClassPath:viewClassPath});
 	}
 	public function setView():Void{
-
+		//${S.dbQuery.dbUser.id} edited_by
+		createOrUpdateView();
 	}
 	public function getView():Void
 	{
-		App.store.dispatch(Status(Update(
-		{
-			className:'',
-			text:'Load deals.DealsModel'}
-		)));
-
 		var pro:Promise<Dynamic> = new Promise<DbData>(function(resolve, reject){
 			if (!props.userState.dbUser.online)
 			{
 				trace('LoginError');
 				reject(DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']));
 			}				
-			trace('creating ConfigLoader ${App.config.api}');
-			
-			var cL:ConfigLoader = ConfigLoader.go(App.config.api,{
-				devIP:App.devIP,
-				limit:100,
-				userState:props.userState,
-				//offset:0,
-				classPath:'tools.Jsonb',
-				action:'getView'
-			},function (res:DBAccessJsonResponse) {
-				trace(res);
-			});
-			//cL.xhr.send(cL.param);
+			var bl:XMLHttpRequest = BinaryLoader.dbQuery(
+				'${App.config.api}', 
+				{
+					devIP:App.devIP,
+					dbUser:props.userState.dbUser,
+					data:{
+						ux_class_path:'model.deals.DealsModel'
+					},
+					classPath:'view.Forms',					
+					//mandator: props.userState.dbUser.mandator,
+					action:'getView'
+				},			
+				function (res:DbData) {
+					trace(res);
+				}
+			);
 		});
 
 		pro.then(function(jsonData:String) {
 			trace(jsonData);
-			var parser = new JsonParser<BaseView>();
-
-			var dA:BaseView = parser.fromJson(jsonData);
 		},function(whatever:Dynamic) {
 			trace(whatever);
 		});
@@ -154,25 +148,37 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(Status(Update(
 		{
 			className:'',
-			text:'Update deals.DealsModel'
+			text:'update model.deals.DealsModel'
 		})));
-/*
-		var pro:Promise<Dynamic> = action.async.LivePBXSync.check({
-			limit:100,
-			userState:props.userState,
-			offset:0,
-			//onlyNew: true,
-			classPath:'tools.Jsonb',
-			action:'createOrUpdateView'
+		var pro:Promise<Dynamic> = new Promise<DbData>(function(resolve, reject){
+			if (!props.userState.dbUser.online)
+			{
+				trace('LoginError');
+				reject(DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']));
+			}				
+			var bl:XMLHttpRequest = BinaryLoader.dbQuery(
+				'${App.config.api}', 
+				{
+					devIP:App.devIP,
+					dbUser:props.userState.dbUser,
+					classPath:'view.Forms',
+					data:{
+						ux_class_path:'model.deals.DealsModel',
+						hxbytes:haxe.Serializer.run(DealsModel.dataAccess['open'].view)
+					},
+					action:'setView'
+				},			
+				function (res:DbData) {
+					trace(res);
+				}
+			);
 		});
 
 		pro.then(function(jsonData:String) {
 			trace(jsonData);
-			var parser = new JsonParser<BaseView>();
-			var dA:DataAccess = parser.fromJson(jsonData, 'parsed.json');
 		},function(whatever:Dynamic) {
 			trace(whatever);
-		});*/
+		});
 	}
 	/**
 	 * fields:[

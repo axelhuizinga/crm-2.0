@@ -115,6 +115,7 @@ class Model
 	public static function dispatch(dbQuery:DbQuery):Void
 	{
 		var param:Map<String,Dynamic> = dbQuery.dbParams;
+		param.set('dbUser',dbQuery.dbUser);
 		trace(param);
 		var cl:Class<Dynamic> = Type.resolveClass('model.' + param.get('classPath'));
 		//trace(cl);
@@ -880,6 +881,7 @@ class Model
 	public static function binary():DbQuery
 	{
 		//S.safeLog(Std.string(SuperGlobal._POST));
+		trace(Global.count(SuperGlobal._POST));
 		var postKV = SuperGlobal._POST.keyValueIterator();
 		trace(postKV.hasNext()?'Y':'N');
 		if(postKV.hasNext())
@@ -903,9 +905,9 @@ class Model
 	public static function json(pKV:KeyValueIterator<String,String>):DbQuery
 	{
 		trace(pKV.hasNext()?'Y':'N');
-		Syntax.foreach(SuperGlobal._POST, function(key:String, value:Dynamic) {
+		/*Syntax.foreach(SuperGlobal._POST, function(key:String, value:Dynamic) {
 			trace(key +':'+ value);
-		});
+		});*/
 		var dbAP:DBAccessProps = {action:''};
 		for(k=>v in pKV){
 			trace('$k => $v');

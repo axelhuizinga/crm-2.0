@@ -258,7 +258,7 @@ class UserAccess {
 	public static function logOut() 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			trace(getState().userState);
+			Out.dumpObject(getState().userState);
 			var userState:UserState = getState().userState;
 			if (userState.dbUser.id == null) 
 				return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:'UserId fehlt!'})));

@@ -124,7 +124,7 @@ class SyncExternalContacts extends Model
 				trace('stored all client_ids to ext_ids_');
 		}
 		else{
-			var stmt:PDOStatement = S.dbh.query('SELECT COUNT(*) FROM ext_ids_');
+			var stmt:PDOStatement = S.dbh.query('SELECT COUNT(*) FROM ext_ids_ WHERE auth_user=${S.dbQuery.dbUser.id} AND table_name=\'contacts\' AND action=${Util.actionPath(this)}');
 			S.checkStmt(S.dbh, stmt, 'getAllExtIds query:'+Std.string(S.dbh.errorInfo()));
 			
 			param['totalRecords'] = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null);	

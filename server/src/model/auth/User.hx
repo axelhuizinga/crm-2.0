@@ -233,8 +233,9 @@ class User extends Model
 				var expire:Int = Date.fromTime(d + 86400000).getSeconds();
 				Global.setcookie('user.id', dbData.dataInfo['id'],expire,'/','',true);
 				Global.setcookie('user.last_name', dbData.dataInfo['last_name'], expire,'/','',true);
-				Global.setcookie('user.first_name', dbData.dataInfo['first_name'], expire,'/','',true);
 				//me.dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(me.doSelect()[0]);
+				Global.setcookie('user.first_name', dbData.dataInfo['first_name'], expire,'/','',true);
+				Global.setcookie('user.user_name', dbData.dataInfo['user_name'], expire,'/','',true);
 				trace(Type.enumConstructor(uath));
 				dbData.dataInfo['change_pass_required'] = Std.string(Type.enumConstructor(uath) == 'PassChangeRequired');
 				//me.dbData.dataInfo['user_data'].id = jwt;

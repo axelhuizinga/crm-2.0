@@ -23,25 +23,14 @@ class BinaryLoader {
 	public static function create(url:String, p:Dynamic, onLoaded:DbData->Void):XMLHttpRequest
 	{
 		return dbQuery(url, p, onLoaded);
-		/*var bl:BinaryLoader = new BinaryLoader(url);
-		trace(p);
-		bl.param = new FormData();
-		//bl.param = Json.stringify(p);
-		bl.cB = onLoaded;
-		for (f in Reflect.fields(p))
-		{
-			bl.param.set(f, Reflect.field(p, f));
-		}
-		bl.load();
-		return bl.xhr;*/
 	}
 
-	public static function dbQuery(url:String,dbQP:DBAccessProps, onLoaded:DbData->Void) {
-		trace(dbQP);
+	public static function dbQuery(url:String,dbAP:DBAccessProps, onLoaded:DbData->Void) {
+		trace(dbAP);
 		var s:Serializer = new Serializer();
 		var bl:BinaryLoader = new BinaryLoader(url);
-		var dbQuery = new DbQuery(dbQP);//.toHex();
-		trace(dbQuery);
+		var dbQuery = new DbQuery(dbAP);//.toHex();
+		Out.dumpObject(dbQuery);
 		var b:Bytes = s.serialize(dbQuery);
 		//trace(dbQuery.getSerializeSchema());
 		//trace(dbQuery.relations.get('contacts').fields);
@@ -56,7 +45,23 @@ class BinaryLoader {
 		bl.load();
 		return bl.xhr;
 	}
+
+	public static function go(url:String, dbAP:DBAccessProps, onLoaded:DBAccessJsonResponse->Void){
+		trace(dbAP);
+		var s:Serializer = new Serializer();
+		var bl:BinaryLoader = new BinaryLoader(url);
+		var dbQuery = new DbQuery(dbAP);//.toHex();
+		trace(dbQuery);
+		var b:Bytes = s.serialize(dbQuery);
+		bl.param = b.getData();
+		bl.dBa = onLoaded;
+		bl.loadJson();
+		return bl.xhr;
+	}
+
+
 	var cB:DbData->Void;	
+	var dBa:DBAccessJsonResponse->Void;
 	var param:Dynamic;
 	//var param:String;
 	public var xhr:XMLHttpRequest;
@@ -126,4 +131,26 @@ class BinaryLoader {
 		xhr.send(param);
 	}
 
+	public function loadJson() {
+		xhr.open('POST', url, true);
+		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+		//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+		xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;
+		
+		xhr.onerror = function(e) {
+			trace(e);
+			trace(e.type);
+		}
+		xhr.withCredentials = true;
+		xhr.onload = function(e) {
+			//trace(xhr.status);
+			if (xhr.status != 200) {
+				onError(xhr.statusText);
+				return;
+			}
+			//trace(xhr.response.length);
+			//dBa(haxe.io.Bytes.ofData(xhr.response));
+		}
+		xhr.send(param);
+	}
 }

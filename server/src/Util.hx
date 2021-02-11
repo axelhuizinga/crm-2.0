@@ -51,12 +51,12 @@ class Util
 			if(!Global.array_key_exists(k,row)){
 				//trace('$k missing@ $row["id"]');
 				continue;
-			}
-				
+			}				
 			var kv:Dynamic = row[k];		
 			var pdoType:Int = v['pdo_type'];			
+			trace('$pdoType: $k => $kv');
 			//if(kv==null||kv.indexOf('0000-00-00')==0||kv=='')
-			if(kv==null||kv.indexOf('0000-')==0||kv=='')
+			if(kv==null||kv==''||pdoType>1&&kv.indexOf('0000-')==0)
 			{
 				//trace (v['native_type']);
 				switch (v['native_type'])

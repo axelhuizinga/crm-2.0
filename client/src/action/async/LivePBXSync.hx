@@ -1,5 +1,6 @@
 package action.async;
 
+import db.LoginTask;
 import thx.fp.TreeBag;
 import db.DBAccessProps;
 //import db.DBAccessProps;
@@ -394,6 +395,13 @@ class LivePBXSync
 				function(data:DbData)
 				{			
 					trace(data.dataInfo);
+					if(data.dataInfo.exists('loginTask')&&data.dataInfo.get('loginTask')==LoginTask.Login){
+						reject( App.store.dispatch(User(LoginError(
+							{
+								dbUser:props.userState.dbUser,
+								lastError:'Du musst dich neu anmelden!'
+							}))));						
+					}
 					//trace(data.dataRows.length);
 					if(data.dataErrors.keys().hasNext())
 					{

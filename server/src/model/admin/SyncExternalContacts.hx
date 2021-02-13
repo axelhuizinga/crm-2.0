@@ -41,9 +41,7 @@ class SyncExternalContacts extends Model
 	public function new(param:Map<String,Dynamic>):Void
 	{
 		super(param);
-		actionFields = [
-			'action','classPath','offset','onlyNew','action_id','limit','maxImport','totalCount'
-		];			
+
 		tableNames[0] = 'clients';
 		totalCount = count();
 		trace(totalCount);
@@ -199,7 +197,7 @@ class SyncExternalContacts extends Model
 	function importContacts() 
 	{
 		//createOrUpdateAction();
-		var allCids = getAllExtIds();
+		//var allCids = getAllExtIds();
 		
 		if(offset.int+limit.int>totalCount)
 		{
@@ -312,10 +310,6 @@ class SyncExternalContacts extends Model
     function upsertClient(rD:NativeArray, cD:Map<String,Dynamic>, cNames:Array<String>):PDOStatement
     {		
 		//trace(rD);
-		//trace(Syntax.code("implode({0})",rD));
-		//var cD:Map<String,Dynamic> = Util.map2fields(rD, keys);
-        //var cNames:Array<String> = [for(k in cD.keys()) k];
-		//var cVals:String =  [for(v in cD.iterator()) v].map(function (v) return '\'$v\'').join(',');
 		var cPlaceholders:Array<String> =  [for(k in cNames) k].map(function (k) return ':$k');
 		var cSet:String = [
 			for(k in cNames.filter(function(k)return k!='id')) k
@@ -329,7 +323,6 @@ class SyncExternalContacts extends Model
 		*/;
 		//trace(sql);
 		//trace(rD);
-		//Sys.exit(333);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		Util.bindClientData('contacts',stmt,rD,dbData);
 		try{

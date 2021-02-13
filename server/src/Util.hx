@@ -290,6 +290,8 @@ class Util
 	public static function limit(?v:Int):IntString {
 		if (v == null)
 			v = Std.parseInt(S.params.get('limit'));
+		if(v==null)
+			v=0;
 		trace(v);
 
 		return {
@@ -301,6 +303,8 @@ class Util
 	public static function offset(?v:Int):IntString {
 		if (v == null)
 			v = Std.parseInt(S.params.get('offset'));
+		if(v==null)
+			v=0;
 		trace(v);
 		return {
 			int:v,

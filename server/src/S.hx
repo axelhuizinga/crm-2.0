@@ -285,7 +285,7 @@ class S
 	
 	public static function send(r:String, ?json:Bool = false)
 	{
-		if (!headerSent)
+		if (!headerSent && !Lib.isCli())
 		{
 			//setHeader((json?'application/json':'text/plain'));		
 			//Web.setHeader('Content-Type', cType);

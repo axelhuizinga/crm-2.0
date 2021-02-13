@@ -128,9 +128,11 @@ typedef GridState =
 	?enteredRow:Int,
 	?selectedRow:Int,
 	?selectedRows:IntMap<Bool>,
+	?selectTimer:Timer,
 	?_rowCells:Array<Element>,
+	?_prevent:Bool,
+	?_selecting:Bool,
 	?_selectedCells:Array<Element>,
-	?_selecting:Bool
 }
 
 class Grid extends ReactComponentOf<GridProps, GridState>
@@ -155,6 +157,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		}	
 		trace(fieldNames);
 		state = {
+			_prevent:false,
 			_selecting:false,
 			selectedRow:null,
 			selectedRows:new IntMap(),
@@ -301,7 +304,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			rCs.push(
 			jsx('<div className=${cD.className} key=${cD.id + '_' + cD.name} data-value=${cD.data} 
 			data-id=${cD.id} data-name=${cD.name} 
-			data-gridpos=${cD.pos.row+"_"+cD.pos.column} onClick=${highLightRow} >
+			data-gridpos=${cD.pos.row+"_"+cD.pos.column} onClick=${select} onDoubleClick=${editRow}>
 				${(cD.dataDisplay==null?<span>&nbsp;</span>:cD.dataDisplay)}
 			</div>'));
 		}
@@ -337,10 +340,29 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		trace(headerUpdated+ ':' + headerRef +' cmp state:' + (prevState==state?'Y':'N')); 
 	}
 	
+	function editRow(_) {
+		state.selectTimer.stop();
+		state._prevent = true;
+		Timer.delay(function() {
+			state._prevent = false;
+		},500);
+		trace('here we go :)');
+	}
+
+	function select(e:ReactEvent){
+		//trace(e);
+		untyped e.persist();
+		state.selectTimer = Timer.delay(function() {
+			if(!state._prevent)
+				highLightRow(e);
+		},500);
+	}
+
 	function highLightRow(evtOrId:Dynamic)
-	{
+	{			
+		trace('evtOrId');
 		if (state._selecting)
-			return;
+			return;		
 		state._selecting = true;
 		//trace(evtOrId);
 		var el:Element = (Std.is(evtOrId, Int)?
@@ -360,7 +382,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 				return;				
 			}
 			else{
-				state.selectedRows.set(rN, true);
+				this.state.selectedRows.set(rN, true);
 			}
 		}
 		else {
@@ -370,10 +392,11 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		var rowCells = Browser.window.document.querySelectorAll('.gridItem[data-id="${el.dataset.id}"]');
 		//trace(rowCells.length + ':' + untyped rowCells.item(0).innerHTML);
 		var rowEls:Array<Element> = Syntax.code("Array.from({0})",rowCells);
-		setState({selectedRows:state.selectedRows});
+		this.setState({selectedRows:state.selectedRows});
 		//trace(el.dataset.id + ':' + rowEls[0].innerHTML + getRowData(rowEls).toString());
 		props.parentComponent.props.select(el.dataset.id,[el.dataset.id => getRowData(rowEls)], props.parentComponent, SelectType.One);
 		state._selecting = false;
+
 	}
 	
 	function showDims(ref:Dynamic)

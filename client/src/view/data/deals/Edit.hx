@@ -203,8 +203,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			data:data2save,
 			filter:{id:state.actualState.id,mandator:1},
 			resolveMessage:{
-				success:'Abschluss ${state.actualState.id} wurde aktualisiert',
-				failure:'Abschluss ${state.actualState.id} konnte nicht aktualisiert werden'
+				success:'Spende ${state.actualState.id} wurde aktualisiert',
+				failure:'Spende ${state.actualState.id} konnte nicht aktualisiert werden'
 			},
 			table:'deals',
 			dbUser:props.userState.dbUser,
@@ -219,10 +219,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.actualState.id);
 		if(!state.actualState.modified())
 		{
-			//TODO: NOCHANGE ACTION => Display Feedback nothing to save
+			//TODO: MAKE ALL MESSAGES CONFIGURABLE BY ADMIN
 			App.store.dispatch(Status(Update( 
 				{	className:'',
-					text:'Abschluss wurde nicht geändert'			
+					text:'Spende wurde nicht geändert'			
 				}
 			)));			
 			trace('nothing modified');

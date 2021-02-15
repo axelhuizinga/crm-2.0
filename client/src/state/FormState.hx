@@ -82,6 +82,6 @@ typedef FormState =
 }
 
 typedef ORMComps = {
-	orm:ORM,
+	orms:IntMap<ORM>,
 	compRef:ReactComponentOf<DataFormProps,FormState>
 }

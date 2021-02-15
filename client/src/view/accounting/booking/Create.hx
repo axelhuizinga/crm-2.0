@@ -224,8 +224,8 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 			data:data2save,
 			filter:{id:state.actualState.id,mandator:1},
 			resolveMessage:{
-				success:'Abschluss ${state.actualState.id} wurde aktualisiert',
-				failure:'Abschluss ${state.actualState.id} konnte nicht aktualisiert werden'
+				success:'Spende ${state.actualState.id} wurde aktualisiert',
+				failure:'Spende ${state.actualState.id} konnte nicht aktualisiert werden'
 			},
 			table:'deals',
 			dbUser:props.userState.dbUser,
@@ -243,7 +243,7 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 			//TODO: NOCHANGE ACTION => Display Feedback nothing to save
 			App.store.dispatch(Status(Update( 
 				{	className:'',
-					text:'Abschluss wurde nicht geändert'			
+					text:'Spende wurde nicht geändert'			
 				}
 			)));			
 			trace('nothing modified');

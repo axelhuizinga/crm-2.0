@@ -222,6 +222,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				trace(Reflect.fields(props));
 				trace(Reflect.fields(props.parentComponent.props));
 				//props.history.replace(props.location.pathname.replace('open','update'));
+				props.parentComponent.registerORM('deals',deal);
 			}
 		});
 	}	

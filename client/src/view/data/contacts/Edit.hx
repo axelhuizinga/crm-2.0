@@ -1,4 +1,5 @@
 package view.data.contacts;
+import model.ORM;
 import haxe.Exception;
 import react.ReactNode.ReactNodeOf;
 import view.data.contacts.Accounts;
@@ -95,7 +96,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var formRef:ReactRef<FormElement>;
 	var fieldNames:Array<String>;
 	var ormRefs:Map<String,ORMComps>;
-	public var registerOrmRef:Function;//ReactRef<FormElement>;
 	var accountsFormRef:ReactRef<FormElement>;
 	var historyFormRef:ReactRef<FormElement>;
 	var baseForm:BaseForm;
@@ -111,50 +111,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		ormRefs = new Map();
 		_trace = true;
-		registerOrmRef = function(ref:Dynamic) {
-			//trace(Type.typeof(ref));
-			switch(Type.typeof(ref)){
-				case TNull:
-					//do nothing
-				case TObject:
-					trace(Reflect.fields(ref));					
-					trace(Type.getClass(ref));					
-					trace(ref.props);
-					trace(ref.state);
-					trace(ref.state.model);
-					if(ref.props !=null && ref.props.model!= null){						
-						//ormRefs[ref.props.model] = ref;
-						//ormRefs[ref.props.model] = ref.props.formRef.current;
-					}
-						
-
-				case TClass(func)://matches component classes, i.e. ReactComponentOf<DataFormProps,FormState>
-					//trace(func);
-					var cL:Dynamic = Type.getClass(ref);
-					if(cL!=null){
-						trace(Type.getClassName(cL));
-						try{
-							trace(Reflect.fields(ref.props));
-							trace(Reflect.fields(ref.state));
-							trace(ref.state.model);
-							if(ref.props !=null && ref.props.model!= null){						
-								ormRefs[ref.props.model] = {
-									compRef:ref,
-									orm:null
-								}
-							}
-						}
-						catch(ex:Exception){
-							trace(ex);
-						}
-
-					}
-					default:
-					trace(ref);
-					//trace(Reflect)
-					//$type(ref);
-			}
-		};
 		accountsFormRef = React.createRef();
 		dealsFormRef = React.createRef();
 		formRef = React.createRef();
@@ -336,10 +292,63 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.initialData.id);
 	}
 
+	function registerOrmRef(ref:Dynamic) {
+		trace(Type.typeof(ref));
+		switch(Type.typeof(ref)){
+			case TNull:
+				//do nothing
+			case TObject:
+				trace(Reflect.fields(ref));					
+				trace(Type.getClass(ref));					
+				trace(ref.props);
+				trace(ref.state);
+				trace(ref.state.model);
+				if(ref.props !=null && ref.props.model!= null){						
+					//ormRefs[ref.props.model] = ref;
+					//ormRefs[ref.props.model] = ref.props.formRef.current;
+				}
+			case TClass(func)://matches component classes, i.e. ReactComponentOf<DataFormProps,FormState>
+				//trace(func);
+				var cL:Dynamic = Type.getClass(ref);
+				if(cL!=null){
+					trace(Type.getClassName(cL));
+					try{
+						trace(Reflect.fields(ref.props));
+						trace(Reflect.fields(ref.state));
+						trace(ref.state.model);
+						if(ref.props !=null && ref.props.model!= null){						
+							ormRefs[ref.props.model] = {
+								compRef:ref,
+								orms:new IntMap()
+							}
+						}
+					}
+					catch(ex:Exception){
+						trace(ex);
+					}
+				}
+				default:
+				trace(ref);
+		}
+	};
 
+	public function registerORM(refModel:String,orm:ORM) {
+		if(ormRefs.exists(refModel)){
+			ormRefs.get(refModel).orms.set(orm.id,orm);
+		}
+		else{
+			trace('OrmRef $refModel not found!');
+		}
+	}
 	function update()
 	{
 		//trace(Reflect.fields(aState));
+		//Out.dumpObjectRSafe(ormRefs);
+		for(k=>v in ormRefs.keyValueIterator())
+		{
+			for(ok=>ov in v.orms.keyValueIterator())
+				trace('$k:$ok=>${ov.allModified()}');
+		}
 		if(state.actualState != null)
 			trace('length:' + state.actualState.fieldsModified.length + ':' + state.actualState.fieldsModified.join('|') );
 		if(state.actualState == null || state.actualState.fieldsModified.length==0)
@@ -403,17 +412,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				//trace();
 				if(state.actualState != null)
 				trace(state.actualState.modified() + ':${state.actualState.fieldsModified}');
-				/*for(f in fieldNames)
-				{
-					//UPDATE FIELDS WITH VALUES CHANGED
-					if(Reflect.field(aState,f)!=Reflect.field(state.initialData,f))
-					{
-						trace('$f:${Reflect.field(aState,f)}==${Reflect.field(state.initialData,f)}<<');
-						Reflect.setProperty(contact, f, Reflect.field(aState,f));
-						contact.modified(f);
-					}						
-				}*/
-				//trace(aState);
+
 				trace(state.actualState.id);
 				if(!state.actualState.modified())
 				{
@@ -473,7 +472,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
 					model:'contact',
-					ref:registerOrmRef,
+					ref:null,
 					title: 'Kontakt - Neue Stammdaten' 
 				},state.actualState);
 			default:
@@ -483,7 +482,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function relData() {
 		return jsx('
-		<>		
+		<>
 			<Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get"  filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>
 			<Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" action="get"  filter=${{contact:props.match.params.id, mandator:'1'}}></Accounts>
 		</>

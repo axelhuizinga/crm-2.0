@@ -22,6 +22,7 @@ import state.UserState;
 typedef DataFormProps =
 {
 	>ChildrenRouteProps,
+	>ReactComponentProps,
 	?action:String,
 	?dataStore:state.DataAccessState,
     ?formApi:FormApi,
@@ -30,8 +31,9 @@ typedef DataFormProps =
 	?isActive:Bool,	
 	?limit:Int,	
 	?load:DBAccessProps->Promise<DbData>,
-	?parentComponent:Dynamic,
+	?loadData:Int->ReactComponentOf<DataFormProps,FormState>->Void,
 	?formRef:ReactRef<FormElement>,
+	?parentComponent:Dynamic,
 	?select:Function, // Int->IntMap<Map<String,Dynamic>>->RouterMatch->SelectType,
 	?setStateFromChild:FormState->Void,
 	?setFormState:FormState->Void,

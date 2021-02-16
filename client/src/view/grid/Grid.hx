@@ -117,7 +117,8 @@ typedef GridProps =
 	?id:String,
 	?itemsPerPage:Int,
 	?onFilter:String->Void,
-	?onPageChange:SortProps->Void,
+	?onPageChange:SortProps->Void,	
+	?onDoubleClick:Event->Void,
 	?onSort:Int->Void,
 	?parentComponent:Dynamic,
 	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>
@@ -143,6 +144,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	var gridStyle:String;
 	var visibleColumns:Int;
 	var headerUpdated:Bool;
+	static var clickDelay:Int = 200;
 	
 	public function new(?props:GridProps)
 	{
@@ -286,13 +288,16 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		//trace('|'+rdMap['h'].keys().next()+'|');
 		//trace(state.selectedRows.toString());
 		var column:Int = 0;
-		var isSelected:Bool = state.selectedRows.exists(row);
+		//var isSelected:Bool = state.selectedRows.exists(row);
 		var rowClass = (row % 2 == 0?'gridItem even':'gridItem odd');
-		if(isSelected)
+		//if(isSelected)
+			//rowClass += ' selected';
+		if(state.selectedRows.exists(rdMap.get('id')))
 			rowClass += ' selected';		
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
 			return map2DataCell(rdMap, fN, column++, row, rowClass);
 		});
+
 		var rCs:Array<ReactFragment> = [];
 		//trace(cells.length);
 		for (cD in cells)
@@ -331,6 +336,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			return;
 		}
 		trace('ok');
+		props.parentComponent.state.dataGrid=this;
 		var grid:Element = gridRef.current;
 		grid.style.setProperty('grid-template-columns', gridStyle);
 	}
@@ -340,13 +346,19 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		trace(headerUpdated+ ':' + headerRef +' cmp state:' + (prevState==state?'Y':'N')); 
 	}
 	
-	function editRow(_) {
+	function editRow(ev:Event) {
 		state.selectTimer.stop();
 		state._prevent = true;
+		var el:Element = cast(ev.target,Element);
+		if(!el.classList.contains('selected'))
+			highLightRow(ev);
 		Timer.delay(function() {
 			state._prevent = false;
-		},500);
+		},clickDelay*2);
 		trace('here we go :)');
+		if(props.onDoubleClick != null){
+			props.onDoubleClick(ev);
+		}
 	}
 
 	function select(e:ReactEvent){
@@ -355,7 +367,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		state.selectTimer = Timer.delay(function() {
 			if(!state._prevent)
 				highLightRow(e);
-		},500);
+		},clickDelay);
 	}
 
 	function highLightRow(evtOrId:Dynamic)
@@ -368,11 +380,12 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		var el:Element = (Std.is(evtOrId, Int)?
 		Browser.window.document.querySelector('.gridItem[data-id="${evtOrId}"]'):
 		cast (evtOrId._targetInst.stateNode, Element));
-		var rN:Int = null;
+		var rN:Int = Std.parseInt(el.dataset.id);
 		var selectedNow:IntMap<Bool> = state.selectedRows.copy();
 
 		trace (el.dataset.id + ':' + state._selecting + ' ctrlKey:' + evtOrId.ctrlKey);
-		rN = Std.parseInt(el.dataset.gridpos.split("_")[0]);
+		//rN = Std.parseInt(el.dataset.id);             
+		//rN = Std.parseInt(el.dataset.gridpos.split("_")[0]);
 		if(!evtOrId.ctrlKey && !evtOrId.shiftKey){
 			//clear selection only
 			state.selectedRows = new IntMap();	
@@ -382,7 +395,8 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 				return;				
 			}
 			else{
-				this.state.selectedRows.set(rN, true);
+				state.selectedRows.set(rN, true);
+				trace(state.selectedRows);
 			}
 		}
 		else {
@@ -392,11 +406,10 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		var rowCells = Browser.window.document.querySelectorAll('.gridItem[data-id="${el.dataset.id}"]');
 		//trace(rowCells.length + ':' + untyped rowCells.item(0).innerHTML);
 		var rowEls:Array<Element> = Syntax.code("Array.from({0})",rowCells);
-		this.setState({selectedRows:state.selectedRows});
+		setState({selectedRows:state.selectedRows});
 		//trace(el.dataset.id + ':' + rowEls[0].innerHTML + getRowData(rowEls).toString());
 		props.parentComponent.props.select(el.dataset.id,[el.dataset.id => getRowData(rowEls)], props.parentComponent, SelectType.One);
 		state._selecting = false;
-
 	}
 	
 	function showDims(ref:Dynamic)

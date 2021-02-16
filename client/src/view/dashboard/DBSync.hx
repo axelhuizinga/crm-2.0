@@ -52,8 +52,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Spenden Daten ',action:'checkDeals'},
 		{label:'Konto Daten ',action:'checkAccounts'}
 		
-		/*{label:'Aktionen Import ',action:'importDeals'},
-		{label:'Aktionen Update ',action:'syncDeals'},
+		/*{label:'Spenden Import ',action:'importDeals'},
+		{label:'Spenden Update ',action:'syncDeals'},
 		{label:'Konten Import ',action:'importAccounts'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}*/
@@ -357,7 +357,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(Status(Update(
 		{
 			className:'',
-			text:'Aktualisiere Aktionen'}
+			text:'Aktualisiere Spenden'}
 		)));
 		var pro:Promise<DbData> = action.async.LivePBXSync.check({
 			limit:1000,
@@ -390,7 +390,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(Status(Update(
 		{
 			className:' ',
-			text:'Synchronisiere Kontakte, Aktionen + Konten'}
+			text:'Synchronisiere Kontakte, Spenden + Konten'}
 		)));
 		var pro:Promise<Dynamic> = App.store.dispatch(action.async.LivePBXSync.checkAll({
 			limit:1000,
@@ -416,7 +416,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(Status(Update(
 			{
 				className:' ',
-				text:'Importiere Aktionen'})));		
+				text:'Importiere Spenden'})));		
 		App.store.dispatch(LivePBXSync.importDeals({
 			limit: 1000,//00,
 			offset:0,
@@ -431,7 +431,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(Status(Update(
 		{
 			className:' ',
-			text:'Aktualisiere Aktionen'
+			text:'Aktualisiere Spenden'
 		})));	
 
 		App.store.dispatch(LivePBXSync.importDeals({

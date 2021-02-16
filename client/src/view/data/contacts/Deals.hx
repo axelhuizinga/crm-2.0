@@ -57,7 +57,6 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
 		dataDisplay = DealsModel.dataGridDisplay;		
 		trace('...' + Reflect.fields(props));
-
 		state =  App.initEState({
 			dataTable:[],
 			loading:false,
@@ -75,11 +74,12 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
 			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
+			loadData:function(id:Int = -1, me:Dynamic) return me.loadData(id),
 			select:function(id:Int = -1, data:Dynamic, me:Dynamic, ?sType:SelectType)
 			{
 				//if(true) trace('select:$id dbUser:${dbUser}');
 				if(true) trace('select:$id me:${Type.getClassName(Type.getClass(me))} SelectType:${sType}');
-				me.loadDealData(id);
+				//me.loadDealData(id);
 				//dispatch(DataAction.CreateSelect(id,data,match));
 				//dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
 			}
@@ -185,7 +185,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		//state.formApi.doAction(props.action);
 	}
 	
-	function loadDealData(id:Int):Void
+	public function loadData(id:Int):Void
 	{
 		trace('loading:$id');
 		if(id == null)
@@ -297,7 +297,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		return jsx('
-		<div className="t_caption">Aktionen
+		<div className="t_caption">Spenden
 		<form className="tabComponentForm formField" ref=${props.formRef} name="dealsList" > 			
 			${renderResults()}
 		</form></div>');

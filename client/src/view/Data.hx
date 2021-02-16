@@ -149,7 +149,7 @@ class Data extends ReactComponentOf<DataProps,CompState>
 						pathname:"/Data/Deals",
 						search:'',
 						state:props.location.state.extend({contact:props.location.hash})
-					}} ${...props} >Aktionen</$TabLink>					
+					}} ${...props} >Spenden</$TabLink>					
 					<$TabLink to=${{
 						key:props.location.key,
 						hash:props.location.hash,

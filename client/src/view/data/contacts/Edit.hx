@@ -1,4 +1,6 @@
 package view.data.contacts;
+import model.deals.DealsModel;
+import model.accounting.AccountsModel;
 import model.ORM;
 import haxe.Exception;
 import react.ReactNode.ReactNodeOf;
@@ -80,8 +82,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Speichern',action:'update'},
 		{label:'Zurücksetzen',action:'reset'},
 		{separator:true},
-		{label:'Aktionen',action:'listDeals', section: 'Edit', classPath:'view.data.contacts.Deals'},	
-		{label:'Konten',action:'listAccounts', section: 'Edit', classPath:'view.data.contacts.Accounts'},
+		{label:'Spenden Bearbeiten',action:'showSelectedDeals', disabled:true, section: 'Edit', classPath:'view.data.contacts.Deals'},	
+		{label:'Konten Bearbeiten',action:'listAccounts', disabled:true, section: 'Edit', classPath:'view.data.contacts.Accounts'},
 		{label:'Verlauf',action:'listHistory', section: 'Edit', classPath:'view.data.contacts.History'}
 	];	
 	public static var classPath = Type.getClassName(Edit);
@@ -105,6 +107,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var modals:Map<String,Bool>;	
 	var mounted:Bool = false;
 	var _trace:Bool = false;
+	var dealDataAccess:DataAccess;
+	var dealFieldNames:Array<String>;
+	var dealDataDisplay:Map<String,DataState>;
+	var accountDataAccess:DataAccess;
+	var accountFieldNames:Array<String>;
+	var accountDataDisplay:Map<String,DataState>;
 
 	public function new(props) 
 	{
@@ -127,6 +135,15 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		dataAccess = ContactsModel.dataAccess;
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
 		dataDisplay = ContactsModel.dataDisplay;
+		//DEALS
+		dealDataAccess = DealsModel.dataAccess;
+		dealFieldNames = BaseForm.initFieldNames(dealDataAccess['open'].view.keys());
+		dealDataDisplay = DealsModel.dataDisplay;
+		//ACCOUNTS
+		accountDataAccess = AccountsModel.dataAccess;
+		accountFieldNames = BaseForm.initFieldNames(accountDataAccess['open'].view.keys());
+		accountDataDisplay = AccountsModel.dataDisplay;
+
 		if(props.dataStore.contactData != null)
 			trace(props.dataStore.contactData.keys().next());
 				
@@ -168,15 +185,26 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		props.history.push('${props.match.path.split(':section')[0]}List/get');
 	}
 
-	function listDeals() {
+	function showSelectedDeals(?ev:Event) {
 		//trace(state.sideMenu);
 		//Browser.document.querySelector('#deals').scrollIntoView();
 		//trace(Reflect.fields(dealsRef.current));
 		//dealsRef.scrollIntoView();
-		trace('---' + Type.typeof(ormRefs['deals']));
-		trace(ormRefs);
-		trace(dealsFormRef);
-		dealsFormRef.current.scrollIntoView();
+		//trace(ormRefs);
+		trace('---' + Type.typeof(ormRefs['deals'].compRef));
+		//trace('---' + props.children);
+		trace('---' + ormRefs['deals'].compRef.state.dataGrid.state.selectedRows);
+		var sRows:IntMap<Bool> = ormRefs['deals'].compRef.state.dataGrid.state.selectedRows;
+		for(k in sRows.keys()){
+			ormRefs['deals'].compRef.props.loadData(k,ormRefs['deals'].compRef);
+		}
+		//dealsFormRef.current.scrollIntoView();
+		trace(dealsFormRef.current);
+		trace(dealsFormRef.current.querySelectorAll('.selected').length);
+		if(ev != null){
+			var targetEl:Element = cast(ev.target, Element);
+			trace(Std.string(targetEl.dataset.id));
+		}
 		/*for(k=>v in state.modals.keyValueIterator())
 			{
 				if(k)
@@ -254,11 +282,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{	
 		trace('mounted:' + mounted);
 		mounted = true;
-		trace(untyped props.children);
+		trace(props.children);
 		loadContactData(Std.parseInt(props.match.params.id));
-		trace(untyped props.children);
-
-		//initSession();
+		trace(props.children);
 	}
 	
 	/*override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
@@ -335,11 +361,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	public function registerORM(refModel:String,orm:ORM) {
 		if(ormRefs.exists(refModel)){
 			ormRefs.get(refModel).orms.set(orm.id,orm);
+			setState({ormRefs:ormRefs});
 		}
 		else{
 			trace('OrmRef $refModel not found!');
 		}
 	}
+
 	function update()
 	{
 		//trace(Reflect.fields(aState));
@@ -461,6 +489,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					title: 'Kontakt - Bearbeite Stammdaten' 
 				},state.actualState)}
 				${relData()}
+				${relDataLists()}
 				</>
 				'));
 				//null;
@@ -479,11 +508,37 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				null;
 		}
 	}
+	
+	function relData():ReactFragment {
+		return [
+			for(model in ['deals','accounts']){
+				if(ormRefs.exists(model))
+				for(orm in ormRefs[model].orms.array()) {
+					${state.formBuilder.renderForm({
+						//mHandlers:state.mHandlers,
+						fields:
+							if(model=='deals')
+								[for(k in dealDataAccess['open'].view.keys())
+									k => dealDataAccess['open'].view[k]]
+							else 
+								[for(k in accountDataAccess['open'].view.keys())
+									k => accountDataAccess['open'].view[k]]							
+						,
+						model:model,
+						ref:null,					
+						title: 'Kontakt - Bearbeite ' + (model=='deals'?'Spenden':'Konten')
+					},orm)}
+				}
+				
+			}
+		];
+	}
 
-	function relData() {
+	function relDataLists():ReactFragment {
+
 		return jsx('
 		<>
-			<Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get"  filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>
+			<Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" onDoubleClick=${showSelectedDeals}  filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>
 			<Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" action="get"  filter=${{contact:props.match.params.id, mandator:'1'}}></Accounts>
 		</>
 		');

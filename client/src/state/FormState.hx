@@ -1,5 +1,6 @@
 package state;
 
+import view.grid.Grid;
 import react.ReactComponent.ReactComponentOf;
 import haxe.Constraints.Function;
 import js.html.Element;
@@ -43,8 +44,9 @@ typedef FormState =
 	?action:String,
 	?actualState:ORM,
 	?clean:Bool,
-	?dataClassPath:String,
 	?data:Map<String,Dynamic>,
+	?dataClassPath:String,
+	?dataGrid:Grid,
 	?dataTable:Array<Map<String,Dynamic>>,
 	?dataCount:Int,
 	?dbQueryParam:DBAccessProps,

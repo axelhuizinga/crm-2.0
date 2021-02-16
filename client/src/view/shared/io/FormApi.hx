@@ -297,15 +297,17 @@ class FormApi
 		if(k==0)
 			trace(state.handleChange);
 
-		var field = switch(formField.type)
+		//var field:ReactFragment =  
+		return switch(formField.type)
 		{
 			case Hidden:
 				jsx('<input key=${Utils.genKey(k++)} name=${name} type="hidden" defaultValue=${state.values[name]} readOnly=${formField.disabled}/>');
 			default:
-				jsx('<input key=${Utils.genKey(k++)} name=${name} defaultValue=${state.values[name]} onChange=${formField.disabled?null:state.handleChange} readOnly=${formField.disabled}/>');
+				[jsx('<label key=${Utils.genKey(k++)}>${formField.label}</label>'), jsx('<input key=${Utils.genKey(k++)} name=${name} defaultValue=${state.values[name]} onChange=${formField.disabled?null:state.handleChange} readOnly=${formField.disabled}/>')];
 			
 		};
-		return formField.type == Hidden? field:[jsx('<label key=${Utils.genKey(k++)}>${formField.label}</label>'), field];
+		//return formField.type == Hidden? field:
+			//[jsx('<label key=${Utils.genKey(k++)}>${formField.label}</label>'), field];
 	}
 	
 	public function renderElements(cState:FormState):ReactFragment
@@ -642,6 +644,7 @@ class FormApi
 
 	public static function initSideMenu(comp:Dynamic, sMb:MenuBlock, sM:MenuProps):MenuProps
 	{
+		return initSideMenu2(comp,[sMb],sM);
 		for(sI in sMb.items)
 			if(sI.section == null)
 				sI.section = sM.section;

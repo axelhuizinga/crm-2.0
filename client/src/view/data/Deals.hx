@@ -72,13 +72,13 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				[
 					{
 						dataClassPath:'data.deals.List',
-						label:'Aktionen',
+						label:'Spenden',
 						section: 'List',
 						items: List.menuItems
 					},
 					{
 						dataClassPath:'data.deals.Edit',
-						label:'Aktionen',
+						label:'Spenden',
 						section: 'Edit',
 						items: Edit.menuItems
 					}

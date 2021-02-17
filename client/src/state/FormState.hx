@@ -50,7 +50,8 @@ typedef FormState =
 	?dataTable:Array<Map<String,Dynamic>>,
 	?dataCount:Int,
 	?dbQueryParam:DBAccessProps,
-	?ormRefs:Map<String,ORMComps>,//classPath(server)=>FormObject
+	?ormRefs:Map<String,ORMComps>,
+	?relDataComps:Map<String,ReactComponentOf<DataFormProps,FormState>>,
 	?fields:Map<String,FormField>,//VIEW FORMFIELDS
 	?formApi:FormApi,
 	?formBuilder:FormBuilder,

@@ -155,6 +155,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			loading:false,
 			model:'contacts',
 			ormRefs:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
+			relDataComps:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
 			//relatedForms:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
@@ -185,15 +186,25 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		props.history.push('${props.match.path.split(':section')[0]}List/get');
 	}
 
+	function showSelectedAccounts(?ev:Event) {
+		//trace('---' + Type.typeof(ormRefs['accounts'].compRef));
+		trace('---' + ormRefs['accounts'].compRef.state.dataGrid.state.selectedRows);
+		var sRows:IntMap<Bool> = ormRefs['accounts'].compRef.state.dataGrid.state.selectedRows;
+		for(k in sRows.keys()){
+			ormRefs['accounts'].compRef.props.loadData(k,ormRefs['accounts'].compRef);
+		}
+	}
+
 	function showSelectedDeals(?ev:Event) {
 		//trace(state.sideMenu);
 		//Browser.document.querySelector('#deals').scrollIntoView();
 		//trace(Reflect.fields(dealsRef.current));
 		//dealsRef.scrollIntoView();
 		//trace(ormRefs);
-		trace('---' + Type.typeof(ormRefs['deals'].compRef));
+		trace('---' + Type.typeof(state.relDataComps));
+		//trace('---' + ormRefs['deals'].compRef.state.dataGrid.state.selectedRows);
+		trace('---' + state.relDataComps.keys().hasNext());
 		//trace('---' + props.children);
-		trace('---' + ormRefs['deals'].compRef.state.dataGrid.state.selectedRows);
 		var sRows:IntMap<Bool> = ormRefs['deals'].compRef.state.dataGrid.state.selectedRows;
 		for(k in sRows.keys()){
 			ormRefs['deals'].compRef.props.loadData(k,ormRefs['deals'].compRef);
@@ -305,17 +316,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		App.store.dispatch(DataAction.SelectActContacts(actData));
 	}
 
-	function mHandlers33(event:Event) {
-		//trace(Reflect.fields(event));
-		//trace(Type.typeof(event));
-		event.preventDefault();
-		//var target:FormElement = cast(event.target, FormElement);
-		var target:InputElement = cast(event.target, InputElement);
-		//trace(Reflect.fields(target));
-		trace(target.value);
-		var dataSet:DOMStringMap = target.dataset;
-		trace(dataSet.action);
-		trace(state.initialData.id);
+	public function registerRelDataComp(rDC:ReactComponentOf<DataFormProps,FormState>) {
+		
 	}
 
 	function registerOrmRef(ref:Dynamic) {
@@ -361,7 +363,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	public function registerORM(refModel:String,orm:ORM) {
 		if(ormRefs.exists(refModel)){
 			ormRefs.get(refModel).orms.set(orm.id,orm);
+			trace(refModel);
 			setState({ormRefs:ormRefs});
+			//setState(copy(state,{ormRefs:ormRefs}));
+			//state.ormRefs = ormRefs;
+			trace(Reflect.fields(state));
+			//setState({ormRefs:ormRefs});
 		}
 		else{
 			trace('OrmRef $refModel not found!');
@@ -372,10 +379,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//trace(Reflect.fields(aState));
 		//Out.dumpObjectRSafe(ormRefs);
-		for(k=>v in ormRefs.keyValueIterator())
+		/*for(k=>v in ormRefs.keyValueIterator())
 		{
 			for(ok=>ov in v.orms.keyValueIterator())
 				trace('$k:$ok=>${ov.allModified()}');
+		}*/
+		for(k=>v in state.relDataComps.keyValueIterator()){
+			trace('$k=>${v.props.save}');
+			v.props.save(v);
 		}
 		if(state.actualState != null)
 			trace('length:' + state.actualState.fieldsModified.length + ':' + state.actualState.fieldsModified.join('|') );
@@ -387,14 +398,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
 		var elements:HTMLCollection = formElement.elements;
 		var aState:Dynamic = copy(state.actualState);
-		var dbaProps:DBAccessProps = 
-		{
-			action:'update',
-			classPath:'data.Contacts',
-			dataSource:null,
-		//	table:'contacts',
-			userState:props.userState
-		};
 		var dbQ:DBAccessProps = {
 			classPath:'data.Contacts',
 			action:'update',
@@ -419,16 +422,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					if(Reflect.field(aState,f)=='')
 						Reflect.deleteField(aState,f);
 				}
-				//Reflect.deleteField(aState,'id');
-				//Reflect.deleteField(aState,'creation_date');				
-				/*dbaProps.dataSource = [
-					"contacts" => [
-						"data" => aState,
-						"fields" => contact.fieldsModified
-					]
-				];*/
 			case 'delete'|'get':
-				dbaProps.dataSource = [
+				dbQ.dataSource = [
 					"contacts" => [
 						"filter" => {id:state.initialData.id}
 					]
@@ -449,18 +444,15 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					return;
 				}
 				trace(state.actualState.allModified());
-				dbaProps.dataSource = [
+				dbQ.dataSource = [
 					"contacts" => [
 						"data" => state.actualState.allModified(),
 						"filter" => {id:state.actualState.id}
 					]
 				];
-				trace(dbaProps.dataSource["contacts"]["filter"]);
+				trace(dbQ.dataSource["contacts"]["filter"]);
 		}
-		//App.store.dispatch(CRUD.update(dbaProps));
-		App.store.dispatch(CRUD.update(dbQ));
-		
-		//App.store.dispatch(DBAccess.execute(dbaProps));
+		App.store.dispatch(CRUD.update(dbQ));		
 	}
 
 	function renderResults():ReactFragment
@@ -486,7 +478,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					],
 					model:'contact',
 					ref:null,					
-					title: 'Kontakt - Bearbeite Stammdaten' 
+					title: 'Stammdaten' 
 				},state.actualState)}
 				${relData()}
 				${relDataLists()}
@@ -526,20 +518,20 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						,
 						model:model,
 						ref:null,					
-						title: 'Kontakt - Bearbeite ' + (model=='deals'?'Spenden':'Konten')
+						title: (model=='deals'?'Spenden':'Konten')
 					},orm)}
 				}
 				
 			}
 		];
-	}
+	}//'Kontakt - Bearbeite ' + 
 
 	function relDataLists():ReactFragment {
 
 		return jsx('
 		<>
-			<Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" onDoubleClick=${showSelectedDeals}  filter=${{contact:props.match.params.id, mandator:'1'}}></Deals>
-			<Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" action="get"  filter=${{contact:props.match.params.id, mandator:'1'}}></Accounts>
+			<$Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" key="deals" onDoubleClick=${showSelectedDeals}  filter=${{contact:props.match.params.id, mandator:'1'}}></$Deals>
+			<$Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" key="accounts" action="get"  onDoubleClick=${showSelectedAccounts} filter=${{contact:props.match.params.id, mandator:'1'}}></$Accounts>
 		</>
 		');
 	}

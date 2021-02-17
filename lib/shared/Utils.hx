@@ -177,7 +177,7 @@ class Utils
 		return fn.then(function(data:DbData)return untilDone(fn, check, check(data)));
 	}*/
 	
-	public static function update(obj1: Dynamic, obj2: Dynamic): Dynamic {
+	public static function updateDyn(obj1: Dynamic, obj2: Dynamic): Dynamic {
 		
 		var keys = Reflect.fields(obj1);
 		if(obj1 == null)

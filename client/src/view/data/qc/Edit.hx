@@ -83,8 +83,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		trace(props.match.params);
 		state = initialState = {
-			id:null,//2000328,
-			edited_by: props.user.id,
+			//id:null,//2000328,
+			//edited_by: props.user.id,
 			mandator: props.user.mandator
 		};	
 
@@ -464,7 +464,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					],
 					model:'contact',
 					ref:formRef,
-					title: 'Kontakt - Bearbeite Stammdaten' 
+					title: 'Stammdaten' 
 				},actualState));
 				//null;
 			case 'insert':
@@ -476,7 +476,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					],
 					model:'contact',
 					ref:formRef,
-					title: 'Kontakt - Neue Stammdaten' 
+					title: 'Stammdaten' 
 				},actualState);
 			default:
 				null;

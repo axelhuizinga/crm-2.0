@@ -1,5 +1,7 @@
 package view.data.contacts;
 
+import react.ReactUtil;
+import model.Account;
 import me.cunity.debug.Out;
 import action.DataAction.SelectType;
 import db.DBAccessProps;
@@ -57,6 +59,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
 			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
+			loadData:function(id:Int = -1, me:Dynamic) return me.loadData(id),
 			select:function(id:Int = -1, me:Dynamic, pComp:Dynamic, ?sType:SelectType)
 				{
 					//if(true) trace('select:$id dbUser:${dbUser}');
@@ -116,28 +119,6 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(state.selectedRows.length);				
 	}
-
-	function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
-	{
-		var iS:Dynamic = {};
-		for(dR in dt)
-		{
-			var rS:Dynamic = {};
-			for(k in dR.keys())
-			{
-				trace(k);
-				if(dataDisplay['fieldsList'].columns.get(k).cellFormat == view.shared.Format.formatBool)
-				{
-					Reflect.setField(rS,k, dR[k] == 'Y');
-				}
-				else
-					Reflect.setField(rS,k, dR[k]);
-			}
-			Reflect.setField(iS, dR['id'], rS);			
-		}
-		trace(iS);
-		return iS;
-	}
 		
 	override public function componentDidMount():Void 
 	{	
@@ -154,11 +135,46 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		get();
 	}
 	
+	public function loadData(id:Int):Void
+	{
+		trace('loading:$id');
+		if(id == null)
+			return;
+		var p:Promise<DbData> = props.load(
+			{
+				classPath:'data.Accounts',
+				action:'get',
+				filter:{id:id,mandator:1},
+				resolveMessage:{
+					success:'Konto ${id} wurde geladen',
+					failure:'Konto ${id} konnte nicht geladen werden'
+				},
+				table:'accounts',
+				dbUser:props.userState.dbUser,
+				devIP:App.devIP
+			}
+		);
+		p.then(function(data:DbData){
+			trace(data.dataRows.length); 
+			if(data.dataRows.length==1)
+			{
+				var data = data.dataRows[0];
+				//trace(data);	
+				//if( mounted)
+				var account:Account = new Account(data);
+				trace(account.id);				
+				state = ReactUtil.copy(state, {loading:false, actualState:account, initialData:account});
+				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
+				props.parentComponent.registerORM('accounts',account);
+			}
+		});
+	}	
+	
 	//renderPager=${function()BaseForm.renderPager(this)}
 	function renderResults():ReactFragment
 	{
 		trace(state.loading + ':' + props.action);
-		if(state.loading)
+		if(state.loading || state.dataTable == null || state.dataTable.length == 0)
 			return state.formApi.renderWait();
 		trace('###########loading:' + props.action);
 		return switch(props.action)

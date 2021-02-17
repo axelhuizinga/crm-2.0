@@ -340,7 +340,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	override public function componentWillUnmount() {
-		//state.storeListener();
+		return;
 		var actData:IntMap<Map<String,Dynamic>> = [initialState.id => [
 		for(f in Reflect.fields(actualState))
 			f => Reflect.field(actualState,f)		
@@ -503,11 +503,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				state.formBuilder.renderForm({
 					mHandlers:state.mHandlers,
 					fields:[
-						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
 					model:'contact',
 					formRef:formRef,
-					title: 'Kontakt - Bearbeite Stammdaten' 
+					title: 'Stammdaten' 
 				},actualState));
 				//null;
 			case 'insert':
@@ -515,7 +515,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				state.formBuilder.renderForm({
 					mHandlers:state.mHandlers,
 					fields:[
-						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
 					model:'contact',
 					formRef:formRef,

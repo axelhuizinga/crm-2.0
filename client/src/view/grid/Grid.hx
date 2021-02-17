@@ -150,6 +150,8 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	{
 		super(props);		
 		headerUpdated = false;
+		gridRef = React.createRef();
+		headerRef = React.createRef();
 		visibleColumns = 0;
 		fieldNames = [];
 		for (k in props.dataState.columns.keys())
@@ -186,8 +188,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		}		
 		//className="${props.className} sort-decoration"
 		//return jsx('<div>1</div>');
-		gridRef = React.createRef();
-		headerRef = React.createRef();
+
 		//renderRows();
 		//var rows:ReactFragment = jsx('<div>1</div>');// ${renderHeaderDisplay()}		
 		var headerRows:ReactFragment = renderHeaderDisplay();
@@ -202,43 +203,6 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			</div>					
 		');		
 	}
-			
-	/**
-	   
-	${renderHeaderRow()}
-	   @return
-	**/
-
-	/*function renderHeaderRow():ReactFragment
-	{
-		if(props.dataState==null)
-			return null;
-		//trace(props.dataState.columns.keys());
-		var headerRow:Array<ReactFragment> = [];
-		var col:Int = 0;
-		gridStyle = '';
-		for (field in props.dataState.columns.keys())
-		{
-			var hC:DataColumn = props.dataState.columns.get(field);
-			if (hC.show == false)
-				continue;
-			//' auto';//
-			gridStyle +=  (hC.flexGrow == 1?' 1fr':' auto');
-			if (col == 0)
-				trace('${hC.headerClassName} :${hC.className}');
-			headerRow.push(jsx('	
-			<div key={field} 
-				className= ${"gridHeadItem "+(hC.headerClassName != null? hC.headerClassName :
-					(hC.className!=null?hC.className:''))}
-				ref=${col==0?gridHead:null}>
-				{hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
-			</div>
-			'));
-			col++;
-		}
-		trace(headerRow.length);
-		return headerRow;
-	}*/
 	
 	function renderHeaderDisplay():ReactFragment
 	{
@@ -256,11 +220,12 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			visibleColumns++;
 			gridStyle +=  (hC.flexGrow !=null ?' ${hC.flexGrow}fr':' max-content');
 			headerRow.push(jsx('	
-			<div key={field} className=${"gridHeadItem " + (hC.headerClassName != null? hC.headerClassName :hC.className)}>
+			<div key={field} className=${"gridHeadItem " + (hC.headerClassName != null? hC.headerClassName : (hC.className!= null?hC.className:''))}>
 			${hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
 			</div>
 			'));
 		}
+		trace('$visibleColumns $gridStyle');
 		return headerRow;
 	}	
 
@@ -310,7 +275,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			jsx('<div className=${cD.className} key=${cD.id + '_' + cD.name} data-value=${cD.data} 
 			data-id=${cD.id} data-name=${cD.name} 
 			data-gridpos=${cD.pos.row+"_"+cD.pos.column} onClick=${select} onDoubleClick=${editRow}>
-				${(cD.dataDisplay==null?<span>&nbsp;</span>:cD.dataDisplay)}
+				${(cD.dataDisplay==null||cD.dataDisplay==''?<span>&nbsp;</span>:cD.dataDisplay)}
 			</div>'));
 		}
 		return rCs;
@@ -331,11 +296,11 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	}
 	
 	override function componentDidMount() {
-		if(gridRef == null){
+		if(gridRef == null ||gridRef.current == null){
 			trace(Type.getClassName(Type.getClass(props.parentComponent)));
 			return;
 		}
-		trace('ok');
+		trace('ok ${gridRef}');
 		props.parentComponent.state.dataGrid=this;
 		var grid:Element = gridRef.current;
 		grid.style.setProperty('grid-template-columns', gridStyle);

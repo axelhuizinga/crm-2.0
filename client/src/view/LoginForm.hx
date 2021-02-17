@@ -172,7 +172,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		trace(submitValue);
 		if(submitValue=='Login')
 		{
-			//props.userState.dbUser.update(
+			//props.userState.dbUser.updateDyn(
 				//{user_name:props.userState.dbUser.user_name, password:props.userState.dbUser.password, jwt:''});
 			props.submitLogin(props.userState);		
 			return true;	
@@ -186,13 +186,13 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 				return false;
 			case LoginTask.ChangePassword:
 				
-				props.submitLogin({ new_pass:props.userState.new_pass, dbUser: props.userState.dbUser.update({
+				props.submitLogin({ new_pass:props.userState.new_pass, dbUser: props.userState.dbUser.updateDyn({
 					user_name:props.userState.dbUser.user_name,
 					password:props.userState.dbUser.password, 
 					jwt:props.userState.dbUser.jwt
 				})});
 			default:
-				var dbUserProps = props.userState.dbUser.update({
+				var dbUserProps = props.userState.dbUser.updateDyn({
 					user_name:props.userState.dbUser.user_name,
 					password:props.userState.dbUser.password, 
 					jwt:props.userState.dbUser.jwt

@@ -24,7 +24,7 @@ import react.intl.ReactIntl;
 import react.intl.comp.FormattedDate;
 import react.intl.DateTimeFormatOptions.NumericFormat.Numeric;
 import react.intl.DateTimeFormatOptions.NumericFormat.TwoDigit;
-//import react.addon.intl.FormattedDate;
+
 /**
  * ...
  * @author axel@cunity.me
@@ -59,16 +59,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	public function new(?props:StatusBarProps,?context:Dynamic)
 	{
 		state = ReactUtil.copy(props, {date:Date.now()});
-		//trace(props);
-		//trace(context);
-		trace('ok');
 		super(props);
-		//trace(this);
-		/*trace(ReactIntl.formatDate(
-			Date.now(),	{
-			hour: Numeric,
-			minute: Numeric
-		}));*/
 	}
 	
 	override public function componentDidMount():Void 
@@ -77,7 +68,6 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		var d:Date = Date.now();
 		var s:Int = d.getSeconds();
 		trace('start delay at $s set timer start in ${(60 - s ) } seconds');
-		//return;
 		Timer.delay(function(){
 			if (!mounted)
 			{
@@ -85,13 +75,12 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 				return;
 			}
 			trace('timer start at ${Date.now().getSeconds()}');
-			//store.dispatch(Tick(Date.now()));
 			this.setState({ date: Date.now()});
 			timer = new Timer(60000);
 			timer.run = function() this.setState({ date: Date.now()});
 		}, (60 - d.getSeconds()) * 1000);
 		
-		//trace(props.dispatch);
+		trace(props.children);
 	}
 	
 	override public function componentWillUnmount()
@@ -103,19 +92,12 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	
 	static function mapStateToProps(astate:AppState) 
 	{
-		//trace(astate.userState.dbUser.first_name);
-		//trace(Reflect.fields(astate));
-		//trace(astate.status);
-		//setState({status:astate.statusBar.status})
 		return {
-			/*date:astate.statusBar.date,*/
-			//userList:astate.userList,
 			className: astate.status.className==null?'':astate.status.className,
 			userState: astate.userState,
 			path: astate.status.path,
 			text: astate.status.text
 		};
-		//};
 	}	
 	
 	override public function render()

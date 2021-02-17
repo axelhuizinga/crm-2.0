@@ -50,11 +50,13 @@ class FormBuilder {
 	public var section:String;
 	var comp:Dynamic;
 	var sM:MenuProps;
+	var i:Int;
 	
 	public function new(rc:Dynamic)
 	{
 		comp = rc;
 		trace(comp.handleChange);
+		i = 1;
 		requests = [];
 		if(rc.props != null)
 		{
@@ -68,7 +70,7 @@ class FormBuilder {
 	function renderElement(el:ReactFragment, ki, label):ReactFragment
 	{
 		return	jsx('
-			<div key=${ki} className="g_row_2" role="rowgroup">
+			<div key=${i++} className="g_row_2" role="rowgroup">
 				<div className="g_cell" role="cell">${label}</div>
 				<div className="g_cell_r" role="cell">
 				${el}
@@ -79,8 +81,8 @@ class FormBuilder {
 
 	function renderOption(si:Int,label:String,?value:Dynamic) {
 		return	
-			value == null ? jsx('<option>$label</option>'):
-			jsx('<option key=${si} value=${value}>$label</option>');
+			value == null ? jsx('<option key=${i++}>$label</option>'):
+			jsx('<option key=${i++} value=${value}>$label</option>');
 	}
 
 	function renderSelect(name:String,options:StringMap<String>):ReactFragment
@@ -100,11 +102,11 @@ class FormBuilder {
 		{			
 			//var check:Bool = actValue==value;
 			var check:String = (actValue==value ? 'on':'');
-			trace('$check $actValue $value');
+			//trace('$check $actValue $value');
 			jsx('
 			<>
-				<label key=${si++} >${label}</label>
-				<input key=${si++} type="radio" name=${name} defaultChecked=${check} onChange=${onChange} value=${value}/>
+				<label key=${i++} >${label}</label>
+				<input key=${i++} type="radio" name=${name} defaultChecked=${check} onChange=${onChange} value=${value}/>
 			</>');
 		}].array();
 	}
@@ -122,9 +124,9 @@ class FormBuilder {
 			switch (field.type)
 			{
 				case FormInputElement.Hidden:
-					jsx('<input key=${ki++} type="hidden" name=${name} defaultValue=${value}/>');
+					jsx('<input key=${i++} type="hidden" name=${name} defaultValue=${value}/>');
 				case FormInputElement.Button: 
-					jsx('<button type="submit">
+					jsx('<button type="submit" key=${i++} >
 						${value}
 					</button>');
 				case FormInputElement.Checkbox:		
@@ -139,16 +141,16 @@ class FormBuilder {
 					};
 					//trace(checked);
 					renderElement(
-						jsx('<input name=${name}  key=${ki++} type="checkbox" defaultChecked=${checked} onChange=${onChange} />')
+						jsx('<input name=${name}  key=${i++} type="checkbox" defaultChecked=${checked} onChange=${onChange} />')
 						/*(checked?
-							jsx('<input name=${name}  key=${ki++} type="checkbox" checked="checked" onChange=${onChange} />') :
-							jsx('<input name=${name}  key=${ki++} type="checkbox"  onChange=${onChange} />'	)
+							jsx('<input name=${name}  key=${i++} type="checkbox" checked="checked" onChange=${onChange} />') :
+							jsx('<input name=${name}  key=${i++} type="checkbox"  onChange=${onChange} />'	)
 						)*/,
 						ki++, field.label
 					);
 				case Radio:
 					//trace (field.type +' $name:' + value);
-					jsx('<div key=${ki++} className="g_row_2" role="rowgroup">
+					jsx('<div key=${i++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r optLabel" role="cell">
 							${renderRadio(name,field.options, value)}
@@ -156,7 +158,7 @@ class FormBuilder {
 					</div>');				
 				case Select:
 				renderElement(
-					jsx('<select name=${name} onChange=${onChange}  defaultValue=${value} key=${ki++} 
+					jsx('<select name=${name} onChange=${onChange}  defaultValue=${value} key=${i++} 
 						multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
 					ki++, field.label
 				);
@@ -175,7 +177,7 @@ class FormBuilder {
 						value:value
 					};
 					jsx('
-					<div key=${ki++} className="g_row_2" role="rowgroup">
+					<div key=${i++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
 							<$DateTimeControl ${...dTC}/>
@@ -196,7 +198,7 @@ class FormBuilder {
 						value:value
 					};
 					jsx('
-					<div key=${ki++} className="g_row_2" role="rowgroup">
+					<div key=${i++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
 							<$DateControl ${...dC}/>
@@ -226,7 +228,7 @@ class FormBuilder {
 						value:value
 					};
 					jsx('
-					<div key=${ki++} className="g_row_2" role="rowgroup">
+					<div key=${i++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
 							<$NumberFormat ${...nfP}/>
@@ -234,7 +236,7 @@ class FormBuilder {
 					</div>');			
 				case FormInputElement.Upload:
 					jsx('
-					<div key=${ki++} className="g_row_2" role="rowgroup">
+					<div key=${i++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
 							Dummy
@@ -242,7 +244,7 @@ class FormBuilder {
 					</div>');
 				default:
 					renderElement(
-						jsx('<input name=${name} onChange=${onChange} type="text"  defaultValue=${value} disabled=${field.disabled} required=${field.required}/>'),
+						jsx('<input name=${name} onChange=${onChange} type="text" defaultValue=${value} disabled=${field.disabled} required=${field.required}/>'),
 						ki++, field.label
 					);
 			}

@@ -1,5 +1,6 @@
 package view.data.accounts;
 
+import model.accounting.AccountsModel;
 import js.Browser;
 import db.DBAccessProps;
 import action.async.CRUD;
@@ -23,7 +24,7 @@ import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import loader.BinaryLoader;
-import view.table.Table;
+import view.grid.Grid;
 import model.Account;
 
 @:connect
@@ -45,7 +46,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		//baseForm =new BaseForm(this);
-		dataDisplay = Accounts.dataDisplay;
+		dataDisplay = AccountsModel.dataGridDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			dataTable:[],
@@ -139,33 +140,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(ev);
 		trace(state.selectedRows.length);				
-		var selected = Browser.document.querySelector('tr.is-selected');
+		var selected = Browser.document.querySelector('.gridItem.selected');
+		if(selected!=null)
 		trace(selected.dataset.id);
 		var baseUrl:String = props.match.path.split(':section')[0];
 		props.history.push('${baseUrl}Edit/update/${selected.dataset.id}');
 	}
-
-	/*function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
-	{
-		var iS:Dynamic = {};
-		for(dR in dt)
-		{
-			var rS:Dynamic = {};
-			for(k in dR.keys())
-			{
-				trace(k);
-				if(dataDisplay['accountsList'].columns[k].cellFormat == view.shared.Format.formatBool)
-				{
-					Reflect.setField(rS,k, dR[k] == 'Y');
-				}
-				else
-					Reflect.setField(rS,k, dR[k]);
-			}
-			Reflect.setField(iS, dR['id'], rS);			
-		}
-		trace(iS);
-		return iS;
-	}*/
 		
 	override public function componentDidMount():Void 
 	{	
@@ -196,18 +176,23 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
 		trace(state.loading);
-		if(state.loading)
+		if(state.loading || state.dataTable == null || state.dataTable.length == 0)
 			return state.formApi.renderWait();
 		trace('###########loading:' + state.loading);
 		return switch(props.match.params.action)
 		{
 			case 'get':
-				jsx('
+				jsx('				
+				<Grid id="accountsList" data=${state.dataTable}
+				${...props} dataState = ${dataDisplay["accountsList"]} 
+				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
+				');
+				/*jsx('
 					<Table id="accountsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} renderPager=${function()BaseForm.renderPager(this)}
 					parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
-				');
-			case 'update':
+				');*/
+			/*case 'update':
 				jsx('
 					<Table id="accountsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["clientList"]} 
@@ -220,7 +205,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 					<Table id="accountsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>				
-				');	
+				');	*/
 			case 'delete':
 				null;
 			default:

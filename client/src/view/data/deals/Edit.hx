@@ -97,7 +97,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(Reflect.fields(props));
 
 		//REDIRECT WITHOUT ID OR edit action
-		if(props.match.params.id==null && ~/open(\/)*$/.match(props.match.params.action) )
+		if(props.match.params.id==null && ~/update(\/)*$/.match(props.match.params.action) )
 		{
 			trace('nothing selected - redirect');
 			var baseUrl:String = props.match.path.split(':section')[0];
@@ -188,7 +188,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function update()
 	{
-		//trace(Reflect.fields(aState));
 		if(state.actualState != null)
 			trace(state.actualState.fieldsModified.length);
 		if(state.actualState == null || state.actualState.fieldsModified.length==0)
@@ -229,8 +228,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			return;
 		}
 		trace(state.actualState.allModified());
-		App.store.dispatch(CRUD.update(dbQ));
-		
+		App.store.dispatch(CRUD.update(dbQ));		
 	}	
 
 	function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
@@ -296,8 +294,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				action:'get',
 				filter:{id:id,mandator:1},
 				resolveMessage:{
-					success:'Aktion ${id} wurde geladen',
-					failure:'Aktion ${id} konnte nicht geladen werden'
+					success:'Spende ${id} wurde geladen',
+					failure:'Spende ${id} konnte nicht geladen werden'
 				},
 				table:'deals',
 				dbUser:props.userState.dbUser,
@@ -351,7 +349,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					],
 					model:'deal',
 					//ref:formRef,
-					title: 'Bearbeite Aktion' 
+					title: 'Bearbeite Spende' 
 				},state.actualState));
 		
 			case 'insert':
@@ -376,9 +374,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
 		<>
-			<form className="tabComponentForm"  >
+			<div className="tabComponentForm"  >
 				${renderResults()}
-			</form>
+			</div>
 		</>'));		
 	}
 	

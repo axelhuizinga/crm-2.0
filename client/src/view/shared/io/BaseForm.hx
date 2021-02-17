@@ -45,11 +45,22 @@ class BaseForm
 		}
 	}
 
-	public static function doChange(comp:Dynamic,name:String,value:Dynamic) {
-		trace('$name: $value');
-		if(name!=null && name!='')
-		//Reflect.setField(comp.state.actualState,name,value);
-		Reflect.setProperty(comp.state.actualState,name,value);
+	public static function doChange(comp:Dynamic,name:String,value:Dynamic) {		
+		//trace(comp.state.ormRefs );
+		trace('$name: $value ');
+		//trace('$name: $value ' + Type.typeof(untyped comp.state.ormRefs.get('deals').orms.get(75)));
+		if(name!=null && name!=''){
+			trace(Reflect.getProperty(comp.state.actualState,name));
+			Reflect.setProperty(comp.state.actualState,name,value);
+		}
+		//Reflect.setProperty(comp.state.actualState,name,value);
+		
+		//untyped  comp.state.actualState.cycle = 'annual';
+		untyped Reflect.setProperty(comp.state.ormRefs.get('deals').orms.get(75),'cycle','annual');
+		trace(untyped comp.state.ormRefs.get('deals').orms.get(75).cycle +':'+
+		comp.state.actualState.cycle);
+		return;
+		//Reflect.setProperty(comp.state.actualState,name,value);
 		trace(Reflect.field(comp.state.actualState, name));
 		//Reflect.set(comp.state.actualState,name,value);
 		//setState({comp.state.initialState:comp.state.actualState});

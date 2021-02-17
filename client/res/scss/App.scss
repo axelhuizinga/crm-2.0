@@ -263,6 +263,9 @@ h2{
 	white-space: nowrap;
 	/*align-items: center;
 	vertical-align: middle;*/
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
 }
 /*.gridColFit{
 

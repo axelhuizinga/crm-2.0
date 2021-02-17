@@ -43,7 +43,8 @@ typedef DataFormProps =
 	?storeData:String->DataAction->Void,
 	?storeFormChange:String->FormState->Void,
 	?render:FormState->ReactFragment,
-	?update:DBAccessProps->Promise<DbData>,
+	?save:ReactComponentOf<DataFormProps,FormState>->Promise<DbData>,
+	?update:DBAccessProps->Promise<DbData>,	
 	userState:UserState,
 	model:String
 }

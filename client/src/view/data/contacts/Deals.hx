@@ -1,5 +1,6 @@
 package view.data.contacts;
 
+import action.AppAction;
 import model.Deal;
 import db.DbUser;
 import action.async.LiveDataAccess;
@@ -45,6 +46,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 
 	var dataAccess:DataAccess;
 	var dataDisplay:Map<String,DataState>;
+	var deal:Deal;
 	var formFields:DataView;
 	var fieldNames:Array<String>;
 	var dbData: shared.DbData;
@@ -58,6 +60,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = DealsModel.dataGridDisplay;		
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
+			actualState:null,
 			dataTable:[],
 			loading:false,
 			dealsData:new IntMap(),	
@@ -67,7 +70,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			values:new Map<String,Dynamic>()
 		},this);
 		//get();	
-		//props.parentComponent.registerOrmRef(this);
+		props.parentComponent.state.relDataComps.set(Type.getClassName(Type.getClass(this)),this);
 		trace(state.loading);
 	}
 	
@@ -75,6 +78,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
         return {
 			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
 			loadData:function(id:Int = -1, me:Dynamic) return me.loadData(id),
+			save: function(me:Dynamic) return me.update(),
 			select:function(id:Int = -1, data:Dynamic, me:Dynamic, ?sType:SelectType)
 			{
 				//if(true) trace('select:$id dbUser:${dbUser}');
@@ -146,7 +150,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.selectedRows.length);				
 	}
 
-	public function selectionClear() {
+	/*public function selectionClear() {
 		var match:RouterMatch = copy(props.match);
 		match.params.action = 'get';
 		trace(state.dataTable.length);
@@ -163,7 +167,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			}
 		};
 		Browser.document.querySelector('[class="grid-container-inner"]').scrollTop = 0;
-	}
+	}*/
 		
 	override public function componentDidMount():Void 
 	{	
@@ -196,8 +200,8 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				action:'get',
 				filter:{id:id,mandator:1},
 				resolveMessage:{
-					success:'Aktion ${id} wurde geladen',
-					failure:'Aktion ${id} konnte nicht geladen werden'
+					success:'Spende ${id} wurde geladen',
+					failure:'Spende ${id} konnte nicht geladen werden'
 				},
 				table:'deals',
 				dbUser:props.userState.dbUser,
@@ -211,16 +215,17 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				var data = data.dataRows[0];
 				trace(data);	
 				//if( mounted)
-				var deal:Deal = new Deal(data);
+				deal = new Deal(data);
 				trace(deal.id);				
 				//setState({loading:false, actualState:deal, initialData: copy(deal)});
 				state = copy(state, {loading:false, actualState:deal, initialData:deal});
+				state.actualState = deal;
 				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
 				//setState({});
-				trace(props.match);
+				//trace(props.match);
 				//trace(props.location.pathname + ':' + untyped state.actualState.amount);
-				trace(Reflect.fields(props));
-				trace(Reflect.fields(props.parentComponent.props));
+				//trace(Reflect.fields(props));
+				//trace(Reflect.fields(props.parentComponent.props));
 				//props.history.replace(props.location.pathname.replace('open','update'));
 				props.parentComponent.registerORM('deals',deal);
 			}
@@ -251,7 +256,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 					],
 					model:'deal',
 					//ref:formRef,
-					title: 'Bearbeite Aktion' 
+					title: 'Bearbeite Spende' 
 				},state.actualState));
 			default:
 				trace('>>>${props.parentComponent.props.match.params.action}<<<');
@@ -265,7 +270,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		//trace(props.action);
 		//trace(dataDisplay["userList"]);
 		//trace(state.loading);
-		if(state.loading)
+		if(state.loading || state.dataTable == null || state.dataTable.length == 0)
 			return state.formApi.renderWait();
 		//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}		
 		trace(props.action);
@@ -302,4 +307,53 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			${renderResults()}
 		</form></div>');
 	}
+
+	function update()
+	{
+		if(state.actualState != null)
+			trace(state.actualState.fieldsModified.length);
+		if(state.actualState == null || state.actualState.fieldsModified.length==0){
+			trace('nothing changed');
+			return;
+		}
+		trace(Reflect.fields(state));
+		state.actualState = deal;
+		var data2save = state.actualState.allModified();
+		var aState:Dynamic = copy(state.actualState);
+
+		var dbQ:DBAccessProps = {
+			classPath:'data.Deals',
+			action:'update',
+			data:data2save,
+			filter:{id:state.actualState.id,mandator:1},
+			resolveMessage:{
+				success:'Spende ${state.actualState.id} wurde aktualisiert',
+				failure:'Spende ${state.actualState.id} konnte nicht aktualisiert werden'
+			},
+			table:'deals',
+			dbUser:props.userState.dbUser,
+			devIP:App.devIP
+		}
+		//trace('${props.match.params.action}: ${state.initialData.id} :: creation_date: ${aState.creation_date} ${state.initialData.creation_date}');
+
+		if(state.actualState != null)
+		trace(state.actualState.modified() + ':${state.actualState.fieldsModified}');
+
+		//trace(aState);
+		trace(state.actualState.id);
+		if(!state.actualState.modified())
+		{
+			//TODO: MAKE ALL MESSAGES CONFIGURABLE BY ADMIN
+			App.store.dispatch(AppAction.Status(Update( 
+				{	className:'',
+					text:'Spende wurde nicht geändert'			
+				}
+			)));			
+			trace('nothing modified');
+			return;
+		}
+		trace(state.actualState.allModified());
+		App.store.dispatch(CRUD.update(dbQ));		
+	}	
+	
 }

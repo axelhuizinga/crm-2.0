@@ -208,16 +208,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				<Grid id="dealsList" data=${state.dataTable}
 				${...props} dataState = ${dataDisplay["dealsList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
-				');
-			/*jsx('
-				<form className="tabComponentForm" ref=${props.formRef}>
-					<$Table id="dealsList" data=${state.dataTable}  parentComponent=${this}
-					${...props} dataState=${dataDisplay["dealsList"]} renderPager=${{function() 
-						trace(Reflect.fields(props));
-					}}
-					className="is-striped is-hoverable" fullWidth=${true}/>
-				</form>
-			');	*/		
+				');	
 			case 'delete':
 				null;
 			default:

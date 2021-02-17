@@ -21,20 +21,12 @@ class AccountsModel
 					],
 				],
 			view:[				
-				'creation_date'=>{label:'Erstellt',type:DatePicker, displayFormat: "d.m.Y", disabled:true},
+				'account_holder'=>{label:'Kontoinhaber',type:Input},
+				'creation_date'=>{label:'Erstellt',type:Hidden, displayFormat: "d.m.Y", disabled:true},
 				'sign_date'=>{label:'Erteilt',type:DatePicker, displayFormat: "d.m.Y"},
-				'start_date'=>{label:'Start',type:DatePicker, displayFormat: "d.m.Y"},
-				'booking_run'=>{label:'Buchungslauf',type: Radio,options: ['start'=>'Monatsanfang','middle'=>'Monatsmitte']},
-				'cycle'=>{label:'Turnus',type:Radio,options:[
-					'once'=>'Einmal','monthly'=>'Monatlich','quarterly'=>'Vierteljährlich',
-					'semiannual'=>'Halbjährlich', 'annual'=>'Jährlich']},
-				'amount'=>{label:'Betrag', type:NFormat},
-				'produkt'=>{label:'Produkt',type:Select,options:['1'=>'Kinderhilfe','2'=>'Tierhilfe']},
-				//'agent'=>{label:'Agent'},
-				//'end_reason'=>{label:'Kündigungsgrund',type:DatePicker, displayFormat: "d.m.Y"},
-				'end_date'=>{label:'Beendet zum',type:DatePicker, displayFormat: "d.m.Y"},				
-				//'repeat_date'=>{label:'Zahlun',type:DatePicker, displayFormat: "d.m.Y"},				
-				//'cycle_start_date'=>{label:'Start',type:DatePicker, displayFormat: "d.m.Y"},
+				'bank_name'=>{label:'Bank',type:Input},
+				'iban'=>{label:'IBAN',type:Input},
+				'status'=>{label:'Status', type:Select,options: ['active'=>'Aktiv','passive'=>'Passiv','new'=>'Neu']},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},				
 				'mandator' => {type:Hidden}				
@@ -53,7 +45,7 @@ class AccountsModel
 				return n.join(' ');
 			}
 		},	
-		'sign_date'=>{label:'Erteilt',cellFormat:function(v:String) return DateTools.format(Date.fromString(v), "%d.%m.%Y")},	
+		'sign_date'=>{label:'Erteilt',cellFormat:function(v:String) return v!=null? DateTools.format(Date.fromString(v), "%d.%m.%Y"):''},	
 		'contact'=>{label:'Kontakt',show:false, useAsIndex: false},				
 		'iban'=>{label:'IBAN'},	
 		'status' => {label:'Status', className: 'tCenter',

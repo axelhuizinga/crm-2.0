@@ -41,8 +41,9 @@ typedef SubmitHandler =
 
 typedef FormState =
 {
-	?action:String,
+	?action:String,	
 	?actualState:ORM,
+	?actualStates:IntMap<ORM>,
 	?clean:Bool,
 	?data:Map<String,Dynamic>,
 	?dataClassPath:String,

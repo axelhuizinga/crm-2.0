@@ -255,7 +255,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				if(mounted)
 					setState({loading:false, actualState:contact, initialData:copy(contact)});
 				//state = copy({loading:false, actualState:contact, initialData:contact});
-				trace(contact.id);
+				trace('$mounted ${contact.id}');
 				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
 				//setState({initialData:copy(state.actualState)});
 				trace(props.location.pathname + ':' + untyped state.actualState.date_of_birth);
@@ -377,13 +377,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function update()
 	{
-		//trace(Reflect.fields(aState));
-		//Out.dumpObjectRSafe(ormRefs);
-		/*for(k=>v in ormRefs.keyValueIterator())
-		{
-			for(ok=>ov in v.orms.keyValueIterator())
-				trace('$k:$ok=>${ov.allModified()}');
-		}*/
 		for(k=>v in state.relDataComps.keyValueIterator()){
 			trace('$k=>${v.props.save}');
 			v.props.save(v);
@@ -444,15 +437,21 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					return;
 				}
 				trace(state.actualState.allModified());
-				dbQ.dataSource = [
+				/*dbQ.dataSource = [
 					"contacts" => [
 						"data" => state.actualState.allModified(),
 						"filter" => {id:state.actualState.id}
 					]
 				];
-				trace(dbQ.dataSource["contacts"]["filter"]);
+				trace(dbQ.dataSource["contacts"]["filter"]);*/
 		}
-		App.store.dispatch(CRUD.update(dbQ));		
+		
+		//App.store.dispatch(CRUD.update(dbQ));	
+		var p:Promise<Dynamic> = App.store.dispatch(CRUD.update(dbQ));	
+		p.then(function(d:Dynamic){
+			trace(d);
+			loadContactData(state.actualState.id);
+		});
 	}
 
 	function renderResults():ReactFragment
@@ -506,7 +505,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			for(model in ['deals','accounts']){
 				if(ormRefs.exists(model))
 				for(orm in ormRefs[model].orms.array()) {
-					${state.formBuilder.renderForm({
+					${orm.formBuilder.renderForm({
 						//mHandlers:state.mHandlers,
 						fields:
 							if(model=='deals')

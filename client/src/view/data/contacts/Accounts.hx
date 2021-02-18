@@ -1,5 +1,7 @@
 package view.data.contacts;
 
+import haxe.Exception;
+import model.ORM;
 import react.ReactUtil;
 import model.Account;
 import me.cunity.debug.Out;
@@ -45,6 +47,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = AccountsModel.dataGridDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
+			actualStates:new IntMap<ORM>(),
 			dataTable:[],
 			loading:true,
 			model:'accounts',
@@ -54,12 +57,14 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 			values:new Map<String,Dynamic>()
 		},this);
 		trace(state.loading);	
+		props.parentComponent.state.relDataComps.set(Type.getClassName(Type.getClass(this)),this);
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
 			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
 			loadData:function(id:Int = -1, me:Dynamic) return me.loadData(id),
+			save: function(me:Dynamic) return me.update(),
 			select:function(id:Int = -1, me:Dynamic, pComp:Dynamic, ?sType:SelectType)
 				{
 					//if(true) trace('select:$id dbUser:${dbUser}');
@@ -162,9 +167,11 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 				//trace(data);	
 				//if( mounted)
 				var account:Account = new Account(data);
-				trace(account.id);				
-				state = ReactUtil.copy(state, {loading:false, actualState:account, initialData:account});
-				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
+				trace(account.id);	
+				state.actualStates.set(account.id, account);
+				state.loading = false;
+				account.state.actualState = account;
+				trace(untyped account.state.actualState.id + ':' + account.state.actualState.fieldsInitalized.join(','));
 				props.parentComponent.registerORM('accounts',account);
 			}
 		});
@@ -229,6 +236,43 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		trace(mEvOrID);
 	}	
 	
+	function update()
+	{
+		var changed:Int = 0;
+		try{	
+			//var it:Iterator<Deal> = props.parentComponent.state.ormRefs.get(state.model).orms.iterator();
+			var it:Iterator<ORM> = state.actualStates.iterator();
+			while(it.hasNext()){
+				var account:ORM = it.next();
+				if(account.fieldsModified.length>0){
+					changed++;
+					var data2save = account.allModified();
+					var dbQ:DBAccessProps = {
+						classPath:'data.Accounts',
+						action:'update',
+						data:data2save,
+						filter:{id:account.id,mandator:1},
+						resolveMessage:{
+							success:'Konto ${account.id} wurde aktualisiert',
+							failure:'Konto ${account.id} konnte nicht aktualisiert werden'
+						},
+						table:'accounts',
+						dbUser:props.userState.dbUser,
+						devIP:App.devIP
+					}
+					var p:Promise<Dynamic> = App.store.dispatch(CRUD.update(dbQ));
+					p.then(function(d:Dynamic){
+						trace(d);
+						get();
+					});
+				}				
+			}
+		}
+		catch(ex:Exception){
+			trace(ex.details);
+		}
+	}	
+
 	function updateMenu(?viewClassPath:String):MenuProps
 	{
 		var sideMenu = state.sideMenu;

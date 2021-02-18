@@ -1,5 +1,7 @@
 package view.data.contacts;
 
+import model.ORM;
+import haxe.Exception;
 import action.AppAction;
 import model.Deal;
 import db.DbUser;
@@ -60,7 +62,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = DealsModel.dataGridDisplay;		
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
-			actualState:null,
+			actualStates:new IntMap<ORM>(),
 			dataTable:[],
 			loading:false,
 			dealsData:new IntMap(),	
@@ -213,14 +215,15 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			if(data.dataRows.length==1)
 			{
 				var data = data.dataRows[0];
-				trace(data);	
+				trace(data);
 				//if( mounted)
 				deal = new Deal(data);
 				trace(deal.id);				
 				//setState({loading:false, actualState:deal, initialData: copy(deal)});
-				state = copy(state, {loading:false, actualState:deal, initialData:deal});
-				state.actualState = deal;
-				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
+				//state = copy(state, {loading:false});
+				deal.state.actualState = deal;
+				state.actualStates.set(deal.id,deal);
+				trace(untyped deal.state.actualState.id + ':' + deal.state.actualState.fieldsInitalized.join(','));
 				//setState({});
 				//trace(props.match);
 				//trace(props.location.pathname + ':' + untyped state.actualState.amount);
@@ -310,37 +313,42 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 
 	function update()
 	{
-		if(state.actualState != null)
-			trace(state.actualState.fieldsModified.length);
-		if(state.actualState == null || state.actualState.fieldsModified.length==0){
-			trace('nothing changed');
-			return;
+		var changed:Int = 0;
+		try{	
+			//var it:Iterator<Deal> = props.parentComponent.state.ormRefs.get(state.model).orms.iterator();
+			var it:Iterator<ORM> = state.actualStates.iterator();
+			while(it.hasNext()){
+				var deal:ORM = it.next();
+				if(deal.fieldsModified.length>0){
+					changed++;
+					var data2save = deal.allModified();
+					var dbQ:DBAccessProps = {
+						classPath:'data.Deals',
+						action:'update',
+						data:data2save,
+						filter:{id:deal.id,mandator:1},
+						resolveMessage:{
+							success:'Spende ${deal.id} wurde aktualisiert',
+							failure:'Spende ${deal.id} konnte nicht aktualisiert werden'
+						},
+						table:'deals',
+						dbUser:props.userState.dbUser,
+						devIP:App.devIP
+					}
+					var p:Promise<Dynamic> = App.store.dispatch(CRUD.update(dbQ));
+					p.then(function(d:Dynamic){
+						trace(d);
+						get();
+					});
+				}				
+			}
 		}
-		trace(Reflect.fields(state));
-		state.actualState = deal;
-		var data2save = state.actualState.allModified();
-		var aState:Dynamic = copy(state.actualState);
-
-		var dbQ:DBAccessProps = {
-			classPath:'data.Deals',
-			action:'update',
-			data:data2save,
-			filter:{id:state.actualState.id,mandator:1},
-			resolveMessage:{
-				success:'Spende ${state.actualState.id} wurde aktualisiert',
-				failure:'Spende ${state.actualState.id} konnte nicht aktualisiert werden'
-			},
-			table:'deals',
-			dbUser:props.userState.dbUser,
-			devIP:App.devIP
+		catch(ex:Exception){
+			trace(ex.details);
 		}
-		//trace('${props.match.params.action}: ${state.initialData.id} :: creation_date: ${aState.creation_date} ${state.initialData.creation_date}');
-
-		if(state.actualState != null)
-		trace(state.actualState.modified() + ':${state.actualState.fieldsModified}');
-
-		//trace(aState);
-		trace(state.actualState.id);
+		if(changed==0)
+			trace('nothing to save');
+		/*
 		if(!state.actualState.modified())
 		{
 			//TODO: MAKE ALL MESSAGES CONFIGURABLE BY ADMIN
@@ -351,9 +359,8 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			)));			
 			trace('nothing modified');
 			return;
-		}
-		trace(state.actualState.allModified());
-		App.store.dispatch(CRUD.update(dbQ));		
+		}*/
+				
 	}	
 	
 }

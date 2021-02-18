@@ -6,8 +6,9 @@ typedef DebitReturnStatementProps = {
 	?ba_id:String,
 	?amount:String,
 	?mandator:Int,
-	?last_modified:String,
-	?processed:Bool
+	?updated_at:String,
+	?processed:Bool,
+	?created_at:String
 };
 
 @:rtti
@@ -69,13 +70,13 @@ class DebitReturnStatement extends ORM
 	}	
 		
 	@dataType("timestamp with time zone")
-	@:isVar public var last_modified(default,set):String;
+	@:isVar public var updated_at(default,set):String;
 
-	function set_last_modified(last_modified:String):String{
-		if(initialized('last_modified'))
-			modified('last_modified');
-		this.last_modified = last_modified ;
-		return last_modified;
+	function set_updated_at(updated_at:String):String{
+		if(initialized('updated_at'))
+			modified('updated_at');
+		this.updated_at = updated_at ;
+		return updated_at;
 	}	
 		
 	@dataType("boolean")
@@ -86,6 +87,16 @@ class DebitReturnStatement extends ORM
 			modified('processed');
 		this.processed = processed ;
 		return processed;
+	}	
+		
+	@dataType("timestamp with time zone")
+	@:isVar public var created_at(default,set):String;
+
+	function set_created_at(created_at:String):String{
+		if(initialized('created_at'))
+			modified('created_at');
+		this.created_at = created_at ;
+		return created_at;
 	}	
 	
 }

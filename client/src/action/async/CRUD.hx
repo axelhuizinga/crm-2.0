@@ -1,4 +1,5 @@
 package action.async;
+import haxe.Exception;
 import me.cunity.debug.Out;
 import haxe.Json;
 import db.DBAccessProps;
@@ -100,7 +101,8 @@ class CRUD
 	}
 	
 	public static function update(param:DBAccessProps) 
-	{	trace(param.action);
+	{	
+		Out.dumpObjectRSafe(param);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
 			//trace(param);
 			//if(param.dataSource != null)
@@ -109,6 +111,7 @@ class CRUD
 			var dbData:DbData = DbDataTools.create();
 			//trace(getState());
 			return new Promise<Dynamic>(function(resolve, reject){
+				try{
 				if (!param.dbUser.online)
 				{
 					dispatch(User(LoginError(
@@ -117,7 +120,7 @@ class CRUD
 						lastError:'Du musst dich neu anmelden!'
 					})));
 					trace('LoginError');
-					resolve(null);
+					reject('Du musst dich neu anmelden!');
 				}	
 				
 				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
@@ -125,7 +128,7 @@ class CRUD
 					param,
 					function(data:DbData)
 					{				
-						trace(data);
+						//trace(data);
 						if(data.dataErrors != null)
 							trace(data.dataErrors);
 						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
@@ -134,7 +137,7 @@ class CRUD
 						if(data.dataErrors.exists('lastError'))
 						{
 							dispatch(User(LoginError({lastError: data.dataErrors.get('lastError')})));
-							resolve(null);
+							reject(data.dataErrors.get('lastError'));
 						}
 						if(data.dataErrors.toString() != '{}')
 						{
@@ -143,7 +146,7 @@ class CRUD
 									text:(param.resolveMessage==null?'':param.resolveMessage.failure)				
 								}
 							)));							
-							resolve(param.resolveMessage);
+							reject(param.resolveMessage);
 						}
 						else{
 
@@ -152,11 +155,15 @@ class CRUD
 									text:(param.resolveMessage==null?'':param.resolveMessage.success)				
 								}
 							)));
-							resolve(data);
+							resolve('updated');
 						}
 					}
 				);
 				trace(bL);
+				}
+				catch(ex:Exception){
+					trace(ex.stack);
+				}
 			});	
 		});
 			

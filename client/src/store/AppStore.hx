@@ -123,8 +123,8 @@ class AppStore
 	
 	public function middleware(action:AppAction, next:Void -> Dynamic)
 	{
-		trace(Type.enumConstructor(action)+'.'+Type.enumConstructor(Type.enumParameters(action)[0]));
-		Out.dumpObject(Type.enumParameters(action));
+		//trace(Type.enumConstructor(action)+'.'+Type.enumConstructor(Type.enumParameters(action)[0]));
+		//Out.dumpObject(Type.enumParameters(action));
 		/*Type.enumParameters(action).map(function (p) {
 			trace(p);
 			return p;

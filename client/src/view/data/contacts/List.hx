@@ -123,7 +123,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{
 				classPath:'data.Contacts',
 				action:'get',
-				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1', state:'active'}),
+				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1', status:'active'}),
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				table:'contacts',

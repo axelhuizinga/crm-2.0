@@ -1,4 +1,5 @@
 package model;
+import view.shared.FormBuilder;
 import me.cunity.tools.StringTool;
 import haxe.rtti.Meta;
 import view.shared.io.DataAccess.DataView;
@@ -30,7 +31,9 @@ class ORM {
 	public var fieldsModified(default,null):Array<String>;
 	
 	public var fieldFormat:Map<String, Function>;
+	public var formBuilder:FormBuilder;
 	public var propertyNames:Array<String>;
+	public var state:Dynamic;
 	var fields:Dynamic<Dynamic<Array<Dynamic>>>;
 
 	public function new(data:Map<String,Dynamic>) {
@@ -41,8 +44,9 @@ class ORM {
 		//trace(Std.string(fields));
 		fieldsInitalized = new Array();
 		fieldsModified = new Array();
+		formBuilder = new FormBuilder(this);
 		propertyNames = Reflect.fields(fields);
-
+		state = {};
 		//trace('data.id: ${data.get('id')}');
 		fieldsInitalized = new Array();
 		fieldsModified = new Array();

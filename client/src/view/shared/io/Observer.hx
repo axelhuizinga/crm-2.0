@@ -15,7 +15,7 @@ class Observer{
 			},
 			set: function (target, property:String, value, receiver:Dynamic):Bool{
 				try{
-					if(property=='co_field')
+					if(property=='care_of')
 					{
 						trace('$value ${Reflect.getProperty(receiver, property)}');
 						trace('$value ${Reflect.getProperty(target, property)}');

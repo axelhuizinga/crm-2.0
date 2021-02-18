@@ -100,7 +100,6 @@ class Deal extends ORM
 		if(initialized('cycle'))
 			modified('cycle');
 		this.cycle = cycle ;
-		trace(initialized('cycle'));
 		return cycle;
 	}	
 		

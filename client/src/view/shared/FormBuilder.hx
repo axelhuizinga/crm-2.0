@@ -55,7 +55,6 @@ class FormBuilder {
 	public function new(rc:Dynamic)
 	{
 		comp = rc;
-		trace(comp.handleChange);
 		i = 1;
 		requests = [];
 		if(rc.props != null)
@@ -167,7 +166,7 @@ class FormBuilder {
 						comp:comp,
 						name:name,
 						disabled:field.disabled,
-						onChange: comp.handleChange,						
+						onChange: onChange,						
 						options:{
 							dateFormat:field.displayFormat, 
 							defaultDate: value,
@@ -189,7 +188,7 @@ class FormBuilder {
 						comp:comp,
 						disabled:field.disabled,
 						name:name,
-						//onChange: comp.handleChange,
+						onChange: onChange,
 						options:{
 							dateFormat:field.displayFormat,
 							defaultDate:'00.00.0000',//Date.now(),

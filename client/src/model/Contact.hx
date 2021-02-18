@@ -3,7 +3,7 @@ package model;
 typedef ContactProps = {
 	?mandator:Int,
 	?creation_date:String,
-	?state:String,
+	?status:String,
 	?use_email:Bool,
 	?company_name:String,
 	?care_of:String,
@@ -58,13 +58,13 @@ class Contact extends ORM
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var state(default,set):String;
+	@:isVar public var status(default,set):String;
 
-	function set_state(state:String):String{
-		if(initialized('state'))
-			modified('state');
-		this.state = state ;
-		return state;
+	function set_status(status:String):String{
+		if(initialized('status'))
+			modified('status');
+		this.status = status ;
+		return status;
 	}	
 		
 	@dataType("boolean")

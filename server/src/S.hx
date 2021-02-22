@@ -219,8 +219,10 @@ class S
 		dbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
 		if(params.get('extDB'))
 			syncDbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
+		saveRequest(dbQuery,false);
+		#else 
+		saveRequest(dbQuery,(params.exist('saveReq')?false:true));
 		#end
-		saveRequest(dbQuery);
 
 		if(action == 'resetPassword')
 		{
@@ -673,11 +675,14 @@ class S
 		return info;
 	}
 
-	static function saveRequest(req:Dynamic):Bool
+	static function saveRequest(req:Dynamic, ?logOnly:Bool=true):Bool
 	{
 		//trace(Json.stringify(dbQuery));
-		Util.safeLog(req);
-		return true;
+		if(logOnly){
+			Util.safeLog(req);
+			return true;			
+		}
+
 		var stmt:PDOStatement = dbh.prepare(
 			'INSERT INTO activity(action,request,"user") VALUES(:action,:request,:user)' ,Syntax.array(null));
 

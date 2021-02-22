@@ -16,7 +16,7 @@ module.exports = () =>{
 	
 	const buildMode = process.env.NODE_ENV || 'development';
 	
-	const isProd = buildMode === 'production';
+	const isProd = buildMode !== 'localDev';
 	
 	const sourcemapsMode = isProd ? undefined :'cheap-module-source-map' ;
 	// Plugins
@@ -59,60 +59,60 @@ module.exports = () =>{
 		// Sourcemaps option for development
 		devtool: sourcemapsMode,
 		// Live development server (serves from memory)
-		devServer: isProd ? {}: {
-			contentBase: dist,
-			compress: true,
-			host:  devHost,
-			https:{
-				key: fs.readFileSync(path.resolve(__dirname, localConf.key)),
-				cert: fs.readFileSync(path.resolve(__dirname, localConf.cert)),
-			},
-			port: 9000,
-			overlay: false,
-			lazy: false,
-			hot:true,
-			disableHostCheck: true,
-			//inline: false,
-			//useLocalIp: true,
-			headers: {
-				//"Access-Control-Allow-Origin": "https://" + localConf.host,				
-				"Access-Control-Allow-Origin": "https://pitverwaltung.de/server.php",
-				//"Access-Control-Allow-Origin": "*",
-				"Access-Control-Allow-Credentials":true,
-				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-				"Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
-			},	       
-			historyApiFallback: {
-				index: '/'
-			},
-			index: 'crm.html',
-			staticOptions:{
-				index:false
-			},
-			//publicPath: __dirname + '../httpdocs/',
-			publicPath: '/',
-				// Accepted values: none, errors-only, minimal, normal, detailed, verbose
-				// Any other falsy value will behave as 'none', truthy values as 'normal'	
-			stats: {
-				children: true,
+		devServer: (process.env.build_mode== 'localDev'?
+			{
+				contentBase: dist,
+				compress: true,
+				host:  localConf.ip,
+				https:{
+					key: fs.readFileSync(path.resolve(__dirname, localConf.key)),
+					cert: fs.readFileSync(path.resolve(__dirname, localConf.cert)),
+				},
+				port: 9000,
+				overlay: false,
+				lazy: false,
+				hot:true,
+				disableHostCheck: true,
+				//inline: false,
+				//useLocalIp: true,
+				headers: {
+					//"Access-Control-Allow-Origin": "https://" + localConf.host,				
+					"Access-Control-Allow-Origin": "https://"+localConf.host+"/server.php",
+					//"Access-Control-Allow-Origin": "*",
+					"Access-Control-Allow-Credentials":true,
+					"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+					"Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+				},	       
+				historyApiFallback: {
+					index: '/'
+				},
+				index: 'crm.html',
+				staticOptions:{
+					index:false
+				},
+				//publicPath: __dirname + '../httpdocs/',
+				publicPath: '/',
+					// Accepted values: none, errors-only, minimal, normal, detailed, verbose
+					// Any other falsy value will behave as 'none', truthy values as 'normal'	
+				stats: {
+					children: true,
 
-				// Add chunk information (setting this to `false` allows for a less verbose output)
-				chunks: true,
-			
-				// Add namedChunkGroups information
-				chunkGroups: true,
-			
-				// Add built modules information to chunk information
-				chunkModules: true,
-			
-				// Add the origins of chunks and chunk merging info
-				chunkOrigins: true,
-				errorDetails: true,
-				entrypoints: true,
-				providedExports: true
-			}
-		},
-
+					// Add chunk information (setting this to `false` allows for a less verbose output)
+					chunks: true,
+				
+					// Add namedChunkGroups information
+					chunkGroups: true,
+				
+					// Add built modules information to chunk information
+					chunkModules: true,
+				
+					// Add the origins of chunks and chunk merging info
+					chunkOrigins: true,
+					errorDetails: true,
+					entrypoints: true,
+					providedExports: true
+				}
+			}:{}),	
 		watch: (isProd ? false: true),
 		watchOptions:{
 			//aggregateTimeout:1500,

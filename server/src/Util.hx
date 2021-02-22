@@ -1,6 +1,7 @@
 package;
 import haxe.exceptions.PosException;
 import me.cunity.debug.Out;
+import me.cunity.php.Debug;
 import haxe.PosInfos;
 import hxbit.Serializer;
 import haxe.io.Bytes;
@@ -328,6 +329,6 @@ class Util
 	}
 
 	public static function safeLog(log:String, ?pos:PosInfos) {
-		Global.file_put_contents('/var/www/pitverwaltung.de/log/crm.log',log, 8);
+		Global.file_put_contents(Debug.logFile,log, 8);
 	}
 }

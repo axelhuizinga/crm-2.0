@@ -182,7 +182,7 @@ class S
 			}
 			//trace(Web.getPostData());
 			dbQuery = Model.binary();			
-			trace(dbQuery);
+			//(dbQuery);
 			if(dbQuery==null)
 				send("dev end");
 			//Model.binary(params.get('dbData'));
@@ -720,7 +720,7 @@ class S
 		haxe.Log.trace = Debug._trace;
 		Out.skipFields = ['admin','keyPhrase','pass','password'];
 		//edump(Debug.logFile);
-		trace('run on branch:$branch');
+		
 		db = Syntax.code("$DB");
 		dbSchema = Syntax.code("$DB_schema");
 		dbHost = Syntax.code("$DB_server");
@@ -733,6 +733,7 @@ class S
 		dbViciBoxPass = Syntax.code("$DB_vicibox_pass");
 		host = Global.gethostname();
 		//request_scheme = Syntax.code("$_SERVER['REQUEST_SCHEME']");
+		trace('run on branch:$branch @ $db');
 		secret = Syntax.code("$secret");
 		//edump(Syntax.code("$conf"));
 		conf =  Config.load('$home/appData.js');

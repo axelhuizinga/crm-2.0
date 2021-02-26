@@ -260,7 +260,7 @@ class FormBuilder {
 		//trace(props); ref=${props.ref} <div className="g_footer" ></div>	
 		var sK:Int = 0;
 		
-		return jsx('<form name=${props.model} className="tabComponentForm formField" ref=${props.formRef}>
+		return jsx('<form name=${props.model} key=${props.model} className="tabComponentForm formField" ref=${props.formRef}>
 				<div className="grid_box" role="table" aria-label="Destinations">
 					<div className="g_caption" >${props.title}</div>						
 					${renderFormInputElements(props.fields, initialState)}						

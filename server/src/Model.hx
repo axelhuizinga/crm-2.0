@@ -277,7 +277,7 @@ class Model
 			buildLimit(sqlBf);
 		if(offset.int>0)
 			buildOffset(sqlBf);
-		//trace(sqlBf.toString());
+		trace(sqlBf.toString());
 		return execute(sqlBf.toString());
 		//return execute(sqlBf.toString(), q,filterValuess);
 	}
@@ -330,7 +330,7 @@ class Model
 		if(setValues.length>0)
 		trace(setValues.length);
 		if(filterValues.length>0)
-		trace(filterValues[0].toString());
+		trace(filterValues.toString());
 		var stmt:PDOStatement =  S.dbh.prepare(sql,Syntax.array(null));
 		if (S.dbh.errorCode()!='00000')
 		{
@@ -776,7 +776,9 @@ class Model
 		sqlBf.add(fields.map(function(f:String)
 		{
 			var g:Array<String> = f.split('|');
-			return  quoteIdent(g[0]) + ( g.length == 2 && g[1] == 'DESC'  ?  ' DESC' : '');
+			return  quoteIdent(g[0]) + ( g.length == 2 ? g[1]  : ' DESC');
+			//return  quoteIdent(g[0]) + ( g.length == 2 && g[1] == 'DESC'  ?  ' DESC' : '');			
+			
 		}).join(','));
 		return true;
 	}

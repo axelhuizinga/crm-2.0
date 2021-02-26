@@ -190,6 +190,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		dataAccess = ReturnDebitModel.dataAccess;
 		trace(props.match.params.action);
 		//state.formApi.doAction('get');
+		if(props.match.params.action=='listReturnDebit')
+			listReturnDebit();
 	}
 
 	public function delete(ev:ReactEvent):Void
@@ -234,6 +236,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(Reflect.fields(finput));
 		js.Syntax.code("console.log({0})",finput.files);
 		trace(finput.value);				
+	}
+
+	function listReturnDebit() {
+		trace('...');
 	}
 
 	override function render():ReactFragment

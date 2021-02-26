@@ -93,77 +93,87 @@ class SyncExternalContacts extends Model
 		return res;	
 	}
 
+	function getMissingExtIds(maxID:Int):NativeArray {
+		var sql:String = 'SELECT client_id FROM clients WHERE client_id>$maxID ORDER BY client_id';
+		trace(sql);
+		var stmt:PDOStatement = S.syncDbh.query(sql);
+		if(untyped stmt==false)
+		{
+			trace(S.syncDbh.errorInfo());
+			S.sendErrors(dbData, ['getAllExtIds query:'=>S.syncDbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+		}
+		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN):null);	
+		
+		trace('all:' + totalCount);
+				
+		//var cleared:Int = S.dbh.exec('TRUNCATE contact_ids');
+		if(S.dbh.errorCode() !='00000')
+		{
+			trace(S.dbh.errorInfo());
+		}	
+		return res;	
+	}
+
 	function  getMissing() {
 		var updateExtIds:Bool= param.exists('updateExtIds')? true:false;
+		var cIDs:Array<Dynamic> = null;
 		if(updateExtIds){
-			var cIDs:Array<Dynamic> = Lib.toHaxeArray(getAllExtIds());			
+			cIDs = Lib.toHaxeArray(getAllExtIds());			
 			trace('got:' +cIDs.length + ' client_ids');
 			//trace('got:' + Syntax.code("count({0})",cIDs) +' client_ids');		
-	
-			var cleared:Int = S.dbh.exec('DELETE FROM ext_ids_ WHERE auth_user=${S.dbQuery.dbUser.id} AND table_name=\'contacts\' AND action=${Util.actionPath(this)}');
-			if(S.dbh.errorCode() !='00000')
-			{
-				trace(S.dbh.errorInfo());var madded:Int = 0;
+			var clearExtIds:Bool= param.exists('clearExtIds')? true:false;
+			if(clearExtIds){
+				var cleared:Int = S.dbh.exec('DELETE FROM ext_ids_ WHERE auth_user=${S.dbQuery.dbUser.id} AND table_name=\'contacts\' AND action=${Util.actionPath(this)}');
+				if(S.dbh.errorCode() !='00000')
+				{
+					trace(S.dbh.errorInfo());var madded:Int = 0;
+				}
+				else 	
+					trace('cleared all contacts IDs from ext_ids_');				
 			}
-			else 	
-				trace('cleared all contacts IDs from ext_ids_');
-	
+
+			var cidsStored:Int = 0;
 			for(cid in cIDs){
-				var stored:Int = S.dbh.exec(
-					'INSERT INTO ext_ids_ VALUES(
-						$cid, ${S.dbQuery.dbUser.id},
-						${Util.actionPath(this)},\'contacts\') ON CONFLICT DO NOTHING');
+				var sql = 'INSERT INTO ext_ids VALUES($cid)';// ON CONFLICT DO NOTHING
+				var stored:Int = S.dbh.exec(sql);
+				cidsStored += stored;
+				if(stored==0){
+					trace('$sql not inserted');
+					S.errorInfo({oops:333});
+				}
 			}
 			if(S.dbh.errorCode() !='00000')
 			{
 				trace(S.dbh.errorInfo());
 			}
 			else 	
-				trace('stored all client_ids to ext_ids_');
+				trace('stored $cidsStored client_ids to ext_ids_');
 		}
 		else{
-			var stmt:PDOStatement = S.dbh.query('SELECT COUNT(*) FROM ext_ids_ WHERE auth_user=${S.dbQuery.dbUser.id} AND table_name=\'contacts\' AND action=${Util.actionPath(this)}');
+			var stmt:PDOStatement = S.dbh.query('SELECT MAX(ext_id)ext_max FROM "crm"."ext_ids";');
 			S.checkStmt(S.dbh, stmt, 'getAllExtIds query:'+Std.string(S.dbh.errorInfo()));
 			
-			param['totalRecords'] = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null);	
+			var ext_max:Int = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null);	
 			//trace(Std.string(res));
 			//param['totalRecords'] = untyped res[0];//Syntax.code("count({0})",res);
-			trace('all:' + param['totalRecords']);			
-		}
-
-		var sql:String = comment(unindent, format)/**
-		SELECT eid.ext_id from ext_ids_ eid
-		LEFT JOIN 
-		contacts c
-		ON eid.ext_id=c.id
-		WHERE eid.table_name='contacts' 
-		AND eid.action=${Util.actionPath(this)}
-		AND c.id IS NULL
-		**/;
-		var stmt:PDOStatement = S.dbh.query(sql);
-		S.checkStmt(S.syncDbh, stmt, 'getMissingIDs query:' + Std.string(S.syncDbh.errorInfo()));
-
-		var missing_client_ids:Array<Dynamic> = Lib.toHaxeArray(stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN,0):null);
-		//var missing_client_ids:Array<Dynamic> = ids.split(',');
-		trace(totalCount + ' - missing:' + missing_client_ids.length);
-		//trace(param['totalRecords'] + ' - missing:' + missing_client_ids);
-		var madded:Int = 0;
-		while(offset.int<totalCount && madded<missing_client_ids.length){
-			//var cData:Array<NativeArray> = cast( Lib.toHaxeArray(getCrmClients()));
-			var cData:NativeArray = getCrmClients();
+			trace('ext_max: $ext_max');			
+			cIDs = Lib.toHaxeArray(getMissingExtIds(ext_max));
+			trace('missing:${cIDs.count()}');
+			var cData:NativeArray = getMissingClients('WHERE client_id>${ext_max}');
+			trace('got:'+Lib.toHaxeArray(cData).length);
 			var cD:Map<String,Dynamic> = Util.map2fields(cData[0], keys);
 			//trace(cD);
 			var cNames:Array<String> = [for(k in cD.keys()) k];
 			//var haData:Array<NativeArray> = Lib.toHaxeArray(cData);
 			var _1st:Bool = true;
+			var madded:Int = 0;
 			for(row in cData.iterator())
 			{			
 				var aid:Int = Syntax.code("{0}['id']",row);				
-				//if(!missing_client_ids.contains(cast(row['id']))){
-				if(!missing_client_ids.contains(aid)){
-					continue;
-				}
-				//trace(Type.typeof(row['id']));
 				var stmt:PDOStatement = upsertClient(row, cD, cNames);
 				try{
 					var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
@@ -184,13 +194,10 @@ class SyncExternalContacts extends Model
 				}
 				madded++;
 			}		
-			trace(offset.int);
+			trace('added $madded');
+			S.sendInfo(dbData);
 		}
-        trace('done - added ${madded}');
-		//dbData.dataInfo['offset'] = param['offset'] + synced;
-		trace(dbData.dataInfo);
-        //S.sendData(dbData, null);
-		S.sendInfo(dbData,['gotMissing'=>'OK:${missing_client_ids.length}']);
+
 		Sys.exit(0);
 	}
 
@@ -393,6 +400,27 @@ ${limit.sql} ${offset.sql}
 		offset = Util.offset(offset.int + Syntax.code("count({0})",res));
 		return res;
 	}
+
+	public function getMissingClients(where:String):NativeArray
+	{		        
+	
+			var sql = comment(unindent,format)/*
+	SELECT cl.client_id id, cl.*,1 mandator,vl.modify_date,vl.status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
+	IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner
+	FROM fly_crm.clients cl 
+	INNER JOIN asterisk.vicidial_list vl
+	ON vl.lead_id=cl.lead_id
+	${where} 
+	ORDER BY client_id
+	
+	*/;
+		trace(sql);
+		var stmt:PDOStatement = S.syncDbh.query(sql);
+		S.checkStmt(S.syncDbh, stmt,'getCrmClients query:');
+		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		//trace(res);
+		return res;
+	}	
 	
 
     public function getCrmData(?min_id=9999999):NativeArray

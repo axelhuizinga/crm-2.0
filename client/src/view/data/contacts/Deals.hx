@@ -126,8 +126,8 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				offset:offset>0?offset:0,
 				table:state.model,
 				resolveMessage:{					
-					success:'Aktionliste wurde geladen',
-					failure:'Aktionliste konnte nicht geladen werden'
+					success:'Spendenliste wurde geladen',
+					failure:'Spendenliste konnte nicht geladen werden'
 				},				
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP
@@ -306,7 +306,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		return jsx('
 		<div className="t_caption">Spenden
-		<form className="tabComponentForm formField" ref=${props.formRef} name="dealsList" > 			
+		<form className="tabComponentForm formField" ref=${props.formRef} name="dealsList" key="dealsList"> 			
 			${renderResults()}
 		</form></div>');
 	}

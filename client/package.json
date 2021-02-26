@@ -62,11 +62,11 @@
     "json5": "2.1.3"
   },
   "scripts": {
-    "start": "build=development webpack-dev-server --hot",
+    "start": "build=development webpack-dev-server --content-base src --hot --inline ",
     "pstart": "cross-env NODE_ENV=development webpack-dev-server --hot --progress",
     "build": "build=production webpack",
     "postbuild": "sh publish.sh",
-    "build_dev": "build=development webpack",
+    "build_dev": "build=none webpack",
     "postbuild_dev": "sh dev.sh"
   }
 }

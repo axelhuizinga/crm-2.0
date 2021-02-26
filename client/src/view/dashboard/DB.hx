@@ -350,6 +350,8 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		if (state.dataTable != null)
 		return switch(props.match.params.action)
 		{
+			case 'getView':
+				jsx('<div className=""><div><pre>${Std.string(state.data)}</pre></div></div>');
 			case 'showFieldList':
 				//trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');

@@ -5,23 +5,23 @@
 //
 module.exports = () =>{
 	// context: __dirname,
-	//console.log(process.env);
+	console.log(process.env.LANG);
 	console.log('build:'+ process.env.build);	
-	const buildTarget = process.env.build || 'dev';
+	//const buildTarget = process.env.build || 'dev';
 	const localConf = require('./webpack.local')(process.env);
 	const devHost = localConf.ip;
 	const devServerHttps = localConf.devServerHttps;
 	const fs = require('fs');
 	const path = require('path');
 	
-	const buildMode = process.env.NODE_ENV || 'development';
+	const buildMode = process.env.build || 'development';
 	
-	const isProd = buildMode !== 'localDev';
+	const isProd = buildMode !== 'development';
 	
 	const sourcemapsMode = isProd ? undefined :'cheap-module-source-map' ;
 	// Plugins
 	//console.log(process.env);
-	console.log(localConf);
+	console.log('localConf:'+localConf);
 	const webpack = require('webpack');
 	const HtmlWebpackPlugin = require('html-webpack-plugin');
 	const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -46,7 +46,6 @@ module.exports = () =>{
 		output: {
 			path: dist,
 			filename: 'js/[name].js',
-			//filename: ([name] == 'app'? 'app.js':'[name].app.js'),
 			//publicPath: dist,
 			publicPath: '/'
 		//publicPath: 'https://192.168.178.20:9000/'
@@ -59,11 +58,11 @@ module.exports = () =>{
 		// Sourcemaps option for development
 		devtool: sourcemapsMode,
 		// Live development server (serves from memory)
-		devServer: (process.env.build_mode== 'localDev'?
+		devServer: (process.env.build == 'development'?
 			{
 				contentBase: dist,
 				compress: true,
-				host:  localConf.ip,
+				host: localConf.ip,
 				https:{
 					key: fs.readFileSync(path.resolve(__dirname, localConf.key)),
 					cert: fs.readFileSync(path.resolve(__dirname, localConf.cert)),
@@ -73,7 +72,7 @@ module.exports = () =>{
 				lazy: false,
 				hot:true,
 				disableHostCheck: true,
-				//inline: false,
+				inline: true,
 				//useLocalIp: true,
 				headers: {
 					//"Access-Control-Allow-Origin": "https://" + localConf.host,				
@@ -160,14 +159,6 @@ module.exports = () =>{
 						//isProd ? MiniCssExtractPlugin.loader: 'style-loader',
 						"css-loader",
 						'sass-loader'
-						/*{
-							loader: 'sass-loader',
-							options: {
-								name: '[name].css',
-								outputPath: 'css/',
-								sourceMap: true
-							}
-						}*/
 					]
 				},
 				{

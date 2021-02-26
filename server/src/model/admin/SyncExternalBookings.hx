@@ -1,4 +1,5 @@
 package model.admin;
+import haxe.Exception;
 import php.Global;
 import comments.CommentString.*;
 import php.Lib;
@@ -44,23 +45,65 @@ class SyncExternalBookings extends Model{
 			case 'syncBookingRequests':
 				syncBookingRequests(S.dbh);
 			case 'getMissing':
+				//getAllBaIDs();
 				getMissing();
 			case _:
 				run();
 		}		
 	}
 
+	function getMaxImported() {
+		var sql = comment(unindent, format) /*
+		SELECT buchungsanforderungID FROM fly_crm.buchungs_anforderungen;				
+		*/;
+	}
+
+	function  getAllBaIDs() {
+		var sql = comment(unindent, format) /*
+		COPY ba_ids(ba_id) FROM '/root/buaIDs.txt' DELIMITER '|' FORMAT csv;				
+		*/;
+		sql = comment(unindent, format) /*
+		COPY ba_ids FROM '/tmp/buaIDs.txt' CSV HEADER;				
+		*/;
+		trace(sql);
+		var stmt = null;
+		try{
+			stmt = S.dbh.query(sql);
+			trace(stmt);
+			if(untyped stmt==false)
+			{
+				trace('$sql ${limit.sql} ${offset.sql}');
+				S.sendErrors(dbData, ['getCrmData query:'=>S.dbh.errorInfo()]);
+			}
+			if(stmt.errorCode() !='00000')
+			{
+				trace(stmt.errorInfo());
+			}
+		}
+		catch(ex:Exception){
+			trace(ex.message);
+			trace(stmt.errorInfo());
+		}
+		/*var crmBaIds:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN):null);		
+		var got:Int = Global.count(crmBaIds);
+		trace('got:$got');*/
+		trace('ok');
+	}
+
 	function getMissing() {
 		//get all BaID's
 		offset = Util.offset(0);
 		var sql = comment(unindent, format) /*
-		SELECT buchungsanforderungID FROM fly_crm.buchungs_anforderungen;				
+		SELECT * FROM ba_ids WHERE ba_id NOT IN
+(SELECT bi.ba_id FROM "ba_ids" bi
+INNER JOIN "booking_requests" br
+ON br.ba_id=bi.ba_id);		
 		*/;
-		var stmt = S.syncDbh.query(sql);
+		var stmt = S.dbh.query(sql);
 		if(untyped stmt==false)
 		{
-			trace('$sql ${limit.sql} ${offset.sql}');
-			S.sendErrors(dbData, ['getCrmData query:'=>S.syncDbh.errorInfo()]);
+			trace('$sql');
+			S.sendErrors(dbData, ['getCrmData query:'=>S.dbh.errorInfo()]);
 		}
 		if(stmt.errorCode() !='00000')
 		{
@@ -69,92 +112,7 @@ class SyncExternalBookings extends Model{
 		var crmBaIds:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN):null);		
 		var got:Int = Global.count(crmBaIds);
 		trace('got:$got');
-		var missing:NativeArray = Syntax.array(null);
-		var mCount:Int = 0;
-		while(offset.int<got){
-			var aBit:NativeArray = Global.array_slice(crmBaIds,offset.int,limit.int);
-			//trace(Type.typeof(aBit));
-			//trace(Std.string(aBit));
-			//var sep = "),(";
-			var bit = Global.implode("),(", aBit);
-			//trace(bit.length);
-			sql = comment(unindent, format) /*			
-				SELECT * FROM (
-					VALUES (${bit})
-					) b(bid)
-				LEFT JOIN				
-				(SELECT ba_id FROM crm.${table}) c
-				ON ba_id=bid
-				WHERE ba_id IS NULL;				
-			*/;
-			if(false && offset.int==0)
-				trace(sql);
-			//Sys.exit(0);
-			stmt = S.dbh.query(sql);
-			if(untyped stmt==false)
-			{
-				trace('$sql ${limit.sql} ${offset.sql}');
-				S.sendErrors(dbData, ['getCrmData query:'=>S.syncDbh.errorInfo()]);
-			}
-			if(stmt.errorCode() !='00000')
-			{
-				trace(stmt.errorInfo());
-			}			
-			//var m_res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_NUM):null);	
-			missing = Global.array_merge(missing,stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN):null);	
-			mCount = Global.count(missing);
-			//trace('missing:$mCount @ ${offset.int}');
-			offset = Util.offset(offset.int+limit.int);
-			trace('missing:$mCount @ ${offset.int} with:${limit.int}');
-			
-			//Sys.exit(0);
-		}
-		trace('missingTotal:$mCount');
-		if(mCount<1)
-			S.send('Done');
-		//trace(missing);Sys.exit(0);
-		sql = comment(unindent, format) /*
-		SELECT * FROM fly_crm.buchungs_anforderungen
-		WHERE buchungsanforderungID IN(${Global.implode(',',missing)});				
-		*/;
-		var stmt = S.syncDbh.query(sql);
-		if(untyped stmt==false)
-		{
-			trace('$sql ${limit.sql} ${offset.sql}');
-			S.sendErrors(dbData, ['getCrmData query:'=>S.syncDbh.errorInfo()]);
-		}
-		if(stmt.errorCode() !='00000')
-		{
-			trace(stmt.errorInfo());
-		}
-		var crmBaIdsMissing:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_NUM):null);		
-		var got:Int = Global.count(crmBaIdsMissing);
-		trace('got missing:$got');
-		//trace(Std.string(crmBaIdsMissing[0]));Sys.exit(0);
-		var dD:Map<String,Dynamic> = Util.map2fieldsNum(missing[0], keys);
-        var dNames:Array<String> = [for(k in dD.keys()) k];		
-		var dPlaceholders:Array<String> =  [for(k in dNames) k].map(function (k) return ':$k');		
-		sql = comment(unindent, format) /*
-			INSERT INTO ${table} (${dNames.join(',')})
-			VALUES (${dPlaceholders.join(',')}) ON CONFLICT DO NOTHING;				
-			*/;
-		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
-		trace(sql);
 		
-		for(row in crmBaIdsMissing.iterator())
-		{
-			//trace(Std.string(row));Sys.exit(0);
-			Util.bindClientDataNum(table,stmt,row,dbData);			
-			if(!stmt.execute()){
-				trace(row);
-				trace(stmt.errorInfo());
-				S.sendErrors(dbData, ['execute'=>Lib.hashOfAssociativeArray(stmt.errorInfo()),
-				'sql'=>sql,
-				'buchungsanforderungID'=>Std.string(Syntax.code("{0}['buchungsanforderungID']",row))]);
-			}
-			synced++;
-			//trace(synced);
-		}
 	}
 
 	function importAll() {
@@ -213,8 +171,7 @@ class SyncExternalBookings extends Model{
 	{		        
         var sql = comment(unindent,format)/*
 		SELECT * FROM buchungs_anforderungen
-ORDER BY Termin  
-
+ORDER BY buchungsanforderungID
 */;
 		trace('loading $sql ${limit.sql} ${offset.sql}');
 		var stmt:PDOStatement = S.syncDbh.query('$sql ${limit.sql} ${offset.sql}');

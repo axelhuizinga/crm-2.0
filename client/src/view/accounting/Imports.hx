@@ -88,7 +88,7 @@ class Imports extends ReactComponentOf<DataFormProps,FormState>
 				//SET DEFAULT SECTION
 			if(_trace) trace('reme');
 			var baseUrl:String = props.match.path.split(':section')[0];			
-			props.history.push('${baseUrl}List/');
+			props.history.push('${baseUrl}Files/');
 			//props.history.push('${baseUrl}List/get${props.dataStore.contactData.iterator().hasNext()?'/'+props.dataStore.contactData.keys().keysList():''}');
 		}		
 	}

@@ -14,25 +14,23 @@ import php.Web;
 class Upload {
 	public static function go() {		
 		//var rData = Web.getMultipart(10*1024*1024);
-		var rData = Lib.hashOfAssociativeArray(SuperGlobal._POST);
-		var rKes:Array<String>=[];
-		for(k in rData.keys()){
-			if(k.indexOf('File')>-1)
-				rKes.push(k);
-		}
-		trace(rKes.join(',')); 
+		var rData = Lib.hashOfAssociativeArray(SuperGlobal._FILES);
+		var keys:String = [for(k in rData.keys())k].map(function (v) return '\'$v\'').join(',');
+		trace(keys);
+		trace(rData.toString()); 
 		trace(SuperGlobal._FILES);
-		switch(rData.get('action')){
+		switch(SuperGlobal._POST['action']){
 			case 'returnDebitFile':
 			if(rData.exists('returnDebitFile')){
 				var rDF:NativeAssocArray<String> =  SuperGlobal._FILES['returnDebitFile'];
-				var name = "/var/www/pitverwaltung.de/files/" + rDF['name'];
+				var name = '/var/www/${SuperGlobal._SERVER["HTTP_HOST"]}/files/' + rDF['name'];
 				Global.move_uploaded_file(rDF['tmp_name'],name);
-				var result:String = Global.file_get_contents('https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file=$name');
+				trace(name+':' + (Global.file_exists(name)?'Y':'N'));
 				trace('https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file=$name');
+				var result:String = Global.file_get_contents('https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file=$name');
 				trace(result);
-				dbStore(rData.get('action'), result);
-				Global.unlink('/var/www/pitverwaltung.de/files/*');
+				dbStore(SuperGlobal._POST['action'], result);
+				//Global.unlink('/var/www/${SuperGlobal._SERVER["HTTP_HOST"]}/files/*');
 				S.send(result,true);
 			}
 			S.send(Json.stringify({error:'No File uploaded'}),true);
@@ -46,15 +44,20 @@ class Upload {
 			case 'returnDebitFile':
 				var dRows:Array<Dynamic> = Json.parse(data).rlData;
 				var sql =  comment(unindent, format) /*
-				INSERT INTO debit_return_statements (id,reason,iban,ba_id,amount,mandator) 
-				VALUES(:id,:sepa_code,:iban,:baID,:amount,:mandator)
+				INSERT INTO debit_return_statements (id,sepa_code,iban,ba_id,amount,mandator) 
+				VALUES(:id,:sepaCode,:iban,:baID,:amount,:mandator)
 				ON CONFLICT DO NOTHING
 				*/;
 				trace(sql);
-				var dKeys:Array<String> = 'id,sepa_code,iban,baID,amount'.split(',');
+				/// TODO: UNIFY FIELDS + COLUMN NAMES
+				var dKeys:Array<String> = 'id,sepaCode,iban,baID,amount'.split(',');
 				var bindVals:Array<String> = new Array();
 				for(r in dRows)
 				{
+					if(r.sepaCode==null || r.sepaCode==''){
+						S.send(Json.stringify(['error'=>Std.string(r)]),true);
+						return 'ooops';
+					}
 					var stmt:PDOStatement = S.dbh.prepare(sql);
 					if (untyped stmt == false)
 					{

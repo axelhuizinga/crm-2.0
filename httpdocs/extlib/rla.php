@@ -9,7 +9,7 @@ use SimpleXMLElement;
 
 require_once('vendor/autoload.php');
 require_once('autoload.php');
-require_once('/var/www/vhosts/pitverwaltung.de/.crm/functions.php');
+require_once("/var/www/{$_SERVER['HTTP_HOST']}/.crm/functions.php");
 /**/
 $loader = new Autoloader();
 $loader->setNamespacePrefix('')
@@ -26,11 +26,7 @@ $config = Config::getDefault();
 #$config->disableXsdValidation();
 ##edump($config);
 $reader = new Reader($config);
-$dir = '/var/www/vhosts/pitverwaltung.de/files';
-#$reader = new Genkgo\Camt\Reader(Config::getDefault());
-#$message = $reader->readFile($dir.'/camt053.v2.minimal.xml');
-#$message = $reader->readFile($dir.'/camt/2014-01-03_C52_DE58740618130100033626_EUR_A00035.xml');
-#$message = $reader->readFile($dir.'/camt-1169231300-43060967-2020-09-23.xml');
+
 $message = $reader->readFile($_GET['file']);
 unlink($_GET['file']);
 #print_r($message);

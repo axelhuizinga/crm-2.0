@@ -177,7 +177,8 @@ class S
 				dbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);	
 				if(params.get('extDB'))
 					syncDbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
-				#end			
+				#end	
+				devIP = params.get('devIP');		
 				Upload.go();
 			}
 			//trace(Web.getPostData());
@@ -712,8 +713,8 @@ class S
 			//Cli.process(Sys.args(), new CliService()).handle(Cli.exit);
 			trace(Sys.args());
 		}		
-		Syntax.code('require_once({0})', '$home/../.$branch/functions.php');
-		Syntax.code('require_once({0})', '$home/../.$branch/db.php');
+		Syntax.code('require_once({0})', '$home/../.crm/functions.php');
+		Syntax.code('require_once({0})', '$home/../.crm/db.php');
 		//Syntax.code("file_put_contents($appLog,'.', FILE_APPEND)");
 		//Syntax.code('require_once({0})', 'inc/PhpRbac/Rbac.php');
 		Debug.logFile = Syntax.code("$appLog");

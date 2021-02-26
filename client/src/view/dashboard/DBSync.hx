@@ -89,8 +89,6 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				edited_by: props.userState.dbUser.id,
 				mandator: props.userState.dbUser.mandator
 			},values:new Map<String,Dynamic>()},this);
-		trace(state.loading);
-
 	}
 
 	static function mapStateToProps(aState:AppState) 
@@ -586,8 +584,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				jsx('<div className="flex0 cCenter">
 					<ul>					
 					<li><h3>BuchungsAnforderungen</h3></li>
-					<li><div>Live System:</div><div className="tRight">${state.data.get('buchungsAnforderungenCount')}</div></li>
-					<li><div>Neues System:</div><div className="tRight">${state.data.get('bookingRequestsCount')}</div></li>
+					<li><div>Live System:</div><div className="tRight tableNums">${state.data.get('buchungsAnforderungenCount')}</div></li>
+					<li><div>Neues System:</div><div className="tRight tableNums">${state.data.get('bookingRequestsCount')}</div></li>
 					</ul>
 				</div>')
 				);
@@ -596,8 +594,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				jsx('<div className="flex0 cCenter">
 					<ul>					
 					<li><h3>Konten</h3></li>
-					<li><div>Live System:</div><div className="tRight">${state.data.get('pay_sourceCount')}</div></li>
-					<li><div>Neues System:</div><div className="tRight">${state.data.get('accountsCount')}</div></li>
+					<li><div>Live System:</div><div className="tRight tableNums">${state.data.get('pay_sourceCount')}</div></li>
+					<li><div>Neues System:</div><div className="tRight tableNums">${state.data.get('accountsCount')}</div></li>
 					</ul>
 				</div>')
 				);
@@ -606,8 +604,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				jsx('<div className="flex0 cCenter">
 					<ul>					
 					<li><h3>Kontakte</h3></li>
-					<li><div>Live System:</div><div className="tRight">${state.data.get('clientsCount')}</div></li>
-					<li><div>Neues System:</div><div className="tRight">${state.data.get('contactsCount')}</div></li>
+					<li><div>Live System:</div><div className="tRight tableNums">${state.data.get('clientsCount')}</div></li>
+					<li><div>Neues System:</div><div className="tRight tableNums">${state.data.get('contactsCount')}</div></li>
 					</ul>
 				</div>')
 				);
@@ -616,8 +614,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				jsx('<div className="flex0 cCenter">
 					<ul>					
 					<li><h3>Spenden</h3></li>
-					<li><div>Live System:</div><div className="tRight">${state.data.get('pay_planCount')}</div></li>
-					<li><div>Neues System:</div><div className="tRight">${state.data.get('dealsCount')}</div></li>
+					<li><div>Live System:</div><div className="tRight tableNums">${state.data.get('pay_planCount')}</div></li>
+					<li><div>Neues System:</div><div className="tRight tableNums">${state.data.get('dealsCount')}</div></li>
 					</ul>
 				</div>')
 				);				

@@ -10,5 +10,12 @@ spl_autoload_register(
 		}
 	}
 );
+if (php_sapi_name() == "cli") {
+    // In cli-mode
+        echo("server start\r\n");
+} else {
+    // Not in cli-mode
+}
+
 include('S.php');
 \S::main();

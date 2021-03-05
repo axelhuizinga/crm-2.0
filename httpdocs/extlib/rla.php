@@ -28,7 +28,8 @@ $config = Config::getDefault();
 $reader = new Reader($config);
 
 $message = $reader->readFile($_GET['file']);
-unlink($_GET['file']);
+if(!$_GET['debug'])
+	unlink($_GET['file']);
 #print_r($message);
 $s_i = 0;
 $r = 0;

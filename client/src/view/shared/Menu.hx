@@ -206,7 +206,8 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			};
 		}
 		style = {
-			minWidth:App.config.sidebarDims.minWidth
+			//minWidth:App.config.sidebarDims.minWidth,
+			width:App.config.sidebarDims.maxWidth
 		}
 		return jsx('
 		<div className="sidebar is-right"  style=${style} > 

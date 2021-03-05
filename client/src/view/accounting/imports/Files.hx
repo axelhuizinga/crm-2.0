@@ -55,7 +55,7 @@ using Lambda;
 class Files extends ReactComponentOf<DataFormProps,FormState>
 {
 
-	static var _instance:Files;
+	static var _instance:Files;//
 
 	public static var menuItems:Array<MItem> = [		
 		{label:'Rücklastschriften',action:'importReturnDebit',
@@ -119,7 +119,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				},
 				{
 					dataClassPath:'admin.ImportCamt',
-					label:"Rücklastschriften",
+					label:"Verlauf",
 					section: 'List',
 					items: List.menuItems
 				},
@@ -212,7 +212,9 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			var dT:Array<Map<String, Dynamic>> = new Array();
 			for(dR in dd.rlData)
 				dT.push(Utils.dynToMap(dR));
-			setState({dataTable:dT,loading:false});
+			//setState({dataTable:dT,loading:false});
+			trace(dT);
+			state.loading = false;
 			var baseUrl:String = props.match.path.split(':section')[0];			
 			props.history.push('${baseUrl}List');
 			App.store.dispatch(Status(Update( 
@@ -235,13 +237,14 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	override function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		//<></>
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
-		<>
+		
 			<form className="tabComponentForm"  >
 				${renderResults()}
 			</form>
-		</>'));		
+		'));		
 	}
 	
 	function renderResults():ReactFragment
@@ -286,7 +289,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 
 			default:
 				if(state.data != null && state.data.exists('hint')){
-					jsx('<div className="hint"><h2>${state.data.get('hint')}</h2></div>');
+					jsx('<div className="hint"><h3>${state.data.get('hint')}</h3></div>');
 				}
 				else{
 					null;

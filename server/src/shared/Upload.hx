@@ -27,7 +27,7 @@ class Upload {
 				Global.move_uploaded_file(rDF['tmp_name'],name);
 				trace(name+':' + (Global.file_exists(name)?'Y':'N'));
 				trace('https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file=$name');
-				var result:String = Global.file_get_contents('https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file=$name');
+				var result:String = Global.file_get_contents('https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file=$name&debug=${(S.params.get('debug')==true?true:false)}');
 				trace(result);
 				dbStore(SuperGlobal._POST['action'], result);
 				//Global.unlink('/var/www/${SuperGlobal._SERVER["HTTP_HOST"]}/files/*');

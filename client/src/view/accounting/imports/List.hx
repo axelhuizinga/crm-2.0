@@ -64,7 +64,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			formField:{				
 				name:'returnDebitFile',
 				//name:'uploadForm',
-				submit:'Importieren',
+				//submit:'Importieren',
 				type:FormInputElement.File,
 				handleChange: function(evt:Event) {
 					//trace(Reflect.fields(evt));
@@ -138,8 +138,14 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:FormApi.initSideMenu2( this,			
 				[
 					{
-						//dataClassPath:'admin.ImportCamt',
-						label:"Rücklastschriften",
+						dataClassPath:'admin.ImportCamt',
+						label:"Upload",
+						section: 'Files',
+						items: Files.menuItems
+					},
+					{
+						//dataClassPath:'admin.ImportCamt',Rücklastschriften
+						label:"Verlauf",
 						section: 'List',
 						items: List.menuItems
 					},

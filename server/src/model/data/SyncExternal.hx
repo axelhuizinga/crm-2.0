@@ -1,5 +1,6 @@
 package model.data;
 
+import php.Global;
 import shared.DbData;
 import haxe.macro.Type.Ref;
 import haxe.ds.Map;
@@ -46,12 +47,45 @@ class SyncExternal extends Model
 	}
 
 	public function bookingRequestsCount() {
-		var stmt:PDOStatement = S.syncDbh.query('SELECT COUNT(*) FROM buchungs_anforderungen');
-		S.checkStmt(S.syncDbh, stmt, 'buchungsAnforderungenCount:'+Std.string(S.syncDbh.errorInfo()));
-		dbData.dataInfo.set('buchungsAnforderungenCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
-		stmt = S.dbh.query('SELECT COUNT(*) FROM booking_requests');
-		S.checkStmt(S.dbh, stmt, 'booking_requests count:'+Std.string(S.dbh.errorInfo()));
-		dbData.dataInfo.set('bookingRequestsCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
+		var sql:String = 'SELECT COUNT(*) FROM buchungs_anforderungen';
+		var stmt:PDOStatement = null;
+		if(S.params.exists('filter')){
+			var eF:EReg = new EReg("(=|<|>)","g");
+			var fEl:Array<String> = eF.split(S.params.get('filter'));
+			trace(fEl.join('|'));
+			if(eF.match(S.params.get('filter'))){
+				trace(eF.matched(1));
+			}
+			var cmp = eF.matched(1);
+			if(~/[a-z0-9_]+/.match(fEl[0])){
+				stmt = S.syncDbh.prepare('$sql WHERE ${fEl[0]} $cmp ?');//, PDO.PARAM_STR
+				//dbData.dataInfo.set('buchungsAnforderungenCount',(stmt.execute(Syntax.array(S.params.get('filter')))?stmt.fetch(PDO.FETCH_COLUMN):null));
+				if(stmt.execute(Syntax.array(fEl[1]))){
+					dbData.dataInfo.set('buchungsAnforderungenCount',stmt.fetch(PDO.FETCH_COLUMN));
+				}
+				else{
+					dbData.dataInfo.set('buchungsAnforderungenCount',Std.string(stmt.errorInfo));
+				}
+				stmt = S.dbh.prepare('SELECT COUNT(*) FROM booking_requests WHERE ${fEl[0]} $cmp ?');
+				trace(S.dbh.getAttribute(PDO.ATTR_SERVER_INFO));
+				if(stmt.execute(Syntax.array(fEl[1]))){
+					dbData.dataInfo.set('bookingRequestsCount',stmt.fetch(PDO.FETCH_COLUMN));
+				}
+				else{
+					dbData.dataInfo.set('bookingRequestsCount',Std.string(stmt.errorInfo));
+				}							
+			}
+
+		}
+		else{
+			stmt = S.syncDbh.query(sql);
+			S.checkStmt(S.syncDbh, stmt, 'buchungsAnforderungenCount:'+Std.string(S.syncDbh.errorInfo()));
+			dbData.dataInfo.set('buchungsAnforderungenCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
+			
+			stmt = S.dbh.query('SELECT COUNT(*) FROM booking_requests');
+			S.checkStmt(S.dbh, stmt, 'booking_requests count:'+Std.string(S.dbh.errorInfo()));
+			dbData.dataInfo.set('bookingRequestsCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
+		}
 		S.sendInfo(dbData);			
 	}
 

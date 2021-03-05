@@ -175,6 +175,7 @@ class S
 				}
 				#if debug
 				dbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);	
+				params.set('debug',true);
 				if(params.get('extDB'))
 					syncDbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
 				#end	
@@ -708,13 +709,17 @@ class S
 		
 		var branch:String = #if dev 'dev' #else 'crm' #end;
 		home = Syntax.code("dirname($_SERVER['SCRIPT_FILENAME'])");
-		///opt/src/crm-2.0/server/src/S.hx
+		Lib.print(home+"\r\n");
+		Syntax.code('require_once({0})', '$home/../.crm/functions.php');
+		Syntax.code('require_once({0})', '$home/../.crm/db.php');		
 		if(Lib.isCli()){
 			//Cli.process(Sys.args(), new CliService()).handle(Cli.exit);
+			trace('helloworld :)');
+
+			Lib.print(Syntax.code("$appLog")  + "\r\n");//();
 			trace(Sys.args());
 		}		
-		Syntax.code('require_once({0})', '$home/../.crm/functions.php');
-		Syntax.code('require_once({0})', '$home/../.crm/db.php');
+
 		//Syntax.code("file_put_contents($appLog,'.', FILE_APPEND)");
 		//Syntax.code('require_once({0})', 'inc/PhpRbac/Rbac.php');
 		Debug.logFile = Syntax.code("$appLog");

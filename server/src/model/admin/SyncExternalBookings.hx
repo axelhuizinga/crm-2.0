@@ -52,6 +52,30 @@ class SyncExternalBookings extends Model{
 		}		
 	}
 
+	override public function count():Int
+	{
+		var sqlBf:StringBuf = new StringBuf();
+		sqlBf.add('SELECT COUNT(*) AS count FROM ');
+
+		if (tableNames.length>1)
+		{
+			sqlBf.add(buildJoin());
+		}		
+		else
+		{
+			trace(tableNames);
+			trace('${tableNames[0]} ');
+			sqlBf.add('${tableNames[0]} ');
+		}
+		if (filterSql != null)
+		{
+			sqlBf.add(filterSql);
+		}
+		trace(sqlBf.toString());
+		var res:NativeArray = execute(sqlBf.toString());
+		return Lib.hashOfAssociativeArray(res[0]).get('count');
+	}
+
 	function getMaxImported() {
 		var sql = comment(unindent, format) /*
 		SELECT buchungsanforderungID FROM fly_crm.buchungs_anforderungen;				
@@ -171,7 +195,7 @@ ON br.ba_id=bi.ba_id);
 	{		        
         var sql = comment(unindent,format)/*
 		SELECT * FROM buchungs_anforderungen
-ORDER BY buchungsanforderungID
+ORDER BY buchungsanforderungID WHERE anforderungs_datum>'2021-01-01'
 */;
 		trace('loading $sql ${limit.sql} ${offset.sql}');
 		var stmt:PDOStatement = S.syncDbh.query('$sql ${limit.sql} ${offset.sql}');

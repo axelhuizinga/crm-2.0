@@ -50,7 +50,7 @@ class Util
 		for(k => v in meta.keyValueIterator())
 		{
 			if(!Global.array_key_exists(k,row)){
-				trace('$k missing@ $row["id"]');
+				//trace('$k missing@ $row["id"]');
 				continue;
 			}				
 			

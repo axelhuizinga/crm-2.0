@@ -774,6 +774,8 @@ form{
 
 input[name="accordion-select"], .panel-block {
   display:none;
+  /*visibility: collapse;
+  height:0px;*/
 }
 
 input[readonly="readonly"]{
@@ -815,6 +817,10 @@ label.panel-heading {
 .panel-block
 {
 	overflow-y: auto;
+}
+
+.panel-block div{
+	width:100%;
 }
 
 .sidebar

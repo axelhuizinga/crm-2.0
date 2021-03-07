@@ -188,7 +188,9 @@ class UserAccess {
 				devIP:App.devIP
 			},
 			function(data:DbData)
-			{				
+			{		
+				trace(Type.typeof(data));
+				//Out.dumpObjectPSafe(data);
 				if (data.dataInfo.exists('loggedIn'))
 					trace('loggedIn:${data.dataInfo.get("loggedIn")}');
 				//trace(data);

@@ -120,6 +120,55 @@ class SyncExternalContacts extends Model
 
 	function  getMissing() {
 		var updateExtIds:Bool= param.exists('updateExtIds')? true:false;
+		
+		var stmt:PDOStatement = S.dbh.query('SELECT MAX(id)ext_max FROM "crm"."contacts";');
+		S.checkStmt(S.dbh, stmt, 'get max contacts id query:'+Std.string(S.dbh.errorInfo()));
+		
+		var maxCid:Int = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null);	
+		//trace(Std.string(res));
+		//param['totalRecords'] = untyped res[0];//Syntax.code("count({0})",res);
+		trace('ext_max: $maxCid');			
+
+		var cData:NativeArray = getMissingClients('WHERE client_id>${maxCid}');
+		trace('got:'+Lib.toHaxeArray(cData).length);
+		var cD:Map<String,Dynamic> = Util.map2fields(cData[0], keys);
+		//trace(cD);
+		var cNames:Array<String> = [for(k in cD.keys()) k];
+		//var haData:Array<NativeArray> = Lib.toHaxeArray(cData);
+		var _1st:Bool = true;
+		var madded:Int = 0;
+		for(row in cData.iterator())
+		{			
+			var aid:Int = Syntax.code("{0}['id']",row);				
+			var stmt:PDOStatement = upsertClient(row, cD, cNames);
+			try{
+				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
+				if(_1st){
+					_1st=false;
+					trace(row);
+					trace(res);
+					//Sys.exit(333);
+				}
+			}
+			catch(e:Dynamic)
+			{
+				{S.sendErrors(dbData, [
+					'dbError'=>S.dbh.errorInfo(),
+					'upsertClient'=>S.errorInfo(row),
+					'exception'=>e
+				]);}		
+			}
+			madded++;
+		}		
+		trace('added $madded');
+		S.sendInfo(dbData);
+	
+
+		Sys.exit(0);
+	}
+
+	function  getMissing1() {
+		var updateExtIds:Bool= param.exists('updateExtIds')? true:false;
 		var cIDs:Array<Dynamic> = null;
 		if(updateExtIds){
 			cIDs = Lib.toHaxeArray(getAllExtIds());			

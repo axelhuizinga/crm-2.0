@@ -49,7 +49,7 @@ class SyncExternal extends Model
 	public function bookingRequestsCount() {
 		var sql:String = 'SELECT COUNT(*) FROM buchungs_anforderungen';
 		var stmt:PDOStatement = null;
-		if(S.params.exists('filter')){
+		if(S.params.exists('filter')&&S.params.get('filter')!=null){
 			var eF:EReg = new EReg("(=|<|>)","g");
 			var fEl:Array<String> = eF.split(S.params.get('filter'));
 			trace(fEl.join('|'));

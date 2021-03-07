@@ -280,7 +280,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			userState:props.userState,
 			offset:0,
 			//onlyNew: true,
-			filter:"anforderungs_datum<2021-01-01",
+			//filter:"anforderungs_datum<2021-01-01",
 			classPath:'data.SyncExternal',
 			action:'bookingRequestsCount'
 		});

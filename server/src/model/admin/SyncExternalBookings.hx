@@ -194,11 +194,13 @@ ON br.ba_id=bi.ba_id);
 	public function getCrmData():NativeArray
 	{		        
         var sql = comment(unindent,format)/*
-		SELECT * FROM buchungs_anforderungen
-ORDER BY buchungsanforderungID WHERE anforderungs_datum>'2021-01-01'
+		SELECT * FROM buchungs_anforderungen WHERE anforderungs_datum>'2021-01-01
+ORDER BY buchungsanforderungID '
 */;
-		trace('loading $sql ${limit.sql} ${offset.sql}');
+		trace('loading $sql ${limit.sql} ${offset.sql}' + S.syncDbh.getAttribute(PDO.ATTR_SERVER_INFO));
 		var stmt:PDOStatement = S.syncDbh.query('$sql ${limit.sql} ${offset.sql}');
+		trace('...');
+		trace(stmt.errorInfo()[2]);
 		if(untyped stmt==false)
 		{
 			trace('$sql ${limit.sql} ${offset.sql}');
@@ -210,9 +212,10 @@ ORDER BY buchungsanforderungID WHERE anforderungs_datum>'2021-01-01'
 		}
 		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_NUM):null);
 		//trace(res);
+		trace(Syntax.code('count({0})',res));
 		if(offset.int==0)
 		{
-			stmt = S.syncDbh.query('SELECT COUNT(*) FROM buchungs_anforderungen');
+			stmt = S.syncDbh.query(sql);
 			var totalRes = stmt.fetchColumn();
 			trace(totalRes);
 			dbData.dataInfo['totalRecords'] = totalRes;

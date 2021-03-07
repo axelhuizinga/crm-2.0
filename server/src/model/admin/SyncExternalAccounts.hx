@@ -77,10 +77,15 @@ class SyncExternalAccounts extends Model
 		return res;	
 	}
 
-	public function getMissing():Map<String,Int> {
+	public function getMissing():Void{
+		var start = Sys.time();
+		var stmt:PDOStatement = S.dbh.query('SELECT MAX(contact) FROM "crm"."accounts";');
+		S.checkStmt(S.dbh, stmt, 'get max contacts id query:'+Std.string(S.dbh.errorInfo()));
 		
-		//return Lib.hashOfAssociativeArray(res);
-		return null;
+		var maxCid:Int = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null);
+		trace('maxCid:$maxCid');
+		importExtAccounts('WHERE client_id>${maxCid}');
+		trace('missing accounts took:' + (Sys.time()-start));
 	}
 
 	/**
@@ -105,14 +110,15 @@ I kno	 * Import or Update accounts
 		Sys.exit(untyped ['syncAccounts'=>'OK']);
 	}		
 		//var ids:Map<String,Int> = getMissing();
-	function importExtAccounts() {
+	function importExtAccounts(where:String='') {
 		// GET ViciBox fly_crm db account data
 		var sql:String = comment(unindent,format)/*
-		SELECT pay_source_id id, client_id contact, debtor account_holder,bank_name,account,blz bic,iban,sign_date, pay_source_state status,creation_date, ${S.dbQuery.dbUser.id} edited_by,1 mandator FROM pay_source 
+		SELECT pay_source_id id, client_id contact, debtor account_holder,bank_name,account,blz bic,iban,sign_date, pay_source_state status,creation_date, ${S.dbQuery.dbUser.id} edited_by,1 mandator FROM pay_source ${where} 
 		ORDER BY id 
-		${limit.sql} ${offset.sql}		
+		${limit.sql} 	
 		*/;
 		trace(sql);
+		//${offset.sql}	
 		var stmt:PDOStatement = S.syncDbh.query(sql);
 		trace('loading  ${limit.sql} ${offset.sql}');		
 		S.checkStmt(S.syncDbh, stmt,'importExtAccounts data:');
@@ -152,21 +158,6 @@ I kno	 * Import or Update accounts
 		}			
 	}
 
-	public function syncBankTransferRequests():Void
-    {
-		var res:NativeArray = fetchAll('SELECT * FROM `buchungs_anforderungen`',S.syncDbh,'syncBankTransferRequests',PDO.FETCH_NUM);
-		trace(res);
-		if(res != null)
-		{
-			//sendRows(res);
-			var updated:Int = 0;//syncUserIds(res);
-			S.sendInfo(dbData,['syncUserDetail'=>'DONE $updated']);
-		}			
-		else 
-			S.sendInfo(dbData,['syncUserDetail'=>'no results???']);
-		trace('done');
-	}
-	
 	function upsertAccount(rD:NativeArray, cD:Map<String,Dynamic>, cNames:Array<String>):PDOStatement
 	{
 		//var cVals:String =  [for(v in cD.iterator()) v].map(function (v) return '\'$v\'').join(',');

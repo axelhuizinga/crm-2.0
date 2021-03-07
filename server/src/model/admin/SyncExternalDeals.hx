@@ -100,27 +100,16 @@ class SyncExternalDeals extends Model
 		return res;	
 	}
 
-	function getMissing():Array<Int> {
+	function getMissing():Void {
 		var start = Sys.time();
-		// GET MISSING  ${onlyNew}
-		var sql = comment(unindent, format)/* 
-		SELECT eid.ext_id from ext_ids_ eid
-		left join 
-		deals d
-		ON eid.ext_id=d.id
-		WHERE eid.table_name='deals'
+		var stmt:PDOStatement = S.dbh.query('SELECT MAX(contact) FROM "crm"."deals";');
+		S.checkStmt(S.dbh, stmt, 'get max contacts id query:'+Std.string(S.dbh.errorInfo()));
 		
-		AND eid.action='${Util.actionPath(this)}'		
-		AND d.id IS NULL
-		*/;
-		var stmt = S.dbh.query(sql);
-		trace(sql);
-		S.checkStmt(S.dbh,stmt,'getMissingIDs ');
+		var maxCid:Int = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null);
+		trace('maxCid:$maxCid');
+		importExtDeals('WHERE client_id>$maxCid ');
 		
-		var ids:Array<Int> = untyped Lib.toHaxeArray(stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN,0):null);
-		
-		trace('missing ids took:' + (Sys.time()-start));
-		return ids;
+		trace('missing deals took:' + (Sys.time()-start));
 	}
 
 	function importAll(){ 
@@ -139,18 +128,18 @@ class SyncExternalDeals extends Model
 		
 	}
 
-	function importExtDeals() {
+	function importExtDeals(where:String='') {
 		/*GET DATA FROM fly_crm */
 		var sql:String = comment(unindent,format)/*
-		SELECT IF(pay_plan_state='active',TRUE,FALSE) active, ${S.dbQuery.dbUser.id} edited_by,1 mandator, pay_plan_id id,client_id contact,creation_date,pay_source_id account,target_id target_account,start_day,start_date,buchungs_tag booking_day,IF(start_day='1','start','middle') booking_run,cycle,amount,IF(product='K',2,3) product ,agent,agency_project project,pay_plan_state,pay_method,end_date,end_reason,repeat_date,cycle_start_date from pay_plan 
+		SELECT IF(pay_plan_state='active',TRUE,FALSE) active, ${S.dbQuery.dbUser.id} edited_by,1 mandator, pay_plan_id id,client_id contact,creation_date,pay_source_id account,target_id target_account,start_day,start_date,buchungs_tag booking_day,IF(start_day='1','start','middle') booking_run,cycle,amount,IF(product='K',2,3) product ,agent,agency_project project,pay_plan_state,pay_method,end_date,end_reason,repeat_date,cycle_start_date from pay_plan ${where} 
 		ORDER BY pay_plan_id  
 		${limit.sql} ${offset.sql}		
 		*/;
 		var stmt = S.syncDbh.query(sql);
 		S.checkStmt(S.syncDbh,stmt,'importExtDeals deals');
-
+		trace(sql);
 		var dData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
-		trace('all:' + param['totalRecords']);
+		trace('all:' + Syntax.code('count({0})',dData));
 		var start = Sys.time();
 		var cD:Map<String,Dynamic> = Util.map2fields(dData[0], keys);
 		//trace(dData);

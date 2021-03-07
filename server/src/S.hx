@@ -709,7 +709,7 @@ class S
 		
 		var branch:String = #if dev 'dev' #else 'crm' #end;
 		home = Syntax.code("dirname($_SERVER['SCRIPT_FILENAME'])");
-		Lib.print(home+"\r\n");
+		//Lib.print(home+"\r\n");
 		Syntax.code('require_once({0})', '$home/../.crm/functions.php');
 		Syntax.code('require_once({0})', '$home/../.crm/db.php');		
 		if(Lib.isCli()){

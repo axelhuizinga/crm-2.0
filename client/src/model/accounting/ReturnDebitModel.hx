@@ -28,31 +28,17 @@ class ReturnDebitModel
 		}
 	];
 
-	/*public static var listColumns:Map<String,DataColumn> = [
-		'id'=>{
-			cellFormat:function(v) {
-				return Std.parseInt(v);
-			},
-			show:false,
-			useAsIndex: true
-		},
-		'dealId'=>{label:'VertragsID', flexGrow:0, className: 'tRight'},
-		//"baID":"baID 800426553","iban":"DE48150505001233003557","sepaCode":"AC04","mID":"11021389T1","amount":"-65.50"
-		'sepaCode'=>{label:'Sepa Code', flexGrow:0, className: 'tRight'},
-		'iban'=>{label:'Iban'},				
-		'baID'=>{label: 'Buchungsanforderung ID', flexGrow:1},		
-		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'}
-	];*/
+	public static var gridColumns:Map<String,view.grid.Grid.DataColumn> = [
+		'id'=>{label:'VertragsID', flexGrow:0, className: 'tRight tableNums'},
+		'sepa_code'=>{label:'Sepa Code', flexGrow:0, className: 'tRight'},
+		'iban'=>{label:'Iban', className: 'tableNums'},				
+		'ba_id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		
+		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
+		//'processed'=>{label: 'Verarbeitet'}
+	];	
+
 	public static var listColumns:Map<String,DataColumn> = [
-		/*'id'=>{
-			cellFormat:function(v) {
-				return Std.parseInt(v);
-			},
-			show:false,
-			useAsIndex: true
-		},*/
-		'id'=>{label:'VertragsID', flexGrow:0, className: 'tRight'},
-		//"baID":"baID 800426553","iban":"DE48150505001233003557","sepaCode":"AC04","mID":"11021389T1","amount":"-65.50"
+		'id'=>{label:'VertragsID', flexGrow:0, className: 'tRight tableNums'},
 		'sepa_code'=>{label:'Sepa Code', flexGrow:0, className: 'tRight'},
 		'iban'=>{label:'Iban'},				
 		'ba_id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		
@@ -63,6 +49,8 @@ class ReturnDebitModel
 	public static var dataDisplay:Map<String,DataState> = [
 		'rDebitList' => {columns:listColumns}
 	];	
-	//public static var propertyNames = 'reason,iban,ba_id,amount,mandator,last_modified,processed'.split(',');
-
+	
+	public static var dataGridDisplay:Map<String,view.grid.Grid.DataState> = [
+		'rDebitList' => {columns:gridColumns}
+	];
 }

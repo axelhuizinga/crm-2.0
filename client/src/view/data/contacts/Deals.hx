@@ -41,6 +41,7 @@ import loader.BinaryLoader;
 import view.grid.Grid;
 
 using StringTools;
+
 @:connect
 class Deals extends ReactComponentOf<DataFormProps,FormState>
 {
@@ -70,8 +71,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			selectedRows:[],
 			sideMenu:null,
 			values:new Map<String,Dynamic>()
-		},this);
-		//get();	
+		},this);	
 		props.parentComponent.state.relDataComps.set(Type.getClassName(Type.getClass(this)),this);
 		trace(state.loading);
 	}

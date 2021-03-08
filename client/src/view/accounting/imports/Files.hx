@@ -39,8 +39,7 @@ import state.FormState;
 import view.shared.FormBuilder;
 import view.shared.MItem;
 import view.shared.MenuProps;
-import view.table.Table.DataState;
-import view.table.Table;
+import view.grid.Grid;
 import view.shared.io.BaseForm;
 import view.shared.io.DataAccess;
 import view.shared.io.DataFormProps;
@@ -99,30 +98,32 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		_instance = this;
-		dataDisplay = ReturnDebitModel.dataDisplay;
+		dataDisplay = ReturnDebitModel.dataGridDisplay;
 		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
 		//formFields = ReturnDebitModel.formFields(props.match.params.action);
 		//trace('...' + Type.getInstanceFields(Type.resolveClass('view.shared.MItem')));
-		trace('...' + Reflect.fields(props));
+		//trace('...' + Reflect.fields(props));
 		//baseForm =new BaseForm(this);
 		
 		menuItems[0].handler = importReturnDebit;
 		state =  App.initEState({
-			data:['hint'=>'Datei zum Upload auswählen'],
+			data:['hint'=>'Datei zum Hochladen auswählen'],
+			action:(props.match.params.action==null?'importReturnDebit':props.match.params.action),
 			sideMenu:FormApi.initSideMenu2( this,			
 			[
 				{
 					dataClassPath:'admin.ImportCamt',
-					label:"Upload",
-					section: 'Files',
-					items: Files.menuItems
-				},
-				{
-					dataClassPath:'admin.ImportCamt',
-					label:"Verlauf",
+					label:"Liste",
 					section: 'List',
 					items: List.menuItems
 				},
+				{
+					dataClassPath:'admin.ImportCamt',
+					label:"Dateien",
+					section: 'Files',
+					items: Files.menuItems
+				},
+
 			],
 			{	
 				section: props.match.params.section==null? 'Files':props.match.params.section, 
@@ -146,11 +147,11 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
 			},
-			select:function(id:Int = -1,data:StringMap<Map<String,Dynamic>>,match:react.router.RouterMatch, ?selectType:SelectType)
+			select:function(id:Int = -1,data:StringMap<Map<String,Dynamic>>,me:Files, ?selectType:SelectType)
 			{
 				if(true) trace('select:$id selectType:${selectType}');
 				trace(data);
-				dispatch(LiveDataAccess.sSelect({id:id,data:data,match:match,selectType: selectType}));
+				dispatch(LiveDataAccess.sSelect({id:id,data:data,match:me.props.match,selectType: selectType}));
 			}						
         }
 	}	
@@ -208,15 +209,15 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			trace(r);
 			var rD:Json = Json.parse(r);
 			var dd:{rlData:Array<Dynamic>} = Json.parse(r);
-			//trace(rD);
+			trace(rD);
 			var dT:Array<Map<String, Dynamic>> = new Array();
 			for(dR in dd.rlData)
 				dT.push(Utils.dynToMap(dR));
-			//setState({dataTable:dT,loading:false});
+			setState({action:'showImportedReturnDebit',dataTable:dT,loading:false});
 			trace(dT);
 			state.loading = false;
 			var baseUrl:String = props.match.path.split(':section')[0];			
-			props.history.push('${baseUrl}List');
+			//props.history.push('${baseUrl}List');
 			App.store.dispatch(Status(Update( 
 				{	
 					text:dT.count() + ' Rücklastschriften Importiert'
@@ -249,20 +250,21 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.action + ':' + Std.string(state.dataTable != null));
-		trace(state.loading);
+		trace(state.action + ':' + Std.string(state.dataTable != null));
+		trace(dataDisplay["rDebitList"]);
 		if(state.loading)
 			return state.formApi.renderWait();
 		trace('${state.action} ###########loading:' + state.loading);
 		return switch(state.action)
 		{
-			/*case 'importReturnDebit':
-				jsx('
-					<Table id="importedReturnDebit" data=${state.dataTable}
-					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${BaseForm.renderPager} 
-					className="is-striped is-hoverable"  parentComponent=${this} fullWidth=${true}/>
-				');
-			case 'importClientList':
+			case 'showImportedReturnDebit':
+				(state.dataTable == null? state.formApi.renderWait():
+				jsx('<Grid id="importedReturnDebit" data=${state.dataTable}
+				${...props} dataState = ${dataDisplay["rDebitList"]} 
+				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
+				'));	
+
+			/*case 'importClientList':
 				//trace(initialState);
 				trace(state.actualState);
 				/*var fields:Map<String,FormField> = [

@@ -78,16 +78,15 @@ class Imports extends ReactComponentOf<DataFormProps,FormState>
 		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
 		//formFields = ReturnDebitModel.formFields(props.match.params.action);
 		_trace = true;
-		if(_trace)
-		trace('...' + Reflect.fields(props));
+		//if(_trace) trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			dataTable:[],loading:false,importData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>()
 		},this);
 		if(props.match.params.section==null)
 		{
 				//SET DEFAULT SECTION
-			if(_trace) trace('reme');
 			var baseUrl:String = props.match.path.split(':section')[0];			
+			if(_trace) trace('reme2${baseUrl}Files/');
 			props.history.push('${baseUrl}Files/');
 			//props.history.push('${baseUrl}List/get${props.dataStore.contactData.iterator().hasNext()?'/'+props.dataStore.contactData.keys().keysList():''}');
 		}		

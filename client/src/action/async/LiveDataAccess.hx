@@ -194,6 +194,8 @@ class LiveDataAccess
 						sData.set(k,v);
 					sData;
 				case One:
+					if(sData==null)
+						sData = new StringMap();
 					sData.set(id,data.get(id));
 					sData;
 				case Unselect:

@@ -85,7 +85,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		state = initialState = {
 			//id:null,//2000328,
 			//edited_by: props.user.id,
-			mandator: props.user.mandator
+			//mandator: props.user.mandator
 		};	
 
 		//REDIRECT WITHOUT ID OR edit action

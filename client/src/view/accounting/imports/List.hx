@@ -41,7 +41,7 @@ import view.shared.FormBuilder;
 import view.shared.MItem;
 import view.shared.MenuProps;
 import view.table.Table.DataState;
-import view.table.Table;
+import view.grid.Grid;
 import view.shared.io.BaseForm;
 import view.shared.io.DataAccess;
 import view.shared.io.DataFormProps;
@@ -52,68 +52,15 @@ using Lambda;
  * ...
  * @author axel@cunity.me
  */
+
 @:connect
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
 
 	static var _instance:List;
 
-	public static var menuItems:Array<MItem> = [		
-		{
-			label:'Auswählen',//action:'loadLocal',
-			formField:{				
-				name:'returnDebitFile',
-				//name:'uploadForm',
-				//submit:'Importieren',
-				type:FormInputElement.File,
-				handleChange: function(evt:Event) {
-					//trace(Reflect.fields(evt));
-					var finput = cast Browser.document.getElementById('returnDebitFile');
-					//trace(_instance);
-					trace(finput.files[0].name);
-					//trace(Reflect.fields(finput.files[0]));
-					var val = (finput.value == ''?'':finput.files[0].name);
-					trace(val);
-					_instance.setState({
-						data:['hint'=>'Zum Laden ausgewählt:${val}','files'=>finput.files]
-					});
-				}
-			},
-			handler: function(_) {//_instance.loadLocal();}/*
-				var finput = cast Browser.document.getElementById('returnDebitFile');
-				//var files = php.Lib.hashOfAssociativeArray(finput.files);
-				
-				trace(finput.files);
-				trace(Reflect.fields(finput));
-				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
-				trace(finput.value);
-				var reader:FileReader = new FileReader();
-				reader.onload = function(e:Dynamic) {
-					var content = e.target.result;
-					trace(content);
-					var rows = Utils.dynArray2MapArray(Json.parse(content));
-					trace(rows[0]);
-					//### filter old system
-					var allCount:Int = rows.length;
-					rows = rows.filter(function(el:Map<String,Dynamic>)return el.get('ba_id').indexOf('ba')==0);
-					trace(rows[0]);
-					App.store.dispatch(Status(Update( 
-						{	className:'',
-							text:('$allCount RüLa\'s insgesamt - ${rows.length} importiert')
-						}
-					)));
-					_instance.setState({'action':'listReturnDebit','dataTable':rows});
-				}
-				reader.readAsText(_instance.state.data.get('files').item(0));
-				//_instance.state.data.get('files').item(0)));
-				//_instance.setState({dataTable:rows});
-				//trace(finput.files.get('returnDebitFile'));
-			}
-		},
-		{
-			label:'Hochladen',action:'processReturnDebitStatements'
-		}
-	];	
+	public static var menuItems:Array<MItem> = [];
+		
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
 	var formApi:FormApi;
@@ -129,32 +76,29 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		_instance = this;
-		dataDisplay = ReturnDebitModel.dataDisplay;
+		dataDisplay = ReturnDebitModel.dataGridDisplay;
 		
 		trace('...' + Reflect.fields(props));
 		//baseForm =new BaseForm(this);
 		
 		state =  App.initEState({
+			action:(props.match.params.action==null?'listReturnDebit':props.match.params.action),
+			loading:true,
 			sideMenu:FormApi.initSideMenu2( this,			
 				[
 					{
-						dataClassPath:'admin.ImportCamt',
-						label:"Upload",
-						section: 'Files',
-						items: Files.menuItems
-					},
-					{
-						//dataClassPath:'admin.ImportCamt',Rücklastschriften
-						label:"Verlauf",
+						dataClassPath:'admin.ImportCamt',//Rücklastschriften
+						label:"Liste",
 						section: 'List',
 						items: List.menuItems
 					},
-					/*{
+					{
 						dataClassPath:'admin.ImportCamt',
-						label:"Upload",
+						label:"Dateien",
 						section: 'Files',
 						items: Files.menuItems
-					},*/
+					}
+
 				],
 				{	
 					section: props.match.params.section==null? 'List':props.match.params.section, 
@@ -162,7 +106,14 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				}
 			)
 		},this);
-
+		if(props.match.params.action==null)
+		{
+			//var sData = App.store.getState().dataStore.contactData;			
+			var baseUrl:String = props.match.path.split(':section')[0];
+			trace('redirecting to ${baseUrl}List/listReturnDebit');
+			props.history.push('${baseUrl}List/listReturnDebit');
+			listReturnDebit(null);
+		}
 		trace(props.match.path);
 	}
 
@@ -180,11 +131,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
 			},
-			select:function(id:Int = -1,data:StringMap<Map<String,Dynamic>>,match:react.router.RouterMatch, ?selectType:SelectType)
+			select:function(id:Int = -1,data:StringMap<Map<String,Dynamic>>,me:List, ?selectType:SelectType)
 			{
-				if(true) trace('select:$id selectType:${selectType}');
 				trace(data);
-				dispatch(LiveDataAccess.sSelect({id:id,data:data,match:match,selectType: selectType}));
+				if(true) trace('select:$id selectType:${selectType}');
+				dispatch(LiveDataAccess.sSelect({id:id,data:data,match:me.props.match,selectType: selectType}));
 			},
 			update: function(param:DBAccessProps) return dispatch(CRUD.update(param)),
 
@@ -198,6 +149,43 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		//state.formApi.doAction('get');
 		if(props.match.params.action=='listReturnDebit')
 			listReturnDebit();
+	}
+
+	public function listReturnDebit(?ev:Dynamic):Void
+	{
+		trace('hi $ev');
+		var offset:Int = 0;
+		if(ev != null && ev.page!=null)
+		{
+			offset = Std.int(props.limit * ev.page);
+		}
+		trace(props.match.params);
+		var p:Promise<DbData> = props.load(
+			{
+				classPath:'data.DebitReturnStatements',
+				action:'get',
+				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
+				limit:props.limit,
+				offset:offset>0?offset:0,
+				table:'debit_return_statements',
+				resolveMessage:{					
+					success:'Lastschriftliste wurde geladen',
+					failure:'Lastschriftliste konnte nicht geladen werden'
+				},
+				dbUser:props.userState.dbUser,
+				devIP: App.devIP
+			}
+		);
+		p.then(function(data:DbData){
+			trace(data.dataRows.length); 
+			//setState({loading:false, dataTable:data.dataRows});
+			setState({
+				loading:false,
+				dataTable:data.dataRows,
+				dataCount:Std.parseInt(data.dataInfo['count']),
+				pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
+			});			
+		});
 	}
 
 	public function delete(ev:ReactEvent):Void
@@ -228,7 +216,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		);
 		p.then(function(data:DbData)
 		{			
-			//trace(Unserializer.run(data.dataInfo['data'])); 
+			trace(Unserializer.run(data.dataInfo['data'])); 
 			trace(Utils.getAllByKey(Unserializer.run(data.dataInfo['data']),'ba_id')); 
 			//setState({loading:false, dataTable:data.dataRows});
 		});
@@ -244,10 +232,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(finput.value);				
 	}
 
-	function listReturnDebit() {
-		trace('...');
-	}
-
 	override function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
@@ -260,10 +244,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		</>'));		
 	}
 	
-	function renderPager(){
-
-	}
-	
 	function renderResults():ReactFragment
 	{
 		trace(props.match.params.action + ':' + Std.string(state.dataTable != null));
@@ -273,11 +253,16 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		return switch(state.action)
 		{
 			case 'listReturnDebit':				
+				jsx('				
+				<Grid id="contactList" data=${state.dataTable}
+				${...props} dataState = ${dataDisplay["rDebitList"]} 
+				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
+				');		/*
 				jsx('
 					<Table id="importedReturnDebit" data=${state.dataTable} selectAble=${false}
 					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${{function()return BaseForm.renderPager(this);}} 
 					className="is-striped is-hoverable"  parentComponent=${this} fullWidth=${true}/>
-				');					
+				');					*/
 			default:
 				state.data==null?null:
 				jsx('<div className="hint">${state.data.get('hint')}</div>');				

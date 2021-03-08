@@ -238,9 +238,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				jsx('				
 				<Grid id="contactList" data=${state.dataTable}
 				${...props} dataState = ${dataDisplay["contactList"]} 
-				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
-						
-				');			/*				
+				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
+				');			
+				/*				
 				jsx('
 					<form className="tabComponentForm" >
 						<$Table id="contactsList" data=${state.dataTable}  parentComponent=${this}

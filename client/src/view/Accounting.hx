@@ -105,7 +105,7 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 						search:'',
 						state:props.location.state.extend({contact:props.location.hash})
 					}} ${...props} >Buchungen</$TabLink>
-					<$TabLink to="/Accounting/Imports" ${...props} >Imports</$TabLink>
+					<$TabLink to="/Accounting/Imports" ${...props} >Lastschriften</$TabLink>
 				</$Tabs>
 			</div>		
             <div className="tabContent2">

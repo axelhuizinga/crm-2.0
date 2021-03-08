@@ -79,7 +79,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	static function mapStateToProps(aState:AppState):UIProps
 	{		
 		//trace(aState.user.id);
-		trace(Reflect.fields(aState));
+		//trace(Reflect.fields(aState));
 		return {
 			userState:aState.userState
 		};
@@ -139,8 +139,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 
 	override function render()
 	{
-		if(props.userState.dbUser !=null)
-		trace(props.userState.dbUser.id);
+		//if(props.userState.dbUser !=null)trace(props.userState.dbUser.id);
 		if (state.hasError || props.userState.dbUser == null) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
@@ -156,7 +155,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 			');		
 		}
 		
-		trace('${props.userState.dbUser.jwt} ${props.userState.dbUser.online}');
+		//trace('${props.userState.dbUser.jwt} ${props.userState.dbUser.online}');
 		if(props.userState.dbUser.jwt == null || props.userState.dbUser.jwt == '' || !props.userState.dbUser.online || props.userState.dbUser.change_pass_required)//
 		{
 			// WE NEED TO LOGIN FIRST
@@ -166,8 +165,8 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		}
 		else
 		{			
-			trace('render Router ' + browserHistory.location.pathname);
-			trace('render Router ' + App.store.getState().locationStore.history.location.pathname);
+			//trace('render Router ' + browserHistory.location.pathname);
+			//trace('render Router ' + App.store.getState().locationStore.history.location.pathname);
 			//trace(App.store.getState());
 			//trace(App.store.getState().locationStore.history == browserHistory);//TRUE
 			if(browserHistory.location.pathname!=App.store.getState().locationStore.redirectAfterLogin)

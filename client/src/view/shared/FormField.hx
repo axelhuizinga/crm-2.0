@@ -29,6 +29,8 @@ typedef BaseField =
 typedef FormField = {
 	>BaseField,
 	?handleChange:Function,
+	?id:Int,
+	?jwt:String,
 	?validate:String->Bool
 
 }

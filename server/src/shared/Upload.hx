@@ -1,5 +1,9 @@
 package shared;
 
+import db.DBAccessProps;
+import haxe.Utf8;
+import db.DbQuery;
+import model.data.DebitReturnStatements;
 import php.Lib;
 import haxe.DynamicAccess;
 import comments.CommentString.*;
@@ -29,8 +33,20 @@ class Upload {
 				trace('https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file=$name');
 				var result:String = Global.file_get_contents('https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file=$name&debug=${(S.params.get('debug')==true?true:false)}');
 				trace(result);
-				dbStore(SuperGlobal._POST['action'], result);
+				var ids:Array<Int> = dbStore(SuperGlobal._POST['action'], result);
 				//Global.unlink('/var/www/${SuperGlobal._SERVER["HTTP_HOST"]}/files/*');
+				var dbAccProps:DBAccessProps = {
+					action:'getStati', 
+					classPath:'data.DebitReturnStatements',
+					dbUser:S.dbQuery.dbUser,
+					table:'deals',
+					filter:{contact:'IN|${ids.join(',')}'}
+				};
+				//var sQuery:DbQuery = new DbQuery(dbAccProps);
+				//Model.dispatch(sQuery);
+				var ipost = Lib.hashOfAssociativeArray(SuperGlobal._POST);
+				var dRS:DebitReturnStatements = new DebitReturnStatements(ipost);
+				trace(dRS.getStati(ids,ipost.get('mandator')));
 				S.send(result,true);
 			}
 			S.send(Json.stringify({error:'No File uploaded'}),true);
@@ -39,31 +55,30 @@ class Upload {
 		S.send(Json.stringify({got:SuperGlobal._FILES}),true);
 	}
 
-	static function dbStore(action:String, data:Dynamic):String {
+	static function dbStore(action:String, data:Dynamic):Array<Int> {
+		var ids:Array<Int> = new Array();
 		switch(action){
 			case 'returnDebitFile':
 				var dRows:Array<Dynamic> = Json.parse(data).rlData;
 				var sql =  comment(unindent, format) /*
 				INSERT INTO debit_return_statements (id,sepa_code,iban,ba_id,amount,mandator) 
-				VALUES(:id,:sepaCode,:iban,:baID,:amount,:mandator)
+				VALUES(:id,:sepa_code,:iban,:ba_id,:amount,:mandator)
 				ON CONFLICT DO NOTHING
 				*/;
 				trace(sql);
 				/// TODO: UNIFY FIELDS + COLUMN NAMES
-				var dKeys:Array<String> = 'id,sepaCode,iban,baID,amount'.split(',');
+				var dKeys:Array<String> = 'id,sepa_code,iban,ba_id,amount'.split(',');
 				var bindVals:Array<String> = new Array();
 				for(r in dRows)
 				{
-					if(r.sepaCode==null || r.sepaCode==''){
+					if(r.sepa_code==null || r.sepa_code==''){
 						S.send(Json.stringify(['error'=>Std.string(r)]),true);
-						return 'ooops';
 					}
 					var stmt:PDOStatement = S.dbh.prepare(sql);
 					if (untyped stmt == false)
 					{
 						trace(S.dbh.errorInfo());
 						S.send(Json.stringify(['error'=>S.dbh.errorInfo()]),true);
-						return 'ooops';
 					}	
 					for(k in dKeys){
 						stmt.bindValue(':$k', Reflect.field(r, k));
@@ -71,14 +86,15 @@ class Upload {
 					stmt.bindValue(':mandator', SuperGlobal._POST['mandator']);
 					if(!stmt.execute()){
 						S.send(Json.stringify(['error'=>S.dbh.errorInfo()]),true);
-						return 'ooops';
-					}										
+					}						
+					ids.push(r.id);
 				}
-				return 'OK';
-			default:
-				return 'Nothing2do for $action';
+				
+			//default:
+			//	return [0,'Nothing2do for $action'];
 				
 		}
+		return ids;
 	}
 }
 

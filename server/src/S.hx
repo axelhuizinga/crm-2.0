@@ -146,7 +146,7 @@ class S
 			action = params.get('action');		
 			trace(params);
 			var dbUser:DbUser = new DbUser(				
-				{jwt:'jwt',id:100,online:true, password:'password', user_name:'sysadmin'});
+				{jwt:'jwt',id:100,online:true, password:Syntax.code("$sysadmin"), user_name:'sysadmin'});
 				//{jwt:params['jwt'],id:params['id'],online:true, password:params['password'], user_name:params['user_name']});
 			var dbAccProps:DBAccessProps = {action:action, data:{REMOTE_ADDR:params['REMOTE_ADDR']}, dbUser: dbUser};
 			for(k=>v in params.keyValueIterator())
@@ -154,15 +154,21 @@ class S
 				Reflect.setField(dbAccProps, k, v);
 			}
 			dbQuery = new DbQuery(dbAccProps);
-			//trace(dbQuery);
+			trace(dbQuery.dbUser);
 		}
 		else{
-			if(Lib.toHaxeArray(SuperGlobal._FILES).length>0)
-			{				
+			dbQuery = Model.binary();
+			//if(dbQuery!=null)trace(dbQuery.dbUser);
+			var ipost = Lib.hashOfAssociativeArray(SuperGlobal._POST);
+			trace(ipost.get('id') +':'+ipost.get('jwt'));
+			trace(ipost.keys());
+			if(Lib.toHaxeArray(SuperGlobal._FILES).length>0&&Global.isset(SuperGlobal._POST['id'])&&
+				User.verify(SuperGlobal._POST['jwt'], Std.parseInt(SuperGlobal._POST['id'])))
+			{
 				dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
 				Syntax.array([PDO.ATTR_PERSISTENT,true]));
 			
-				//trace(dbh);
+				trace(dbh);
 				params = Lib.hashOfAssociativeArray(SuperGlobal._POST);
 				action = params.get('action');		
 				if(params.get('extDB'))
@@ -182,13 +188,14 @@ class S
 				devIP = params.get('devIP');		
 				Upload.go();
 			}
-			//trace(Web.getPostData());
-			dbQuery = Model.binary();			
+			//trace(dbQuery.dbUser);
+						
 			//(dbQuery);
 			if(dbQuery==null)
 				send("dev end");
 			//Model.binary(params.get('dbData'));
-			params = dbQuery.dbParams;
+			if(params==null)
+				params = dbQuery.dbParams;
 			params.set('mandator',dbQuery.dbUser.mandator);
 			user_id = dbQuery.dbUser.id;
 			trace(params);
@@ -233,12 +240,21 @@ class S
 		}
 
 		var jwt:String = (dbQuery.dbUser!=null?dbQuery.dbUser.jwt:'');
-		//var id:String = params.get('id');
+		var id:Int = params.get('id');
+		if(dbQuery.dbUser!=null){
+			jwt = dbQuery.dbUser.jwt;
+			id = dbQuery.dbUser.id;
+		}
+		else {
+			jwt = params.get('jwt');
+			id = params.get('id');
+		}
+	
 		if(jwt != null)
 		trace('jwt.length:' +jwt.length);
 		if (jwt.length > 0)
 		{
-			if(Lib.isCli() || User.verify(dbQuery))
+			if(User.verify(jwt, id))
 			{
 				if(action=='returnDebitFile')
 				{

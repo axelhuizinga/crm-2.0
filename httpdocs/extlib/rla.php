@@ -15,7 +15,7 @@ $loader = new Autoloader();
 $loader->setNamespacePrefix('')
        ->setBaseDir(__DIR__.DIRECTORY_SEPARATOR)
        ->register();
-
+$appLog = "/var/www/{$_SERVER['HTTP_HOST']}/log/app.log";
 #edump("FILES:".print_r($_FILES,1));
 edump("FILE:".print_r($_GET,1));
 #edump(strlen(file_get_contents($_GET['file'])));
@@ -55,17 +55,18 @@ foreach ($statements as $statement) {
 			$account = $traDet->getRelatedParties()[1]->getAccount();
 			#edump($traDet->getRelatedParties()[1]->getAccount()->getIdentification());
 			edump($rInfo->getCode().'::'.sprintf("%.2f", $money->getAmount()/100).'::'.$money->isNegative());			
-			edump('getReference:'.$traDet->getReference()->getMandateId().' getAccountServicerReference::'.$entry-> getAccountServicerReference().' getAccount::'.get_class($account).'<');
-			edump('getRemittanceInformation:'.$traDet->getRemittanceInformation()->getMessage().' getRelatedPartyAccount::'.$account->getIdentification().'  getEndToEndId::'.$traDet->getReference()->getEndToEndId());
+			#edump('getReference:'.$traDet->getReference()->getMandateId().' getAccountServicerReference::'.$entry-> getAccountServicerReference().' getAccount::'.get_class($account).'<');
+			#edump('getRemittanceInformation:'.$traDet->getRemittanceInformation()->getMessage().' getRelatedPartyAccount::'.$account->getIdentification().'  getEndToEndId::'.$traDet->getReference()->getEndToEndId());
 			$rlData = array(
 				'id'=>intval($traDet->getReference()->getMandateId()),
-				'baID'=>$traDet->getReference()->getEndToEndId(),
+				'ba_id'=>$traDet->getReference()->getEndToEndId(),
 				'iban'=>$account->getIdentification(),
-				'sepaCode'=>$rInfo->getCode(),
+				'sepa_code'=>$rInfo->getCode(),
 				'dealId'=>$traDet->getReference()->getMandateId(),
 				'amount'=>sprintf("%.2f", $money->getAmount()/100)
 			);
 			array_push($rla,$rlData);
+			#edump($rlData);
 		}
 		else{
 			### normal transaction						

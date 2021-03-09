@@ -1,6 +1,7 @@
 package view;
 
 
+import me.cunity.debug.Out;
 import react.ReactUtil;
 import state.UserState;
 import react.ReactComponent.ReactFragment;
@@ -104,7 +105,12 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	{
 		var display_name:String = 'Gast';
 		var userIcon:String = 'fa fa-user-o';
-		//trace(props.path);
+		if(!Std.isOfType(props.text,String))
+		{
+			Out.dumpObject(props.text);
+			return null;
+		}
+		//trace(props);
 		if (props.userState.dbUser != null)
 		{
 		 display_name = props.userState.dbUser.first_name != null &&  props.userState.dbUser.first_name !='' ?

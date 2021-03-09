@@ -411,51 +411,20 @@ X-Mailer: HaxeMail
 		return '';
 	}
 	
-	public static function verify(dbQuery:DbQuery):Bool
+	//public static function verify(dbQuery:DbQuery):Bool
+	public static function verify(jwt:String, id:Int):Bool	
 	{
-		var jwt:String = dbQuery.dbUser.jwt;
-		var id:Int = dbQuery.dbUser.id;	
+
 		var now:Float = Date.now().getTime();	
 		var dbData:DbData = new DbData();
-		//trace('$now:$jwt');
+		trace('$now:$id $jwt ');
 		//trace(dbQuery);
 		try{
 			var userInfo:UserInfo = JWT.extract(jwt);			
 			//S.safeLog(userInfo);		
-			trace(userInfo);		
-			/*if(userInfo.id==null && userInfo.id ==dbQuery.dbUser.id && (userInfo.validUntil - Date.now().getTime()) > 0)
-			{
-				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
-				trace(jRes);
-				return switch(jRes)				
-				{
-					case Invalid(payload):
-						trace(payload);
-						// JWT INVALID
-						//saveRequest(id, dbQuery);
-						dbData.dataErrors = ['jwtError'=>'Invalid payload'];
-						S.sendInfo(dbData, ['loginTask'=>Login]);
-						false;
-					case Valid(payload):
-						// JWT VALID AND NOT OLDER THAN...
-						if(dbQuery.dbUser.mandator == null)
-							dbQuery.dbUser.mandator = userInfo.mandator;
-						//params.set('mandator',userInfo.mandator);
-						//saveRequest(id, dbQuery);	
-						//if(S.action=='verify')
-							S.sendInfo(dbData, ['verify'=>'OK']);
-						true;
-					default:
-						dbData.dataErrors = ['jwtError'=>'${DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")}<${DateTools.format(Date.fromTime(now),"%d.%m.%y %H:%M:%S")}'];
-						S.sendInfo(dbData, ['loginTask'=>Login]);
-						false;
-				}
-
-			}*/
-			//trace('$id==${userInfo.id}::${userInfo.ip}::${Web.getClientIP()}:' + Date.fromTime(userInfo.validUntil) + ':${userInfo.validUntil} - $now:' + cast( userInfo.validUntil - now) + (userInfo.validUntil - Date.now().getTime()) > 0?'Y':'N');
-			
-			trace('$id:'+(id == userInfo.id) + ' ${userInfo.validUntil} - ${Date.now().getTime()} > 0)' + (userInfo.validUntil - Date.now().getTime() > 0));
-			//trace(':'+(userInfo.ip == Web.getClientIP()));
+			trace(userInfo);			
+			trace('>$id:${userInfo.id}<'+(id == userInfo.id) + ' ${userInfo.validUntil} - ${Date.now().getTime()} > 0)' + (userInfo.validUntil - Date.now().getTime() > 0));
+			trace(Type.typeof(userInfo.id) +' == ' + SuperGlobal._SERVER['REMOTE_ADDR']);
 			//trace(':'+((userInfo.validUntil - Date.now().getTime()) > 0));
 			if (Lib.isCli() || id == userInfo.id && userInfo.ip == SuperGlobal._SERVER['REMOTE_ADDR'] && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{

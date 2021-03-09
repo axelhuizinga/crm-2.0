@@ -710,7 +710,7 @@ class Model
 			{
 				fBuf.add('${quoteIdent(keys[0])}.${quoteIdent(keys[1])}');
 			}			
-			else //no alias
+			else //field name only //?(no alias)
 				fBuf.add(quoteIdent(key));
 			switch(how.toUpperCase())
 			{

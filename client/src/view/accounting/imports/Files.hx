@@ -58,7 +58,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 
 	public static var menuItems:Array<MItem> = [		
 		{label:'Rücklastschriften',action:'importReturnDebit',
-			formField:{
+			formField:{				
 				name:'returnDebitFile',
 				submit:'Importieren',
 				type:FormInputElement.Upload,
@@ -83,6 +83,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			}/**/
 		}
 	];	
+
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
 	var formApi:FormApi;
@@ -106,6 +107,9 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		//baseForm =new BaseForm(this);
 		
 		menuItems[0].handler = importReturnDebit;
+		menuItems[0].formField.id = App._app.state.userState.dbUser.id;
+		menuItems[0].formField.jwt = App._app.state.userState.dbUser.jwt;
+		trace(menuItems[0].formField);
 		state =  App.initEState({
 			data:['hint'=>'Datei zum Hochladen auswählen'],
 			action:(props.match.params.action==null?'importReturnDebit':props.match.params.action),
@@ -180,7 +184,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			trace(uFile);
 			var fd:FormData = new FormData();			
 			fd.append('devIP',App.devIP);
+			fd.append('id',Std.string(App._app.state.userState.dbUser.id));
+			fd.append('jwt',Std.string(App._app.state.userState.dbUser.jwt));
 			fd.append('mandator',Std.string(App.mandator));
+
 			fd.append('action','returnDebitFile');
 			fd.append('returnDebitFile',uFile,finput.value);
 			var xhr = new js.html.XMLHttpRequest();

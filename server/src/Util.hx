@@ -1,4 +1,5 @@
 package;
+import php.Lib;
 import haxe.exceptions.PosException;
 import me.cunity.debug.Out;
 import me.cunity.php.Debug;
@@ -329,6 +330,9 @@ class Util
 	}
 
 	public static function safeLog(log:String, ?pos:PosInfos) {
-		Global.file_put_contents(Debug.logFile,log, 8);
+		if(Lib.isCli())
+			trace(pos.fileName+':'+pos.lineNumber+'::'+log);
+		else 
+			Global.file_put_contents(Debug.logFile,log, 8);
 	}
 }

@@ -168,6 +168,8 @@ class User extends Model
 	static function userIsAuthorized(user:DbUser,?login:Bool):UserAuth
 	{
 		var dbData:DbData = new DbData();
+		if (Lib.isCli())
+			return UserAuth.AuthOK(dbData);
 		var sql:String = 'SELECT user_name FROM ${S.dbSchema}.users WHERE user_name=:user_name AND active=TRUE';
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		if( !Model.paramExecute(stmt, Lib.associativeArrayOfObject({':user_name': '${user.user_name}'})))

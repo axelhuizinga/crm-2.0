@@ -118,8 +118,7 @@ class S
 			m += '${k}=>${v}' + Const.PHP_EOL;
 		}
 		Syntax.code("error_log({0})",m);*/
-		//Syntax.code("error_log({0} {1} {2})",_server.length, Const.PHP_EOL, Global.implode(Const.PHP_EOL, Lib.toPhpArray(_server)));
-		
+		//Syntax.code("error_log({0} {1} {2})",_server.length, Const.PHP_EOL, Global.implode(Const.PHP_EOL, Lib.toPhpArray(_server)));		
 		init();
 		//trace(conf.get('ini'));
 		//var ini:NativeArray = S.conf.get('ini');
@@ -138,16 +137,20 @@ class S
 		{trace(Syntax.code("$_SERVER['VERIFIED']"));}
 		//var pd:Dynamic = Web.getPostData();
 		trace(Lib.isCli()?'cli':'web');
-		//devIP = SuperGlobal._POST['devIP'];
+		//devIP = SuperGlobal._POST['devIP'];Syntax.code("$sysadmin")
 		response = {content:'',error:''};
 		if(Lib.isCli()){
-			safeLog(Sys.args());
+			trace(Sys.args());
 			params = Cli.parse();
 			action = params.get('action');		
 			trace(params);
-			var dbUser:DbUser = new DbUser(				
-				{jwt:'jwt',id:100,online:true, password:Syntax.code("$sysadmin"), user_name:'sysadmin'});
+			//var dbUser:DbUser = new DbUser(				
+				var dbUser = untyped  {dummy:1};			
+				//var dbUser:DbUser = null;			
+			//	{jwt:'jwt',id:100,online:true, password:'sysadmin', user_name:'sysadmin'});
 				//{jwt:params['jwt'],id:params['id'],online:true, password:params['password'], user_name:params['user_name']});
+			trace('dbUser');
+			//Sys.exit(0);
 			var dbAccProps:DBAccessProps = {action:action, data:{REMOTE_ADDR:params['REMOTE_ADDR']}, dbUser: dbUser};
 			for(k=>v in params.keyValueIterator())
 			{
@@ -707,7 +710,7 @@ class S
 		var success:Bool = Model.paramExecute(stmt, 
 			Lib.associativeArrayOfObject(
 				{':action':params.get('classPath') + '.' + params.get('action'),
-				':user': req.dbUser.id, ':request': Json.stringify(req, function(key:Dynamic, value:Dynamic) {
+				':user': (Lib.isCli()?'100':req.dbUser.id), ':request': Json.stringify(req, function(key:Dynamic, value:Dynamic) {
 					return switch(key){
 						case 'password'|'new_pass':
 							'XXX';
@@ -732,15 +735,17 @@ class S
 			//Cli.process(Sys.args(), new CliService()).handle(Cli.exit);
 			trace('helloworld :)');
 
-			Lib.print(Syntax.code("$appLog")  + "\r\n");//();
+			//Lib.print(Syntax.code("$appLog")  + "\r\n");//();
 			trace(Sys.args());
 		}		
-
+		else{
+			Debug.logFile = Syntax.code("$appLog");
+			haxe.Log.trace = Debug._trace;
+			Out.skipFields = ['admin','keyPhrase','pass','password'];			
+		}
 		//Syntax.code("file_put_contents($appLog,'.', FILE_APPEND)");
 		//Syntax.code('require_once({0})', 'inc/PhpRbac/Rbac.php');
-		Debug.logFile = Syntax.code("$appLog");
-		haxe.Log.trace = Debug._trace;
-		Out.skipFields = ['admin','keyPhrase','pass','password'];
+
 		//edump(Debug.logFile);
 		
 		db = Syntax.code("$DB");

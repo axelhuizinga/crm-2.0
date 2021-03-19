@@ -1,9 +1,7 @@
 package action.async;
 
 import db.LoginTask;
-import thx.fp.TreeBag;
 import db.DBAccessProps;
-//import db.DBAccessProps;
 import react.ReactUtil;
 import js.lib.Promise;
 import haxe.ds.IntMap;

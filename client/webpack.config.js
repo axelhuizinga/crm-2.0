@@ -48,7 +48,6 @@ module.exports = () =>{
 			filename: 'js/[name].js',
 			//publicPath: dist,
 			publicPath: '/'
-		//publicPath: 'https://192.168.178.20:9000/'
 		},
 		// Module resolution options (alias, default paths,...)
 		resolve: {

@@ -19,5 +19,6 @@
 				"name": "unnamed"
 			}
 		],
+		"npm.packageManager": "yarn",
 	}
 }

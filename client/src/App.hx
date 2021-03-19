@@ -73,7 +73,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	public static var config:ConfigState = js.Lib.require('config.js').config;
 	public static var devIP = (untyped __devIP__ == 'X'?'':__devIP__);
 	public static var devUser = (untyped __user_name__ == 'X' ? '' : __user_name__);
-	public static var devPassword = (untyped __password__ == 'X' ? '' : __password__);
+	public static var devPassword = '';//(untyped __password__ == 'X' ? '' : __password__);
 	public static var flatpickr:Function = Webpack.require('flatpickr');
 	public static var German = js.Lib.require('flatpickr/dist/l10n/de.js');
 	static var flat = js.Lib.require('flatpickr/dist/flatpickr.min.css');

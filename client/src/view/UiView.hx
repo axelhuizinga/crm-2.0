@@ -134,7 +134,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 				); */
 			}
 			return
-			#if debug 
+			#if debug
 				jsx('
 			<$Router history={browserHistory} >
 			<>
@@ -169,10 +169,10 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 				</div>
 				<div className="tabComponent">
 					<$Route path="/"  render=${renderRedirect} exact={true}/>									
-					<$Route path="/DashBoard*" component=${Bundle.load(DashBoard)}/>
-					<$Route path="/Data" component=${Bundle.load(Data)}/>
-					<$Route path="/Accounting" component=${Bundle.load(Accounting)}/>					
-					<$Route path="/Reports" component=${Bundle.load(Reports)}/>
+					<$Route path="/DashBoard*" component=${cast Bundle.load(DashBoard)}/>
+					<$Route path="/Data" component=${cast Bundle.load(Data)}/>
+					<$Route path="/Accounting" component=${cast Bundle.load(Accounting)}/>					
+					<$Route path="/Reports" component=${cast Bundle.load(Reports)}/>
 				</div>				
 			</>
 			</$Router>

@@ -62,9 +62,8 @@ typedef AppProps =
 
 class App  extends ReactComponentOf<AppProps, AppState>
 {
-	//static var fa = require('./node_modules/font-awesome/css/font-awesome.min.css');
 	public static var _app:App;
-  	static var STYLES = Webpack.require('App.scss');
+  	//static var STYLES = js.Lib.require('App.scss');
  
 	public static var browserHistory:History;
 	
@@ -74,14 +73,14 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	public static var devIP = (untyped __devIP__ == 'X'?'':__devIP__);
 	public static var devUser = (untyped __user_name__ == 'X' ? '' : __user_name__);
 	public static var devPassword = '';//(untyped __password__ == 'X' ? '' : __password__);
-	public static var flatpickr:Function = Webpack.require('flatpickr');
-	public static var German = js.Lib.require('flatpickr/dist/l10n/de.js');
-	static var flat = js.Lib.require('flatpickr/dist/flatpickr.min.css');
+	public static var flatpickr:Function = js.Lib.require('flatpickr');
+	public static var German = js.Lib.require('js/de.js');
+	//static var flat = js.Lib.require('flatpickr/dist/flatpickr.min.css');
 	//static var rvirt = js.Lib.require('react-virtualized/styles.css');	
 	//static var flat = js.Lib.require('flatpickr/dist/themes/light.css');	
-	public static var sprintf:Function = Webpack.require('sprintf-js').sprintf;
-	//public static var useBrowserContextCommunication:Dynamic = Webpack.require('react-window-communication-hook');
-	//public static var useState:Dynamic = Webpack.require('react').useState;
+	public static var sprintf:Function = js.Lib.require('sprintf-js').sprintf;
+	//public static var useBrowserContextCommunication:Dynamic = js.Lib.require('react-window-communication-hook');
+	//public static var useState:Dynamic = js.Lib.require('react').useState;
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
 	public static var onResizeComponents:List<Dynamic> = new List();
 	public static var defaultUrl = '/Data/Contacts/List/get';

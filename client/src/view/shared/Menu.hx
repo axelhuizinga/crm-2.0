@@ -106,10 +106,6 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		if (props.menuBlocks.empty())
 			return null;
 		var style:Dynamic = null;
-		style = {
-			minWidth:App.config.sidebarDims.minWidth,
-			maxWidth:App.config.sidebarDims.maxWidth
-		};
 		style = null;
 		//var className = ''; 'panel-block';
 		if(props.sameWidth && state.sameWidth>0) {

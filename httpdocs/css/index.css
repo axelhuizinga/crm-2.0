@@ -1,0 +1,83 @@
+* {
+	padding:0;
+	margin:0;
+	font-family: Arial;
+}
+
+nav {
+	padding: 10px;
+	border-bottom: solid 1px #aaa;
+}
+
+.about-content {
+	padding: 10px;
+}
+.about-content p {
+	padding: 8px 0;
+}
+.about-content button {
+	font-size: 18px;
+	padding: 8px;
+}
+
+
+.todoview {
+	padding:10px;
+	padding-left: 35px;
+	list-style: none;
+	background: url('../img/none.png') no-repeat 10px center;
+}
+
+.done {
+	background: url('../img/done.png') no-repeat 10px center;
+}
+
+.statsview {
+	background: #eee;
+	padding: 10px;
+	margin: 0px;
+	overflow: hidden;
+}
+
+.statsview label {
+	line-height: 30px;
+}
+
+.statsview a {
+	float: right;
+	padding: 4px;border: solid #AAA 2px;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.filterview {
+	padding: 8px;
+}
+
+.filterview li {
+	display: inline-block;
+	padding: 0 8px;
+	border-left: solid 1px #999;
+	cursor: pointer;
+}
+
+.filterview li:first-child {
+	border: none;
+}
+.filterview li.selected {
+	font-weight: bold;
+}
+
+footer {
+	border-top: 1px solid #aaa;
+	background: #eee;
+	padding: 16px;
+	color: #aaa;
+	line-height: 32px;
+}
+.footer-logo {
+	float: left;
+	width: 32px;
+	height: 32px;
+	margin-right: 10px;
+}

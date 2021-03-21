@@ -7,7 +7,7 @@ import action.DataAction;
 import state.AppState;
 import haxe.Constraints.Function;
 import haxe.ds.IntMap;
-import react.data.ReactDataGrid;
+//import react.data.ReactDataGrid;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;

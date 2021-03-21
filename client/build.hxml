@@ -1,4 +1,4 @@
--lib haxe-loader
+-lib modular
 -lib history
 -lib hxbit
 -lib react-next
@@ -12,7 +12,7 @@
 -lib js-object
 -lib json2object
 -lib tink_core
--lib thx.format
+#-lib thx.format
 
 -cp /opt/src/lib
 -cp ../lib
@@ -20,8 +20,8 @@
 -cp src
 
 -js ../httpdocs/js/app.js
--dce std
---debug
+-dce no
+-D react_hot
 #--no-traces
 #-D eval-stack
 -main Go

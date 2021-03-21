@@ -34,14 +34,14 @@ class Go
 	{
 
 		var app = ReactDOM.render(jsx('
-					<App/>
+			<App/>
 		'), root);	
 		//trace(app);
 		trace('GO');
 		
 		#if (debug && react_hot)
 		trace('calling ReactHMR.autoRefresh');
-		ReactHMR.autoRefresh(app);
+		ReactHMR.autoRefresh(cast app);
 		#end
 	}
 }

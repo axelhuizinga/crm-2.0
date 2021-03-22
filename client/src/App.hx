@@ -1,3 +1,4 @@
+import haxe.Resource;
 import shared.DbData;
 import js.lib.Promise;
 import react.ReactUtil;
@@ -69,16 +70,16 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	
 	public static var store:Store<AppState>;
 
-	public static var config:ConfigState = js.Lib.require('config.js').config;
-	public static var devIP = (untyped __devIP__ == 'X'?'':__devIP__);
-	public static var devUser = (untyped __user_name__ == 'X' ? '' : __user_name__);
+	public static var config:ConfigState = Json.parse(Resource.getString('config'));
+	public static var devIP = (config.ip == null?'':config.ip);
+	public static var devUser = (config.user_name == null ? '' : config.user_name);
 	public static var devPassword = '';//(untyped __password__ == 'X' ? '' : __password__);
-	public static var flatpickr:Function = js.Lib.require('flatpickr');
-	public static var German = js.Lib.require('js/de.js');
+	public static var flatpickr:Function = untyped Browser.window['flatpickr'];
+	public static var German = untyped German; //js.Lib.require('js/de.js');
 	//static var flat = js.Lib.require('flatpickr/dist/flatpickr.min.css');
 	//static var rvirt = js.Lib.require('react-virtualized/styles.css');	
 	//static var flat = js.Lib.require('flatpickr/dist/themes/light.css');	
-	public static var sprintf:Function = js.Lib.require('sprintf-js').sprintf;
+	public static var sprintf:Function = untyped sprintf;// js.Lib.require('sprintf-js').sprintf;
 	//public static var useBrowserContextCommunication:Dynamic = js.Lib.require('react-window-communication-hook');
 	//public static var useState:Dynamic = js.Lib.require('react').useState;
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
@@ -166,6 +167,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	{
 		super(props);
 		//globalState = new Map();
+		config.api = 'https://' + config.dev_host + '/server.php';
 		untyped flatpickr.localize(German);
 		//ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
@@ -175,7 +177,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		trace(Reflect.fields(state));
 		//trace(config);
 		trace(devIP);
-		//trace(state);
+		trace('password:'+state.userState.dbUser.password + ':' + config.password);
 		tul = startHistoryListener(store, state.locationStore.history);
 		//store.subscribe(saveToLocalStorage);
 		//var uBCC:Dynamic = react.WinCom.useBrowserContextCommunication('appGlobal');

@@ -55,7 +55,7 @@ class UserStore implements IReducer<UserAction, UserState>
 		return switch(action)
 		{
 			case LoginChange(uState)|LoginRequired(uState):
-				trace('...');
+				trace('...'+uState.dbUser.password);
 				//Out.dumpObject(uState);
 				copy(state, uState);                             					
 			case LoginError(err):

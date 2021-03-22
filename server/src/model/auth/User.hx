@@ -180,6 +180,7 @@ class User extends Model
 		}
 		if(stmt.rowCount()>0)
 		{
+			trace(user);
 			//ACTIVE USER EXISTS
 			sql = 'SELECT change_pass_required, first_name, last_name, last_login, us.id, us.mandator FROM ${S.dbSchema}.users us INNER JOIN contacts cl ON us.contact=cl.id WHERE user_name=:user_name AND phash=crypt(:password,phash)';
 			trace(sql);

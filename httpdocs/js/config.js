@@ -1,28 +1,6 @@
 var scrollbarWidth;
-export let config =
+var preferences =
 {
-	//api:'https://'+__host__ + '/graphql',
-	api:'https://'+__host__ + '/server.php',
-	fieldProps:{
-		user:{
-			className:'cRight'
-		},
-		pass:{
-			className:'cCenter'
-		},
-		full_name:{
-			flexGrow:1
-		},
-		user_level:{
-			className:'cRight'
-		},
-		user_group:{
-			flexGrow:1
-		},
-		active:{
-			className:'cRight'
-		}
-	},
 	formatDate:'%d.%m.%Y',
 	locale:'de',
 	getScrollbarWidth:function(recalculate) {
@@ -49,10 +27,5 @@ export let config =
 		document.body.removeChild(div1);
 		document.body.removeChild(div2);
 		return scrollbarWidth;
-	},
-	sidebarDims:{
-		minWidth:'15%',
-		maxWidth:'20%'
 	}
-
 }

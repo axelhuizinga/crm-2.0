@@ -63,7 +63,7 @@
   },
   "scripts": {
     "libs": "browserify src/libs.js -o ../httpdocs/js/libs.js -d",
-    "serve": "livereloadx -s ../httpdocs",
+    "serve": "livereloadx -a -s ../httpdocs",
     "dev": "haxe build.hxml -debug",
     "build": "haxe build.hxml",
     "minify": "node minify-all.js",

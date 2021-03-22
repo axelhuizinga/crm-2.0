@@ -31,7 +31,8 @@ class BinaryLoader {
 		var s:Serializer = new Serializer();
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbAP);//.toHex();
-		//Out.dumpObject(dbQuery);
+		Out.dumpObject(dbQuery);
+		trace(dbQuery.dbUser.password);
 		var b:Bytes = s.serialize(dbQuery);
 		//trace(dbQuery.getSerializeSchema());
 		//trace(dbQuery.relations.get('contacts').fields);
@@ -110,7 +111,7 @@ class BinaryLoader {
 			trace(e);
 			trace(e.type);
 		}
-		xhr.withCredentials = true;
+		xhr.withCredentials = false;
 		xhr.onload = function(e) {
 			//trace(xhr.status);
 			if (xhr.status != 200) {

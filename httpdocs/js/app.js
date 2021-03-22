@@ -14,6 +14,580 @@ function $extend(from, fields) {
 	return proto;
 }
 var React_Component = require("react").Component;
+var haxe_Resource = function() { };
+$hxClasses["haxe.Resource"] = haxe_Resource;
+haxe_Resource.__name__ = "haxe.Resource";
+haxe_Resource.content = null;
+haxe_Resource.listNames = function() {
+	var _g = [];
+	var _g1 = 0;
+	var _g2 = haxe_Resource.content;
+	while(_g1 < _g2.length) {
+		var x = _g2[_g1];
+		++_g1;
+		_g.push(x.name);
+	}
+	return _g;
+};
+haxe_Resource.getString = function(name) {
+	var _g = 0;
+	var _g1 = haxe_Resource.content;
+	while(_g < _g1.length) {
+		var x = _g1[_g];
+		++_g;
+		if(x.name == name) {
+			if(x.str != null) {
+				return x.str;
+			}
+			var b = haxe_crypto_Base64.decode(x.data);
+			return b.toString();
+		}
+	}
+	return null;
+};
+haxe_Resource.getBytes = function(name) {
+	var _g = 0;
+	var _g1 = haxe_Resource.content;
+	while(_g < _g1.length) {
+		var x = _g1[_g];
+		++_g;
+		if(x.name == name) {
+			if(x.str != null) {
+				return haxe_io_Bytes.ofString(x.str);
+			}
+			return haxe_crypto_Base64.decode(x.data);
+		}
+	}
+	return null;
+};
+var haxe_io_Bytes = function(data) {
+	this.length = data.byteLength;
+	this.b = new Uint8Array(data);
+	this.b.bufferValue = data;
+	data.hxBytes = this;
+	data.bytes = this.b;
+};
+$hxClasses["haxe.io.Bytes"] = haxe_io_Bytes;
+haxe_io_Bytes.__name__ = "haxe.io.Bytes";
+haxe_io_Bytes.alloc = function(length) {
+	return new haxe_io_Bytes(new ArrayBuffer(length));
+};
+haxe_io_Bytes.ofString = function(s,encoding) {
+	if(encoding == haxe_io_Encoding.RawNative) {
+		var buf = new Uint8Array(s.length << 1);
+		var _g = 0;
+		var _g1 = s.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var c = s.charCodeAt(i);
+			buf[i << 1] = c & 255;
+			buf[i << 1 | 1] = c >> 8;
+		}
+		return new haxe_io_Bytes(buf.buffer);
+	}
+	var a = [];
+	var i = 0;
+	while(i < s.length) {
+		var c = s.charCodeAt(i++);
+		if(55296 <= c && c <= 56319) {
+			c = c - 55232 << 10 | s.charCodeAt(i++) & 1023;
+		}
+		if(c <= 127) {
+			a.push(c);
+		} else if(c <= 2047) {
+			a.push(192 | c >> 6);
+			a.push(128 | c & 63);
+		} else if(c <= 65535) {
+			a.push(224 | c >> 12);
+			a.push(128 | c >> 6 & 63);
+			a.push(128 | c & 63);
+		} else {
+			a.push(240 | c >> 18);
+			a.push(128 | c >> 12 & 63);
+			a.push(128 | c >> 6 & 63);
+			a.push(128 | c & 63);
+		}
+	}
+	return new haxe_io_Bytes(new Uint8Array(a).buffer);
+};
+haxe_io_Bytes.ofData = function(b) {
+	var hb = b.hxBytes;
+	if(hb != null) {
+		return hb;
+	}
+	return new haxe_io_Bytes(b);
+};
+haxe_io_Bytes.ofHex = function(s) {
+	if((s.length & 1) != 0) {
+		throw haxe_Exception.thrown("Not a hex string (odd number of digits)");
+	}
+	var a = [];
+	var i = 0;
+	var len = s.length >> 1;
+	while(i < len) {
+		var high = s.charCodeAt(i * 2);
+		var low = s.charCodeAt(i * 2 + 1);
+		high = (high & 15) + ((high & 64) >> 6) * 9;
+		low = (low & 15) + ((low & 64) >> 6) * 9;
+		a.push((high << 4 | low) & 255);
+		++i;
+	}
+	return new haxe_io_Bytes(new Uint8Array(a).buffer);
+};
+haxe_io_Bytes.fastGet = function(b,pos) {
+	return b.bytes[pos];
+};
+haxe_io_Bytes.prototype = {
+	length: null
+	,b: null
+	,data: null
+	,get: function(pos) {
+		return this.b[pos];
+	}
+	,set: function(pos,v) {
+		this.b[pos] = v;
+	}
+	,blit: function(pos,src,srcpos,len) {
+		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) {
+			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
+		}
+		if(srcpos == 0 && len == src.b.byteLength) {
+			this.b.set(src.b,pos);
+		} else {
+			this.b.set(src.b.subarray(srcpos,srcpos + len),pos);
+		}
+	}
+	,fill: function(pos,len,value) {
+		var _g = 0;
+		var _g1 = len;
+		while(_g < _g1) {
+			var i = _g++;
+			this.b[pos++] = value;
+		}
+	}
+	,sub: function(pos,len) {
+		if(pos < 0 || len < 0 || pos + len > this.length) {
+			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
+		}
+		return new haxe_io_Bytes(this.b.buffer.slice(pos + this.b.byteOffset,pos + this.b.byteOffset + len));
+	}
+	,compare: function(other) {
+		var b1 = this.b;
+		var b2 = other.b;
+		var len = this.length < other.length ? this.length : other.length;
+		var _g = 0;
+		var _g1 = len;
+		while(_g < _g1) {
+			var i = _g++;
+			if(b1[i] != b2[i]) {
+				return b1[i] - b2[i];
+			}
+		}
+		return this.length - other.length;
+	}
+	,initData: function() {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+	}
+	,getDouble: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getFloat64(pos,true);
+	}
+	,getFloat: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getFloat32(pos,true);
+	}
+	,setDouble: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setFloat64(pos,v,true);
+	}
+	,setFloat: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setFloat32(pos,v,true);
+	}
+	,getUInt16: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getUint16(pos,true);
+	}
+	,setUInt16: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setUint16(pos,v,true);
+	}
+	,getInt32: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getInt32(pos,true);
+	}
+	,setInt32: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setInt32(pos,v,true);
+	}
+	,getInt64: function(pos) {
+		var this1 = new haxe__$Int64__$_$_$Int64(this.getInt32(pos + 4),this.getInt32(pos));
+		return this1;
+	}
+	,setInt64: function(pos,v) {
+		this.setInt32(pos,v.low);
+		this.setInt32(pos + 4,v.high);
+	}
+	,getString: function(pos,len,encoding) {
+		if(pos < 0 || len < 0 || pos + len > this.length) {
+			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
+		}
+		if(encoding == null) {
+			encoding = haxe_io_Encoding.UTF8;
+		}
+		var s = "";
+		var b = this.b;
+		var i = pos;
+		var max = pos + len;
+		switch(encoding._hx_index) {
+		case 0:
+			var debug = pos > 0;
+			while(i < max) {
+				var c = b[i++];
+				if(c < 128) {
+					if(c == 0) {
+						break;
+					}
+					s += String.fromCodePoint(c);
+				} else if(c < 224) {
+					var code = (c & 63) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(code);
+				} else if(c < 240) {
+					var c2 = b[i++];
+					var code1 = (c & 31) << 12 | (c2 & 127) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(code1);
+				} else {
+					var c21 = b[i++];
+					var c3 = b[i++];
+					var u = (c & 15) << 18 | (c21 & 127) << 12 | (c3 & 127) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(u);
+				}
+			}
+			break;
+		case 1:
+			while(i < max) {
+				var c = b[i++] | b[i++] << 8;
+				s += String.fromCodePoint(c);
+			}
+			break;
+		}
+		return s;
+	}
+	,readString: function(pos,len) {
+		return this.getString(pos,len);
+	}
+	,toString: function() {
+		return this.getString(0,this.length);
+	}
+	,toHex: function() {
+		var s_b = "";
+		var chars = [];
+		var str = "0123456789abcdef";
+		var _g = 0;
+		var _g1 = str.length;
+		while(_g < _g1) {
+			var i = _g++;
+			chars.push(HxOverrides.cca(str,i));
+		}
+		var _g = 0;
+		var _g1 = this.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var c = this.b[i];
+			s_b += String.fromCodePoint(chars[c >> 4]);
+			s_b += String.fromCodePoint(chars[c & 15]);
+		}
+		return s_b;
+	}
+	,getData: function() {
+		return this.b.bufferValue;
+	}
+	,__class__: haxe_io_Bytes
+};
+var haxe_io_Encoding = $hxEnums["haxe.io.Encoding"] = { __ename__:"haxe.io.Encoding",__constructs__:null
+	,UTF8: {_hx_name:"UTF8",_hx_index:0,__enum__:"haxe.io.Encoding",toString:$estr}
+	,RawNative: {_hx_name:"RawNative",_hx_index:1,__enum__:"haxe.io.Encoding",toString:$estr}
+};
+haxe_io_Encoding.__constructs__ = [haxe_io_Encoding.UTF8,haxe_io_Encoding.RawNative];
+haxe_io_Encoding.__empty_constructs__ = [haxe_io_Encoding.UTF8,haxe_io_Encoding.RawNative];
+var haxe_crypto_Base64 = function() { };
+$hxClasses["haxe.crypto.Base64"] = haxe_crypto_Base64;
+haxe_crypto_Base64.__name__ = "haxe.crypto.Base64";
+haxe_crypto_Base64.encode = function(bytes,complement) {
+	if(complement == null) {
+		complement = true;
+	}
+	var str = new haxe_crypto_BaseCode(haxe_crypto_Base64.BYTES).encodeBytes(bytes).toString();
+	if(complement) {
+		switch(bytes.length % 3) {
+		case 1:
+			str += "==";
+			break;
+		case 2:
+			str += "=";
+			break;
+		default:
+		}
+	}
+	return str;
+};
+haxe_crypto_Base64.decode = function(str,complement) {
+	if(complement == null) {
+		complement = true;
+	}
+	if(complement) {
+		while(HxOverrides.cca(str,str.length - 1) == 61) str = HxOverrides.substr(str,0,-1);
+	}
+	return new haxe_crypto_BaseCode(haxe_crypto_Base64.BYTES).decodeBytes(haxe_io_Bytes.ofString(str));
+};
+haxe_crypto_Base64.urlEncode = function(bytes,complement) {
+	if(complement == null) {
+		complement = false;
+	}
+	var str = new haxe_crypto_BaseCode(haxe_crypto_Base64.URL_BYTES).encodeBytes(bytes).toString();
+	if(complement) {
+		switch(bytes.length % 3) {
+		case 1:
+			str += "==";
+			break;
+		case 2:
+			str += "=";
+			break;
+		default:
+		}
+	}
+	return str;
+};
+haxe_crypto_Base64.urlDecode = function(str,complement) {
+	if(complement == null) {
+		complement = false;
+	}
+	if(complement) {
+		while(HxOverrides.cca(str,str.length - 1) == 61) str = HxOverrides.substr(str,0,-1);
+	}
+	return new haxe_crypto_BaseCode(haxe_crypto_Base64.URL_BYTES).decodeBytes(haxe_io_Bytes.ofString(str));
+};
+var HxOverrides = function() { };
+$hxClasses["HxOverrides"] = HxOverrides;
+HxOverrides.__name__ = "HxOverrides";
+HxOverrides.dateStr = function(date) {
+	var m = date.getMonth() + 1;
+	var d = date.getDate();
+	var h = date.getHours();
+	var mi = date.getMinutes();
+	var s = date.getSeconds();
+	return date.getFullYear() + "-" + (m < 10 ? "0" + m : "" + m) + "-" + (d < 10 ? "0" + d : "" + d) + " " + (h < 10 ? "0" + h : "" + h) + ":" + (mi < 10 ? "0" + mi : "" + mi) + ":" + (s < 10 ? "0" + s : "" + s);
+};
+HxOverrides.strDate = function(s) {
+	switch(s.length) {
+	case 8:
+		var k = s.split(":");
+		var d = new Date();
+		d["setTime"](0);
+		d["setUTCHours"](k[0]);
+		d["setUTCMinutes"](k[1]);
+		d["setUTCSeconds"](k[2]);
+		return d;
+	case 10:
+		var k = s.split("-");
+		return new Date(k[0],k[1] - 1,k[2],0,0,0);
+	case 19:
+		var k = s.split(" ");
+		var y = k[0].split("-");
+		var t = k[1].split(":");
+		return new Date(y[0],y[1] - 1,y[2],t[0],t[1],t[2]);
+	default:
+		throw haxe_Exception.thrown("Invalid date format : " + s);
+	}
+};
+HxOverrides.cca = function(s,index) {
+	var x = s.charCodeAt(index);
+	if(x != x) {
+		return undefined;
+	}
+	return x;
+};
+HxOverrides.substr = function(s,pos,len) {
+	if(len == null) {
+		len = s.length;
+	} else if(len < 0) {
+		if(pos == 0) {
+			len = s.length + len;
+		} else {
+			return "";
+		}
+	}
+	return s.substr(pos,len);
+};
+HxOverrides.indexOf = function(a,obj,i) {
+	var len = a.length;
+	if(i < 0) {
+		i += len;
+		if(i < 0) {
+			i = 0;
+		}
+	}
+	while(i < len) {
+		if(((a[i]) === obj)) {
+			return i;
+		}
+		++i;
+	}
+	return -1;
+};
+HxOverrides.lastIndexOf = function(a,obj,i) {
+	var len = a.length;
+	if(i >= len) {
+		i = len - 1;
+	} else if(i < 0) {
+		i += len;
+	}
+	while(i >= 0) {
+		if(((a[i]) === obj)) {
+			return i;
+		}
+		--i;
+	}
+	return -1;
+};
+HxOverrides.remove = function(a,obj) {
+	var i = a.indexOf(obj);
+	if(i == -1) {
+		return false;
+	}
+	a.splice(i,1);
+	return true;
+};
+HxOverrides.iter = function(a) {
+	return { cur : 0, arr : a, hasNext : function() {
+		return this.cur < this.arr.length;
+	}, next : function() {
+		return this.arr[this.cur++];
+	}};
+};
+HxOverrides.keyValueIter = function(a) {
+	return new haxe_iterators_ArrayKeyValueIterator(a);
+};
+HxOverrides.now = function() {
+	return Date.now();
+};
+var haxe_crypto_BaseCode = function(base) {
+	var len = base.length;
+	var nbits = 1;
+	while(len > 1 << nbits) ++nbits;
+	if(nbits > 8 || len != 1 << nbits) {
+		throw haxe_Exception.thrown("BaseCode : base length must be a power of two.");
+	}
+	this.base = base;
+	this.nbits = nbits;
+};
+$hxClasses["haxe.crypto.BaseCode"] = haxe_crypto_BaseCode;
+haxe_crypto_BaseCode.__name__ = "haxe.crypto.BaseCode";
+haxe_crypto_BaseCode.encode = function(s,base) {
+	var b = new haxe_crypto_BaseCode(haxe_io_Bytes.ofString(base));
+	return b.encodeString(s);
+};
+haxe_crypto_BaseCode.decode = function(s,base) {
+	var b = new haxe_crypto_BaseCode(haxe_io_Bytes.ofString(base));
+	return b.decodeString(s);
+};
+haxe_crypto_BaseCode.prototype = {
+	base: null
+	,nbits: null
+	,tbl: null
+	,encodeBytes: function(b) {
+		var nbits = this.nbits;
+		var base = this.base;
+		var size = b.length * 8 / nbits | 0;
+		var out = new haxe_io_Bytes(new ArrayBuffer(size + (b.length * 8 % nbits == 0 ? 0 : 1)));
+		var buf = 0;
+		var curbits = 0;
+		var mask = (1 << nbits) - 1;
+		var pin = 0;
+		var pout = 0;
+		while(pout < size) {
+			while(curbits < nbits) {
+				curbits += 8;
+				buf <<= 8;
+				buf |= b.b[pin++];
+			}
+			curbits -= nbits;
+			out.b[pout++] = base.b[buf >> curbits & mask];
+		}
+		if(curbits > 0) {
+			out.b[pout++] = base.b[buf << nbits - curbits & mask];
+		}
+		return out;
+	}
+	,initTable: function() {
+		var tbl = [];
+		var _g = 0;
+		while(_g < 256) {
+			var i = _g++;
+			tbl[i] = -1;
+		}
+		var _g = 0;
+		var _g1 = this.base.length;
+		while(_g < _g1) {
+			var i = _g++;
+			tbl[this.base.b[i]] = i;
+		}
+		this.tbl = tbl;
+	}
+	,decodeBytes: function(b) {
+		var nbits = this.nbits;
+		var base = this.base;
+		if(this.tbl == null) {
+			this.initTable();
+		}
+		var tbl = this.tbl;
+		var size = b.length * nbits >> 3;
+		var out = new haxe_io_Bytes(new ArrayBuffer(size));
+		var buf = 0;
+		var curbits = 0;
+		var pin = 0;
+		var pout = 0;
+		while(pout < size) {
+			while(curbits < 8) {
+				curbits += nbits;
+				buf <<= nbits;
+				var i = tbl[b.b[pin++]];
+				if(i == -1) {
+					throw haxe_Exception.thrown("BaseCode : invalid encoded char");
+				}
+				buf |= i;
+			}
+			curbits -= 8;
+			out.b[pout++] = buf >> curbits & 255;
+		}
+		return out;
+	}
+	,encodeString: function(s) {
+		return this.encodeBytes(haxe_io_Bytes.ofString(s)).toString();
+	}
+	,decodeString: function(s) {
+		return this.decodeBytes(haxe_io_Bytes.ofString(s)).toString();
+	}
+	,__class__: haxe_crypto_BaseCode
+};
 var React = require("react");
 var haxe_ds_List = function() {
 	this.length = 0;
@@ -162,13 +736,15 @@ haxe_ds_List.prototype = {
 var App = function(props) {
 	var _gthis = this;
 	React_Component.call(this,props);
+	App.config.api = "https://" + Std.string(App.config.dev_host) + "/server.php";
 	App.flatpickr.localize(App.German);
 	App._app = this;
 	var ti = null;
 	App.store = this.initStore(history_BrowserHistory.createBrowserHistory({ basename : "/", getUserConfirmation : state_CState.confirmTransition}));
 	this.state = App.store.getState();
-	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "src/App.hx", lineNumber : 175, className : "App", methodName : "new"});
-	haxe_Log.trace(App.devIP,{ fileName : "src/App.hx", lineNumber : 177, className : "App", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "src/App.hx", lineNumber : 177, className : "App", methodName : "new"});
+	haxe_Log.trace(App.devIP,{ fileName : "src/App.hx", lineNumber : 179, className : "App", methodName : "new"});
+	haxe_Log.trace("password:" + this.state.userState.dbUser.password + ":" + Std.string(App.config.password),{ fileName : "src/App.hx", lineNumber : 180, className : "App", methodName : "new"});
 	this.tul = App.startHistoryListener(App.store,this.state.locationStore.history);
 	window.onresize = function() {
 		if(ti != null) {
@@ -186,7 +762,7 @@ var App = function(props) {
 			}
 		},250);
 	};
-	me_cunity_debug_Out.dumpObject(this.state.userState,{ fileName : "src/App.hx", lineNumber : 200, className : "App", methodName : "new"});
+	me_cunity_debug_Out.dumpObject(this.state.userState,{ fileName : "src/App.hx", lineNumber : 202, className : "App", methodName : "new"});
 	if(!(this.state.userState.dbUser.id == null || this.state.userState.dbUser.jwt == "")) {
 		var p = this.load();
 		p.then(function(dbData) {
@@ -195,7 +771,7 @@ var App = function(props) {
 			var inlStringMapKeyIterator_keys = Object.keys(h);
 			var inlStringMapKeyIterator_length = inlStringMapKeyIterator_keys.length;
 			var inlStringMapKeyIterator_current = 0;
-			haxe_Log.trace(inlStringMapKeyIterator_current < inlStringMapKeyIterator_length,{ fileName : "src/App.hx", lineNumber : 206, className : "App", methodName : "new"});
+			haxe_Log.trace(inlStringMapKeyIterator_current < inlStringMapKeyIterator_length,{ fileName : "src/App.hx", lineNumber : 208, className : "App", methodName : "new"});
 			if(!Lambda.empty(dbData.dataErrors) && Object.prototype.hasOwnProperty.call(dbData.dataErrors.h,"jwtError")) {
 				App.store.dispatch(redux_Action.map(action_UserAction.LoginExpired({ waiting : false, loginTask : "Login"})));
 			} else {
@@ -204,10 +780,10 @@ var App = function(props) {
 			}
 		});
 	} else {
-		haxe_Log.trace("LOGIN required",{ fileName : "src/App.hx", lineNumber : 219, className : "App", methodName : "new"});
+		haxe_Log.trace("LOGIN required",{ fileName : "src/App.hx", lineNumber : 221, className : "App", methodName : "new"});
 		App.store.dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginRequired(react_ReactUtil.copy(this.state.userState,{ waiting : false})))));
 	}
-	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "src/App.hx", lineNumber : 229, className : "App", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "src/App.hx", lineNumber : 231, className : "App", methodName : "new"});
 };
 $hxClasses["App"] = App;
 App.__name__ = "App";
@@ -217,13 +793,13 @@ App.store = null;
 App.startHistoryListener = function(store,history) {
 	store.dispatch(redux_Action.map(action_AppAction.Location(action_LocationAction.InitHistory(history))));
 	return history.listen(function(location,action) {
-		haxe_Log.trace(location.pathname,{ fileName : "src/App.hx", lineNumber : 159, className : "App", methodName : "startHistoryListener"});
+		haxe_Log.trace(location.pathname,{ fileName : "src/App.hx", lineNumber : 160, className : "App", methodName : "startHistoryListener"});
 		store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ path : location.pathname, text : ""}))));
 		store.dispatch(redux_Action.map(action_LocationAction.LocationChange(location)));
 	});
 };
 App.edump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "src/App.hx", lineNumber : 270, className : "App", methodName : "edump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "src/App.hx", lineNumber : 272, className : "App", methodName : "edump"});
 	return "OK";
 };
 App.await = function(delay,check,cb) {
@@ -257,7 +833,7 @@ App.initEState = function(init,comp) {
 	return fS2;
 };
 App.jsxDump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "src/App.hx", lineNumber : 326, className : "App", methodName : "jsxDump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "src/App.hx", lineNumber : 328, className : "App", methodName : "jsxDump"});
 	return "OK";
 };
 App.queryString2 = function(params) {
@@ -284,7 +860,7 @@ App.queryString2 = function(params) {
 		result[i] = query;
 	}
 	var query = result.join("&");
-	haxe_Log.trace(query,{ fileName : "src/App.hx", lineNumber : 345, className : "App", methodName : "queryString2"});
+	haxe_Log.trace(query,{ fileName : "src/App.hx", lineNumber : 347, className : "App", methodName : "queryString2"});
 	return query;
 };
 App.__super__ = React_Component;
@@ -293,11 +869,11 @@ App.prototype = $extend(React_Component.prototype,{
 	,tul: null
 	,initStore: function(history) {
 		var userStore = new store_UserStore();
-		haxe_Log.trace(Reflect.fields(userStore),{ fileName : "src/App.hx", lineNumber : 96, className : "App", methodName : "initStore"});
+		haxe_Log.trace(Reflect.fields(userStore),{ fileName : "src/App.hx", lineNumber : 97, className : "App", methodName : "initStore"});
 		var appWare = new store_AppStore(userStore);
 		var locationStore = new store_LocationStore(history);
 		var rootReducer = redux_Redux.combineReducers({ config : redux_StoreBuilder.mapReducer(action_ConfigAction,new store_ConfigStore(App.config)), dataStore : redux_StoreBuilder.mapReducer(action_DataAction,new store_DataStore()), locationStore : redux_StoreBuilder.mapReducer(action_LocationAction,locationStore), status : redux_StoreBuilder.mapReducer(action_StatusAction,new store_StatusStore()), userState : redux_StoreBuilder.mapReducer(action_UserAction,userStore)});
-		haxe_Log.trace(rootReducer,{ fileName : "src/App.hx", lineNumber : 111, className : "App", methodName : "initStore"});
+		haxe_Log.trace(rootReducer,{ fileName : "src/App.hx", lineNumber : 112, className : "App", methodName : "initStore"});
 		return redux_StoreBuilder.createStore(rootReducer,null,redux_Redux.applyMiddleware(redux_StoreBuilder.mapMiddleware(redux_thunk_Thunk,new redux_thunk_ThunkMiddleware()),redux_StoreBuilder.mapMiddleware(action_AppAction,appWare),redux_StoreBuilder.mapMiddleware(action_LocationAction,locationStore),redux_StoreBuilder.mapMiddleware(action_UserAction,userStore)));
 	}
 	,loadFromLocalStorage: function() {
@@ -310,7 +886,7 @@ App.prototype = $extend(React_Component.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var e = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(e,{ fileName : "src/App.hx", lineNumber : 130, className : "App", methodName : "loadFromLocalStorage"});
+			haxe_Log.trace(e,{ fileName : "src/App.hx", lineNumber : 131, className : "App", methodName : "loadFromLocalStorage"});
 			return { };
 		}
 	}
@@ -320,27 +896,27 @@ App.prototype = $extend(React_Component.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var e = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(e,{ fileName : "src/App.hx", lineNumber : 142, className : "App", methodName : "saveToLocalStorage"});
+			haxe_Log.trace(e,{ fileName : "src/App.hx", lineNumber : 143, className : "App", methodName : "saveToLocalStorage"});
 		}
 	}
 	,load: function() {
 		return App.store.dispatch(redux_Action.map(action_async_UserAccess.verify()));
 	}
 	,gGet: function(key) {
-		haxe_Log.trace(key,{ fileName : "src/App.hx", lineNumber : 239, className : "App", methodName : "gGet"});
+		haxe_Log.trace(key,{ fileName : "src/App.hx", lineNumber : 241, className : "App", methodName : "gGet"});
 		return this.globalState.h[key];
 	}
 	,gSet: function(key,val) {
 		this.globalState.h[key] = val;
 	}
 	,componentDidMount: function() {
-		haxe_Log.trace("yeah",{ fileName : "src/App.hx", lineNumber : 251, className : "App", methodName : "componentDidMount"});
+		haxe_Log.trace("yeah",{ fileName : "src/App.hx", lineNumber : 253, className : "App", methodName : "componentDidMount"});
 	}
 	,componentDidCatch: function(error,info) {
-		haxe_Log.trace(error,{ fileName : "src/App.hx", lineNumber : 256, className : "App", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "src/App.hx", lineNumber : 258, className : "App", methodName : "componentDidCatch"});
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace("...",{ fileName : "src/App.hx", lineNumber : 261, className : "App", methodName : "componentDidUpdate"});
+		haxe_Log.trace("...",{ fileName : "src/App.hx", lineNumber : 263, className : "App", methodName : "componentDidUpdate"});
 	}
 	,componentWillUnmount: function() {
 		this.tul();
@@ -621,113 +1197,9 @@ Go.createRoot = function() {
 };
 Go.render = function(root) {
 	var app = ReactDOM.render(React.createElement(react_ReactType.fromComp(App),{ }),root);
-	haxe_Log.trace("GO",{ fileName : "src/Go.hx", lineNumber : 40, className : "Go", methodName : "render"});
-	haxe_Log.trace("calling ReactHMR.autoRefresh",{ fileName : "src/Go.hx", lineNumber : 43, className : "Go", methodName : "render"});
+	haxe_Log.trace("GO",{ fileName : "src/Go.hx", lineNumber : 39, className : "Go", methodName : "render"});
+	haxe_Log.trace("calling ReactHMR.autoRefresh",{ fileName : "src/Go.hx", lineNumber : 42, className : "Go", methodName : "render"});
 	ReactHMR.autoRefresh(app);
-};
-var HxOverrides = function() { };
-$hxClasses["HxOverrides"] = HxOverrides;
-HxOverrides.__name__ = "HxOverrides";
-HxOverrides.dateStr = function(date) {
-	var m = date.getMonth() + 1;
-	var d = date.getDate();
-	var h = date.getHours();
-	var mi = date.getMinutes();
-	var s = date.getSeconds();
-	return date.getFullYear() + "-" + (m < 10 ? "0" + m : "" + m) + "-" + (d < 10 ? "0" + d : "" + d) + " " + (h < 10 ? "0" + h : "" + h) + ":" + (mi < 10 ? "0" + mi : "" + mi) + ":" + (s < 10 ? "0" + s : "" + s);
-};
-HxOverrides.strDate = function(s) {
-	switch(s.length) {
-	case 8:
-		var k = s.split(":");
-		var d = new Date();
-		d["setTime"](0);
-		d["setUTCHours"](k[0]);
-		d["setUTCMinutes"](k[1]);
-		d["setUTCSeconds"](k[2]);
-		return d;
-	case 10:
-		var k = s.split("-");
-		return new Date(k[0],k[1] - 1,k[2],0,0,0);
-	case 19:
-		var k = s.split(" ");
-		var y = k[0].split("-");
-		var t = k[1].split(":");
-		return new Date(y[0],y[1] - 1,y[2],t[0],t[1],t[2]);
-	default:
-		throw haxe_Exception.thrown("Invalid date format : " + s);
-	}
-};
-HxOverrides.cca = function(s,index) {
-	var x = s.charCodeAt(index);
-	if(x != x) {
-		return undefined;
-	}
-	return x;
-};
-HxOverrides.substr = function(s,pos,len) {
-	if(len == null) {
-		len = s.length;
-	} else if(len < 0) {
-		if(pos == 0) {
-			len = s.length + len;
-		} else {
-			return "";
-		}
-	}
-	return s.substr(pos,len);
-};
-HxOverrides.indexOf = function(a,obj,i) {
-	var len = a.length;
-	if(i < 0) {
-		i += len;
-		if(i < 0) {
-			i = 0;
-		}
-	}
-	while(i < len) {
-		if(((a[i]) === obj)) {
-			return i;
-		}
-		++i;
-	}
-	return -1;
-};
-HxOverrides.lastIndexOf = function(a,obj,i) {
-	var len = a.length;
-	if(i >= len) {
-		i = len - 1;
-	} else if(i < 0) {
-		i += len;
-	}
-	while(i >= 0) {
-		if(((a[i]) === obj)) {
-			return i;
-		}
-		--i;
-	}
-	return -1;
-};
-HxOverrides.remove = function(a,obj) {
-	var i = a.indexOf(obj);
-	if(i == -1) {
-		return false;
-	}
-	a.splice(i,1);
-	return true;
-};
-HxOverrides.iter = function(a) {
-	return { cur : 0, arr : a, hasNext : function() {
-		return this.cur < this.arr.length;
-	}, next : function() {
-		return this.arr[this.cur++];
-	}};
-};
-HxOverrides.keyValueIter = function(a) {
-	return new haxe_iterators_ArrayKeyValueIterator(a);
-};
-HxOverrides.now = function() {
-	return Date.now();
 };
 var IntIterator = function(min,max) {
 	this.min = min;
@@ -9879,268 +10351,6 @@ haxe_http_HttpJs.prototype = $extend(haxe_http_HttpBase.prototype,{
 	}
 	,__class__: haxe_http_HttpJs
 });
-var haxe_io_Bytes = function(data) {
-	this.length = data.byteLength;
-	this.b = new Uint8Array(data);
-	this.b.bufferValue = data;
-	data.hxBytes = this;
-	data.bytes = this.b;
-};
-$hxClasses["haxe.io.Bytes"] = haxe_io_Bytes;
-haxe_io_Bytes.__name__ = "haxe.io.Bytes";
-haxe_io_Bytes.alloc = function(length) {
-	return new haxe_io_Bytes(new ArrayBuffer(length));
-};
-haxe_io_Bytes.ofString = function(s,encoding) {
-	if(encoding == haxe_io_Encoding.RawNative) {
-		var buf = new Uint8Array(s.length << 1);
-		var _g = 0;
-		var _g1 = s.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var c = s.charCodeAt(i);
-			buf[i << 1] = c & 255;
-			buf[i << 1 | 1] = c >> 8;
-		}
-		return new haxe_io_Bytes(buf.buffer);
-	}
-	var a = [];
-	var i = 0;
-	while(i < s.length) {
-		var c = s.charCodeAt(i++);
-		if(55296 <= c && c <= 56319) {
-			c = c - 55232 << 10 | s.charCodeAt(i++) & 1023;
-		}
-		if(c <= 127) {
-			a.push(c);
-		} else if(c <= 2047) {
-			a.push(192 | c >> 6);
-			a.push(128 | c & 63);
-		} else if(c <= 65535) {
-			a.push(224 | c >> 12);
-			a.push(128 | c >> 6 & 63);
-			a.push(128 | c & 63);
-		} else {
-			a.push(240 | c >> 18);
-			a.push(128 | c >> 12 & 63);
-			a.push(128 | c >> 6 & 63);
-			a.push(128 | c & 63);
-		}
-	}
-	return new haxe_io_Bytes(new Uint8Array(a).buffer);
-};
-haxe_io_Bytes.ofData = function(b) {
-	var hb = b.hxBytes;
-	if(hb != null) {
-		return hb;
-	}
-	return new haxe_io_Bytes(b);
-};
-haxe_io_Bytes.ofHex = function(s) {
-	if((s.length & 1) != 0) {
-		throw haxe_Exception.thrown("Not a hex string (odd number of digits)");
-	}
-	var a = [];
-	var i = 0;
-	var len = s.length >> 1;
-	while(i < len) {
-		var high = s.charCodeAt(i * 2);
-		var low = s.charCodeAt(i * 2 + 1);
-		high = (high & 15) + ((high & 64) >> 6) * 9;
-		low = (low & 15) + ((low & 64) >> 6) * 9;
-		a.push((high << 4 | low) & 255);
-		++i;
-	}
-	return new haxe_io_Bytes(new Uint8Array(a).buffer);
-};
-haxe_io_Bytes.fastGet = function(b,pos) {
-	return b.bytes[pos];
-};
-haxe_io_Bytes.prototype = {
-	length: null
-	,b: null
-	,data: null
-	,get: function(pos) {
-		return this.b[pos];
-	}
-	,set: function(pos,v) {
-		this.b[pos] = v;
-	}
-	,blit: function(pos,src,srcpos,len) {
-		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) {
-			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
-		}
-		if(srcpos == 0 && len == src.b.byteLength) {
-			this.b.set(src.b,pos);
-		} else {
-			this.b.set(src.b.subarray(srcpos,srcpos + len),pos);
-		}
-	}
-	,fill: function(pos,len,value) {
-		var _g = 0;
-		var _g1 = len;
-		while(_g < _g1) {
-			var i = _g++;
-			this.b[pos++] = value;
-		}
-	}
-	,sub: function(pos,len) {
-		if(pos < 0 || len < 0 || pos + len > this.length) {
-			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
-		}
-		return new haxe_io_Bytes(this.b.buffer.slice(pos + this.b.byteOffset,pos + this.b.byteOffset + len));
-	}
-	,compare: function(other) {
-		var b1 = this.b;
-		var b2 = other.b;
-		var len = this.length < other.length ? this.length : other.length;
-		var _g = 0;
-		var _g1 = len;
-		while(_g < _g1) {
-			var i = _g++;
-			if(b1[i] != b2[i]) {
-				return b1[i] - b2[i];
-			}
-		}
-		return this.length - other.length;
-	}
-	,initData: function() {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-	}
-	,getDouble: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getFloat64(pos,true);
-	}
-	,getFloat: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getFloat32(pos,true);
-	}
-	,setDouble: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setFloat64(pos,v,true);
-	}
-	,setFloat: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setFloat32(pos,v,true);
-	}
-	,getUInt16: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getUint16(pos,true);
-	}
-	,setUInt16: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setUint16(pos,v,true);
-	}
-	,getInt32: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getInt32(pos,true);
-	}
-	,setInt32: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setInt32(pos,v,true);
-	}
-	,getInt64: function(pos) {
-		var this1 = new haxe__$Int64__$_$_$Int64(this.getInt32(pos + 4),this.getInt32(pos));
-		return this1;
-	}
-	,setInt64: function(pos,v) {
-		this.setInt32(pos,v.low);
-		this.setInt32(pos + 4,v.high);
-	}
-	,getString: function(pos,len,encoding) {
-		if(pos < 0 || len < 0 || pos + len > this.length) {
-			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
-		}
-		if(encoding == null) {
-			encoding = haxe_io_Encoding.UTF8;
-		}
-		var s = "";
-		var b = this.b;
-		var i = pos;
-		var max = pos + len;
-		switch(encoding._hx_index) {
-		case 0:
-			var debug = pos > 0;
-			while(i < max) {
-				var c = b[i++];
-				if(c < 128) {
-					if(c == 0) {
-						break;
-					}
-					s += String.fromCodePoint(c);
-				} else if(c < 224) {
-					var code = (c & 63) << 6 | b[i++] & 127;
-					s += String.fromCodePoint(code);
-				} else if(c < 240) {
-					var c2 = b[i++];
-					var code1 = (c & 31) << 12 | (c2 & 127) << 6 | b[i++] & 127;
-					s += String.fromCodePoint(code1);
-				} else {
-					var c21 = b[i++];
-					var c3 = b[i++];
-					var u = (c & 15) << 18 | (c21 & 127) << 12 | (c3 & 127) << 6 | b[i++] & 127;
-					s += String.fromCodePoint(u);
-				}
-			}
-			break;
-		case 1:
-			while(i < max) {
-				var c = b[i++] | b[i++] << 8;
-				s += String.fromCodePoint(c);
-			}
-			break;
-		}
-		return s;
-	}
-	,readString: function(pos,len) {
-		return this.getString(pos,len);
-	}
-	,toString: function() {
-		return this.getString(0,this.length);
-	}
-	,toHex: function() {
-		var s_b = "";
-		var chars = [];
-		var str = "0123456789abcdef";
-		var _g = 0;
-		var _g1 = str.length;
-		while(_g < _g1) {
-			var i = _g++;
-			chars.push(HxOverrides.cca(str,i));
-		}
-		var _g = 0;
-		var _g1 = this.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var c = this.b[i];
-			s_b += String.fromCodePoint(chars[c >> 4]);
-			s_b += String.fromCodePoint(chars[c & 15]);
-		}
-		return s_b;
-	}
-	,getData: function() {
-		return this.b.bufferValue;
-	}
-	,__class__: haxe_io_Bytes
-};
 var haxe_io_BytesBuffer = function() {
 	this.pos = 0;
 	this.size = 0;
@@ -10244,12 +10454,6 @@ haxe_io_BytesBuffer.prototype = {
 	,__class__: haxe_io_BytesBuffer
 	,__properties__: {get_length:"get_length"}
 };
-var haxe_io_Encoding = $hxEnums["haxe.io.Encoding"] = { __ename__:"haxe.io.Encoding",__constructs__:null
-	,UTF8: {_hx_name:"UTF8",_hx_index:0,__enum__:"haxe.io.Encoding",toString:$estr}
-	,RawNative: {_hx_name:"RawNative",_hx_index:1,__enum__:"haxe.io.Encoding",toString:$estr}
-};
-haxe_io_Encoding.__constructs__ = [haxe_io_Encoding.UTF8,haxe_io_Encoding.RawNative];
-haxe_io_Encoding.__empty_constructs__ = [haxe_io_Encoding.UTF8,haxe_io_Encoding.RawNative];
 var haxe_io_Eof = function() {
 };
 $hxClasses["haxe.io.Eof"] = haxe_io_Eof;
@@ -18277,6 +18481,8 @@ loader_BinaryLoader.dbQuery = function(url,dbAP,onLoaded) {
 	var s = new hxbit_Serializer();
 	var bl = new loader_BinaryLoader(url);
 	var dbQuery = new db_DbQuery(dbAP);
+	me_cunity_debug_Out.dumpObject(dbQuery,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 34, className : "loader.BinaryLoader", methodName : "dbQuery"});
+	haxe_Log.trace(dbQuery.dbUser.password,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 35, className : "loader.BinaryLoader", methodName : "dbQuery"});
 	var b = s.serialize(dbQuery);
 	bl.param = b.b.bufferValue;
 	bl.cB = onLoaded;
@@ -18284,11 +18490,11 @@ loader_BinaryLoader.dbQuery = function(url,dbAP,onLoaded) {
 	return bl.xhr;
 };
 loader_BinaryLoader.go = function(url,dbAP,onLoaded) {
-	haxe_Log.trace(dbAP,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 51, className : "loader.BinaryLoader", methodName : "go"});
+	haxe_Log.trace(dbAP,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 52, className : "loader.BinaryLoader", methodName : "go"});
 	var s = new hxbit_Serializer();
 	var bl = new loader_BinaryLoader(url);
 	var dbQuery = new db_DbQuery(dbAP);
-	haxe_Log.trace(dbQuery,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 55, className : "loader.BinaryLoader", methodName : "go"});
+	haxe_Log.trace(dbQuery,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 56, className : "loader.BinaryLoader", methodName : "go"});
 	var b = s.serialize(dbQuery);
 	bl.param = b.b.bufferValue;
 	bl.dBa = onLoaded;
@@ -18307,14 +18513,14 @@ loader_BinaryLoader.prototype = {
 			var data = u.unserialize(bytes,shared_DbData);
 			this.cB(data);
 		} else {
-			haxe_Log.trace("got nothing",{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 89, className : "loader.BinaryLoader", methodName : "onLoaded"});
+			haxe_Log.trace("got nothing",{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 90, className : "loader.BinaryLoader", methodName : "onLoaded"});
 		}
 	}
 	,onProgress: function(cur,max) {
 	}
 	,onError: function(msg) {
-		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 97, className : "loader.BinaryLoader", methodName : "onError"});
-		haxe_Log.trace(msg,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 98, className : "loader.BinaryLoader", methodName : "onError"});
+		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 98, className : "loader.BinaryLoader", methodName : "onError"});
+		haxe_Log.trace(msg,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 99, className : "loader.BinaryLoader", methodName : "onError"});
 		throw haxe_Exception.thrown(msg);
 	}
 	,load: function() {
@@ -18322,10 +18528,10 @@ loader_BinaryLoader.prototype = {
 		this.xhr.open("POST",this.url,true);
 		this.xhr.responseType = "arraybuffer";
 		this.xhr.onerror = function(e) {
-			haxe_Log.trace(e,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 110, className : "loader.BinaryLoader", methodName : "load"});
-			haxe_Log.trace(e.type,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 111, className : "loader.BinaryLoader", methodName : "load"});
+			haxe_Log.trace(e,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 111, className : "loader.BinaryLoader", methodName : "load"});
+			haxe_Log.trace(e.type,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 112, className : "loader.BinaryLoader", methodName : "load"});
 		};
-		this.xhr.withCredentials = true;
+		this.xhr.withCredentials = false;
 		this.xhr.onload = function(e) {
 			if(_gthis.xhr.status != 200) {
 				_gthis.onError(_gthis.xhr.statusText);
@@ -18340,8 +18546,8 @@ loader_BinaryLoader.prototype = {
 		this.xhr.open("POST",this.url,true);
 		this.xhr.responseType = "arraybuffer";
 		this.xhr.onerror = function(e) {
-			haxe_Log.trace(e,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 142, className : "loader.BinaryLoader", methodName : "loadJson"});
-			haxe_Log.trace(e.type,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 143, className : "loader.BinaryLoader", methodName : "loadJson"});
+			haxe_Log.trace(e,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 143, className : "loader.BinaryLoader", methodName : "loadJson"});
+			haxe_Log.trace(e.type,{ fileName : "src/loader/BinaryLoader.hx", lineNumber : 144, className : "loader.BinaryLoader", methodName : "loadJson"});
 		};
 		this.xhr.withCredentials = true;
 		this.xhr.onload = function(e) {
@@ -18449,7 +18655,8 @@ me_cunity_debug_Out.dumpObjectPSafe = function(ob) {
 			var f = _g1[_g];
 			++_g;
 			if(new EReg("^pass","").match(f)) {
-				m += f + ":xxx\n";
+				var val = Reflect.field(ob,f);
+				m += f + (val.length > 0 ? ":xxx\n" : "\n");
 				continue;
 			}
 			if(f == "dbUser") {
@@ -18489,7 +18696,7 @@ me_cunity_debug_Out._dumpObjectTree = function(root,parent,recursive,i) {
 		while(_g < fields.length) {
 			var f = fields[_g];
 			++_g;
-			haxe_Log.trace(f,{ fileName : "me/cunity/debug/Out.hx", lineNumber : 347, className : "me.cunity.debug.Out", methodName : "_dumpObjectTree", customParams : [i]});
+			haxe_Log.trace(f,{ fileName : "me/cunity/debug/Out.hx", lineNumber : 348, className : "me.cunity.debug.Out", methodName : "_dumpObjectTree", customParams : [i]});
 			if(recursive) {
 				if(me_cunity_debug_Out.dumpedObjects.length > 1000) {
 					me_cunity_debug_Out._trace(me_cunity_debug_Out.dumpedObjects.toString(),i);
@@ -18505,7 +18712,7 @@ me_cunity_debug_Out._dumpObjectTree = function(root,parent,recursive,i) {
 	} catch( _g ) {
 		haxe_NativeStackTrace.lastError = _g;
 		var ex = haxe_Exception.caught(_g).unwrap();
-		haxe_Log.trace(ex,{ fileName : "me/cunity/debug/Out.hx", lineNumber : 372, className : "me.cunity.debug.Out", methodName : "_dumpObjectTree"});
+		haxe_Log.trace(ex,{ fileName : "me/cunity/debug/Out.hx", lineNumber : 373, className : "me.cunity.debug.Out", methodName : "_dumpObjectTree"});
 	}
 };
 me_cunity_debug_Out.dumpObject = function(ob,i) {
@@ -18562,7 +18769,7 @@ me_cunity_debug_Out.dumpStack = function(sA,i) {
 		me_cunity_debug_Out.itemToString(item,b);
 		b.b += "\n";
 	}
-	haxe_Log.trace(b.b,{ fileName : "me/cunity/debug/Out.hx", lineNumber : 463, className : "me.cunity.debug.Out", methodName : "dumpStack", customParams : [i]});
+	haxe_Log.trace(b.b,{ fileName : "me/cunity/debug/Out.hx", lineNumber : 464, className : "me.cunity.debug.Out", methodName : "dumpStack", customParams : [i]});
 };
 me_cunity_debug_Out.itemToString = function(s,b) {
 	switch(s._hx_index) {
@@ -22177,7 +22384,7 @@ store_UserStore.prototype = {
 		switch(action._hx_index) {
 		case 0:
 			var uState = action.state;
-			haxe_Log.trace("...",{ fileName : "src/store/UserStore.hx", lineNumber : 58, className : "store.UserStore", methodName : "reduce"});
+			haxe_Log.trace("..." + uState.dbUser.password,{ fileName : "src/store/UserStore.hx", lineNumber : 58, className : "store.UserStore", methodName : "reduce"});
 			return react_ReactUtil.copy(state,uState);
 		case 1:
 			var uState = action.state;
@@ -22201,7 +22408,7 @@ store_UserStore.prototype = {
 			return react_ReactUtil.copy(state,uState);
 		case 6:
 			var uState = action.state;
-			haxe_Log.trace("...",{ fileName : "src/store/UserStore.hx", lineNumber : 58, className : "store.UserStore", methodName : "reduce"});
+			haxe_Log.trace("..." + uState.dbUser.password,{ fileName : "src/store/UserStore.hx", lineNumber : 58, className : "store.UserStore", methodName : "reduce"});
 			return react_ReactUtil.copy(state,uState);
 		}
 	}
@@ -24817,13 +25024,13 @@ view_LoginForm.mapDispatchToProps = function(dispatch) {
 view_LoginForm.mapStateToProps = function() {
 	return function(aState) {
 		var uState = aState.userState;
-		haxe_Log.trace(aState.locationStore.redirectAfterLogin,{ fileName : "src/view/LoginForm.hx", lineNumber : 123, className : "view.LoginForm", methodName : "mapStateToProps"});
-		me_cunity_debug_Out.dumpObject(uState,{ fileName : "src/view/LoginForm.hx", lineNumber : 124, className : "view.LoginForm", methodName : "mapStateToProps"});
+		haxe_Log.trace(aState.locationStore.redirectAfterLogin,{ fileName : "src/view/LoginForm.hx", lineNumber : 124, className : "view.LoginForm", methodName : "mapStateToProps"});
+		haxe_Log.trace(uState.dbUser.password,{ fileName : "src/view/LoginForm.hx", lineNumber : 126, className : "view.LoginForm", methodName : "mapStateToProps"});
 		if(uState.loginTask == "ChangePassword") {
 			var rAL = aState.locationStore.redirectAfterLogin;
-			haxe_Log.trace(rAL,{ fileName : "src/view/LoginForm.hx", lineNumber : 128, className : "view.LoginForm", methodName : "mapStateToProps"});
+			haxe_Log.trace(rAL,{ fileName : "src/view/LoginForm.hx", lineNumber : 131, className : "view.LoginForm", methodName : "mapStateToProps"});
 			var param = shared_Utils.argList(rAL,["action","jwt","user_name","opath"]);
-			haxe_Log.trace(param == null ? "null" : haxe_ds_StringMap.stringify(param.h),{ fileName : "src/view/LoginForm.hx", lineNumber : 132, className : "view.LoginForm", methodName : "mapStateToProps"});
+			haxe_Log.trace(param == null ? "null" : haxe_ds_StringMap.stringify(param.h),{ fileName : "src/view/LoginForm.hx", lineNumber : 135, className : "view.LoginForm", methodName : "mapStateToProps"});
 			return { userState : uState, redirectAfterLogin : aState.locationStore.redirectAfterLogin};
 		}
 		return { userState : uState, redirectAfterLogin : aState.locationStore.redirectAfterLogin};
@@ -24855,31 +25062,31 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 			var password = js_Boot.__cast(doc.querySelector("input[name=\"password\"]") , HTMLInputElement);
 			var formElement = js_Boot.__cast(doc.querySelector("form[name=\"form\"]") , HTMLFormElement);
 			this.props.userState.dbUser.password = App.devPassword;
-			me_cunity_debug_Out.dumpObject(this.props.userState,{ fileName : "src/view/LoginForm.hx", lineNumber : 112, className : "view.LoginForm", methodName : "componentDidMount"});
+			haxe_Log.trace(this.props.userState.dbUser.password,{ fileName : "src/view/LoginForm.hx", lineNumber : 112, className : "view.LoginForm", methodName : "componentDidMount"});
 			this.props.submitLogin(this.props.userState);
 		}
-		haxe_Log.trace(this.props.redirectAfterLogin,{ fileName : "src/view/LoginForm.hx", lineNumber : 115, className : "view.LoginForm", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.redirectAfterLogin,{ fileName : "src/view/LoginForm.hx", lineNumber : 116, className : "view.LoginForm", methodName : "componentDidMount"});
 	}
 	,handleChange: function(e) {
 		var s = { dbUser : this.props.userState.dbUser};
 		var t = e.target;
-		haxe_Log.trace(t.name,{ fileName : "src/view/LoginForm.hx", lineNumber : 150, className : "view.LoginForm", methodName : "handleChange"});
-		haxe_Log.trace(t.value,{ fileName : "src/view/LoginForm.hx", lineNumber : 151, className : "view.LoginForm", methodName : "handleChange"});
+		haxe_Log.trace(t.name,{ fileName : "src/view/LoginForm.hx", lineNumber : 153, className : "view.LoginForm", methodName : "handleChange"});
+		haxe_Log.trace(t.value,{ fileName : "src/view/LoginForm.hx", lineNumber : 154, className : "view.LoginForm", methodName : "handleChange"});
 		if(t.name == "new_pass" && t.value == this.props.userState.dbUser.password) {
 			t.value = "";
 		}
+		haxe_Log.trace(this.props.userState.dbUser.password + "::" + this.state.dbUser.password,{ fileName : "src/view/LoginForm.hx", lineNumber : 161, className : "view.LoginForm", methodName : "handleChange"});
 		(t.name.indexOf("new_pass") == -1 ? s.dbUser : s)[t.name] = t.value;
-		var tmp = this.props;
-		var tmp1 = react_ReactUtil.copy(this.props.userState,s);
-		tmp.stateChange(tmp1);
-		haxe_Log.trace(this.state,{ fileName : "src/view/LoginForm.hx", lineNumber : 164, className : "view.LoginForm", methodName : "handleChange"});
+		haxe_Log.trace(s.dbUser.password,{ fileName : "src/view/LoginForm.hx", lineNumber : 163, className : "view.LoginForm", methodName : "handleChange"});
+		haxe_Log.trace(this.state.dbUser.password,{ fileName : "src/view/LoginForm.hx", lineNumber : 169, className : "view.LoginForm", methodName : "handleChange"});
 	}
 	,handleSubmit: function(e) {
 		e.preventDefault();
-		haxe_Log.trace(this.props,{ fileName : "src/view/LoginForm.hx", lineNumber : 170, className : "view.LoginForm", methodName : "handleSubmit"});
-		haxe_Log.trace(this.state,{ fileName : "src/view/LoginForm.hx", lineNumber : 171, className : "view.LoginForm", methodName : "handleSubmit"});
-		haxe_Log.trace(this.submitValue,{ fileName : "src/view/LoginForm.hx", lineNumber : 172, className : "view.LoginForm", methodName : "handleSubmit"});
+		haxe_Log.trace(this.props,{ fileName : "src/view/LoginForm.hx", lineNumber : 175, className : "view.LoginForm", methodName : "handleSubmit"});
+		haxe_Log.trace(this.state,{ fileName : "src/view/LoginForm.hx", lineNumber : 176, className : "view.LoginForm", methodName : "handleSubmit"});
+		haxe_Log.trace(this.submitValue,{ fileName : "src/view/LoginForm.hx", lineNumber : 177, className : "view.LoginForm", methodName : "handleSubmit"});
 		if(this.submitValue == "Login") {
+			haxe_Log.trace(this.props.userState.dbUser.password,{ fileName : "src/view/LoginForm.hx", lineNumber : 182, className : "view.LoginForm", methodName : "handleSubmit"});
 			this.props.submitLogin(this.props.userState);
 			return true;
 		}
@@ -24893,8 +25100,8 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 				this.props.submitLogin({ new_pass : this.props.userState.new_pass, dbUser : shared_Utils.updateDyn(this.props.userState.dbUser,{ user_name : this.props.userState.dbUser.user_name, password : this.props.userState.dbUser.password, jwt : this.props.userState.dbUser.jwt})});
 				break;
 			case "ResetPassword":
-				haxe_Log.trace("Reset Password requested",{ fileName : "src/view/LoginForm.hx", lineNumber : 183, className : "view.LoginForm", methodName : "handleSubmit"});
-				haxe_Log.trace(this.props,{ fileName : "src/view/LoginForm.hx", lineNumber : 184, className : "view.LoginForm", methodName : "handleSubmit"});
+				haxe_Log.trace("Reset Password requested",{ fileName : "src/view/LoginForm.hx", lineNumber : 189, className : "view.LoginForm", methodName : "handleSubmit"});
+				haxe_Log.trace(this.props,{ fileName : "src/view/LoginForm.hx", lineNumber : 190, className : "view.LoginForm", methodName : "handleSubmit"});
 				this.props.resetPassword(this.props.userState);
 				return false;
 			default:
@@ -24906,9 +25113,7 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 	}
 	,renderForm: function() {
 		var _gthis = this;
-		haxe_Log.trace(this.props.redirectAfterLogin,{ fileName : "src/view/LoginForm.hx", lineNumber : 211, className : "view.LoginForm", methodName : "renderForm"});
-		me_cunity_debug_Out.dumpObject(this.props.userState.dbUser,{ fileName : "src/view/LoginForm.hx", lineNumber : 212, className : "view.LoginForm", methodName : "renderForm"});
-		haxe_Log.trace("error_style password:" + this.errorStyle("password"),{ fileName : "src/view/LoginForm.hx", lineNumber : 213, className : "view.LoginForm", methodName : "renderForm"});
+		haxe_Log.trace(this.props.userState.loginTask + ":" + this.props.userState.dbUser.password,{ fileName : "src/view/LoginForm.hx", lineNumber : 217, className : "view.LoginForm", methodName : "renderForm"});
 		if(this.props.userState.loginTask == "CheckEmail") {
 			var tmp = react_ReactType.fromString("form");
 			var tmp1 = React.createElement(react_ReactType.fromString("div"),{ className : "formField"},React.createElement(react_ReactType.fromString("img"),{ className : "center", src : "img/emblem-mail.png"}));
@@ -24938,7 +25143,7 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 			return React.createElement(tmp,{ name : "form", onSubmit : $bind(this,this.handleSubmit), className : "login"},tmp1,tmp2,tmp7,tmp8,tmp9,React.createElement(tmp3,{ className : "formField"},React.createElement(react_ReactType.fromString("input"),{ type : "submit", style : { width : "100%"}, value : "Absenden"})));
 		}
 		if(this.props.userState.dbUser.change_pass_required) {
-			haxe_Log.trace("props.userState.dbUser.change_pass_required:" + Std.string(this.props.userState.dbUser.change_pass_required),{ fileName : "src/view/LoginForm.hx", lineNumber : 263, className : "view.LoginForm", methodName : "renderForm"});
+			haxe_Log.trace("props.userState.dbUser.change_pass_required:" + Std.string(this.props.userState.dbUser.change_pass_required),{ fileName : "src/view/LoginForm.hx", lineNumber : 270, className : "view.LoginForm", methodName : "renderForm"});
 			var tmp = react_ReactType.fromString("form");
 			var tmp1 = React.createElement(react_ReactType.fromString("input"),{ name : "password", type : "hidden", value : this.props.userState.dbUser.password});
 			var tmp2 = React.createElement(react_ReactType.fromString("div"),{ className : "formField"},React.createElement(react_ReactType.fromString("h3"),{ },"Bitte neues Passwort eintragen!"));
@@ -24958,9 +25163,9 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 			var tmp6 = this.errorStyle("new_pass_confirm") + "form-input";
 			var tmp9 = React.createElement(tmp3,{ className : "formField"},tmp4,React.createElement(tmp5,{ className : tmp6, name : "new_pass_confirm", type : "password", placeholder : "Confirm New Password", value : this.state.new_pass_confirm, onChange : $bind(this,this.handleChange)}));
 			var tmp3 = react_ReactType.fromString("div");
-			return React.createElement(tmp,{ name : "form", onSubmit : $bind(this,this.handleSubmit), className : "login"},tmp1,tmp2,tmp7,tmp8,tmp9,React.createElement(tmp3,{ className : "formField"},React.createElement(react_ReactType.fromString("input"),{ type : "submit", style : { width : "100%"}, value : "Login"})));
+			return React.createElement(tmp,{ name : "form", onSubmit : $bind(this,this.handleSubmit), className : "login"},tmp1,tmp2,tmp7,tmp8,tmp9,React.createElement(tmp3,{ className : "formField"},React.createElement(react_ReactType.fromString("input"),{ type : "submit", value : "Login"})));
 		}
-		haxe_Log.trace(this.props.userState.loginTask,{ fileName : "src/view/LoginForm.hx", lineNumber : 296, className : "view.LoginForm", methodName : "renderForm"});
+		haxe_Log.trace(this.props.userState.loginTask + ":" + this.props.userState.dbUser.password,{ fileName : "src/view/LoginForm.hx", lineNumber : 303, className : "view.LoginForm", methodName : "renderForm"});
 		var tmp = react_ReactType.fromString("form");
 		var tmp1 = react_ReactType.fromString("div");
 		var tmp2 = React.createElement(react_ReactType.fromString("label"),{ className : "fa userIcon", forhtml : "login_user_name"},React.createElement(react_ReactType.fromString("span"),{ className : "hidden"},"User ID"));
@@ -24971,7 +25176,7 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 		var tmp2 = React.createElement(react_ReactType.fromString("label"),{ className : "fa lockIcon", forhtml : "pw"},React.createElement(react_ReactType.fromString("span"),{ className : "hidden"},"Password"));
 		var tmp3 = react_ReactType.fromString("input");
 		var tmp4 = this.errorStyle("password") + " form-input";
-		var tmp6 = React.createElement(tmp1,{ className : "formField"},tmp2,React.createElement(tmp3,{ id : "pw", className : tmp4, name : "password", autoComplete : "current-password", type : "password", placeholder : "Password", onChange : $bind(this,this.handleChange)}));
+		var tmp6 = React.createElement(tmp1,{ className : "formField"},tmp2,React.createElement(tmp3,{ id : "pw", className : tmp4, name : "password", type : "password", placeholder : "Password", onChange : $bind(this,this.handleChange)}));
 		var tmp1 = React.createElement(react_ReactType.fromString("div"),{ className : "formField"},React.createElement(react_ReactType.fromString("input"),{ type : "submit", style : { width : "100%"}, value : "Login", onClick : function() {
 			_gthis.submitValue = "Login";
 			return true;
@@ -24984,9 +25189,10 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 		return React.createElement(tmp,{ name : "form", onSubmit : $bind(this,this.handleSubmit), className : "login"},tmp5,tmp6,tmp1,React.createElement(tmp2,tmp3,React.createElement(react_ReactType.fromString("input"),{ type : "submit", value : "Passwort vergessen?"})));
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/LoginForm.hx", lineNumber : 329, className : "view.LoginForm", methodName : "render"});
-		haxe_Log.trace(this.props.userState.lastError,{ fileName : "src/view/LoginForm.hx", lineNumber : 330, className : "view.LoginForm", methodName : "render"});
-		haxe_Log.trace(this.state.waiting,{ fileName : "src/view/LoginForm.hx", lineNumber : 331, className : "view.LoginForm", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/LoginForm.hx", lineNumber : 336, className : "view.LoginForm", methodName : "render"});
+		haxe_Log.trace(this.state.waiting,{ fileName : "src/view/LoginForm.hx", lineNumber : 337, className : "view.LoginForm", methodName : "render"});
+		haxe_Log.trace(this.props.userState.lastError,{ fileName : "src/view/LoginForm.hx", lineNumber : 338, className : "view.LoginForm", methodName : "render"});
+		haxe_Log.trace("password:" + this.props.userState.dbUser.password,{ fileName : "src/view/LoginForm.hx", lineNumber : 339, className : "view.LoginForm", methodName : "render"});
 		var style = { maxWidth : "32rem"};
 		if(this.state.waiting) {
 			var tmp = react_ReactType.fromString("section");
@@ -25004,7 +25210,6 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 		return React.createElement(tmp,{ className : "hero is-alt is-fullheight"},React.createElement(tmp1,{ className : "formContainer"},React.createElement(tmp2,{ className : "formBox is-rounded", style : style},tmp5,React.createElement(tmp3,{ className : "form2"},tmp4))));
 	}
 	,errorStyle: function(name) {
-		haxe_Log.trace(name,{ fileName : "src/view/LoginForm.hx", lineNumber : 369, className : "view.LoginForm", methodName : "errorStyle"});
 		var eStyle;
 		switch(name) {
 		case "new_pass_confirm":
@@ -25013,7 +25218,7 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 			break;
 		case "password":
 			var res = this.props.userState.lastError != null && this.props.userState.lastError.indexOf("password") > -1 ? "error " : "";
-			haxe_Log.trace(res,{ fileName : "src/view/LoginForm.hx", lineNumber : 374, className : "view.LoginForm", methodName : "errorStyle"});
+			haxe_Log.trace(res,{ fileName : "src/view/LoginForm.hx", lineNumber : 382, className : "view.LoginForm", methodName : "errorStyle"});
 			eStyle = res;
 			break;
 		case "user_name":
@@ -25023,8 +25228,6 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 		default:
 			eStyle = "";
 		}
-		me_cunity_debug_Out.dumpObject(this.props.userState,{ fileName : "src/view/LoginForm.hx", lineNumber : 388, className : "view.LoginForm", methodName : "errorStyle"});
-		haxe_Log.trace(eStyle,{ fileName : "src/view/LoginForm.hx", lineNumber : 389, className : "view.LoginForm", methodName : "errorStyle"});
 		return eStyle;
 	}
 	,setState: null
@@ -25201,10 +25404,7 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 	,dispatchInitial: null
 	,mounted: null
 	,componentDidCatch: function(error,info) {
-		if(this.mounted) {
-			this.setState({ hasError : true});
-		}
-		haxe_Log.trace(error,{ fileName : "src/view/UiView.hx", lineNumber : 87, className : "view.UiView", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "src/view/UiView.hx", lineNumber : 86, className : "view.UiView", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
 		this.mounted = true;
@@ -25214,7 +25414,7 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 			return React.createElement(react_ReactType.fromString("h1"),{ },"Something went wrong.");
 		}
 		if(this.props.userState.waiting) {
-			haxe_Log.trace("waiting hero",{ fileName : "src/view/UiView.hx", lineNumber : 102, className : "view.UiView", methodName : "render"});
+			haxe_Log.trace("waiting hero",{ fileName : "src/view/UiView.hx", lineNumber : 101, className : "view.UiView", methodName : "render"});
 			var tmp = react_ReactType.fromString("section");
 			var tmp1 = react_ReactType.fromString("div");
 			return React.createElement(tmp,{ className : "hero is-alt is-fullheight"},React.createElement(tmp1,{ className : "hero-body"},React.createElement(react_ReactType.fromString("div"),{ className : "loader", style : { width : "7rem", height : "7rem", margin : "auto", borderWidth : "0.58rem"}})));
@@ -25223,7 +25423,7 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 			return React.createElement(view_LoginForm._renderWrapper,{ userState : this.props.userState});
 		} else {
 			if(this.browserHistory.location.pathname != App.store.getState().locationStore.redirectAfterLogin) {
-				haxe_Log.trace("Redirect to: " + App.store.getState().locationStore.redirectAfterLogin,{ fileName : "src/view/UiView.hx", lineNumber : 128, className : "view.UiView", methodName : "render"});
+				haxe_Log.trace("Redirect to: " + App.store.getState().locationStore.redirectAfterLogin,{ fileName : "src/view/UiView.hx", lineNumber : 127, className : "view.UiView", methodName : "render"});
 				this.browserHistory.push(App.store.getState().locationStore.redirectAfterLogin);
 			}
 			var tmp = react_ReactType.fromComp(react_router_Router);
@@ -25248,7 +25448,7 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,renderRedirect: function(p) {
-		haxe_Log.trace(App.store.getState().locationStore.redirectAfterLogin,{ fileName : "src/view/UiView.hx", lineNumber : 193, className : "view.UiView", methodName : "renderRedirect"});
+		haxe_Log.trace(App.store.getState().locationStore.redirectAfterLogin,{ fileName : "src/view/UiView.hx", lineNumber : 192, className : "view.UiView", methodName : "renderRedirect"});
 		return React.createElement(react_ReactType.fromComp(view_RedirectBox),{ to : p == null ? App.store.getState().locationStore.redirectAfterLogin : p.to});
 	}
 	,setState: null
@@ -27095,7 +27295,7 @@ view_dashboard_Setup.prototype = $extend(React_Component.prototype,{
 		haxe_Log.trace(error,{ fileName : "src/view/dashboard/Setup.hx", lineNumber : 81, className : "view.dashboard.Setup", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
-		this.setState({ mounted : true});
+		this.state.mounted = true;
 		if(this.props.match.params.section == null) {
 			var basePath = this.props.match.url;
 			this.props.history.push("" + basePath + "/DB");
@@ -29927,7 +30127,6 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 			return null;
 		}
 		var style = null;
-		style = { minWidth : App.config.sidebarDims.minWidth, maxWidth : App.config.sidebarDims.maxWidth};
 		style = null;
 		var tmp = this.props.sameWidth && this.state.sameWidth > 0;
 		var i = 1;
@@ -29989,40 +30188,45 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 		}
 		if(this.props.parentComponent != null) {
 			var c = js_Boot.getClass(this.props.parentComponent);
-			haxe_Log.trace(c.__name__,{ fileName : "src/view/shared/Menu.hx", lineNumber : 197, className : "view.shared.Menu", methodName : "render"});
+			haxe_Log.trace(c.__name__,{ fileName : "src/view/shared/Menu.hx", lineNumber : 193, className : "view.shared.Menu", methodName : "render"});
 		}
 		this.menuRef = React.createRef();
 		var style = null;
 		if(this.props.sameWidth && this.state.sameWidth == null) {
 			style = { visibility : "hidden"};
 		}
-		style = { width : App.config.sidebarDims.maxWidth};
 		var tmp = react_ReactType.fromString("div");
 		var tmp1 = react_ReactType.fromString("aside");
 		var tmp2 = { ref : this.menuRef, className : "menu"};
 		var tmp3 = this.renderHeader();
 		var tmp4 = this.renderPanels();
-		return React.createElement(tmp,{ className : "sidebar is-right", style : style},React.createElement(tmp1,tmp2,tmp3,tmp4));
+		return React.createElement(tmp,{ className : "sidebar is-right"},React.createElement(tmp1,tmp2,tmp3,tmp4));
 	}
 	,switchContent: function(reactEventSource) {
 		var section = reactEventSource.target.getAttribute("data-section");
-		haxe_Log.trace("state.section:" + this.state.section + " section:" + section,{ fileName : "src/view/shared/Menu.hx", lineNumber : 227, className : "view.shared.Menu", methodName : "switchContent"});
+		haxe_Log.trace("state.section:" + this.state.section + " section:" + section,{ fileName : "src/view/shared/Menu.hx", lineNumber : 219, className : "view.shared.Menu", methodName : "switchContent"});
 		if(section != this.props.section) {
 			var basePath = this.props.match.path.split("/:")[0];
-			haxe_Log.trace(this.props.location.pathname,{ fileName : "src/view/shared/Menu.hx", lineNumber : 233, className : "view.shared.Menu", methodName : "switchContent"});
+			haxe_Log.trace(this.props.location.pathname,{ fileName : "src/view/shared/Menu.hx", lineNumber : 225, className : "view.shared.Menu", methodName : "switchContent"});
 			this.props.history.push("" + basePath + "/" + section);
-			haxe_Log.trace(this.props.history.location.pathname,{ fileName : "src/view/shared/Menu.hx", lineNumber : 236, className : "view.shared.Menu", methodName : "switchContent"});
+			haxe_Log.trace(this.props.history.location.pathname,{ fileName : "src/view/shared/Menu.hx", lineNumber : 228, className : "view.shared.Menu", methodName : "switchContent"});
 		}
 	}
 	,layout: function() {
 		var i = 0;
 		var activePanel = null;
 		this.aW = react_ReactRef.get_current(this.menuRef).getElementsByClassName("panel").item(0).offsetWidth;
-		haxe_Log.trace(this.aW,{ fileName : "src/view/shared/Menu.hx", lineNumber : 246, className : "view.shared.Menu", methodName : "layout"});
+		haxe_Log.trace(this.aW,{ fileName : "src/view/shared/Menu.hx", lineNumber : 238, className : "view.shared.Menu", methodName : "layout"});
 		if(this.state.sameWidth == null) {
-			this.setState({ sameWidth : this.aW},function() {
-				haxe_Log.trace("what's up?",{ fileName : "src/view/shared/Menu.hx", lineNumber : 249, className : "view.shared.Menu", methodName : "layout"});
-			});
+			try {
+				this.setState({ sameWidth : this.aW},function() {
+					haxe_Log.trace("what's up?",{ fileName : "src/view/shared/Menu.hx", lineNumber : 242, className : "view.shared.Menu", methodName : "layout"});
+				});
+			} catch( _g ) {
+				var ex = haxe_Exception.caught(_g);
+				haxe_Log.trace($bind(ex,ex.details),{ fileName : "src/view/shared/Menu.hx", lineNumber : 246, className : "view.shared.Menu", methodName : "layout"});
+				haxe_Log.trace(Reflect.field(this,"setState"),{ fileName : "src/view/shared/Menu.hx", lineNumber : 247, className : "view.shared.Menu", methodName : "layout"});
+			}
 		}
 	}
 	,componentDidMount: function() {
@@ -31545,6 +31749,7 @@ view_table_Tr.prototype = $extend(React_Component.prototype,{
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
 $global.$haxeUID |= 0;
+haxe_Resource.content = [{ name : "config", data : "ew0KCSJvcmciOiJTY2h1dHplbmdlbHdlcmsuZGUiLA0KCSJkZXZfaG9zdCI6ImRldi5waXR2ZXJ3YWx0dW5nLmRlIiwNCgkiaG9zdCI6InBpdHZlcndhbHR1bmcuZGUiLA0KCSJ1c2VyX25hbWUiOiJheGVsIiwNCgkicGFzc3dvcmQiOiJuZXdBZ2VfNjY2wqdfIiwNCgkiaXAiOiIxOTIuMTY4LjE3OC4yMCINCn0"}];
 if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : false) {
 	HxOverrides.now = performance.now.bind(performance);
 }
@@ -31567,13 +31772,17 @@ js_Boot.__toStr = ({ }).toString;
 if(ArrayBuffer.prototype.slice == null) {
 	ArrayBuffer.prototype.slice = js_lib__$ArrayBuffer_ArrayBufferCompat.sliceImpl;
 }
-App.config = require("config.js").config;
-App.devIP = __devIP__ == "X" ? "" : __devIP__;
-App.devUser = __user_name__ == "X" ? "" : __user_name__;
+haxe_crypto_Base64.CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+haxe_crypto_Base64.BYTES = haxe_io_Bytes.ofString(haxe_crypto_Base64.CHARS);
+haxe_crypto_Base64.URL_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+haxe_crypto_Base64.URL_BYTES = haxe_io_Bytes.ofString(haxe_crypto_Base64.URL_CHARS);
+App.config = JSON.parse(haxe_Resource.getString("config"));
+App.devIP = App.config.ip == null ? "" : App.config.ip;
+App.devUser = App.config.user_name == null ? "" : App.config.user_name;
 App.devPassword = "";
-App.flatpickr = require("flatpickr");
-App.German = require("js/de.js");
-App.sprintf = require("sprintf-js").sprintf;
+App.flatpickr = window["flatpickr"];
+App.German = App.German;
+App.sprintf = App.sprintf;
 App.modalBox = React.createRef();
 App.onResizeComponents = new haxe_ds_List();
 App.defaultUrl = "/Data/Contacts/List/get";

@@ -32,7 +32,6 @@ class Go
 
 	static function render(root:DivElement)
 	{
-
 		var app = ReactDOM.render(jsx('
 			<App/>
 		'), root);	

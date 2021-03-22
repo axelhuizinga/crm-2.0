@@ -109,7 +109,8 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			//props.userState.dbUser.password = password.value = App.devPassword;
 			props.userState.dbUser.password = App.devPassword;
 			//formElement.submit();
-			Out.dumpObject(props.userState);
+			trace(props.userState.dbUser.password);
+			//Out.dumpObject(props.userState);
 			props.submitLogin(props.userState);
 		}
 		trace(props.redirectAfterLogin);
@@ -121,7 +122,9 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		{
 			var uState = aState.userState;
 			trace(aState.locationStore.redirectAfterLogin);
-			Out.dumpObject(uState);		
+			//Out.dumpObject(uState);		
+			trace(uState.dbUser.password);
+
 			if(uState.loginTask == LoginTask.ChangePassword)
 			{
 				var rAL:String = aState.locationStore.redirectAfterLogin;
@@ -155,13 +158,15 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			t.value='';
 		}
 		//TODO: HANDLE CHANGE
+		trace(props.userState.dbUser.password +'::'+this.state.dbUser.password);
 		Reflect.setField((t.name.indexOf('new_pass')==-1? s.dbUser:s), t.name, t.value);
-		props.stateChange(copy(props.userState,s));
+		trace(s.dbUser.password);
+		//props.stateChange(copy(props.userState,s));
 		//trace(props.dispatch + '==' + App.store.dispatch);
 		//App.store.dispatch(UserAction.LoginChange(s));
 		//TODO: PUT INTO Global State to avoid rerender
 		//this.setState(s);
-		trace(this.state);
+		trace(this.state.dbUser.password);
 	}
 	
 	function handleSubmit(e:InputEvent)
@@ -174,6 +179,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		{
 			//props.userState.dbUser.updateDyn(
 				//{user_name:props.userState.dbUser.user_name, password:props.userState.dbUser.password, jwt:''});
+			trace(props.userState.dbUser.password);
 			props.submitLogin(props.userState);		
 			return true;	
 		}
@@ -208,9 +214,9 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	public function  renderForm():ReactFragment
 	{		
 		
-		trace(props.redirectAfterLogin);
-		Out.dumpObject(props.userState.dbUser);
-		trace('error_style password:'+errorStyle("password"));
+		trace(props.userState.loginTask +':' + props.userState.dbUser.password);
+		//Out.dumpObject(props.userState.dbUser);
+		//trace('error_style password:'+errorStyle("password"));
 		//if(props.redirectAfterLogin != null && props.redirectAfterLogin.startsWith('/ResetPassword'))
 		
 		if(props.userState.loginTask == CheckEmail)
@@ -260,7 +266,8 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		}
 
 		if(props.userState.dbUser.change_pass_required)
-		{trace('props.userState.dbUser.change_pass_required:'+props.userState.dbUser.change_pass_required);
+		{
+			trace('props.userState.dbUser.change_pass_required:'+props.userState.dbUser.change_pass_required);
 			return jsx('
 					<form name="form" onSubmit={handleSubmit} className="login" >
 						<input  name="password" type="hidden" value=${props.userState.dbUser.password} />														
@@ -273,7 +280,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								</label>
 								<input id="login_user_name" name="user_name" disabled="disabled" 
 								className=${errorStyle("user_name") + "form-input"}  
-								placeholder="User ID" value=${props.userState.dbUser.user_name} onChange={handleChange} />
+								placeholder="User ID" value=${props.userState.dbUser.user_name} onChange=${handleChange} />
 						</div>
 						<div className="formField">
 								<label className="fa lockIcon" forhtml="pw">
@@ -288,12 +295,12 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								<input  className=${errorStyle("new_pass_confirm") + "form-input"} name="new_pass_confirm" type="password" placeholder="Confirm New Password" value=${state.new_pass_confirm} onChange=${handleChange} />
 						</div>							
 						<div className="formField">
-								<input type="submit" style=${{width:'100%'}} value="Login" />
+								<input type="submit" value="Login" />
 						</div>
 					</form>'
 				);
-		}		
-		trace(props.userState.loginTask);
+		}
+		trace(props.userState.loginTask + ':' + props.userState.dbUser.password);//autoComplete="current-password"  
 		return jsx('
 				  	<form name="form" onSubmit={handleSubmit} className="login" >
 						<div className="formField">
@@ -308,7 +315,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								<label className="fa lockIcon" forhtml="pw">
 										<span className="hidden">Password</span>
 								</label>
-								<input id="pw" className=${errorStyle("password") + " form-input"} name="password"  autoComplete="current-password"  type="password" placeholder="Password" onChange=${handleChange} />
+								<input id="pw" className=${errorStyle("password") + " form-input"} name="password"  type="password" placeholder="Password" onChange=${handleChange} />
 						</div>
 						<div className="formField">
 								<input type="submit" style=${{width:'100%'}} value="Login" onClick=${function(){submitValue='Login';return true;}}/>
@@ -327,8 +334,9 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	override public function render()
 	{
 		trace(Reflect.fields(props));
-		trace(props.userState.lastError);
 		trace(state.waiting);
+		trace(props.userState.lastError);
+		trace('password:'+props.userState.dbUser.password);
 		var style = 
 		{
 			maxWidth:'32rem'
@@ -366,7 +374,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 	
 	function errorStyle(name:String):String
 	{
-		trace(name);
+		//trace(name);
 		var eStyle = switch(name)
 		{
 			case "password":
@@ -385,8 +393,8 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			default:
 				"";
 		}
-		Out.dumpObject(props.userState);
-		trace(eStyle);
+		//Out.dumpObject(props.userState);
+		//trace(eStyle);
 		return eStyle;
 	}
 	

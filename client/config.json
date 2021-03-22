@@ -1,3 +1,8 @@
 {
-    "hello": "This is an asynchronous module" 
+	"org":"Schutzengelwerk.de",
+	"dev_host":"dev.pitverwaltung.de",
+	"host":"pitverwaltung.de",
+	"user_name":"axel",
+	"password":"newAge_666§_",
+	"ip":"192.168.178.20"
 }

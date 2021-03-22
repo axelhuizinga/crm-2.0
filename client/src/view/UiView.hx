@@ -80,8 +80,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 
 	override function componentDidCatch(error, info) {
 		// Display fallback UI
-		if(mounted)
-		this.setState({ hasError: true });
+		//if(mounted)this.setState({ hasError: true });
 		// You can also log the error to an error reporting service
 		//logErrorToMyStore(error, info);
 		trace(error);

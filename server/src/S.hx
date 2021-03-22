@@ -160,9 +160,15 @@ class S
 			trace(dbQuery.dbUser);
 		}
 		else{
+			/*edump(SuperGlobal._GET);
+			if(SuperGlobal._GET['test']!=null){
+				devIP = "test";
+				S.send('{"ok":666}',true);
+			}*/
 			dbQuery = Model.binary();
 			//if(dbQuery!=null)trace(dbQuery.dbUser);
 			var ipost = Lib.hashOfAssociativeArray(SuperGlobal._POST);
+			devIP = ipost.get('devIP');	
 			trace(ipost.get('id') +':'+ipost.get('jwt'));
 			trace(ipost.keys());
 			if(Lib.toHaxeArray(SuperGlobal._FILES).length>0&&Global.isset(SuperGlobal._POST['id'])&&
@@ -188,7 +194,7 @@ class S
 				if(params.get('extDB'))
 					syncDbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
 				#end	
-				devIP = params.get('devIP');		
+					
 				Upload.go();
 			}
 			//trace(dbQuery.dbUser);
@@ -315,7 +321,7 @@ class S
 			Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 			Web.setHeader("Access-Control-Allow-Credentials", "true");
 			if(S.devIP!=null&&S.devIP!=''){
-				Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
+				Web.setHeader("Access-Control-Allow-Origin", '*');	
 				trace('https://${S.devIP}:9000');
 			}
 			else {
@@ -431,14 +437,7 @@ class S
 		Web.setHeader('Content-Type', cType);
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 		Web.setHeader("Access-Control-Allow-Credentials", "true");
-		if(S.devIP!=null&&S.devIP!=''){
-			Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
-			trace('https://${S.devIP}:9000');
-		}
-		else {
-			Web.setHeader("Access-Control-Allow-Origin", '*');
-			trace('no devIP? ${S.devIP}<<<');
-		}
+		Web.setHeader("Access-Control-Allow-Origin", '*');	
 		headerSent = true;	
 	}
 

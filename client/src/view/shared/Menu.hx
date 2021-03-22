@@ -1,6 +1,6 @@
 package view.shared;
 
-//import js.lib.Reflect;
+import haxe.Exception;
 import state.AppState;
 import action.LocationAction;
 import js.html.ButtonElement;
@@ -195,18 +195,14 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		//trace(props.basePath);
 		menuRef = React.createRef();
 		var style:Dynamic = null;
-		if(true&&props.sameWidth && state.sameWidth == null)//sameWidth
+		if(true&&props.sameWidth && state.sameWidth == null)//sameWidth style=${style} 
 		{
 			style = {
 				visibility: 'hidden'
 			};
-		}
-		style = {
-			//minWidth:App.config.sidebarDims.minWidth,
-			width:App.config.sidebarDims.maxWidth
-		}
+		}		
 		return jsx('
-		<div className="sidebar is-right"  style=${style} > 
+		<div className="sidebar is-right" > 
 			<aside className="menu" ref=${menuRef}>
 				${renderHeader()}
 				${renderPanels()}
@@ -240,10 +236,18 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		var activePanel:Int = null;
 		aW = menuRef.current.getElementsByClassName('panel').item(0).offsetWidth;
 		trace(aW);//
-		if(state.sameWidth==null)
-		this.setState({sameWidth:aW},function (){
-			trace("what's up?");
-		});
+		if(state.sameWidth==null){
+			try{
+				this.setState({sameWidth:aW},function (){
+					trace("what's up?");
+				});				
+			}
+			catch(ex:Exception){
+				trace(ex.details);
+				trace(Reflect.field(this,'setState'));
+			}
+		}
+
 	}
 	
 	override public function componentDidMount():Void 

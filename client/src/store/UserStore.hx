@@ -20,7 +20,7 @@ using shared.Utils;
  */
 
 class UserStore implements IReducer<UserAction, UserState>
-	implements IMiddleware<UserAction, UserState>
+	//implements IMiddleware<UserAction, UserState>
 {
 	public var initState:UserState;
 	
@@ -82,7 +82,7 @@ class UserStore implements IReducer<UserAction, UserState>
 		}
 	}
 
-	public function middleware(action:UserAction, next:Void -> Dynamic)
+	/*public function middleware(action:UserAction, next:Void -> Dynamic)
 	{
 		trace(store);
 		return switch(action)
@@ -95,5 +95,5 @@ class UserStore implements IReducer<UserAction, UserState>
 			default: 
 			next();
 		}
-	}	
+	}*/	
 }

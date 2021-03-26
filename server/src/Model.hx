@@ -351,6 +351,12 @@ class Model
 			for (fV in setValues)
 			{
 				var type:Int = PDO.PARAM_STR; //dbFieldTypes.get(fV[0]);
+				trace(fV);
+				if(fV=='date_null'){
+					type = PDO.PARAM_INT;
+					fV = Syntax.code("NULL");
+					trace(fV);
+				}
 				values2bind[i++] = fV;
 				//trace(Std.string(Global.count(values2bind)) +':' + fV);
 				//if (!stmt.bindParam(i, fV[1], type))//TODO: CHECK POSTGRES DRIVER OPTIONS
@@ -599,8 +605,7 @@ class Model
 		return execute(sqlBf.toString());
 	}
 	
-	
-	public function buildCond1(filter:String):String
+	/*public function buildCond1(filter:String):String
 	{
 		if (filter == null)		
 		{
@@ -675,7 +680,7 @@ class Model
 		}
 		filterSql = fBuf.toString();
 		return filterSql;
-	}
+	}*/
 
 	public function buildCond(filters:Dynamic):String
 	{
@@ -889,6 +894,7 @@ class Model
 		if(postKV.hasNext())
 			return json(postKV);
 		//var d:DbQuery = new DbQuery();
+		//trace(Global.file_get_contents('php://input'));
 		var pData = Bytes.ofString((
 			Lib.isCli()? Sys.args()[0]:
 			Global.file_get_contents('php://input')));

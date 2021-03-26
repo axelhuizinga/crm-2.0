@@ -1,6 +1,5 @@
 package;
 import php.Lib;
-import haxe.exceptions.PosException;
 import me.cunity.debug.Out;
 import me.cunity.php.Debug;
 import haxe.PosInfos;

@@ -244,10 +244,10 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		var activePanel:Int = null;
 		aW = menuRef.current.getElementsByClassName('panel').item(0).offsetWidth;
 		trace(aW);//
-		if(state.sameWidth==null)
+		/*if(state.sameWidth==null)
 		this.setState({sameWidth:aW},function (){
 			trace("what's up?");
-		});
+		});*/
 	}
 	
 	override public function componentDidMount():Void 

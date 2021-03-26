@@ -1,4 +1,5 @@
 package model;
+import haxe.macro.Compiler.NullSafetyMode;
 import view.shared.FormBuilder;
 import me.cunity.tools.StringTool;
 import haxe.rtti.Meta;
@@ -85,7 +86,8 @@ class ORM {
 				case _.indexOf('timestamp') => 0:
 					nv == null? '': nv;
 				case('date'):
-					nv == null? '': nv;
+					trace(nv == ''?'null':'notnull');
+					nv == ''? 'date_null': nv;
 				case _.indexOf('numeric') => 0:
 					nv = nv.split(' ')[0];
 					var dvals:Array<String> = nv.split(dsep);

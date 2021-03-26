@@ -131,11 +131,6 @@ class Data extends ReactComponentOf<DataProps,CompState>
 	
     override function render() 
 	{	
-		//if(_trace) trace(this.state);
-		//if(_trace) trace(props.history.location.pathname);
-		//if(_trace) trace(props.user);
-		//if (state.hasError)
-		//	return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');
 		if(_trace) trace(Reflect.fields(props));
 		if(_trace) trace(Reflect.fields(state));
 		return jsx('

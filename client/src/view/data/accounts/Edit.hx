@@ -13,7 +13,6 @@ import js.html.HTMLPropertiesCollection;
 import js.html.Document;
 import js.Browser;
 import js.html.HTMLCollection;
-import haxe.macro.Type.Ref;
 import react.React;
 import js.html.Event;
 import js.html.FormElement;

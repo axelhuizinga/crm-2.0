@@ -160,6 +160,11 @@ class S
 			trace(dbQuery.dbUser);
 		}
 		else{
+			if(SuperGlobal._SERVER['REQUEST_METHOD'] == 'OPTIONS'){
+				setHeader('Access-Control-Allow-Origin: *');
+				setHeader('Access-Control-Allow-Headers: X-Requested-With');
+				exit(0);
+			}
 			dbQuery = Model.binary();
 			//if(dbQuery!=null)trace(dbQuery.dbUser);
 			var ipost = Lib.hashOfAssociativeArray(SuperGlobal._POST);
@@ -196,6 +201,7 @@ class S
 			//(dbQuery);
 			if(dbQuery==null)
 				send("dev end");
+			devIP = params.get('devIP');
 			//Model.binary(params.get('dbData'));
 			if(params==null)
 				params = dbQuery.dbParams;
@@ -313,9 +319,9 @@ class S
 			//setHeader((json?'application/json':'text/plain'));		
 			//Web.setHeader('Content-Type', cType);
 			Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
-			Web.setHeader("Access-Control-Allow-Credentials", "true");
+			Web.setHeader("Access-Control-Allow-Credentials", "false");
 			if(S.devIP!=null&&S.devIP!=''){
-				Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
+				Web.setHeader("Access-Control-Allow-Origin", '*');	
 				trace('https://${S.devIP}:9000');
 			}
 			else {
@@ -430,9 +436,9 @@ class S
 			return;
 		Web.setHeader('Content-Type', cType);
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
-		Web.setHeader("Access-Control-Allow-Credentials", "true");
+		Web.setHeader("Access-Control-Allow-Credentials", "false");
 		if(S.devIP!=null&&S.devIP!=''){
-			Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
+			Web.setHeader("Access-Control-Allow-Origin", '*');	
 			trace('https://${S.devIP}:9000');
 		}
 		else {

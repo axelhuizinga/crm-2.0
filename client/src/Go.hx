@@ -17,7 +17,7 @@ class Go
 		var t:IntMap<haxe.ds.Map<String,Dynamic>> = new IntMap();
 		t.set(0, ["hello"=>"world"]);
 		t.set(1, ["org"=>666]);
-		trace(Type.getInstanceFields(Type.getClass(t)));
+		//trace(Type.getInstanceFields(Type.getClass(t)));
 		trace(t.remove(0));
 		render(createRoot());
 	}

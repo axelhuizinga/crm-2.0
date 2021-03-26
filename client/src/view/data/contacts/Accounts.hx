@@ -39,6 +39,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
+	var parentState:FormState;
 
 	public function new(props) 
 	{
@@ -57,7 +58,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 			values:new Map<String,Dynamic>()
 		},this);
 		trace(state.loading);	
-		props.parentComponent.state.relDataComps.set(Type.getClassName(Type.getClass(this)),this);
+		parentState = props.parentComponent.state;
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
@@ -138,6 +139,9 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		trace('ok');
 		props.parentComponent.registerOrmRef(this);
 		get();
+		if(parentState.relDataComps!=null){
+			parentState.relDataComps[Type.getClassName(Type.getClass(this))] = this;
+		}
 	}
 	
 	public function loadData(id:Int):Void

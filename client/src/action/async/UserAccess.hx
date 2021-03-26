@@ -189,7 +189,7 @@ class UserAccess {
 			},
 			function(data:DbData)
 			{		
-				trace(Type.typeof(data));
+				//trace(Type.typeof(data));
 				//Out.dumpObjectPSafe(data);
 				if (data.dataInfo.exists('loggedIn'))
 					trace('loggedIn:${data.dataInfo.get("loggedIn")}');
@@ -201,7 +201,9 @@ class UserAccess {
 						return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:data.dataErrors.iterator().next()})));
 				}
 				//trace(DbUser);
-				var userFields:Array<String> = Type.getInstanceFields(DbUser);
+				//var userFields:Array<String> = Type.getInstanceFields(DbUser);
+				var userFields:Array<String> = Reflect.fields(userState.dbUser);
+				trace(userFields.join('|'));
 				//var uProps:UserState = {};
 
 				for(k=>v in data.dataInfo.keyValueIterator())

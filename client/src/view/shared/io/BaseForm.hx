@@ -54,6 +54,7 @@ class BaseForm
 		if(name!=null && name!=''){
 			trace(Reflect.getProperty(comp.state.actualState,name));
 			Reflect.setProperty(comp.state.actualState,name,value);
+			trace(Reflect.getProperty(comp.state.actualState,name));
 		}
 		//Reflect.setProperty(comp.state.actualState,name,value);
 		/*trace(untyped comp.state.ormRefs.get('deals').orms.get(75).cycle +':'+comp.state.actualState.cycle);

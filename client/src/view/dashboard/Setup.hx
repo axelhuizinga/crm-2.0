@@ -83,8 +83,8 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 	
 	override public function componentDidMount():Void 
 	{
-		//
-		setState({mounted:true});
+		//		setState({mounted:true});
+		state.mounted = true;
 		if (props.match.params.section == null)
 		{
 			var basePath:String = props.match.url;

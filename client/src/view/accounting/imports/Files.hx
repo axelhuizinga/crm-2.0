@@ -102,7 +102,6 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = ReturnDebitModel.dataGridDisplay;
 		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
 		//formFields = ReturnDebitModel.formFields(props.match.params.action);
-		//trace('...' + Type.getInstanceFields(Type.resolveClass('view.shared.MItem')));
 		//trace('...' + Reflect.fields(props));
 		//baseForm =new BaseForm(this);
 		

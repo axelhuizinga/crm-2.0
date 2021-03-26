@@ -102,7 +102,7 @@ class CRUD
 	
 	public static function update(param:DBAccessProps) 
 	{	
-		Out.dumpObjectRSafe(param);
+		//Out.dumpObjectRSafe(param);
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState):Promise<Dynamic>{
 			//trace(param);
 			//if(param.dataSource != null)
@@ -122,7 +122,7 @@ class CRUD
 					trace('LoginError');
 					reject('Du musst dich neu anmelden!');
 				}	
-				
+				trace(param.data);
 				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
 					'${App.config.api}', 
 					param,

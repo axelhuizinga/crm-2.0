@@ -54,6 +54,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	var fieldNames:Array<String>;
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
+	var parentState:FormState;
 
 	public function new(props:DataFormProps) 
 	{
@@ -72,8 +73,10 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:null,
 			values:new Map<String,Dynamic>()
 		},this);	
-		props.parentComponent.state.relDataComps.set(Type.getClassName(Type.getClass(this)),this);
+		parentState = props.parentComponent.state;
 		trace(state.loading);
+		trace(Reflect.fields(props.parentComponent.state.relDataComps).join('|'));
+		trace(Type.typeof(props.parentComponent.state.relDataComps));
 	}
 	
 	static function mapDispatchToProps(dispatch:Dispatch) {
@@ -188,6 +191,9 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		//dbData = FormApi.init(this, props);
 		props.parentComponent.registerOrmRef(this);
 		get();
+		if(parentState.relDataComps!=null){
+			parentState.relDataComps[Type.getClassName(Type.getClass(this))] = this;
+		}
 		//state.formApi.doAction(props.action);
 	}
 	
@@ -322,6 +328,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				if(deal.fieldsModified.length>0){
 					changed++;
 					var data2save = deal.allModified();
+					trace(data2save[0]);
 					var dbQ:DBAccessProps = {
 						classPath:'data.Deals',
 						action:'update',

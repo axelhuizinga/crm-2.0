@@ -156,7 +156,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			model:'contacts',
 			ormRefs:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
 			relDataComps:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
-			//relatedForms:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
 				{

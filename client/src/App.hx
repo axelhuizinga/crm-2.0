@@ -115,8 +115,8 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		Redux.applyMiddleware(
 			mapMiddleware(Thunk, new ThunkMiddleware()),
 			mapMiddleware(AppAction, appWare),
-			mapMiddleware(LocationAction, locationStore),
-			mapMiddleware(UserAction, userStore)
+			mapMiddleware(LocationAction, locationStore)
+			//mapMiddleware(UserAction, userStore)
 			)
 		);
 	}

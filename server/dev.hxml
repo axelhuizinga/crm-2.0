@@ -13,7 +13,7 @@
 #-D analyzer-optimize
 -D dev
 -D no-deprecation-warnings
--debug
+-debug 
 -dce std
 -main S
 

@@ -75,7 +75,7 @@ module.exports = () =>{
 				//useLocalIp: true,
 				headers: {
 					//"Access-Control-Allow-Origin": "https://" + localConf.host,				
-					"Access-Control-Allow-Origin": "https://"+localConf.host+"/server.php",
+					"Access-Control-Allow-Origin": "https://"+localConf.ip+"/server.php",
 					//"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Credentials":true,
 					"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",

@@ -286,6 +286,12 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		});
 		pro.then(function(props:DbData) {
 			trace(props);
+			trace(state.data);
+			/*state.data = [
+				'action'=>'bookingRequestsCount',
+				'buchungsAnforderungenCount'=>props.dataInfo.get('buchungsAnforderungenCount'),
+				'bookingRequestsCount'=>props.dataInfo.get('bookingRequestsCount')
+			];*/
 			setState({data:[
 				'action'=>'bookingRequestsCount',
 				'buchungsAnforderungenCount'=>props.dataInfo.get('buchungsAnforderungenCount'),

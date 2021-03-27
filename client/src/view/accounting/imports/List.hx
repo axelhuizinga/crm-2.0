@@ -165,9 +165,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				classPath:'data.DebitReturnStatements',
 				action:'get',
 				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
+				table:'debit_return_statements',
 				limit:props.limit,
 				offset:offset>0?offset:0,
-				table:'debit_return_statements',
 				resolveMessage:{					
 					success:'Lastschriftliste wurde geladen',
 					failure:'Lastschriftliste konnte nicht geladen werden'

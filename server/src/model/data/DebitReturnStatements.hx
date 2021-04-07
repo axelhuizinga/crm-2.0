@@ -24,7 +24,8 @@ class DebitReturnStatements extends Model
 	{
 		super(param);
 		trace(setValues.length);
-		if(action=='insert')
+		if(param.exists('table'))
+			table = param.get('table');
 		go();
 	}
 
@@ -58,8 +59,7 @@ class DebitReturnStatements extends Model
 		if(iData==null)
 			return null;
 		trace(iData[0]);
-		if(param.exists('table'))
-			table = param.get('table');
+
 		if(table != null)
 		{
 			fieldNames = param.exists('fields')? 

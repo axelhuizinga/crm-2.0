@@ -135,50 +135,55 @@ class SyncExternalDeals extends Model
 		ORDER BY pay_plan_id  
 		${limit.sql} ${offset.sql}		
 		*/;
+		trace(sql);
+
 		var stmt = S.syncDbh.query(sql);
 		S.checkStmt(S.syncDbh,stmt,'importExtDeals deals');
-		trace(sql);
 		var dData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		var cnt:Int = Global.count(dData);
 		trace('all:' + Syntax.code('count({0})',dData));
-		var start = Sys.time();
-		var cD:Map<String,Dynamic> = Util.map2fields(dData[0], keys);
-		//trace(dData);
-		//trace(cD);
-		var cNames:Array<String> = [for(k in cD.keys()) k];		
-		/* STORE fetched data in new crm */
-		for(row in dData)
-		{			
-			var stmt:PDOStatement = upsertDeal(row, cD, cNames);
-			try{
-				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);	
-				if(!(synced>1)){
-					trace(row);
-					trace(res);
+		if(cnt>0){
+			var start = Sys.time();
+			var cD:Map<String,Dynamic> = Util.map2fields(dData[0], keys);
+			//trace(dData);
+			//trace(cD);
+			var cNames:Array<String> = [for(k in cD.keys()) k];		
+			/* STORE fetched data in new crm */
+			for(row in dData)
+			{			
+				var stmt:PDOStatement = upsertDeal(row, cD, cNames);
+				try{
+					var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);	
+					if(!(synced>1)){
+						trace(row);
+						trace(res);
+					}
 				}
+				catch(e:Dynamic)
+				{
+					{S.sendErrors(dbData, [
+						'dbError'=>S.dbh.errorInfo(),
+						'upsertClient'=>S.errorInfo(row),
+						'exception'=>e
+					]);}		
+				}	
+			}		
+			if(Lib.isCli()){
+				trace('${offset.int} + ${synced}');
+				offset = Util.offset(synced);
+				if(offset.int+limit.int>param['totalRecords'])
+				{
+					limit = Util.limit(param['totalRecords'] - offset.int);
+				}			
+				return;
 			}
-			catch(e:Dynamic)
-			{
-				{S.sendErrors(dbData, [
-					'dbError'=>S.dbh.errorInfo(),
-					'upsertClient'=>S.errorInfo(row),
-					'exception'=>e
-				]);}		
-			}	
-		}		
-		if(Lib.isCli()){
-			trace('${offset.int} + ${synced}');
-			offset = Util.offset(synced);
-			if(offset.int+limit.int>param['totalRecords'])
-			{
-				limit = Util.limit(param['totalRecords'] - offset.int);
-			}			
-			return;
-		}
 
-		trace('done took:' + (Sys.time()-start));
+			trace('done took:' + (Sys.time()-start));
+			
+			//dbData.dataInfo['offset'] = param['offset'] + synced;
+			trace(dbData.dataInfo);
+		}
 		
-		//dbData.dataInfo['offset'] = param['offset'] + synced;
-		trace(dbData.dataInfo);
         //S.sendData(dbData, null);
 		//S.sendInfo(dbData,['missing'=> missing, 'got' => got, 'max_client_id' => maxCid]);
 		

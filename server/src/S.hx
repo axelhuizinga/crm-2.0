@@ -106,24 +106,14 @@ class S
 	public static var dbViciBoxPass:String;	
 	public static var dbQuery:DbQuery;
 	public static var params:Map<String,Dynamic>;
+	public static var _SERVER:Map<String,Dynamic>;
 	public static var vicidialUser:String;
 	public static var viciDial: Map<String, Dynamic>;
 	static var ts:Float;
 	
 	static function main() 
 	{		
-		/*var _server:NativeArray = SuperGlobal._SERVER;
-		var m:String = '';//'${_server.length} ${Const.PHP_EOL}${Global.implode(Const.PHP_EOL, Lib.toPhpArray(_server))}${Const.PHP_EOL}';
-		for(k=>v in _server){
-			m += '${k}=>${v}' + Const.PHP_EOL;
-		}
-		Syntax.code("error_log({0})",m);*/
-		//Syntax.code("error_log({0} {1} {2})",_server.length, Const.PHP_EOL, Global.implode(Const.PHP_EOL, Lib.toPhpArray(_server)));		
 		init();
-		//trace(conf.get('ini'));
-		//var ini:NativeArray = S.conf.get('ini');
-		//var vD:NativeArray = ini['vicidial'];
-		//trace(ini);
 		ts = Sys.time();
 		last_request_time = Date.fromTime(ts/1000);
 		var now:String = DateTools.format(Date.now(), "%d.%m.%y %H:%M:%S");		
@@ -137,7 +127,8 @@ class S
 		{trace(Syntax.code("$_SERVER['VERIFIED']"));}
 		//var pd:Dynamic = Web.getPostData();
 		trace(Lib.isCli()?'cli':'web');
-		//devIP = SuperGlobal._POST['devIP'];Syntax.code("$sysadmin")
+		//trace(SuperGlobal._SERVER['REQUEST_METHOD']);
+		//devIP = SuperGlobal._POST['devIP'];//Syntax.code("$sysadmin")
 		response = {content:'',error:''};
 		if(Lib.isCli()){
 			trace(Sys.args());
@@ -149,7 +140,7 @@ class S
 				//var dbUser:DbUser = null;			
 			//	{jwt:'jwt',id:100,online:true, password:'sysadmin', user_name:'sysadmin'});
 				//{jwt:params['jwt'],id:params['id'],online:true, password:params['password'], user_name:params['user_name']});
-			trace('dbUser');
+			//trace('dbUser');
 			//Sys.exit(0);
 			var dbAccProps:DBAccessProps = {action:action, data:{REMOTE_ADDR:params['REMOTE_ADDR']}, dbUser: dbUser};
 			for(k=>v in params.keyValueIterator())
@@ -161,15 +152,21 @@ class S
 		}
 		else{
 			if(SuperGlobal._SERVER['REQUEST_METHOD'] == 'OPTIONS'){
-				setHeader('Access-Control-Allow-Origin: *');
-				setHeader('Access-Control-Allow-Headers: X-Requested-With');
-				exit(0);
+				//Web.setHeader('Content-Type', cType);
+				//var _server:Map<String,Dynamic> = Lib.hashOfAssociativeArray(SuperGlobal._SERVER);
+				//trace(_server.toString());
+				Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
+				//Web.setHeader("Access-Control-Allow-Credentials", "false");				
+				Web.setHeader('Access-Control-Allow-Origin','*');
+				//Web.setHeader('Access-Control-Allow-Headers','X-Requested-With');
+				Sys.exit(0);
 			}
 			dbQuery = Model.binary();
-			//if(dbQuery!=null)trace(dbQuery.dbUser);
+			trace(dbQuery.dbParams);
+			if(dbQuery!=null)trace(dbQuery.dbUser);
 			var ipost = Lib.hashOfAssociativeArray(SuperGlobal._POST);
 			trace(ipost.get('id') +':'+ipost.get('jwt'));
-			trace(ipost.keys());
+			//trace(ipost.keys());
 			if(Lib.toHaxeArray(SuperGlobal._FILES).length>0&&Global.isset(SuperGlobal._POST['id'])&&
 				User.verify(SuperGlobal._POST['jwt'], Std.parseInt(SuperGlobal._POST['id'])))
 			{
@@ -177,7 +174,7 @@ class S
 				Syntax.array([PDO.ATTR_PERSISTENT,true]));
 			
 				trace(dbh);
-				params = Lib.hashOfAssociativeArray(SuperGlobal._POST);
+				params = _SERVER;// Lib.hashOfAssociativeArray(SuperGlobal._POST);
 				action = params.get('action');		
 				if(params.get('extDB'))
 				{
@@ -193,7 +190,7 @@ class S
 				if(params.get('extDB'))
 					syncDbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
 				#end	
-				devIP = params.get('devIP');		
+				devIP = params.get('devIP');	
 				Upload.go();
 			}
 			//trace(dbQuery.dbUser);
@@ -202,18 +199,22 @@ class S
 			if(dbQuery==null)
 				send("dev end");
 			devIP = params.get('devIP');
-			//Model.binary(params.get('dbData'));
+			//trace([for(k in params.keys())k].map(function (v) return '\'$v\'').join('|'));
 			if(params==null)
 				params = dbQuery.dbParams;
 			params.set('mandator',dbQuery.dbUser.mandator);
 			user_id = dbQuery.dbUser.id;
 			trace(params);
-			safeLog(dbQuery);
+			if(Lib.isCli())
+				safeLog(params);
+			else 
+				safeLog(dbQuery);
 			//devIP = params.get('devIP');
 			//trace(params);
 
 		}
 		action = params.get('action');
+
 		devIP = params.get('devIP');
 		if (params.get('action') == null || params.get('classPath') == null)
 		{
@@ -223,8 +224,8 @@ class S
 		dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
 			Syntax.array([PDO.ATTR_PERSISTENT,true]));
 		
-		//trace(dbh);
-		trace('$devIP connect2syncDB:'+ (params.get('extDB')!=null||params.get('action').indexOf('sync')==0?'Y':'N'));
+		//trace(dbh);!=null
+		trace('$devIP connect2syncDB:'+ (params.get('extDB')||params.get('action').indexOf('sync')==0?'Y':'N'));
 		if(params.get('extDB')||params.get('action').indexOf('sync')==0)
 		{
 			//CONNECT DIALER DB	
@@ -233,15 +234,24 @@ class S
 				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
 			trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
 		}
-		#if debug
-		dbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
-		if(params.get('extDB'))
-			syncDbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
-		saveRequest(dbQuery,false);
-		#else 
-		saveRequest(dbQuery,(params.exist('saveReq')?false:true));
-		#end
-
+		
+		if(action=='login'){
+			params.set('user_name', dbQuery.dbUser.user_name);
+			saveRequest(params,true);
+		}
+		else{		
+			#if debug
+			dbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
+			if(params.get('extDB'))
+				syncDbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
+			saveRequest(dbQuery,Lib.isCli());
+			#else 
+			saveRequest(dbQuery,(params.exist('saveReq')?false:Lib.isCli()));
+			#end
+		}
+		if(Lib.isCli()){
+			Model.dispatch(dbQuery);
+		}
 		if(action == 'resetPassword')
 		{
 			User.resetPassword(params);
@@ -438,11 +448,12 @@ class S
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 		Web.setHeader("Access-Control-Allow-Credentials", "false");
 		if(S.devIP!=null&&S.devIP!=''){
-			Web.setHeader("Access-Control-Allow-Origin", '*');	
+			Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
 			trace('https://${S.devIP}:9000');
 		}
 		else {
 			Web.setHeader("Access-Control-Allow-Origin", '*');
+			Out.dumpStack(CallStack.callStack());
 			trace('no devIP? ${S.devIP}<<<');
 		}
 		headerSent = true;	
@@ -704,9 +715,9 @@ class S
 
 	static function saveRequest(req:Dynamic, ?logOnly:Bool=true):Bool
 	{
-		//trace(Json.stringify(dbQuery));
+		trace(Json.stringify(req));
 		if(logOnly){
-			Util.safeLog(req);
+			Util.safeLog(Json.stringify(req));
 			return true;			
 		}
 
@@ -730,18 +741,22 @@ class S
 		return success;
 	}	
 	//static function __init__() {
-	static function init() {
-		
+	static function init() {		
 		var branch:String = #if dev 'dev' #else 'crm' #end;
-		home = Syntax.code("dirname($_SERVER['SCRIPT_FILENAME'])");
+		_SERVER = Lib.hashOfAssociativeArray(SuperGlobal._SERVER);
 		//Lib.print(home+"\r\n");
-		Syntax.code('require_once({0})', '$home/../.crm/functions.php');
-		Syntax.code('require_once({0})', '$home/../.crm/db.php');		
+		home = haxe.io.Path.directory(_SERVER['SCRIPT_FILENAME']);
+		//home = Syntax.code("dirname($_SERVER['SCRIPT_FILENAME'])");
+		Global.require_once('$home/../.crm/functions.php');
+		Global.require_once('$home/../.crm/db.php');		
+		Debug.logFile = Syntax.code("$appLog");
+		haxe.Log.trace = Debug._trace;
 		if(Lib.isCli()){
 			//Cli.process(Sys.args(), new CliService()).handle(Cli.exit);
 			trace('helloworld :)');
 
-			//Lib.print(Syntax.code("$appLog")  + "\r\n");//();
+			Lib.print(Syntax.code("$appLog")  + "\r\n");//();
+			trace(Global.ini_get('error_log'));
 			trace(Sys.args());
 		}		
 		else{

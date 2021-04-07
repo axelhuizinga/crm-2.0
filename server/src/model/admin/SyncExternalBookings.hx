@@ -123,6 +123,7 @@ class SyncExternalBookings extends Model{
 INNER JOIN "booking_requests" br
 ON br.ba_id=bi.ba_id);		
 		*/;
+		trace('$sql');
 		var stmt = S.dbh.query(sql);
 		if(untyped stmt==false)
 		{

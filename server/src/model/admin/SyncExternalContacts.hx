@@ -440,7 +440,7 @@ ON vl.lead_id=cl.lead_id
 ORDER BY client_id
 ${limit.sql} ${offset.sql}
 */;
-		//trace(sql);
+		trace(sql);
 		var stmt:PDOStatement = S.syncDbh.query(sql);
 		trace('loading ${limit} ${offset}');
 		S.checkStmt(S.syncDbh, stmt,'getCrmClients query:');

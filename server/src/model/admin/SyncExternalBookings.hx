@@ -179,7 +179,7 @@ ON br.ba_id=bi.ba_id);
 			}
 			// GOT LIVE PBX DATA
 
-			trace('${offset.int} + ${synced}');
+			trace('totalCount:${totalCount} offset:${offset.int} + synced:${synced}');
 			offset = Util.offset(synced);
 			if(offset.int+limit.int>totalCount)
 			{

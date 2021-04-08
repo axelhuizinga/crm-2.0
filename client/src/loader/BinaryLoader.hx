@@ -102,7 +102,7 @@ class BinaryLoader {
 	public function load() {
 		xhr.open('POST', url, true);
 		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
-		xhr.setRequestHeader('Access-Control-Allow-Origin', 'https://${App.devIP}:9000');
+		//xhr.setRequestHeader('Access-Control-Allow-Origin', 'https://${App.devIP}:9000');
 		xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;
 		
 		//xhr.onerror = function(e) onError(xhr.statusText);
@@ -110,7 +110,7 @@ class BinaryLoader {
 			trace(e);
 			trace(e.type);
 		}
-		xhr.withCredentials = false;
+		xhr.withCredentials = true;
 		xhr.onload = function(e) {
 			//trace(xhr.status);
 			if (xhr.status != 200) {

@@ -156,8 +156,8 @@ class S
 				//var _server:Map<String,Dynamic> = Lib.hashOfAssociativeArray(SuperGlobal._SERVER);
 				//trace(_server.toString());
 				Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
-				//Web.setHeader("Access-Control-Allow-Credentials", "false");				
-				Web.setHeader('Access-Control-Allow-Origin','*');
+				Web.setHeader("Access-Control-Allow-Credentials", "true");				
+				Web.setHeader('Access-Control-Allow-Origin','https://192.168.178.20:9000');
 				//Web.setHeader('Access-Control-Allow-Headers','X-Requested-With');
 				Sys.exit(0);
 			}
@@ -431,6 +431,8 @@ class S
 		trace('OK ${b.length}');
 		if(Lib.isCli())
 			return false;		
+		Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');
+		Web.setHeader("Access-Control-Allow-Credentials", "true");
 		setHeader('application/octet-stream');		
 		var out = File.write("php://output", true);
 		out.bigEndian = true;
@@ -446,7 +448,7 @@ class S
 			return;
 		Web.setHeader('Content-Type', cType);
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
-		Web.setHeader("Access-Control-Allow-Credentials", "false");
+		//Web.setHeader("Access-Control-Allow-Credentials", "false");
 		if(S.devIP!=null&&S.devIP!=''){
 			Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
 			trace('https://${S.devIP}:9000');

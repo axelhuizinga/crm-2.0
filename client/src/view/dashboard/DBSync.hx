@@ -252,7 +252,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			maxImport:50000,
 			userState:props.userState,
 			offset:100000,
-			table:'bank_transfers',
+			table:'booking_requests',
 			classPath:'admin.SyncExternalBookings',
 			action:'importContacts'
 		}));

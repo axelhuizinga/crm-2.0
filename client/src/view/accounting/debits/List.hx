@@ -1,4 +1,4 @@
-package view.accounting.imports;
+package view.accounting.debits;
 
 import haxe.Serializer;
 import js.html.Event;
@@ -87,13 +87,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:FormApi.initSideMenu2( this,			
 				[
 					{
-						dataClassPath:'admin.ImportCamt',//Rücklastschriften
+						dataClassPath:'admin.Debit',//Rücklastschriften (admin.ImportCamt)
 						label:"Liste",
 						section: 'List',
 						items: List.menuItems
 					},
 					{
-						dataClassPath:'admin.ImportCamt',
+						dataClassPath:'admin.Debit',//admin.ImportCamt
 						label:"Dateien",
 						section: 'Files',
 						items: Files.menuItems
@@ -169,8 +169,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				resolveMessage:{					
-					success:'Lastschriftliste wurde geladen',
-					failure:'Lastschriftliste konnte nicht geladen werden'
+					success:'Rücklastschriften wurde geladen',
+					failure:'Rücklastschriften konnte nicht geladen werden'
 				},
 				dbUser:props.userState.dbUser,
 				devIP: App.devIP

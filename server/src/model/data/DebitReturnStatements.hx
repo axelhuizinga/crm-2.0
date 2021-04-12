@@ -55,6 +55,7 @@ class DebitReturnStatements extends Model
 	
 	function insert():NativeArray
 	{		
+		trace(dbData.dataInfo);
 		var iData:Array<Map<String,Dynamic>> = Unserializer.run(dbData.dataInfo.get('data'));
 		if(iData==null)
 			return null;

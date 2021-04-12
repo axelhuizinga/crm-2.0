@@ -187,7 +187,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 			limit:props.limit,
 			offset:offset>0?offset:0,
 			order:'termin',
-			table:'bank_transfers'
+			table:'booking_requests'
 		};
 		BinaryLoader.dbQuery(
 			'${App.config.api}', 
@@ -249,13 +249,14 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 	function draw() {
 		if(state.dataTable != null && state.dataTable.length>0)
 			{		
-		//trace(chartBox.outerHTML);	
+		trace(chartBox.outerHTML);	
 		var cW:Int = chartBox.offsetWidth;
 		var iX:Int = Math.floor(cW/state.dataTable.length);		
 		cW = iX * state.dataTable.length;
 		chartBox.style.width = cW + 'px';
 		var cH:Int = chartBox.offsetHeight-1;
 		var lH:Int = cH*0.064>24?Math.round(cH*0.064):24;
+		trace('cH:$cH lH:$lH');
 		cH -= lH;
 		//var formatTime = D3.time.format;//("%b %Y");//TimeFormat.iso(
 		var months = 'Jan,Feb,Mar,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez'.split(',');
@@ -415,7 +416,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(props.match.params.section + ':${props.match.params.action}::' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
-		if( state.dataTable.length==0)
+		if(state.dataTable.length==0)
 			return state.formApi.renderWait();
 		//trace('###########loading:' + state.rows[0]);
 		return switch(props.match.params.action)

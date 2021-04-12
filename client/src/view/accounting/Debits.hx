@@ -36,8 +36,8 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import shared.DbData;
 import state.FormState;
-import view.accounting.imports.Files;
-import view.accounting.imports.List;
+import view.accounting.debits.Files;
+import view.accounting.debits.List;
 import view.shared.FormBuilder;
 import view.shared.MItem;
 import view.shared.MenuProps;
@@ -54,10 +54,10 @@ using Lambda;
  * @author axel@cunity.me
  */
 @:connect
-class Imports extends ReactComponentOf<DataFormProps,FormState>
+class Debits extends ReactComponentOf<DataFormProps,FormState>
 {
 
-	static var _instance:Imports;
+	static var _instance:Debits;
 	var _trace:Bool;
 
 	var dataAccess:DataAccess;	
@@ -101,7 +101,7 @@ class Imports extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-			/*load: function(param:DBAccessProps) return dispatch(Imports.upload(param)),
+			/*load: function(param:DBAccessProps) return dispatch(Debits.upload(param)),
 			storeData:function(id:String, action:DataAction)
 			{
 				dispatch(LiveDataAccess.storeData(id, action));

@@ -1,5 +1,6 @@
-package view.accounting.imports;
+package view.accounting.debits;
 
+import js.lib.Error;
 import js.html.Event;
 import action.DataAction;
 import action.DataAction.SelectType;
@@ -57,7 +58,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	static var _instance:Files;//
 
 	public static var menuItems:Array<MItem> = [		
-		{label:'Rücklastschriften',action:'importReturnDebit',
+		{label:'Rücklastschriften Hochladen',action:'importReturnDebit',
 			formField:{				
 				name:'returnDebitFile',
 				submit:'Importieren',
@@ -79,6 +80,31 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				trace(Reflect.fields(finput));
 				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
 				trace(finput.value);
+				//trace(finput.files.get('returnDebitFile'));
+			}/**/
+		},
+		{label:'Neu Erstellen',action:'createDirectDebit',
+			formField:{				
+				name:'directDebitFile',
+				submit:'Herunterladen',
+				type:FormInputElement.Button,
+				handleChange: function(evt:Event) {
+					trace(Reflect.fields(evt));
+					/*var finput = cast Browser.document.getElementById('returnDebitFile');
+					trace(finput.value);
+					//trace(_instance);
+					var val = (finput.value == ''?'':finput.value.split('\\').pop());
+					Files._instance.setState({data:['hint'=>'Zum Upload ausgewählt:${val}']});*/
+				}
+			},
+			handler: function(_) {				
+				/*var finput = cast Browser.document.getElementById('returnDebitFile');
+				//var files = php.Lib.hashOfAssociativeArray(finput.files);
+				
+				trace(finput.files);
+				trace(Reflect.fields(finput));
+				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
+				trace(finput.value);*/
 				//trace(finput.files.get('returnDebitFile'));
 			}/**/
 		}
@@ -110,18 +136,18 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		menuItems[0].formField.jwt = App._app.state.userState.dbUser.jwt;
 		trace(menuItems[0].formField);
 		state =  App.initEState({
-			data:['hint'=>'Datei zum Hochladen auswählen'],
+			data:['hint'=>'Rücklastschriften zum Hochladen auswählen'],
 			action:(props.match.params.action==null?'importReturnDebit':props.match.params.action),
 			sideMenu:FormApi.initSideMenu2( this,			
 			[
 				{
-					dataClassPath:'admin.ImportCamt',
+					dataClassPath:'admin.Debit',
 					label:"Liste",
 					section: 'List',
 					items: List.menuItems
 				},
 				{
-					dataClassPath:'admin.ImportCamt',
+					dataClassPath:'admin.Debit',
 					label:"Dateien",
 					section: 'Files',
 					items: Files.menuItems
@@ -165,6 +191,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.action);
 		state.formApi.doAction();
 	}
+
+	public function createDirectDebit(_):Void {
+		trace(Date.now());
+	}
 	
 	public function delete(ev:ReactEvent):Void
 	{
@@ -181,6 +211,9 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			//var reader:FileReader = new FileReader();
 			var uFile:Blob = cast(finput.files[0], Blob);
 			trace(uFile);
+			if(uFile==null){
+				reject({error:new Error('Keine Datei ausgewählt')});
+			}
 			var fd:FormData = new FormData();			
 			fd.append('devIP',App.devIP);
 			fd.append('id',Std.string(App._app.state.userState.dbUser.id));

@@ -14,6 +14,7 @@ import haxe.Json;
 import php.SuperGlobal;
 import sys.io.File;
 import php.Web;
+import php.extlib.CAMTbox;
 
 class Upload {
 	public static function go() {		
@@ -26,14 +27,21 @@ class Upload {
 		switch(SuperGlobal._POST['action']){
 			case 'returnDebitFile':
 			if(rData.exists('returnDebitFile')){
+				Global.require_once ('extlib/CAMTbox.php');
 				var rDF:NativeAssocArray<String> =  SuperGlobal._FILES['returnDebitFile'];
 				var name = '/var/www/${SuperGlobal._SERVER["HTTP_HOST"]}/files/' + rDF['name'];
 				Global.move_uploaded_file(rDF['tmp_name'],name);
 				trace(name+':' + (Global.file_exists(name)?'Y':'N'));
-				trace('https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file=$name');
-				var result:String = Global.file_get_contents('https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file=$name&debug=${(S.params.get('debug')==true?true:false)}');
-				trace(result);
+				/*var rlaUrl:String = 
+				
+				'https://${SuperGlobal._SERVER["HTTP_HOST"]}/extlib/rla.php?file='+StringTools.urlEncode(name)+'&debug=${(S.params.get('debug')==true?true:false)}';
+				trace(rlaUrl);*/
+				var result:String = CAMTbox.processDebitReturns(name);
+				trace(result.substr(0,250));
+				if(result.length==0)
+				S.send(Json.stringify({error:'No File uploaded'}),true);
 				var ids:Array<Int> = dbStore(SuperGlobal._POST['action'], result);
+				trace(ids);
 				//Global.unlink('/var/www/${SuperGlobal._SERVER["HTTP_HOST"]}/files/*');
 				var dbAccProps:DBAccessProps = {
 					action:'getStati', 
@@ -44,9 +52,11 @@ class Upload {
 				};
 				//var sQuery:DbQuery = new DbQuery(dbAccProps);
 				//Model.dispatch(sQuery);
-				var ipost = Lib.hashOfAssociativeArray(SuperGlobal._POST);
-				var dRS:DebitReturnStatements = new DebitReturnStatements(ipost);
-				trace(dRS.getStati(ids,ipost.get('mandator')));
+				var ipost:Map<String,Dynamic> = Lib.hashOfAssociativeArray(SuperGlobal._POST);
+				ipost.set('action', 'insert');
+				trace(ipost);
+				//var dRS:DebitReturnStatements = new DebitReturnStatements(ipost);
+				/*trace(dRS.getStati(ids,ipost.get('mandator')));*/
 				S.send(result,true);
 			}
 			S.send(Json.stringify({error:'No File uploaded'}),true);
@@ -82,8 +92,10 @@ class Upload {
 					}	
 					for(k in dKeys){
 						stmt.bindValue(':$k', Reflect.field(r, k));
+						trace(':$k ' + Reflect.field(r, k));
 					}
 					stmt.bindValue(':mandator', SuperGlobal._POST['mandator']);
+					trace(':mandator' + SuperGlobal._POST['mandator']);
 					if(!stmt.execute()){
 						S.send(Json.stringify(['error'=>S.dbh.errorInfo()]),true);
 					}						

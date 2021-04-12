@@ -49,12 +49,12 @@ class History extends Model
 		var filter = (param.get('filter')!=null ? 'WHERE '+param.get('filter') :'');
 		var sql1:String = comment(unindent, format)/*		
 		SELECT COUNT(*),  date(date_trunc('month',Termin)), SUM(Betrag) 
-		FROM bank_transfers ${filter} GROUP BY  date(date_trunc('month',Termin)) 
+		FROM booking_requests ${filter} GROUP BY  date(date_trunc('month',Termin)) 
 		ORDER BY date(date_trunc('month',Termin))
 		*/;
 		S.dbh.beginTransaction();
 		var sql:String = comment(unindent, format)/*
-		CREATE TEMPORARY TABLE m_bank ON COMMIT DROP AS SELECT * FROM bank_transfers;;
+		CREATE TEMPORARY TABLE m_bank ON COMMIT DROP AS SELECT * FROM booking_requests;;
 		*/;
 		var stmt:PDOStatement = S.dbh.query(sql);
 		if(S.dbh.errorCode() != '00000')

@@ -25,8 +25,8 @@ import view.LoginForm;
 import view.StatusBar;
 //import Webpack.*;
 import state.AppState;
-import view.accounting.Bookings;
-import view.accounting.Debits;
+import view.accounting.DirectDebits;
+import view.accounting.ReturnDebits;
 using state.CState;
 using shared.Utils;
 
@@ -44,8 +44,8 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 		//trace(this.state);
 		if (props.match.url == '/Accounting' && props.match.isExact)
 		{
-			if(true) trace('pushing2: /Accounting/Debits/Files');
-			props.history.push('/Accounting/Debits/List');
+			if(true) trace('pushing2: /Accounting/ReturnDebits/Files');
+			props.history.push('/Accounting/ReturnDebits/List');
 		}		
 	}
 
@@ -101,17 +101,17 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 					<$TabLink to=${{
 						key:props.location.key,
 						hash:props.location.hash,
-						pathname:"/Accounting/Bookings",
+						pathname:"/Accounting/DirectDebits",
 						search:'',
 						state:props.location.state.extend({contact:props.location.hash})
-					}} ${...props} >Buchungen</$TabLink>
-					<$TabLink to="/Accounting/Debits" ${...props} >Lastschriften</$TabLink>
+					}} ${...props} >Bankeinzug</$TabLink>
+					<$TabLink to="/Accounting/ReturnDebits" ${...props} >Rücklastschriften</$TabLink>
 				</$Tabs>
 			</div>		
             <div className="tabContent2">
 				<$Switch>
-					<$Route path="/Accounting/Bookings/:section?/:action?/:id?"   ${...props} component={Bookings}/>	
-					<$Route path="/Accounting/Debits/:section?/:action?/:id?"  ${...props} component={Debits}/>
+					<$Route path="/Accounting/DirectDebits/:section?/:action?/:id?"   ${...props} component={DirectDebits}/>	
+					<$Route path="/Accounting/ReturnDebits/:section?/:action?/:id?"  ${...props} component={ReturnDebits}/>
 				</$Switch>
             </div>
 			<StatusBar {...props}/>

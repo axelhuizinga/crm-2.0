@@ -14,7 +14,8 @@
 -D dev
 -D no-deprecation-warnings
 -debug 
--dce std
+#-dce no
+#std
 -main S
 
 -cmd ./dev.sh

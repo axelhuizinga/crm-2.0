@@ -102,7 +102,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 			trace(props.history.location.pathname);
 			trace('setting section to:List');
 		}		
-		trace('${}');
+		trace('${props.match}');
 		//TODO: AUTOMATE CREATE HISTORY TRIGGER IF DB TABLES CHANGED
 		/*AjaxLoader.loadData('${App.config.api}', 
 			{

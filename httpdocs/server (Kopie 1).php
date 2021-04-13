@@ -16,5 +16,6 @@ if (php_sapi_name() == "cli") {
 } else {
     // Not in cli-mode
 }
-\php\Boot::__hx__init();
+
+include('S.php');
 \S::main();

@@ -5,7 +5,7 @@ import action.DataAction;
 import action.DataAction.SelectType;
 import action.async.LiveDataAccess;
 import shared.Utils;
-import model.accounting.ReturnDebitModel;
+import model.accounting.DebitModel;
 import haxe.Json;
 import js.html.Blob;
 import js.html.File;
@@ -18,7 +18,6 @@ import haxe.Unserializer;
 import js.html.XMLHttpRequest;
 import shared.DbDataTools;
 import action.AppAction;
-import db.DbQuery.DBAccessProps;
 import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
 import action.async.CRUD;
@@ -100,7 +99,7 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		_instance = this;
-		dataDisplay = ReturnDebitModel.dataDisplay;
+		dataDisplay = DebitModel.dataDisplay;
 		
 		trace('...' + Reflect.fields(props));
 		//baseForm =new BaseForm(this);

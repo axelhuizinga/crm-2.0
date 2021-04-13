@@ -1,6 +1,6 @@
 package view.accounting;
 
-import model.accounting.ReturnDebitModel;
+import model.accounting.DebitModel;
 import loader.AjaxLoader;
 import action.async.UserAccess;
 import haxe.Serializer;
@@ -30,9 +30,9 @@ using Lambda;
  */
 
 @:connect
-class Bookings extends ReactComponentOf<DataFormProps,FormState>
+class DirectDebits extends ReactComponentOf<DataFormProps,FormState>
 {			
-	static var _instance:Bookings;
+	static var _instance:DirectDebits;
 	var _trace:Bool;
 
 	var dataDisplay:Map<String,DataState>;

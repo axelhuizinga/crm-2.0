@@ -171,7 +171,7 @@ class LiveDataAccess
 						aState.locationStore.history.push('${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}',
 						{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
 						return dispatch(DataAction.SelectDeals(props.data));*/
-					case 'Debits':
+					case 'ReturnDebits':
 						sData = sSelectType(props.id, props.data, sData, props.selectType);
 						trace(sData);
 						trace('${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}');

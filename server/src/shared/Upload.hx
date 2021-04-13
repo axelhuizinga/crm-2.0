@@ -73,7 +73,7 @@ class Upload {
 				var sql =  comment(unindent, format) /*
 				INSERT INTO debit_return_statements (id,sepa_code,iban,ba_id,amount,mandator) 
 				VALUES(:id,:sepa_code,:iban,:ba_id,:amount,:mandator)
-				ON CONFLICT DO NOTHING
+				ON CONFLICT DO NOTHING RETURNING id
 				*/;
 				trace(sql);
 				/// TODO: UNIFY FIELDS + COLUMN NAMES
@@ -92,13 +92,14 @@ class Upload {
 					}	
 					for(k in dKeys){
 						stmt.bindValue(':$k', Reflect.field(r, k));
-						trace(':$k ' + Reflect.field(r, k));
+						//trace(':$k ' + Reflect.field(r, k));
 					}
 					stmt.bindValue(':mandator', SuperGlobal._POST['mandator']);
 					trace(':mandator' + SuperGlobal._POST['mandator']);
 					if(!stmt.execute()){
 						S.send(Json.stringify(['error'=>S.dbh.errorInfo()]),true);
-					}						
+					}					
+					trace(r.id +':'+stmt.fetchColumn());
 					ids.push(r.id);
 				}
 				

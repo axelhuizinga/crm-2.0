@@ -151,16 +151,6 @@ class S
 			trace(dbQuery.dbUser);
 		}
 		else{
-			if(SuperGlobal._SERVER['REQUEST_METHOD'] == 'OPTIONS'){
-				//Web.setHeader('Content-Type', cType);
-				//var _server:Map<String,Dynamic> = Lib.hashOfAssociativeArray(SuperGlobal._SERVER);
-				//trace(_server.toString());
-				Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
-				Web.setHeader("Access-Control-Allow-Credentials", "true");				
-				Web.setHeader('Access-Control-Allow-Origin','https://192.168.178.20:9000');
-				//Web.setHeader('Access-Control-Allow-Headers','X-Requested-With');
-				Sys.exit(0);
-			}
 			dbQuery = Model.binary();
 			trace(dbQuery.dbParams);
 			if(dbQuery!=null)trace(dbQuery.dbUser);
@@ -766,6 +756,7 @@ class S
 			haxe.Log.trace = Debug._trace;
 			Out.skipFields = ['admin','keyPhrase','pass','password'];			
 		}
+		trace('Loaded config@${home}');
 		//Syntax.code("file_put_contents($appLog,'.', FILE_APPEND)");
 		//Syntax.code('require_once({0})', 'inc/PhpRbac/Rbac.php');
 

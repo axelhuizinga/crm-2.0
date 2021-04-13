@@ -6,10 +6,9 @@ import action.DataAction;
 import action.DataAction.SelectType;
 import action.async.LiveDataAccess;
 import shared.Utils;
-import model.accounting.ReturnDebitModel;
+import model.accounting.DebitModel;
 import haxe.Json;
 import js.html.Blob;
-import js.html.File;
 import js.Syntax;
 import js.html.FormData;
 import view.shared.FormInputElement;
@@ -58,10 +57,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	static var _instance:Files;//
 
 	public static var menuItems:Array<MItem> = [		
-		{label:'Rücklastschriften Hochladen',action:'importReturnDebit',
+		{label:'Auswahl',action:'importReturnDebit',
 			formField:{				
 				name:'returnDebitFile',
-				submit:'Importieren',
+				submit:'Hochladen',
 				type:FormInputElement.Upload,
 				handleChange: function(evt:Event) {
 					//trace(Reflect.fields(evt));
@@ -82,31 +81,6 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				trace(finput.value);
 				//trace(finput.files.get('returnDebitFile'));
 			}/**/
-		},
-		{label:'Neu Erstellen',action:'createDirectDebit',
-			formField:{				
-				name:'directDebitFile',
-				submit:'Herunterladen',
-				type:FormInputElement.Button,
-				handleChange: function(evt:Event) {
-					trace(Reflect.fields(evt));
-					/*var finput = cast Browser.document.getElementById('returnDebitFile');
-					trace(finput.value);
-					//trace(_instance);
-					var val = (finput.value == ''?'':finput.value.split('\\').pop());
-					Files._instance.setState({data:['hint'=>'Zum Upload ausgewählt:${val}']});*/
-				}
-			},
-			handler: function(_) {				
-				/*var finput = cast Browser.document.getElementById('returnDebitFile');
-				//var files = php.Lib.hashOfAssociativeArray(finput.files);
-				
-				trace(finput.files);
-				trace(Reflect.fields(finput));
-				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
-				trace(finput.value);*/
-				//trace(finput.files.get('returnDebitFile'));
-			}/**/
 		}
 	];	
 
@@ -125,9 +99,9 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		_instance = this;
-		dataDisplay = ReturnDebitModel.dataGridDisplay;
-		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
-		//formFields = ReturnDebitModel.formFields(props.match.params.action);
+		dataDisplay = DebitModel.dataGridDisplay;
+		//dataAccess = DebitModel.dataAccess(props.match.params.action);
+		//formFields = DebitModel.formFields(props.match.params.action);
 		//trace('...' + Reflect.fields(props));
 		//baseForm =new BaseForm(this);
 		
@@ -187,13 +161,9 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 
 	override public function componentDidMount():Void 
 	{	
-		dataAccess = ReturnDebitModel.dataAccess;
+		dataAccess = DebitModel.dataAccess;
 		trace(props.match.params.action);
 		state.formApi.doAction();
-	}
-
-	public function createDirectDebit(_):Void {
-		trace(Date.now());
 	}
 	
 	public function delete(ev:ReactEvent):Void

@@ -1,7 +1,9 @@
 package view.accounting.booking;
 
+import view.shared.FormInputElement;
+import js.html.Event;
 import db.DBAccessProps;
-import model.accounting.ReturnDebitModel;
+import model.accounting.DebitModel;
 import js.html.HTMLCollection;
 import js.Browser;
 import js.html.Document;
@@ -66,7 +68,32 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 	public static var menuItems:Array<MItem> = [
 		{label:'Anzeigen',action:'get'},
 		{label:'Download', action:'download'},
-		{label:'Bearbeiten',action:'edit'}
+		{label:'Bearbeiten',action:'edit'},
+		{label:'Neu Erstellen',action:'createDirectDebit',
+			formField:{				
+				name:'directDebitFile',
+				submit:'Herunterladen',
+				type:FormInputElement.Button,
+				handleChange: function(evt:Event) {
+					trace(Reflect.fields(evt));
+					/*var finput = cast Browser.document.getElementById('returnDebitFile');
+					trace(finput.value);
+					//trace(_instance);
+					var val = (finput.value == ''?'':finput.value.split('\\').pop());
+					Files._instance.setState({data:['hint'=>'Zum Upload ausgewählt:${val}']});*/
+				}
+			},
+			handler: function(_) {				
+				/*var finput = cast Browser.document.getElementById('returnDebitFile');
+				//var files = php.Lib.hashOfAssociativeArray(finput.files);
+				
+				trace(finput.files);
+				trace(Reflect.fields(finput));
+				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
+				trace(finput.value);*/
+				//trace(finput.files.get('returnDebitFile'));
+			}/**/
+		}
 	];
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
@@ -98,9 +125,9 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 			props.history.push('${baseUrl}List/get');
 			return;
 		}		
-		dataAccess = ReturnDebitModel.dataAccess;
+		dataAccess = DebitModel.dataAccess;
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
-		dataDisplay = ReturnDebitModel.dataDisplay;
+		dataDisplay = DebitModel.dataDisplay;
 
 				
 		state =  App.initEState({
@@ -112,8 +139,8 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
 				{
-					dataClassPath:'data.Bookings',
-					label:'Buchungen',
+					dataClassPath:'data.DirectDebits',
+					label:'Bankeinzug',
 					section: 'Create',
 					items: menuItems
 				}					
@@ -150,11 +177,15 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 	
 	override public function componentDidMount():Void 
 	{	
-		dataAccess = ReturnDebitModel.dataAccess;
+		dataAccess = DebitModel.dataAccess;
 		trace(props.match.params.action);
 		state.formApi.doAction('get');
 	}
-	
+
+	public function createDirectDebit(_):Void {
+		trace(Date.now());
+	}
+
 	public function delete(ev:ReactEvent):Void
 	{
 		trace(state.selectedRows.length);
@@ -179,8 +210,8 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 				offset:offset>0?offset:0,
 				table:'debit_return_statements',
 				resolveMessage:{					
-					success:'Rücklastschriften wurde geladen',
-					failure:'Rücklastschriften konnten nicht geladen werden'
+					success:'',
+					failure:''
 				},
 				dbUser:props.userState.dbUser,
 				devIP: App.devIP

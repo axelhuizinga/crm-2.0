@@ -5,7 +5,7 @@ import action.DataAction;
 import action.DataAction.SelectType;
 import action.async.LiveDataAccess;
 import shared.Utils;
-import model.accounting.ReturnDebitModel;
+import model.accounting.DebitModel;
 import haxe.Json;
 import js.html.Blob;
 import js.html.File;
@@ -54,10 +54,10 @@ using Lambda;
  * @author axel@cunity.me
  */
 @:connect
-class Debits extends ReactComponentOf<DataFormProps,FormState>
+class ReturnDebits extends ReactComponentOf<DataFormProps,FormState>
 {
 
-	static var _instance:Debits;
+	static var _instance:ReturnDebits;
 	var _trace:Bool;
 
 	var dataAccess:DataAccess;	
@@ -74,9 +74,9 @@ class Debits extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props) 
 	{
 		super(props);
-		//dataDisplay = ReturnDebitModel.dataDisplay;
-		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
-		//formFields = ReturnDebitModel.formFields(props.match.params.action);
+		//dataDisplay = DebitModel.dataDisplay;
+		//dataAccess = DebitModel.dataAccess(props.match.params.action);
+		//formFields = DebitModel.formFields(props.match.params.action);
 		_trace = true;
 		//if(_trace) trace('...' + Reflect.fields(props));
 		state =  App.initEState({
@@ -101,7 +101,7 @@ class Debits extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-			/*load: function(param:DBAccessProps) return dispatch(Debits.upload(param)),
+			/*load: function(param:DBAccessProps) return dispatch(ReturnDebits.upload(param)),
 			storeData:function(id:String, action:DataAction)
 			{
 				dispatch(LiveDataAccess.storeData(id, action));

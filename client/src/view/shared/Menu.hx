@@ -164,13 +164,13 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			return switch(type)
 			{
 				//case Filter: jsx('<$Filter  key=${i++}/>');				
-				case File:
+				/*case File:
 					jsx('<div key=${"uf"+(i++)}  id="uploadForm"   className="uploadBox" >
 					<input  id=${item.formField.name} type="file" name=${item.formField.name} onChange=${item.formField.handleChange} className="fileinput"  />
 					<label htmlFor=${item.formField.name} className="button" >${item.label}</label>
 					<Button onClick=${item.handler} data-action=${item.action}
 				data-section=${item.section} disabled=${item.disabled}>${item.formField.submit}</Button>
-				</div>');
+				</div>');*/
 				case Upload:
 					//trace(item.formField.handleChange);
 					jsx('<div key=${"up"+(i++)}  id="uploadForm"  className="uploadBox" >

@@ -20,7 +20,7 @@ import react.ReactUtil;
 import react.ReactType;
 import redux.Redux.Dispatch;
 import action.async.LiveDataAccess;
-import model.accounting.ReturnDebitModel;
+import model.accounting.DebitModel;
 import loader.AjaxLoader;
 import view.data.accounts.Edit;
 import view.data.accounts.List;

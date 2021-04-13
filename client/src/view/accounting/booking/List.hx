@@ -1,4 +1,4 @@
-package view.accounting.debits;
+package view.accounting.booking;
 
 import haxe.Serializer;
 import js.html.Event;

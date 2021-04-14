@@ -179,7 +179,7 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 	{	
 		dataAccess = DebitModel.dataAccess;
 		trace(props.match.params.action);
-		state.formApi.doAction('get');
+		//state.formApi.doAction('get');
 	}
 
 	public function createDirectDebit(_):Void {

@@ -18,6 +18,7 @@ import react.ReactUtil;
 import react.ReactType;
 import redux.Redux.Dispatch;
 import view.accounting.booking.Create;
+import view.accounting.booking.List;
 import view.shared.io.DataFormProps;
 import view.shared.io.FormApi;
 import state.FormState;
@@ -104,10 +105,10 @@ class DirectDebits extends ReactComponentOf<DataFormProps,FormState>
 					jsx('
 						<$Create ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 					');					
-				/*case "List":
+				case "List":
 					jsx('
 						<$List ${...props}  limit=${100} fullWidth={true} sideMenu=${state.sideMenu}/>
-					');	*/					
+					');				
 				default:
 					null;				
 			}

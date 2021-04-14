@@ -60,7 +60,6 @@ class DealsModel
 			}},
 		'cycle' => {label: 'Turnus'},
 		'amount' => {label: 'Betrag', cellFormat: function(v) {
-			trace(v);
 			return App.sprintf('%01.2f €',v).replace('.',',');
 		},className: 'tRight tableNums'},
 		

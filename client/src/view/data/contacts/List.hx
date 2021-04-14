@@ -254,9 +254,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		return null;
 	}
 
-	function getCellData(cP:Dynamic) {
+	/*function getCellData(cP:Dynamic) {
 		trace(cP);
-	}
+	}*/
 //cellDataGetter=${getCellData}
 	
 	override function render():ReactFragment

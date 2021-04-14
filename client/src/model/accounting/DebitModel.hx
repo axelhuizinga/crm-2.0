@@ -1,5 +1,6 @@
 package model.accounting;
 
+import haxe.ds.StringMap;
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
 import view.table.Table.DataColumn;
@@ -15,25 +16,33 @@ class DebitModel
 	public static var dataAccess:DataAccess = [
 		'open' => {
 			source:[
-				"debit_return_statements" => [
-					"filter" => 'id'
+				"booking_requests" => [
+					"filter" => 'ba_id'
 					]
 				],
 			view:[
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},				
 				'mandator'=>{type:Hidden},
-				'merged'=>{type:Hidden},
+				'zahlpfl_name'=>{type:Input},
 			]
 		}
 	];
 
 	public static var gridColumns:Map<String,view.grid.Grid.DataColumn> = [
-		'id'=>{label:'VertragsID', flexGrow:0, className: 'tRight tableNums'},
-		'sepa_code'=>{label:'Sepa Code', flexGrow:0, className: 'tRight'},
-		'iban'=>{label:'Iban', className: 'tableNums'},				
-		'ba_id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		
-		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
+		'zahlpfl_name'=>{label: 'Name', flexGrow:1},
+		'vwz1'=>{label:'SpenderIn', flexGrow:0, className: 'tRight tableNums'},
+		'betrag'=>{label: 'Betrag', cellFormat: function(v=0) {
+			return App.sprintf('%01.2f €',v).replace('.',',');
+		},className: 'tRight tableNums', headerClassName: 'tRight'},
+		'cycle'=>{label: 'Turnus',cellFormat:function(v:String){
+			var options:Map<String,String> = [
+			'once'=>'Einmal','monthly'=>'Monatlich','quarterly'=>'Vierteljährlich',
+			'semiannual'=>'Halbjährlich', 'annual'=>'Jährlich'];
+			return options[v];
+		},headerClassName: 'tRight'},
+		'iban'=>{label:'Iban'},				
+		'ba_id'=>{label: 'Buchungsanforderung ID'},		
 		//'processed'=>{label: 'Verarbeitet'}
 	];	
 

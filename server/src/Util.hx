@@ -1,4 +1,5 @@
 package;
+import php.Exception;
 import php.Lib;
 import me.cunity.debug.Out;
 import me.cunity.php.Debug;
@@ -91,36 +92,42 @@ class Util
 	public static function bindClientDataNum(table:String, stmt:PDOStatement, row:NativeArray, dbData:DbData)
 	{
 		var meta:Map<String, NativeArray> = S.columnsMeta(table);
-		//trace(meta);
+		//trace(meta.keys());
 		var i:Int = 0;
-		for(k => v in meta.keyValueIterator())
-		{
-			//if(k=='id')
-				//continue;
-			
-			var pdoType:Int = v['pdo_type'];
-			
-			if(row[i]==null||row[i].indexOf('0000-00-00')==0||row[i]=='')
-			//if(row[i]==null||row[i]=='')
-			{				
-				//trace (v['native_type']);
-				switch (v['native_type'])
-				{
-					case 'date'|'datetime'|'timestamp':
-					pdoType = PDO.PARAM_NULL;
-					case 'text'|'varchar':
-					row[i] = '';
-					case 'int8':
-					row[i] = 0;
-				}
-			}
-			//trace('$k => $pdoType:${row[i]}');
-			if(!stmt.bindValue(':$k',row[i], pdoType))//row[i]==null?1:
+		try{
+			for(k => v in meta.keyValueIterator())
 			{
-				//trace('$k => $v');
-				S.sendErrors(dbData,['bindValue'=>'${row[i]}:$pdoType']);
-			}		
-			i++;
+				//if(k=='id')
+					//continue;				
+				var pdoType:Int = v['pdo_type'];
+				if(Global.array_key_exists(i,row)){
+					if(row[i]==null||row[i].indexOf('0000-00-00')==0||row[i]=='')
+					{				
+						//trace (v['native_type']);
+						switch (v['native_type'])
+						{
+							case 'date'|'datetime'|'timestamp':
+							pdoType = PDO.PARAM_NULL;
+							case 'text'|'varchar':
+							row[i] = '';
+							case 'int8':
+							row[i] = 0;
+						}
+					}
+					//trace('$k => $pdoType:${row[i]}');
+					if(!stmt.bindValue(':$k',row[i], pdoType))//row[i]==null?1:
+					{
+						//trace('$k => $v');
+						S.sendErrors(dbData,['bindValue'=>'${row[i]}:$pdoType']);
+					}
+				}
+				i++;
+			}
+		}
+		catch(ex:haxe.Exception){
+			trace(row);
+			trace('i:$i');
+			trace(ex.message);
 		}
 	}
 

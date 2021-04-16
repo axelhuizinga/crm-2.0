@@ -153,17 +153,22 @@ ON br.ba_id=bi.ba_id);
 	{		
 		var bookings:NativeArray = null;
 		var dD:Map<String,Dynamic> = Util.map2fieldsNum(bookings[0], keys);
-        var dNames:Array<String> = [for(k in dD.keys()) k];		
+		var dNames:Array<String> = [for(k in dD.keys()) k];		
+		dNames = dNames.filter(function(n:String) {
+			return n!='id'&&n!='mandator';
+		});
 		var dPlaceholders:Array<String> =  [for(k in dNames) k].map(function (k) return ':$k');
+		trace(dPlaceholders);
 		var sql:String = comment(unindent, format) /*
 		INSERT INTO ${table} (${dNames.join(',')})
 		VALUES (${dPlaceholders.join(',')}) ON CONFLICT DO NOTHING;				
 		*/;
+		trace(sql);
 		while(synced<totalCount){
 			//	LOAD LIVE PBX DATA
 			bookings = getCrmData();
 			var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
-			trace(sql);
+			trace('totalRecords:' + dbData.dataInfo['totalRecords']);
 			for(row in bookings.iterator())
 			{
 				trace(synced);

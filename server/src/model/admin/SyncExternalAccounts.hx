@@ -122,9 +122,15 @@ I kno	 * Import or Update accounts
 		var stmt:PDOStatement = S.syncDbh.query(sql);
 		trace('loading  ${limit.sql} ${offset.sql}');		
 		S.checkStmt(S.syncDbh, stmt,'importExtAccounts data:');
-		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		
+		//var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN):null);
 		offset = Util.offset(offset.int + Syntax.code("count({0})",res));
 		//return res;
+		trace(stmt.rowCount());
+		trace(res);
+		if(Global.count(res)==0)
+			return;
 		trace('id:' + untyped res[0]['id']);
 		var cD:Map<String,Dynamic> = Util.map2fields(res[0], keys);
 		//trace(cD);

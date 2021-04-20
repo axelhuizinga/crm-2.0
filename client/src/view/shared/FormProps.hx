@@ -1,4 +1,5 @@
 package view.shared;
+import state.FormState;
 import js.html.InputEvent;
 import redux.Redux.Dispatch;
 import react.ReactType;

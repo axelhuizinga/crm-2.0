@@ -3,7 +3,7 @@ package shared;
 import db.DBAccessProps;
 import haxe.Utf8;
 import db.DbQuery;
-import model.data.DebitReturnStatements;
+import model.data.ReturnDebitStatements;
 import php.Lib;
 import haxe.DynamicAccess;
 import comments.CommentString.*;
@@ -45,7 +45,7 @@ class Upload {
 				//Global.unlink('/var/www/${SuperGlobal._SERVER["HTTP_HOST"]}/files/*');
 				var dbAccProps:DBAccessProps = {
 					action:'getStati', 
-					classPath:'data.DebitReturnStatements',
+					classPath:'data.ReturnDebitStatements',
 					dbUser:S.dbQuery.dbUser,
 					table:'deals',
 					filter:{contact:'IN|${ids.join(',')}'}
@@ -55,7 +55,7 @@ class Upload {
 				var ipost:Map<String,Dynamic> = Lib.hashOfAssociativeArray(SuperGlobal._POST);
 				ipost.set('action', 'insert');
 				trace(ipost);
-				//var dRS:DebitReturnStatements = new DebitReturnStatements(ipost);
+				//var dRS:ReturnDebitStatements = new ReturnDebitStatements(ipost);
 				/*trace(dRS.getStati(ids,ipost.get('mandator')));*/
 				S.send(result,true);
 			}

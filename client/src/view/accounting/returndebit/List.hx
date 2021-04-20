@@ -1,13 +1,12 @@
-package view.accounting.booking;
+package view.accounting.returndebit;
 
-import view.accounting.debits.Files;
 import haxe.Serializer;
 import js.html.Event;
 import action.DataAction;
 import action.DataAction.SelectType;
 import action.async.LiveDataAccess;
 import shared.Utils;
-import model.accounting.DebitModel;
+import model.accounting.ReturnDebitModel;
 import haxe.Json;
 import js.html.Blob;
 import js.html.File;
@@ -77,13 +76,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		_instance = this;
-		dataDisplay = DebitModel.dataGridDisplay;
+		dataDisplay = ReturnDebitModel.dataGridDisplay;
 		
 		trace('...' + Reflect.fields(props));
 		//baseForm =new BaseForm(this);
 		
 		state =  App.initEState({
-			action:(props.match.params.action==null?'get':props.match.params.action),
+			action:(props.match.params.action==null?'listReturnDebit':props.match.params.action),
 			loading:true,
 			sideMenu:FormApi.initSideMenu2( this,			
 				[
@@ -111,9 +110,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			//var sData = App.store.getState().dataStore.contactData;			
 			var baseUrl:String = props.match.path.split(':section')[0];
-			trace('redirecting to ${baseUrl}List/get');
-			props.history.push('${baseUrl}List/get');
-			get(null);
+			trace('redirecting to ${baseUrl}List/listReturnDebit');
+			props.history.push('${baseUrl}List/listReturnDebit');
+			listReturnDebit(null);
 		}
 		trace(props.match.path);
 	}
@@ -145,14 +144,14 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	override public function componentDidMount():Void 
 	{	
-		dataAccess = DebitModel.dataAccess;
+		dataAccess = ReturnDebitModel.dataAccess;
 		trace(props.match.params.action);
 		//state.formApi.doAction('get');
-		if(props.match.params.action=='get')
-			get();
+		if(props.match.params.action=='listReturnDebit')
+			listReturnDebit();
 	}
 
-	public function get(?ev:Dynamic):Void
+	public function listReturnDebit(?ev:Dynamic):Void
 	{
 		trace('hi $ev');
 		var offset:Int = 0;
@@ -163,15 +162,15 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params);
 		var p:Promise<DbData> = props.load(
 			{
-				classPath:'data.DirectDebits',
+				classPath:'data.ReturnDebitStatements',
 				action:'get',
 				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
-				table:'booking_requests',
+				table:'debit_return_statements',
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				resolveMessage:{					
-					success:'Bankeinzug wurden geladen',
-					failure:'Bankeinzug konnte nicht geladen werden'
+					success:'Rücklastschriften wurde geladen',
+					failure:'Rücklastschriften konnte nicht geladen werden'
 				},
 				dbUser:props.userState.dbUser,
 				devIP: App.devIP
@@ -201,7 +200,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.dataTable);
 		var p:Promise<DbData> = props.update(
 			{
-				classPath:'data.DebitReturnStatements',
+				classPath:'data.ReturnDebitStatements',
 				action:'insert',
 				mandator:1,
 				//data: state.dataTable,//Serializer.run(state.dataTable),
@@ -253,9 +252,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading +' state.action:' + state.action);
 		return switch(state.action)
 		{
-			case 'get':				
+			case 'listReturnDebit':				
 				jsx('				
-				<Grid id="rDebitList" data=${state.dataTable}
+				<Grid id="contactList" data=${state.dataTable}
 				${...props} dataState = ${dataDisplay["rDebitList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
 				');		/*

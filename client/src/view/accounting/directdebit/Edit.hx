@@ -1,4 +1,4 @@
-package view.accounting.booking;
+package view.accounting.directdebit;
 
 import view.shared.FormInputElement;
 import js.html.Event;
@@ -63,7 +63,7 @@ using StringTools;
  */
 
 @:connect
-class Create extends ReactComponentOf<DataFormProps,FormState>
+class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
 		{label:'Anzeigen',action:'get'},
@@ -137,17 +137,25 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 			loading:false,
 			mHandlers:menuItems,
 			selectedRows:[],
-			sideMenu:FormApi.initSideMenu( this,
+			sideMenu:FormApi.initSideMenu2( this,
+			[	
 				{
 					dataClassPath:'data.DirectDebits',
-					label:'Bankeinzug',
-					section: 'Create',
+					label:'Gesamtliste',
+					section: 'List',
+					items:List.menuItems
+				},
+				{
+					dataClassPath:'data.DirectDebits',
+					label:'Bearbeiten',
+					section: 'Edit',
 					items: menuItems
-				}					
-				,{	
-					section: props.match.params.section==null? 'Create':props.match.params.section, 
-					sameWidth: true
-				}),	
+				}
+			],				
+			{	
+				section: props.match.params.section==null? 'Edit':props.match.params.section, 
+				sameWidth: true
+			}),	
 			/*storeListener:App.store.subscribe(function(){
 				trace(App.store.getState().dataStore);
 			}),*/
@@ -203,7 +211,7 @@ class Create extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.userState);
 		var p:Promise<DbData> = props.load(
 			{
-				classPath:'data.DebitReturnStatements',
+				classPath:'data.ReturnDebitStatements',
 				action:'get',
 				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1',processed:'false'}),
 				limit:props.limit,

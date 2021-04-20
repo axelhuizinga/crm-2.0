@@ -66,7 +66,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		{label:'getView',action:'getView'},
 		{label:'setView',action:'setView'},
 		{label:'Formulare',action:'listForms'},
-		//{label:'Create Fields Table',action:'createFieldList'},
+		//{label:'Edit Fields Table',action:'createFieldList'},
 		{label:'Bearbeiten',action:'edit'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}

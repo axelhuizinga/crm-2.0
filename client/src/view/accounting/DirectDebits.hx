@@ -17,8 +17,8 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import react.ReactType;
 import redux.Redux.Dispatch;
-import view.accounting.booking.Create;
-import view.accounting.booking.List;
+import view.accounting.directdebit.Edit;
+import view.accounting.directdebit.List;
 import view.shared.io.DataFormProps;
 import view.shared.io.FormApi;
 import state.FormState;
@@ -51,7 +51,7 @@ class DirectDebits extends ReactComponentOf<DataFormProps,FormState>
 			//SET DEFAULT SECTION
 			if(_trace) trace('reme');
 			var baseUrl:String = props.match.path.split(':section')[0];				
-			props.history.push('${baseUrl}Create');
+			props.history.push('${baseUrl}Edit');
 			}		
 		state =  App.initEState({
 			loading:false
@@ -101,9 +101,9 @@ class DirectDebits extends ReactComponentOf<DataFormProps,FormState>
 			//trace(state.sideMenu); 
 			return switch(props.match.params.section)
 			{
-				case "Create":
+				case "Edit":
 					jsx('
-						<$Create ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+						<$Edit ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
 					');					
 				case "List":
 					jsx('

@@ -988,6 +988,27 @@ form td, form caption
 	overflow-y: auto;
 	padding-right: 1rem;
 }
+.grid_menu
+{
+	display: grid;
+	margin: 1px auto;
+    grid-template-columns: 
+        [viewport-start] minmax(1em, 1fr)
+        [container-start] minmax(0, 30em) [container-end]
+        minmax(1em, 1fr) [viewport-end];		
+}
+.item--contained {
+    grid-column: container;
+}.item--full { 
+    grid-column: viewport; 
+    display: inherit;
+    grid-template-columns: inherit;
+}.item--full > * {
+    grid-column: container;
+}
+.sub-item{
+	width:50%;
+}
 .g_block, .g_caption
 {
 	

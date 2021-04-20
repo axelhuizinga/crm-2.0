@@ -296,7 +296,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 			.attr('id', 'mainGradient')
 			.attr('gradientUnits', 'userSpaceOnUse');
 
-		// Create the stops of the main gradient. Each stop will be assigned
+		// Edit the stops of the main gradient. Each stop will be assigned
 		// a class to style the stop using CSS.
 		mainGradient.append('stop')
 			.attr('class', 'stop-bottom')

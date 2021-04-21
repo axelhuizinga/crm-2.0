@@ -30,24 +30,24 @@ class DebitModel
 	];
 
 	public static var gridColumns:Map<String,view.grid.Grid.DataColumn> = [
-		'zahlpfl_name'=>{label: 'Name', flexGrow:1},
-		'vwz1'=>{label:'SpenderIn', flexGrow:0, className: 'tRight tableNums'},
+		'zahlpfl_name'=>{className: 'tLeft', label: 'Name', flexGrow:1},
+		'vwz1'=>{label:'SpenderIn', flexGrow:0, className: 'tableNums'},
 		'betrag'=>{label: 'Betrag', cellFormat: function(v=0) {
 			return App.sprintf('%01.2f €',v).replace('.',',');
-		},className: 'tRight tableNums', headerClassName: 'tRight'},
+		},className: 'tableNums'},
 		'cycle'=>{label: 'Turnus',cellFormat:function(v:String){
 			var options:Map<String,String> = [
 			'once'=>'Einmal','monthly'=>'Monatlich','quarterly'=>'Vierteljährlich',
 			'semiannual'=>'Halbjährlich', 'annual'=>'Jährlich'];
 			return options[v];
-		},headerClassName: 'tRight'},
-		'iban'=>{label:'Iban'},				
-		'ba_id'=>{label: 'Buchungsanforderung ID'},		
-		//'processed'=>{label: 'Verarbeitet'}
+		}},
+		'zahlpfl_name_kto_or_iban'=>{label:'Iban',className: 'tableNums'},				
+		'ba_id'=>{label: 'Buchungsanforderung ID', show:false},		
+		//'processed'=>{label: 'Verarbeitet'},headerClassName: 'tRight'}
 	];	
 
 	public static var listColumns:Map<String,DataColumn> = [
-		'id'=>{label:'VertragsID', flexGrow:0, className: 'tRight tableNums'},
+		'id'=>{label:'VertragsID', flexGrow:0, className: 'tableNums'},
 		'sepa_code'=>{label:'Sepa Code', flexGrow:0, className: 'tRight'},
 		'iban'=>{label:'Iban'},				
 		'ba_id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		

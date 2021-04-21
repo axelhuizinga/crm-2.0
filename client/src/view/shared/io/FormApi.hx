@@ -325,17 +325,7 @@ class FormApi
 		}
 		return elements;
 	}
-	
-	/*public function storeFormState(field:String, val:Dynamic) {
-		var match:RouterMatch = comp.props.match;
-		var baseUrl:String = match.path.split(':section')[0];
-		baseUrl = '${baseUrl}${match.params.section}/${match.params.action}';	
-		var actualState = App.store.getState().formStates.get(comp.state.formStateKey);
-		//Reflect.setField(actualState, field, val);
-		//comp.setState({actualState: actualState});
-		comp.props.parentComponent.props.storeFormChange(comp.state.formStateKey,copy(actualState,{field:val}));			
-	}*/
-	
+
 	public function createElementsArray():ReactFragment
 	{
 		if(_fstate.dataTable.empty())

@@ -165,7 +165,8 @@ class S
 				Syntax.array([PDO.ATTR_PERSISTENT,true]));
 			
 				trace(dbh);
-				params = _SERVER;// Lib.hashOfAssociativeArray(SuperGlobal._POST);
+				params = Lib.hashOfAssociativeArray(SuperGlobal._POST);
+				trace(params);
 				action = params.get('action');		
 				if(params.get('extDB'))
 				{
@@ -182,6 +183,7 @@ class S
 					syncDbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
 				#end	
 				devIP = params.get('devIP');	
+				trace(S.devIP + ':' + devIP);
 				Upload.go();
 			}
 			//trace(dbQuery.dbUser);
@@ -320,9 +322,9 @@ class S
 			//setHeader((json?'application/json':'text/plain'));		
 			//Web.setHeader('Content-Type', cType);
 			Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
-			Web.setHeader("Access-Control-Allow-Credentials", "false");
+			Web.setHeader("Access-Control-Allow-Credentials", "true");
 			if(S.devIP!=null&&S.devIP!=''){
-				Web.setHeader("Access-Control-Allow-Origin", '*');	
+				Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
 				trace('https://${S.devIP}:9000');
 			}
 			else {

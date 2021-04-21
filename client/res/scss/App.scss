@@ -118,6 +118,10 @@ h3{
 	align-self:flex-end;
 	text-align:right!important;
 }
+.tLeft
+{
+	text-align:left!important;
+}
 .tRight
 {
 	text-align:right!important;
@@ -259,7 +263,7 @@ h2{
 	padding: $gridPadding!important;
 	display: inline-block;
 	/*border:1px solid red;*/
-	text-align: left;
+	text-align: right;
 	white-space: nowrap;
 	/*align-items: center;
 	vertical-align: middle;*/

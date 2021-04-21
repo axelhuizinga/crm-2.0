@@ -90,28 +90,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = AccountsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		formRef = React.createRef();
-	/*	if(props.match.params.id!=null)
-			initialState.id = Std.parseInt(props.match.params.id);
-			
-		
-		trace(props.dataStore.contactActData);
-		trace(props.dataStore.contactData);
-		if((initialState.id!=null && props.dataStore.contactData.exists(initialState.id)))
-		{
-			initialState = loadContactData(initialState.id);
-			//actualState = copy(initialState);
-			trace(actualState);		
-			//OK we got the data
-			actualState = view.shared.io.Observer.run(actualState, function(newState){
-				actualState = newState;
-				trace(actualState);
-			});	
-		}
-		else {			
-			//actualState = copy(initialState);
-			trace(actualState);
-		}*/
-		
 		state =  App.initEState({
 			dataTable:[],
 			formBuilder:new FormBuilder(this),

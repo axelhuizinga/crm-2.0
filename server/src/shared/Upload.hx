@@ -76,6 +76,7 @@ class Upload {
 				ON CONFLICT DO NOTHING RETURNING id
 				*/;
 				trace(sql);
+				trace(Global.count(dRows));
 				/// TODO: UNIFY FIELDS + COLUMN NAMES
 				var dKeys:Array<String> = 'id,sepa_code,iban,ba_id,amount'.split(',');
 				var bindVals:Array<String> = new Array();
@@ -97,6 +98,7 @@ class Upload {
 					stmt.bindValue(':mandator', SuperGlobal._POST['mandator']);
 					trace(':mandator' + SuperGlobal._POST['mandator']);
 					if(!stmt.execute()){
+						trace(stmt.debugDumpParams());
 						S.send(Json.stringify(['error'=>S.dbh.errorInfo()]),true);
 					}					
 					trace(r.id +':'+stmt.fetchColumn());

@@ -39,6 +39,7 @@ class DataStore
 	{
 		trace(action);
 		trace(Reflect.fields(state));
+		trace(state.dealData);
 		//return nul018l;
 		return switch(action)
 		{

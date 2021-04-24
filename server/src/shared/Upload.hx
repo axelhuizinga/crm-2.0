@@ -91,9 +91,11 @@ class Upload {
 						trace(S.dbh.errorInfo());
 						S.send(Json.stringify(['error'=>S.dbh.errorInfo()]),true);
 					}	
-					for(k in dKeys){
-						stmt.bindValue(':$k', Reflect.field(r, k));
+					for(k in dKeys){						
+						trace(':$k ' );
+						trace(Reflect.field(r, k));
 						//trace(':$k ' + Reflect.field(r, k));
+						stmt.bindValue(':$k', Reflect.field(r, k));
 					}
 					stmt.bindValue(':mandator', SuperGlobal._POST['mandator']);
 					trace(':mandator' + SuperGlobal._POST['mandator']);

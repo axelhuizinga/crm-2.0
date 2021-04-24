@@ -154,6 +154,8 @@ class S
 		else{
 			dbQuery = Model.binary();
 			trace(dbQuery.dbParams);
+			params = dbQuery.dbParams;
+			S.devIP = params['devIP'];
 			if(dbQuery!=null)trace(dbQuery.dbUser);
 			var ipost = Lib.hashOfAssociativeArray(SuperGlobal._POST);
 			trace(ipost.get('id') +':'+ipost.get('jwt'));
@@ -165,7 +167,7 @@ class S
 				Syntax.array([PDO.ATTR_PERSISTENT,true]));
 			
 				trace(dbh);
-				params = Lib.hashOfAssociativeArray(SuperGlobal._POST);
+				//params = Lib.hashOfAssociativeArray(SuperGlobal._POST);
 				trace(params);
 				action = params.get('action');		
 				if(params.get('extDB'))

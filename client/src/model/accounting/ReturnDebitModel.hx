@@ -29,10 +29,11 @@ class ReturnDebitModel
 	];
 
 	public static var gridColumns:Map<String,view.grid.Grid.DataColumn> = [
-		'id'=>{label:'VertragsID', flexGrow:0, className: 'tRight tableNums'},
-		'sepa_code'=>{label:'Sepa Code', flexGrow:0, className: 'tRight'},
-		'iban'=>{label:'Iban', className: 'tableNums'},				
-		'ba_id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		
+		'id'=>{label:'ContactID', flexGrow:0, className: 'tLeft tableNums'},
+		'sepa_code'=>{label:'Sepa Code' },
+		'iban'=>{label:'Iban', className: 'tableNums', flexGrow:1, headerClassName: 'tRight'},						
+		'deal_id'=>{label: 'SpendenID', flexGrow:0},		
+		'ba_id'=>{label: 'Buchungsanforderung ID', flexGrow:0},		
 		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
 		//'processed'=>{label: 'Verarbeitet'}
 	];	

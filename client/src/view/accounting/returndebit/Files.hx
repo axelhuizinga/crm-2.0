@@ -1,12 +1,13 @@
 package view.accounting.returndebit;
 
+import hxbit.Serializer;
 import js.lib.Error;
 import js.html.Event;
 import action.DataAction;
 import action.DataAction.SelectType;
 import action.async.LiveDataAccess;
 import shared.Utils;
-import model.accounting.DebitModel;
+import model.accounting.ReturnDebitModel;
 import haxe.Json;
 import js.html.Blob;
 import js.Syntax;
@@ -99,9 +100,9 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		_instance = this;
-		dataDisplay = DebitModel.dataGridDisplay;
-		//dataAccess = DebitModel.dataAccess(props.match.params.action);
-		//formFields = DebitModel.formFields(props.match.params.action);
+		dataDisplay = ReturnDebitModel.dataGridDisplay;
+		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
+		//formFields = ReturnDebitModel.formFields(props.match.params.action);
 		//trace('...' + Reflect.fields(props));
 		//baseForm =new BaseForm(this);
 		
@@ -161,7 +162,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 
 	override public function componentDidMount():Void 
 	{	
-		dataAccess = DebitModel.dataAccess;
+		dataAccess = ReturnDebitModel.dataAccess;
 		trace(props.match.params.action);
 		state.formApi.doAction();
 	}
@@ -216,11 +217,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		
 		iPromise.then(function (r:Dynamic) {
 			trace(r);
-			var rD:Json = Json.parse(r);
-			var dd:{rlData:Array<Dynamic>} = Json.parse(r);
+			var rD:{rlData:Array<Dynamic>} = Json.parse(r);
+			var dT:Array<Map<String, Dynamic>> = new Array();			
 			trace(rD);
-			var dT:Array<Map<String, Dynamic>> = new Array();
-			for(dR in dd.rlData)
+			for(dR in rD.rlData)
 				dT.push(Utils.dynToMap(dR));
 			setState({action:'showImportedReturnDebit',dataTable:dT,loading:false});
 			trace(dT);

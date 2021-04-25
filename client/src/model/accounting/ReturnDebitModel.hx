@@ -32,8 +32,8 @@ class ReturnDebitModel
 		'id'=>{label:'ContactID', flexGrow:0, className: 'tLeft tableNums'},
 		'sepa_code'=>{label:'Sepa Code' },
 		'iban'=>{label:'Iban', className: 'tableNums', flexGrow:1, headerClassName: 'tRight'},						
-		'deal_id'=>{label: 'SpendenID', flexGrow:0},		
-		'ba_id'=>{label: 'Buchungsanforderung ID', flexGrow:0},		
+		'deal_id'=>{label: 'SpendenID', className: 'tableNums'},		
+		'ba_id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
 		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
 		//'processed'=>{label: 'Verarbeitet'}
 	];	

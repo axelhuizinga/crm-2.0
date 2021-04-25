@@ -67,9 +67,9 @@ class ContactsModel
 		'last_name'=>{label:'Name', flexGrow:0},
 		//'email'=>{label:'Email'},
 		'phone_number'=>{label:'Telefon'},				
-		'address'=>{label: 'Straße'},		
-		'address_2'=>{label: 'Hausnummer'},		
-		'care_of'=>{label: 'Adresszusatz', flexGrow:1},
+		'address'=>{label: 'Straße', showSearch:false},		
+		'address_2'=>{label: 'Hausnummer', showSearch:false},		
+		'care_of'=>{label: 'Adresszusatz', flexGrow:1, showSearch:false},
 		'postal_code'=>{label: 'PLZ'},
 		'city'=>{label: 'Ort'},
 		'state' => {label:'Status', className: 'tCenter',
@@ -79,7 +79,7 @@ class ContactsModel
 				//trace(uState);
 				return jsx('<span className="fa fa-$uState"></span>');
 			}},
-		'id' => {show:false}
+		'id' => {label:'Kontakt ID',show:false}
 	];
 	
 	public static var listColumns:Map<String,DataColumn> = [

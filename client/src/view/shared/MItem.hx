@@ -1,4 +1,5 @@
 package view.shared;
+import state.FormState;
 import view.shared.FormField;
 import state.FormState.HandlerAction;
 import react.ReactType;
@@ -10,6 +11,7 @@ typedef MItem =
 	?actions:Array<Function>,
 	?className:String,
 	?classPath:String,
+	?form:FormState,
 	?formField:FormField,
 	?section:String,
 	?disabled:Bool,	

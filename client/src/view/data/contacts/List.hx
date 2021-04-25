@@ -43,6 +43,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Neu', action:'insert',section: 'Edit'},		
 		{label:'Löschen',action:'delete'},
 		{label:'Auswahl aufheben',action:'selectionClear'},
+		{separator: true},
+		{formField: {
+			label: 'ID',dataTable: 'contacts', dataField: 'id'
+		}}
 	//	{label:'Auswahl umkehren',action:'selectionInvert'},
 	//	{label:'Auswahl alle',action:'selectionAll'},
 	];

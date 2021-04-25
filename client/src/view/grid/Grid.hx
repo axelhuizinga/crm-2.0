@@ -1,5 +1,6 @@
 package view.grid;
 
+import view.shared.FormField;
 import js.Syntax;
 import action.DataAction.SelectType;
 import haxe.ds.IntMap;
@@ -48,7 +49,9 @@ typedef DataColumn =
 	?label:String,
 	?name:String,
 	?search:SortDirection,
+	?searchField:FormField,
 	?show:Bool,
+	?showSearch:Bool,	
 	?useAsIndex:Bool,
 	?style:Dynamic,
 	?tip:String
@@ -109,7 +112,7 @@ typedef GridProps =
 	dataState:DataState,
 	?disableHeader:Bool,
 	?oddClassName: String,
-    ?evenClassName:String,	
+	?evenClassName:String,	
 	?defaultSort:Dynamic,	
 	?defaultSortDescending:Bool,
 	?fullWidth:Bool,

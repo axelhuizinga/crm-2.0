@@ -1,5 +1,9 @@
 package view.accounting.returndebit;
 
+import haxe.Exception;
+import model.ORM;
+import js.html.Element;
+import js.html.FormElement;
 import hxbit.Serializer;
 import js.lib.Error;
 import js.html.Event;
@@ -34,9 +38,13 @@ import model.Contact;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
+import react.ReactRef;
 import react.ReactUtil;
 import shared.DbData;
 import state.FormState;
+import view.accounting.returndebit.AccountForm;
+import view.accounting.returndebit.ContactForm;
+import view.accounting.returndebit.DealForm;
 import view.shared.FormBuilder;
 import view.shared.MItem;
 import view.shared.MenuProps;
@@ -69,7 +77,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 					trace(finput.value);
 					//trace(_instance);
 					var val = (finput.value == ''?'':finput.value.split('\\').pop());
-					Files._instance.setState({data:['hint'=>'Zum Upload ausgewählt:${val}']});
+					Files._instance.setState({action:'ReturnDebitsFileSelected',data:['hint'=>'Zum Upload ausgewählt:${val}']});
 				}
 			},
 			handler: function(_) {				
@@ -90,7 +98,11 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	var formApi:FormApi;
 	var formBuilder:FormBuilder;
 	var formFields:DataView;
+	var dealsFormRef:ReactRef<FormElement>;
+	var formRef:ReactRef<FormElement>;
 	var fieldNames:Array<String>;
+	var ormRefs:Map<String,ORMComps>;
+	var accountsFormRef:ReactRef<FormElement>;	
 	var baseForm:BaseForm;
 	var contact:Contact;
 	var dbData: shared.DbData;
@@ -136,6 +148,14 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		},this);
 
 		trace(props.match.path);
+		if(props.match.params.action==null)
+		{
+			//var sData = App.store.getState().dataStore.contactData;	props.match.params.section==null||		
+			var baseUrl:String = props.match.path.split(':section')[0];
+			trace('redirecting to ${baseUrl}Files/importReturnDebitFile');
+			props.history.push('${baseUrl}Files/importReturnDebitFile');
+			//get(null);
+		}
 	}
 
 	static function mapStateToProps(aState:AppState) 
@@ -164,7 +184,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	{	
 		dataAccess = ReturnDebitModel.dataAccess;
 		trace(props.match.params.action);
-		state.formApi.doAction();
+		state.formApi.doAction('importReturnDebitFile');
 	}
 	
 	public function delete(ev:ReactEvent):Void
@@ -172,6 +192,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.selectedRows.length);
 		var data = state.formApi.selectedRowsMap(state);
 		trace(data);
+	}
+
+	public function importReturnDebitFile() {
+		state.action = 'importReturnDebitFile';
 	}
 
 	public function importReturnDebit(_):Void
@@ -242,6 +266,131 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			)));
 		});
 		
+	}
+
+	public function close() {
+		// TODO: CHECK IF MODIFIED + ASK FOR SAVING / DISCARDING
+		//var baseUrl:String = props.match.path.split(':section')[0];
+		props.history.push('${props.match.path.split(':section')[0]}List/get');
+	}
+
+	function showSelectedAccounts(?ev:Event) {
+		//trace('---' + Type.typeof(ormRefs['accounts'].compRef));
+		trace('---' + ormRefs['accounts'].compRef.state.dataGrid.state.selectedRows);
+		var sRows:IntMap<Bool> = ormRefs['accounts'].compRef.state.dataGrid.state.selectedRows;
+		for(k in sRows.keys()){
+			ormRefs['accounts'].compRef.props.loadData(k,ormRefs['accounts'].compRef);
+		}
+	}
+
+	function showSelectedDeals(?ev:Event) {
+		//trace(state.sideMenu);
+		//Browser.document.querySelector('#deals').scrollIntoView();
+		//trace(Reflect.fields(dealsRef.current));
+		//dealsRef.scrollIntoView();
+		//trace(ormRefs);
+		trace('---' + Type.typeof(state.relDataComps));
+		//trace('---' + ormRefs['deals'].compRef.state.dataGrid.state.selectedRows);
+		trace('---' + state.relDataComps.keys().hasNext());
+		//trace('---' + props.children);
+		var sRows:IntMap<Bool> = ormRefs['deals'].compRef.state.dataGrid.state.selectedRows;
+		for(k in sRows.keys()){
+			ormRefs['deals'].compRef.props.loadData(k,ormRefs['deals'].compRef);
+		}
+		//dealsFormRef.current.scrollIntoView();
+		trace(dealsFormRef.current);
+		trace(dealsFormRef.current.querySelectorAll('.selected').length);
+		if(ev != null){
+			var targetEl:Element = cast(ev.target, Element);
+			trace(Std.string(targetEl.dataset.id));
+		}
+	}
+
+	function registerOrmRef(ref:Dynamic) {
+		trace(Type.typeof(ref));
+		switch(Type.typeof(ref)){
+			case TNull:
+				//do nothing
+			case TObject:
+				trace(Reflect.fields(ref));					
+				trace(Type.getClass(ref));					
+				trace(ref.props);
+				trace(ref.state);
+				trace(ref.state.model);
+				if(ref.props !=null && ref.props.model!= null){						
+					//ormRefs[ref.props.model] = ref;
+					//ormRefs[ref.props.model] = ref.props.formRef.current;
+				}
+			case TClass(func)://matches component classes, i.e. ReactComponentOf<DataFormProps,FormState>
+				//trace(func);
+				var cL:Dynamic = Type.getClass(ref);
+				if(cL!=null){
+					trace(Type.getClassName(cL));
+					try{
+						trace(Reflect.fields(ref.props));
+						trace(Reflect.fields(ref.state));
+						trace(ref.state.model);
+						if(ref.props !=null && ref.props.model!= null){						
+							ormRefs[ref.props.model] = {
+								compRef:ref,
+								orms:new IntMap()
+							}
+						}
+					}
+					catch(ex:Exception){
+						trace(ex);
+					}
+				}
+				default:
+				trace(ref);
+		}
+	};
+
+	public function registerORM(refModel:String,orm:ORM) {
+		if(ormRefs.exists(refModel)){
+			ormRefs.get(refModel).orms.set(orm.id,orm);
+			trace(refModel);
+			setState({ormRefs:ormRefs});
+			//setState(copy(state,{ormRefs:ormRefs}));
+			//state.ormRefs = ormRefs;
+			trace(Reflect.fields(state));
+			//setState({ormRefs:ormRefs});
+		}
+		else{
+			trace('OrmRef $refModel not found!');
+		}
+	}
+
+	function relData():ReactFragment {
+		return jsx('
+		<>
+			<$ContactForm formRef=${dealsFormRef} parentComponent=${this} model="contacts" action="get" key="contact"  filter=${{id:props.match.params.id, mandator:'1'}}></$ContactForm>
+			<$DealForm formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" key="deal"  filter=${{contact:props.match.params.id, mandator:'1'}}></$DealForm>
+			<$AccountForm formRef=${accountsFormRef} parentComponent=${this} model="accounts" key="account" action="get" filter=${{contact:props.match.params.id, mandator:'1'}}></$AccountForm>
+		</>
+		');
+		/*return [
+			for(model in ['deals','accounts']){
+				if(ormRefs.exists(model))
+				for(orm in ormRefs[model].orms.array()) {
+					${orm.formBuilder.renderForm({
+						//mHandlers:state.mHandlers,
+						fields:
+							if(model=='deals')
+								[for(k in dealDataAccess['open'].view.keys())
+									k => dealDataAccess['open'].view[k]]
+							else 
+								[for(k in accountDataAccess['open'].view.keys())
+									k => accountDataAccess['open'].view[k]]							
+						,
+						model:model,
+						ref:null,					
+						title: (model=='deals'?'Spenden':'Konten')
+					},orm)}
+				}
+				
+			}
+		];*/
 	}
 
 	override function render():ReactFragment

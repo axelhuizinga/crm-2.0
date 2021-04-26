@@ -21,7 +21,8 @@ class StatusStore
 		trace(initState);
 	}
 	public function reduce(state:StatusState, action:StatusAction):StatusState
-	{
+	{		
+		trace(action);
 		trace(state);
 		return switch(action)
 		{

@@ -215,13 +215,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			var targetEl:Element = cast(ev.target, Element);
 			trace(Std.string(targetEl.dataset.id));
 		}
-		/*for(k=>v in state.modals.keyValueIterator())
-			{
-				if(k)
-			}*/
-		//setState({modals:renderModals('deals')});
-		//modals = copy(modals, ['deals' => true]);
-		//deals = new Deals()
 	}
 
 	function loadContactData(id:Int):Void

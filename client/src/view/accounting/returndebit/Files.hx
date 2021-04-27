@@ -248,7 +248,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				dT.push(Utils.dynToMap(dR));
 			setState({action:'showImportedReturnDebit',dataTable:dT,loading:false});
 			trace(dT);
-			state.loading = false;
+			//state.loading = false;
 			var baseUrl:String = props.match.path.split(':section')[0];			
 			//props.history.push('${baseUrl}List');
 			App.store.dispatch(Status(Update( 
@@ -361,36 +361,15 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
-	function relData():ReactFragment {
+	function relData(?dGrid:ReactFragment):ReactFragment {
 		return jsx('
 		<>
+			$dGrid
 			<$ContactForm formRef=${dealsFormRef} parentComponent=${this} model="contacts" action="get" key="contact"  filter=${{id:props.match.params.id, mandator:'1'}}></$ContactForm>
 			<$DealForm formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" key="deal"  filter=${{contact:props.match.params.id, mandator:'1'}}></$DealForm>
 			<$AccountForm formRef=${accountsFormRef} parentComponent=${this} model="accounts" key="account" action="get" filter=${{contact:props.match.params.id, mandator:'1'}}></$AccountForm>
 		</>
 		');
-		/*return [
-			for(model in ['deals','accounts']){
-				if(ormRefs.exists(model))
-				for(orm in ormRefs[model].orms.array()) {
-					${orm.formBuilder.renderForm({
-						//mHandlers:state.mHandlers,
-						fields:
-							if(model=='deals')
-								[for(k in dealDataAccess['open'].view.keys())
-									k => dealDataAccess['open'].view[k]]
-							else 
-								[for(k in accountDataAccess['open'].view.keys())
-									k => accountDataAccess['open'].view[k]]							
-						,
-						model:model,
-						ref:null,					
-						title: (model=='deals'?'Spenden':'Konten')
-					},orm)}
-				}
-				
-			}
-		];*/
 	}
 
 	override function render():ReactFragment
@@ -398,7 +377,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		//<></>
 		trace(props.match.params.section);		
-		return state.formApi.render(jsx('
+		/*return state.formApi.render(jsx('
 		
 			<form className="tabComponentForm"  >
 				${renderResults()}
@@ -407,45 +386,20 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 	function renderResults():ReactFragment
-	{
+	{*/
 		trace(state.action + ':' + Std.string(state.dataTable != null));
-		trace(dataDisplay["rDebitList"]);
+		//trace(dataDisplay["rDebitList"]);
 		if(state.loading)
 			return state.formApi.renderWait();
 		trace('${state.action} ###########loading:' + state.loading);
-		return switch(state.action)
+		return state.formApi.render(switch(state.action)
 		{
 			case 'showImportedReturnDebit':
 				(state.dataTable == null? state.formApi.renderWait():
-				jsx('<Grid id="importedReturnDebit" data=${state.dataTable}
+				relData(jsx('<Grid id="importedReturnDebit" data=${state.dataTable}
 				${...props} dataState = ${dataDisplay["rDebitList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
-				'));	
-
-			/*case 'importClientList':
-				//trace(initialState);
-				trace(state.actualState);
-				/*var fields:Map<String,FormField> = [
-					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
-				];
-				(state.actualState==null ? state.formApi.renderWait():
-				state.formBuilder.renderForm({
-					mHandlers:state.mHandlers,
-					fields:formFields,/*[
-						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
-					],
-					model:'importClientList',
-					//ref:formRef,
-					title: 'Stammdaten Import' 
-				},state.actualState));	
-			/*case 'showFieldList2':
-				trace(dataDisplay["fieldsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
-				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["fieldsList"]} 
-					className="is-striped is-hoverable" fullWidth=${true}/>				
-				');	*/
+				')));			
 
 			default:
 				if(state.data != null && state.data.exists('hint')){
@@ -454,7 +408,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				else{
 					null;
 				}				
-		}
+		});
 		return null;
 	}	
 }

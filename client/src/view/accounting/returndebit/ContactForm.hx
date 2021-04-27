@@ -78,6 +78,9 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.loading);
 		trace(Reflect.fields(props.parentComponent.state.relDataComps).join('|'));
 		trace(Type.typeof(props.parentComponent.state.relDataComps));
+		if(props.id!=null){
+			loadData(props.id);
+		}
 	}
 	
 	static function mapDispatchToProps(dispatch:Dispatch) {
@@ -110,71 +113,6 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}	
 	
-	/**
-	 * get all contacts with this Contact id
-	 */
-
-	public function get():Void
-	{
-		var offset:Int = 0;
-		trace(props.filter);
-		//setState({loading:true});	
-		state.loading=true;	
-		//var contact = (props.location.state.contact);
-		var p:Promise<DbData> = props.load(
-			{
-				classPath:'data.Deals',
-				action:'get',
-				filter:(props.filter!=null?props.filter:{mandator:'1'}),
-				limit:props.limit,
-				offset:offset>0?offset:0,
-				table:state.model,
-				resolveMessage:{					
-					success:'Spendenliste wurde geladen',
-					failure:'Spendenliste konnte nicht geladen werden'
-				},				
-				dbUser:props.userState.dbUser,
-				devIP:App.devIP
-			}
-		);
-		p.then(function(data:DbData){
-			trace(data.dataRows.length); 
-			if(data.dataRows.length>0)
-				trace(data.dataRows[0]);
-			//setState({loading:false, dataTable:data.dataRows});
-			setState({
-				loading:false,
-				dataTable:data.dataRows,
-				dataCount:Std.parseInt(data.dataInfo['count']),
-				pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
-			});			
-		});
-	}
-	
-	public function edit(ev:ReactEvent):Void
-	{
-		trace(state.selectedRows.length);				
-	}
-
-	/*public function selectionClear() {
-		var match:RouterMatch = copy(props.match);
-		match.params.action = 'get';
-		trace(state.dataTable.length);
-		props.select(1, null,match, UnselectAll);	
-		//trace(formRef !=null);
-
-		var trs:NodeList = Browser.document.querySelectorAll('.tabComponentForm tr');				
-		trace(trs.length);
-		for(i in 0...trs.length){
-			var tre:TableRowElement = cast(trs.item(i), TableRowElement);
-			if(tre.classList.contains('is-selected')){
-				trace('unselect:${tre.dataset.id}');
-				tre.classList.remove('is-selected');
-			}
-		};
-		Browser.document.querySelector('[class="grid-container-inner"]').scrollTop = 0;
-	}*/
-		
 	override public function componentDidMount():Void 
 	{	
 		dataAccess = [
@@ -191,7 +129,7 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 		trace('yeah: ${props.userState.dbUser.first_name}');
 		//dbData = FormApi.init(this, props);
 		props.parentComponent.registerOrmRef(this);
-		get();
+		//get();
 		if(parentState.relDataComps!=null){
 			parentState.relDataComps[Type.getClassName(Type.getClass(this))] = this;
 		}
@@ -205,12 +143,12 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 			return;
 		var p:Promise<DbData> = props.load(
 			{
-				classPath:'data.Deals',
+				classPath:'data.Contacts',
 				action:'get',
 				filter:{id:id,mandator:1},
 				resolveMessage:{
-					success:'Spende ${id} wurde geladen',
-					failure:'Spende ${id} konnte nicht geladen werden'
+					success:'Kontakt ${id} wurde geladen',
+					failure:'Kontakt ${id} konnte nicht geladen werden'
 				},
 				table:'contacts',
 				dbUser:props.userState.dbUser,
@@ -275,7 +213,7 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 		//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}
 	}
 	
-	function renderResults():ReactFragment
+	override public function render():ReactFragment
 	{
 		//trace(props.action);
 		//trace(dataDisplay["userList"]);
@@ -290,8 +228,8 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 			//trace(state.dataTable);
 			jsx('
 			<>
-			<Grid id="dealsList" data=${state.dataTable}
-			${...props} dataState = ${dataDisplay["dealsList"]} 
+			<Grid id="contact" data=${state.dataTable}
+			${...props} dataState = ${dataDisplay["contactsList"]} 
 			parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
 			${renderForm()}		
 			</>			
@@ -303,21 +241,7 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 		}
 		return null;
 	}
-	/**
-	 * <$Table id="dealsList" data=${state.dataTable}  parentComponent=${this}
-					${...props} dataState=${dataDisplay.get("dealsList")} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-	 */
-	override public function render():ReactFragment
-	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		return jsx('
-		<div className="t_caption">Spenden
-		<form className="tabComponentForm formField" ref=${props.formRef} name="dealsList" key="dealsList"> 			
-			${renderResults()}
-		</form></div>');
-	}
-
+	
 	function update()
 	{
 		var changed:Int = 0;
@@ -346,7 +270,7 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 					var p:Promise<Dynamic> = App.store.dispatch(CRUD.update(dbQ));
 					p.then(function(d:Dynamic){
 						trace(d);
-						get();
+						loadData(props.id);
 					});
 				}				
 			}

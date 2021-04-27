@@ -175,8 +175,10 @@ class LiveDataAccess
 						sData = sSelectType(props.id, props.data, sData, props.selectType);
 						trace(sData);
 						trace('${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}');
-						aState.locationStore.history.push('${tableRoot[2]}#${FormApi.sParams(sData.keys().sKeysList())}',
-						{activeContactUrl:'${tableRoot[2]}#${FormApi.sParams(sData.keys().sKeysList())}'});
+						trace(props.match.params);
+						trace(props.match.path);
+						aState.locationStore.history.push('${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}',
+						{activeContactUrl:'${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}'});
 						return dispatch(DataAction.SelectBookings(props.data));
 					default:
 						return null;

@@ -147,7 +147,12 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			})
 		},this);
 
-		trace(props.match.path);
+		if(props.match.params.id!=null){
+			var baseUrl:String = props.match.path.split(':section')[0];
+			trace('redirecting to ${baseUrl}Files/${props.match.params.action}');
+			props.history.push('${baseUrl}Files/${props.match.params.action}');
+		}
+			trace(props.match.path);
 		if(props.match.params.action==null)
 		{
 			//var sData = App.store.getState().dataStore.contactData;	props.match.params.section==null||		
@@ -361,13 +366,25 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
+	function contactForm(?dGrid:ReactFragment):ReactFragment {
+		return jsx('<div>dummy</div>');
+	}
+
+	//function relData(?dGrid:ReactFragment):ReactFragment {
+	//function relData(?dGrid:ReactFragment):ReactFragment {
+	/**
+	 * 			<$DealForm formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" key="deal"  filter=${{contact:props.match.params.id, mandator:'1'}}></$DealForm>
+			<$AccountForm formRef=${accountsFormRef} parentComponent=${this} model="accounts" key="account" action="get" filter=${{contact:props.match.params.id, mandator:'1'}}></$AccountForm>
+	 * [Description]
+	 * @param dGrid 
+	 * @return ReactFragment
+	 */
 	function relData(?dGrid:ReactFragment):ReactFragment {
-		return jsx('
+		return props.match.params.id==null? dGrid:jsx('
 		<>
 			$dGrid
 			<$ContactForm formRef=${dealsFormRef} parentComponent=${this} model="contacts" action="get" key="contact"  filter=${{id:props.match.params.id, mandator:'1'}}></$ContactForm>
-			<$DealForm formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" key="deal"  filter=${{contact:props.match.params.id, mandator:'1'}}></$DealForm>
-			<$AccountForm formRef=${accountsFormRef} parentComponent=${this} model="accounts" key="account" action="get" filter=${{contact:props.match.params.id, mandator:'1'}}></$AccountForm>
+
 		</>
 		');
 	}
@@ -376,7 +393,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		//<></>
-		trace(props.match.params.section);		
+		trace(props.match.params.section + '/' + props.match.params.action);		
 		/*return state.formApi.render(jsx('
 		
 			<form className="tabComponentForm"  >

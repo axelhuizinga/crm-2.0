@@ -112,6 +112,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		_instance = this;
+		ormRefs = new Map();
 		dataDisplay = ReturnDebitModel.dataGridDisplay;
 		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
 		//formFields = ReturnDebitModel.formFields(props.match.params.action);
@@ -312,7 +313,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	function registerOrmRef(ref:Dynamic) {
-		trace(Type.typeof(ref));
+		//trace(Type.typeof(ref));
 		switch(Type.typeof(ref)){
 			case TNull:
 				//do nothing
@@ -379,33 +380,31 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	 * @param dGrid 
 	 * @return ReactFragment
 	 */
-	function relData(?dGrid:ReactFragment):ReactFragment {
+	function relData1(?dGrid:ReactFragment):ReactFragment {
 		return props.match.params.id==null? dGrid:jsx('
 		<>
 			$dGrid
-			<$ContactForm formRef=${dealsFormRef} parentComponent=${this} model="contacts" action="get" key="contact"  filter=${{id:props.match.params.id, mandator:'1'}}></$ContactForm>
+			<$ContactForm formRef=${dealsFormRef} parentComponent=${this} model="contacts" id=${props.match.params.id} key="contact"  filter=${{mandator:'1'}}></$ContactForm>
 
 		</>
 		');
 	}
 
+	function relData(?dGrid:ReactFragment):ReactFragment {
+		var rData:Array<ReactFragment> = [dGrid];
+		if(props.match.params.id!=null)
+			rData.push(jsx('<$ContactForm formRef=${dealsFormRef} parentComponent=${this} model="contacts" id=${props.match.params.id} key="contact"  filter=${{mandator:'1'}}></$ContactForm>'));
+		for(model in ['contacts','deals','accounts']){
+			if(ormRefs.exists(model))
+				rData.push(untyped ormRefs[model].compRef.renderForm());
+		}
+		return rData;
+	}
+
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		//<></>
 		trace(props.match.params.section + '/' + props.match.params.action);		
-		/*return state.formApi.render(jsx('
-		
-			<form className="tabComponentForm"  >
-				${renderResults()}
-			</form>
-		'));		
-	}
-	
-	function renderResults():ReactFragment
-	{*/
 		trace(state.action + ':' + Std.string(state.dataTable != null));
-		//trace(dataDisplay["rDebitList"]);
 		if(state.loading)
 			return state.formApi.renderWait();
 		trace('${state.action} ###########loading:' + state.loading);

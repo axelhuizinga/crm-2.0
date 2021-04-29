@@ -75,9 +75,10 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 			values:new Map<String,Dynamic>()
 		},this);	
 		parentState = props.parentComponent.state;
-		trace(state.loading);
-		trace(Reflect.fields(props.parentComponent.state.relDataComps).join('|'));
-		trace(Type.typeof(props.parentComponent.state.relDataComps));
+		trace('id:${props.id}');
+		//trace(Reflect.fields(props.parentComponent.state.relDataComps).join('|'));
+		//trace(state.loading);
+		//trace(Type.typeof(props.parentComponent.state.relDataComps));
 		if(props.id!=null){
 			loadData(props.id);
 		}
@@ -175,7 +176,7 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 				//trace(Reflect.fields(props));
 				//trace(Reflect.fields(props.parentComponent.props));
 				//props.history.replace(props.location.pathname.replace('open','update'));
-				props.parentComponent.registerORM('contact',contact);
+				props.parentComponent.registerORM('contacts',contact);
 			}
 		});
 	}	
@@ -187,30 +188,19 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.loading + ':' + props.parentComponent.props.match.params.action);
 		if(state.loading)
 			return state.formApi.renderWait();
-		trace('###########loading:' + state.loading);
+		trace('###########loading:' + state.loading + 'state.actualState:${state.actualState}');
 		//return null;
-		return switch(props.parentComponent.props.match.params.action)
-		{
-			case 'open2'|'update2':
-				trace(state.actualState);
-				/*var fields:Map<String,FormField> = [
+		return (state.actualState==null ? state.formApi.renderWait():
+			state.formBuilder.renderForm({
+				mHandlers:state.mHandlers,
+				fields:[
 					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
-				];*/
-				(state.actualState==null ? state.formApi.renderWait():
-				state.formBuilder.renderForm({
-					mHandlers:state.mHandlers,
-					fields:[
-						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
-					],
-					model:'contact',
-					//ref:formRef,
-					title: 'Bearbeite Spende' 
-				},state.actualState));
-			default:
-				trace('>>>${props.parentComponent.props.match.params.action}<<<');
-				null;
-		}
-		//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}
+				],
+				model:'contact',
+				//ref:formRef,
+				title: 'Bearbeite Spende' 
+			},state.actualState)
+		);			
 	}
 	
 	override public function render():ReactFragment
@@ -224,7 +214,7 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.action);
 		return switch(props.action)
 		{
-			case 'get':
+			case 'importReturnDebitFile':
 			//trace(state.dataTable);
 			jsx('
 			<>

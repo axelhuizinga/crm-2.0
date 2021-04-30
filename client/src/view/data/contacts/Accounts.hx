@@ -227,7 +227,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		//return state.formApi.render(jsx('
 		return jsx('
 		<div className="t_caption">Konten
-			<form className="tabComponentForm" name="accountsList" >				
+			<form className="tabComponentForm2" name="accountsList" >				
 				${renderResults()}
 			</form>
 		</div>

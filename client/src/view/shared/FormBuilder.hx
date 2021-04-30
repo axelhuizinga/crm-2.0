@@ -243,7 +243,7 @@ class FormBuilder {
 					</div>');
 				default:
 					renderElement(
-						jsx('<input name=${name} onChange=${onChange} type="text" defaultValue=${value} disabled=${field.disabled} required=${field.required}/>'),
+						jsx('<input name=${name} onChange=${onChange} type="text" defaultValue=${value} disabled=${field.disabled}  key=${i++} required=${field.required}/>'),
 						ki++, field.label
 					);
 			}
@@ -254,7 +254,7 @@ class FormBuilder {
 
     public function renderForm(props:FormState, initialState:Dynamic):ReactFragment
     {
-		//trace(props.fields.toString());
+		trace(props.model);
 		//trace(Std.string(props.fields));
 		//return null;formField<div className="g_block" ></div>${renderForms(props.modals)}
 		//trace(props); ref=${props.ref} <div className="g_footer" ></div>	

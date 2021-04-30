@@ -595,7 +595,7 @@ class FormApi
 	public function renderWait()
 	{
 			//trace(comp.state);
-			//trace(Type.getClass(comp.state.values));
+			//trace(Type.getClass(comp));
 			//trace(comp.state.values != null && comp.state.values.get('loadResult' !=null));
 			//trace(comp.state.values.get('loadResult'));
 			if(comp.state.values != null && comp.state.values.get('loadResult') !=null)

@@ -131,39 +131,41 @@ class SyncExternalContacts extends Model
 
 		var cData:NativeArray = getMissingClients('WHERE client_id>${maxCid}');
 		trace('got:'+Lib.toHaxeArray(cData).length);
-		var cD:Map<String,Dynamic> = Util.map2fields(cData[0], keys);
-		//trace(cD);
-		var cNames:Array<String> = [for(k in cD.keys()) k];
-		//var haData:Array<NativeArray> = Lib.toHaxeArray(cData);
-		var _1st:Bool = true;
-		var madded:Int = 0;
-		for(row in cData.iterator())
-		{			
-			var aid:Int = Syntax.code("{0}['id']",row);				
-			var stmt:PDOStatement = upsertClient(row, cD, cNames);
-			try{
-				var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
-				if(_1st){
-					_1st=false;
-					trace(row);
-					trace(res);
-					//Sys.exit(333);
+		if(Lib.toHaxeArray(cData).length>0){
+			trace(cData[0]);
+			var cD:Map<String,Dynamic> = Util.map2fields(cData[0], keys);
+			//trace(cD);
+			var cNames:Array<String> = [for(k in cD.keys()) k];
+			//var haData:Array<NativeArray> = Lib.toHaxeArray(cData);
+			var _1st:Bool = true;
+			var madded:Int = 0;
+			for(row in cData.iterator())
+			{			
+				var aid:Int = Syntax.code("{0}['id']",row);				
+				var stmt:PDOStatement = upsertClient(row, cD, cNames);
+				try{
+					var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);		
+					if(_1st){
+						_1st=false;
+						trace(row);
+						trace(res);
+						//Sys.exit(333);
+					}
 				}
-			}
-			catch(e:Dynamic)
-			{
-				{S.sendErrors(dbData, [
-					'dbError'=>S.dbh.errorInfo(),
-					'upsertClient'=>S.errorInfo(row),
-					'exception'=>e
-				]);}		
-			}
-			madded++;
-		}		
-		trace('added $madded');
+				catch(e:Dynamic)
+				{
+					{S.sendErrors(dbData, [
+						'dbError'=>S.dbh.errorInfo(),
+						'upsertClient'=>S.errorInfo(row),
+						'exception'=>e
+					]);}		
+				}
+				madded++;
+			}		
+			trace('added $madded');	
+		}
+		
 		S.sendInfo(dbData);
-	
-
 		Sys.exit(0);
 	}
 

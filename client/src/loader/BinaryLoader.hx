@@ -31,7 +31,7 @@ class BinaryLoader {
 		var s:Serializer = new Serializer();
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbAP);//.toHex();
-		Out.dumpObject(dbQuery);
+		//Out.dumpObject(dbQuery);
 		var b:Bytes = s.serialize(dbQuery);
 		//trace(dbQuery.getSerializeSchema());
 		//trace(dbQuery.relations.get('contacts').fields);

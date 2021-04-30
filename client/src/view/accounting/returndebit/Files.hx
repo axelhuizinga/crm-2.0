@@ -289,27 +289,9 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
-	function showSelectedDeals(?ev:Event) {
+	function showSelectedDeal(id:Int) {
 		//trace(state.sideMenu);
-		//Browser.document.querySelector('#deals').scrollIntoView();
-		//trace(Reflect.fields(dealsRef.current));
-		//dealsRef.scrollIntoView();
-		//trace(ormRefs);
-		trace('---' + Type.typeof(state.relDataComps));
-		//trace('---' + ormRefs['deals'].compRef.state.dataGrid.state.selectedRows);
-		trace('---' + state.relDataComps.keys().hasNext());
-		//trace('---' + props.children);
-		var sRows:IntMap<Bool> = ormRefs['deals'].compRef.state.dataGrid.state.selectedRows;
-		for(k in sRows.keys()){
-			ormRefs['deals'].compRef.props.loadData(k,ormRefs['deals'].compRef);
-		}
-		//dealsFormRef.current.scrollIntoView();
-		trace(dealsFormRef.current);
-		trace(dealsFormRef.current.querySelectorAll('.selected').length);
-		if(ev != null){
-			var targetEl:Element = cast(ev.target, Element);
-			trace(Std.string(targetEl.dataset.id));
-		}
+
 	}
 
 	function registerOrmRef(ref:Dynamic) {
@@ -367,36 +349,25 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
-	function contactForm(?dGrid:ReactFragment):ReactFragment {
-		return jsx('<div>dummy</div>');
-	}
-
-	//function relData(?dGrid:ReactFragment):ReactFragment {
-	//function relData(?dGrid:ReactFragment):ReactFragment {
-	/**
-	 * 			<$DealForm formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" key="deal"  filter=${{contact:props.match.params.id, mandator:'1'}}></$DealForm>
-			<$AccountForm formRef=${accountsFormRef} parentComponent=${this} model="accounts" key="account" action="get" filter=${{contact:props.match.params.id, mandator:'1'}}></$AccountForm>
-	 * [Description]
-	 * @param dGrid 
-	 * @return ReactFragment
-	 */
-	function relData1(?dGrid:ReactFragment):ReactFragment {
-		return props.match.params.id==null? dGrid:jsx('
-		<>
-			$dGrid
-			<$ContactForm formRef=${dealsFormRef} parentComponent=${this} model="contacts" id=${props.match.params.id} key="contact"  filter=${{mandator:'1'}}></$ContactForm>
-
-		</>
-		');
+	function relForm(model:String):ReactFragment {
+		return (ormRefs.exists(model)? untyped ormRefs[model].compRef.renderForm(): null);
 	}
 
 	function relData(?dGrid:ReactFragment):ReactFragment {
+
+		return jsx('<>
+		$dGrid
+		${(props.match.params.id!=null?<$DealForm formRef=${dealsFormRef} parentComponent=${this} id=${props.match.params.id} key="importedReturnDebitDeal"  model="deals" filter=${{mandator:'1'}}></$DealForm>:null)}
+		${for(model in ['contacts','deals','accounts'])relForm(model)}
+		</>');
 		var rData:Array<ReactFragment> = [dGrid];
-		if(props.match.params.id!=null)
-			rData.push(jsx('<$ContactForm formRef=${dealsFormRef} parentComponent=${this} model="contacts" id=${props.match.params.id} key="contact"  filter=${{mandator:'1'}}></$ContactForm>'));
+		if(props.match.params.id!=null){
+			rData.push(jsx('<$DealForm formRef=${dealsFormRef} parentComponent=${this} id=${props.match.params.id} key="importedReturnDebitDeal"  model="deals" filter=${{mandator:'1'}}></$DealForm>'));
+		}
+		//
 		for(model in ['contacts','deals','accounts']){
 			if(ormRefs.exists(model))
-				rData.push(untyped ormRefs[model].compRef.renderForm());
+				rData.push(cast( untyped ormRefs[model].compRef.renderForm()));
 		}
 		return rData;
 	}
@@ -405,21 +376,21 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(props.match.params.section + '/' + props.match.params.action);		
 		trace(state.action + ':' + Std.string(state.dataTable != null));
+		trace('${state.action} ###########loading:' + state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
-		trace('${state.action} ###########loading:' + state.loading);
 		return state.formApi.render(switch(state.action)
 		{
 			case 'showImportedReturnDebit':
-				(state.dataTable == null? state.formApi.renderWait():
+				//(state.dataTable == null? state.formApi.renderWait():
 				relData(jsx('<Grid id="importedReturnDebit" data=${state.dataTable}
-				${...props} dataState = ${dataDisplay["rDebitList"]} 
-				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
-				')));			
+				${...props} dataState = ${dataDisplay["rDebitList"]} key="importedReturnDebitList" 
+				parentComponent=${this} className="is-striped is-hoverable" />			
+				'));			
 
 			default:
 				if(state.data != null && state.data.exists('hint')){
-					jsx('<div className="hint"><h3>${state.data.get('hint')}</h3></div>');
+					jsx('<div className="hint" key="loadReturnDebitsFile" ><h3>${state.data.get('hint')}</h3></div>');
 				}
 				else{
 					null;

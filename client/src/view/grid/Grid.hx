@@ -198,9 +198,9 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		//return headerRows;
 		//var rows:ReactFragment = renderHeaderDisplay();
 		trace(gridStyle);
-		//return rows; style="{{grid-template-columns:$gridStyle}}"
+		//return rows; style="{{grid-template-columns:$gridStyle}}"<div className="grid-container" ref=${gridRef} id=${props.id}>	
 		return jsx('		
-			<div className="grid-container" ref=${gridRef}>			
+			<div className="grid_box" ref=${gridRef} id=${props.id}>			
 					${headerRows}
 					${renderRows()}
 			</div>					

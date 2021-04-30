@@ -112,6 +112,7 @@ h3{
 .cCenter
 {
 	align-self:center;
+	min-width: max-content;
 }
 .cRight
 {
@@ -130,7 +131,7 @@ h3{
 {
 	display:flex;
 	height:80vh;
-	align-items: center;
+	align-items: center;	
 }
 .flex1
 {
@@ -507,11 +508,13 @@ input::-moz-focus-inner {
 }
 .tabComponentForm
 {
-	min-width: 80%;
+	/*width: min-content;*/
 	display:flex;	
 	flex-direction: column;
 	flex-grow:1;
 	margin:0 auto 0.8rem auto;	
+	max-width: min-content;
+
 	/*min-height: 0;
 	overflow-x: auto;*/
 }
@@ -915,10 +918,11 @@ form table{
 	background-color:transparent;// #fff;
 	border-radius: $tableHeader-radius $tableHeader-radius 0 0;
 	padding: 0.35rem 2rem 0.3rem 2rem;
-	/*font-weight: bold;*/
-	font-size: 0.8rem;
+	/*font-weight: bold;
+	font-size: 0.8rem;*/
 	color:#111;
-	width: 50%;
+	min-width: 50%;
+	max-width: min-content;
 	margin:auto;
 }
 
@@ -984,13 +988,15 @@ form td, form caption
 .grid_box
 {
 	display: grid;
-	margin: 1px auto;
+	margin: 0.32rem auto;
 	grid-auto-rows:  min-content;
-	grid-gap: 1rem;
 	grid-template-columns: 1fr 1fr;
 	font-size: 1.0rem;
-	overflow-y: auto;
+	overflow-y: visible;
+	min-width: 80%;
+	/*min-width: min-content;*/
 	padding-right: 1rem;
+	white-space: nowrap;
 }
 .grid_menu
 {
@@ -1022,13 +1028,12 @@ form td, form caption
 {
 	/*grid-column: grid-column-start / grid-column-end;display: flex;*/
 	text-align: center;
-
 	background-color: $paleBlue;
 	background-image:$darkGradient;
 	border-radius: $tableHeader-radius $tableHeader-radius;
-	padding: 0.7rem 2rem 0.64rem 2rem;
+	padding: 0.5rem 2rem 0.4rem 2rem;
 	font-weight: bold;
-	font-size: 1.22rem;
+	font-size: 1.11rem;
 	color:white;
 }
 .g_fill_row
@@ -1068,7 +1073,7 @@ form td, form caption
 	height: 1.8rem;
 }
 .g_cell_r{
-	width:auto;
+	min-width: max-content;
 }
 .g_cell_r input{
 	border: none;
@@ -1090,6 +1095,9 @@ form td, form caption
 	z-index: -1;
 }
 
+.tabComponentForm .grid_box{
+	grid-gap: 1rem;
+}
 /*** D3 CHARTS ***/
 
 div.tooltip {	

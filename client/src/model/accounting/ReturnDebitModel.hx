@@ -29,7 +29,13 @@ class ReturnDebitModel
 	];
 
 	public static var gridColumns:Map<String,view.grid.Grid.DataColumn> = [
-		'id'=>{label:'ContactID', flexGrow:0, className: 'tLeft tableNums'},
+		'id'=>{label:'KontaktID', flexGrow:0, className: 'tLeft tableNums'},
+		'value_date'=>{label: 'Wertstellung',cellFormat:function(v:Dynamic){
+			if(v==null)
+				return null;
+			trace(v);
+			 return DateTools.format(Date.fromString(v), "%d.%m.%Y");
+		}},
 		'sepa_code'=>{label:'Sepa Code' },
 		'iban'=>{label:'Iban', className: 'tableNums', flexGrow:1, headerClassName: 'tRight'},						
 		'deal_id'=>{label: 'SpendenID', className: 'tableNums'},		
@@ -40,6 +46,11 @@ class ReturnDebitModel
 
 	public static var listColumns:Map<String,DataColumn> = [
 		'id'=>{label:'VertragsID', flexGrow:0, className: 'tRight tableNums'},
+		'value_date'=>{label: 'Wertstellung',cellFormat:function(v:String){
+			if(v==null)
+				return null;
+			 return DateTools.format(Date.fromString(v), "%d.%m.%Y");
+			}},
 		'sepa_code'=>{label:'Sepa Code', flexGrow:0, className: 'tRight'},
 		'iban'=>{label:'Iban'},				
 		'ba_id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		

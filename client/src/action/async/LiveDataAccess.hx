@@ -174,12 +174,12 @@ class LiveDataAccess
 					case 'ReturnDebits':
 						sData = sSelectType(props.id, props.data, sData, props.selectType);
 						trace(sData);
-						trace('${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}');
+						trace('${tableRoot[2]}/${Std.parseInt(props.data.get(props.id).get('deal_id')) }');
 						trace(props.match.params);
 						trace(props.match.path);
 						aState.locationStore.history.push('${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}',
 						{activeContactUrl:'${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}'});
-						return dispatch(DataAction.SelectBookings(props.data));
+						return null;//dispatch(DataAction.SelectBookings(props.data));
 					default:
 						return null;
 				}		

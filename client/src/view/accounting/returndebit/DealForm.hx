@@ -75,8 +75,10 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 		},this);	
 		parentState = props.parentComponent.state;
 		trace(state.loading);
-		trace(Reflect.fields(props.parentComponent.state.relDataComps).join('|'));
-		trace(Type.typeof(props.parentComponent.state.relDataComps));
+		trace('id:${props.id}');
+		if(props.id!=null){
+			loadData(props.id);
+		}
 	}
 	
 	static function mapDispatchToProps(dispatch:Dispatch) {
@@ -154,43 +156,15 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(state.selectedRows.length);				
 	}
-
-	/*public function selectionClear() {
-		var match:RouterMatch = copy(props.match);
-		match.params.action = 'get';
-		trace(state.dataTable.length);
-		props.select(1, null,match, UnselectAll);	
-		//trace(formRef !=null);
-
-		var trs:NodeList = Browser.document.querySelectorAll('.tabComponentForm tr');				
-		trace(trs.length);
-		for(i in 0...trs.length){
-			var tre:TableRowElement = cast(trs.item(i), TableRowElement);
-			if(tre.classList.contains('is-selected')){
-				trace('unselect:${tre.dataset.id}');
-				tre.classList.remove('is-selected');
-			}
-		};
-		Browser.document.querySelector('[class="grid-container-inner"]').scrollTop = 0;
-	}*/
 		
 	override public function componentDidMount():Void 
 	{	
-		dataAccess = [
-			'get' =>{
-				source:[
-					"deals" => []
-				],
-				view:[]
-			},
-		];			
-		//
 		trace(props.action);
 		if(props.userState.dbUser != null)
 		trace('yeah: ${props.userState.dbUser.first_name}');
 		//dbData = FormApi.init(this, props);
 		props.parentComponent.registerOrmRef(this);
-		get();
+		//get();
 		if(parentState.relDataComps!=null){
 			parentState.relDataComps[Type.getClassName(Type.getClass(this))] = this;
 		}
@@ -225,7 +199,7 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 				//if( mounted)
 				deal = new Deal(data);
 				trace(deal.id);				
-				//setState({loading:false, actualState:deal, initialData: copy(deal)});
+				setState({loading:false, actualState:deal, initialData: copy(deal)});
 				//state = copy(state, {loading:false});
 				deal.state.actualState = deal;
 				state.actualStates.set(deal.id,deal);
@@ -243,35 +217,22 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderForm():ReactFragment
 	{
-		//trace(props.action);
-		//trace(dataDisplay["userList"]);
 		trace(state.loading + ':' + props.parentComponent.props.match.params.action);
 		if(state.loading)
 			return state.formApi.renderWait();
-		trace('###########loading:' + state.loading);
+		//trace('###########loading:' + state.loading + ' state.actualState:${state.actualState}');
 		//return null;
-		return switch(props.parentComponent.props.match.params.action)
-		{
-			case 'open2'|'update2':
-				trace(state.actualState);
-				/*var fields:Map<String,FormField> = [
+		return (state.actualState==null ? state.formApi.renderWait():
+			state.formBuilder.renderForm({
+				mHandlers:state.mHandlers,
+				fields:[
 					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
-				];*/
-				(state.actualState==null ? state.formApi.renderWait():
-				state.formBuilder.renderForm({
-					mHandlers:state.mHandlers,
-					fields:[
-						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
-					],
-					model:'deal',
-					//ref:formRef,
-					title: 'Bearbeite Spende' 
-				},state.actualState));
-			default:
-				trace('>>>${props.parentComponent.props.match.params.action}<<<');
-				null;
-		}
-		//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}
+				],
+				model:'deal',
+				//ref:formRef,
+				title: 'Bearbeite Spende' 
+			},state.actualState)
+		);	
 	}
 	
 	function renderResults():ReactFragment
@@ -310,11 +271,7 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 	override public function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		return jsx('
-		<div className="t_caption">Spenden
-		<form className="tabComponentForm formField" ref=${props.formRef} name="dealsList" key="dealsList"> 			
-			${renderResults()}
-		</form></div>');
+		return null;
 	}
 
 	function update()

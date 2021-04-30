@@ -60,8 +60,9 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props:DataFormProps) 
 	{
 		super(props);
-		dataAccess = DealsModel.dataAccess;
+		dataAccess = ContactsModel.dataAccess;
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
+		trace(fieldNames);
 		dataDisplay = ContactsModel.dataGridDisplay;		
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
@@ -76,9 +77,6 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 		},this);	
 		parentState = props.parentComponent.state;
 		trace('id:${props.id}');
-		//trace(Reflect.fields(props.parentComponent.state.relDataComps).join('|'));
-		//trace(state.loading);
-		//trace(Type.typeof(props.parentComponent.state.relDataComps));
 		if(props.id!=null){
 			loadData(props.id);
 		}
@@ -116,15 +114,7 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 	
 	override public function componentDidMount():Void 
 	{	
-		dataAccess = [
-			'get' =>{
-				source:[
-					"contacts" => []
-				],
-				view:[]
-			},
-		];			
-		//
+
 		trace(props.action);
 		if(props.userState.dbUser != null)
 		trace('yeah: ${props.userState.dbUser.first_name}');
@@ -165,7 +155,7 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 				//if( mounted)
 				contact = new Contact(data);
 				trace(contact.id);				
-				//setState({loading:false, actualState:contact, initialData: copy(contact)});
+				setState({loading:false, actualState:contact, initialData: copy(contact)});
 				//state = copy(state, {loading:false});
 				contact.state.actualState = contact;
 				state.actualStates.set(contact.id,contact);
@@ -188,7 +178,7 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.loading + ':' + props.parentComponent.props.match.params.action);
 		if(state.loading)
 			return state.formApi.renderWait();
-		trace('###########loading:' + state.loading + 'state.actualState:${state.actualState}');
+		trace('###########loading:' + state.loading + ' state.actualState:${state.actualState}');
 		//return null;
 		return (state.actualState==null ? state.formApi.renderWait():
 			state.formBuilder.renderForm({
@@ -198,7 +188,7 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 				],
 				model:'contact',
 				//ref:formRef,
-				title: 'Bearbeite Spende' 
+				title: 'Bearbeite Kontakt' 
 			},state.actualState)
 		);			
 	}
@@ -207,10 +197,11 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//trace(props.action);
 		//trace(dataDisplay["userList"]);
-		//trace(state.loading);
+		trace(state.loading || state.dataTable == null || state.dataTable.length == 0);
 		if(state.loading || state.dataTable == null || state.dataTable.length == 0)
-			return state.formApi.renderWait();
-		//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}		
+			//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}		${renderForm()}	
+		return null;
+		return state.formApi.renderWait();
 		trace(props.action);
 		return switch(props.action)
 		{
@@ -221,7 +212,7 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 			<Grid id="contact" data=${state.dataTable}
 			${...props} dataState = ${dataDisplay["contactsList"]} 
 			parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
-			${renderForm()}		
+				
 			</>			
 			');			
 			case 'delete':

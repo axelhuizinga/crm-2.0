@@ -123,8 +123,8 @@ I kno	 * Import or Update accounts
 		trace('loading  ${limit.sql} ${offset.sql}');		
 		S.checkStmt(S.syncDbh, stmt,'importExtAccounts data:');
 		
-		//var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
-		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN):null);
+		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		//var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN):null);
 		offset = Util.offset(offset.int + Syntax.code("count({0})",res));
 		//return res;
 		trace(stmt.rowCount());

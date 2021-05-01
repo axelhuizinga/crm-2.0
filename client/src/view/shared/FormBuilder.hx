@@ -1,5 +1,6 @@
 package view.shared;
 
+import react.Fragment;
 import view.data.contacts.Deals;
 import view.shared.io.BaseForm;
 import react.NumberFormatProps;
@@ -66,12 +67,13 @@ class FormBuilder {
 	}  
 
 
-	function renderElement(el:ReactFragment, ki, label):ReactFragment
+	function renderElement(el:ReactFragment, label):ReactFragment
 	{
+		//trace(i);
 		return	jsx('
 			<div key=${i++} className="g_row_2" role="rowgroup">
-				<div className="g_cell" role="cell">${label}</div>
-				<div className="g_cell_r" role="cell">
+				<div className="g_cell" key=${i+'_l'} role="cell">${label}</div>
+				<div className="g_cell_r" key=${i+'_r'}role="cell">
 				${el}
 				</div>
 			</div>
@@ -79,6 +81,7 @@ class FormBuilder {
 	}
 
 	function renderOption(si:Int,label:String,?value:Dynamic) {
+		//trace(i);
 		return	
 			value == null ? jsx('<option key=${i++}>$label</option>'):
 			jsx('<option key=${i++} value=${value}>$label</option>');
@@ -90,36 +93,31 @@ class FormBuilder {
 		return [for (value=>label in options)
 		{
 			renderOption(si++, label,value);
-		}].array();
+		}];
 	}
 
 	function renderRadio(name:String,options:StringMap<String>, actValue:String):ReactFragment
 	{
-		var si:Int = 1;
-		//onChange=${onChange} 
+		trace(options.toString());
 		return [for (value=>label in options)
 		{			
-			//var check:Bool = actValue==value;
 			var check:String = (actValue==value ? 'on':'');
-			//trace('$check $actValue $value');
+			//trace('$i::label:$label');
 			jsx('
-			<>
-				<label key=${i++} >${label}</label>
-				<input key=${i++} type="radio" name=${name} defaultChecked=${check} onChange=${onChange} value=${value}/>
-			</>');
-		}].array();
+			<Fragment key=${i++}>
+				<label key=${"label_"+i} >${label}</label>
+				<input key=${"option_"+i} type="radio" name=${name} defaultChecked=${check} onChange=${onChange} value=${value}/>
+			</Fragment>');
+		}];
 	}
-
 
 	function renderFormInputElements(fields:Map<String, FormField>, initialData:Dynamic, ?compOnChange:Function):ReactFragment
 	{
-		var ki:Int = 0;
-		//trace(Utils.genKey(1));
 		return [for(name => field in fields)
 		{
 			var value:Dynamic = Reflect.field(initialData,name);
 			//if(name=='date_of_birth')trace (field.type +' $name:' + value);
-			//trace(field.type);
+			//trace('$i::$name');
 			switch (field.type)
 			{
 				case FormInputElement.Hidden:
@@ -140,18 +138,14 @@ class FormBuilder {
 					};
 					//trace(checked);
 					renderElement(
-						jsx('<input name=${name}  key=${i++} type="checkbox" defaultChecked=${checked} onChange=${onChange} />')
-						/*(checked?
-							jsx('<input name=${name}  key=${i++} type="checkbox" checked="checked" onChange=${onChange} />') :
-							jsx('<input name=${name}  key=${i++} type="checkbox"  onChange=${onChange} />'	)
-						)*/,
-						ki++, field.label
+						jsx('<input name=${name}  key=${i++} type="checkbox" defaultChecked=${checked} onChange=${onChange} />'),
+						field.label
 					);
 				case Radio:
 					//trace (field.type +' $name:' + value);
 					jsx('<div key=${i++} className="g_row_2" role="rowgroup">
-						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r optLabel" role="cell">
+						<div className="g_cell" role="cell" key=${name+'_'+i}>${field.label}</div>
+						<div className="g_cell_r optLabel" role="cell" key=${name+'_opt'}>
 							${renderRadio(name,field.options, value)}
 						</div>
 					</div>');				
@@ -159,7 +153,7 @@ class FormBuilder {
 				renderElement(
 					jsx('<select name=${name} onChange=${onChange}  defaultValue=${value} key=${i++} 
 						multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
-					ki++, field.label
+					field.label
 				);
 				case FormInputElement.DateTimePicker:
 					var dTC:DateTimeProps = {
@@ -177,8 +171,8 @@ class FormBuilder {
 					};
 					jsx('
 					<div key=${i++} className="g_row_2" role="rowgroup">
-						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r" role="cell">
+						<div className="g_cell" key=${i+'_l'} role="cell">${field.label}</div>
+						<div className="g_cell_r" key=${i+'_r'} role="cell">
 							<$DateTimeControl ${...dTC}/>
 						</div>
 					</div>');								
@@ -198,8 +192,8 @@ class FormBuilder {
 					};
 					jsx('
 					<div key=${i++} className="g_row_2" role="rowgroup">
-						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r" role="cell">
+						<div className="g_cell" key=${i+'_l'} role="cell">${field.label}</div>
+						<div className="g_cell_r" key=${i+'_r'} role="cell">
 							<$DateControl ${...dC}/>
 						</div>
 					</div>');
@@ -244,12 +238,10 @@ class FormBuilder {
 				default:
 					renderElement(
 						jsx('<input name=${name} onChange=${onChange} type="text" defaultValue=${value} disabled=${field.disabled}  key=${i++} required=${field.required}/>'),
-						ki++, field.label
+						field.label
 					);
 			}
-		}].array();
-		//trace(fields.array());
-		return null;
+		}];
 	}	
 
     public function renderForm(props:FormState, initialState:Dynamic):ReactFragment
@@ -262,7 +254,7 @@ class FormBuilder {
 		
 		return jsx('<form name=${props.model} key=${props.model} className="tabComponentForm formField" ref=${props.formRef}>
 				<div className="grid_box" role="table" aria-label="Destinations">
-					<div className="g_caption" >${props.title}</div>						
+					<div className="g_caption" key=${props.model+'caption'}>${props.title}</div>						
 					${renderFormInputElements(props.fields, initialState)}						
 				</div>			
 			</form>

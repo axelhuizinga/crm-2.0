@@ -1,10 +1,9 @@
 package view.shared;
 
-typedef  InteractionState =
-{
-	var disables:Array<String>;
-	var enables:Array<String>;
-}
+import haxe.ds.StringMap;
+import view.shared.MItem;
+
+typedef  InteractionStates = StringMap<Bool>;
 
 typedef MenuState =
 {
@@ -12,5 +11,6 @@ typedef MenuState =
 	?disabled:Bool,
 	?sameWidth:Int,
 	?section:String,
-	?interactionStates:Map<String,InteractionState>
+	?interactionStates:InteractionStates,
+	?items:StringMap<MItem>
 }

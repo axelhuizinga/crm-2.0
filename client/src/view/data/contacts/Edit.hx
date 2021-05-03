@@ -82,8 +82,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Speichern',action:'update'},
 		{label:'Zurücksetzen',action:'reset'},
 		{separator:true},
-		{label:'Spenden Bearbeiten',action:'showSelectedDeals', disabled:true, section: 'Edit', classPath:'view.data.contacts.Deals'},	
-		{label:'Konten Bearbeiten',action:'listAccounts', disabled:true, section: 'Edit', classPath:'view.data.contacts.Accounts'},
+		//{label:'Spenden Bearbeiten',action:'showSelectedDeals', disabled:true, section: 'Edit', classPath:'view.data.contacts.Deals'},	
+		//{label:'Konten Bearbeiten',action:'listAccounts', disabled:true, section: 'Edit', classPath:'view.data.contacts.Accounts'},
 		{label:'Verlauf',action:'listHistory', section: 'Edit', classPath:'view.data.contacts.History'}
 	];	
 	public static var classPath = Type.getClassName(Edit);

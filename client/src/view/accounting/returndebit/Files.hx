@@ -66,7 +66,9 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	static var _instance:Files;//
 
 	public static var menuItems:Array<MItem> = [		
-		{label:'Auswahl',action:'importReturnDebit',
+		{
+			id:'returnDebitFile',
+			label:'Auswahl',action:'importReturnDebit', disabled: true,
 			formField:{				
 				name:'returnDebitFile',
 				submit:'Hochladen',
@@ -77,7 +79,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 					trace(finput.value);
 					//trace(_instance);
 					var val = (finput.value == ''?'':finput.value.split('\\').pop());
-					Files._instance.setState({action:'ReturnDebitsFileSelected',data:['hint'=>'Zum Upload ausgewählt:${val}']});
+					trace(Files._instance.state.sideMenu.instance.enableItem('returnDebitFile'));
+					Files._instance.setState({
+						action:'ReturnDebitsFileSelected',data:['hint'=>'Zum Upload ausgewählt:${val}']
+					});
 				}
 			},
 			handler: function(_) {				
@@ -90,7 +95,11 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				trace(finput.value);
 				//trace(finput.files.get('returnDebitFile'));
 			}/**/
-		}
+		},
+		{id:'close',label:'Schließen',action:'close', disabled:true},		
+		//{label:'Speichern + Schließen',action:'update', then:'close'},
+		{id:'update',label:'Speichern',action:'update', disabled:true},
+		{id:'reset',label:'Zurücksetzen',action:'reset', disabled:true},
 	];	
 
 	var dataAccess:DataAccess;	

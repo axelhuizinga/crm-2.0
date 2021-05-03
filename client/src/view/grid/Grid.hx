@@ -255,6 +255,10 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		//trace(fieldNames.join('|'));
 		//trace('|'+rdMap['h'].keys().next()+'|');
 		//trace(state.selectedRows.toString());
+		var title = '';
+		if(rdMap.exists('title')){
+			title = rdMap.get('title');
+		}
 		var column:Int = 0;
 		//var isSelected:Bool = state.selectedRows.exists(row);
 		var rowClass = (row % 2 == 0?'gridItem even':'gridItem odd');
@@ -274,9 +278,10 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			//trace(row + ':' + cD.id + '_' + cD.pos.column);
 			if (!cD.show)
 			 continue;
+
 			rCs.push(
 			jsx('<div className=${cD.className} key=${cD.id + '_' + cD.name} data-value=${cD.data} 
-			data-id=${cD.id} data-name=${cD.name} 
+			data-id=${cD.id} data-name=${cD.name} title=${title}
 			data-gridpos=${cD.pos.row+"_"+cD.pos.column} onClick=${select} onDoubleClick=${editRow}>
 				${(cD.dataDisplay==null||cD.dataDisplay==''?<span>&nbsp;</span>:cD.dataDisplay)}
 			</div>'));

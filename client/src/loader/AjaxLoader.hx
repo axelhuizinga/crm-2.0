@@ -37,12 +37,31 @@ typedef AsyncDataLoader =
 		req.request(params != null);
 		return req;
 	} 
+
+	public static function loadJson(url:String, ?params:Dynamic,?cB:Dynamic->Void):Dynamic
+	{
+		var req = new HttpJs(url); 
+		if(params!=null) for (k in Reflect.fields(params))
+		{
+			req.addParameter(k, Reflect.field(params, k));
+		}		
+		req.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
+		req.addHeader('Access-Control-Allow-Origin', '*');
+		var loader:AjaxLoader = new AjaxLoader(cB);
+		req.onData = loader._onData;
+		req.onError = function(err:String) trace(err);
+		trace('POST? ' + params != null);
+		req.withCredentials = true;
+		req.request(params != null);
+		return loader.dataObj;
+	} 
 	
 	var cB:Dynamic->Void;
 	var params:Dynamic;
 	var post:Bool;
 	var req:HttpJs;
 	var url:String;
+	var dataObj:Dynamic;
 	
 	public function new(?cb:String->Void, ?p:Dynamic, ?r:HttpJs)
 	{
@@ -56,7 +75,7 @@ typedef AsyncDataLoader =
 	{
 		if (response.length > 0)
 		{
-			var dataObj = Json.parse(response);
+			dataObj = Json.parse(response);
 			if (dataObj.error != '')
 			{
 				trace(dataObj.error);

@@ -13,6 +13,8 @@ using StringTools;
 
 class DealsModel
 {
+	static var _initialized:Bool = false;
+
 	public static var dataAccess:DataAccess = [
 		'open' => {
 			source:[
@@ -35,6 +37,26 @@ class DealsModel
 				'end_date'=>{label:'Beendet zum',type:DatePicker, displayFormat: "d.m.Y"},				
 				//'repeat_date'=>{label:'Zahlun',type:DatePicker, displayFormat: "d.m.Y"},				
 				'cycle_start_date'=>{label:'Turnus Startdatum',type:DatePicker, displayFormat: "d.m.Y"},
+				'end_reason'=>{label: 'Rückgabegrund',type: Select,options: [
+					'AC01'=>'Fehlerhafte/ungültige Kontonummer (IBAN fehlerhaft)',
+					'AC04'=>'Konto erloschen (Konto aufgelöst)',
+					'AC06'=>'Keine Angabe des Grundes (Konto gesperrt)',
+					'AG01'=>'Zahlungsart für Konto unzulässig (Zahlungsart für KTO unzulässig)',
+					'AM04'=>'Keine Deckung (Rückgabe mangels Deckung)',
+					'AM05'=>'Doppeleinreichung',
+					'BE05'=>'Gläubiger-ID ungültig',
+					'MD01'=>'Kein gültiges Mandat',
+					'MD02'=>'Mandatsinfo fehlt',
+					'MD06'=>'Widerspruch durch Zahlungspflichtigen',
+					'MD07'=>'Kontoinhaber verstorben',
+					'MS02'=>'Keine Angabe, Rückgabe durch Kunden (sonstige Gründe)',
+					'MS03'=>'Keine Angabe, Rückgabe durch Institut (sonstige Gründe)',
+					'RR01'=>'Ablehnung aufgrund von aufsichtsrechtlichen Vorschriften: Konto/ID Zahler fehlt',
+					'RR02'=>'Ablehnung aufgrund von aufsichtsrechtlichen Vorschriften: Name/Adresse Zahler fehlt',
+					'RR03'=>'Ablehnung aufgrund von aufsichtsrechtlichen Vorschriften: Name/Adresse Empfänger fehlt',
+					'RR04'=>'Ablehnung aufgrund von aufsichtsrechtlichen Vorschriften: Aufsichtsrechtliche Gründe',
+					'SL01'=>'Rückgabe aufgrund spezifischer Dienstleistung der Zahlstellen'
+				]},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},				
 				'mandator' => {type:Hidden}				
@@ -90,4 +112,10 @@ class DealsModel
 	public static var dataGridDisplay:Map<String,view.grid.Grid.DataState> = [
 		'dealsList' => {columns:gridColumns}
 	];	
+
+	public static function getDataAccess() {
+		if(!_initialized){
+
+		}
+	}
 }

@@ -69,13 +69,27 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	public function new(props:MenuProps) 
 	{
 		super(props);
+		//trace(props);
 		//trace(props.menuBlocks);
 		trace(Reflect.fields(props));
 		state = {
-			hidden:props.hidden||false
+			hidden:props.hidden||false,
+			items: new StringMap()
+			//interactionStates: new StringMap()
 		};
 		//Out.dumpStack(CallStack.callStack());
 		//trace('OK');
+	}
+
+	public function enableItem(id:String,?enable:Bool = true):Bool
+	{
+		trace(state.items);
+		trace(enable);
+		if(!state.items.exists(id))
+			return null;
+		var item = state.items.get(id);
+		item.disabled = !enable;
+		return !item.disabled;
 	}
 
 	function renderHeader():ReactFragment
@@ -157,6 +171,12 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		var i:Int = 1;
 		return items.map(function(item:MItem) 
 		{
+			if(item.id != null && !state.items.exists(item.id))
+			{
+				//REGISTER ITEM INTERACTIONSTATE
+				state.items.set(item.id, item);
+			}
+
 			if(item.separator){ return jsx('<hr key=${i++} className="menuSeparator"/>');}
 			var type:FormInputElement;
 			type = (item.formField==null||item.formField.type==null?Button:item.formField.type);
@@ -252,6 +272,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	
 	override public function componentDidMount():Void 
 	{
+		props.parentComponent.state.sideMenu.instance = this;
 		if(props.sameWidth && state.sameWidth == null)
 		{
 			//Timer.delay(layout,800);

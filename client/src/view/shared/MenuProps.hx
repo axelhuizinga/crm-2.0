@@ -1,4 +1,5 @@
 package view.shared;
+import view.shared.Menu;
 import haxe.Constraints.Function;
 import react.router.Route.RouteRenderProps;
 import js.html.Event;
@@ -8,7 +9,7 @@ import view.shared.MenuBlock;
 typedef MenuProps =
 {
 	>RouteRenderProps,
-	?activeInstance:Dynamic,
+	?instance:Menu,
 	?className:String,
 	?basePath:String,
 	?hidden:Bool,

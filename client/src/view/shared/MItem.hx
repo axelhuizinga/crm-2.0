@@ -16,6 +16,7 @@ typedef MItem =
 	?section:String,
 	?disabled:Bool,	
 	?handler:Function,//default:action
+	?id:String,
 	?img:String,
 	?info:String,
 	?label:String,

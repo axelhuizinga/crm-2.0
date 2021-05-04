@@ -12,6 +12,7 @@ import view.shared.MItem;
 import model.ORM;
 import js.html.InputElement;
 import haxe.ds.IntMap;
+import haxe.ds.StringMap;
 import js.html.FormElement;
 import js.html.InputEvent;
 import js.html.TableRowElement;
@@ -61,6 +62,7 @@ typedef FormState =
 	?pageCount:Int,
 	?ref:Function,//,	
 	?initialData:Dynamic,//IntMap<Map<String,Dynamic>>,
+	?selectedData:StringMap<Map<String,Dynamic>>,
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,
 	?handleChange:InputEvent->Void,

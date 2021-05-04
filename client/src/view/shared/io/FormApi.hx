@@ -169,7 +169,6 @@ class FormApi
 		e.preventDefault();
 		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
 		trace(action);
-		trace(Reflect.field(_me,'callMethod'));
 		callMethod(action, e);
 	}
 
@@ -177,6 +176,7 @@ class FormApi
 	{
 		///trace(Reflect.fields(e));
 		var eTarget:Element = cast(e.target, Element);
+		trace(Type.typeof(eTarget));
 		var targetSection = eTarget.dataset.section;
 		trace('>>$targetSection<< ${comp.props.match.params.section}');
 		if(eTarget.dataset.then != null)
@@ -216,15 +216,15 @@ class FormApi
 	}
 
 	function executeMethod(method:String, ?r:Array<Dynamic>) {
+		trace(method);		
 		var fun:Function = Reflect.field(comp,method);
 		if(Reflect.isFunction(fun))
 		{
 			Reflect.callMethod(comp,fun,r);
 			return true;
 		}
-		else 
-			trace('$method not found');
-		return false;		
+		trace('$method is not a function');
+		return false;
 	}
 
 	public function getUrl(?action:String,?targetSection:String):String

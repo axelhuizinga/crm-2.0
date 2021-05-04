@@ -1,5 +1,6 @@
 package action.async;
 
+import js.lib.Promise;
 import haxe.ds.StringMap;
 import haxe.ds.IntMap;
 import react.router.RouterMatch;
@@ -133,7 +134,7 @@ class LiveDataAccess
 		}	
 	}
 
-	public static function sSelect(props:SDataProps) 
+	public static function  sSelect(props:SDataProps) 
 		{
 			return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 				if(props.id == null)
@@ -142,47 +143,52 @@ class LiveDataAccess
 				var tableRoot:Array<String> = FormApi.getTableRoot(props.match);			
 				trace(tableRoot);
 				trace(Reflect.fields(aState));
-				//trace(aState);
+				//trace(aState);function(resolve, reject)
 				trace(props.data);
 				var sData:StringMap<Map<String,Dynamic>> = null;
-				switch(tableRoot[1])
-				{
-					/*case 'Accounts':
-						sData = aState.dataStore.accountData;					
-						sData = sSelectType(props.id, props.data, sData, props.selectType);
-						aState.locationStore.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
-						return dispatch(DataAction.SelectAccounts(props.data));				
-					case 'Contacts':
-						sData = aState.dataStore.contactData;
-						//trace(sData);
-						sData = selectType(props.id, props.data, sData, props.selectType);
-						trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
-						trace(sData);
-						aState.locationStore.history.push('${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}',
-						{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
-						//dispatch(LocationAction(Push()))
-						return dispatch(DataAction.SelectContacts(props.data));
-					case 'Deals':
-						sData = aState.dataStore.dealData;
-						//trace(sData);
-						sData = selectType(props.id, props.data, sData, props.selectType);
-						trace(sData);
-						trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
-						aState.locationStore.history.push('${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}',
-						{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
-						return dispatch(DataAction.SelectDeals(props.data));*/
-					case 'ReturnDebits':
-						sData = sSelectType(props.id, props.data, sData, props.selectType);
-						trace(sData);
-						trace('${tableRoot[2]}/${Std.parseInt(props.data.get(props.id).get('deal_id')) }');
-						trace(props.match.params);
-						trace(props.match.path);
-						aState.locationStore.history.push('${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}',
-						{activeContactUrl:'${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}'});
-						return null;//dispatch(DataAction.SelectBookings(props.data));
-					default:
-						return null;
-				}		
+				return new Promise(function(resolve, reject){
+					switch(tableRoot[1])
+					{
+						/*case 'Accounts':
+							sData = aState.dataStore.accountData;					
+							sData = sSelectType(props.id, props.data, sData, props.selectType);
+							aState.locationStore.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
+							return dispatch(DataAction.SelectAccounts(props.data));				
+						case 'Contacts':
+							sData = aState.dataStore.contactData;
+							//trace(sData);
+							sData = selectType(props.id, props.data, sData, props.selectType);
+							trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
+							trace(sData);
+							aState.locationStore.history.push('${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}',
+							{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
+							//dispatch(LocationAction(Push()))
+							return dispatch(DataAction.SelectContacts(props.data));
+						case 'Deals':
+							sData = aState.dataStore.dealData;
+							//trace(sData);
+							sData = selectType(props.id, props.data, sData, props.selectType);
+							trace(sData);
+							trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
+							aState.locationStore.history.push('${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}',
+							{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
+							return dispatch(DataAction.SelectDeals(props.data));*/
+						case 'ReturnDebits':
+							sData = sSelectType(props.id, props.data, sData, props.selectType);
+							trace(sData);
+							trace('${tableRoot[2]}/${Std.parseInt(props.data.get(props.id).get('deal_id')) }');
+							trace(props.match.params);
+							trace(props.match.path);
+							aState.locationStore.history.push('${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}',
+							{activeContactUrl:'${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}'});
+							dispatch(DataAction.SelectReturnDebits(sData));
+							resolve(sData);//
+						default:
+							//return null;
+							null;
+							
+					}
+				});	
 			});
 		}
 	

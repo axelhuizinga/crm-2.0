@@ -98,7 +98,7 @@ class FormBuilder {
 
 	function renderRadio(name:String,options:StringMap<String>, actValue:String):ReactFragment
 	{
-		trace(options.toString());
+		//trace(options.toString());
 		return [for (value=>label in options)
 		{			
 			var check:String = (actValue==value ? 'on':'');

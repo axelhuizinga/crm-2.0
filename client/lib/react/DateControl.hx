@@ -27,7 +27,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 
 	public function new(props:DateTimeProps) 
 	{
-		trace( props.value );
+		//trace( props.value );
 		super(props);
 		//this.props = props;
 		//trace(Reflect.fields(props));
@@ -41,7 +41,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 		
 		//var val = (props.value == null ?'':props.value);
 		var val = (props.value == null ?'':'00.00.0000');
-		trace('$val =>${props.value}<<');
+		//trace('$val =>${props.value}<<');
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
@@ -56,11 +56,11 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 				onOpen:onOpen,
 				onReady:onReady
 		});
-		trace('fpInstance.input.value:${fpInstance.input.value}');			
+		//trace('fpInstance.input.value:${fpInstance.input.value}');			
 	}
 
 	function onOpen(e:Dynamic) {
-		trace(e);
+		//trace(e);
 	}
 
 	function onChange(_) {
@@ -72,7 +72,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 
 	function onClose (sDates:Array<Dynamic>,val:String,me:DateTimePicker)
 	{
-		trace(val);
+		//trace(val);
 		//trace(fpInstance.altInput.value);
 
 		if(tip != null)
@@ -81,7 +81,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 
 	function onReady(sDates:Array<Dynamic>,val:String,me:Dynamic)
 	{
-		trace('${sDates} $val ');
+		//trace('${sDates} $val ');
 		//trace(me);
 	}
 	

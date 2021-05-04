@@ -162,7 +162,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			trace('redirecting to ${baseUrl}Files/${props.match.params.action}');
 			props.history.push('${baseUrl}Files/${props.match.params.action}');
 		}
-			trace(props.match.path);
+		trace(props.match.path);
 		if(props.match.params.action==null)
 		{
 			//var sData = App.store.getState().dataStore.contactData;	props.match.params.section==null||		
@@ -190,11 +190,40 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			{
 				if(true) trace('select:$id selectType:${selectType}');
 				trace(data);
-				dispatch(LiveDataAccess.sSelect({id:id,data:data,match:me.props.match,selectType: selectType}));
+				//_instance.state.selectedData = dispatch(LiveDataAccess.sSelect({id:id,data:data,match:me.props.match,selectType: selectType}));
+				var p:Promise<Dynamic> = dispatch(LiveDataAccess.sSelect({id:id,data:data,match:me.props.match,selectType: selectType}));
+				p.then(function(d:StringMap<Map<String,Dynamic>>){
+					trace(d.keys().hasNext());
+					if(d.keys().hasNext()){
+						trace(Files._instance.state.sideMenu.instance.enableItem('close'));
+						Files._instance.state.selectedData = d;
+						trace(Files._instance.state.selectedData);
+					}
+				});
+				
 			}						
         }
 	}	
 
+	public function close() {
+		if(state.selectedData.keys().hasNext()){
+			trace(666);
+			var p:Promise<Dynamic> = App.store.dispatch(LiveDataAccess.sSelect({id:-1,data:new StringMap(),match:props.match,selectType: SelectType.UnselectAll}));
+			if(p!=null)
+			p.then(function(d:Dynamic) {
+				trace(d);
+			});
+			//trace(state.selectedData.keys().hasNext());
+		}
+		
+	}
+	/**
+	 * var p:Promise<Dynamic> = App.store.dispatch(CRUD.update(dbQ));
+					p.then(function(d:Dynamic){
+						trace(d);
+						get();
+					});
+	 */
 	override public function componentDidMount():Void 
 	{	
 		dataAccess = ReturnDebitModel.dataAccess;
@@ -250,6 +279,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				resolve(xhr.response);
 				//onLoaded(haxe.io.Bytes.ofData(xhr.response));
 			}
+			trace(Files._instance.state.sideMenu.instance.enableItem('returnDebitFile',false));
 			xhr.send(fd);
 			setState({action:'importReturnDebit',loading:true});
 		});
@@ -283,15 +313,15 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		
 	}
 
-	public function close() {
+	/*public function close() {
 		// TODO: CHECK IF MODIFIED + ASK FOR SAVING / DISCARDING
 		//var baseUrl:String = props.match.path.split(':section')[0];
 		props.history.push('${props.match.path.split(':section')[0]}List/get');
-	}
+	}*/
 
 	function showSelectedAccounts(?ev:Event) {
 		//trace('---' + Type.typeof(ormRefs['accounts'].compRef));
-		trace('---' + ormRefs['accounts'].compRef.state.dataGrid.state.selectedRows);
+		//trace('---' + ormRefs['accounts'].compRef.state.dataGrid.state.selectedRows);
 		var sRows:IntMap<Bool> = ormRefs['accounts'].compRef.state.dataGrid.state.selectedRows;
 		for(k in sRows.keys()){
 			ormRefs['accounts'].compRef.props.loadData(k,ormRefs['accounts'].compRef);
@@ -324,9 +354,9 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				if(cL!=null){
 					trace(Type.getClassName(cL));
 					try{
-						trace(Reflect.fields(ref.props));
-						trace(Reflect.fields(ref.state));
-						trace(ref.state.model);
+						//trace(Reflect.fields(ref.props));
+						//trace(Reflect.fields(ref.state));
+						//trace(ref.state.model);
 						if(ref.props !=null && ref.props.model!= null){						
 							ormRefs[ref.props.model] = {
 								compRef:ref,
@@ -383,9 +413,9 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 
 	override function render():ReactFragment
 	{
-		trace(props.match.params.section + '/' + props.match.params.action);		
-		trace(state.action + ':' + Std.string(state.dataTable != null));
-		trace('${state.action} ###########loading:' + state.loading);
+		//trace(props.match.params.section + '/' + props.match.params.action);		
+		//trace(state.action + ':' + Std.string(state.dataTable != null));
+		//trace('${state.action} ###########loading:' + state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
 		return state.formApi.render(switch(state.action)

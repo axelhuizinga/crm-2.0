@@ -131,7 +131,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
 			},
-			select:function(id:Int = -1,data:StringMap<Map<String,Dynamic>>,me:List, ?selectType:SelectType)
+			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,me:List, ?selectType:SelectType)
 			{
 				trace(data);
 				if(true) trace('select:$id selectType:${selectType}');
@@ -140,8 +140,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			update: function(param:DBAccessProps) return dispatch(CRUD.update(param)),
 
         }
-	}	
-	
+	}		
 	override public function componentDidMount():Void 
 	{	
 		dataAccess = ReturnDebitModel.dataAccess;

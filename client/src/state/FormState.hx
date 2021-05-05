@@ -62,7 +62,7 @@ typedef FormState =
 	?pageCount:Int,
 	?ref:Function,//,	
 	?initialData:Dynamic,//IntMap<Map<String,Dynamic>>,
-	?selectedData:StringMap<Map<String,Dynamic>>,
+	?selectedData:IntMap<Map<String,Dynamic>>,
 	?selectedRows:Array<TableRowElement>,
 	?selectedRowIDs:Array<Int>,
 	?handleChange:InputEvent->Void,

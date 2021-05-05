@@ -37,7 +37,7 @@ class DealsModel
 				'end_date'=>{label:'Beendet zum',type:DatePicker, displayFormat: "d.m.Y"},				
 				//'repeat_date'=>{label:'Zahlun',type:DatePicker, displayFormat: "d.m.Y"},				
 				'cycle_start_date'=>{label:'Turnus Startdatum',type:DatePicker, displayFormat: "d.m.Y"},
-				'end_reason'=>{label: 'Rückgabegrund',type: Select,options: [
+				'end_reason'=>{className:'max50', label: 'Rückgabegrund',type: Select,options: [
 					'AC01'=>'Fehlerhafte/ungültige Kontonummer (IBAN fehlerhaft)',
 					'AC04'=>'Konto erloschen (Konto aufgelöst)',
 					'AC06'=>'Keine Angabe des Grundes (Konto gesperrt)',

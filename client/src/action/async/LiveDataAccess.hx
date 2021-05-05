@@ -145,7 +145,7 @@ class LiveDataAccess
 				trace(Reflect.fields(aState));
 				//trace(aState);function(resolve, reject)
 				trace(props.data);
-				var sData:StringMap<Map<String,Dynamic>> = null;
+				var sData:IntMap<Map<String,Dynamic>> = null;
 				return new Promise(function(resolve, reject){
 					switch(tableRoot[1])
 					{
@@ -179,8 +179,8 @@ class LiveDataAccess
 							trace('${tableRoot[2]}/${Std.parseInt(props.data.get(props.id).get('deal_id')) }');
 							trace(props.match.params);
 							trace(props.match.path);
-							aState.locationStore.history.push('${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}',
-							{activeContactUrl:'${tableRoot[2]}/${FormApi.sParams(sData.keys().sKeysList())}'});
+							aState.locationStore.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}',
+							{activeContactUrl:'${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}'});
 							dispatch(DataAction.SelectReturnDebits(sData));
 							resolve(sData);//
 						default:
@@ -192,7 +192,34 @@ class LiveDataAccess
 			});
 		}
 	
-		static function sSelectType(id:Dynamic,data:StringMap<Map<String,Dynamic>>,sData:StringMap<Map<String,Dynamic>>, sT:SelectType):StringMap<Map<String,Dynamic>>
+		static function sSelectType(id:Int,data:IntMap<Map<String,Dynamic>>,sData:IntMap<Map<String,Dynamic>>, sT:SelectType):IntMap<Map<String,Dynamic>>
+		{
+			return switch(sT)
+			{
+				case All:
+					sData = new IntMap();
+					for(k=>v in data.keyValueIterator())
+						sData.set(k,v);
+					sData;
+				case One:
+					if(sData==null)
+						sData = new IntMap();
+					sData.set(id,data.get(id));
+					sData;
+				case Unselect:
+					sData.remove(id);
+					sData;
+				case UnselectAll:
+					sData = new IntMap();
+				default:
+					trace(data);
+					sData = new IntMap();
+					sData.set(id,data.get(id));
+					sData;
+			}	
+		}
+
+		static function sSelectType1(id:Dynamic,data:StringMap<Map<String,Dynamic>>,sData:StringMap<Map<String,Dynamic>>, sT:SelectType):StringMap<Map<String,Dynamic>>
 		{
 			return switch(sT)
 			{
@@ -217,5 +244,5 @@ class LiveDataAccess
 					sData.set(id,data.get(id));
 					sData;
 			}	
-		}	
+		}			
 }

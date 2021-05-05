@@ -30,7 +30,8 @@ class DataStore
 			//dbData:new DbData(),			
 			contactData: new IntMap(),
 			dealData: new IntMap(),
-			accountData: new IntMap()
+			accountData: new IntMap(),
+			returnDebitsData: new IntMap()
 		};
 		trace('ok');
 	}
@@ -79,6 +80,11 @@ class DataStore
 				copy(state,{
 					dealData:sData
 				});
+			case SelectReturnDebits(sData):
+				trace(sData.keys().keysList());
+				copy(state,{
+					returnDebitsData:sData
+				});				
 			case Update(uData):
 				trace(uData);
 				var cData = state.contactData;

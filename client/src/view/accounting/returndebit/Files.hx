@@ -186,13 +186,13 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
 			},
-			select:function(id:Int = -1,data:StringMap<Map<String,Dynamic>>,me:Files, ?selectType:SelectType)
+			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,me:Files, ?selectType:SelectType)
 			{
 				if(true) trace('select:$id selectType:${selectType}');
 				trace(data);
 				//_instance.state.selectedData = dispatch(LiveDataAccess.sSelect({id:id,data:data,match:me.props.match,selectType: selectType}));
 				var p:Promise<Dynamic> = dispatch(LiveDataAccess.sSelect({id:id,data:data,match:me.props.match,selectType: selectType}));
-				p.then(function(d:StringMap<Map<String,Dynamic>>){
+				p.then(function(d:IntMap<Map<String,Dynamic>>){
 					trace(d.keys().hasNext());
 					if(d.keys().hasNext()){
 						trace(Files._instance.state.sideMenu.instance.enableItem('close'));
@@ -200,7 +200,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 						trace(Files._instance.state.selectedData);
 					}
 				});
-				
+				trace(App.store.getState().dataStore.returnDebitsData.toString());
 			}						
         }
 	}	
@@ -208,7 +208,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	public function close() {
 		if(state.selectedData.keys().hasNext()){
 			trace(666);
-			var p:Promise<Dynamic> = App.store.dispatch(LiveDataAccess.sSelect({id:-1,data:new StringMap(),match:props.match,selectType: SelectType.UnselectAll}));
+			var p:Promise<Dynamic> = App.store.dispatch(LiveDataAccess.sSelect({id:-1,data:new IntMap(),match:props.match,selectType: SelectType.UnselectAll}));
 			if(p!=null)
 			p.then(function(d:Dynamic) {
 				trace(d);
@@ -240,13 +240,18 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 
 	public function importReturnDebitFile() {
 		state.action = 'importReturnDebitFile';
+		trace(state.action);
 	}
 
+	/**
+	 * Upload selected ReturnDebits File
+	 * @param _ 
+	 */
 	public function importReturnDebit(_):Void
 	{
 		var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){
 			var finput = cast  Browser.document.getElementById('returnDebitFile');
-			trace(props.userState.dbUser.first_name + '::' + finput.files[0]);
+			trace(state.action + '::' + finput.files[0]);
 			//var reader:FileReader = new FileReader();
 			var uFile:Blob = cast(finput.files[0], Blob);
 			trace(uFile);
@@ -285,10 +290,12 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		});
 		
 		iPromise.then(function (r:Dynamic) {
-			trace(r);
+			//trace(r);
 			var rD:{rlData:Array<Dynamic>} = Json.parse(r);
+			if(rD.rlData != null)
+				trace(rD.rlData.length);
+			//trace(rD);
 			var dT:Array<Map<String, Dynamic>> = new Array();			
-			trace(rD);
 			for(dR in rD.rlData)
 				dT.push(Utils.dynToMap(dR));
 			setState({action:'showImportedReturnDebit',dataTable:dT,loading:false});
@@ -302,7 +309,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				}
 			)));
 			
-		}, function (r:Dynamic) {
+		}, function (r:Dynamic) {//rejected callback
 			trace(r);
 			App.store.dispatch(Status(Update( 
 				{	className:'',

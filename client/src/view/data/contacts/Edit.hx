@@ -313,16 +313,16 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	function registerOrmRef(ref:Dynamic) {
-		trace(Type.typeof(ref));
+		//trace(Type.typeof(ref));
 		switch(Type.typeof(ref)){
 			case TNull:
 				//do nothing
 			case TObject:
 				trace(Reflect.fields(ref));					
 				trace(Type.getClass(ref));					
-				trace(ref.props);
-				trace(ref.state);
-				trace(ref.state.model);
+				//trace(ref.props);
+				//trace(ref.state);
+				//trace(ref.state.model);
 				if(ref.props !=null && ref.props.model!= null){						
 					//ormRefs[ref.props.model] = ref;
 					//ormRefs[ref.props.model] = ref.props.formRef.current;
@@ -331,11 +331,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				//trace(func);
 				var cL:Dynamic = Type.getClass(ref);
 				if(cL!=null){
-					trace(Type.getClassName(cL));
+					//trace(Type.getClassName(cL));
 					try{
-						trace(Reflect.fields(ref.props));
-						trace(Reflect.fields(ref.state));
-						trace(ref.state.model);
+						//trace(Reflect.fields(ref.props));
+						//trace(Reflect.fields(ref.state));
+						//trace(ref.state.model);
 						if(ref.props !=null && ref.props.model!= null){						
 							ormRefs[ref.props.model] = {
 								compRef:ref,

@@ -63,13 +63,13 @@ class CRUD
 					param,
 					function(data:DbData)
 					{			
-						trace(data.dataInfo);
+						//trace(data.dataInfo);
 						trace(data.dataRows.length);
 						if(data.dataRows.length>0) 
 						{
 							if(!data.dataErrors.keys().hasNext())
 							{
-								trace(data.dataRows[0]);
+								//trace(data.dataRows[0]);
 								dispatch(Status(Update( 
 									{	className:'',
 										text:(param.resolveMessage==null?'':param.resolveMessage.success)

@@ -176,7 +176,7 @@ class FormApi
 	{
 		///trace(Reflect.fields(e));
 		var eTarget:Element = cast(e.target, Element);
-		trace(Type.typeof(eTarget));
+		//trace(Type.typeof(eTarget));
 		var targetSection = eTarget.dataset.section;
 		trace('>>$targetSection<< ${comp.props.match.params.section}');
 		if(eTarget.dataset.then != null)
@@ -233,7 +233,7 @@ class FormApi
 		var baseUrl:String = match.path.split(':section')[0];		
 		var section = match.params.section;
 		//var id:String = (match.params.id==null||action=='insert'?'':'/${match.params.id}');
-		trace(comp.props.location);
+		//trace(comp.props.location);
 		var id:String = (comp.props.location.hash==''||action=='insert'?'':'/${comp.props.location.hash.substr(1)}');
 		return '${baseUrl}${targetSection==null?section:targetSection}/${action}${id}';
 	}

@@ -151,7 +151,7 @@ class FormBuilder {
 					</div>');				
 				case Select:
 				renderElement(
-					jsx('<select name=${name} onChange=${onChange}  defaultValue=${value} key=${i++} 
+					jsx('<select name=${name} onChange=${onChange} className=${field.className} defaultValue=${value} key=${i++} 
 						multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
 					field.label
 				);

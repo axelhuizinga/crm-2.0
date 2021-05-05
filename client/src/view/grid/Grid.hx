@@ -177,8 +177,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	{
 		if(props.data != null)
 		trace(props.data.length);
-		trace(props.className);
-		
+		//trace(props.className);		
 		if (props.data == null || props.data.length == 0)
 		{
 			return jsx('
@@ -197,7 +196,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		var headerRows:ReactFragment = renderHeaderDisplay();
 		//return headerRows;
 		//var rows:ReactFragment = renderHeaderDisplay();
-		trace(gridStyle);
+		//trace(gridStyle);
 		//return rows; style="{{grid-template-columns:$gridStyle}}"<div className="grid-container" ref=${gridRef} id=${props.id}>	
 		return jsx('		
 			<div className="grid_box" ref=${gridRef} id=${props.id}>			
@@ -228,7 +227,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			</div>
 			'));
 		}
-		trace('$visibleColumns $gridStyle');
+		//trace('$visibleColumns $gridStyle');
 		return headerRow;
 	}	
 

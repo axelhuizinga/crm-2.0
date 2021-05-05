@@ -36,7 +36,7 @@ typedef LiveDataProps =
 typedef SDataProps = 
 {
 	id:Dynamic,
-	?data: StringMap<Map<String,Dynamic>>,
+	?data: IntMap<Map<String,Dynamic>>,
 	?match:RouterMatch,
 	?callBack:Function,
 	?selectType:SelectType
@@ -52,8 +52,8 @@ enum  DataAction
 	SelectAccounts(sData:IntMap<Map<String,Dynamic>>);
 	SelectActContacts(sData:IntMap<Map<String,Dynamic>>);
 	SelectContacts(sData:IntMap<Map<String,Dynamic>>);
-	SelectBookings(sData:StringMap<Map<String,Dynamic>>);
-	SelectReturnDebits(sData:StringMap<Map<String,Dynamic>>);
+	SelectBookings(sData:IntMap<Map<String,Dynamic>>);
+	SelectReturnDebits(sData:IntMap<Map<String,Dynamic>>);
 	SelectDeals(sData:IntMap<Map<String,Dynamic>>);
 	Sync(dataAccess:DBAccessProps);
 	UpStore(sData:IntMap<Map<String,Dynamic>>);

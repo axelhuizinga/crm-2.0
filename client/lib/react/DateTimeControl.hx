@@ -37,7 +37,7 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 	{
 		var fP:Dynamic = App.flatpickr;
 		var val:Date = (props.value == null ? null:parseTimestampz(props.value));
-		trace('given:${props.value} got:$val format:${props.options.dateFormat}');
+		//trace('given:${props.value} got:$val format:${props.options.dateFormat}');
 		fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
@@ -48,7 +48,7 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 				defaultValue:props.value, 
 				//onChange:onChange,
 				onClose:onClose,
-				onReady:onReady
+				//onReady:onReady
 		});
 
 		var altInput:InputElement = fpInstance.altInput;
@@ -131,9 +131,9 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 		var b:Array<Int> = ~/[^0-9]/g.split(tz).map(function(t) return Std.parseInt(t));
 		b[1] = b[1]-1;
 		//b[6] = 0;//Math.floor(b[6].substr(0,3);
-		trace(b.join('-'));
+		//trace(b.join('-'));
 		b.pop();
-		trace('DateTools has makeUtc:' + (Type.getClassFields(DateTools).contains('makeUtc')?'Y':'N'));
+		//trace('DateTools has makeUtc:' + (Type.getClassFields(DateTools).contains('makeUtc')?'Y':'N'));
 		//return Date.fromTime(Reflect.callMethod(DateTools, Reflect.field(DateTools, 'makeUtc'),b));
 		return Date.fromTime(DateTools.makeUtc(b[0],b[1],b[2],b[3],b[4],b[5]));
 		//return new Date('05.05.1954');
@@ -171,7 +171,7 @@ class DateTimeControl extends  PureComponentOfProps<DateTimeProps>
 
 	function onReady(sDates:Array<Dynamic>,val:String,me:Dynamic)
 	{
-		trace('${sDates} $val ');
+		//trace('${sDates} $val ');
 		//trace(me);
 	}
 

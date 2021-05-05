@@ -225,14 +225,14 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.section + ':${props.match.params.action}::' + Std.string(state.dataTable != null));
+		//trace(props.match.params.section + ':${props.match.params.action}::' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
 		var pState:FormState = props.parentComponent.state;
 		trace(state.dataTable.length);
 		if(props.dataStore.contactsDbData != null)
 		trace(props.dataStore.contactsDbData.dataRows[0]);
 		else trace(props.dataStore.contactsDbData);
-		trace(state.loading);
+		//trace(state.loading);
 		if( state.dataTable.length==0)
 			return state.formApi.renderWait();
 		//trace('###########loading:' + state.rows[0]);

@@ -98,7 +98,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		var offset:Int = 0;
 		//setState({loading:true});
 		//var contact = (props.location.state.contact);
-		Out.dumpObject(props.userState);
+		//Out.dumpObject(props.userState);
 		var p:Promise<DbData> = props.load(
 			{
 				classPath:'data.Accounts',

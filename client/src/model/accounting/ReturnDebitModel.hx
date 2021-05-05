@@ -29,7 +29,8 @@ class ReturnDebitModel
 	];
 
 	public static var gridColumns:Map<String,view.grid.Grid.DataColumn> = [
-		'id'=>{label:'KontaktID', flexGrow:0, className: 'tLeft tableNums'},
+		'name'=>{label:'Name', flexGrow:0, className: 'tLeft'},
+		//'id'=>{label:'KontaktID', flexGrow:0, className: 'tLeft tableNums'},
 		'value_date'=>{label: 'Wertstellung',cellFormat:function(v:Dynamic){
 			if(v==null)
 				return null;

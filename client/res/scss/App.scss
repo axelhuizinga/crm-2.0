@@ -426,7 +426,7 @@ input::-moz-focus-inner {
 	height: inherit;
 	line-height: 0.8rem;
 	font-size: inherit;
-	margin-right: 0.8rem;
+	margin-right: 0.3rem;
 }
 .abs-right
 {
@@ -708,7 +708,7 @@ form.modal-card-body{
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
-	margin: 0.8rem 0 0 0.8rem;
+	/*margin: 0.8rem 0 0 0.8rem;*/
 	overflow-y: auto;
 }
 
@@ -743,9 +743,9 @@ form{
 	border-radius: $tableHeader-radius;
 	border:$cell-border;
 }
-.formField label
+.max50
 {
-	width:50%;
+	max-width:50%;
 }
 .formFieldInline
 {
@@ -754,8 +754,8 @@ form{
 }
 .formField select
 {
-	/*box-sizing: content-box;
-	font-size: 1rem;*/
+	/*min-width: 100%;*/
+	min-width: 240px;
 	margin-top: auto;
 	margin-bottom: auto;
 }
@@ -990,9 +990,10 @@ form td, form caption
 {
 	display: grid;
 	margin: 0.32rem auto;
+	font-size: 1.0rem;
 	grid-auto-rows:  min-content;
 	grid-template-columns: 1fr 1fr;
-	font-size: 1.0rem;
+	/*grid-template-columns: minmax(50% auto);*/
 	overflow-y: visible;
 	min-width: 80%;
 	/*min-width: min-content;*/
@@ -1077,7 +1078,14 @@ form td, form caption
 	height: 1.8rem;
 }
 .g_cell_r{
-	min-width: max-content;
+	/*max-width: 50%;
+	max-width: minmax(min-content 50hmax);*/
+	justify-content: end;
+	justify-self: end;
+	max-width: max-content;
+}
+.g_cell_r option{
+	max-width: 200px;
 }
 .g_cell_r input{
 	border: none;

@@ -74,9 +74,9 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			values:new Map<String,Dynamic>()
 		},this);	
 		parentState = props.parentComponent.state;
-		trace(state.loading);
-		trace(Reflect.fields(props.parentComponent.state.relDataComps).join('|'));
-		trace(Type.typeof(props.parentComponent.state.relDataComps));
+		//trace(state.loading);
+		//trace(Reflect.fields(props.parentComponent.state.relDataComps).join('|'));
+		//trace(Type.typeof(props.parentComponent.state.relDataComps));
 	}
 	
 	static function mapDispatchToProps(dispatch:Dispatch) {

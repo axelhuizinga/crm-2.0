@@ -584,6 +584,9 @@ input::-moz-focus-inner {
 	color:red;
 	content:" *";
 }
+.warn{
+	color:orange;
+}
 
 button::-moz-focus-inner {padding:0; border:0}
 
@@ -1063,9 +1066,7 @@ form td, form caption
 	border: 1px solid #ccc;
 	border-radius: $tabs-boxed-link-radius;
 }
-/*.g_row_2 >*{
-	min-width: 50%;
-}*/
+
 .g_cell
 {
 	padding: $ePad;
@@ -1078,8 +1079,6 @@ form td, form caption
 	height: 1.8rem;
 }
 .g_cell_r{
-	/*max-width: 50%;
-	max-width: minmax(min-content 50hmax);*/
 	justify-content: end;
 	justify-self: end;
 	max-width: max-content;

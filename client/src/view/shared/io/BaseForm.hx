@@ -1,4 +1,6 @@
 package view.shared.io;
+
+import action.AppAction;
 import model.ORM;
 import haxe.Constraints.Function;
 import model.Contact;
@@ -33,9 +35,32 @@ class BaseForm
 {
 	var comp:ReactComponentOf<DataFormProps,FormState>;
 
-	/*public function new(comp:Dynamic) {
-		this.comp = comp;		
-	}*/
+	/**
+	 * 	function renderForm():ReactFragment
+	{
+		trace(state.loading + ':' + props.parentComponent.props.match.params.action);
+		if(state.loading)
+			return state.formApi.renderWait();
+		//return jsx('<div key="dummy">Dummy</div>');
+		////trace('###########loading:' + state.loading + ' state.actualState:${state.actualState}');
+		//return null;
+		return (state.actualState==null ? state.formApi.renderWait():
+			state.formBuilder.renderForm({
+				mHandlers:state.mHandlers,
+				fields:[
+					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
+				],
+				model:'deals',
+				//ref:formRef,
+				title: 'Bearbeite Spende' 
+			},state.actualState)
+		);	
+	}
+	 */
+	public static var LiveDataForm = function(props:DataFormProps) {
+		return jsx('<div key="dummy">Dummy</div>');		
+	}
+
 
 	public static function compareStates(comp:Dynamic) {
 		var dObj:ORM = cast(comp.state.actualState, ORM);
@@ -56,11 +81,6 @@ class BaseForm
 			Reflect.setProperty(comp.state.actualState,name,value);
 			trace(Reflect.getProperty(comp.state.actualState,name));
 		}
-		//Reflect.setProperty(comp.state.actualState,name,value);
-		/*trace(untyped comp.state.ormRefs.get('deals').orms.get(75).cycle +':'+comp.state.actualState.cycle);
-		untyped Reflect.setProperty(comp.state.ormRefs.get('deals').orms.get(75),'cycle',value);
-		trace(untyped comp.state.ormRefs.get('deals').orms.get(75).cycle +':'+
-		comp.state.actualState.cycle);*/
 		return;
 		//Reflect.setProperty(comp.state.actualState,name,value);
 		trace(Reflect.field(comp.state.actualState, name));
@@ -98,6 +118,31 @@ class BaseForm
 		Browser.window.sessionStorage.setItem(classPath,Json.stringify(comp.state.actualState));
 		Browser.window.removeEventListener('beforeunload', sessionStore);
 	}*/
+
+	/**
+	 * [Check if ORM data is modified]
+	 * @param path 
+	 * @param params 
+	 * @return Bool
+	 */
+	
+	public static function ormsModified(cmp:Dynamic):Bool {
+		var ormRefs:Map<String,ORMComps> = cast cmp.ormRefs;
+		for(model=>ormRef in ormRefs.keyValueIterator()){
+			for(orm in ormRef.orms.iterator())
+				if(orm.modified())
+					return true;
+		}
+		return false;
+	}
+
+	public static function warn(text:String) {
+		App.store.dispatch(Status(Update( 
+			{	className:'warn',
+				text:text
+			}
+		)));
+	}
 
 	public function storeParams(path:String, params:Dynamic):Map<String,Map<String,String>>
 	{

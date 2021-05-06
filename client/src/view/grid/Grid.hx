@@ -199,7 +199,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		//trace(gridStyle);
 		//return rows; style="{{grid-template-columns:$gridStyle}}"<div className="grid-container" ref=${gridRef} id=${props.id}>	
 		return jsx('		
-			<div className="grid_box" ref=${gridRef} id=${props.id}>			
+			<div className="grid_box" ref=${gridRef} id=${props.id} key=${"grid_list"+props.id}>		
 					${headerRows}
 					${renderRows()}
 			</div>					
@@ -222,7 +222,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			visibleColumns++;
 			gridStyle +=  (hC.flexGrow !=null ?' ${hC.flexGrow}fr':' max-content');
 			headerRow.push(jsx('	
-			<div key={field} className=${"gridHeadItem " + (hC.headerClassName != null? hC.headerClassName : (hC.className!= null?hC.className:''))}>
+			<div key=${field+"header"} className=${"gridHeadItem " + (hC.headerClassName != null? hC.headerClassName : (hC.className!= null?hC.className:''))}>
 			${hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
 			</div>
 			'));

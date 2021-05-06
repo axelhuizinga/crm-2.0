@@ -1,5 +1,9 @@
 package view.accounting.returndebit;
 
+import action.AppAction;
+import action.DataAction;
+import action.DataAction.SelectType;
+import action.async.LiveDataAccess;
 import haxe.Exception;
 import model.ORM;
 import js.html.Element;
@@ -7,9 +11,6 @@ import js.html.FormElement;
 import hxbit.Serializer;
 import js.lib.Error;
 import js.html.Event;
-import action.DataAction;
-import action.DataAction.SelectType;
-import action.async.LiveDataAccess;
 import shared.Utils;
 import model.accounting.ReturnDebitModel;
 import haxe.Json;
@@ -22,7 +23,7 @@ import js.html.FileReader;
 import haxe.Unserializer;
 import js.html.XMLHttpRequest;
 import shared.DbDataTools;
-import action.AppAction;
+import react.Fragment;
 import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
 import action.async.CRUD;
@@ -175,8 +176,11 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapStateToProps(aState:AppState) 
 	{
+		if(_instance!=null)
+		trace(Reflect.fields(_instance.props).join('|'));
 		return {
-			userState:aState.userState
+			//userState:aState.userState
+			//dummy:aState.dataStore.returnDebitsData.toString()
 		};
 	}
 
@@ -189,15 +193,23 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,me:Files, ?selectType:SelectType)
 			{
 				if(true) trace('select:$id selectType:${selectType}');
-				trace(data);
+				if(id>-1 && BaseForm.ormsModified(me)){
+					BaseForm.warn('Änderungen speichern oder zurücksetzen');
+					return;
+				}
+				//trace(data);
 				//_instance.state.selectedData = dispatch(LiveDataAccess.sSelect({id:id,data:data,match:me.props.match,selectType: selectType}));
 				var p:Promise<Dynamic> = dispatch(LiveDataAccess.sSelect({id:id,data:data,match:me.props.match,selectType: selectType}));
 				p.then(function(d:IntMap<Map<String,Dynamic>>){
 					trace(d.keys().hasNext());
 					if(d.keys().hasNext()){
-						trace(Files._instance.state.sideMenu.instance.enableItem('close'));
-						Files._instance.state.selectedData = d;
-						trace(Files._instance.state.selectedData);
+						trace(me.state.sideMenu.instance.enableItem('close'));
+						me.state.selectedData = d;
+						//trace(Files._instance.state.selectedData);
+						if(d.keys().next()==id){
+							trace('yes:$id');
+							me.ormRefs = new Map();
+						}
 					}
 				});
 				trace(App.store.getState().dataStore.returnDebitsData.toString());
@@ -299,7 +311,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			for(dR in rD.rlData)
 				dT.push(Utils.dynToMap(dR));
 			setState({action:'showImportedReturnDebit',dataTable:dT,loading:false});
-			trace(dT);
+			trace(dT.length);
 			//state.loading = false;
 			var baseUrl:String = props.match.path.split(':section')[0];			
 			//props.history.push('${baseUrl}List');
@@ -339,52 +351,44 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		//trace(state.sideMenu);
 
 	}
-
-	function registerOrmRef(ref:Dynamic) {
-		//trace(Type.typeof(ref));
-		switch(Type.typeof(ref)){
-			case TNull:
-				//do nothing
-			case TObject:
-				trace(Reflect.fields(ref));					
-				trace(Type.getClass(ref));					
-				trace(ref.props);
-				trace(ref.state);
-				trace(ref.state.model);
-				if(ref.props !=null && ref.props.model!= null){						
-					//ormRefs[ref.props.model] = ref;
-					//ormRefs[ref.props.model] = ref.props.formRef.current;
-				}
-			case TClass(func)://matches component classes, i.e. ReactComponentOf<DataFormProps,FormState>
-				//trace(func);
-				var cL:Dynamic = Type.getClass(ref);
-				if(cL!=null){
-					trace(Type.getClassName(cL));
-					try{
-						//trace(Reflect.fields(ref.props));
-						//trace(Reflect.fields(ref.state));
-						//trace(ref.state.model);
-						if(ref.props !=null && ref.props.model!= null){						
-							ormRefs[ref.props.model] = {
-								compRef:ref,
-								orms:new IntMap()
-							}
-						}
+	
+	function registerOrmRef(form:ReactComponentOf<DataFormProps,FormState>) {
+		//trace(Type.typeof(form));
+		var cL:Dynamic = Type.getClass(form);
+		if(cL!=null){
+			trace(Type.getClassName(cL));
+			try{
+				//trace(Reflect.fields(form.props));
+				//trace(Reflect.fields(form.state));
+				trace('>form.state.model<');
+				if(form.props !=null && form.props.model!= null){	
+					trace(form.props.model);					
+					ormRefs[form.props.model] = {
+						compRef:form,
+						orms:new IntMap()
 					}
-					catch(ex:Exception){
-						trace(ex);
-					}
+					//trace('>${ormRefs[form.props.model].keys().next()}<');
 				}
-				default:
-				trace(ref);
+			}
+			catch(ex:Exception){
+				trace(ex);
+			}
 		}
 	};
 
-	public function registerORM(refModel:String,orm:ORM) {
+	public function registerORM(refModel:String,orm:ORM, ?sType:SelectType = SelectType.One) {
 		if(ormRefs.exists(refModel)){
-			ormRefs.get(refModel).orms.set(orm.id,orm);
-			trace(refModel);
-			setState({ormRefs:ormRefs});
+			switch(sType){
+				case One:
+					ormRefs.get(refModel).orms.clear();
+					ormRefs.get(refModel).orms.set(orm.id,orm);
+				default:
+					trace(sType);
+
+			}
+			
+			trace(ormRefs.get(refModel).orms.keys().hasNext());
+			//setState({ormRefs:ormRefs});
 			//setState(copy(state,{ormRefs:ormRefs}));
 			//state.ormRefs = ormRefs;
 			trace(Reflect.fields(state));
@@ -400,22 +404,12 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	function relData(?dGrid:ReactFragment):ReactFragment {
-
-		return jsx('<>
+//<></>
+		return jsx('<Fragment key="relData">
 		$dGrid
 		${(props.match.params.id!=null?<$DealForm formRef=${dealsFormRef} parentComponent=${this} id=${props.match.params.id} key="importedReturnDebitDeal"  model="deals" filter=${{mandator:'1'}}></$DealForm>:null)}
 		${for(model in ['contacts','deals','accounts'])relForm(model)}
-		</>');
-		var rData:Array<ReactFragment> = [dGrid];
-		if(props.match.params.id!=null){
-			rData.push(jsx('<$DealForm formRef=${dealsFormRef} parentComponent=${this} id=${props.match.params.id} key="importedReturnDebitDeal"  model="deals" filter=${{mandator:'1'}}></$DealForm>'));
-		}
-		//
-		for(model in ['contacts','deals','accounts']){
-			if(ormRefs.exists(model))
-				rData.push(cast( untyped ormRefs[model].compRef.renderForm()));
-		}
-		return rData;
+		</Fragment>');
 	}
 
 	override function render():ReactFragment
@@ -430,7 +424,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			case 'showImportedReturnDebit':
 				//(state.dataTable == null? state.formApi.renderWait():
 				relData(jsx('<Grid id="importedReturnDebit" data=${state.dataTable}
-				${...props} dataState = ${dataDisplay["rDebitList"]} key="importedReturnDebitList" 
+				${...props} dataState=${dataDisplay["rDebitList"]} key="importedReturnDebitList" 
 				parentComponent=${this} className="is-striped is-hoverable" />			
 				'));			
 

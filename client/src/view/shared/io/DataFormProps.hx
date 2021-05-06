@@ -37,7 +37,7 @@ typedef DataFormProps =
 	?parentComponent:Dynamic,
 	?select:Function, // Int->IntMap<Map<String,Dynamic>>->RouterMatch->SelectType,
 	?setStateFromChild:FormState->Void,
-	?setFormState:FormState->Void,
+	//?setFormState:FormState->Void,
 	?sideMenu:MenuProps,
 	//?store:Store<AppState>,
 	//?storeContactsList:DbData->Void,

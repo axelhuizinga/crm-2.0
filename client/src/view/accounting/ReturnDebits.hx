@@ -105,13 +105,13 @@ class ReturnDebits extends ReactComponentOf<DataFormProps,FormState>
 			storeData:function(id:String, action:DataAction)
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
-			},*/
+			},
 			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:react.router.RouterMatch, ?selectType:SelectType)
 			{
 				if(true) trace('select:$id selectType:${selectType}');
 				trace(data);
 				dispatch(LiveDataAccess.sSelect({id:id,data:data,match:match,selectType: selectType}));
-			}						
+			}	*/					
         }
 	}	
 	
@@ -131,10 +131,10 @@ class ReturnDebits extends ReactComponentOf<DataFormProps,FormState>
 	override function render():ReactFragment
 	{		
 		trace(props.match.params.action + ':' + props.match.params.section);
-		trace(state.loading);
+		//trace(state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
-		trace('###########loading:' + state.sideMenu);
+		//trace('###########loading:' + state.sideMenu);
 		return switch(props.match.params.section)
 		{
 			case "List":

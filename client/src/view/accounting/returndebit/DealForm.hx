@@ -220,7 +220,8 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.loading + ':' + props.parentComponent.props.match.params.action);
 		if(state.loading)
 			return state.formApi.renderWait();
-		//trace('###########loading:' + state.loading + ' state.actualState:${state.actualState}');
+		//return jsx('<div key="dummy">Dummy</div>');
+		////trace('###########loading:' + state.loading + ' state.actualState:${state.actualState}');
 		//return null;
 		return (state.actualState==null ? state.formApi.renderWait():
 			state.formBuilder.renderForm({
@@ -228,7 +229,7 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 				fields:[
 					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 				],
-				model:'deal',
+				model:'deals',
 				//ref:formRef,
 				title: 'Bearbeite Spende' 
 			},state.actualState)
@@ -247,7 +248,7 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.action)
 		{
 			case 'get':
-			//trace(state.dataTable);
+			//trace(state.dataTable);<Fragment key=${i++}>
 			jsx('
 			<>
 			<Grid id="dealsList" data=${state.dataTable}

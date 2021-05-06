@@ -347,7 +347,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					fields:[
 						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
-					model:'deal',
+					model:'deals',
 					//ref:formRef,
 					title: 'Bearbeite Spende' 
 				},state.actualState));

@@ -160,6 +160,6 @@ class ORM {
 	}
 
 	public function save():Void{
-
+		trace('?');
 	}
 }

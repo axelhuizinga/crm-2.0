@@ -69,7 +69,7 @@ class FormBuilder {
 
 	function renderElement(el:ReactFragment, label):ReactFragment
 	{
-		//trace(i);
+		trace(i);
 		return	jsx('
 			<div key=${i++} className="g_row_2" role="rowgroup">
 				<div className="g_cell" key=${i+'_l'} role="cell">${label}</div>
@@ -81,10 +81,10 @@ class FormBuilder {
 	}
 
 	function renderOption(si:Int,label:String,?value:Dynamic) {
-		//trace(i);
+		trace('$i $value');
 		return	
 			value == null ? jsx('<option key=${i++}>$label</option>'):
-			jsx('<option key=${i++} value=${value}>$label</option>');
+			jsx('<option key=${i++} title=${value} value=${value}>$label</option>');
 	}
 
 	function renderSelect(name:String,options:StringMap<String>):ReactFragment
@@ -150,6 +150,7 @@ class FormBuilder {
 						</div>
 					</div>');				
 				case Select:
+					trace('$i:: $name: $value');
 				renderElement(
 					jsx('<select name=${name} onChange=${onChange} className=${field.className} defaultValue=${value} key=${i++} 
 						multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
@@ -253,15 +254,14 @@ class FormBuilder {
 		var sK:Int = 0;
 		
 		return jsx('<form name=${props.model} key=${props.model} className="tabComponentForm formField" ref=${props.formRef}>
-				<div className="grid_box" role="table" aria-label="Destinations">
-					<div className="g_caption" key=${props.model+'caption'}>${props.title}</div>						
-					${renderFormInputElements(props.fields, initialState)}						
+				<div className="grid_box" role="table" aria-label="Destinations" key=${props.model+"_grid_box"} >
+					<div className="g_caption" key=${props.model+'caption'}>${props.title}</div>			${renderFormInputElements(props.fields, initialState)}					
 				</div>			
 			</form>
 		');				
 	}	
 
-	/*function renderForms(props:FormState){
+	/*function renderForms(props:FormState){			
 		return 
 			for(m in props.modals)[
 				jsx('<form name=${props.model} className="tabComponentForm" ref=${props.ref}>

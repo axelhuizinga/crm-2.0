@@ -33,15 +33,17 @@ typedef BookingRequestProps = {
 	?mandat_datum:String,
 	?ag_creditor_id:String,
 	?sequenz:String,
-	?super_ag_name:String
+	?super_ag_name:String,
+	?mandator:Int
 };
 
 @:rtti
 class BookingRequest extends ORM
 {
+	public static var tableName:String = "booking_requests";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("character varying(64)")
@@ -372,6 +374,16 @@ class BookingRequest extends ORM
 			modified('super_ag_name');
 		this.super_ag_name = super_ag_name ;
 		return super_ag_name;
+	}	
+		
+	@dataType("bigint")
+	@:isVar public var mandator(default,set):Int;
+
+	function set_mandator(mandator:Int):Int{
+		if(initialized('mandator'))
+			modified('mandator');
+		this.mandator = mandator ;
+		return mandator;
 	}	
 	
 }

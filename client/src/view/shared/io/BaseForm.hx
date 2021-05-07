@@ -57,9 +57,7 @@ class BaseForm
 		);	
 	}
 	 */
-	public static var LiveDataForm = function(props:DataFormProps) {
-		return jsx('<div key="dummy">Dummy</div>');		
-	}
+
 
 
 	public static function compareStates(comp:Dynamic) {

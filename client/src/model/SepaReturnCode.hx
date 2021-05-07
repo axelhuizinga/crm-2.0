@@ -9,9 +9,10 @@ typedef SepaReturnCodeProps = {
 @:rtti
 class SepaReturnCode extends ORM
 {
+	public static var tableName:String = "sepa_return_codes";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("character varying")

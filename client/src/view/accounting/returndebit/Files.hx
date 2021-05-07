@@ -1,5 +1,6 @@
 package view.accounting.returndebit;
 
+import view.shared.io.LiveData;
 import action.AppAction;
 import action.DataAction;
 import action.DataAction.SelectType;
@@ -351,53 +352,6 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		//trace(state.sideMenu);
 
 	}
-	
-	function registerOrmRef(form:ReactComponentOf<DataFormProps,FormState>) {
-		//trace(Type.typeof(form));
-		var cL:Dynamic = Type.getClass(form);
-		if(cL!=null){
-			trace(Type.getClassName(cL));
-			try{
-				//trace(Reflect.fields(form.props));
-				//trace(Reflect.fields(form.state));
-				trace('>form.state.model<');
-				if(form.props !=null && form.props.model!= null){	
-					trace(form.props.model);					
-					ormRefs[form.props.model] = {
-						compRef:form,
-						orms:new IntMap()
-					}
-					//trace('>${ormRefs[form.props.model].keys().next()}<');
-				}
-			}
-			catch(ex:Exception){
-				trace(ex);
-			}
-		}
-	};
-
-	public function registerORM(refModel:String,orm:ORM, ?sType:SelectType = SelectType.One) {
-		if(ormRefs.exists(refModel)){
-			switch(sType){
-				case One:
-					ormRefs.get(refModel).orms.clear();
-					ormRefs.get(refModel).orms.set(orm.id,orm);
-				default:
-					trace(sType);
-
-			}
-			
-			trace(ormRefs.get(refModel).orms.keys().hasNext());
-			//setState({ormRefs:ormRefs});
-			//setState(copy(state,{ormRefs:ormRefs}));
-			//state.ormRefs = ormRefs;
-			trace(Reflect.fields(state));
-			//setState({ormRefs:ormRefs});
-		}
-		else{
-			trace('OrmRef $refModel not found!');
-		}
-	}
 
 	function relForm(model:String):ReactFragment {
 		return (ormRefs.exists(model)? untyped ormRefs[model].compRef.renderForm(): null);
@@ -405,11 +359,28 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 
 	function relData(?dGrid:ReactFragment):ReactFragment {
 //<></>
+		var FormView:FormView = null;/*LiveData.create({
+			classPath:'data.Deals',
+			action:'get',
+			filter:{id:id,mandator:1},
+			resolveMessage:{
+				success:'Spende ${id} wurde geladen',
+				failure:'Spende ${id} konnte nicht geladen werden'
+			},
+			table:'deals',
+			dbUser:param.userState.dbUser,
+			devIP:App.devIP
+		}, this);*/
 		return jsx('<Fragment key="relData">
+			$dGrid
+			${FormView}
+			</Fragment>');
+
+		/*return jsx('<Fragment key="relData">
 		$dGrid
 		${(props.match.params.id!=null?<$DealForm formRef=${dealsFormRef} parentComponent=${this} id=${props.match.params.id} key="importedReturnDebitDeal"  model="deals" filter=${{mandator:'1'}}></$DealForm>:null)}
 		${for(model in ['contacts','deals','accounts'])relForm(model)}
-		</Fragment>');
+		</Fragment>');*/
 	}
 
 	override function render():ReactFragment

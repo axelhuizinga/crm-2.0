@@ -32,9 +32,10 @@ typedef ContactProps = {
 @:rtti
 class Contact extends ORM
 {
+	public static var tableName:String = "contacts";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("bigint")

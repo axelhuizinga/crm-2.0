@@ -12,9 +12,10 @@ typedef UserGroupProps = {
 @:rtti
 class UserGroup extends ORM
 {
+	public static var tableName:String = "user_groups";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("character varying(64)")

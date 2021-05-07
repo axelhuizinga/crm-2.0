@@ -16,9 +16,10 @@ typedef TableFieldProps = {
 @:rtti
 class TableField extends ORM
 {
+	public static var tableName:String = "table_fields";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("character varying")

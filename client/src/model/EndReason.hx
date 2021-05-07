@@ -9,9 +9,10 @@ typedef EndReasonProps = {
 @:rtti
 class EndReason extends ORM
 {
+	public static var tableName:String = "end_reasons";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("character varying(64)")

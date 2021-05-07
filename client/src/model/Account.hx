@@ -18,9 +18,10 @@ typedef AccountProps = {
 @:rtti
 class Account extends ORM
 {
+	public static var tableName:String = "accounts";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("bigint")

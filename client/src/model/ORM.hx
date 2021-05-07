@@ -27,6 +27,7 @@ class ORM {
 	
 	//TODO: LOAD DSEP FROM CONFIG
 	static var dsep:String = ',';
+	public static var tableName:String;
 
 	public var fieldsInitalized(default,null):Array<String>;
 	public var fieldsModified(default,null):Array<String>;

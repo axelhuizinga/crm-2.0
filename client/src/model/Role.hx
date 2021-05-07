@@ -12,9 +12,10 @@ typedef RoleProps = {
 @:rtti
 class Role extends ORM
 {
+	public static var tableName:String = "roles";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("character varying(64)")

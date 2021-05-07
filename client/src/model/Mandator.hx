@@ -13,9 +13,10 @@ typedef MandatorProps = {
 @:rtti
 class Mandator extends ORM
 {
+	public static var tableName:String = "mandators";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("bigint")

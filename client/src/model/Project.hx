@@ -14,9 +14,10 @@ typedef ProjectProps = {
 @:rtti
 class Project extends ORM
 {
+	public static var tableName:String = "projects";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("bigint")

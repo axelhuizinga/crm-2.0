@@ -7,9 +7,10 @@ typedef FormInputElementProps = {
 @:rtti
 class FormInputElement extends ORM
 {
+	public static var tableName:String = "form_input_elements";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("text")

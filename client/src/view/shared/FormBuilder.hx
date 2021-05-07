@@ -261,18 +261,6 @@ class FormBuilder {
 		');				
 	}	
 
-	/*function renderForms(props:FormState){			
-		return 
-			for(m in props.modals)[
-				jsx('<form name=${props.model} className="tabComponentForm" ref=${props.ref}>
-					<div className="grid_box" role="table" aria-label="Destinations">
-						<div className="g_caption" >${props.title}</div>						
-						${renderFormInputElements(props.fields, props.initialState)}						
-					</div>													
-				</form>
-			')];			
-	}*/
-
 	function renderButton(mItem:MItem, i:Int):ReactFragment {
 		if(mItem.onlySm)
 			return null;

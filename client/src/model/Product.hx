@@ -14,9 +14,10 @@ typedef ProductProps = {
 @:rtti
 class Product extends ORM
 {
+	public static var tableName:String = "products";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("character varying(1024)")

@@ -28,9 +28,10 @@ typedef DealProps = {
 @:rtti
 class Deal extends ORM
 {
+	public static var tableName:String = "deals";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("bigint")

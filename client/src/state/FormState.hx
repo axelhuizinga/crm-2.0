@@ -77,7 +77,7 @@ typedef FormState =
 	?modelClass:Dynamic,
 	?valuesArray:Array<Map<String,Dynamic>>,//FORMATTED DISPLAY VALUES
 	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES
-//	?relatedForms:Map<String,Dynamic>,
+	?forms:Map<String,FormView>,
 	?rows:Array<Dynamic>,
 	?section:String,
 	?sideMenu:MenuProps,
@@ -85,6 +85,13 @@ typedef FormState =
 	?submitted:Bool,
 	?errors:Map<String,String>,
 	?title:String
+}
+
+typedef FormView = {
+	form:ReactFragment,
+	orm:ORM,
+	props:DataFormProps,
+	view:ReactComponentOf<DataFormProps,FormState>
 }
 
 typedef ORMComps = {

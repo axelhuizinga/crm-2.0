@@ -14,9 +14,10 @@ typedef DebitReturnStatementProps = {
 @:rtti
 class DebitReturnStatement extends ORM
 {
+	public static var tableName:String = "debit_return_statements";
+
 	public function new(data:Map<String,String>) {
-		super(data);
-		
+		super(data);		
 	}	
 		
 	@dataType("text")

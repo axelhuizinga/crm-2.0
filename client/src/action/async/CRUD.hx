@@ -45,6 +45,7 @@ class CRUD
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			//trace(getState());
 			//Out.dumpObject(param);
+			trace(Reflect.fields(param).join('|'));
 			return new Promise(function(resolve, reject){
 				if (!param.dbUser.online)
 				{

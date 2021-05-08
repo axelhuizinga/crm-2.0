@@ -40,20 +40,10 @@ class AppStore
 		
 	public var store:StoreMethods<AppState>;
 	
-	public function new(uStore:UserStore) 
+	public function new() 
 	{
 		//var user = new UserStore();
 		initState = {
-			//app:{},
-			//config:App.config,
-			//dataStore: {},
-			//firstLoad:true,
-			//formStates: new Map(),
-			//themeColor: 'green',
-			//locale: 'de',			
-			//routeHistory: new Array(),
-			
-			//redirectAfterLogin: (Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname), 
 			 
 			status: {
 				date:Date.now(),
@@ -147,9 +137,9 @@ class AppStore
 			//case Thunk.Action(f):
 				//store.dispatch(action);
 			case Status(action):	
-				store.dispatch(action);*/
-			case Location(action):
 				store.dispatch(action);
+			case Location(action):
+				store.dispatch(action);*/
 			case User(action):
 				store.dispatch(action);
 				//next();

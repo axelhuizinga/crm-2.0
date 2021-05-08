@@ -84,7 +84,7 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
 			load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
-			loadData:function(id:Int = -1, me:Dynamic) return me.loadData(id),
+			/*loadData:function(id:Int = -1, me:Dynamic) return me.loadData(id),
 			save: function(me:Dynamic) return me.update(),
 			select:function(id:Int = -1, data:Dynamic, me:Dynamic, ?sType:SelectType)
 			{
@@ -93,13 +93,14 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 				//me.loadDealData(id);
 				//dispatch(DataAction.CreateSelect(id,data,match));
 				//dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
-			}
+			}*/
 		};
 	}
 		
 	static function mapStateToProps(aState:AppState) 
 	{
 		trace(Reflect.fields(aState));
+		trace(aState.dataStore.returnDebitsData);
 		return {
 			userState:aState.userState
 		};
@@ -264,11 +265,7 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 		}
 		return null;
 	}
-	/**
-	 * <$Table id="dealsList" data=${state.dataTable}  parentComponent=${this}
-					${...props} dataState=${dataDisplay.get("dealsList")} 
-					className="is-striped is-hoverable" fullWidth=${true}/>
-	 */
+
 	override public function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);

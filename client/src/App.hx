@@ -95,7 +95,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	{
 		var userStore = new UserStore();
 		trace(Reflect.fields(userStore));
-		var appWare = new AppStore(userStore);
+		var appWare = new AppStore();
 		var locationStore =  new LocationStore(history);
 
 		var rootReducer = Redux.combineReducers(
@@ -112,11 +112,11 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		trace(rootReducer); 
 		//return createStore(rootReducer, {dataStore:loadFromLocalStorage()},  
 		return createStore(rootReducer, null,  
-		Redux.applyMiddleware(
-			mapMiddleware(Thunk, new ThunkMiddleware()),
-			mapMiddleware(AppAction, appWare),
-			mapMiddleware(LocationAction, locationStore)
-			//mapMiddleware(UserAction, userStore)
+			Redux.applyMiddleware(
+				mapMiddleware(Thunk, new ThunkMiddleware()),
+				mapMiddleware(AppAction, appWare),
+				mapMiddleware(LocationAction, locationStore)
+				//mapMiddleware(UserAction, userStore)
 			)
 		);
 	}

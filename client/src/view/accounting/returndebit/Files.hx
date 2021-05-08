@@ -179,6 +179,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	{
 		if(_instance!=null)
 		trace(Reflect.fields(_instance.props).join('|'));
+		
 		return {
 			//userState:aState.userState
 			//dummy:aState.dataStore.returnDebitsData.toString()
@@ -200,19 +201,27 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				}
 				//trace(data);
 				//_instance.state.selectedData = dispatch(LiveDataAccess.sSelect({id:id,data:data,match:me.props.match,selectType: selectType}));
-				var p:Promise<Dynamic> = dispatch(LiveDataAccess.sSelect({id:id,data:data,match:me.props.match,selectType: selectType}));
-				p.then(function(d:IntMap<Map<String,Dynamic>>){
-					trace(d.keys().hasNext());
-					if(d.keys().hasNext()){
-						trace(me.state.sideMenu.instance.enableItem('close'));
-						me.state.selectedData = d;
-						//trace(Files._instance.state.selectedData);
-						if(d.keys().next()==id){
-							trace('yes:$id');
-							me.ormRefs = new Map();
-						}
+				var sData:IntMap<Map<String,Dynamic>> = LiveData.select({id:id,data:data,match:me.props.match,selectType: selectType});
+
+				if(sData.keys().hasNext()){
+					trace(me.state.sideMenu.instance.enableItem('close'));
+					//me.state.selectedData = d;
+					//trace(Files._instance.state.selectedData);
+					if(sData.keys().next()==id){
+						trace('yes:$id');
+						me.ormRefs = new Map();
+						//Object requires fields: userState, match, location, histo
+						LiveData.create({
+							history: me.props.history,
+							id:id,
+							location: me.props.location,
+							match:me.props.match,
+							model:'deals',
+							userState: App.store.getState().userState
+
+						},me);
 					}
-				});
+				}
 				trace(App.store.getState().dataStore.returnDebitsData.toString());
 			}						
         }

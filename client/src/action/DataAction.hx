@@ -38,7 +38,6 @@ typedef SDataProps =
 	id:Dynamic,
 	?data: IntMap<Map<String,Dynamic>>,
 	?match:RouterMatch,
-	?callBack:Function,
 	?selectType:SelectType
 }
 

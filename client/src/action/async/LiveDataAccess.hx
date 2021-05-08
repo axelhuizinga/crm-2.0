@@ -133,28 +133,6 @@ class LiveDataAccess
 				sData;
 		}	
 	}
-
-	/*public static function  dSelect(props:SDataProps){
-		var tableRoot:Array<String> = FormApi.getTableRoot(props.match);			
-		trace(tableRoot);
-		switch(tableRoot[1])
-		{
-			case 'ReturnDebits':
-				sData = sSelectType(props.id, props.data, sData, props.selectType);
-				//trace(sData);
-				trace('${tableRoot[2]}/${Std.parseInt(props.data.get(props.id).get('deal_id')) }');
-				trace(props.match.params);
-				trace(props.match.path);
-				aState.locationStore.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}',
-				{activeContactUrl:'${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}'});
-				dispatch(DataAction.SelectReturnDebits(sData));
-				resolve(sData);//
-			default:
-				//return null;
-				null;
-				
-		}					
-	} */
 	
 	public static function  sSelect(props:SDataProps)
 	{
@@ -202,7 +180,7 @@ class LiveDataAccess
 						trace(props.match.params);
 						trace(props.match.path);
 						aState.locationStore.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}',
-						{activeContactUrl:'${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}'});
+						{activeUrl:'${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}'});
 						dispatch(DataAction.SelectReturnDebits(sData));
 						resolve(sData);//
 					default:

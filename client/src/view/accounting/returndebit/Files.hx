@@ -1,5 +1,9 @@
 package view.accounting.returndebit;
 
+import js.lib.Reflect;
+import model.accounting.AccountsModel;
+import model.contacts.ContactsModel;
+import model.deals.DealsModel;
 import view.shared.io.LiveData;
 import action.AppAction;
 import action.DataAction;
@@ -106,6 +110,8 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
+	var formDataAccess:Map<String,DataAccess>;
+	var formDataDisplay:Map<String,Map<String,DataState>>;
 	var formApi:FormApi;
 	var formBuilder:FormBuilder;
 	var formFields:DataView;
@@ -124,11 +130,21 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		_instance = this;
 		ormRefs = new Map();
+		dataAccess = ReturnDebitModel.dataAccess;
 		dataDisplay = ReturnDebitModel.dataGridDisplay;
-		//dataAccess = ReturnDebitModel.dataAccess(props.match.params.action);
-		//formFields = ReturnDebitModel.formFields(props.match.params.action);
-		//trace('...' + Reflect.fields(props));
-		//baseForm =new BaseForm(this);
+		formDataAccess = new Map();
+		for(model in ['deals','contacts','accounts']){
+			formDataAccess[model] = switch(model){
+				case 'deals':
+					DealsModel.dataAccess;
+				case 'contacts':
+					ContactsModel.dataAccess;
+				case 'accounts':
+					AccountsModel.dataAccess;
+				default:
+					null;
+			}
+		}
 		
 		menuItems[0].handler = importReturnDebit;
 		menuItems[0].formField.id = App._app.state.userState.dbUser.id;
@@ -217,8 +233,8 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 							location: me.props.location,
 							match:me.props.match,
 							model:'deals',
+							parentComponent: me,
 							userState: App.store.getState().userState
-
 						},me);
 					}
 				}
@@ -228,6 +244,9 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	}	
 
 	public function close() {
+		trace(Reflect.fields(state).join('|'));
+		trace(Reflect.fields(App.store.getState().dataStore).join('|'));
+		return;
 		if(state.selectedData.keys().hasNext()){
 			trace(666);
 			var p:Promise<Dynamic> = App.store.dispatch(LiveDataAccess.sSelect({id:-1,data:new IntMap(),match:props.match,selectType: SelectType.UnselectAll}));
@@ -248,7 +267,6 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	 */
 	override public function componentDidMount():Void 
 	{	
-		dataAccess = ReturnDebitModel.dataAccess;
 		trace(props.match.params.action);
 		state.formApi.doAction('importReturnDebitFile');
 	}
@@ -342,11 +360,24 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		
 	}
 
-	/*public function close() {
-		// TODO: CHECK IF MODIFIED + ASK FOR SAVING / DISCARDING
-		//var baseUrl:String = props.match.path.split(':section')[0];
-		props.history.push('${props.match.path.split(':section')[0]}List/get');
-	}*/
+	public function registerORM(refModel:String,orm:ORM) {
+		if(ormRefs.exists(refModel)){
+			ormRefs.get(refModel).orms.set(orm.id,orm);
+			trace(refModel);
+			//setState({ormRefs:ormRefs});
+			//setState({loading:false, actualState:deal, initialData: copy(deal)});
+			//setState(copy(state,{ormRefs:ormRefs}));
+			//state.ormRefs = ormRefs;
+			//trace(Reflect.fields(state));
+			//setState({ormRefs:ormRefs});
+		}
+		else{
+			ormRefs.set(refModel, {
+				orms:[orm.id=>orm], compRef:this});
+			trace('OrmRef $refModel created!');
+		}
+		setState({ormRefs:ormRefs});
+	}
 
 	function showSelectedAccounts(?ev:Event) {
 		//trace('---' + Type.typeof(ormRefs['accounts'].compRef));
@@ -380,9 +411,35 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			dbUser:param.userState.dbUser,
 			devIP:App.devIP
 		}, this);*/
+		var FormsView:ReactFragment = [
+			for(model in ['deals','contacts','accounts']){
+				if(ormRefs.exists(model))
+				for(orm in ormRefs[model].orms.array()) {
+					orm.formBuilder.renderForm({
+						//mHandlers:state.mHandlers,
+						fields:
+							[for(k in formDataAccess[model]['open'].view.keys())
+								k => formDataAccess[model]['open'].view[k]]						
+						,
+						model:model,
+						ref:null,					
+						title: switch (model){
+							case 'accounts':
+								'Konto';
+							case 'contacts':
+								'Kontakt';
+							case 'deals':
+								'Spende';	
+							default:
+								model;														
+						}
+					},orm);
+				}				
+			}
+		];
 		return jsx('<Fragment key="relData">
 			$dGrid
-			${FormView}
+			${FormsView}
 			</Fragment>');
 
 		/*return jsx('<Fragment key="relData">

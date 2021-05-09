@@ -49,9 +49,7 @@ class ORM {
 		formBuilder = new FormBuilder(this);
 		propertyNames = Reflect.fields(fields);
 		state = {};
-		//trace('data.id: ${data.get('id')}');
-		fieldsInitalized = new Array();
-		fieldsModified = new Array();
+
 		for(f in propertyNames)
 		{
 			if(data.exists(f)){

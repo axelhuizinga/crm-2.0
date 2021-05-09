@@ -49,13 +49,13 @@ class CRUD
 			return new Promise(function(resolve, reject){
 				if (!param.dbUser.online)
 				{
+					trace('LoginError');
 					param.dbUser.last_error = 'Du musst dich neu anmelden!';
 					dispatch(User(LoginError(
 					{
 						dbUser:param.dbUser,
 						lastError:'Du musst dich neu anmelden!'
 					})));
-					trace('LoginError');
 					var dbData:DbData = DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']);
 					reject(dbData);
 				}

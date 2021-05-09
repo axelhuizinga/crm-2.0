@@ -1,5 +1,7 @@
 package view.shared.io;
 
+import model.Account;
+import model.Contact;
 import tools.ClassInfo;
 import action.DataAction;
 import action.DataAction.SDataProps;
@@ -58,21 +60,69 @@ class LiveData {
 					{
 						var data = data.dataRows[0];
 						trace(data);
-						//if( mounted)
 						var deal = new Deal(data);
 						trace(deal.id);				
-						//setState({loading:false, actualState:deal, initialData: copy(deal)});
-						//state = copy(state, {loading:false});
 						deal.state.actualState = deal;
-						//state.actualStates.set(deal.id,deal);
 						trace(untyped deal.state.actualState.id + ':' + deal.state.actualState.fieldsInitalized.join(','));
-						//setState({});
-						//trace(props.match);
-						//trace(props.location.pathname + ':' + untyped state.actualState.amount);
-						//trace(Reflect.fields(props));
-						//trace(Reflect.fields(props.parentComponent.props));
-						//props.history.replace(props.location.pathname.replace('open','update'));
 						props.parentComponent.registerORM('deals',deal);
+						formView.orm = deal;
+						// LOAD RELATED DATA
+						loadORM(			
+							props.id,
+							{
+								classPath:'data.Contacts',
+								action:'get',
+								filter:{id:deal.contact,mandator:1},
+								resolveMessage:{
+									success:'Kontakt ${deal.contact} wurde geladen',
+									failure:'Kontakt ${deal.contact} konnte nicht geladen werden'
+								},
+								table:'contacts',
+								then: function(data:DbData){
+									trace(data.dataRows.length); 
+									if(data.dataRows.length==1)
+									{
+										var data = data.dataRows[0];
+										trace(data);
+										var contact = new Contact(data);
+										trace(deal.id);				
+										contact.state.actualState = contact;
+										trace(untyped contact.state.actualState.id + ':' + contact.state.actualState.fieldsInitalized.join(','));
+										props.parentComponent.registerORM('contacts',contact);
+										
+									}
+								},
+								dbUser:props.userState.dbUser,
+								devIP:App.devIP
+							});
+						loadORM(			
+							props.id,
+							{
+								classPath:'data.Accounts',
+								action:'get',
+								filter:{id:deal.account,mandator:1},
+								resolveMessage:{
+									success:'Konto ${deal.account} wurde geladen',
+									failure:'Konto ${deal.account} konnte nicht geladen werden'
+								},
+								table:'accounts',
+								then: function(data:DbData){
+									trace(data.dataRows.length); 
+									if(data.dataRows.length==1)
+									{
+										var data = data.dataRows[0];
+										trace(data);
+										var account = new Account(data);
+										trace(account.id);				
+										account.state.actualState = account;
+										trace(untyped account.state.actualState.id + ':' + account.state.actualState.fieldsInitalized.join(','));
+										props.parentComponent.registerORM('accounts',account);
+										
+									}
+								},
+								dbUser:props.userState.dbUser,
+								devIP:App.devIP
+							});
 					}
 				},
 				dbUser:props.userState.dbUser,
@@ -82,7 +132,7 @@ class LiveData {
 		return formView;
 	}
 
-	public static function create(props:DataFormProps, view:ReactComponentOf<DataFormProps,FormState>):FormView 
+	public static function create(props:DataFormProps, view:ReactComponentOf<DataFormProps,FormState>):Void 
 	{	
 		//var cL:Dynamic = Type.getClass(view);
 		var viewPath:String = ClassInfo.classPath(view);
@@ -99,10 +149,10 @@ class LiveData {
 					// CREATE
 					forms.set(viewPath, [props.model=>[props.id=>createFormView(props, view)]]);
 				}				 
-				return forms.get(viewPath).get(props.model).get(props.id);
+				//return forms.get(viewPath).get(props.model).get(props.id);
 			}
 		}
-		return null;
+		//return null;
 	}
 
 	/**
@@ -143,12 +193,14 @@ class LiveData {
 		trace('loading:$id');
 		if(id == null)
 			return;
+		var cb:DbData->Void = param.then;
+		param.then = null;
 		var p:Promise<DbData> = cast App.store.dispatch(CRUD.read(
 			param
 		));
 		
-		p.then(function(data:DbData)  trace(data));
-		//p.then(function(data:DbData)  param.then(data));
+		//p.then(function(data:DbData)  trace(data));
+		p.then(function(data:DbData)  cb(data));
 		/*var p:Promise<DbData> = cast App.store.dispatch(CRUD.read(
 			param
 		));

@@ -69,7 +69,7 @@ class FormBuilder {
 
 	function renderElement(el:ReactFragment, label):ReactFragment
 	{
-		trace(i);
+		//trace(i);
 		return	jsx('
 			<div key=${i++} className="g_row_2" role="rowgroup">
 				<div className="g_cell" key=${i+'_l'} role="cell">${label}</div>
@@ -81,7 +81,7 @@ class FormBuilder {
 	}
 
 	function renderOption(si:Int,label:String,?value:Dynamic) {
-		trace('$i $value');
+		//trace('$i $value');
 		return	
 			value == null ? jsx('<option key=${i++}>$label</option>'):
 			jsx('<option key=${i++} title=${value} value=${value}>$label</option>');
@@ -150,7 +150,7 @@ class FormBuilder {
 						</div>
 					</div>');				
 				case Select:
-					trace('$i:: $name: $value');
+					//trace('$i:: $name: $value');
 				renderElement(
 					jsx('<select name=${name} onChange=${onChange} className=${field.className} defaultValue=${value} key=${i++} 
 						multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),

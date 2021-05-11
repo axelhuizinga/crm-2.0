@@ -99,13 +99,12 @@ GROUP BY(trg.tgname);
 	
 	function createTrigger(tableName:String)
 	{		
-		var activateTrigger = comment(unindent, format) /*
-		CREATE TRIGGER update_customer_modtime BEFORE UPDATE ON customer FOR EACH ROW EXECUTE PROCEDURE  update_modified_column();
-
+		var triggerSQL = comment(unindent, format) /*
+		CREATE TRIGGER t_last_modified BEFORE UPDATE ON crm.$tableName FOR EACH ROW EXECUTE PROCEDURE update_modified_timestamp()
 		*/;		
 		
-		trace(activateTrigger);
-		S.dbh.exec(activateTrigger);
+		trace(triggerSQL);
+		S.dbh.exec(triggerSQL);
 		if (S.dbh.errorCode() != '00000')
 		{
 			trace(S.dbh.errorInfo());
@@ -114,3 +113,17 @@ GROUP BY(trg.tgname);
 		
 	}
 }
+
+/**
+ * BEGIN;
+
+DROP TRIGGER IF EXISTS t_last_modified ON debit_return_statements;
+
+CREATE TRIGGER t_last_modified
+  BEFORE UPDATE
+  ON debit_return_statements
+  FOR EACH ROW
+  EXECUTE PROCEDURE update_modified_timestamp();
+
+COMMIT;
+ */

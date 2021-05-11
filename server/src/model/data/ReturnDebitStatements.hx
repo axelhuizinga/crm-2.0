@@ -1,4 +1,5 @@
 package model.data;
+import php.Syntax;
 import haxe.ds.StringMap;
 import haxe.ds.IntMap;
 import haxe.Unserializer;
@@ -53,14 +54,16 @@ class ReturnDebitStatements extends Model
 		return ['dummy'=>666];
 	}
 	
-	function insert():NativeArray
+	function insert():Array<String>
 	{		
-		trace(dbData.dataInfo);
-		var iData:Array<Map<String,Dynamic>> = Unserializer.run(dbData.dataInfo.get('data'));
+		trace(table+':'+dbData.dataInfo);		
+		//var iData:Dynamic = Unserializer.run(dbData.dataInfo.get('data'));
+		//var iData:Array<Map<String,Dynamic>> = Unserializer.run(dbData.dataInfo.get('data'));
+		var iData:Array<Map<String,Dynamic>> = dbData.dataInfo.get('data');
 		if(iData==null)
-			return null;
-		trace(iData[0]);
-
+			return  null;		
+		trace(iData);
+		trace(Type.typeof(iData[0]));
 		if(table != null)
 		{
 			fieldNames = param.exists('fields')? 
@@ -68,29 +71,36 @@ class ReturnDebitStatements extends Model
 				S.tableFields(table).map(function (f)return quoteIdent(f));
 			tableNames = [table];
 			queryFields = fieldNames.join(',');
-			trace(tableNames);
+			trace(fieldNames);
 		}
 		else
 			tableNames = [];
 		var fields:Array<String> = [];
-		for (k in iData[0].keys())
-			fields.push(k);
-		trace(setValues.length);
+		var ids:Array<String> = [];
 		var setPlaceholders:Array<String> = [];
-		var rps = fields.map( function(_) return '?').join(',');
+		var ri:Int=1;
 		for(row in iData){
-			setPlaceholders.push('($rps)');
+			setValues = new Array();
+			if(ri++==1){
+				for (k in row.keys())
+					if(k!='name'&&k!='title')//	TODO: check field exists in table
+						fields.push(k);
+				trace(setValues.length);				
+				var rps = fields.map( function(_) return '?').join(',');
+				setPlaceholders.push('($rps)');
+			}			
 			for( f in fields){
 				setValues.push(row.get(f));
 			}
+			setSql = 'VALUES ${setPlaceholders.join(",\n")}';
+			var sqlBf:StringBuf = new StringBuf();
+			trace(queryFields);
+			sqlBf.add('INSERT INTO ');
+			sqlBf.add('${quoteIdent(tableNames[0])} (${fields.join(",")}) ${setSql} ON CONFLICT DO NOTHING RETURNING id');
+			trace(sqlBf.toString());
+			ids.push(cast untyped execute(sqlBf.toString())[0]);
 		}
-		trace(setValues.length);
-		setSql = 'VALUES ${setPlaceholders.join(",\n")}';
-		var sqlBf:StringBuf = new StringBuf();
-		trace(queryFields);
-		sqlBf.add('INSERT INTO ');
-		sqlBf.add('${quoteIdent(tableNames[0])} (${fields.join(",")}) ${setSql} ON CONFLICT DO NOTHING RETURNING id');
-		return execute(sqlBf.toString());
+		return ids;
 	}
 
 	function sync()	

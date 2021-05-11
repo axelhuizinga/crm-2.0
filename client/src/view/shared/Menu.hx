@@ -272,6 +272,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	
 	override public function componentDidMount():Void 
 	{
+		if(props.parentComponent.state.sideMenu==null){
+			trace(Type.getClass(props.parentComponent));
+			return;
+		}
+		trace(Type.getClass(props.parentComponent));
 		props.parentComponent.state.sideMenu.instance = this;
 		if(props.sameWidth && state.sameWidth == null)
 		{

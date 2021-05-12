@@ -69,6 +69,7 @@ class Upload {
 				trace(ipost);
 				var dRS:ReturnDebitStatements = new ReturnDebitStatements(ipost);
 				//trace(dRS.getStati(ids,ipost.get('mandator')));
+				trace(result);
 				S.send(result,true);
 			}
 			S.send(Json.stringify({error:'No File uploaded'}),true);

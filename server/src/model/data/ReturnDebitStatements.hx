@@ -79,11 +79,12 @@ class ReturnDebitStatements extends Model
 		var ids:Array<String> = [];
 		var setPlaceholders:Array<String> = [];
 		var ri:Int=1;
+		var tableFields:Array<String> = S.tableFields(tableNames[0]);
 		for(row in iData){
 			setValues = new Array();
 			if(ri++==1){
 				for (k in row.keys())
-					if(k!='name'&&k!='title')//	TODO: check field exists in table
+					if(tableFields.contains(k))
 						fields.push(k);
 				trace(setValues.length);				
 				var rps = fields.map( function(_) return '?').join(',');
@@ -96,10 +97,12 @@ class ReturnDebitStatements extends Model
 			var sqlBf:StringBuf = new StringBuf();
 			trace(queryFields);
 			sqlBf.add('INSERT INTO ');
-			sqlBf.add('${quoteIdent(tableNames[0])} (${fields.join(",")}) ${setSql} ON CONFLICT DO NOTHING RETURNING id');
-			trace(sqlBf.toString());
-			ids.push(cast untyped execute(sqlBf.toString())[0]);
+			sqlBf.add('${quoteIdent(tableNames[0])} (${fields.join(",")}) ${setSql} ON CONFLICT DO NOTHING RETURNING id');			
+			//trace(sqlBf.toString());
+			//trace(setValues.toString());
+			ids.push(cast untyped execute(sqlBf.toString(),true)[0]);
 		}
+		trace(ids);
 		return ids;
 	}
 

@@ -324,7 +324,7 @@ class Model
 		S.sendData(dbData,rData);
 	}
 	
-	public function execute(sql:String):NativeArray
+	public function execute(sql:String, noSend:Bool=false):NativeArray
 	{
 		//trace(sql);	
 		if(setValues.length>0)
@@ -394,9 +394,14 @@ class Model
 			trace('>>$action<<');
 			if(action=='update'||action=='delete'||action=='insert')
 			{
-				//EXIT
-				trace('done');
-				S.sendInfo(dbData);
+				if(noSend){
+					trace('$action row done');
+				}
+				else{
+					//EXIT
+					trace('done');
+					S.sendInfo(dbData);					
+				}
 			}
 			if (Std.parseInt(dbData.dataInfo['count'])>0)
 			{

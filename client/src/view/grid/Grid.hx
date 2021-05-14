@@ -1,5 +1,6 @@
 package view.grid;
 
+import react.ReactPaginate;
 import view.shared.FormField;
 import js.Syntax;
 import action.DataAction.SelectType;
@@ -21,6 +22,7 @@ import js.html.TableElement;
 import js.html.TableRowElement;
 import js.html.DivElement;
 import me.cunity.debug.Out;
+import react.Fragment;
 import react.React;
 import react.ReactEvent;
 import react.ReactRef;
@@ -188,24 +190,59 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			</section>
 			');					
 		}		
-		//className="${props.className} sort-decoration"
-		//return jsx('<div>1</div>');
-
-		//renderRows();
-		//var rows:ReactFragment = jsx('<div>1</div>');// ${renderHeaderDisplay()}		
+	
 		var headerRows:ReactFragment = renderHeaderDisplay();
-		//return headerRows;
-		//var rows:ReactFragment = renderHeaderDisplay();
-		//trace(gridStyle);
-		//return rows; style="{{grid-template-columns:$gridStyle}}"<div className="grid-container" ref=${gridRef} id=${props.id}>	
+		trace('pageCount=${props.parentComponent.state.pageCount} dataCount=${props.parentComponent.state.dataCount} limit=${props.parentComponent.props.limit}');	
+
 		return jsx('		
+		<Fragment>
 			<div className="grid_box" ref=${gridRef} id=${props.id} key=${"grid_list"+props.id}>		
-					${headerRows}
+					${headerRows}				
 					${renderRows()}
 			</div>					
-		');		
+			${renderPager(props.parentComponent)}
+		</Fragment>');		
 	}
-	
+	//${renderPager(props.parentComponent)}	
+
+	public function renderPager(comp:Dynamic):ReactFragment
+	{
+		trace('pageCount=${comp.state.pageCount}');		
+		if(Math.isNaN(comp.state.pageCount) || comp.state.pageCount<2)
+			return null;
+		//trace(props);
+		trace(ReactPaginate);
+		//trace(comp.props);
+		//trace(jsx('<div className="paginationContainer">React Paginate</div>'));
+		return jsx('
+		<div id="pct" className="paginationContainer">
+			<nav>
+				<$ReactPaginate previousLabel=${'<'} breakLinkClassName=${'pagination-link'}
+					pageLinkClassName=${'pagination-link'}					
+					nextLinkClassName=${'pagination-next'}
+					previousLinkClassName=${'pagination-previous'}
+					nextLabel=${'>'}
+					breakLabel=${'...'}
+					breakClassName=${'break-me'}
+					pageCount=${comp.state.pageCount}
+					marginPagesDisplayed={2}
+					pageRangeDisplayed={5}
+					onPageChange=${function(data){
+						trace('${comp.props.match.params.action}  ${data.selected}');
+						var fun:Function = Reflect.field(comp,comp.props.match.params.action);
+						if(Reflect.isFunction(fun))
+						{
+							Reflect.callMethod(comp,fun,[{page:data.selected}]);
+						}
+					}}
+					containerClassName=${'pagination is-small'}
+					subContainerClassName=${'pages pagination'}
+					activeLinkClassName=${'is-current'}/>
+			</nav>	
+		</div>		
+		');
+	}	
+
 	function renderHeaderDisplay():ReactFragment
 	{
 		if(props.dataState==null)

@@ -180,7 +180,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			if(item.separator){ return jsx('<hr key=${i++} className="menuSeparator"/>');}
 			var type:FormInputElement;
 			type = (item.formField==null||item.formField.type==null?Button:item.formField.type);
-			//trace(i + ':' + type);
+			trace(i + ':' + type);
 			return switch(type)
 			{
 				//case Filter: jsx('<$Filter  key=${i++}/>');				

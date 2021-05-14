@@ -135,12 +135,13 @@ class ReturnDebits extends ReactComponentOf<DataFormProps,FormState>
 		if(state.loading)
 			return state.formApi.renderWait();
 		//trace('###########loading:' + state.sideMenu);
+		//TODO: MAKE LIMIT CONFIGURABLE
 		return switch(props.match.params.section)
 		{
 			case "List":
 				trace('render List');
 				jsx('
-					<$List ${...props} limit=${100} parentComponent=${this} formApi=${state.formApi} fullWidth={true}/>
+					<$List ${...props} limit=${25} parentComponent=${this} formApi=${state.formApi} fullWidth={true}/>
 				');					
 			case "Files":
 				jsx('

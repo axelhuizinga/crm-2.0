@@ -102,6 +102,20 @@ class SyncExternalDeals extends Model
 
 	function getMissing():Void {
 		var start = Sys.time();
+		var stmt:PDOStatement = S.dbh.query('SELECT MAX(id) FROM "crm"."deals";');
+		S.checkStmt(S.dbh, stmt, 'get max deals id query:'+Std.string(S.dbh.errorInfo()));
+		
+		var maxDeal:Int = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):0);
+		if(maxDeal==null)
+			maxDeal=0;
+		trace('maxDeal:$maxDeal');
+		importExtDeals('WHERE pay_plan_id>$maxDeal ');
+		
+		trace('missing deals took:' + (Sys.time()-start));
+	}
+	
+	function getMissing1():Void {
+		var start = Sys.time();
 		var stmt:PDOStatement = S.dbh.query('SELECT MAX(contact) FROM "crm"."deals";');
 		S.checkStmt(S.dbh, stmt, 'get max contacts id query:'+Std.string(S.dbh.errorInfo()));
 		
@@ -110,7 +124,7 @@ class SyncExternalDeals extends Model
 		importExtDeals('WHERE client_id>$maxCid ');
 		
 		trace('missing deals took:' + (Sys.time()-start));
-	}
+	}	
 
 	function importAll(){ 
 
@@ -155,7 +169,7 @@ class SyncExternalDeals extends Model
 				try{
 					var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);	
 					if(!(synced>1)){
-						trace(row);
+						//trace(row);
 						trace(res);
 					}
 				}
@@ -169,8 +183,8 @@ class SyncExternalDeals extends Model
 				}	
 			}		
 			if(Lib.isCli()){
-				trace('${offset.int} + ${synced}');
-				offset = Util.offset(synced);
+				trace('${offset.int} + ${synced} limit:${limit.int} all:${param['totalRecords']}');
+				//offset = Util.offset(synced);
 				if(offset.int+limit.int>param['totalRecords'])
 				{
 					limit = Util.limit(param['totalRecords'] - offset.int);
@@ -263,6 +277,7 @@ class SyncExternalDeals extends Model
 			'id'=>Std.string(Syntax.code("{0}['id']",rD))]);
 		}
 		synced++;
+		trace(synced);
 		return stmt;
 	}	
 

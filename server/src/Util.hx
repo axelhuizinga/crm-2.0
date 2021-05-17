@@ -298,7 +298,7 @@ class Util
 	public static function limit(?v:Int):IntString {
 		if (v == null)
 			v = Std.parseInt(S.params.get('limit'));
-		if(v==null)
+		if(v==null||v<0)
 			v=0;
 		trace(v);
 

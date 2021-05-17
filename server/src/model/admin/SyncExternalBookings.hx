@@ -76,19 +76,18 @@ class SyncExternalBookings extends Model{
 		return Lib.hashOfAssociativeArray(res[0]).get('count');
 	}
 
-	function getMaxImported() {
+	function getMaxImported():Int {
 		var sql = comment(unindent, format) /*
-		SELECT buchungsanforderungID FROM fly_crm.buchungs_anforderungen;				
+		SELECT max(ba_id) from booking_requests ;				
 		*/;
+		var stmt = S.dbh.query(sql);
+		var got:Int = Std.parseInt(stmt.execute()?stmt.fetchColumn(0):null);		
+		trace('got:$got');	
+		return got;	
 	}
 
-	function  getAllBaIDs() {
-		var sql = comment(unindent, format) /*
-		COPY ba_ids(ba_id) FROM '/root/buaIDs.txt' DELIMITER '|' FORMAT csv;				
-		*/;
-		sql = comment(unindent, format) /*
-		COPY ba_ids FROM '/tmp/buaIDs.txt' CSV HEADER;				
-		*/;
+	/*function  getAllBaIDs() {
+		sql = "	COPY ba_ids FROM '/tmp/buaIDs.txt' CSV HEADER;";
 		trace(sql);
 		var stmt = null;
 		try{
@@ -108,20 +107,17 @@ class SyncExternalBookings extends Model{
 			trace(ex.message);
 			trace(stmt.errorInfo());
 		}
-		/*var crmBaIds:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_COLUMN):null);		
-		var got:Int = Global.count(crmBaIds);
-		trace('got:$got');*/
+
 		trace('ok');
-	}
+	}*/
 
 	function getMissing() {
 		//get all BaID's
+		return syncBookingRequests(S.dbh,getMaxImported());
 		offset = Util.offset(0);
+		var maxID:Int = getMaxImported();
 		var sql = comment(unindent, format) /*
-		SELECT * FROM ba_ids WHERE ba_id NOT IN
-(SELECT bi.ba_id FROM "ba_ids" bi
-INNER JOIN "booking_requests" br
-ON br.ba_id=bi.ba_id);		
+		SELECT * FROM _ba_ids WHERE ba_id > $maxID;		
 		*/;
 		trace('$sql');
 		var stmt = S.dbh.query(sql);
@@ -149,7 +145,7 @@ ON br.ba_id=bi.ba_id);
 	}
 
 
-	public function syncBookingRequests(dbh:PDO):Void 
+	public function syncBookingRequests(dbh:PDO,minID:Int=0):Void 
 	{		
 		var bookings:NativeArray = null;
 		var dD:Map<String,Dynamic> = Util.map2fieldsNum(bookings[0], keys);
@@ -163,10 +159,11 @@ ON br.ba_id=bi.ba_id);
 		INSERT INTO ${table} (${dNames.join(',')})
 		VALUES (${dPlaceholders.join(',')}) ON CONFLICT DO NOTHING;				
 		*/;
-		trace(sql);
+		trace(sql);		
+		//while(synced<totalCount){
 		while(synced<totalCount){
 			//	LOAD LIVE PBX DATA
-			bookings = getCrmData();
+			bookings = getCrmData(minID);
 			var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 			trace('totalRecords:' + dbData.dataInfo['totalRecords']);
 			for(row in bookings.iterator())
@@ -197,11 +194,11 @@ ON br.ba_id=bi.ba_id);
 		Sys.exit(S.sendInfo(dbData, ['importedBookingRequests'=>'OK'])?1:0);
 	}
 	
-	public function getCrmData():NativeArray
+	public function getCrmData(maxImported:Int=0):NativeArray
 	{		        
         var sql = comment(unindent,format)/*
-		SELECT * FROM buchungs_anforderungen WHERE anforderungs_datum>'2021-01-01
-ORDER BY buchungsanforderungID '
+		SELECT * FROM buchungs_anforderungen WHERE `buchungsanforderungID`>$maxImported 
+ORDER BY buchungsanforderungID 
 */;
 		trace('loading $sql ${limit.sql} ${offset.sql}' + S.syncDbh.getAttribute(PDO.ATTR_SERVER_INFO));
 		var stmt:PDOStatement = S.syncDbh.query('$sql ${limit.sql} ${offset.sql}');
@@ -221,10 +218,10 @@ ORDER BY buchungsanforderungID '
 		trace(Syntax.code('count({0})',res));
 		if(offset.int==0)
 		{
-			stmt = S.syncDbh.query(sql);
-			var totalRes = stmt.fetchColumn();
+			//stmt = S.syncDbh.query(sql);
+			var totalRes = Syntax.code('count({0})',res);//stmt.fetchColumn();
 			trace(totalRes);
-			dbData.dataInfo['totalRecords'] = totalRes;
+			totalCount = dbData.dataInfo['totalRecords'] = Std.parseInt(totalRes);
 		}
 		return res;
 	}

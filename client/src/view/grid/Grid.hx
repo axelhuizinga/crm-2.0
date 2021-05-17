@@ -203,17 +203,12 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			${renderPager(props.parentComponent)}
 		</Fragment>');		
 	}
-	//${renderPager(props.parentComponent)}	
 
 	public function renderPager(comp:Dynamic):ReactFragment
 	{
 		trace('pageCount=${comp.state.pageCount}');		
 		if(Math.isNaN(comp.state.pageCount) || comp.state.pageCount<2)
 			return null;
-		//trace(props);
-		trace(ReactPaginate);
-		//trace(comp.props);
-		//trace(jsx('<div className="paginationContainer">React Paginate</div>'));
 		return jsx('
 		<div id="pct" className="paginationContainer">
 			<nav>

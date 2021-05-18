@@ -1,6 +1,7 @@
 package view.data;
 
 import action.DataAction;
+import data.DataState;
 import haxe.Constraints.Function;
 import state.DataAccessState;
 import haxe.macro.Expr.Catch;

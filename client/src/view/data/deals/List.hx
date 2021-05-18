@@ -1,5 +1,6 @@
 package view.data.deals;
 
+import data.DataState;
 import js.Browser;
 import js.html.NodeList;
 import js.html.TableRowElement;

@@ -1,5 +1,6 @@
 package view.data.accounts;
 
+import data.DataState;
 import model.accounting.AccountsModel;
 import js.Browser;
 import db.DBAccessProps;

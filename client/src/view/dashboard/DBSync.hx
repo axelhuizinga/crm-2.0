@@ -23,7 +23,7 @@ import view.shared.FormBuilder;
 import view.shared.MItem;
 import view.shared.MenuProps;
 import view.dashboard.model.DBSyncModel;
-import view.table.Table.DataState;
+import data.DataState;
 import view.shared.io.BaseForm;
 import view.shared.io.DataAccess;
 import view.shared.io.DataFormProps;

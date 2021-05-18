@@ -38,7 +38,7 @@ import view.shared.MenuProps;
 import view.shared.MItem;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess.DataView;
-import view.table.Table.DataState;
+import data.DataState;
 import react.ReactComponent;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;

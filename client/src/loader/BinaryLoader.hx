@@ -26,8 +26,8 @@ class BinaryLoader {
 	}
 
 	public static function dbQuery(url:String,dbAP:DBAccessProps, onLoaded:DbData->Void) {
-		//trace(dbAP);
-		//trace(url);
+		trace(dbAP);
+		trace(url);
 		var s:Serializer = new Serializer();
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbAP);//.toHex();
@@ -101,8 +101,11 @@ class BinaryLoader {
 
 	public function load() {
 		xhr.open('POST', url, true);
-		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+		//xhr.setRequestHeader('Origin', 'https://${App.devIP}:9000');
+		//xhr.setRequestHeader('Access-Control-Request-Method', 'POST');
 		//xhr.setRequestHeader('Access-Control-Allow-Origin', 'https://${App.devIP}:9000');
+		//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
 		xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;
 		
 		//xhr.onerror = function(e) onError(xhr.statusText);
@@ -111,6 +114,7 @@ class BinaryLoader {
 			trace(e.type);
 		}
 		xhr.withCredentials = true;
+		//xhr.withCredentials = false;
 		xhr.onload = function(e) {
 			//trace(xhr.status);
 			if (xhr.status != 200) {

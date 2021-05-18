@@ -16,6 +16,7 @@ import redux.Redux.Dispatch;
 import js.lib.Promise;
 import action.async.CRUD;
 import action.DataAction;
+import data.DataState;
 import state.AppState;
 import model.contacts.ContactsModel;
 import model.deals.DealsModel;

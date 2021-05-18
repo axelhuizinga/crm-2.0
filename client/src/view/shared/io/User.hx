@@ -5,6 +5,7 @@ import action.AppAction;
 import action.UserAction;
 import action.async.UserAccess;
 import tink.core.Error.Stack;
+import data.DataState;
 import haxe.Serializer;
 import haxe.ds.StringMap;
 import haxe.http.HttpJs;

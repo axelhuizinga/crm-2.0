@@ -45,7 +45,7 @@ import view.shared.Menu;
 import view.shared.MItem;
 
 import view.shared.MenuProps;
-import view.table.Table;
+import data.DataState;
 using  shared.Utils;
 
 /**

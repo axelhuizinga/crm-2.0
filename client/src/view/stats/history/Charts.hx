@@ -22,7 +22,7 @@ import js.d3.D3.time;
 import react.ReactComponent.ReactComponentOf;
 import view.shared.io.DataAccess;
 import view.shared.io.FormApi;
-import view.table.Table.DataState;
+import data.DataState;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
 import shared.DbData;

@@ -1,5 +1,6 @@
 package view.dashboard.model;
 
+import data.DataState;
 import view.grid.Grid;
 import haxe.ds.Map;
 import state.FormState;

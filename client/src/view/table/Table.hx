@@ -5,7 +5,7 @@ import react.ReactPaginate;
 import js.Browser;
 import haxe.Constraints.Function;
 import haxe.Timer;
-//import haxe.ds.Map;
+import data.DataState;
 import haxe.extern.EitherType;
 import js.html.DOMRect;
 import js.html.Element;
@@ -37,34 +37,6 @@ using StringTools;
  * @author axel@cunity.me
  */
 
-typedef DataState =
-{
-	?altGroupPos:Int,
-	columns:Map<String,DataColumn>,
-	?defaultSearch:Map<String,DataColumn>,
-	?search:Map<String,DataColumn>
-}
-
-typedef DataColumn = 
-{
-	@:optional var dbFormat:Function;
-	@:optional var cellFormat:Function;
-	@:optional var className:Dynamic;
-	@:optional var editable:Bool;
-	@:optional var flexGrow:Int;
-	@:optional var headerClassName:String;
-	@:optional var headerFormat:Function;
-	@:optional var headerStyle:Dynamic;
-	@:optional var label:String;
-	@:optional var name:String;	
-	@:optional var title:String;
-	@:optional var search:SortDirection;
-	@:optional var show:Bool;	
-	@:optional var style:Dynamic;
-	@:optional var useAsIndex:Bool;
-	@:optional var useInTooltip:Int;//-1 = not, n = position
-}
-
 typedef DataCellPos =
 {
 	column:Int,
@@ -91,19 +63,6 @@ typedef Size =
 {
 	?height:Int,
 	?width:Int
-}
-
-@:enum
-abstract SortDirection(String){
-	var ASC;// = 'ASC';
-	var DESC;// = 'DESC';
-	var NONE;// = '';
-}
-
-typedef SortProps =
-{
-	column:String,
-	direction:SortDirection
 }
 
 typedef TableProps =

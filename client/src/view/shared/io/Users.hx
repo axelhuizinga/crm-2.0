@@ -7,7 +7,7 @@ import state.FormState;
 import view.shared.io.DataFormProps;
 import view.shared.MItem;
 import view.table.Table;
-import view.table.Table.DataState;
+import data.DataState;
 
 class Users extends ReactComponentOf<DataFormProps,FormState>
 {

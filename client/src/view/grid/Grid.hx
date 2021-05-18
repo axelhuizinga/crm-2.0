@@ -1,5 +1,6 @@
 package view.grid;
 
+import data.DataState;
 import react.ReactPaginate;
 import view.shared.FormField;
 import js.Syntax;
@@ -36,7 +37,7 @@ import shared.Utils;
  * ...
  * @author axel@cunity.me
  */
-
+/*
 typedef DataColumn = 
 {
 	?altGroupPos:Int,
@@ -58,7 +59,14 @@ typedef DataColumn =
 	?style:Dynamic,
 	?tip:String
 }
+typedef DataState =
+{
+	columns:StringMap<DataColumn>,
+	?defaultSearch:StringMap<DataColumn>,
+	?search:StringMap<DataColumn>
+}
 
+*/
 typedef DataCellPos =
 {
 	column:Int,
@@ -81,19 +89,12 @@ typedef DataCell =
 	@:optional var flexGrow:Int;
 }
 
-typedef DataState =
-{
-	columns:StringMap<DataColumn>,
-	?defaultSearch:StringMap<DataColumn>,
-	?search:StringMap<DataColumn>
-}
-
 typedef Size =
 {
 	?height:Int,
 	?width:Int
 }
-
+/*
 @:enum
 abstract SortDirection(String){
 	var ASC = 'ASC';
@@ -106,7 +107,7 @@ typedef SortProps =
 	column:String,
 	direction:SortDirection
 }
-
+*/
 typedef GridProps =
 {
 	?className:String,

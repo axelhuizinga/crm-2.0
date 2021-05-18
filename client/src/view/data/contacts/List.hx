@@ -1,5 +1,7 @@
 package view.data.contacts;
+
 import action.async.CRUD;
+import data.DataState;
 import db.DBAccessProps;
 import redux.Redux.Dispatch;
 import js.lib.Promise;

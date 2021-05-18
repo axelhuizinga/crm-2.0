@@ -3,8 +3,8 @@ package model.accounting;
 import haxe.ds.StringMap;
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
-import view.table.Table.DataColumn;
-import view.table.Table.DataState;
+import data.DataState.DataColumn;
+import data.DataState;
 import view.shared.FormInputElement;
 
 /**
@@ -29,7 +29,7 @@ class DebitModel
 		}
 	];
 
-	public static var gridColumns:Map<String,view.grid.Grid.DataColumn> = [
+	public static var gridColumns:Map<String,DataColumn> = [
 		'zahlpfl_name'=>{className: 'tLeft', label: 'Name', flexGrow:1},
 		'vwz1'=>{label:'SpenderIn', flexGrow:0, className: 'tableNums'},
 		'betrag'=>{label: 'Betrag', cellFormat: function(v=0) {
@@ -59,7 +59,7 @@ class DebitModel
 		'rDebitList' => {columns:listColumns}
 	];	
 	
-	public static var dataGridDisplay:Map<String,view.grid.Grid.DataState> = [
+	public static var dataGridDisplay:Map<String,data.DataState> = [
 		'rDebitList' => {columns:gridColumns}
 	];
 }

@@ -2,8 +2,8 @@ package model.deals;
 
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
-import view.table.Table.DataColumn;
-import view.table.Table.DataState;
+import data.DataState.DataColumn;
+import data.DataState;
 import view.shared.FormInputElement;
 
 using StringTools;
@@ -62,9 +62,9 @@ class DealsModel
 				'mandator' => {type:Hidden}				
 			]
 		}
-	];
+	]; 
 
-	public static var gridColumns:Map<String,view.grid.Grid.DataColumn> = [
+	public static var gridColumns:Map<String,DataColumn> = [
 	//public static var shortListColumns:Map<String,DataColumn> = [
 		'id'=>{label:'ID',show:false},				
 		'start_date'=>{label:'Seit',cellFormat:function(v:String) return DateTools.format(Date.fromString(v), "%d.%m.%Y"), className: 'tableNums'},	
@@ -109,7 +109,7 @@ class DealsModel
 		'dealsFull' => {columns:listColumns}
 	];	
 
-	public static var dataGridDisplay:Map<String,view.grid.Grid.DataState> = [
+	public static var dataGridDisplay:Map<String,data.DataState> = [
 		'dealsList' => {columns:gridColumns}
 	];	
 

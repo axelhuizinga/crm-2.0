@@ -2,8 +2,8 @@ package model.contacts;
 
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
-import view.table.Table.DataColumn;
-import view.table.Table.DataState;
+import data.DataState.DataColumn;
+import data.DataState;
 import view.shared.FormInputElement;
 
 /**
@@ -62,7 +62,7 @@ class ContactsModel
 		}
 	];
 
-	public static var gridColumns:Map<String,view.grid.Grid.DataColumn> = [
+	public static var gridColumns:Map<String,DataColumn> = [
 		'first_name'=>{label:'Vorname', flexGrow:0},
 		'last_name'=>{label:'Name', flexGrow:0},
 		//'email'=>{label:'Email'},
@@ -106,7 +106,7 @@ class ContactsModel
 		'contactList' => {columns:listColumns}
 	];	
 
-	public static var dataGridDisplay:Map<String,view.grid.Grid.DataState> = [
+	public static var dataGridDisplay:Map<String,data.DataState> = [
 		'contactList' => {columns:gridColumns}
 	];	
 }

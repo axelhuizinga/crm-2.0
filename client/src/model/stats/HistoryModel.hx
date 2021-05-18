@@ -2,8 +2,8 @@ package model.stats;
 
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
-import view.table.Table.DataColumn;
-import view.table.Table.DataState;
+import data.DataState.DataColumn;
+import data.DataState;
 import view.shared.FormInputElement;
 
 /**

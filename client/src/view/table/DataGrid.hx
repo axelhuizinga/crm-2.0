@@ -29,7 +29,7 @@ import shared.Utils;
 import state.FormState;
 import view.shared.io.FormApi;
 import view.shared.OneOf;
-import view.table.Table.DataState;
+import data.DataState;
 
 using Lambda;
 

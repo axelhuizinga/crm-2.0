@@ -39,7 +39,7 @@ import view.shared.io.DataFormProps;
 import view.shared.io.FormApi;
 import view.shared.io.Loader;
 import view.table.Table;
-import view.table.Table.DataState;
+import data.DataState;
 
 
 /**

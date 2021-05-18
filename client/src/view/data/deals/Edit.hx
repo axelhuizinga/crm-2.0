@@ -9,6 +9,7 @@ import view.shared.io.BaseForm;
 import redux.Redux.Dispatch;
 import action.AppAction;
 import action.async.CRUD;
+import data.DataState;
 import db.DBAccessProps;
 import model.Deal;
 import state.AppState;

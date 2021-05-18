@@ -41,7 +41,7 @@ import view.accounting.returndebit.List;
 import view.shared.FormBuilder;
 import view.shared.MItem;
 import view.shared.MenuProps;
-import view.table.Table.DataState;
+import data.DataState;
 import view.table.Table;
 import view.shared.io.BaseForm;
 import view.shared.io.DataAccess;

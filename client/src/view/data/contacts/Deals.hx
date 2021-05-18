@@ -4,6 +4,7 @@ import model.ORM;
 import haxe.Exception;
 import action.AppAction;
 import model.Deal;
+import data.DataState;
 import db.DbUser;
 import action.async.LiveDataAccess;
 import js.Browser;

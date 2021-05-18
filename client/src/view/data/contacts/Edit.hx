@@ -1,4 +1,6 @@
 package view.data.contacts;
+
+import data.DataState;
 import model.deals.DealsModel;
 import model.accounting.AccountsModel;
 import model.ORM;

@@ -26,8 +26,8 @@ import react.ReactUtil.copy;
 import state.FormState;
 import view.table.Table.DataCell;
 import view.table.Table.DataCellPos;
-import view.table.Table.DataColumn;
-import view.table.Table.SortDirection;
+import data.DataState.DataColumn;
+import data.DataState.SortDirection;
 
 using shared.Utils;
 using view.shared.io.FormApi;

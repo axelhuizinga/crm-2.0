@@ -5,8 +5,8 @@ package view.dashboard.model;
  * @author axel@cunity.me
  */
 
-import view.table.Table.DataColumn;
-import view.table.Table.DataState;
+import data.DataState.DataColumn;
+import data.DataState;
 import view.shared.FormInputElement;
 import view.shared.io.DataAccess;
 

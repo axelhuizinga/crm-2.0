@@ -2,8 +2,8 @@ package view.data.accounts.model;
 
 import react.ReactMacro.jsx;
 
-import view.table.Table.DataColumn;
-import view.table.Table.DataState;
+import data.DataState.DataColumn;
+import data.DataState;
 
 /**
  * @author axel@cunity.me

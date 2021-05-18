@@ -11,7 +11,7 @@ import react.ReactComponent;
 import shared.DbData;
 
 import loader.BinaryLoader;
-import view.table.Table;
+import data.DataState;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;

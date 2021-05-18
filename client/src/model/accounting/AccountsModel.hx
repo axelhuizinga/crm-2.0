@@ -2,8 +2,8 @@ package model.accounting;
 
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
-import view.table.Table.DataColumn;
-import view.table.Table.DataState;
+import data.DataState.DataColumn;
+import data.DataState;
 import view.shared.FormInputElement;
 
 /**
@@ -34,7 +34,7 @@ class AccountsModel
 		}
 	];
 
-	public static var gridColumns:Map<String,view.grid.Grid.DataColumn> = [
+	public static var gridColumns:Map<String,DataColumn> = [
 		'id'=>{label:'ID',show:false, useAsIndex: true},				
 		'account_holder'=>{
 			flexGrow:1,
@@ -76,7 +76,7 @@ class AccountsModel
 		'accountsList' => {columns:listColumns}
 	];	
 
-	public static var dataGridDisplay:Map<String,view.grid.Grid.DataState> = [
+	public static var dataGridDisplay:Map<String,data.DataState> = [
 		'accountsList' => {columns:gridColumns}
 	];	
 }

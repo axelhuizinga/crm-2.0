@@ -40,7 +40,7 @@ import state.FormState;
 import view.shared.FormBuilder;
 import view.shared.MItem;
 import view.shared.MenuProps;
-import view.table.Table.DataState;
+import data.DataState;
 import view.grid.Grid;
 import view.shared.io.BaseForm;
 import view.shared.io.DataAccess;
@@ -78,7 +78,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		_instance = this;
 		dataDisplay = ReturnDebitModel.dataGridDisplay;
 		
-		trace('...' + Reflect.fields(props));
+		//trace('...' + Reflect.fields(props));
 		//baseForm =new BaseForm(this);
 		
 		state =  App.initEState({

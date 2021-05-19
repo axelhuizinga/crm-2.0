@@ -107,7 +107,10 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		var userIcon:String = 'fa fa-user-o';
 		if(!Std.isOfType(props.text,String))
 		{
-			Out.dumpObject(props.text);
+			//Out.dumpObject(props.text);
+			trace(Reflect.fields(props));
+			if(true||props.text==null)
+				trace(props);
 			return null;
 		}
 		//trace(props);

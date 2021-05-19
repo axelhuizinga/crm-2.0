@@ -153,10 +153,11 @@ class S
 		}
 		else{
 			dbQuery = Model.binary();
-			trace(dbQuery.dbParams);
 			params = dbQuery.dbParams;
+			trace(dbQuery.dbParams);
+			trace(dbQuery.relations);
 			S.devIP = params['devIP'];
-			if(dbQuery!=null)trace(dbQuery.dbUser);
+			//if(dbQuery!=null)trace(dbQuery.dbUser);
 			var ipost = Lib.hashOfAssociativeArray(SuperGlobal._POST);
 			trace(ipost.get('id') +':'+ipost.get('jwt'));
 			//trace(ipost.keys());

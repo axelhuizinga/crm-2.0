@@ -2,6 +2,7 @@ package view.grid;
 
 import data.DataState;
 import react.ReactPaginate;
+import view.grid.GridProps;
 import view.shared.FormField;
 import js.Syntax;
 import action.DataAction.SelectType;
@@ -37,110 +38,6 @@ import shared.Utils;
  * ...
  * @author axel@cunity.me
  */
-/*
-typedef DataColumn = 
-{
-	?altGroupPos:Int,
-	?cellFormat:Function,
-	?className:String,
-	?displayFormat:String,
-	?editable:Bool,
-	?flexGrow:Int,
-	?headerClassName:String,
-	?headerFormat:Function,
-	?headerStyle:Dynamic,
-	?label:String,
-	?name:String,
-	?search:SortDirection,
-	?searchField:FormField,
-	?show:Bool,
-	?showSearch:Bool,	
-	?useAsIndex:Bool,
-	?style:Dynamic,
-	?tip:String
-}
-typedef DataState =
-{
-	columns:StringMap<DataColumn>,
-	?defaultSearch:StringMap<DataColumn>,
-	?search:StringMap<DataColumn>
-}
-
-*/
-typedef DataCellPos =
-{
-	column:Int,
-	row:Int
-}
-typedef DataCell =
-{
-	@:optional var cellFormat:Function;
-	@:optional var className:String;
-	@:optional var data:Dynamic;// CELL CONTENT VALUE
-	@:optional var dataDisplay:Dynamic;// CELL CONTENT DISPLAY VALUE
-	@:optional var dataType:Dynamic;// CELL CONTENT VALUE TYPE
-	@:optional var name:String;
-	var id:Int;
-	@:optional var pos:DataCellPos;
-	@:optional var show:Bool;
-	@:value(true)
-	@:optional var style:Dynamic;
-	@:optional var title:String;
-	@:optional var flexGrow:Int;
-}
-
-typedef Size =
-{
-	?height:Int,
-	?width:Int
-}
-/*
-@:enum
-abstract SortDirection(String){
-	var ASC = 'ASC';
-	var DESC = 'DESC';
-	var NONE = '';
-}
-
-typedef SortProps =
-{
-	column:String,
-	direction:SortDirection
-}
-*/
-typedef GridProps =
-{
-	?className:String,
-	data:Array<Dynamic>,
-	dataState:DataState,
-	?disableHeader:Bool,
-	?oddClassName: String,
-	?evenClassName:String,	
-	?defaultSort:Dynamic,	
-	?defaultSortDescending:Bool,
-	?fullWidth:Bool,
-	?filterable:Dynamic,
-	?id:String,
-	?itemsPerPage:Int,
-	?onFilter:String->Void,
-	?onPageChange:SortProps->Void,	
-	?onDoubleClick:Event->Void,
-	?onSort:Int->Void,
-	?parentComponent:Dynamic,
-	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>
-}
-
-typedef GridState =
-{
-	?enteredRow:Int,
-	?selectedRow:Int,
-	?selectedRows:IntMap<Bool>,
-	?selectTimer:Timer,
-	?_rowCells:Array<Element>,
-	?_prevent:Bool,
-	?_selecting:Bool,
-	?_selectedCells:Array<Element>,
-}
 
 class Grid extends ReactComponentOf<GridProps, GridState>
 {

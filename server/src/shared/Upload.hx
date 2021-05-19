@@ -1,5 +1,6 @@
 package shared;
 
+import haxe.Exception;
 import haxe.Serializer;
 import php.NativeArray;
 import php.Syntax;
@@ -35,42 +36,48 @@ class Upload {
 				var name = '/var/www/${SuperGlobal._SERVER["HTTP_HOST"]}/files/' + rDF['name'];
 				Global.move_uploaded_file(rDF['tmp_name'],name);
 				trace(name+':' + (Global.file_exists(name)?'Y':'N'));
-				var result:String = CAMTbox.processDebitReturns(name);
-				trace(result.substr(0,250));
-				if(result.length==0)
-				S.send(Json.stringify({error:'No File uploaded'}),true);
-				var ids:Array<Int> = dbStore(SuperGlobal._POST['action'], result);
-				trace(ids);
-				//Syntax.code('array_walk(glob("{0}/files/*"), "unlink")',SuperGlobal._SERVER["HTTP_HOST"]);
-				var files:Array<Dynamic> = Lib.toHaxeArray(Syntax.code("glob({0}.'/files/*')",SuperGlobal._SERVER["HOME"]));
-				for(file in files){
-					Syntax.code("unlink({0})",file);
-				}
-				//Global.array_walk(Global.glob('/var/www/${SuperGlobal._SERVER["HTTP_HOST"]}/files/*');
-				var dbAccProps:DBAccessProps = {
-					action:'getStati', 
-					classPath:'data.ReturnDebitStatements',					
-					dbUser:S.dbQuery.dbUser,
-					table:'deals',
-					filter:{contact:'IN|${ids.join(',')}'}
-				};
-				//var sQuery:DbQuery = new DbQuery(dbAccProps);
-				//Model.dispatch(sQuery);
-				var ipost:Map<String,Dynamic> = Lib.hashOfAssociativeArray(SuperGlobal._POST);
-				ipost.set('action', 'insert');
-				var rlData:Array<Dynamic> = Json.parse(result).rlData;
+				try{
+					var result:String = CAMTbox.processDebitReturns(name);
+					trace(result.substr(0,250));
+					if(result.length==0)
+					S.send(Json.stringify({error:'No File uploaded'}),true);
+					var ids:Array<Int> = dbStore(SuperGlobal._POST['action'], result);
+					trace(ids);
+					//Syntax.code('array_walk(glob("{0}/files/*"), "unlink")',SuperGlobal._SERVER["HTTP_HOST"]);
+					var files:Array<Dynamic> = Lib.toHaxeArray(Syntax.code("glob({0}.'/files/*')",SuperGlobal._SERVER["HOME"]));
+					for(file in files){
+						Syntax.code("unlink({0})",file);
+					}
+					//Global.array_walk(Global.glob('/var/www/${SuperGlobal._SERVER["HTTP_HOST"]}/files/*');
+					var dbAccProps:DBAccessProps = {
+						action:'getStati', 
+						classPath:'data.ReturnDebitStatements',					
+						dbUser:S.dbQuery.dbUser,
+						table:'deals',
+						filter:{contact:'IN|${ids.join(',')}'}
+					};
+					//var sQuery:DbQuery = new DbQuery(dbAccProps);
+					//Model.dispatch(sQuery);
+					var ipost:Map<String,Dynamic> = Lib.hashOfAssociativeArray(SuperGlobal._POST);
+					ipost.set('action', 'insert');
+					var rlData:Array<Dynamic> = Json.parse(result).rlData;
 
-				ipost.set('data', [
-					for(row in rlData)
-						Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(row))
-				]);
-				//ipost.set('data', Serializer.run(Json.parse(result).rlData));
-				ipost.set('table', 'debit_return_statements');
-				trace(ipost);
-				var dRS:ReturnDebitStatements = new ReturnDebitStatements(ipost);
-				//trace(dRS.getStati(ids,ipost.get('mandator')));
-				trace(result);
-				S.send(result,true);
+					ipost.set('data', [
+						for(row in rlData)
+							Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(row))
+					]);
+					//ipost.set('data', Serializer.run(Json.parse(result).rlData));
+					ipost.set('table', 'debit_return_statements');
+					trace(ipost);
+					var dRS:ReturnDebitStatements = new ReturnDebitStatements(ipost);
+					//trace(dRS.getStati(ids,ipost.get('mandator')));
+					trace(result);
+					S.send(result,true);
+				}
+				catch(e:Exception){
+					S.send(Json.stringify({error:e.details}),true);
+				}
+
 			}
 			S.send(Json.stringify({error:'No File uploaded'}),true);
 		}

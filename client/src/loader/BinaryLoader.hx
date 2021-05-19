@@ -26,22 +26,15 @@ class BinaryLoader {
 	}
 
 	public static function dbQuery(url:String,dbAP:DBAccessProps, onLoaded:DbData->Void) {
-		trace(dbAP);
 		trace(url);
+		//trace(dbAP);
+		trace('${dbAP.classPath}.${dbAP.action} filter:${dbAP.filter} table:${dbAP.table}');
 		var s:Serializer = new Serializer();
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbAP);//.toHex();
 		//Out.dumpObject(dbQuery);
 		var b:Bytes = s.serialize(dbQuery);
-		//trace(dbQuery.getSerializeSchema());
-		//trace(dbQuery.relations.get('contacts').fields);
-		//dbQuery.dump('/tmp/dbQuery.json');
-		//trace(dbQuery);
-		//trace('b.length:${b.length}');
 		bl.param = b.getData();
-		//bl.param = new FileReader().readAsBinaryString(s.serialize(new DbQuery(dbQuery)));
-		//trace(bl.param);
-		//trace(bl.param.toHex().length + ' :: ' + bl.param.toString().length + ' : ' + bl.param.length);
 		bl.cB = onLoaded;
 		bl.load();
 		return bl.xhr;

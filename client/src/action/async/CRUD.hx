@@ -143,8 +143,9 @@ class CRUD
 						if(data.dataErrors.toString() != '{}')
 						{
 							dispatch(Status(Update( 
-								{	className:'error',
-									text:(param.resolveMessage==null?'':param.resolveMessage.failure)				
+								{	className:'error',						
+									//text:(param.resolveMessage==null?'':param.resolveMessage.failure)
+									text:(param.resolveMessage==null?data.dataErrors.toString():param.resolveMessage.failure)
 								}
 							)));							
 							reject(param.resolveMessage);
@@ -153,7 +154,7 @@ class CRUD
 
 							dispatch(Status(Update( 
 								{	className:'',
-									text:(param.resolveMessage==null?'':param.resolveMessage.success)				
+									text:(param.resolveMessage==null?'':param.resolveMessage.success)		
 								}
 							)));
 							resolve('updated');

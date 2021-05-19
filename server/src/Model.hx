@@ -245,7 +245,7 @@ class Model
 	}
 
 		
-	public function doSelect():NativeArray
+	public function  doSelect():NativeArray
 	{	
 		var sqlBf:StringBuf = new StringBuf();
 
@@ -892,19 +892,18 @@ class Model
 
 	public static function binary():DbQuery
 	{
-		//S.safeLog(Std.string(SuperGlobal._POST));
 		trace(Global.count(SuperGlobal._POST));
-		var postKV = SuperGlobal._POST.keyValueIterator();
-		trace(postKV.hasNext()?'Y':'N');
-		if(postKV.hasNext())
-			return json(postKV);
-		//var d:DbQuery = new DbQuery();
-		//trace(Global.file_get_contents('php://input'));
+		if(Global.count(SuperGlobal._POST)>0){
+			var postKV = SuperGlobal._POST.keyValueIterator();
+			trace(postKV.hasNext()?'Y':'N');
+			if(postKV.hasNext())
+				return json(postKV);			
+		}
+		
 		var pData = Bytes.ofString((
 			Lib.isCli()? Sys.args()[0]:
 			Global.file_get_contents('php://input')));
-		//var pData = Bytes.ofString(Web.getPostData());
-		//trace(Web.getPostData());
+
 		trace(pData.length);
 		if(pData.length==0)
 		{

@@ -357,6 +357,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 					text:(r.error==null?'':r.error)
 				}
 			)));
+			setState({action:'showImportedReturnDebit',loading:false});
 		});
 		
 	}

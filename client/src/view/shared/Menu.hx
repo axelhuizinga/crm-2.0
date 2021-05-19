@@ -276,7 +276,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			trace(Type.getClass(props.parentComponent));
 			return;
 		}
-		trace(Type.getClass(props.parentComponent));
+		//trace(Type.getClass(props.parentComponent));
 		props.parentComponent.state.sideMenu.instance = this;
 		if(props.sameWidth && state.sameWidth == null)
 		{

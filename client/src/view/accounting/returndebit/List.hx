@@ -1,5 +1,6 @@
 package view.accounting.returndebit;
 
+import db.DbRelation;
 import haxe.Serializer;
 import js.html.Event;
 import action.DataAction;
@@ -167,6 +168,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				table:'debit_return_statements',
 				limit:props.limit,
 				offset:offset>0?offset:0,
+				relations: ["booking_requests" => new DbRelation({
+					alias:dataDisplay["rDebitData"].joins[0].alias,
+					columns:dataDisplay["rDebitData"].joins[0].columns,
+					jCond:dataDisplay["rDebitData"].joins[0].on,
+					table:dataDisplay["rDebitData"].joins[0].table
+					})
+				],
 				resolveMessage:{					
 					success:'Rücklastschriften wurde geladen',
 					failure:'Rücklastschriften konnte nicht geladen werden'
@@ -253,14 +261,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			case 'listReturnDebit':				
 				jsx('				
 				<Grid id="contactList" data=${state.dataTable}
-				${...props} dataState = ${dataDisplay["rDebitList"]} 
+				${...props} dataState = ${dataDisplay["rDebitData"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
-				');		/*
-				jsx('
-					<Table id="importedReturnDebit" data=${state.dataTable} selectAble=${false}
-					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${{function()return BaseForm.renderPager(this);}} 
-					className="is-striped is-hoverable"  parentComponent=${this} fullWidth=${true}/>
-				');					*/
+				');		
 			default:
 				state.data==null?null:
 				jsx('<div className="hint">${state.data.get('hint')}</div>');				

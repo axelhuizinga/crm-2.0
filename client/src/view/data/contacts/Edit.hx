@@ -400,7 +400,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 		trace(props.match.params.action);
 		switch (props.match.params.action)
-		//switch ('update')
 		{
 			case 'insert':
 				for(f in fieldNames)

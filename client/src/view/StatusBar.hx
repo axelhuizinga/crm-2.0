@@ -103,15 +103,17 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	
 	override public function render()
 	{
-		var display_name:String = 'Gast';
 		var userIcon:String = 'fa fa-user-o';
+		var display_name:String = 'Gast';
+		var display_text:String = props.text;
 		if(!Std.isOfType(props.text,String))
 		{
 			//Out.dumpObject(props.text);
 			trace(Reflect.fields(props));
-			if(true||props.text==null)
+			if(false||props.text==null)
 				trace(props);
-			return null;
+			//return null;
+			display_text = '';
 		}
 		//trace(props);
 		if (props.userState.dbUser != null)
@@ -125,7 +127,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		<Footer>
 			<div className="statusbar">
 				<span className="column" >${props.path}</span>	
-				<span className="main column ${props.className}" >${props.text}</span>			
+				<span className="main column ${props.className}" >${display_text}</span>			
 				<span className="column flex-end">
 				<i className=${userIcon}></i> $display_name</span>
 				<$DateTime />			

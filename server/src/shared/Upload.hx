@@ -75,6 +75,7 @@ class Upload {
 					S.send(result,true);
 				}
 				catch(e:Exception){
+					trace(e.details);
 					S.send(Json.stringify({error:e.details}),true);
 				}
 

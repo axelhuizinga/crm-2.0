@@ -357,7 +357,9 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 					text:(r.error==null?'':r.error)
 				}
 			)));
-			setState({action:'showImportedReturnDebit',loading:false});
+			
+			setState({action:'ReturnDebitsFileSelected',data:['hint'=>'Importfehler:${Std.string(r.error)}'],loading:false});
+			//setState({action:'showError', errors: ['Importfehler'=>Std.string(r.error)],loading:false});
 		});
 		
 	}
@@ -433,7 +435,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 							case 'deals':
 								'Spende';	
 							default:
-								model;														
+								model;											
 						}
 					},orm);
 				}				
@@ -466,7 +468,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				${...props} dataState=${dataDisplay["rDebitList"]} key="importedReturnDebitList" 
 				parentComponent=${this} className="is-striped is-hoverable" />			
 				'));			
-
+			case 'showError':
+				return jsx('				
+					<div className="hint">Fehler:${state.errors.toString()}</div>					
+			');	
 			default:
 				if(state.data != null && state.data.exists('hint')){
 					jsx('<div className="hint" key="loadReturnDebitsFile" ><h3>${state.data.get('hint')}</h3></div>');

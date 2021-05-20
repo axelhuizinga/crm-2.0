@@ -1,4 +1,6 @@
 package;
+import db.DbRelation;
+import haxe.ds.StringMap;
 import php.Exception;
 import php.Lib;
 import me.cunity.debug.Out;
@@ -340,5 +342,15 @@ class Util
 			trace(pos.fileName+':'+pos.lineNumber+'::'+log);
 		else 
 			Global.file_put_contents(Debug.logFile,log, 8);
+	}
+
+	public static function rels2string(rels:StringMap<DbRelation>):String {
+		var s:String = '';
+		for(k=>v in rels.keyValueIterator()){
+			s += '$k:' + Reflect.fields(v).join('|') + "\n";
+			//s += '$k:' + Type.typeof(v) + "\n";
+			//s += '$k:' + Std.string(v) + "\n";
+		}
+		return s;
 	}
 }

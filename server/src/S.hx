@@ -1,4 +1,5 @@
 package;
+import shared.Utils;
 import haxe.Exception;
 import haxe.CallStack;
 import db.DBAccessProps;
@@ -156,6 +157,7 @@ class S
 			params = dbQuery.dbParams;
 			trace(dbQuery.dbParams);
 			trace(dbQuery.relations);
+			trace(Util.rels2string(dbQuery.relations));
 			S.devIP = params['devIP'];
 			//if(dbQuery!=null)trace(dbQuery.dbUser);
 			var ipost = Lib.hashOfAssociativeArray(SuperGlobal._POST);

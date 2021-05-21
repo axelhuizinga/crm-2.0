@@ -3,7 +3,7 @@ import haxe.ds.IntMap;
 import shared.DbData;
 import state.UserState;
 
-typedef DataSource =
+typedef DBsource =
 {
     ?dataBase:String,
     ?dbTable:String,
@@ -26,6 +26,6 @@ typedef DataAccessState =
 	?accountData:IntMap<Map<String,Dynamic>>,	
 	?returnDebitsData:IntMap<Map<String,Dynamic>>,	
 	?dealsDbData:DbData,
-    ?source:DataSource,
+    ?source:DBsource,
     ?waiting:Bool
 }

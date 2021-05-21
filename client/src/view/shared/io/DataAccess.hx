@@ -15,7 +15,7 @@ typedef BaseView = Map<String,BaseField>;
    keys = tablenames[?'alias',?'fields',?'jCond',?'filter']:String
 **/
    
-typedef DataSource = Map<String,Map<String,String>>;
+typedef DataSource = Map<String,Map<String,Dynamic>>;
    
 typedef DataView = Map<String,FormField>;
 

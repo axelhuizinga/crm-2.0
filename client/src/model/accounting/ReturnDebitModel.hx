@@ -31,28 +31,37 @@ class ReturnDebitModel
 	/**
 	 * Array<Map TableName => Map<String,DataColumn>>
 	 */
-	 static var joins:Array<DataJoin> = [{
-		alias: 'br',
-		columns: [
-			'ag_name'=>{label:'Name', flexGrow:0, className: 'tLeft'},
-			//'id'=>{label:'KontaktID', flexGrow:0, className: 'tLeft tableNums'},
-			'value_date'=>{label: 'Wertstellung',cellFormat:function(v:Dynamic){
-				if(v==null)
-					return null;
-				trace(v);
-				return DateTools.format(Date.fromString(v), "%d.%m.%Y");
-			}},
-			'sepa_code'=>{label:'Sepa Code' },
-			/*'ag_konto_or_iban'=>{
-				alias:'iban', label:'Iban', className: 'tableNums', flexGrow:1, headerClassName: 'tRight'
-			},*/						
-			'deal_id'=>{label: 'SpendenID', className: 'tableNums'},		
-			'ba_id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
-			'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
-			//'processed'=>{label: 'Verarbeitet'}		
-		],	 
-		table: 'booking_requests'
-	 }];
+	static var joins:Array<DataJoin> = [
+		{
+			alias: 'drs',
+			columns: base,
+			jCond: '',
+			table: 'debit_return_statements'
+		},
+		{
+			alias: 'br',
+			columns: [
+				'ag_name'=>{label:'Name', flexGrow:0, className: 'tLeft'},
+				//'id'=>{label:'KontaktID', flexGrow:0, className: 'tLeft tableNums'},
+				'value_date'=>{label: 'Wertstellung',cellFormat:function(v:Dynamic){
+					if(v==null)
+						return null;
+					trace(v);
+					return DateTools.format(Date.fromString(v), "%d.%m.%Y");
+				}},
+				'sepa_code'=>{label:'Sepa Code' },
+				/*'ag_konto_or_iban'=>{
+					alias:'iban', label:'Iban', className: 'tableNums', flexGrow:1, headerClassName: 'tRight'
+				},*/						
+				'deal_id'=>{label: 'SpendenID', className: 'tableNums'},		
+				'ba_id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
+				'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
+				//'processed'=>{label: 'Verarbeitet'}		
+			],	 
+			jCond:'',
+			table: 'booking_requests'
+	 	}
+	];
 
 	public static var base:Map<String,DataColumn> = [
 		'ag_name'=>{label:'Name', flexGrow:0, className: 'tLeft'},

@@ -15,6 +15,11 @@ using StringTools;
  */
 class Config
 {
+	/**
+	 * [Load configuration from file in javascript format]
+	 * @param cjs 
+	 * @return Map<String,Dynamic>
+	 */
 	public static function load(cjs:String) :Map<String,Dynamic>
 	{
 		var js:String = File.getContent(cjs);

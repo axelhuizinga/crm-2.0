@@ -524,31 +524,44 @@ class S
 
 	public static function safeLog(what:Dynamic,?pos:PosInfos):Void
 	{		
-		// TODO: ADD Const.FILE_APPEND
+		// TODO: ADD Const.FILE_APPEND  2 haxe.git
+		//trace(pos);
+		Util.safeLog(what,false,pos);
+		/*
 		var fields:Array<String> = Reflect.fields(what);
+		trace(fields.join('|'), pos);
 		for (f in fields)
 		{
 			if(f.indexOf('pass') > -1 || f.indexOf('__hx')>-1)
 			{
 				continue;
 			}
-			var cName:String = Type.getClassName(Type.getClass(Reflect.field(what,f)));
-			Util.safeLog(cName, pos);
-			if(cName=='Array'){
-				return Util.safeLog(cast(Reflect.field(what,f),Array<Dynamic>).filter(function (f:Dynamic) {
+			var val:Dynamic = Reflect.field(what,f);
+			if(Type.typeof(val)==TUnknown){
+				Util.safeLog([for (k in Lib.hashOfAssociativeArray(val).keys())k].join('|'),pos);
+			}
+			Util.safeLog(Std.string(Type.typeof(val)) + ':' + Std.isOfType(val, Array),pos);
+			var cName:String = Type.getClassName(Type.getClass(val));
+			//trace(cName + ':' + val + ':' + Std.isOfType(val, Array),pos);
+			//if(cName=='Array'){
+			if(Std.isOfType(val, Array)){
+			//Util.safeLog(cName, pos);
+				Util.safeLog(cast(val,Array<Dynamic>).filter(function (f:Dynamic) {
 					return cast(f, String).indexOf('pass') == -1;
 				}).join(','), pos);
+				continue;
 			}
 			if(cName.indexOf('.')>-1)
 			{
 				Util.safeLog('recurse4 $cName', pos);
-				return Util.safeLog(Reflect.field(what,f), pos);
+				Util.safeLog(val, pos);
+				continue;
 			}
-			Util.safeLog(Reflect.field(what,f), pos);
+			Util.safeLog(val, pos);
 		}
 		//trace(what);
 		return;
-		dumpNativeArray(what, pos);
+		dumpNativeArray(what, pos);*/
 	}
 
 	public static function columnDefaults(table:String, schema:String = 'crm'):Array<ColDef>
@@ -740,7 +753,7 @@ class S
 			trace(stmt.errorInfo());
 		return success;
 	}	
-	//static function __init__() {
+	
 	static function init() {		
 		var branch:String = #if dev 'dev' #else 'crm' #end;
 		_SERVER = Lib.hashOfAssociativeArray(SuperGlobal._SERVER);
@@ -750,17 +763,15 @@ class S
 		Global.require_once('$home/../.crm/functions.php');
 		Global.require_once('$home/../.crm/db.php');		
 		Debug.logFile = Syntax.code("$appLog");
-		haxe.Log.trace = Debug._trace;
+		haxe.Log.trace = Debug._trace;		
 		if(Lib.isCli()){
 			//Cli.process(Sys.args(), new CliService()).handle(Cli.exit);
 			trace('helloworld :)');
-
 			Lib.print(Syntax.code("$appLog")  + "\r\n");//();
 			trace(Global.ini_get('error_log'));
 			trace(Sys.args());
 		}		
 		else{
-			Debug.logFile = Syntax.code("$appLog");
 			haxe.Log.trace = Debug._trace;
 			Out.skipFields = ['admin','keyPhrase','pass','password'];			
 		}
@@ -782,13 +793,18 @@ class S
 		dbViciBoxPass = Syntax.code("$DB_vicibox_pass");
 		host = Global.gethostname();
 		//request_scheme = Syntax.code("$_SERVER['REQUEST_SCHEME']");
-		trace('run on branch:$branch @ $db');
+		trace('run on branch:$branch @ $db Debug.logFile:${Debug.logFile}');
 		secret = Syntax.code("$secret");
 		//edump(Syntax.code("$conf"));
 		conf =  Config.load('$home/appData.js');
-		var ini:NativeArray = Syntax.code("$ini");
-		conf.set('ini', ini);		
-		safeLog(conf.get('ini'));
+		var ini:NativeArray = Syntax.code("$ini");		
+		//trace(ini);	
+		var hIni:Map<String,Dynamic> = Lib.hashOfAssociativeArray(ini);
+		//trace(conf);	
+		conf.set('ini', ini);	
+		trace(Type.typeof(conf.get('ini')) + ':' + conf.exists('ini') + ':' + Reflect.fields(conf.get('ini')));	
+		safeLog({vicidial:hIni.get('vicidial')});
+		//
 		new DbData();
 		new DbUser(null);
 		new DbRelation(null);

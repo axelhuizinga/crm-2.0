@@ -1,4 +1,5 @@
 package;
+import haxe.Unserializer;
 import db.DbRelation;
 import haxe.ds.StringMap;
 import php.Exception;
@@ -337,20 +338,74 @@ class Util
 		return s;
 	}
 
-	public static function safeLog(log:String, ?pos:PosInfos) {
+	public static function safeLog(what:Dynamic, recursive:Bool = false, ?pos:PosInfos) {
+		var fields:Array<String> = Reflect.fields(what);
+		//trace(fields.join('|'), pos);
+		var sLog:String = '';
+		for (f in fields)
+		{
+			if(f.indexOf('pass') > -1 || f.indexOf('__hx')>-1)
+			{
+				continue;
+			}
+			var val:Dynamic = Reflect.field(what,f);
+			if(Type.typeof(val)==TUnknown){				
+				//Util.safeLog([for (k in Lib.hashOfAssociativeArray(val).keys())k].join('|'),pos);
+				sLog += '$f:';
+				for (k=>v in Lib.hashOfAssociativeArray(val).keyValueIterator()){
+					sLog += k.indexOf('pass') == -1 ? '$k:${Std.string(v)}' : '$k:xxx';
+				};
+				sLog += '\n';
+				continue;
+			}
+			//Util.safeLog(Std.string(Type.typeof(val)) + ':' + Std.isOfType(val, Array),pos);
+			//trace(cName + ':' + val + ':' + Std.isOfType(val, Array),pos);
+			//if(cName=='Array'){
+			if(Std.isOfType(val, Array)){
+				sLog += '$f:' + cast(val,Array<Dynamic>).filter(function (f:Dynamic) {
+					return cast(f, String).indexOf('pass') == -1;
+				}).join(',');
+				sLog += '\n';
+				continue;
+			}
+			var cName:String = Type.getClassName(Type.getClass(val));
+			if(cName.indexOf('.')>-1)
+			{
+				//Util.safeLog('recurse4 $cName', pos);
+				sLog += '$f:';
+				sLog += Util.safeLog(val, true, pos);
+				continue;
+			}			
+		}
+		/**
+		 * return String from recursive call
+		 */
+		if(recursive)
+			return sLog;
+
 		if(Lib.isCli())
-			trace(pos.fileName+':'+pos.lineNumber+'::'+log);
+			trace(pos.fileName+':'+pos.lineNumber+'::'+sLog);
 		else 
-			Global.file_put_contents(Debug.logFile,log, 8);
+			Global.file_put_contents(Debug.logFile,
+				pos.fileName+':'+pos.lineNumber+'::'+ Std.string(sLog) + "\n", Const.FILE_APPEND);
+		return null;
 	}
 
 	public static function rels2string(rels:StringMap<DbRelation>):String {
 		var s:String = '';
+		if(rels==null)
+			return s;
 		for(k=>v in rels.keyValueIterator()){
 			s += '$k:' + Reflect.fields(v).join('|') + "\n";
 			//s += '$k:' + Type.typeof(v) + "\n";
 			//s += '$k:' + Std.string(v) + "\n";
 		}
 		return s;
+	}
+
+	public static function unserialize(serialized:String):Dynamic {
+		//var s:Serializer = new Serializer();
+		//return s.unserialize(Bytes.ofString(serialized));
+		return Unserializer.run(serialized);
 	}
 }

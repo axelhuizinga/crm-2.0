@@ -1,0 +1,74 @@
+package model.admin;
+
+
+import haxe.extern.EitherType;
+import php.Lib;
+import php.NativeArray;
+import me.cunity.php.db.*;
+import php.Syntax;
+import php.db.PDOStatement;
+import sys.db.*;
+import comments.CommentString.*;
+using Lambda;
+using Util;
+
+/**
+ * ...
+ * @author axel@bi4.me
+ */
+
+
+class Configure extends Model 
+{
+	public function new(?param:Map<String,String>) 
+	{
+		//table = 'contacts';
+		super(param);
+		go();
+	}
+
+	function go():Void {
+		trace(action);
+		switch(action ){
+			case 'xxx':
+				dev();
+			case _:
+				run();
+		}		
+	}	
+
+	function dev() {
+		var sql:String = comment(unindent, format) /*
+			SELECT hx_serial FROM ux_config WHERE id = 22;
+		*/;	
+		var stmt:PDOStatement = S.dbh.query(sql);
+		if(stmt.execute()){
+			var res:Dynamic Util.unserialize(stmt.fetchColumn(0));
+			trace(res);
+			S.send(Json.stringify(res),true);
+		};
+	}
+
+	override function run():Void
+	{
+		var sql:String = comment(unindent, format) /*
+			SELECT string_agg(table_name, ',')
+			FROM information_schema.tables 
+			WHERE table_schema LIKE 'crm' GROUP BY (table_schema)
+		*/;
+		//trace(sql);
+		var getSEPACodes:PDOStatement = S.dbh.query(sql);
+		if (!untyped getSEPACodes)
+		{
+			trace(S.dbh.errorInfo());
+			Sys.exit(0);
+		}
+		getSEPACodes.execute(null);
+		trace(getSEPACodes.rowCount);
+
+		var SEPACodes:Array<String> = getSEPACodes.fetchColumn().split(',');
+		trace(SEPACodes);
+		json_encode();
+	}
+
+}

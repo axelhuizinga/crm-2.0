@@ -29,7 +29,7 @@ typedef DBAccessJsonResponse = {
 typedef DBAccessProps = {	
 	>DBAccessAction,	
 	?relations:Map<String,DbRelation>,
-	?dataSource:Map<String,Map<String,Dynamic>>,	
+	?dataSource:DataSource,//Map<String,Map<String,Dynamic>>,	
 	?dbUser:DbUser,
 	?devIP:String,	
 	?extDB:Bool,	

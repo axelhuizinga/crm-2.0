@@ -31,7 +31,7 @@ typedef DataJoin = {
 	?alias:String,	
 	columns:Map<String,DataColumn>,
 	?db:String,
-	?on:String,
+	?jCond:String,
 	table:String,
 }
 

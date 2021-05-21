@@ -1,6 +1,6 @@
 package shared;
 import db.DbQuery;
-import state.DataAccessState.DataSource;
+import state.DataAccessState;
 import state.UserState;
 import haxe.ds.Map;
 import hxbit.Schema;
@@ -20,7 +20,6 @@ typedef DbRequestParam = {
 	?filter:Dynamic,
 	?limit:Int,
 	?maxImport:Int,
-//	?pages:Int,
 	?offset:Int,
 	?table:String,
 	?userState:UserState

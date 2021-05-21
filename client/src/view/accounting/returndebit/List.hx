@@ -171,7 +171,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				relations: ["booking_requests" => new DbRelation({
 					alias:dataDisplay["rDebitData"].joins[0].alias,
 					columns:dataDisplay["rDebitData"].joins[0].columns,
-					jCond:dataDisplay["rDebitData"].joins[0].on,
+					jCond:dataDisplay["rDebitData"].joins[0].jCond,
 					table:dataDisplay["rDebitData"].joins[0].table
 					})
 				],

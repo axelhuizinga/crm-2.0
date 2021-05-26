@@ -445,15 +445,16 @@ class S
 		if(Lib.isCli())
 			return;
 		Web.setHeader('Content-Type', cType);
-		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
-		//Web.setHeader("Access-Control-Allow-Credentials", "false");
+
 		if(S.devIP!=null&&S.devIP!=''){
+		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
+		Web.setHeader("Access-Control-Allow-Credentials", "true");			
 			Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
 			trace('https://${S.devIP}:9000');
 		}
 		else {
-			Web.setHeader("Access-Control-Allow-Origin", '*');
-			Out.dumpStack(CallStack.callStack());
+			//Web.setHeader("Access-Control-Allow-Origin", '*');
+			//Out.dumpStack(CallStack.callStack());
 			trace('no devIP? ${S.devIP}<<<');
 		}
 		headerSent = true;	

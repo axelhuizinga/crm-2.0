@@ -114,6 +114,9 @@ class Forms extends Model
 				'sql'=>sql,
 				'id'=>Std.string(Syntax.code("{0}['id']",rD))]);
 			}
+			else{
+				S.sendInfo(dbData, ['setView' => 'OK', 'updatedRows' => stmt.rowCount()]);
+			}
 		}
 		catch(ex:Exception){
 			trace(ex);

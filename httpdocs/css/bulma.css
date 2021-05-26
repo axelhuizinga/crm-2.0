@@ -398,9 +398,9 @@ pre {
   background-color: whitesmoke;
   color: #4a4a4a;
   font-size: 0.875em;
-  overflow-x: auto;
+  /*overflow-y: auto;*/
   padding: 1.25rem 1.5rem;
-  white-space: pre;
+  white-space: pre-wrap;
   word-wrap: normal;
 }
 

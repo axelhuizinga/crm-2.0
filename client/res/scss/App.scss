@@ -514,10 +514,10 @@ input::-moz-focus-inner {
 	flex-direction: column;
 	flex-grow:1;
 	margin:0 auto 0.8rem auto;	
-	max-width: min-content;
+	max-width: 80%;
 	min-width: 80%;
 
-	/*min-height: 0;
+	/*min-height: 0;max-width: min-content;
 	overflow-x: auto;*/
 }
 .tabComponentForm table,
@@ -713,7 +713,8 @@ form.modal-card-body{
 	flex-direction: column;
 	flex-grow: 1;
 	/*margin: 0.8rem 0 0 0.8rem;*/
-	overflow-y: auto;
+	overflow: auto;
+	max-width: 82%;
 }
 
 /*FORMS * ELEMENTS*/
@@ -842,6 +843,9 @@ label.panel-heading {
     /*min-height: 0px;
      height: 100%;
     -bottom: #{$statusBarHeight}px; */
+}
+.pwrap{
+	white-space: pre-wrap;
 }
 
 /*tables*/

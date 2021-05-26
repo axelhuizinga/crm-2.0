@@ -140,6 +140,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 
 		pro.then(function(viewData:DataView) {
 			trace(viewData);
+			setState({action:'getView', dataTable: [['row'=>1]],data: ['view'=>viewData]});
 		},function(whatever:Dynamic) {
 			trace(whatever);
 		});
@@ -172,14 +173,25 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 				},			
 				function (res:DbData) {
 					trace(res);
+					if(res.dataErrors.keys().hasNext()){
+						reject(res);
+					}
+					else{
+						resolve(res);
+					}
 				}
 			);
 		});
 
-		pro.then(function(jsonData:String) {
-			trace(jsonData);
-		},function(whatever:Dynamic) {
+		pro.then(function(dbData:DbData) {
+			var info:Map<String,Dynamic> = dbData.dataInfo;
+			trace(info);
+			setState({action:'setView', dataTable: [['row'=>1]],data: ['SetView'=>info['setView'],'Zeilen geändert:'=>info['updatedRows']]});
+		},function(whatever:DbData) {
 			trace(whatever);
+			if(whatever.dataInfo.exists('loginTask')){
+				
+			}
 		});
 	}
 	/**
@@ -347,11 +359,13 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
+		trace(state.action);
 		if (state.dataTable != null)
-		return switch(props.match.params.action)
+		return switch(state.action)
+		//return switch(props.match.params.action)			
 		{
-			case 'getView':
-				jsx('<div className=""><div><pre>${Std.string(state.data)}</pre></div></div>');
+			case 'getView'|'setView':
+				jsx('<div className=""><pre className="pwrap">${Std.string(state.data)}</pre></div>');
 			case 'showFieldList':
 				//trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');

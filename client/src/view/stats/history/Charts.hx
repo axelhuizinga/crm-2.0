@@ -115,7 +115,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
 
-	var formFields:DataView;
+	var formFields:DataDisplay;
 	var formRef:ReactRef<FormElement>;
 	var fieldNames:Array<String>;
 	var baseForm:BaseForm;

@@ -113,7 +113,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	}
 	public function getView():Void
 	{
-		var pro:Promise<Dynamic> = new Promise<DataView>(function(resolve, reject){
+		var pro:Promise<Dynamic> = new Promise<DataDisplay>(function(resolve, reject){
 			if (!props.userState.dbUser.online)
 			{
 				trace('LoginError');
@@ -138,7 +138,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			);
 		});
 
-		pro.then(function(viewData:DataView) {
+		pro.then(function(viewData:DataDisplay) {
 			trace(viewData);
 			setState({action:'getView', dataTable: [['row'=>1]],data: ['view'=>viewData]});
 		},function(whatever:Dynamic) {

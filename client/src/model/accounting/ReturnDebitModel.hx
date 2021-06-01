@@ -28,20 +28,36 @@ class ReturnDebitModel
 		}
 	];
 
-	/**
-	 * Array<Map TableName => Map<String,DataColumn>>
-	 */
-	static var joins:Array<DataJoin> = [
+	public static var listReturnDebitColumns:Map<String,DataColumn> = [
+		'zahlpfl_name'=>{label:'Name', flexGrow:0, className: 'tLeft'},
+		'value_date'=>{label: 'Wertstellung',cellFormat:function(v:Dynamic){
+			if(v==null)
+				return null;
+			trace(v);
+			 return DateTools.format(Date.fromString(v), "%d.%m.%Y");
+		}},
+		'sepa_code'=>{label:'Sepa Code' },
+		'iban'=>{label:'Iban', className: 'tableNums', flexGrow:1, headerClassName: 'tRight'},						
+		'deal_id'=>{label: 'SpendenID', className: 'tableNums'},		
+		'ba_id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
+		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
+		//'processed'=>{label: 'Verarbeitet'}
+	];	
+
+	public static var listReturnDebitJoins:Array<DBQueryParam> = [
 		{
 			alias: 'drs',
-			columns: base,
+			columns: ['zahlpfl_name'=>{
+				label: 'Name',
+
+			}],
 			jCond: '',
 			table: 'debit_return_statements'
 		},
 		{
 			alias: 'br',
 			columns: [
-				'ag_name'=>{label:'Name', flexGrow:0, className: 'tLeft'},
+				//'ag_name'=>{label:'Name', flexGrow:0, className: 'tLeft'},
 				//'id'=>{label:'KontaktID', flexGrow:0, className: 'tLeft tableNums'},
 				'value_date'=>{label: 'Wertstellung',cellFormat:function(v:Dynamic){
 					if(v==null)
@@ -81,7 +97,7 @@ class ReturnDebitModel
 	];
 
 	public static var gridColumns:Map<String,DataColumn> = [
-		'ag_name'=>{label:'Name', flexGrow:0, className: 'tLeft'},
+		//'ag_name'=>{label:'Name', flexGrow:0, className: 'tLeft', type:Hidden},
 		//'id'=>{label:'KontaktID', flexGrow:0, className: 'tLeft tableNums'},
 		'value_date'=>{label: 'Wertstellung',cellFormat:function(v:Dynamic){
 			if(v==null)
@@ -119,9 +135,19 @@ class ReturnDebitModel
 		'rDebitList' => {columns:gridColumns},
 		'rDebitData' => {
 			columns:base, 
-			joins:joins,
+			joins:null,
 			table:'debit_return_statements',
 			tableAlias:'drs'
 		}
 	];
+
+	public static var listReturnDebitsDisplay:Map<String,DataState> = [
+		'rDebitList' => {columns:listReturnDebitColumns},
+		'rDebitData' => {
+			columns:listReturnDebitColumns, 
+			joins:null,
+			table:'debit_return_statements',
+			tableAlias:'drs'
+		}
+	];	
 }

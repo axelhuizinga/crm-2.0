@@ -46,7 +46,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	];
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
-	var formFields:DataView;
+	var formFields:DataDisplay;
 	var fieldNames:Array<String>;
 	var baseForm:BaseForm;		
 	var dbData: shared.DbData;

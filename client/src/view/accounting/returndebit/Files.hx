@@ -115,7 +115,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	var formDataDisplay:Map<String,Map<String,DataState>>;
 	var formApi:FormApi;
 	var formBuilder:FormBuilder;
-	var formFields:DataView;
+	var formFields:DataDisplay;
 	var dealsFormRef:ReactRef<FormElement>;
 	var formRef:ReactRef<FormElement>;
 	var fieldNames:Array<String>;

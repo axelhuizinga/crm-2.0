@@ -3,6 +3,9 @@ package data;
 import view.shared.FormField;
 import haxe.Constraints.Function;
 
+/**
+ * Fields to connect DataState with DataDisplay
+ */
 typedef DataColumn = 
 {
 	?alias:String,
@@ -27,7 +30,10 @@ typedef DataColumn =
 	?useInTooltip:Int,//-1 = not, n = position
 }
 
-typedef DataJoin = {
+/**
+ * DB Query Parameters
+ */
+typedef DBQueryParam = {
 	?alias:String,	
 	columns:Map<String,DataColumn>,
 	?db:String,
@@ -40,7 +46,7 @@ typedef DataState =
 	?altGroupPos:Int,
 	columns:Map<String,DataColumn>,
 	?defaultSearch:Map<String,DataColumn>,
-	?joins:Array<DataJoin>,
+	?joins:Array<DBQueryParam>,
 	?tableAlias:String,
 	?table:String,	
 	?search:Map<String,DataColumn>

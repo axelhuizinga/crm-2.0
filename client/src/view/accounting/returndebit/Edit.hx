@@ -99,7 +99,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var dataDisplay:Map<String,DataState>;
 	var formApi:FormApi;
 	var formBuilder:FormBuilder;
-	var formFields:DataView;
+	var formFields:DataDisplay;
 	var formRef:ReactRef<FormElement>;
 	var fieldNames:Array<String>;
 	var baseForm:BaseForm;

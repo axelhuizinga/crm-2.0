@@ -27,12 +27,13 @@ class BinaryLoader {
 
 	public static function dbQuery(url:String,dbAP:DBAccessProps, onLoaded:DbData->Void) {
 		trace(url);
+		trace(dbAP.relations);
 		//trace(dbAP);
 		trace('${dbAP.classPath}.${dbAP.action} filter:${dbAP.filter} table:${dbAP.table}');
 		var s:Serializer = new Serializer();
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbAP);//.toHex();
-		//Out.dumpObject(dbQuery);
+		Out.dumpObject(dbQuery.relations);
 		var b:Bytes = s.serialize(dbQuery);
 		bl.param = b.getData();
 		bl.cB = onLoaded;

@@ -3,7 +3,7 @@ import haxe.macro.Compiler.NullSafetyMode;
 import view.shared.FormBuilder;
 import me.cunity.tools.StringTool;
 import haxe.rtti.Meta;
-import view.shared.io.DataAccess.DataView;
+import view.shared.io.DataAccess.DataDisplay;
 import haxe.Constraints.Function;
 import haxe.rtti.CType.ClassField;
 import haxe.rtti.CType.Classdef;

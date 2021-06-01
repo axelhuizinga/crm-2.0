@@ -37,7 +37,7 @@ import view.shared.OneOf;
 import view.shared.MenuProps;
 import view.shared.MItem;
 import view.shared.io.DataFormProps;
-import view.shared.io.DataAccess.DataView;
+import view.shared.io.DataAccess.DataDisplay;
 import data.DataState;
 import react.ReactComponent;
 import react.ReactComponent.ReactFragment;
@@ -104,12 +104,12 @@ class FormApi
 		}
 	}
 
-	public function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,Dynamic>>
+	public function createStateValuesArray(data:Array<Map<String,String>>, view:DataDisplay):Array<Map<String,Dynamic>>
 	{
 		return [ for (r in data) createStateValues(r, view) ];
 	}
 	
-	public function createStateValues(data:Map<String,Dynamic>, view:DataView):Map<String,Dynamic>
+	public function createStateValues(data:Map<String,Dynamic>, view:DataDisplay):Map<String,Dynamic>
 	{
 		var vState:Map<String,String> = new Map();
 		trace(data.keys());

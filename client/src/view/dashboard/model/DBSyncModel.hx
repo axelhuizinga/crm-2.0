@@ -52,7 +52,7 @@ class DBSyncModel
 		}
 	}
 
-	public static function formFields(action:String):DataView {
+	public static function formFields(action:String):DataDisplay {
 		return switch(action){
 			case 'editTableFields':
 				[

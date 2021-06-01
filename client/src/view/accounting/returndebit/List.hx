@@ -66,7 +66,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	var dataDisplay:Map<String,DataState>;
 	var formApi:FormApi;
 	var formBuilder:FormBuilder;
-	var formFields:DataView;
+	var formFields:DataDisplay;
 	var fieldNames:Array<String>;
 	var baseForm:BaseForm;
 	var contact:Contact;
@@ -77,7 +77,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		_instance = this;
-		dataDisplay = ReturnDebitModel.dataGridDisplay;
+		//dataDisplay = ReturnDebitModel.dataGridDisplay;
+		dataDisplay = ReturnDebitModel.listReturnDebitsDisplay;
 		
 		//trace('...' + Reflect.fields(props));
 		//baseForm =new BaseForm(this);
@@ -160,7 +161,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			offset = Std.int(props.limit * ev.page);
 		}
 		trace(props.match.params);
-		var p:Promise<DbData> = props.load(
+		/*var p:Promise<DbData> = props.load(
 			{
 				classPath:'data.ReturnDebitStatements',
 				action:'get',
@@ -168,13 +169,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				table:'debit_return_statements',
 				limit:props.limit,
 				offset:offset>0?offset:0,
-				relations: ["booking_requests" => new DbRelation({
+				relations: null,/*["booking_requests" => new DbRelation({
 					alias:dataDisplay["rDebitData"].joins[0].alias,
 					columns:dataDisplay["rDebitData"].joins[0].columns,
 					jCond:dataDisplay["rDebitData"].joins[0].jCond,
 					table:dataDisplay["rDebitData"].joins[0].table
 					})
-				],
+				]
 				resolveMessage:{					
 					success:'Rücklastschriften wurde geladen',
 					failure:'Rücklastschriften konnte nicht geladen werden'
@@ -182,7 +183,42 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				dbUser:props.userState.dbUser,
 				devIP: App.devIP
 			}
-		);
+		);*/
+		var p:Promise<DbData> = props.load(
+			{
+				classPath:'data.ReturnDebitStatements',
+				action:'get',
+				relations:[
+					'debit_return_statements' => new DbRelation({
+						alias:'drs',
+						//columns:ReturnDebitModel.listReturnDebitJoins[0].columns,
+						fields:['sepa_code','iban','ba_id','amount','mandator','last_modified','processed','created_at','value_date'],
+						//filter:(props.match.params.id!=null?['id' =>props.match.params.id, 'mandator'=>'1']:['mandator'=>'1']),
+						jCond:ReturnDebitModel.listReturnDebitJoins[0].jCond,
+						//table:ReturnDebitModel.listReturnDebitJoins[0].table
+					}),				
+					'booking_requests' => new DbRelation({
+						fields:['zahlpfl_name','mandat_id'],
+						jCond:'drs.ba_id=ref_id'
+					})
+				],
+				limit:props.limit,
+				offset:offset>0?offset:0,
+				/*relations: null,["booking_requests" => new DbRelation({
+					alias:dataDisplay["rDebitData"].joins[0].alias,
+					columns:dataDisplay["rDebitData"].joins[0].columns,
+					jCond:dataDisplay["rDebitData"].joins[0].jCond,
+					table:dataDisplay["rDebitData"].joins[0].table
+					})
+				]*/
+				resolveMessage:{					
+					success:'Rücklastschriften wurde geladen',
+					failure:'Rücklastschriften konnte nicht geladen werden'
+				},
+				dbUser:props.userState.dbUser,
+				devIP: App.devIP
+			}
+		);		
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
 			setState({
@@ -260,7 +296,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'listReturnDebit':				
 				jsx('				
-				<Grid id="contactList" data=${state.dataTable}
+				<Grid id="returnDebitList" data=${state.dataTable}
 				${...props} dataState = ${dataDisplay["rDebitData"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
 				');		

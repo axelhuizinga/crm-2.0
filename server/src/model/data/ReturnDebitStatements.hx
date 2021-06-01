@@ -1,4 +1,5 @@
 package model.data;
+import db.DbRelation;
 import php.Syntax;
 import haxe.ds.StringMap;
 import haxe.ds.IntMap;
@@ -33,6 +34,8 @@ class ReturnDebitStatements extends Model
 	function go():Void {
 		trace(action);
 		switch(action ){
+			case 'get':
+				get();
 			case 'insert':
 				insert();
 			case 'sync':
@@ -41,6 +44,55 @@ class ReturnDebitStatements extends Model
 				run();
 		}		
 	}	
+
+	override function get() {
+		var fields:Array<String> = [];
+		trace(param.toString());
+		if(param.get('relations') != null)
+		{
+			dataSource = Unserializer.run(param.get('relations'));
+			//dataSource = TJSON.parse(param.get('dataSource'));
+		}
+		var fields:Array<String> = [];
+		if(dataSource != null)
+		{
+			trace(Std.string(dataSource));
+			var tKeys:Iterator<String> = dataSource.keys();
+			while(tKeys.hasNext())
+			{
+				var tableName = tKeys.next();
+				tableNames.push(tableName);
+				var tableProps:DbRelation = dataSource.get(tableName);
+				trace(Std.string(tableProps));
+
+				fields = fields.concat(buildFieldsSql(tableName, [
+					'alias' => tableProps.alias,
+					'fields' => tableProps.fields
+				]));
+				/*if(action == 'create')
+				{
+					fields.remove('id');
+					fieldNames = fields;
+					buildValues(tableProps.get('data'));
+					setSql = fields.map(function (_)return '?').join(',');
+					setSql = '($setSql)';
+				}*/
+				if(tableProps.filter != null)
+					filterSql += buildCond(tableProps.filter);
+				trace('filterSql:$filterSql::${1}');
+			}			
+			queryFields += fields.length > 0 ? fields.join(','):'';
+
+		}				
+		if (tableNames.length>1)
+		{
+			joinSql = buildJoin();
+		}			
+		trace('${action}:' + tableNames.toString());
+		trace(queryFields);
+		trace(setSql);		
+		super.get();
+	}
 
 	public function getStati(ids:Array<Int>,mandator:Int):Dynamic{
 		var endReasons:IntMap<String> = untyped Lib.hashOfAssociativeArray(query(

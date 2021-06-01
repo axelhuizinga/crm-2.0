@@ -52,7 +52,7 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 	var dataAccess:DataAccess;
 	var dataDisplay:Map<String,DataState>;
 	var contact:Contact;
-	var formFields:DataView;
+	var formFields:DataDisplay;
 	var fieldNames:Array<String>;
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;

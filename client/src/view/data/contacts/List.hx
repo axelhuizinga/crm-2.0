@@ -56,7 +56,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	var dataDisplay:Map<String,DataState>;
 	var formApi:FormApi;
 	var formBuilder:FormBuilder;
-	var formFields:DataView;
+	var formFields:DataDisplay;
 	var fieldNames:Array<String>;
 	var baseForm:BaseForm;
 	var contact:Contact;

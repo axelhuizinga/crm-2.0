@@ -8,7 +8,7 @@
 		}
 	],
 	"settings": {
-		"window.zoomLevel": 1.0,
+		"window.zoomLevel": 0,
 		"sshfs.configs": [
 			{
 				"root": "/tmp",

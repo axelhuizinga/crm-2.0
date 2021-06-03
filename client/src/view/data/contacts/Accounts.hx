@@ -80,7 +80,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	static function mapStateToProps(aState:AppState) 
 	{		
 		//trace(aState.userState);
-		trace(Reflect.fields(aState));
+		//trace(Reflect.fields(aState));
 		return {
 			userState:aState.userState
 		};
@@ -88,14 +88,14 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function delete(ev:ReactEvent):Void
 	{
-		trace(state.selectedRows.length);
+		//trace(state.selectedRows.length);
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
 	public function get():Void
 	{
 		//trace('hi :)');
-		trace(props.filter);
+		//trace(props.filter);
 		var offset:Int = 0;
 		//setState({loading:true});
 		//var contact = (props.location.state.contact);
@@ -117,7 +117,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 			}
 		);
 		p.then(function(data:DbData){
-			trace(data.dataRows.length); 
+			//trace(data.dataRows.length); 
 			setState({loading:false, dataTable:data.dataRows});
 		});
 	}
@@ -147,7 +147,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function loadData(id:Int):Void
 	{
-		trace('loading:$id');
+		//trace('loading:$id');
 		if(id == null)
 			return;
 		var p:Promise<DbData> = props.load(
@@ -176,7 +176,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 				state.actualStates.set(account.id, account);
 				state.loading = false;
 				account.state.actualState = account;
-				trace(untyped account.state.actualState.id + ':' + account.state.actualState.fieldsInitalized.join(','));
+				//trace(untyped account.state.actualState.id + ':' + account.state.actualState.fieldsInitalized.join(','));
 				props.parentComponent.registerORM('accounts',account);
 			}
 		});
@@ -192,7 +192,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.action)
 		{
 			case 'get':
-				trace(state.dataTable);
+				//trace(state.dataTable);
 				//jsx('<div>dummy</div>');
 				jsx('
 					<Grid id="accountsList" data=${state.dataTable}
@@ -206,8 +206,8 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');			
 			case 'insert':
-				trace(dataDisplay["accountsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
+				//trace(dataDisplay["accountsList"]);
+				//trace(state.dataTable[29]['id']+'<<<');
 				jsx('
 					<Grid id="accountsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} 

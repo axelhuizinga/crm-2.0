@@ -1,5 +1,8 @@
 package view.grid;
 
+import react.ReactUtil;
+import haxe.Exception;
+import js.html.TimeElement;
 import data.DataState;
 import react.ReactPaginate;
 import view.grid.GridProps;
@@ -104,7 +107,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 
 	public function renderPager(comp:Dynamic):ReactFragment
 	{
-		trace('pageCount=${comp.state.pageCount}');		
+		//trace('pageCount=${comp.state.pageCount}');		
 		if(Math.isNaN(comp.state.pageCount) || comp.state.pageCount<2)
 			return null;
 		return jsx('
@@ -166,7 +169,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		if(rdMap[fN]=='')
 			rdMap[fN] = null;
 		//trace(fN + '::' + rdMap[fN] + '::' + columnDataState.cellFormat);
-		//trace(rdMap);
+		//trace(fN + '::' +columnDataState);
 		return {
 			cellFormat:columnDataState.cellFormat,
 			className:(columnDataState.className==null?rowClass:columnDataState.className +' '+ rowClass),
@@ -175,24 +178,20 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			id:rdMap['id'],
 			name:fN,
 			pos:{column:column, row:row},
-			show:columnDataState.show != false
+			show:columnDataState.show != false,
+			title: rdMap['title']
 		};
 	}
 
 	function renderCells(rdMap:Map<String,Dynamic>, row:Int):ReactFragment
 	{
-		//trace(fieldNames.join('|'));
+		//trace(rdMap.toString());
 		//trace('|'+rdMap['h'].keys().next()+'|');
 		//trace(state.selectedRows.toString());
-		var title = '';
-		if(rdMap.exists('title')){
-			title = rdMap.get('title');
-		}
 		var column:Int = 0;
-		//var isSelected:Bool = state.selectedRows.exists(row);
+
 		var rowClass = (row % 2 == 0?'gridItem even':'gridItem odd');
-		//if(isSelected)
-			//rowClass += ' selected';
+
 		if(state.selectedRows.exists(rdMap.get('id')))
 			rowClass += ' selected';		
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
@@ -201,16 +200,24 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 
 		var rCs:Array<ReactFragment> = [];
 		//trace(cells.length);
-		for (cD in cells)
-		{
+		for (cD in cells){
+			// Map DataFieldName to DisplayFieldName, 		
+			if(props.dataState.titleMap!=null){
+				for( key => val in props.dataState.titleMap){
+					if(rdMap.exists(key)&&rdMap.exists(val)){
+						cD.title = rdMap.get(key);
+					}
+				}
+			}
+		}
+		for (cD in cells){
 			//trace(cD);"r"+cD.pos.row+"c"+cD.pos.column
 			//trace(row + ':' + cD.id + '_' + cD.pos.column);
-			if (!cD.show)
-			 continue;
-
-			rCs.push(
+			//trace(cD.name+':'+cD.title+':'+cD.show);
+			if (cD.show)
+				rCs.push(
 			jsx('<div className=${cD.className} key=${cD.id + '_' + cD.name} data-value=${cD.data} 
-			data-id=${cD.id} data-name=${cD.name} title=${title}
+			data-id=${cD.id} data-name=${cD.name} title=${cD.title}
 			data-gridpos=${cD.pos.row+"_"+cD.pos.column} onClick=${select} onDoubleClick=${editRow}>
 				${(cD.dataDisplay==null||cD.dataDisplay==''?<span>&nbsp;</span>:cD.dataDisplay)}
 			</div>'));

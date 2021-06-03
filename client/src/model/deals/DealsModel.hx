@@ -33,11 +33,11 @@ class DealsModel
 				'amount'=>{label:'Betrag', type:NFormat},
 				'product'=>{label:'Produkt',type:Select,options:['2'=>'Kinderhilfe','3'=>'Tierhilfe']},
 				//'agent'=>{label:'Agent'},
-				//'end_reason'=>{label:'Kündigungsgrund',type:DatePicker, displayFormat: "d.m.Y"},
+				//'sepa_code'=>{label:'Kündigungsgrund',type:DatePicker, displayFormat: "d.m.Y"},
 				'end_date'=>{label:'Beendet zum',type:DatePicker, displayFormat: "d.m.Y"},				
 				//'repeat_date'=>{label:'Zahlun',type:DatePicker, displayFormat: "d.m.Y"},				
 				'cycle_start_date'=>{label:'Turnus Startdatum',type:DatePicker, displayFormat: "d.m.Y"},
-				'end_reason'=>{className:'max50', label: 'Rückgabegrund',type: Select,options: [
+				'sepa_code'=>{className:'max50', label: 'Rückgabegrund',type: Select,options: [
 					'AC01'=>'Fehlerhafte/ungültige Kontonummer (IBAN fehlerhaft)',
 					'AC04'=>'Konto erloschen (Konto aufgelöst)',
 					'AC06'=>'Keine Angabe des Grundes (Konto gesperrt)',

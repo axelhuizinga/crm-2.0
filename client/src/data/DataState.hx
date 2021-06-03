@@ -1,5 +1,6 @@
 package data;
 
+import haxe.ds.Either;
 import view.shared.FormField;
 import haxe.Constraints.Function;
 
@@ -49,6 +50,10 @@ typedef DataState =
 	?joins:Array<DBQueryParam>,
 	?tableAlias:String,
 	?table:String,	
+	/**
+	 * Map DisplayColumFieldName to DataColumnFieldName
+	 */
+	?titleMap:Map<String,String>,	
 	?search:Map<String,DataColumn>
 }
 

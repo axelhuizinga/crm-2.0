@@ -1,5 +1,6 @@
 package model.accounting;
 
+import model.deals.DealsModel;
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
 import data.DataState.DataColumn;
@@ -27,8 +28,14 @@ class ReturnDebitModel
 			]
 		}
 	];
-
+	/**
+	 * function(v:String):String {
+			var s:Dynamic = DealsModel.dataAccess.get('open').view.get('sepa_code').get(v);
+			return(s==null?'':Std.string(s));
+		} }
+	 */
 	public static var listReturnDebitColumns:Map<String,DataColumn> = [
+		//'description'=>{show:false, titleMap:'sepa_code'},
 		'zahlpfl_name'=>{label:'Name', flexGrow:0, className: 'tLeft'},
 		'value_date'=>{label: 'Wertstellung',cellFormat:function(v:Dynamic){
 			if(v==null)
@@ -36,9 +43,9 @@ class ReturnDebitModel
 			trace(v);
 			 return DateTools.format(Date.fromString(v), "%d.%m.%Y");
 		}},
-		'sepa_code'=>{label:'Sepa Code' },
+		'sepa_code'=>{label:'Sepa Code'}, 
 		'iban'=>{label:'Iban', className: 'tableNums', flexGrow:1, headerClassName: 'tRight'},						
-		'deal_id'=>{label: 'SpendenID', className: 'tableNums'},		
+		'mandat_id'=>{label: 'SpendenID', className: 'tableNums'},		
 		'ba_id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
 		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
 		//'processed'=>{label: 'Verarbeitet'}
@@ -147,7 +154,8 @@ class ReturnDebitModel
 			columns:listReturnDebitColumns, 
 			joins:null,
 			table:'debit_return_statements',
-			tableAlias:'drs'
+			tableAlias:'drs',
+			titleMap:['description'=>'sepa_code']
 		}
 	];	
 }

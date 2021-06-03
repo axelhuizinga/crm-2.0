@@ -179,6 +179,7 @@ class Model
 		{
 			sqlBf.add(filterSql);
 		}
+		trace(sqlBf.toString());
 		var res:NativeArray = execute(sqlBf.toString());
 		return Lib.hashOfAssociativeArray(res[0]).get('count');
 	}

@@ -184,41 +184,53 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				devIP: App.devIP
 			}
 		);*/
-		var p:Promise<DbData> = props.load(
-			{
-				classPath:'data.ReturnDebitStatements',
-				action:'get',
-				relations:[
-					'debit_return_statements' => new DbRelation({
-						alias:'drs',
-						//columns:ReturnDebitModel.listReturnDebitJoins[0].columns,
-						fields:['sepa_code','iban','ba_id','amount','mandator','last_modified','processed','created_at','value_date'],
-						//filter:(props.match.params.id!=null?['id' =>props.match.params.id, 'mandator'=>'1']:['mandator'=>'1']),
-						jCond:ReturnDebitModel.listReturnDebitJoins[0].jCond,
-						//table:ReturnDebitModel.listReturnDebitJoins[0].table
-					}),				
-					'booking_requests' => new DbRelation({
-						fields:['zahlpfl_name','mandat_id'],
-						jCond:'drs.ba_id=ref_id'
-					})
-				],
-				limit:props.limit,
-				offset:offset>0?offset:0,
-				/*relations: null,["booking_requests" => new DbRelation({
-					alias:dataDisplay["rDebitData"].joins[0].alias,
-					columns:dataDisplay["rDebitData"].joins[0].columns,
-					jCond:dataDisplay["rDebitData"].joins[0].jCond,
-					table:dataDisplay["rDebitData"].joins[0].table
-					})
-				]*/
-				resolveMessage:{					
-					success:'Rücklastschriften wurde geladen',
-					failure:'Rücklastschriften konnte nicht geladen werden'
-				},
-				dbUser:props.userState.dbUser,
-				devIP: App.devIP
-			}
-		);		
+		/**
+		 * 				[
+					"contacts" => [
+						"alias" => 'co',
+						"fields" => '',
+						"jCond"=>'contact=co.id'
+					],
+					"deals" => ["alias" => 'da',
+						"fields" => null,
+						"jCond"=>'contact=co.id'
+					],
+					"accounts" =>["alias" => 'ac',
+						"fields" => ''
+					]
+				]
+		 */
+		var dS:db.DataSource = [
+			'debit_return_statements' => [
+				'alias' => 'drs',
+				'fields' => 'sepa_code,iban,ba_id,amount,mandator,last_modified,processed,created_at,value_date',
+				//	TODO: BUILD FILTER FUNCTION
+				//'filter' => (props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
+			],				
+			'booking_requests' => [
+				'fields' => 'zahlpfl_name,mandat_id',
+				'jCond' => 'drs.ba_id=ref_id'
+			],
+			'sepa_return_codes' => [
+				'fields' => 'description',
+				'jCond' => 'drs.sepa_code=code'
+			]
+		];
+		var params:Dynamic = {		
+			dbUser:props.userState.dbUser,
+			devIP: App.devIP,
+			jwt:props.userState.dbUser.jwt,
+			classPath:'data.ReturnDebitStatements',
+			action:'get',				
+			dataSource:Serializer.run(dS),
+			limit:props.limit,
+			resolveMessage:{					
+				success:'Rücklastschriften wurde geladen',
+				failure:'Rücklastschriften konnte nicht geladen werden'
+			},			
+			offset:(offset>0?offset:0)
+		};
+		var p:Promise<DbData> = props.load(params);		
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
 			setState({

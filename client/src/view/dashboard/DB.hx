@@ -55,8 +55,9 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		trace('${App.devIP} action:' + props.match.params.action);
-
-		dataDisplay = null;//DBFormsModel.dataDisplay;
+		
+		dataDisplay = DBFormsModel.dataDisplay;
+		//dataDisplay = null;//DBFormsModel.dataDisplay;
 		//var sideMenu = updateMenu('DB'); //state.sideMenu;
 		//state = {hasError:false, sideMenu:updateMenu('DB')};		
 		state = {formApi:new FormApi(this), hasError:false, sideMenu:props.sideMenu};		

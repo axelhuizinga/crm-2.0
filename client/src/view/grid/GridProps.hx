@@ -13,6 +13,7 @@ typedef DataCellPos =
 	column:Int,
 	row:Int
 }
+
 typedef DataCell =
 {
 	@:optional var cellFormat:Function;

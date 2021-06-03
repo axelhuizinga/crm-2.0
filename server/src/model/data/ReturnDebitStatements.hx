@@ -1,4 +1,5 @@
 package model.data;
+import db.DataSource;
 import db.DbRelation;
 import php.Syntax;
 import haxe.ds.StringMap;
@@ -48,10 +49,9 @@ class ReturnDebitStatements extends Model
 	override function get() {
 		var fields:Array<String> = [];
 		trace(param.toString());
-		if(param.get('relations') != null)
+		if(param.get('dataSource') != null)
 		{
-			dataSource = Unserializer.run(param.get('relations'));
-			//dataSource = TJSON.parse(param.get('dataSource'));
+			dataSource = Unserializer.run(param.get('dataSource'));
 		}
 		var fields:Array<String> = [];
 		if(dataSource != null)
@@ -62,13 +62,10 @@ class ReturnDebitStatements extends Model
 			{
 				var tableName = tKeys.next();
 				tableNames.push(tableName);
-				var tableProps:DbRelation = dataSource.get(tableName);
+				var tableProps:DataSource = dataSource.get(tableName);
 				trace(Std.string(tableProps));
 
-				fields = fields.concat(buildFieldsSql(tableName, [
-					'alias' => tableProps.alias,
-					'fields' => tableProps.fields
-				]));
+				fields = fields.concat(buildFieldsSql(tableName, tableProps));
 				/*if(action == 'create')
 				{
 					fields.remove('id');
@@ -77,8 +74,8 @@ class ReturnDebitStatements extends Model
 					setSql = fields.map(function (_)return '?').join(',');
 					setSql = '($setSql)';
 				}*/
-				if(tableProps.filter != null)
-					filterSql += buildCond(tableProps.filter);
+				if(tableProps.exists('filter'))
+					filterSql += buildCond(tableProps.get('filter'));
 				trace('filterSql:$filterSql::${1}');
 			}			
 			queryFields += fields.length > 0 ? fields.join(','):'';
@@ -89,8 +86,8 @@ class ReturnDebitStatements extends Model
 			joinSql = buildJoin();
 		}			
 		trace('${action}:' + tableNames.toString());
-		trace(queryFields);
-		trace(setSql);		
+		trace(queryFields);		
+		trace(setSql);	
 		super.get();
 	}
 

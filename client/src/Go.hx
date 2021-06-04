@@ -13,12 +13,7 @@ class Go
 	public static function main()
 	{
 		Log.trace = Out._trace;
-		trace('hi :) ${Out.suspended}');	
-		var t:IntMap<haxe.ds.Map<String,Dynamic>> = new IntMap();
-		t.set(0, ["hello"=>"world"]);
-		t.set(1, ["org"=>666]);
-		//trace(Type.getInstanceFields(Type.getClass(t)));
-		trace(t.remove(0));
+		trace('hi :) ${!Out.suspended}');	
 		render(createRoot());
 	}
 

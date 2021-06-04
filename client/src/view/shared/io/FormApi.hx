@@ -74,12 +74,10 @@ class FormApi
 	public var section:ReactComponent;
 	var comp:ReactComponentOf<DataFormProps,FormState>;
 	var sM:MenuProps;
-	var _me:FormApi;
 	
 	public function new(rc:ReactComponentOf<DataFormProps,FormState>,?sM:MenuProps)
 	{
 		comp = rc;
-		_me = this;
 		//trace(Type.getClass(comp));
 		//requests = [];
 		if(rc.props != null)
@@ -91,7 +89,7 @@ class FormApi
 			//trace(this.sM);
 		}
 		//trace('>>>${props.match.params.action}<<<');
-		trace(Reflect.fields(sM));
+		//trace(Reflect.fields(sM));
 	}	
 
 	public function doAction(?defaultAction:String):Void

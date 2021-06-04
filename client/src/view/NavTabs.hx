@@ -28,7 +28,7 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 	
 	public function new(?props:NavProps, ?context:Dynamic) 
 	{
-		trace(Reflect.fields(props));
+		//trace(Reflect.fields(props));
 		//trace(context);
 		super(props);		
 	}

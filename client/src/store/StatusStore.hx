@@ -18,12 +18,12 @@ class StatusStore
 			date:Date.now(),
 			userState:null
 		}
-		trace(initState);
+		//trace(initState);
 	}
 	public function reduce(state:StatusState, action:StatusAction):StatusState
 	{		
 		//trace(action);
-		trace(state);
+		//trace(state);
 		return switch(action)
 		{
 			case Update(status):

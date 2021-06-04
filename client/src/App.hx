@@ -109,7 +109,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		});
 		//var dataStore:DataAccessState = loadFromLocalStorage();
 		//trace(dataStore);		
-		trace(rootReducer); 
+		//trace(rootReducer); 
 		//return createStore(rootReducer, {dataStore:loadFromLocalStorage()},  
 		return createStore(rootReducer, null,  
 			Redux.applyMiddleware(
@@ -147,14 +147,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	static function startHistoryListener(store:Store<AppState>, history:History):TUnlisten
 	{
 		//trace(history);
-		store.dispatch(Location(InitHistory(history/*,
-		{
-			pathname:store.getState().locationStore.redirectAfterLogin,
-			search:'',
-			hash:'',
-			key:'',
-			state:{}
-		}*/)));
+		store.dispatch(Location(InitHistory(history)));
 	
 		return history.listen( function(location:Location, action:history.Action){
 			trace(location.pathname);			
@@ -173,9 +166,9 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		var ti:Timer = null;
 		store = initStore(BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}));
 		state = store.getState();
-		trace(Reflect.fields(state));
+		//trace(Reflect.fields(state));
 		//trace(config);
-		trace(devIP);
+		//trace(devIP);
 		//trace(state);
 		tul = startHistoryListener(store, state.locationStore.history);
 		//store.subscribe(saveToLocalStorage);
@@ -198,7 +191,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			},250);
 		}
 		//trace(store);
-		Out.dumpObject(state.userState);
+		//Out.dumpObject(state.userState);
 		//CState.init(store);		
 		if (!(state.userState.dbUser.id == null || state.userState.dbUser.jwt == ''))
 		{			
@@ -223,11 +216,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 					UserAction.LoginRequired(
 						ReactUtil.copy( state.userState, {waiting:false}))));
 		}
-
-		//trace(state.userState.jwt);
-		
-		//state.history.listen(CState.historyChange);
-		trace(Reflect.fields(state));
+		//trace(Reflect.fields(state));
 	}
 	
 	function load():Promise<DbData> {

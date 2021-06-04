@@ -305,7 +305,7 @@ class UserAccess {
 			//trace('clientVerify');
 			return new Promise(function(resolve, reject){
 				var state:AppState = getState();
-				trace(state.userState.dbUser);
+				//trace(state.userState.dbUser);
 				//trace(Type.getClass(state.userState.dbUser));
 				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
 				'${App.config.api}', 
@@ -329,11 +329,12 @@ class UserAccess {
 				},			
 				function(data:DbData)
 				{
-					trace(data);
+					//trace(data);
 					if(data.dataInfo.exists('verify') && data.dataInfo.get('verify')=='OK'){
+						trace(data.dataInfo.get('verify'));
 						return resolve(data);
 					}
-					trace(data.dataErrors.empty());
+					//trace(data.dataErrors.empty());
 					if (!data.dataErrors.empty())
 					{
 						trace(data.dataErrors);

@@ -139,6 +139,7 @@ class LiveDataAccess
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			if(props.id == null)
 				return null;
+			trace(props.data);
 			var aState:AppState = getState();
 			var tableRoot:Array<String> = FormApi.getTableRoot(props.match);			
 			trace(tableRoot);
@@ -176,9 +177,11 @@ class LiveDataAccess
 					case 'ReturnDebits':
 						sData = sSelectType(props.id, props.data, sData, props.selectType);
 						//trace(sData);
-						trace('${tableRoot[2]}/${Std.parseInt(props.data.get(props.id).get('deal_id')) }');
-						trace(props.match.params);
-						trace(props.match.path);
+						//trace(Type.getClass(props.data));
+						//if(props.data!=null&&props.data.exists(props.id))
+						//trace('${tableRoot[2]}/${Std.parseInt(props.data.get(props.id).get('deal_id')) }');
+						//trace(props.match.params);
+						//trace(props.match.path);
 						aState.locationStore.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}',
 						{activeUrl:'${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}'});
 						dispatch(DataAction.SelectReturnDebits(sData));
@@ -194,6 +197,8 @@ class LiveDataAccess
 
 	static function sSelectType(id:Int,data:IntMap<Map<String,Dynamic>>,sData:IntMap<Map<String,Dynamic>>, sT:SelectType):IntMap<Map<String,Dynamic>>
 	{
+		trace(sT);
+		trace(data);
 		return switch(sT)
 		{
 			case All:

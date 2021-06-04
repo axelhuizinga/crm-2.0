@@ -21,11 +21,10 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 {
 	public var initState:LocationState;
 	public var store:StoreMethods<AppState>;
-	var _trace:Bool;
 
 	public function new(history:History) 
 	{
-		_trace = false;
+		Out.suspended = true;
 		initState = {
 			history:history,
 			lastModified:Date.now(),
@@ -35,28 +34,28 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 					(Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname);
 				case true:
 					var args:Map<String,Dynamic> = Browser.location.pathname.argList(['action','jwt','user_name','opath']);
-					if(_trace) trace(args);
+					trace(args);
 					args.get('opath');
 			}
 			// (Browser.location.pathname=='/'?'/DashBoard':Browser.location.pathname)
 		};	
 		Out.dumpObject(initState);
+		Out.suspended = false;
 	}
 
 	public function reduce(state:LocationState, action:LocationAction):LocationState
 	{
-		if(_trace) trace(state.history.location);
-		if(store != null)
-		if(_trace) trace(Reflect.fields(store));
+		trace(state.history.location.pathname);		
+		//if(store != null)trace(Reflect.fields(store));
 		return switch(action)
 		{
 			case InitHistory(history):
-				if(_trace) Out.dumpObject(state);
+				//Out.dumpObject(state);
 				copy(state, {
 					history:history
 				});
 			case LocationChange(location):
-				if(false&&_trace) trace(location.pathname);
+				trace(location.pathname);
 				copy(state, location);				
 			default:
 				state;
@@ -65,15 +64,15 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 
 	public function middleware(action:LocationAction, next:Void -> Dynamic):Dynamic
 	{
-		if(_trace) trace(action);
-		if(_trace) trace(Reflect.fields(store.getState()));
+		//trace(action);
+		//trace(Reflect.fields(store.getState()));
 		
 		var history = store.getState().locationStore.history;//App._app.state.locationState.history;
 		//var history = App._app.state.locationStore.history;
 		return switch(action)
 		{
 			/*case LocationChange(location):
-				if(_trace) trace(location.pathname);
+				trace(location.pathname);
 				history.push(location.pathname);
 				{};
 			case Pop(url, state):

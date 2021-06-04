@@ -40,8 +40,8 @@ class ReturnDebitModel
 		'value_date'=>{label: 'Wertstellung',cellFormat:function(v:Dynamic){
 			if(v==null)
 				return null;
-			trace(v);
-			 return DateTools.format(Date.fromString(v), "%d.%m.%Y");
+			//trace(v);
+			return DateTools.format(Date.fromString(v), "%d.%m.%Y");
 		}},
 		'sepa_code'=>{label:'Sepa Code'}, 
 		'iban'=>{label:'Iban', className: 'tableNums', flexGrow:1, headerClassName: 'tRight'},						

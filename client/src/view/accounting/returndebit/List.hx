@@ -146,7 +146,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{	
 		dataAccess = ReturnDebitModel.dataAccess;
-		trace(props.match.params.action);
+		//trace(props.match.params.action);
 		//state.formApi.doAction('get');
 		if(props.match.params.action=='listReturnDebit')
 			listReturnDebit();
@@ -154,56 +154,17 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 	public function listReturnDebit(?ev:Dynamic):Void
 	{
-		trace('hi $ev');
+		//trace('hi $ev');
 		var offset:Int = 0;
 		if(ev != null && ev.page!=null)
 		{
 			offset = Std.int(props.limit * ev.page);
 		}
-		trace(props.match.params);
-		/*var p:Promise<DbData> = props.load(
-			{
-				classPath:'data.ReturnDebitStatements',
-				action:'get',
-				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
-				table:'debit_return_statements',
-				limit:props.limit,
-				offset:offset>0?offset:0,
-				relations: null,/*["booking_requests" => new DbRelation({
-					alias:dataDisplay["rDebitData"].joins[0].alias,
-					columns:dataDisplay["rDebitData"].joins[0].columns,
-					jCond:dataDisplay["rDebitData"].joins[0].jCond,
-					table:dataDisplay["rDebitData"].joins[0].table
-					})
-				]
-				resolveMessage:{					
-					success:'Rücklastschriften wurde geladen',
-					failure:'Rücklastschriften konnte nicht geladen werden'
-				},
-				dbUser:props.userState.dbUser,
-				devIP: App.devIP
-			}
-		);*/
-		/**
-		 * 				[
-					"contacts" => [
-						"alias" => 'co',
-						"fields" => '',
-						"jCond"=>'contact=co.id'
-					],
-					"deals" => ["alias" => 'da',
-						"fields" => null,
-						"jCond"=>'contact=co.id'
-					],
-					"accounts" =>["alias" => 'ac',
-						"fields" => ''
-					]
-				]
-		 */
+	
 		var dS:db.DataSource = [
 			'debit_return_statements' => [
 				'alias' => 'drs',
-				'fields' => 'sepa_code,iban,ba_id,amount,mandator,last_modified,processed,created_at,value_date',
+				'fields' => 'id,sepa_code,iban,ba_id,amount,mandator,last_modified,processed,created_at,value_date',
 				//	TODO: BUILD FILTER FUNCTION
 				//'filter' => (props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
 			],				
@@ -228,11 +189,14 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				success:'Rücklastschriften wurde geladen',
 				failure:'Rücklastschriften konnte nicht geladen werden'
 			},			
-			offset:(offset>0?offset:0)
+			offset:(offset>0?offset:0),
+			joinID:'drs.id'
 		};
 		var p:Promise<DbData> = props.load(params);		
-		p.then(function(data:DbData){
-			trace(data.dataRows.length); 
+		p.then(function(data:DbData){			
+			//trace(data.dataRows.length); 
+			if(data.dataRows.length>0)
+				trace(data.dataRows[0]); 
 			setState({
 				loading:false,
 				dataTable:data.dataRows,
@@ -276,20 +240,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		});
 	}	
 
-	public function loadLocal() {
-		var finput = cast Browser.document.getElementById('returnDebitFile');
-		//var files = php.Lib.hashOfAssociativeArray(finput.files);
-		
-		trace(finput.files);
-		trace(Reflect.fields(finput));
-		js.Syntax.code("console.log({0})",finput.files);
-		trace(finput.value);				
-	}
-
 	override function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		trace(props.match.params.section);		
+		//trace(props.match.params.section);		
 		return state.formApi.render(jsx('
 		<>
 			<form className="tabComponentForm2"  >
@@ -300,10 +254,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.action + ':' + Std.string(state.dataTable != null));
+		//trace(props.match.params.action + ':' + Std.string(state.dataTable != null));
 		if(state.loading)
 			return state.formApi.renderWait();
-		trace('###########loading:' + state.loading +' state.action:' + state.action);
+		//trace('###########loading:' + state.loading +' state.action:' + state.action);
 		return switch(state.action)
 		{
 			case 'listReturnDebit':				

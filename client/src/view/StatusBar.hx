@@ -59,12 +59,12 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	
 	public function new(?props:StatusBarProps,?context:Dynamic)
 	{
-		trace(Reflect.field(this,'setState'));
+		//trace(Reflect.field(this,'setState'));
 		state = ReactUtil.copy(props, {date:Date.now()});
 		super(props);
 		trace(Reflect.fields(state).join('|'));
-		trace(state.userState.dbUser.id);
-		trace(Reflect.field(this,'setState'));
+		//trace(state.userState.dbUser.id);
+		//trace(Reflect.field(this,'setState'));
 	}
 	
 	override public function componentDidMount():Void 
@@ -72,16 +72,16 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		mounted = true;
 		var d:Date = Date.now();
 		var s:Int = d.getSeconds();
-		trace('start delay at $s set timer start in ${(60 - s ) } seconds');
+		//trace('start delay at $s set timer start in ${(60 - s ) } seconds');
 		Timer.delay(function(){
-			trace('timer start at ${Date.now().getSeconds()}');
+			//trace('timer start at ${Date.now().getSeconds()}');
 			//this.setState({ date: Date.now()});
 			state.date = Date.now();
 			timer = new Timer(60000);
 			timer.run = function() this.setState({ date: Date.now()});
 		}, (60 - d.getSeconds()) * 1000);
 		
-		trace(props.children);
+		//trace(props.children);
 	}
 	
 	override public function componentWillUnmount()

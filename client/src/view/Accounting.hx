@@ -38,7 +38,7 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 	
 	public function new(?props:Dynamic, context:Dynamic)
 	{
-		trace(context);
+		//trace(context);
 		//this.state = App.store.getState();
 		super(props);
 		//trace(this.state);

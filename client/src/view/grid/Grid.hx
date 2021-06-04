@@ -65,7 +65,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			//trace(k);
 			fieldNames.push(k);
 		}	
-		trace(fieldNames);
+		//trace(fieldNames);
 		state = {
 			_prevent:false,
 			_selecting:false,
@@ -78,8 +78,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	
 	override public function render():ReactFragment
 	{
-		if(props.data != null)
-		trace(props.data.length);
+		//if(props.data != null)trace(props.data.length);
 		//trace(props.className);		
 		if (props.data == null || props.data.length == 0)
 		{
@@ -93,7 +92,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		}		
 	
 		var headerRows:ReactFragment = renderHeaderDisplay();
-		trace('pageCount=${props.parentComponent.state.pageCount} dataCount=${props.parentComponent.state.dataCount} limit=${props.parentComponent.props.limit}');	
+		//trace('pageCount=${props.parentComponent.state.pageCount} dataCount=${props.parentComponent.state.dataCount} limit=${props.parentComponent.props.limit}');	
 
 		return jsx('		
 		<Fragment>
@@ -204,7 +203,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			// Map DataFieldName to DisplayFieldName, 		
 			if(props.dataState.titleMap!=null){
 				for( key => val in props.dataState.titleMap){
-					if(rdMap.exists(key)&&rdMap.exists(val)){
+					if(cD.name==val && rdMap.exists(key)&&rdMap.exists(val)){
 						cD.title = rdMap.get(key);
 					}
 				}
@@ -217,7 +216,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			if (cD.show)
 				rCs.push(
 			jsx('<div className=${cD.className} key=${cD.id + '_' + cD.name} data-value=${cD.data} 
-			data-id=${cD.id} data-name=${cD.name} title=${cD.title}
+			data-id=${cD.id} data-name=${cD.name} title=${cD.title} 
 			data-gridpos=${cD.pos.row+"_"+cD.pos.column} onClick=${select} onDoubleClick=${editRow}>
 				${(cD.dataDisplay==null||cD.dataDisplay==''?<span>&nbsp;</span>:cD.dataDisplay)}
 			</div>'));
@@ -244,7 +243,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			trace(Type.getClassName(Type.getClass(props.parentComponent)));
 			return;
 		}
-		trace('ok ${gridRef}');
+		//trace('ok ${gridRef}');
 		props.parentComponent.state.dataGrid=this;
 		var grid:Element = gridRef.current;
 		grid.style.setProperty('grid-template-columns', gridStyle);
@@ -264,7 +263,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		Timer.delay(function() {
 			state._prevent = false;
 		},clickDelay*2);
-		trace('here we go :)');
+		trace('here we go :)'+props.onDoubleClick);
 		if(props.onDoubleClick != null){
 			props.onDoubleClick(ev);
 		}

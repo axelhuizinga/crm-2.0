@@ -60,7 +60,7 @@ class FormBuilder {
 		requests = [];
 		if(rc.props != null)
 		{
-			trace(Reflect.fields(comp));
+			//trace(Reflect.fields(comp));
 		}
 		//dbData = new DbData();
 		//trace('>>>${props.match.params.acton}<<<');

@@ -69,7 +69,7 @@ class DBSyncModel
 			case 'importClientList':
 				[
 					'import_contacts'=>{label:'Kontakte',type:Checkbox, preset:true},
-					'contacts_limit'=>{label:'Anzahl',type:Input},
+					'contacts_limit'=>{label:'Anzahl',type:Text},
 					'import_deals'=>{label:'Aufträge',type:Checkbox, preset:true},
 					'import_accounts'=>{label:'Kontent', type:Checkbox, preset:true},
 				];
@@ -104,7 +104,7 @@ class DBSyncModel
 				],
 				view:[
 					'import_contacts'=>{label:'Kontakte',type:Checkbox, preset:true},
-					'contacts_limit'=>{label:'Anzahl',type:Input},
+					'contacts_limit'=>{label:'Anzahl',type:Text},
 					'import_deals'=>{label:'Aufträge',type:Checkbox, preset:true},
 					'import_accounts'=>{label:'Kontent', type:Checkbox, preset:true},
 				]

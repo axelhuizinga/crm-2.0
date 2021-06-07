@@ -197,24 +197,13 @@ class FormApi
 		{
 			trace(getUrl(eTarget.dataset.action));
 			trace(Type.getClassName(Type.getClass(comp)));
-			//comp.props.history.push(getUrl(eTarget.dataset.action));
-			//return true;			
-			/*var fun:Function = Reflect.field(targetSection,method);
-			if(Reflect.isFunction(fun))
-			{
-				Reflect.callMethod(targetSection,fun,[e]);
-				return true;
-			}
-			else{
-				trace('$method not found in $targetSection');			
-				return false;
-			}*/
 		}
 		return executeMethod(method);
 	}
 
 	function executeMethod(method:String, ?r:Array<Dynamic>) {
 		trace(method);		
+		trace( Type.getInstanceFields(Type.getClass(comp)).join('|'));
 		var fun:Function = Reflect.field(comp,method);
 		if(Reflect.isFunction(fun))
 		{

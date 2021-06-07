@@ -33,32 +33,7 @@ import view.table.Table;
 
 class BaseForm
 {
-	var comp:ReactComponentOf<DataFormProps,FormState>;
-
-	/**
-	 * 	function renderForm():ReactFragment
-	{
-		trace(state.loading + ':' + props.parentComponent.props.match.params.action);
-		if(state.loading)
-			return state.formApi.renderWait();
-		//return jsx('<div key="dummy">Dummy</div>');
-		////trace('###########loading:' + state.loading + ' state.actualState:${state.actualState}');
-		//return null;
-		return (state.actualState==null ? state.formApi.renderWait():
-			state.formBuilder.renderForm({
-				mHandlers:state.mHandlers,
-				fields:[
-					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
-				],
-				model:'deals',
-				//ref:formRef,
-				title: 'Bearbeite Spende' 
-			},state.actualState)
-		);	
-	}
-	 */
-
-
+	//var comp:ReactComponentOf<DataFormProps,FormState>;
 
 	public static function compareStates(comp:Dynamic) {
 		var dObj:ORM = cast(comp.state.actualState, ORM);
@@ -86,7 +61,26 @@ class BaseForm
 		//setState({comp.state.initialState:comp.state.actualState});
 	}
 
-	public function handleChange(e:Event) 
+	public static function filter(props:DataFormProps,?param:Dynamic):Dynamic {
+		var filter:Dynamic = copy({mandator:'1'},param);		
+		if(props.match.params.id!=null){
+			filter.id = props.match.params.id;
+		}
+		return filter;
+	}
+
+	public static function copy(ob:Dynamic, ?ob2:Dynamic):Dynamic {
+		var res:Dynamic = {};
+		for(f in Reflect.fields(ob)){
+			Reflect.setField(res,f,Reflect.field(ob,f));
+		}
+		for(f in Reflect.fields(ob2)){
+			Reflect.setField(res,f,Reflect.field(ob2,f));
+		}
+		return res;
+	}
+
+	/*public function handleChange(e:Event) get(BaseForm.filter(props, arg));
 	{
 		var el:Dynamic = e.target;
 		trace(Type.typeof(el));
@@ -100,7 +94,7 @@ class BaseForm
 		}	
 
 		//trace(comp.state.actualState);
-	}		
+	}	*/	
 
 	public static function initFieldNames(keys:Iterator<String>):Array<String> {
 		var fieldNames = new Array();
@@ -110,20 +104,13 @@ class BaseForm
 		}		
 		return fieldNames;
 	}
-	
-	/*public function sessionStore(classPath:String){
-		trace(comp.state.actualState);
-		Browser.window.sessionStorage.setItem(classPath,Json.stringify(comp.state.actualState));
-		Browser.window.removeEventListener('beforeunload', sessionStore);
-	}*/
 
 	/**
 	 * [Check if ORM data is modified]
 	 * @param path 
 	 * @param params 
 	 * @return Bool
-	 */
-	
+	 */	
 	public static function ormsModified(cmp:Dynamic):Bool {
 		var ormRefs:Map<String,ORMComps> = cast cmp.ormRefs;
 		for(model=>ormRef in ormRefs.keyValueIterator()){
@@ -162,7 +149,6 @@ class BaseForm
 	/**
 	 * PAGER HANDLING
 	 */
-
 	public static function renderPager(comp:Dynamic):ReactFragment
 	{
 		trace('pageCount=${comp.state.pageCount}');

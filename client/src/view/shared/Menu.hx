@@ -1,6 +1,10 @@
 package view.shared;
 
 //import js.lib.Reflect;
+//import model.FormInputElement;
+import view.shared.io.BaseForm;
+import js.html.NodeList;
+import js.html.Document;
 import state.AppState;
 import action.LocationAction;
 import js.html.ButtonElement;
@@ -25,6 +29,7 @@ import bulma_components.Button;
 import react.ReactRef;
 import redux.Redux.Dispatch;
 import redux.react.ReactRedux;
+import view.shared.FormInputElement;
 import view.shared.MItem;
 import view.shared.MenuBlock;
 import view.shared.MenuProps;
@@ -47,6 +52,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 {
 	var menuRef:ReactRef<DivElement>;
 	var aW:Int;
+	var hasForm:Bool;
 
 	static function mapDispatchToProps(dispatch:Dispatch):MenuProps
     {
@@ -71,7 +77,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		super(props);
 		//trace(props);
 		//trace(props.menuBlocks);
-		//trace(Reflect.fields(props));
+		hasForm = false;
 		state = {
 			hidden:props.hidden||false,
 			items: new StringMap()
@@ -90,6 +96,20 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		var item = state.items.get(id);
 		item.disabled = !enable;
 		return !item.disabled;
+	}
+
+	function find() {
+		var inputs:NodeList = Browser.document.querySelectorAll('.formRow .input');
+		trace(inputs.length);
+		var el:InputElement;
+		var param:Dynamic = {};
+		for(i in 0...inputs.length){
+			el = cast( inputs[i], InputElement);
+			trace(i+':'+ el.name + '::' + el.value);
+			if(el.value!='')
+				Reflect.setField(param, el.name,el.value);
+		}
+		props.parentComponent.get(BaseForm.filter(props.parentComponent.props,param));
 	}
 
 	function renderHeader():ReactFragment
@@ -152,8 +172,9 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	{
 		if (items == null || items.length == 0)
 			return null;
+		var B:ReactType = ${bulma_components.Button};
 		var i:Int = 1;
-		return items.map(function(item:MItem) 
+		var items =  items.map(function(item:MItem) 
 		{
 			if(item.id != null && !state.items.exists(item.id))
 			{
@@ -163,8 +184,10 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 
 			if(item.separator){ return jsx('<hr key=${i++} className="menuSeparator"/>');}
 			var type:FormInputElement;
-			type = (item.formField==null||item.formField.type==null?Button:item.formField.type);
+			type = (item.formField==null?Button:(item.formField.type==null?FormInputElement.Text: item.formField.type));
 			//trace(i + ':' + type);
+			if(type!=Button)
+				hasForm = true;
 			return switch(type)
 			{
 				//case Filter: jsx('<$Filter  key=${i++}/>');				
@@ -175,21 +198,30 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					<Button onClick=${item.handler} data-action=${item.action}
 				data-section=${item.section} disabled=${item.disabled}>${item.formField.submit}</Button>
 				</div>');*/
+				case Text:
+					jsx('<div key=${"uf"+(i++)}  id="findForm_${i}"   className="formRow" >
+					<label htmlFor=${item.formField.name} className="" >${item.label}</label>
+					<input  id=${item.formField.name} type="text" name=${item.formField.name} onChange=${item.formField.handleChange} className="input"  />
+				</div>');
 				case Upload:
 					//trace(item.formField.handleChange);
 					jsx('<div key=${"up"+(i++)}  id="uploadForm"  className="uploadBox" >
 					<input id=${item.formField.name} type="file" name=${item.formField.name} onChange=${item.formField.handleChange} className="fileinput"  />
 					<label htmlFor=${item.formField.name} className="button" >${item.label}</label>
-					<Button onClick=${item.handler} data-action=${item.action}
-				data-section=${item.section} disabled=${item.disabled}>${item.formField.submit}</Button>
+					<$B onClick=${item.handler} data-action=${item.action}
+				data-section=${item.section} disabled=${item.disabled}>${item.formField.submit}</$B>
 				</div>');
 
 				default:
 					//trace('key:${"bu"+(i)}');
-					jsx('<Button key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then}
-					data-section=${item.section} disabled=${item.disabled}>${item.label}</Button>');
+					jsx('<$B key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then}
+					data-section=${item.section} disabled=${item.disabled}>${item.label}</$B>');
 			}
 		}).array();
+		if(hasForm){
+			items.push(jsx('<$B key=${"bu"+(i++)} onClick=${find} data-action="find" data-then=${null}>Finden</$B>'));
+		}
+		return items;
 	}
 	
 	override public function render()

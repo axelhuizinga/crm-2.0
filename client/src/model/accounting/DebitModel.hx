@@ -24,7 +24,7 @@ class DebitModel
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},				
 				'mandator'=>{type:Hidden},
-				'zahlpfl_name'=>{type:Input},
+				'zahlpfl_name'=>{type:Text},
 			]
 		}
 	];

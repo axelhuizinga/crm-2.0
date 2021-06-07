@@ -72,8 +72,8 @@ class Data extends ReactComponentOf<DataProps,CompState>
 	{
 		mounted = true;
 		/*if(_trace) trace(props.history.location);
-		if(_trace) trace(props.location);
-		if(_trace) trace(props.match);*/
+		if(_trace) trace(props.location);*/
+		trace(props.match);
 		//internalRedirect();
 		//if(path != props.location.pathname)
 		//props.history.push(path);
@@ -116,18 +116,9 @@ class Data extends ReactComponentOf<DataProps,CompState>
 			//initChildren: function() dispatch()
 		};
     }
-	/*
-	static function mapStateToProps(aState:AppState) {
-		var uState:UserProps = aState.user;
-		if(_trace) trace(uState.first_name);
-		//if(_trace) trace(' ${aState.locationState.history.location.pathname + (aState.compState.exists('contacts') && aState.compState.get('contacts').isMounted ? "Y":"N")}');
-		
-		return {
-			appConfig:aState.config,
-			redirectAfterLogin:aState.locationStore.redirectAfterLogin,
-			userState:uState
-		};		
-	}		*/
+	function find() {
+		trace('OK');
+	}
 	
     override function render() 
 	{	

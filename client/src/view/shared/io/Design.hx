@@ -56,9 +56,7 @@ class Design extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props:DataFormProps)
 	{
 		super(props);		
-		//menuItems = [{handler:edit, label:'Bearbeiten', section:'update'}];
-		//sideMenu.menuBlocks['bookmarks'].items = function() return _menuItems;
-		//trace(sideMenu.menuBlocks['bookmarks'].items());
+
 		state = {
 			clean:true,
 			hasError:false,
@@ -66,25 +64,7 @@ class Design extends ReactComponentOf<DataFormProps,FormState>
 			loading:true,
 			sideMenu:{}, 
 		};
-		/*_menuItems = menuItems.map(function (mI:MItem){
-			var h:Event->Void = Reflect.field(this, mI.action);
-			trace(h);
-			mI.handler = h;
-			switch(mI.action)
-			{
-				case 'editTableFields':
-					mI.disabled = state.selectedRows.length==0;
-				case 'save':
-					mI.disabled = state.clean;
-				default:
 
-			}
-			return mI;
-
-		});*/
-		//this.state = state;
-		//super(props, state);
-		//trace(props);
 		trace(this.props);
 	}
 	

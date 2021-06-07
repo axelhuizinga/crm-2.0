@@ -37,7 +37,7 @@ $headPadding: 0.75rem 0.75rem 0.25rem 0.75rem;
 $ePad:0.3rem 0.64rem;
 $darkBlue: rgb(10,20,60);
 $strongViolet:#6b6ab3;
-$disabled: rgb(80,80,80);
+$disabled: rgb(124, 124, 124);
 $logoBlue: #3292ca;
 $paleBlue: rgb(140,190,240);
 $darkGreen: rgb(60,80,0);
@@ -846,6 +846,16 @@ label.panel-heading {
 }
 .pwrap{
 	white-space: pre-wrap;
+}
+.formRow{
+	display: grid;
+	grid-template-columns: 38% 62%;
+	align-content: space-around;
+}
+.formRow label{
+	min-height: 0;
+	max-height: 50%;
+	margin: auto 0;
 }
 
 /*tables*/

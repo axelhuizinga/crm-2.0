@@ -45,16 +45,18 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Neu', action:'insert',section: 'Edit'},		
 		{label:'Löschen',action:'delete'},
 		{label:'Auswahl aufheben',action:'selectionClear'},
-		{separator: true},
-		{formField: {
-			label: 'ID',dataTable: 'contacts', dataField: 'id'
-		}}
+		{separator: true},		
+		{label: 'ID',formField: { name: 'id'}},
+		{label: 'Vorname',formField: { name: 'first_name'}},
+		{label: 'Nachname',formField: { name: 'last_name'}},
+		{label: 'Telefon',formField: { name: 'phone_number'}},
+		{label: 'Ort',formField: { name: 'city'}},
 	//	{label:'Auswahl umkehren',action:'selectionInvert'},
 	//	{label:'Auswahl alle',action:'selectionAll'},
 	];
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
-	var formApi:FormApi;
+	public var formApi:FormApi;
 	var formBuilder:FormBuilder;
 	var formFields:DataDisplay;
 	var fieldNames:Array<String>;
@@ -116,20 +118,20 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
-	public function get(ev:Dynamic):Void
+	public function get(filter:Dynamic=null):Void
 	{
-		trace('hi $ev');
+		trace('hi $filter');
 		var offset:Int = 0;
-		if(ev != null && ev.page!=null)
+		if(filter != null && filter.page!=null)
 		{
-			offset = Std.int(props.limit * ev.page);
+			offset = Std.int(props.limit * filter.page);
 		}
 		trace(props.match.params);
 		var p:Promise<DbData> = props.load(
 			{
 				classPath:'data.Contacts',
 				action:'get',
-				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
+				filter:filter,
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				table:'contacts',
@@ -157,6 +159,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(state.selectedRows.length);	
 		trace(Reflect.fields(ev));
+	}
+	
+	public function find(arg:Map<String,Dynamic>):Void
+	{
+		trace(arg);
+		get(BaseForm.filter(props, arg));
 	}
 
 	public function restore() {

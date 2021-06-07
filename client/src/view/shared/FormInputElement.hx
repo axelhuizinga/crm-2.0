@@ -7,7 +7,7 @@ abstract FormInputElement(String)
 	var Hidden;
 	var DatePicker;
 	var DateTimePicker;	
-	var Input;
+	var Text;
 	var Password;
 	var Checkbox;
 	var Radio;

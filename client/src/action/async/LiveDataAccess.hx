@@ -207,10 +207,11 @@ class LiveDataAccess
 					sData.set(k,v);
 				sData;
 			case One:
-				if(sData==null)
+				/*if(sData==null)
 					sData = new IntMap();
 				sData.set(id,data.get(id));
-				sData;
+				sData;*/
+				[id => data.get(id)];
 			case Unselect:
 				sData.remove(id);
 				sData;

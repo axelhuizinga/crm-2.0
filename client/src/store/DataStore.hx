@@ -72,6 +72,7 @@ class DataStore
 			case SelectContacts(sData):				
 				trace(sData);
 				//trace(sData.keys().keysList());
+				trace(state.contactData.keys().keysList());
 				copy(state,{
 					contactData:sData
 				});

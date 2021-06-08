@@ -38,6 +38,7 @@ class DealsModel
 				//'repeat_date'=>{label:'Zahlun',type:DatePicker, displayFormat: "d.m.Y"},				
 				'cycle_start_date'=>{label:'Turnus Startdatum',type:DatePicker, displayFormat: "d.m.Y"},
 				'sepa_code'=>{className:'max50', label: 'Rückgabegrund',type: Select,options: [
+					'XXX'=>'',
 					'AC01'=>'Fehlerhafte/ungültige Kontonummer (IBAN fehlerhaft)',
 					'AC04'=>'Konto erloschen (Konto aufgelöst)',
 					'AC06'=>'Keine Angabe des Grundes (Konto gesperrt)',

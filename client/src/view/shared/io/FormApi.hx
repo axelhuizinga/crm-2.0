@@ -203,7 +203,8 @@ class FormApi
 
 	function executeMethod(method:String, ?r:Array<Dynamic>) {
 		trace(method);		
-		trace( Type.getInstanceFields(Type.getClass(comp)).join('|'));
+		//trace( Type.getInstanceFields(Type.getClass(comp)).join('|'));
+		//trace(Type.typeof(comp));
 		var fun:Function = Reflect.field(comp,method);
 		if(Reflect.isFunction(fun))
 		{

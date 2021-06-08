@@ -26,7 +26,7 @@ typedef DataFormProps =
 	?action:String,
 	?dataStore:state.DataAccessState,
     ?formApi:FormApi,
-	?filter:String,
+	?filter:Dynamic,
 	?fullWidth:Bool,	
 	?isActive:Bool,		
 	?id:Int,	

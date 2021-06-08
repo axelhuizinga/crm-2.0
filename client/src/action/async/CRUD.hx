@@ -89,12 +89,14 @@ class CRUD
 								reject(data);
 							}				
 						}
-						else
+						else{
+							//trace(param);
 							dispatch(Status(Update(
 							{
 								className: 'warn',
 								text: 'Keine Daten für ${Json.stringify(param.filter)} gefunden'
 							}))); 
+						}
 					}
 				);
 			});
@@ -130,7 +132,7 @@ class CRUD
 					function(data:DbData)
 					{				
 						//trace(data);
-						if(data.dataErrors != null)
+						if(data.dataErrors != null && data.dataErrors.keys().hasNext())
 							trace(data.dataErrors);
 						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
 							trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());

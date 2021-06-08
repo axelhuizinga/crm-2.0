@@ -117,7 +117,14 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 	public function get():Void
 	{
 		var offset:Int = 0;
-		trace(props.filter);
+		//trace(props.filter);
+		if(deal!=null)
+			trace(deal.id + ':' + deal.contact);
+		var filter:Dynamic = (deal!=null?{id:deal.id, contact:deal.contact, mandator:1}:{mandator:'1'});
+		if(props.filter!=null){
+			filter = BaseForm.copy(filter,props.filter);
+		}
+		trace(filter);
 		//setState({loading:true});	
 		state.loading=true;	
 		//var contact = (props.location.state.contact);
@@ -125,7 +132,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			{
 				classPath:'data.Deals',
 				action:'get',
-				filter:(props.filter!=null?props.filter:{mandator:'1'}),
+				filter:filter,
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				table:state.model,
@@ -225,12 +232,12 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				trace(data);
 				//if( mounted)
 				deal = new Deal(data);
-				trace(deal.id);				
+				trace(deal.id + ':' + deal.contact);				
 				//setState({loading:false, actualState:deal, initialData: copy(deal)});
 				//state = copy(state, {loading:false});
 				deal.state.actualState = deal;
 				state.actualStates.set(deal.id,deal);
-				trace(untyped deal.state.actualState.id + ':' + deal.state.actualState.fieldsInitalized.join(','));
+				//trace(untyped deal.state.actualState.id + ':' + deal.state.actualState.contact + ':' + deal.state.actualState.fieldsInitalized.join(','));
 				//setState({});
 				//trace(props.match);
 				//trace(props.location.pathname + ':' + untyped state.actualState.amount);
@@ -325,7 +332,8 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			//var it:Iterator<Deal> = props.parentComponent.state.ormRefs.get(state.model).orms.iterator();
 			var it:Iterator<ORM> = state.actualStates.iterator();
 			while(it.hasNext()){
-				var deal:ORM = it.next();
+				deal = cast(it.next(),Deal);
+				trace(deal.id + ':' + deal.contact);
 				if(deal.fieldsModified.length>0){
 					changed++;
 					var data2save = deal.allModified();
@@ -345,8 +353,8 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 					}
 					var p:Promise<Dynamic> = App.store.dispatch(CRUD.update(dbQ));
 					p.then(function(d:Dynamic){
-						trace(d);
-						get();
+						trace(d);						
+						//get();
 					});
 				}				
 			}

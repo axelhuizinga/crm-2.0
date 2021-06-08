@@ -116,6 +116,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,component:Contacts, ?selectType:SelectType)			
 			{
 				if(_strace) trace('select:$id selectType:${selectType}');
+				//trace(component.props);
 				//dispatch(DataAction.CreateSelect(id,data,match));
 				dispatch(LiveDataAccess.select({id:id,data:data,match:component.props.match,selectType: selectType}));
 			}

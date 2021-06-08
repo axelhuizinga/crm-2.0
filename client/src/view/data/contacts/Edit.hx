@@ -126,6 +126,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		formRef = React.createRef();
 		historyFormRef = React.createRef();
 		trace(props.match.params);
+		//TODO: EDIT MULTIPLE CONTACTS
+		if(props.dataStore.contactData != null)
+			props.match.params.id = Std.string(props.dataStore.contactData.keys().next());		
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/open(\/)*$/.match(props.match.params.action) )
 		{
@@ -288,7 +291,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace('mounted:' + mounted);
 		mounted = true;
 		trace(props.children);
-		loadContactData(Std.parseInt(props.match.params.id));
+
+		if(props.match.params.id != null)
+			loadContactData(Std.parseInt(props.match.params.id));	
 		trace(props.children);
 	}
 	

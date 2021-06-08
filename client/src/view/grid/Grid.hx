@@ -286,36 +286,33 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		state._selecting = true;
 		//trace(evtOrId);
 		var el:Element = (Std.is(evtOrId, Int)?
-		Browser.window.document.querySelector('.gridItem[data-id="${evtOrId}"]'):
-		cast (evtOrId._targetInst.stateNode, Element));
+			Browser.window.document.querySelector('.gridItem[data-id="${evtOrId}"]'):
+			cast (evtOrId._targetInst.stateNode, Element));
 		var rN:Int = Std.parseInt(el.dataset.id);
+		var rowCells = Browser.window.document.querySelectorAll('.gridItem[data-id="${el.dataset.id}"]');
+		var rowEls:Array<Element> = Syntax.code("Array.from({0})",rowCells);
 		var selectedNow:IntMap<Bool> = state.selectedRows.copy();
-
 		trace (el.dataset.id + ':' + state._selecting + ' ctrlKey:' + evtOrId.ctrlKey);
-		//rN = Std.parseInt(el.dataset.id);             
-		//rN = Std.parseInt(el.dataset.gridpos.split("_")[0]);
 		if(!evtOrId.ctrlKey && !evtOrId.shiftKey){
 			//clear selection only
-			state.selectedRows = new IntMap();	
 			if(selectedNow.exists(rN)){
-				setState({selectedRows:state.selectedRows});		
+				setState({selectedRows:new IntMap()});		
 				state._selecting = false;
+				props.parentComponent.props.select(el.dataset.id,[el.dataset.id => getRowData(rowEls)], props.parentComponent, SelectType.Unselect);
 				return;				
 			}
 			else{
-				state.selectedRows.set(rN, true);
-				trace(state.selectedRows);
+				//state.selectedRows = new IntMap();	
+				//state.selectedRows.set(rN, true);
+				selectedNow = [rN => true];
+				trace(selectedNow);
 			}
 		}
 		else {
 			//TODO: HANDLE SELECTION WITH MODIFIERS
-		}
-		
-		var rowCells = Browser.window.document.querySelectorAll('.gridItem[data-id="${el.dataset.id}"]');
-		//trace(rowCells.length + ':' + untyped rowCells.item(0).innerHTML);
-		var rowEls:Array<Element> = Syntax.code("Array.from({0})",rowCells);
-		setState({selectedRows:state.selectedRows});
-		//trace(el.dataset.id + ':' + rowEls[0].innerHTML + getRowData(rowEls).toString());
+		}		
+
+		setState({selectedRows:selectedNow});
 		props.parentComponent.props.select(el.dataset.id,[el.dataset.id => getRowData(rowEls)], props.parentComponent, SelectType.One);
 		state._selecting = false;
 	}

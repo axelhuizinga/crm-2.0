@@ -69,13 +69,14 @@ class BaseForm
 		return filter;
 	}
 
-	public static function copy(ob:Dynamic, ?ob2:Dynamic):Dynamic {
+	public static function copy(ob:Dynamic, ?ob2:Dynamic, useNull:Bool=false):Dynamic {
 		var res:Dynamic = {};
 		for(f in Reflect.fields(ob)){
 			Reflect.setField(res,f,Reflect.field(ob,f));
 		}
 		for(f in Reflect.fields(ob2)){
-			Reflect.setField(res,f,Reflect.field(ob2,f));
+			if(useNull || Reflect.field(ob2,f)!=null)
+				Reflect.setField(res,f,Reflect.field(ob2,f));
 		}
 		return res;
 	}

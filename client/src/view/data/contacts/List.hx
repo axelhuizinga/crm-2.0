@@ -1,5 +1,6 @@
 package view.data.contacts;
 
+import js.html.DivElement;
 import action.async.CRUD;
 import data.DataState;
 import db.DBAccessProps;
@@ -120,6 +121,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 	public function get(filter:Dynamic=null):Void
 	{
+		if(filter == null)
+			filter = {mandator:props.userState.dbUser.mandator};
 		trace('hi $filter');
 		var offset:Int = 0;
 		if(filter != null && filter.page!=null)
@@ -161,11 +164,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(Reflect.fields(ev));
 	}
 	
-	public function find(arg:Map<String,Dynamic>):Void
+	/*public function find(arg:Map<String,Dynamic>):Void
 	{
 		trace(arg);
 		get(BaseForm.filter(props, arg));
-	}
+	}*/
 
 	public function restore() {
 		trace(Reflect.fields(props.dataStore));
@@ -200,19 +203,19 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var match:RouterMatch = copy(props.match);
 		match.params.action = 'get';
 		trace(state.dataTable.length);
-		props.select(0, null,match, UnselectAll);	
+		props.select(0, null,props.parentComponent, UnselectAll);	
 		//trace(formRef !=null);
 
-		var trs:NodeList = Browser.document.querySelectorAll('.tabComponentForm tr');				
+		var trs:NodeList = Browser.document.querySelectorAll('#contactList .gridItem.selected');				
 		trace(trs.length);
 		for(i in 0...trs.length){
-			var tre:TableRowElement = cast(trs.item(i), TableRowElement);
-			if(tre.classList.contains('is-selected')){
-				trace('unselect:${tre.dataset.id}');
-				tre.classList.remove('is-selected');
-			}
+			var tre:DivElement = cast(trs.item(i), DivElement);
+			//if(tre.classList.contains('is-selected')){
+			//	trace('unselect:${tre.dataset.id}');
+				tre.classList.remove('selected');
+			//}
 		};
-		Browser.document.querySelector('[class="grid-container-inner"]').scrollTop = 0;
+		Browser.document.querySelector('[class="formsContainer"]').scrollTop = 0;
 	}
 		
 	override public function componentDidMount():Void 

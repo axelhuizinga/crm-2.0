@@ -89,10 +89,10 @@ class LiveDataAccess
 					sData = selectType(props.id, props.data, sData, props.selectType);
 					trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
 					trace(sData);
-					aState.locationStore.history.push('${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}',
-					{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
+					//aState.locationStore.history.push('${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}',					{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
+					return dispatch(DataAction.SelectContacts(sData));
+					//return dispatch(DataAction.SelectContacts(props.data, props.selectType));
 					//dispatch(LocationAction(Push()))
-					return dispatch(DataAction.SelectContacts(props.data));
 				case 'Deals':
 					sData = aState.dataStore.dealData;
 					//trace(sData);

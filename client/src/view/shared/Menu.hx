@@ -98,6 +98,15 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		return !item.disabled;
 	}
 
+	function clear() {
+		var inputs:NodeList = Browser.document.querySelectorAll('.formRow .input');
+		var el:InputElement;
+		for(i in 0...inputs.length){
+			el = cast( inputs[i], InputElement);
+			el.value = '';
+		}
+	}
+
 	function find() {
 		var inputs:NodeList = Browser.document.querySelectorAll('.formRow .input');
 		trace(inputs.length);
@@ -106,11 +115,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		for(i in 0...inputs.length){
 			el = cast( inputs[i], InputElement);
 			trace(i+':'+ el.name + '::' + el.value);
-			if(el.value!='')
+			if(StringTools.trim(el.value)!='')
 				Reflect.setField(param, el.name,el.value);
 		}
 		props.parentComponent.get(BaseForm.filter(props.parentComponent.props,param));
-	}
+	}	
 
 	function renderHeader():ReactFragment
 	{
@@ -218,8 +227,9 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					data-section=${item.section} disabled=${item.disabled}>${item.label}</$B>');
 			}
 		}).array();
-		if(hasForm){
+		if(hasForm){			
 			items.push(jsx('<$B key=${"bu"+(i++)} onClick=${find} data-action="find" data-then=${null}>Finden</$B>'));
+			items.push(jsx('<$B key=${"bu"+(i++)} onClick=${clear} data-action="clear" data-then=${null}>Zurücksetzen</$B>'));
 		}
 		return items;
 	}

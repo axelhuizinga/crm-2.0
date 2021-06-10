@@ -148,6 +148,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		);
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
+			if(data.dataRows.length<5 && data.dataRows.length>0)
+			{
+				trace(data.dataRows);
+			}
 			//setState({loading:false, dataTable:data.dataRows});
 			setState({
 				loading:false,

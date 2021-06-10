@@ -68,18 +68,18 @@ class ContactsModel
 		//'email'=>{label:'Email'},
 		'phone_number'=>{label:'Telefon'},				
 		'address'=>{label: 'Straße', showSearch:false},		
-		'address_2'=>{label: 'Hausnummer', showSearch:false},		
+		'address_2'=>{label: 'Nr.', showSearch:false},		
 		'care_of'=>{label: 'Adresszusatz', flexGrow:1, showSearch:false},
 		'postal_code'=>{label: 'PLZ'},
 		'city'=>{label: 'Ort'},
-		'state' => {label:'Status', className: 'tCenter',
+		'status' => {label:'Status', className: 'tCenter',
 			cellFormat:function(v:String) 
 			{
 				var uState = (v=='active'?'user':'user-slash');
 				//trace(uState);
 				return jsx('<span className="fa fa-$uState"></span>');
 			}},
-		'id' => {label:'Kontakt ID',show:false}
+		'id' => {label:'Kontakt ID',show:true}
 	];
 	
 	public static var listColumns:Map<String,DataColumn> = [

@@ -189,6 +189,7 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 		if(state.loading || state.dataTable == null || state.dataTable.length == 0)
 			return state.formApi.renderWait();
 		trace('###########loading:' + props.action);
+		trace(state.dataTable);
 		return switch(props.action)
 		{
 			case 'get':

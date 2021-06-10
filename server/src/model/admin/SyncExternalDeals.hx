@@ -277,7 +277,7 @@ class SyncExternalDeals extends Model
 			'id'=>Std.string(Syntax.code("{0}['id']",rD))]);
 		}
 		synced++;
-		trace(synced);
+		//trace(synced);
 		return stmt;
 	}	
 

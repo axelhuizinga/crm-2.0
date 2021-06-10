@@ -89,7 +89,7 @@ class SyncExternalAccounts extends Model
 	}
 
 	/**
-I kno	 * Import or Update accounts
+	* Import or Update accounts
 	 */
 
 	function syncAll() {
@@ -104,18 +104,17 @@ I kno	 * Import or Update accounts
 		while(synced<param['totalRecords']){
 			importExtAccounts();
 			trace('offset:'+ offset.int);
-			trace(param);
+			//trace(param);
 		}
 		trace('done:' + Std.string(Sys.time()-start));
 		Sys.exit(untyped ['syncAccounts'=>'OK']);
 	}		
-		//var ids:Map<String,Int> = getMissing();
+		
 	function importExtAccounts(where:String='') {
 		// GET ViciBox fly_crm db account data
 		var sql:String = comment(unindent,format)/*
-		SELECT pay_source_id id, client_id contact, debtor account_holder,bank_name,account,blz bic,iban,sign_date, pay_source_state status,creation_date, ${S.dbQuery.dbUser.id} edited_by,1 mandator FROM pay_source ${where} 
-		ORDER BY id 
-		${limit.sql} 	
+		SELECT pay_source_id id, client_id contact, debtor account_holder,bank_name,account,blz bic,iban,sign_date, IF(pay_source_state='passive','passive','active') status,creation_date, ${S.dbQuery.dbUser.id} edited_by,1 mandator FROM pay_source ${where} 
+		ORDER BY id ${limit.sql} ${offset.sql}
 		*/;
 		trace(sql);
 		//${offset.sql}	
@@ -128,7 +127,7 @@ I kno	 * Import or Update accounts
 		offset = Util.offset(offset.int + Syntax.code("count({0})",res));
 		//return res;
 		trace(stmt.rowCount());
-		trace(res);
+		//trace(res);
 		if(Global.count(res)==0)
 			return;
 		trace('id:' + untyped res[0]['id']);

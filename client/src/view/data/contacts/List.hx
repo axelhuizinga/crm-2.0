@@ -285,7 +285,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
+		<>
+			<form className="tabComponentForm"  >
 				${renderResults()}
+			</form>
+		</>
 		'));		
 	}
 

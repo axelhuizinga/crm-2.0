@@ -165,7 +165,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{
 				classPath:'data.DirectDebits',
 				action:'get',
-				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
+				filter:(props.match.params.ba_id!=null?{id:props.match.params.ba_id, mandator:'1'}:{mandator:'1'}),
 				table:'booking_requests',
 				limit:props.limit,
 				offset:offset>0?offset:0,
@@ -258,12 +258,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				<Grid id="rDebitList" data=${state.dataTable}
 				${...props} dataState = ${dataDisplay["rDebitList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
-				');		/*
-				jsx('
-					<Table id="importedReturnDebit" data=${state.dataTable} selectAble=${false}
-					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${{function()return BaseForm.renderPager(this);}} 
-					className="is-striped is-hoverable"  parentComponent=${this} fullWidth=${true}/>
-				');					*/
+				');		
+				
 			default:
 				state.data==null?null:
 				jsx('<div className="hint">${state.data.get('hint')}</div>');				

@@ -25,7 +25,7 @@ class AccountsModel
 				'creation_date'=>{label:'Erstellt',type:Hidden, displayFormat: "d.m.Y", disabled:true},
 				'sign_date'=>{label:'Erteilt',type:DatePicker, displayFormat: "d.m.Y"},
 				'bank_name'=>{label:'Bank',type:Text},
-				'iban'=>{label:'IBAN',type:Text},
+				'iban'=>{label:'IBAN',type:Text,className: 'tableNums'},
 				'status'=>{label:'Status', type:Select,options: ['active'=>'Aktiv','passive'=>'Passiv','new'=>'Neu']},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},				
@@ -47,7 +47,7 @@ class AccountsModel
 		},	
 		'sign_date'=>{label:'Erteilt',cellFormat:function(v:String) return v!=null? DateTools.format(Date.fromString(v), "%d.%m.%Y"):''},	
 		'contact'=>{label:'Kontakt',show:false, useAsIndex: false},				
-		'iban'=>{label:'IBAN'},	
+		'iban'=>{label:'IBAN',className: 'tableNums'},	
 		'status' => {label:'Status', className: 'tCenter',
 			cellFormat:function(v:String) 
 			{

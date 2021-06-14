@@ -514,10 +514,9 @@ input::-moz-focus-inner {
 	flex-direction: column;
 	flex-grow:1;
 	margin:0 auto 0.8rem auto;	
-	max-width: 80%;
+	/*max-width: 80%;
 	min-width: 80%;
-
-	/*min-height: 0;max-width: min-content;
+	min-height: 0;max-width: min-content;
 	overflow-x: auto;*/
 }
 .tabComponentForm table,
@@ -1120,10 +1119,10 @@ form td, form caption
 	position: absolute;
 	z-index: -1;
 }
-
+/*
 .tabComponentForm .grid_box{
 	grid-gap: 1rem;
-}
+}*/
 /*** D3 CHARTS ***/
 
 div.tooltip {	

@@ -49,8 +49,8 @@ class DirectDebits extends ReactComponentOf<DataFormProps,FormState>
 		if(props.match.params.section==null)
 		{
 			//SET DEFAULT SECTION
-			if(_trace) trace('reme');
-			var baseUrl:String = props.match.path.split(':section')[0];				
+			var baseUrl:String = props.match.path.split(':section')[0];			
+			trace('pushing2: ${baseUrl}Edit');
 			props.history.push('${baseUrl}Edit');
 			}		
 		state =  App.initEState({

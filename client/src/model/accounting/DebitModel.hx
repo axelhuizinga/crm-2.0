@@ -49,7 +49,7 @@ class DebitModel
 	public static var listColumns:Map<String,DataColumn> = [
 		'id'=>{label:'VertragsID', flexGrow:0, className: 'tableNums'},
 		'sepa_code'=>{label:'Sepa Code', flexGrow:0, className: 'tRight'},
-		'iban'=>{label:'Iban'},				
+		'iban'=>{label:'Iban',className: 'tableNums'},				
 		'ba_id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		
 		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
 		//'processed'=>{label: 'Verarbeitet'}

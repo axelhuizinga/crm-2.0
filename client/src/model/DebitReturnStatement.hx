@@ -43,7 +43,7 @@ class DebitReturnStatement extends ORM
 	@dataType("character varying")
 	@:isVar public var id(default,set):String;
 
-	function set_ba_id(id:String):String{
+	function set_id(id:String):String{
 		if(initialized('id'))
 			modified('id');
 		this.id = id ;

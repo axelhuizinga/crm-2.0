@@ -1,4 +1,4 @@
-package model;
+ackage model;
 
 typedef BookingRequestProps = {
 	?ag_name:String,
@@ -269,7 +269,7 @@ class BookingRequest extends ORM
 	@dataType("bigint")
 	@:isVar public var id(default,set):Int;
 
-	function set_ba_id(id:Int):Int{
+	function set_id(id:Int):Int{
 		if(initialized('id'))
 			modified('id');
 		this.id = id ;

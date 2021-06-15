@@ -92,14 +92,14 @@ class Upload {
 			case 'returnDebitFile':
 				var dRows:Array<Dynamic> = Json.parse(data).rlData;
 				var sql =  comment(unindent, format) /*
-				INSERT INTO debit_return_statements (id,sepa_code,iban,ba_id,amount,mandator) 
-				VALUES(:id,:sepa_code,:iban,:ba_id,:amount,:mandator)
+				INSERT INTO debit_return_statements (id,sepa_code,iban,id,amount,mandator) 
+				VALUES(:id,:sepa_code,:iban,:id,:amount,:mandator)
 				ON CONFLICT DO NOTHING RETURNING id
 				*/;
 				trace(sql);
 				trace(Global.count(dRows));
 				/// TODO: UNIFY FIELDS + COLUMN NAMES
-				var dKeys:Array<String> = 'id,sepa_code,iban,ba_id,amount'.split(',');
+				var dKeys:Array<String> = 'id,sepa_code,iban,id,amount'.split(',');
 				var bindVals:Array<String> = new Array();
 				for(r in dRows)
 				{

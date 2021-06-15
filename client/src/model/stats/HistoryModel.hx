@@ -54,7 +54,7 @@ class HistoryModel
 				},
 				'comments'=>{label:'Kommentar'},
 				'use_email'=>{label:'Post per Email',type: Checkbox},
-				'ba_id' => {type:Hidden},
+				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},				
 				'mandator'=>{type:Hidden},
 			]

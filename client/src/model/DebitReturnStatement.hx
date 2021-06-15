@@ -3,7 +3,7 @@ package model;
 typedef DebitReturnStatementProps = {
 	?sepa_code:String,
 	?iban:String,
-	?ba_id:String,
+	?id:String,
 	?amount:String,
 	?mandator:Int,
 	?updated_at:String,
@@ -41,13 +41,13 @@ class DebitReturnStatement extends ORM
 	}	
 		
 	@dataType("character varying")
-	@:isVar public var ba_id(default,set):String;
+	@:isVar public var id(default,set):String;
 
-	function set_ba_id(ba_id:String):String{
-		if(initialized('ba_id'))
-			modified('ba_id');
-		this.ba_id = ba_id ;
-		return ba_id;
+	function set_ba_id(id:String):String{
+		if(initialized('id'))
+			modified('id');
+		this.id = id ;
+		return id;
 	}	
 		
 	@dataType("numeric")

@@ -1,7 +1,7 @@
 package model;
 
 typedef BaIdProps = {
-	?ba_id:Int
+	?id:Int
 };
 
 @:rtti
@@ -14,13 +14,13 @@ class BaId extends ORM
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var ba_id(default,set):Int;
+	@:isVar public var id(default,set):Int;
 
-	function set_ba_id(ba_id:Int):Int{
-		if(initialized('ba_id'))
-			modified('ba_id');
-		this.ba_id = ba_id ;
-		return ba_id;
+	function set_ba_id(id:Int):Int{
+		if(initialized('id'))
+			modified('id');
+		this.id = id ;
+		return id;
 	}	
 	
 }

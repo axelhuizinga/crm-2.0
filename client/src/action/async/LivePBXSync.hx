@@ -68,7 +68,7 @@ class LivePBXSync
 					classPath:props.classPath,
 					action:props.action,
 					extDB:true,
-					action_id:(props.action_id == null?0:props.action_id),
+					id:(props.id == null?0:props.id),
 					limit:props.limit,
 					offset:props.offset,
 					table:props.table,

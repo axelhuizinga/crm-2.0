@@ -17,7 +17,7 @@ class DebitModel
 		'open' => {
 			source:[
 				"booking_requests" => [
-					"filter" => 'ba_id'
+					"filter" => 'id'
 					]
 				],
 			view:[
@@ -42,22 +42,22 @@ class DebitModel
 			return options[v];
 		}},
 		'zahlpfl_name_kto_or_iban'=>{label:'Iban',className: 'tableNums'},				
-		'ba_id'=>{label: 'Buchungsanforderung ID', show:false},		
+		'id'=>{label: 'Buchungsanforderung ID', show:false},		
 		//'processed'=>{label: 'Verarbeitet'},headerClassName: 'tRight'}
 	];	
 
-	public static var listColumns:Map<String,DataColumn> = [
+	/*public static var listColumns:Map<String,DataColumn> = [
 		'id'=>{label:'VertragsID', flexGrow:0, className: 'tableNums'},
 		'sepa_code'=>{label:'Sepa Code', flexGrow:0, className: 'tRight'},
 		'iban'=>{label:'Iban',className: 'tableNums'},				
-		'ba_id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		
+		'id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		
 		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
 		//'processed'=>{label: 'Verarbeitet'}
 	];	
 
 	public static var dataDisplay:Map<String,DataState> = [
 		'rDebitList' => {columns:listColumns}
-	];	
+	];	*/
 	
 	public static var dataGridDisplay:Map<String,data.DataState> = [
 		'rDebitList' => {columns:gridColumns}

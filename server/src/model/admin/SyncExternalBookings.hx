@@ -78,7 +78,7 @@ class SyncExternalBookings extends Model{
 
 	function getMaxImported():Int {
 		var sql = comment(unindent, format) /*
-		SELECT max(ba_id) from booking_requests ;				
+		SELECT max(id) from booking_requests ;				
 		*/;
 		var stmt = S.dbh.query(sql);
 		var got:Int = Std.parseInt(stmt.execute()?stmt.fetchColumn(0):null);		
@@ -117,7 +117,7 @@ class SyncExternalBookings extends Model{
 		offset = Util.offset(0);
 		var maxID:Int = getMaxImported();
 		var sql = comment(unindent, format) /*
-		SELECT * FROM _ba_ids WHERE ba_id > $maxID;		
+		SELECT * FROM _ba_ids WHERE id > $maxID;		
 		*/;
 		trace('$sql');
 		var stmt = S.dbh.query(sql);
@@ -175,7 +175,7 @@ class SyncExternalBookings extends Model{
 					trace(stmt.errorInfo());
 					S.sendErrors(dbData, ['execute'=>Lib.hashOfAssociativeArray(stmt.errorInfo()),
 					'sql'=>sql,
-					'ba_id'=>Std.string(Syntax.code("{0}['ba_id']",row))]);
+					'id'=>Std.string(Syntax.code("{0}['id']",row))]);
 				}
 				synced++;
 			}

@@ -97,7 +97,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 	];
 	var dataAccess:DataAccess;	
-	var dataDisplay:Map<String,DataState>;
+	//var dataDisplay:Map<String,DataState>;
 	var formApi:FormApi;
 	var formBuilder:FormBuilder;
 	var formFields:DataDisplay;
@@ -128,7 +128,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}		
 		dataAccess = DebitModel.dataAccess;
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
-		dataDisplay = DebitModel.dataDisplay;
+		//dataDisplay = DebitModel.dataDisplay;
 
 				
 		state =  App.initEState({
@@ -294,7 +294,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		
 	}	
 
-	function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
+	/*function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
 	{
 		var iS:Dynamic = {};
 		for(dR in dt)
@@ -314,7 +314,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 		trace(iS); 
 		return iS;
-	}
+	}*/
 
 	function loadDealData(id:Int):Void
 		{
@@ -385,14 +385,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					title: 'Bearbeite Aktion' 
 				},state.actualState));
 		
-			case 'insert':
+			/*case 'insert':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["fieldsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>				
-				');	
+				');	*/
 			case 'delete':
 				null;
 			default:

@@ -176,14 +176,14 @@ class Util
 
 	/**
 	 * actionFields = [
-			'action','classPath','offset','onlyNew','action_id','limit','maxImport','totalRecords'
+			'action','classPath','offset','onlyNew','id','limit','maxImport','totalRecords'
 		];
 	 * 				{
 					dbUser:props.userState.dbUser,
 					classPath:props.classPath,
 					action:props.action,
 					extDB:true,
-					action_id:(props.action_id == null?0:props.action_id),
+					id:(props.id == null?0:props.id),
 					limit:props.limit,
 					offset:props.offset,
 					table:props.table,
@@ -197,7 +197,7 @@ class Util
 		var dbQP:DBAccessProps = {
 			dbUser:S.dbQuery.dbUser,
 			action:param['action'],
-			action_id:param['action_id'],
+			id:param['id'],
 			extDB:param['extDB'],
 			filter:param['filter'],
 			offset:param['offset'],

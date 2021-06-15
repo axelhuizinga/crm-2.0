@@ -320,7 +320,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		return jsx('
 		<div className="t_caption">Spenden
-		<form className="tabComponentForm2 formField" ref=${props.formRef} name="dealsList" key="dealsList"> 			
+		<form className="tabComponentForm2" ref=${props.formRef} name="dealsList" key="dealsList"> 			
 			${renderResults()}
 		</form></div>');
 	}

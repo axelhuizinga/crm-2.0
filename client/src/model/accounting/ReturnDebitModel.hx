@@ -46,7 +46,7 @@ class ReturnDebitModel
 		'sepa_code'=>{label:'Sepa Code'}, 
 		'iban'=>{label:'Iban', className: 'tableNums', flexGrow:1, headerClassName: 'tRight'},						
 		'mandat_id'=>{label: 'SpendenID', className: 'tableNums'},		
-		'ba_id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
+		'id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
 		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
 		//'processed'=>{label: 'Verarbeitet'}
 	];	
@@ -77,7 +77,7 @@ class ReturnDebitModel
 					alias:'iban', label:'Iban', className: 'tableNums', flexGrow:1, headerClassName: 'tRight'
 				},*/						
 				'deal_id'=>{label: 'SpendenID', className: 'tableNums'},		
-				'ba_id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
+				'id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
 				'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
 				//'processed'=>{label: 'Verarbeitet'}		
 			],	 
@@ -98,7 +98,7 @@ class ReturnDebitModel
 		'sepa_code'=>{label:'Sepa Code' },
 		'iban'=>{label:'Iban', className: 'tableNums', flexGrow:1, headerClassName: 'tRight'},						
 		'deal_id'=>{label: 'SpendenID', className: 'tableNums'},		
-		'ba_id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
+		'id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
 		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
 		//'processed'=>{label: 'Verarbeitet'}
 	];
@@ -115,12 +115,12 @@ class ReturnDebitModel
 		'sepa_code'=>{label:'Sepa Code' },
 		'iban'=>{label:'Iban', className: 'tableNums', flexGrow:1, headerClassName: 'tRight'},						
 		'deal_id'=>{label: 'SpendenID', className: 'tableNums'},		
-		'ba_id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
+		'id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
 		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
 		//'processed'=>{label: 'Verarbeitet'}
 	];	
 
-	public static var listColumns:Map<String,DataColumn> = [
+	/*public static var listColumns:Map<String,DataColumn> = [
 		'id'=>{label:'VertragsID', flexGrow:0, className: 'tRight tableNums'},
 		'value_date'=>{label: 'Wertstellung',cellFormat:function(v:String){
 			if(v==null)
@@ -129,14 +129,14 @@ class ReturnDebitModel
 			}},
 		'sepa_code'=>{label:'Sepa Code', flexGrow:0, className: 'tRight'},
 		'iban'=>{label:'Iban'},				
-		'ba_id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		
+		'id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		
 		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
 		//'processed'=>{label: 'Verarbeitet'}
 	];	
 
 	public static var dataDisplay:Map<String,DataState> = [
 		'rDebitList' => {columns:listColumns}
-	];	
+	];	*/
 	
 	public static var dataGridDisplay:Map<String,DataState> = [
 		'rDebitList' => {columns:gridColumns},

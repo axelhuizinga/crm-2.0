@@ -8,7 +8,7 @@ import state.UserState;
 typedef DBAccessAction = {
 	action:String,
 	?classPath:String,
-	?action_id:Int,
+	?id:Int,
 	?offset:Int,
 	?onlyNew:Bool,
 	?limit:Int,	
@@ -35,6 +35,7 @@ typedef DBAccessProps = {
 	?extDB:Bool,	
 	?filter:Dynamic,
 	?data:Dynamic,	
+	?index:String,
 	?jThen:DBAccessJsonResponse->Void,
 	?mandator:Int,
 	?pages:Int,

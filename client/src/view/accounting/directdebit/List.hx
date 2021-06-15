@@ -165,7 +165,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{
 				classPath:'data.DirectDebits',
 				action:'get',
-				filter:(props.match.params.ba_id!=null?{id:props.match.params.ba_id, mandator:'1'}:{mandator:'1'}),
+				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
 				table:'booking_requests',
 				limit:props.limit,
 				offset:offset>0?offset:0,
@@ -218,7 +218,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		p.then(function(data:DbData)
 		{			
 			trace(Unserializer.run(data.dataInfo['data'])); 
-			trace(Utils.getAllByKey(Unserializer.run(data.dataInfo['data']),'ba_id')); 
+			trace(Utils.getAllByKey(Unserializer.run(data.dataInfo['data']),'id')); 
 			//setState({loading:false, dataTable:data.dataRows});
 		});
 	}	

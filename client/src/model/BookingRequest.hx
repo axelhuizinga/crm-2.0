@@ -23,7 +23,7 @@ typedef BookingRequestProps = {
 	?vwz7:String,
 	?vwz8:String,
 	?vwz9:String,
-	?ba_id:Int,
+	?id:Int,
 	?tracking_status:String,
 	?anforderungs_datum:String,
 	?rueck_datum:String,
@@ -267,13 +267,13 @@ class BookingRequest extends ORM
 	}	
 		
 	@dataType("bigint")
-	@:isVar public var ba_id(default,set):Int;
+	@:isVar public var id(default,set):Int;
 
-	function set_ba_id(ba_id:Int):Int{
-		if(initialized('ba_id'))
-			modified('ba_id');
-		this.ba_id = ba_id ;
-		return ba_id;
+	function set_ba_id(id:Int):Int{
+		if(initialized('id'))
+			modified('id');
+		this.id = id ;
+		return id;
 	}	
 		
 	@dataType("bank_transfers_tracking_status")

@@ -33,6 +33,7 @@ $buttonSun:#ffdd57;
 $cell-border: 1px solid #ccc;
 $cellPadding: 0px 0.75rem;
 $gridPadding: 0.1rem 0.8rem 0.2rem 0.8rem;
+$gridHeadPadding: 0.2rem 0.8rem 0.2rem 0.8rem;
 $headPadding: 0.75rem 0.75rem 0.25rem 0.75rem;
 $ePad:0.3rem 0.64rem;
 $darkBlue: rgb(10,20,60);
@@ -43,6 +44,7 @@ $paleBlue: rgb(140,190,240);
 $darkGreen: rgb(60,80,0);
 $highLightGreen: rgb(80,220,20);
 $lightBlue: rgb(240,240,255);
+$lightGray: rgb(220,220,220);
 $lightGreen: rgb(240,255,240);
 $darkRed: rgb(128, 17, 17);
 $lightRed: rgb(251, 220, 220);
@@ -61,6 +63,7 @@ $tableHeaderHeight: 2rem;
 /*
 $darkGradient1:linear-gradient($lightGreen,$darkGreen, $darkGreen);	 
 $darkGradient:linear-gradient($lightBlue 0%, $paleBlue 32%);*/
+$lightGradient:linear-gradient(#eee 0%, $lightGray 80%);
 $darkGradient:linear-gradient($lightBlue 0%, $strongViolet 32%);
 *{
 	border-collapse:collapse;
@@ -246,18 +249,25 @@ h2{
 /*margin-bottom:-2.5rem;*/
 	overflow-x: hidden;
 	overflow-y: auto;
-	border:1px solid $border-light;
-	border-style:none solid;
+	/*border:1px solid $border-light;
+	border-style:none solid;*/
 	flex-grow: 1;
 }
 .gridHeadItem
 {
 	font-weight:bold;
-	padding: $gridPadding!important;
+	padding: $gridHeadPadding;
 	white-space: nowrap;
+	background-image: $lightGradient;
 	/*display:flex;
 	flex-grow:1 0 auto;
 	justify-content:space-between;*/
+}
+.gridHeadItem:first-child{
+	border-top-left-radius: 0.25rem;
+}
+.gridHeadItem:last-of-type{
+	border-top-right-radius: 0.25rem;
 }
 .gridItem{
 	
@@ -1119,10 +1129,10 @@ form td, form caption
 	position: absolute;
 	z-index: -1;
 }
-/*
-.tabComponentForm .grid_box{
+
+.formField .grid_box{
 	grid-gap: 1rem;
-}*/
+}
 /*** D3 CHARTS ***/
 
 div.tooltip {	
@@ -1151,7 +1161,6 @@ div.tooltip {
 	/*alignment-baseline:central;*/
 	vertical-align: baseline;
 }
-$lightGradient:linear-gradient(0deg $darkBlue, $paleBlue);
 .stop-bottom{
 	stop-color: $darkBlue;
 }

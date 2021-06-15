@@ -1071,7 +1071,7 @@ class Model
 
 	/*function createOrUpdateAction(){
 		
-		if(param['action_id']==0||param['action_id']==null)
+		if(param['id']==0||param['id']==null)
 		{
 			//GET MAX actions id for user
 			var sql:String = comment(unindent,format)/**
@@ -1082,7 +1082,7 @@ class Model
 			if(untyped stmt==false)
 			{
 				trace(S.dbh.errorInfo());
-				S.sendErrors(dbData, ['GET MAX actions action_id for user:'=>S.dbh.errorInfo()]);
+				S.sendErrors(dbData, ['GET MAX actions id for user:'=>S.dbh.errorInfo()]);
 			}
 			if(stmt.errorCode() !='00000')
 			{
@@ -1091,7 +1091,7 @@ class Model
 			if(stmt.execute()){
 				var res:Dynamic = stmt.fetch(PDO.FETCH_OBJ);
 				trace('result:' + res);
-				param['action_id'] = (res.user_max_action_id==null?1:res.user_max_action_id+1);
+				param['id'] = (res.user_max_action_id==null?1:res.user_max_action_id+1);
 			}
 			else {
 				trace(stmt.errorInfo());
@@ -1119,7 +1119,7 @@ class Model
 				S.sendErrors(dbData, ['STORE NEW ACTION for user:'=>stmt.errorInfo()]);
 			}
 
-			dbData.dataInfo.set('action_id', param['action_id']);
+			dbData.dataInfo.set('id', param['id']);
 			trace(dbData.dataInfo);
 			//S.sendData(dbData, null);
 			//S.sendInfo(dbData);			

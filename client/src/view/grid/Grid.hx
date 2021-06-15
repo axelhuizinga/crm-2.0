@@ -154,9 +154,9 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			visibleColumns++;
 			gridStyle +=  (hC.flexGrow !=null ?' ${hC.flexGrow}fr':' max-content');
 			headerRow.push(jsx('	
-			<div key=${field+"header"} className=${"gridHeadItem " + (hC.headerClassName != null? hC.headerClassName : (hC.className!= null?hC.className:''))}>
+			<span key=${field+"header"} className=${"gridHeadItem " + (hC.headerClassName != null? hC.headerClassName : (hC.className!= null?hC.className:''))}>
 			${hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
-			</div>
+			</span>
 			'));
 		}
 		//trace('$visibleColumns $gridStyle');

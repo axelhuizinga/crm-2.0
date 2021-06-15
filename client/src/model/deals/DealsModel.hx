@@ -74,18 +74,17 @@ class DealsModel
 				return null;
 			 return DateTools.format(Date.fromString(v), "%d.%m.%Y");
 			}},	
+		'cycle' => {label: 'Turnus',flexGrow:1},
+		'amount' => {label: 'Betrag', cellFormat: function(v) {
+			return App.sprintf('%01.2f €',v).replace('.',',');
+		},className: 'tRight tableNums'},
 		'active' => {label:'Status', className: 'tCenter',
 			cellFormat:function(v:Bool) 
 			{
 				var className = (v?'active fas fa-heart':'passive far fa-heart');
 				//trace('>>>$v<<<');
 				return jsx('<span className=${className}></span>');
-			}},
-		'cycle' => {label: 'Turnus'},
-		'amount' => {label: 'Betrag', cellFormat: function(v) {
-			return App.sprintf('%01.2f €',v).replace('.',',');
-		},className: 'tRight tableNums'},
-		
+			}},		
 	];
 
 	public static var listColumns:Map<String,DataColumn> = [

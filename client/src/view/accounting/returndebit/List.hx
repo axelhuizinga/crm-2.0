@@ -164,13 +164,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var dS:db.DataSource = [
 			'debit_return_statements' => [
 				'alias' => 'drs',
-				'fields' => 'id,sepa_code,iban,ba_id,amount,mandator,last_modified,processed,created_at,value_date',
+				'fields' => 'id,sepa_code,iban,id,amount,mandator,last_modified,processed,created_at,value_date',
 				//	TODO: BUILD FILTER FUNCTION
 				//'filter' => (props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
 			],				
 			'booking_requests' => [
 				'fields' => 'zahlpfl_name,mandat_id',
-				'jCond' => 'drs.ba_id=ref_id'
+				'jCond' => 'drs.id=ref_id'
 			],
 			'sepa_return_codes' => [
 				'fields' => 'description',
@@ -235,7 +235,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		p.then(function(data:DbData)
 		{			
 			trace(Unserializer.run(data.dataInfo['data'])); 
-			trace(Utils.getAllByKey(Unserializer.run(data.dataInfo['data']),'ba_id')); 
+			trace(Utils.getAllByKey(Unserializer.run(data.dataInfo['data']),'id')); 
 			//setState({loading:false, dataTable:data.dataRows});
 		});
 	}	

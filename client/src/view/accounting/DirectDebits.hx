@@ -75,25 +75,7 @@ class DirectDebits extends ReactComponentOf<DataFormProps,FormState>
 	{	
 		trace(props.match.params.action);
 		state.formApi.doAction();
-	}
-	
-	/*override public function componentWillUnmount()
-	{
-		for (r in requests)
-			r.cancel();
-	}
-	//columnSizerProps = {{}}defaultSort = ${{column:"full_name", direction: SortDirection.ASC}}
-    override function render() {
-		trace(Reflect.fields(props));
-		//trace(state);
-		//trace(props);
-        return jsx('		
-				<div className="columns">
-					<div className="tabComponentForm" children={renderContent()} />
-					<Menu className="menu" menuBlocks={state.sideMenu.menuBlocks}/>					
-				</div>		
-        ');
-    }	*/	
+	}	
 	
 	override public function render() 
 		{

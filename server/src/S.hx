@@ -28,7 +28,7 @@ import model.admin.CreateUsers;
 import model.data.Accounts;
 import model.data.Contacts;
 import model.data.Deals;
-import model.data.ReturnDebitStatements;
+import model.data.DebitReturnStatements;
 import model.data.DirectDebits;
 import model.data.SyncExternal;
 import model.admin.SyncExternalAccounts;

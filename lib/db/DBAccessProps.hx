@@ -35,7 +35,7 @@ typedef DBAccessProps = {
 	?extDB:Bool,	
 	?filter:Dynamic,
 	?data:Dynamic,	
-	?index:String,
+	?order:Dynamic,
 	?jThen:DBAccessJsonResponse->Void,
 	?mandator:Int,
 	?pages:Int,

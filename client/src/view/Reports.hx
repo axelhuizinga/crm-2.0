@@ -78,7 +78,7 @@ class Reports extends ReactComponentOf<DataProps,CompState>
 			</div>
             <div className="tabContent2" >
 			<$Switch>
-				<$Route path="/Reports/History/:section?/:action?/:id?"  ${...props} component={History}/>
+				<$Route path="/Reports/History/:section?/:action?/"  ${...props} component={History}/>
 				<$Route path="/Reports/Preview/:section?/:action?/:id?"   ${...props} component={Preview}/>	
 				
             </$Switch>

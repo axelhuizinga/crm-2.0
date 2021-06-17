@@ -63,6 +63,8 @@ class History extends ReactComponentOf<DataFormProps,FormState>
 			//SET DEFAULT SECTION
 			trace('reme');
 			var baseUrl:String = props.match.path.split(':section')[0];
+			
+			trace('pushing2: ${baseUrl}Charts/get');
 			props.history.push('${baseUrl}Charts/get');
 		}		
 		

@@ -164,13 +164,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var dS:db.DataSource = [
 			'debit_return_statements' => [
 				'alias' => 'drs',
-				'fields' => 'id,sepa_code,iban,id,amount,mandator,last_modified,processed,created_at,value_date',
+				'fields' => 'id,sepa_code,iban,ba_id,amount,mandator,last_modified,processed,created_at,value_date',
 				//	TODO: BUILD FILTER FUNCTION
 				//'filter' => (props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
 			],				
 			'booking_requests' => [
 				'fields' => 'zahlpfl_name,mandat_id',
-				'jCond' => 'drs.id=ref_id'
+				'jCond' => 'drs.ba_id=ref_id'
 			],
 			'sepa_return_codes' => [
 				'fields' => 'description',
@@ -181,7 +181,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			dbUser:props.userState.dbUser,
 			devIP: App.devIP,
 			jwt:props.userState.dbUser.jwt,
-			classPath:'data.ReturnDebitStatements',
+			classPath:'data.DebitReturnStatements',
 			action:'get',				
 			dataSource:Serializer.run(dS),
 			limit:props.limit,
@@ -218,7 +218,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.dataTable);
 		var p:Promise<DbData> = props.update(
 			{
-				classPath:'data.ReturnDebitStatements',
+				classPath:'data.DebitReturnStatements',
 				action:'insert',
 				mandator:1,
 				//data: state.dataTable,//Serializer.run(state.dataTable),

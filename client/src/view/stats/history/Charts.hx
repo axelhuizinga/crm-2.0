@@ -265,7 +265,6 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 			//var d:Date = Date.fromString(d.date);
 			var d = dd.get('date').split('-');
 			//trace(dd);
-			//return 'hi';
 			//trace('${months[Std.parseInt(d[1])-1]} ${d[0]}');
 			
 			return '${months[Std.parseInt(d[1])-1]} ${d[0]}';

@@ -524,8 +524,8 @@ input::-moz-focus-inner {
 	flex-direction: column;
 	flex-grow:1;
 	margin:0 auto 0.8rem auto;	
+	min-width: 100%;
 	/*max-width: 80%;
-	min-width: 80%;
 	min-height: 0;max-width: min-content;
 	overflow-x: auto;*/
 }
@@ -1151,8 +1151,9 @@ div.tooltip {
 
 .chartBox
 {
-	margin:8rem;
+	margin:8rem auto;
 	display: flex;
+	width: 88%;
 	flex-grow: 1;
 	font-family: Linotte-SemiBold;
 	shape-rendering: crispEdges;

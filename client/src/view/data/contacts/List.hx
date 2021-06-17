@@ -167,12 +167,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.selectedRows.length);	
 		trace(Reflect.fields(ev));
 	}
-	
-	/*public function find(arg:Map<String,Dynamic>):Void
-	{
-		trace(arg);
-		get(BaseForm.filter(props, arg));
-	}*/
 
 	public function restore() {
 		trace(Reflect.fields(props.dataStore));

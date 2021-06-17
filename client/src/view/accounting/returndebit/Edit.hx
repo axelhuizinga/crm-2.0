@@ -212,7 +212,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.userState);
 		var p:Promise<DbData> = props.load(
 			{
-				classPath:'data.ReturnDebitStatements',
+				classPath:'data.DebitReturnStatements',
 				action:'get',
 				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1',processed:'false'}),
 				limit:props.limit,

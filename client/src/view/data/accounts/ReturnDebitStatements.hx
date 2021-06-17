@@ -52,10 +52,10 @@ using Lambda;
  * @author axel@cunity.me
  */
 @:connect
-class ReturnDebitStatements extends ReactComponentOf<DataFormProps,FormState>
+class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 {
 
-	static var _instance:ReturnDebitStatements;
+	static var _instance:DebitReturnStatements;
 
 	public static var menuItems:Array<MItem> = [		
 		{label:'Datei Rücklastschrift',action:'importReturnDebit',
@@ -110,11 +110,11 @@ class ReturnDebitStatements extends ReactComponentOf<DataFormProps,FormState>
 			{
 				dataClassPath:'admin.ImportCamt',
 				label:"Upload RüLa's",
-				section: 'ReturnDebitStatements',
+				section: 'DebitReturnStatements',
 				items: menuItems
 			},
 			{	
-				section: props.match.params.section==null? 'ReturnDebitStatements':props.match.params.section, 
+				section: props.match.params.section==null? 'DebitReturnStatements':props.match.params.section, 
 				sameWidth: true					
 			})
 		},this);

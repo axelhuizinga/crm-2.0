@@ -201,7 +201,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.dataTable);
 		var p:Promise<DbData> = props.update(
 			{
-				classPath:'data.ReturnDebitStatements',
+				classPath:'data.DebitReturnStatements',
 				action:'insert',
 				mandator:1,
 				//data: state.dataTable,//Serializer.run(state.dataTable),

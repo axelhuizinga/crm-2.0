@@ -70,7 +70,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Anzeigen',action:'get'},
 		{label:'Download', action:'download'},
 		{label:'Bearbeiten',action:'edit'},
-		{label:'Neu Erstellen',action:'createDirectDebit',
+		{label:'Neu Erstellen',action:'create',
 			formField:{				
 				name:'directDebitFile',
 				submit:'Herunterladen',
@@ -94,7 +94,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				trace(finput.value);*/
 				//trace(finput.files.get('returnDebitFile'));
 			}/**/
-		}
+		},
+		{separator: true},		
+		{label: 'Buchungsdatum',formField: { name: 'booking_day', type: Checkbox, options: ['1'=>'1','15'=>'15']}},
 	];
 	var dataAccess:DataAccess;	
 	//var dataDisplay:Map<String,DataState>;
@@ -191,7 +193,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//state.formApi.doAction('get');
 	}
 
-	public function createDirectDebit(_):Void {
+	public function create(_):Void {
 		trace(Date.now());
 	}
 
@@ -212,7 +214,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.userState);
 		var p:Promise<DbData> = props.load(
 			{
-				classPath:'data.ReturnDebitStatements',
+				classPath:'data.DirectDebits',
 				action:'get',
 				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1',processed:'false'}),
 				limit:props.limit,

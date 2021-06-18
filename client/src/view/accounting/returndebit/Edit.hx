@@ -128,7 +128,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}		
 		dataAccess = DebitModel.dataAccess;
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
-		dataDisplay = DebitModel.dataDisplay;
+		dataDisplay = DebitModel.dataGridDisplay;
 
 				
 		state =  App.initEState({

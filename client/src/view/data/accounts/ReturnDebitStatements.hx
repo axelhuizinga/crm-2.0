@@ -99,7 +99,7 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		_instance = this;
-		dataDisplay = DebitModel.dataDisplay;
+		dataDisplay = DebitModel.dataGridDisplay;
 		
 		trace('...' + Reflect.fields(props));
 		//baseForm =new BaseForm(this);

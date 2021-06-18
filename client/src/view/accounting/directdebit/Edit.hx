@@ -1,5 +1,6 @@
 package view.accounting.directdebit;
 
+import js.html.FormData;
 import data.DataState;
 import view.shared.FormInputElement;
 import js.html.Event;
@@ -73,30 +74,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Neu Erstellen',action:'create',
 			formField:{				
 				name:'directDebitFile',
-				submit:'Herunterladen',
-				type:FormInputElement.Button,
-				handleChange: function(evt:Event) {
-					trace(Reflect.fields(evt));
-					/*var finput = cast Browser.document.getElementById('returnDebitFile');
-					trace(finput.value);
-					//trace(_instance);
-					var val = (finput.value == ''?'':finput.value.split('\\').pop());
-					Files._instance.setState({data:['hint'=>'Zum Upload ausgewählt:${val}']});*/
-				}
-			},
-			handler: function(_) {				
-				/*var finput = cast Browser.document.getElementById('returnDebitFile');
-				//var files = php.Lib.hashOfAssociativeArray(finput.files);
-				
-				trace(finput.files);
-				trace(Reflect.fields(finput));
-				js.Syntax.code("console.log({0}[{1}])",finput.files,"returnDebitFile");
-				trace(finput.value);*/
-				//trace(finput.files.get('returnDebitFile'));
-			}/**/
+				type: FormInputElement.Button
+			}
 		},
 		{separator: true},		
-		{label: 'Buchungsdatum',formField: { name: 'booking_day', type: Checkbox, options: ['1'=>'1','15'=>'15']}},
+		{label: 'Buchungstag',formField: { name: 'booking_day', type: Radio, options: ['1'=>'1','15'=>'15']}},
 	];
 	var dataAccess:DataAccess;	
 	//var dataDisplay:Map<String,DataState>;
@@ -150,6 +132,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				},
 				{
 					dataClassPath:'data.DirectDebits',
+					hasForm:false,
 					label:'Bearbeiten',
 					section: 'Edit',
 					items: menuItems
@@ -192,9 +175,58 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.action);
 		//state.formApi.doAction('get');
 	}
-
-	public function create(_):Void {
-		trace(Date.now());
+	
+	//public function create(arg:Array<FormData>):Void {
+	public function create(fd:FormData):Void {
+		//var fd:FormData = arg;//[0];
+		trace(fd);
+		trace(fd.entries().next());
+		var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){
+			fd.append('devIP',App.devIP);
+			fd.append('action','createDirectDebitsCSV');
+			var xhr = new js.html.XMLHttpRequest();
+			xhr.open('POST', '${App.config.api}', true);
+			xhr.onerror = function(e) {
+				trace(e);
+				trace(e.type);
+				reject({error:e});
+			}
+			xhr.withCredentials = true;
+			xhr.onload = function(e) {
+				trace(xhr.status);
+				if (xhr.status != 200) {				
+					trace(xhr.statusText);
+					reject({error:xhr.statusText});
+				}
+				trace(xhr.response.length);
+				resolve(xhr.response);
+				//onLoaded(haxe.io.Bytes.ofData(xhr.response));
+			}
+			xhr.send(fd);
+			setState({action:'createDirectDebitsCSV',loading:true});
+		});
+		
+		iPromise.then(function (r:Dynamic) {
+			trace(r);
+			/*var dd:{rlData:Array<Dynamic>} = Json.parse(r);
+			//trace(rD);
+			var dT:Array<Map<String, Dynamic>> = new Array();
+			for(dR in dd.rlData)
+				dT.push(Utils.dynToMap(dR));
+			setState({dataTable:dT,loading:false});
+			App.store.dispatch(Status(Update( 
+				{	
+					text:dT.count() + ' Buchungsanforderungen erstellt'
+				}
+			)));*/
+		}, function (r:Dynamic) {
+			trace(r);
+			App.store.dispatch(Status(Update( 
+				{	className:'',
+					text:(r.error==null?'':r.error)
+				}
+			)));
+		});
 	}
 
 	public function delete(ev:ReactEvent):Void

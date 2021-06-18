@@ -2,6 +2,11 @@ package view.shared;
 
 //import js.lib.Reflect;
 //import model.FormInputElement;
+import js.html.FormElement;
+import js.html.Element;
+import js.html.FormData;
+import js.html.FormDataIterator;
+import js.html.SelectElement;
 import view.shared.io.BaseForm;
 import js.html.NodeList;
 import js.html.Document;
@@ -98,17 +103,44 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		return !item.disabled;
 	}
 
-	function clear() {
-		var inputs:NodeList = Browser.document.querySelectorAll('.formRow .input');
+	function clear(evt:Event) {
+		evt.preventDefault();
+		var form:FormElement = untyped evt.target.form;
+		form.reset();
+		/*var inputs:NodeList = Browser.document.querySelectorAll('.formRow input');
 		var el:InputElement;
 		for(i in 0...inputs.length){
-			el = cast( inputs[i], InputElement);
+			el = cast( inputs[i], InputElement);			
 			el.value = '';
 		}
+		var selects:NodeList = Browser.document.querySelectorAll('.formRow select');
+		var sel:SelectElement;
+		for(i in 0...selects.length){
+			sel = cast(selects[i], SelectElement);
+			for(o in 0...sel.options.length){
+				if(sel.options[o].defaultSelected)
+					sel.options[o].selected = true
+			}
+		}*/
+
 	}
 
-	function find() {
-		var inputs:NodeList = Browser.document.querySelectorAll('.formRow .input');
+	function find(evt:Event) {
+		evt.preventDefault();
+		//trace(untyped evt.target.form);
+		//return;
+		var form:FormElement = untyped evt.target.form;
+		var fD:FormData = new FormData(form);
+		if(Reflect.isFunction(Reflect.field(props.parentComponent, 'find'))){
+			return props.parentComponent.find(fD);
+		}
+		var fDe:FormDataIterator = fD.entries();
+		//while(e:Dynamic = fDe.next())
+		fD.forEach(function(d:Dynamic) {
+			trace(d);
+		});
+		//trace(fD.getAll('*'));
+		var inputs:NodeList = Browser.document.querySelectorAll('.formRow input');
 		trace(inputs.length);
 		var el:InputElement;
 		var param:Dynamic = {};
@@ -118,7 +150,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			if(StringTools.trim(el.value)!='')
 				Reflect.setField(param, el.name,el.value);
 		}
-		props.parentComponent.get(BaseForm.filter(props.parentComponent.props,param));
+		return props.parentComponent.get(BaseForm.filter(props.parentComponent.props,param));
 	}	
 
 	function renderHeader():ReactFragment
@@ -169,7 +201,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			panels.push( jsx('	
 			<div className="panel" key=${"pa"+i} style=${style}>
 				<label className="panel-heading" htmlFor=${"sMenuPanel-"+i}>${block.label}</label>
-				<div id=${"pblock" + i} className=${"panel-block body-"+(i++)} children=${renderItems(block.items)}></div>
+				<div id=${"pblock" + i} className=${"panel-block body-"+(i++)} children=${renderBlock(block,i)}></div>
 			</div>		
 			'));
 		} );
@@ -177,8 +209,16 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		return panels;
 	}	
 	
-	function renderItems(items:Array<MItem>):ReactFragment
+	function renderBlock(block:MenuBlock, i:Int):ReactFragment
 	{
+		//trace(block);
+		var items:ReactFragment = renderItems(block);
+		return block.hasForm ? jsx('<form name=${block.dataClassPath} key=${"f_"+i}>$items</form>'):items;
+	}
+
+	function renderItems(block:MenuBlock):ReactFragment
+	{
+		var items:Array<MItem> = block.items;
 		if (items == null || items.length == 0)
 			return null;
 		var B:ReactType = ${bulma_components.Button};
@@ -191,15 +231,23 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				state.items.set(item.id, item);
 			}
 
-			if(item.separator){ return jsx('<hr key=${i++} className="menuSeparator"/>');}
+			if(item.separator){ return jsx('<hr key=${"s_"+i++} className="menuSeparator"/>');}
 			var type:FormInputElement;
 			type = (item.formField==null?Button:(item.formField.type==null?FormInputElement.Text: item.formField.type));
 			//trace(i + ':' + type);
 			if(type!=Button)
-				hasForm = true;
+				block.hasForm = true;
 			return switch(type)
 			{
-				//case Filter: jsx('<$Filter  key=${i++}/>');				
+				case Radio: 
+					var o:Int = 0;
+					var options:ReactFragment = [
+					for(k=>v in item.formField.options.keyValueIterator()){
+						jsx('<><span key=${"o_"+(o++)Y}>${v} <input type="radio" name=${item.formField.name} value=${v} /></span></>');
+					}];
+					jsx('<div className="formRow" key=${"fr_"+(i++)} >
+					<label>${item.label}</label><div className="formRow2">$options</div>
+					</div>');	
 				/*case File:
 					jsx('<div key=${"uf"+(i++)}  id="uploadForm"   className="uploadBox" >
 					<input  id=${item.formField.name} type="file" name=${item.formField.name} onChange=${item.formField.handleChange} className="fileinput"  />
@@ -240,8 +288,9 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		if(props.menuBlocks == null)
 		return null;
 		//if(props.parentComponent != null)
+		//trace(props.menuBlocks.keys());
+		//trace(props.menuBlocks.get('Edit'));
 			//trace(Type.getClassName(Type.getClass(props.parentComponent)));
-		//trace(props.menuBlocks.keys().next);
 		//trace(props.basePath);
 		menuRef = React.createRef();
 		var style:Dynamic = null;

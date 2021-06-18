@@ -198,17 +198,18 @@ class FormApi
 			trace(getUrl(eTarget.dataset.action));
 			trace(Type.getClassName(Type.getClass(comp)));
 		}
-		return executeMethod(method);
+		return executeMethod(method,  new FormData(untyped e.target.form));
 	}
 
-	function executeMethod(method:String, ?r:Array<Dynamic>) {
+	function executeMethod(method:String, ?r:Dynamic) {
 		trace(method);		
+		trace(r);		
 		//trace( Type.getInstanceFields(Type.getClass(comp)).join('|'));
 		//trace(Type.typeof(comp));
 		var fun:Function = Reflect.field(comp,method);
 		if(Reflect.isFunction(fun))
 		{
-			Reflect.callMethod(comp,fun,r);
+			Reflect.callMethod(comp,fun,[r]);
 			return true;
 		}
 		trace('$method is not a function');
@@ -262,6 +263,7 @@ class FormApi
 			//trace(content);
 			return null;
 		}
+		//trace(sM);
 			
 		if(sM.section != null)//TODO: MONITOR PERFORMANCE + INTEGRITY SETTING SUBMENU SECTION HERE
 		{

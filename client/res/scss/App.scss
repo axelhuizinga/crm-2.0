@@ -863,8 +863,15 @@ label.panel-heading {
 }
 .formRow label{
 	min-height: 0;
-	max-height: 50%;
+	/*max-height: 50%;*/
 	margin: auto 0;
+}
+.formRow span{
+	margin: 0 0.8rem;
+	vertical-align: middle;
+}
+.formRow input{
+	vertical-align: middle;
 }
 
 /*tables*/

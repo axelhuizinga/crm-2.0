@@ -45,7 +45,11 @@ module.exports = () =>{
 		// Generation options (destination, naming pattern,...)
 		output: {
 			path: dist,
-			filename: 'js/[name].js',
+			filename: (pathData, assetInfo)=>{
+				console.log('name:' +  pathData.chunk.name);
+				return 'js/[name].js';
+			},
+			//filename: 'js/[name].js',
 			//publicPath: dist,
 			publicPath: '/'
 		},
@@ -114,9 +118,9 @@ module.exports = () =>{
 		watch: (isProd ? false: true),
 		watchOptions:{
 			//aggregateTimeout:1500,
-			ignored: ['httpdocs']
+			//ignored: ['httpdocs']
 		},    
-		// List all the processors
+		// List all the processorsconsole.log('context:' + context);
 		module: {
 			rules: [
 				// Haxe loader (through HXML files for now)

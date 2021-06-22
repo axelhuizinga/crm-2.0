@@ -275,7 +275,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					data-section=${item.section} disabled=${item.disabled}>${item.label}</$B>');
 			}
 		}).array();
-		if(hasForm){			
+		if(true||hasForm){			
 			items.push(jsx('<$B key=${"bu"+(i++)} onClick=${find} data-action="find" data-then=${null}>Finden</$B>'));
 			items.push(jsx('<$B key=${"bu"+(i++)} onClick=${clear} data-action="clear" data-then=${null}>Zurücksetzen</$B>'));
 		}

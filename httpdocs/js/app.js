@@ -1795,7 +1795,7 @@ action_async_LivePBXSync.importContacts = function(props) {
 			return dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ dbUser : props.userState.dbUser, lastError : "Du musst dich neu anmelden!"}))));
 		}
 		haxe_Log.trace("creating BinaryLoader " + Std.string(App.config.api),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 63, className : "action.async.LivePBXSync", methodName : "importContacts"});
-		var bl = loader_BinaryLoader.dbQuery("" + Std.string(App.config.api),{ dbUser : props.userState.dbUser, classPath : props.classPath, action : props.action, extDB : true, action_id : props.action_id == null ? 0 : props.action_id, limit : props.limit, offset : props.offset, table : props.table, filter : props.filter, maxImport : props.maxImport == null ? 1000 : props.maxImport, devIP : App.devIP},function(data) {
+		var bl = loader_BinaryLoader.dbQuery("" + Std.string(App.config.api),{ dbUser : props.userState.dbUser, classPath : props.classPath, action : props.action, extDB : true, id : props.id == null ? 0 : props.id, limit : props.limit, offset : props.offset, table : props.table, filter : props.filter, maxImport : props.maxImport == null ? 1000 : props.maxImport, devIP : App.devIP},function(data) {
 			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 81, className : "action.async.LivePBXSync", methodName : "importContacts"});
 			haxe_Log.trace(data.dataRows.length,{ fileName : "action/async/LivePBXSync.hx", lineNumber : 82, className : "action.async.LivePBXSync", methodName : "importContacts"});
 			var h = data.dataErrors.h;
@@ -18572,7 +18572,7 @@ view_Reports.prototype = $extend(React_Component.prototype,{
 		var tmp5 = React.createElement(tmp1,{ className : "tabNav2"},React.createElement(tmp2,{ className : "is-boxed"},tmp3,tmp4));
 		var tmp1 = react_ReactType.fromString("div");
 		var tmp2 = react_ReactType.fromComp(react_router_Switch);
-		var tmp3 = React.createElement(react_ReactType.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/Reports/History/:section?/:action?/:id?", component : react_ReactType.fromComp(view_stats_History)}));
+		var tmp3 = React.createElement(react_ReactType.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/Reports/History/:section?/:action?/", component : react_ReactType.fromComp(view_stats_History)}));
 		var tmp4 = React.createElement(react_ReactType.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/Reports/Preview/:section?/:action?/:id?", component : react_ReactType.fromComp(view_stats_Preview)}));
 		var tmp6 = React.createElement(tmp1,{ className : "tabContent2"},React.createElement(tmp2,{ },tmp3,tmp4));
 		var tmp1 = React.createElement(view_StatusBar._renderWrapper,this.props);
@@ -18754,10 +18754,8 @@ view_accounting_Accounts.prototype = $extend(React_Component.prototype,{
 var view_accounting_DirectDebits = function(props) {
 	React_Component.call(this,props);
 	if(props.match.params.section == null) {
-		if(this._trace) {
-			haxe_Log.trace("reme",{ fileName : "view/accounting/DirectDebits.hx", lineNumber : 52, className : "view.accounting.DirectDebits", methodName : "new"});
-		}
 		var baseUrl = props.match.path.split(":section")[0];
+		haxe_Log.trace("pushing2: " + baseUrl + "Edit",{ fileName : "view/accounting/DirectDebits.hx", lineNumber : 53, className : "view.accounting.DirectDebits", methodName : "new"});
 		props.history.push("" + baseUrl + "Edit");
 	}
 	this.state = App.initEState({ loading : false},this);
@@ -18785,7 +18783,7 @@ view_accounting_DirectDebits.prototype = $extend(React_Component.prototype,{
 		this.state.formApi.doAction();
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/accounting/DirectDebits.hx", lineNumber : 100, className : "view.accounting.DirectDebits", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/accounting/DirectDebits.hx", lineNumber : 82, className : "view.accounting.DirectDebits", methodName : "render"});
 		switch(this.props.match.params.section) {
 		case "Edit":
 			return React.createElement(view_accounting_directdebit_Edit._renderWrapper,Object.assign({ },this.props,{ fullWidth : true, sideMenu : this.state.sideMenu}));
@@ -18864,25 +18862,24 @@ view_accounting_ReturnDebits.prototype = $extend(React_Component.prototype,{
 var view_accounting_directdebit_Edit = function(props) {
 	this.mounted = false;
 	React_Component.call(this,props);
-	haxe_Log.trace(props.match.params,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 117, className : "view.accounting.directdebit.Edit", methodName : "new"});
-	haxe_Log.trace(Reflect.fields(props),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 119, className : "view.accounting.directdebit.Edit", methodName : "new"});
+	haxe_Log.trace(props.match.params,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 101, className : "view.accounting.directdebit.Edit", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(props),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 103, className : "view.accounting.directdebit.Edit", methodName : "new"});
 	if(props.match.params.id == null && new EReg("open(/)*$","").match(props.match.params.action)) {
-		haxe_Log.trace("nothing selected - redirect",{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 124, className : "view.accounting.directdebit.Edit", methodName : "new"});
+		haxe_Log.trace("nothing selected - redirect",{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 108, className : "view.accounting.directdebit.Edit", methodName : "new"});
 		var baseUrl = props.match.path.split(":section")[0];
 		props.history.push("" + baseUrl + "List/get");
 		return;
 	}
 	this.dataAccess = model_accounting_DebitModel.dataAccess;
 	this.fieldNames = view_shared_io_BaseForm.initFieldNames(new haxe_ds__$StringMap_StringMapKeyIterator(this.dataAccess.h["open"].view.h));
-	this.dataDisplay = model_accounting_DebitModel.dataDisplay;
-	this.state = App.initEState({ actualState : null, initialData : null, loading : false, mHandlers : view_accounting_directdebit_Edit.menuItems, selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu2(this,[{ dataClassPath : "data.DirectDebits", label : "Gesamtliste", section : "List", items : view_accounting_directdebit_List.menuItems},{ dataClassPath : "data.DirectDebits", label : "Bearbeiten", section : "Edit", items : view_accounting_directdebit_Edit.menuItems}],{ section : props.match.params.section == null ? "Edit" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
-	haxe_Log.trace(this.state.initialData,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 166, className : "view.accounting.directdebit.Edit", methodName : "new"});
-	haxe_Log.trace(this.state.loading,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 170, className : "view.accounting.directdebit.Edit", methodName : "new"});
+	this.state = App.initEState({ actualState : null, initialData : null, loading : false, mHandlers : view_accounting_directdebit_Edit.menuItems, selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu2(this,[{ dataClassPath : "data.DirectDebits", label : "Gesamtliste", section : "List", items : view_accounting_directdebit_List.menuItems},{ dataClassPath : "data.DirectDebits", hasForm : false, label : "Bearbeiten", section : "Edit", items : view_accounting_directdebit_Edit.menuItems}],{ section : props.match.params.section == null ? "Edit" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
+	haxe_Log.trace(this.state.initialData,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 151, className : "view.accounting.directdebit.Edit", methodName : "new"});
+	haxe_Log.trace(this.state.loading,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 155, className : "view.accounting.directdebit.Edit", methodName : "new"});
 };
 $hxClasses["view.accounting.directdebit.Edit"] = view_accounting_directdebit_Edit;
 view_accounting_directdebit_Edit.__name__ = "view.accounting.directdebit.Edit";
 view_accounting_directdebit_Edit.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace("here we should be ready to load",{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 174, className : "view.accounting.directdebit.Edit", methodName : "mapDispatchToProps"});
+	haxe_Log.trace("here we should be ready to load",{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 159, className : "view.accounting.directdebit.Edit", methodName : "mapDispatchToProps"});
 	return { load : function(param) {
 		return dispatch(redux_Action.map(action_async_CRUD.read(param)));
 	}};
@@ -18893,7 +18890,6 @@ view_accounting_directdebit_Edit.mapStateToProps = function(aState) {
 view_accounting_directdebit_Edit.__super__ = React_Component;
 view_accounting_directdebit_Edit.prototype = $extend(React_Component.prototype,{
 	dataAccess: null
-	,dataDisplay: null
 	,formApi: null
 	,formBuilder: null
 	,formFields: null
@@ -18906,35 +18902,66 @@ view_accounting_directdebit_Edit.prototype = $extend(React_Component.prototype,{
 	,mounted: null
 	,componentDidMount: function() {
 		this.dataAccess = model_accounting_DebitModel.dataAccess;
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 190, className : "view.accounting.directdebit.Edit", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 175, className : "view.accounting.directdebit.Edit", methodName : "componentDidMount"});
 	}
-	,createDirectDebit: function(_) {
-		haxe_Log.trace(new Date(),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 195, className : "view.accounting.directdebit.Edit", methodName : "createDirectDebit"});
+	,create: function(fd) {
+		var _gthis = this;
+		haxe_Log.trace(fd,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 182, className : "view.accounting.directdebit.Edit", methodName : "create"});
+		haxe_Log.trace(fd.entries().next(),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 183, className : "view.accounting.directdebit.Edit", methodName : "create"});
+		var iPromise = new Promise(function(resolve,reject) {
+			fd.append("devIP",App.devIP);
+			fd.append("action","createDirectDebitsCSV");
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST","" + Std.string(App.config.api),true);
+			xhr.onerror = function(e) {
+				haxe_Log.trace(e,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 190, className : "view.accounting.directdebit.Edit", methodName : "create"});
+				haxe_Log.trace(e.type,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 191, className : "view.accounting.directdebit.Edit", methodName : "create"});
+				reject({ error : e});
+			};
+			xhr.withCredentials = true;
+			xhr.onload = function(e) {
+				haxe_Log.trace(xhr.status,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 196, className : "view.accounting.directdebit.Edit", methodName : "create"});
+				if(xhr.status != 200) {
+					haxe_Log.trace(xhr.statusText,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 198, className : "view.accounting.directdebit.Edit", methodName : "create"});
+					reject({ error : xhr.statusText});
+				}
+				haxe_Log.trace(xhr.response.length,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 201, className : "view.accounting.directdebit.Edit", methodName : "create"});
+				resolve(xhr.response);
+			};
+			xhr.send(fd);
+			_gthis.setState({ action : "createDirectDebitsCSV", loading : true});
+		});
+		iPromise.then(function(r) {
+			haxe_Log.trace(r,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 210, className : "view.accounting.directdebit.Edit", methodName : "create"});
+		},function(r) {
+			haxe_Log.trace(r,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 223, className : "view.accounting.directdebit.Edit", methodName : "create"});
+			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : r.error == null ? "" : r.error}))));
+		});
 	}
 	,'delete': function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 200, className : "view.accounting.directdebit.Edit", methodName : "delete"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 234, className : "view.accounting.directdebit.Edit", methodName : "delete"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
 	}
 	,get: function(ev) {
 		var _gthis = this;
-		haxe_Log.trace("hi " + Std.string(ev),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 206, className : "view.accounting.directdebit.Edit", methodName : "get"});
+		haxe_Log.trace("hi " + Std.string(ev),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 240, className : "view.accounting.directdebit.Edit", methodName : "get"});
 		var offset = 0;
 		if(ev != null && ev.page != null) {
 			offset = this.props.limit * ev.page | 0;
 		}
-		haxe_Log.trace(this.props.userState,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 212, className : "view.accounting.directdebit.Edit", methodName : "get"});
-		var p = this.props.load({ classPath : "data.ReturnDebitStatements", action : "get", filter : this.props.match.params.id != null ? { id : this.props.match.params.id, mandator : "1"} : { mandator : "1", processed : "false"}, limit : this.props.limit, offset : offset > 0 ? offset : 0, table : "debit_return_statements", resolveMessage : { success : "", failure : ""}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
+		haxe_Log.trace(this.props.userState,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 246, className : "view.accounting.directdebit.Edit", methodName : "get"});
+		var p = this.props.load({ classPath : "data.DirectDebits", action : "get", filter : this.props.match.params.id != null ? { id : this.props.match.params.id, mandator : "1"} : { mandator : "1", processed : "false"}, limit : this.props.limit, offset : offset > 0 ? offset : 0, table : "debit_return_statements", resolveMessage : { success : "", failure : ""}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
 		p.then(function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 230, className : "view.accounting.directdebit.Edit", methodName : "get"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 264, className : "view.accounting.directdebit.Edit", methodName : "get"});
 			_gthis.setState({ loading : false, dataTable : data.dataRows});
 		});
 	}
 	,edit: function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 237, className : "view.accounting.directdebit.Edit", methodName : "edit"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 271, className : "view.accounting.directdebit.Edit", methodName : "edit"});
 	}
 	,update: function() {
 		if(this.state.actualState != null) {
-			haxe_Log.trace(this.state.actualState.fieldsModified.length,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 244, className : "view.accounting.directdebit.Edit", methodName : "update"});
+			haxe_Log.trace(this.state.actualState.fieldsModified.length,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 278, className : "view.accounting.directdebit.Edit", methodName : "update"});
 		}
 		if(this.state.actualState == null || this.state.actualState.fieldsModified.length == 0) {
 			return;
@@ -18943,62 +18970,36 @@ view_accounting_directdebit_Edit.prototype = $extend(React_Component.prototype,{
 		var doc = window.document;
 		var aState = react_ReactUtil.copy(this.state.actualState);
 		var dbQ = { classPath : "data.Deals", action : "update", data : data2save, filter : { id : this.state.actualState.id, mandator : 1}, resolveMessage : { success : "Spende " + this.state.actualState.id + " wurde aktualisiert", failure : "Spende " + this.state.actualState.id + " konnte nicht aktualisiert werden"}, table : "deals", dbUser : this.props.userState.dbUser, devIP : App.devIP};
-		haxe_Log.trace("" + this.props.match.params.action + ": " + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 274, className : "view.accounting.directdebit.Edit", methodName : "update"});
+		haxe_Log.trace("" + this.props.match.params.action + ": " + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 308, className : "view.accounting.directdebit.Edit", methodName : "update"});
 		if(this.state.actualState != null) {
-			haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 277, className : "view.accounting.directdebit.Edit", methodName : "update"});
+			haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 311, className : "view.accounting.directdebit.Edit", methodName : "update"});
 		}
-		haxe_Log.trace(this.state.actualState.id,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 280, className : "view.accounting.directdebit.Edit", methodName : "update"});
+		haxe_Log.trace(this.state.actualState.id,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 314, className : "view.accounting.directdebit.Edit", methodName : "update"});
 		if(!this.state.actualState.modified()) {
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Spende wurde nicht geändert"}))));
-			haxe_Log.trace("nothing modified",{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 289, className : "view.accounting.directdebit.Edit", methodName : "update"});
+			haxe_Log.trace("nothing modified",{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 323, className : "view.accounting.directdebit.Edit", methodName : "update"});
 			return;
 		}
-		haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 292, className : "view.accounting.directdebit.Edit", methodName : "update"});
+		haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 326, className : "view.accounting.directdebit.Edit", methodName : "update"});
 		App.store.dispatch(redux_Action.map(action_async_CRUD.update(dbQ)));
-	}
-	,initStateFromDataTable: function(dt) {
-		var iS = { };
-		var _g = 0;
-		while(_g < dt.length) {
-			var dR = dt[_g];
-			++_g;
-			var rS = { };
-			var h = dR.h;
-			var k_h = h;
-			var k_keys = Object.keys(h);
-			var k_length = k_keys.length;
-			var k_current = 0;
-			while(k_current < k_length) {
-				var k = k_keys[k_current++];
-				haxe_Log.trace(k,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 305, className : "view.accounting.directdebit.Edit", methodName : "initStateFromDataTable"});
-				if(this.dataDisplay.h["fieldsList"].columns.h[k].cellFormat == view_shared_Format.formatBool) {
-					rS[k] = dR.h[k] == "Y";
-				} else {
-					rS[k] = dR.h[k];
-				}
-			}
-			iS[dR.h["id"]] = rS;
-		}
-		haxe_Log.trace(iS,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 315, className : "view.accounting.directdebit.Edit", methodName : "initStateFromDataTable"});
-		return iS;
 	}
 	,loadDealData: function(id) {
 		var _gthis = this;
-		haxe_Log.trace("loading:" + id,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 321, className : "view.accounting.directdebit.Edit", methodName : "loadDealData"});
+		haxe_Log.trace("loading:" + id,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 355, className : "view.accounting.directdebit.Edit", methodName : "loadDealData"});
 		if(id == null) {
 			return;
 		}
 		var p = this.props.load({ classPath : "data.Deals", action : "get", filter : { id : id, mandator : 1}, resolveMessage : { success : "Aktion " + id + " wurde geladen", failure : "Aktion " + id + " konnte nicht geladen werden"}, table : "deals", dbUser : this.props.userState.dbUser, devIP : App.devIP});
 		p.then(function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 339, className : "view.accounting.directdebit.Edit", methodName : "loadDealData"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 373, className : "view.accounting.directdebit.Edit", methodName : "loadDealData"});
 			if(data.dataRows.length == 1) {
 				var data1 = data.dataRows[0];
-				haxe_Log.trace(data1 == null ? "null" : haxe_ds_StringMap.stringify(data1.h),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 343, className : "view.accounting.directdebit.Edit", methodName : "loadDealData"});
+				haxe_Log.trace(data1 == null ? "null" : haxe_ds_StringMap.stringify(data1.h),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 377, className : "view.accounting.directdebit.Edit", methodName : "loadDealData"});
 				var deal = new model_Deal(data1);
-				haxe_Log.trace(deal.id,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 346, className : "view.accounting.directdebit.Edit", methodName : "loadDealData"});
+				haxe_Log.trace(deal.id,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 380, className : "view.accounting.directdebit.Edit", methodName : "loadDealData"});
 				_gthis.setState({ loading : false, actualState : deal, initialData : react_ReactUtil.copy(deal)});
-				haxe_Log.trace(_gthis.state.actualState.id + ":" + _gthis.state.actualState.fieldsInitalized.join(","),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 348, className : "view.accounting.directdebit.Edit", methodName : "loadDealData"});
-				haxe_Log.trace(_gthis.props.location.pathname + ":" + _gthis.state.actualState.amount,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 350, className : "view.accounting.directdebit.Edit", methodName : "loadDealData"});
+				haxe_Log.trace(_gthis.state.actualState.id + ":" + _gthis.state.actualState.fieldsInitalized.join(","),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 382, className : "view.accounting.directdebit.Edit", methodName : "loadDealData"});
+				haxe_Log.trace(_gthis.props.location.pathname + ":" + _gthis.state.actualState.amount,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 384, className : "view.accounting.directdebit.Edit", methodName : "loadDealData"});
 				var _gthis1 = _gthis.props.history;
 				var tmp = StringTools.replace(_gthis.props.location.pathname,"open","update");
 				_gthis1.replace(tmp);
@@ -19006,21 +19007,17 @@ view_accounting_directdebit_Edit.prototype = $extend(React_Component.prototype,{
 		});
 	}
 	,renderResults: function() {
-		haxe_Log.trace(this.props.match.params.section + ":" + Std.string(this.state.dataTable != null),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 358, className : "view.accounting.directdebit.Edit", methodName : "renderResults"});
-		haxe_Log.trace(Std.string(this.state.loading) + ":" + this.props.match.params.action,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 360, className : "view.accounting.directdebit.Edit", methodName : "renderResults"});
+		haxe_Log.trace(this.props.match.params.section + ":" + Std.string(this.state.dataTable != null),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 392, className : "view.accounting.directdebit.Edit", methodName : "renderResults"});
+		haxe_Log.trace(Std.string(this.state.loading) + ":" + this.props.match.params.action,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 394, className : "view.accounting.directdebit.Edit", methodName : "renderResults"});
 		if(this.state.loading) {
 			return this.state.formApi.renderWait();
 		}
-		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 363, className : "view.accounting.directdebit.Edit", methodName : "renderResults"});
+		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 397, className : "view.accounting.directdebit.Edit", methodName : "renderResults"});
 		switch(this.props.match.params.action) {
 		case "delete":
 			return null;
-		case "insert":
-			haxe_Log.trace(this.dataDisplay.h["fieldsList"],{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 389, className : "view.accounting.directdebit.Edit", methodName : "renderResults"});
-			haxe_Log.trace(Std.string(this.state.dataTable[29].h["id"]) + "<<<",{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 390, className : "view.accounting.directdebit.Edit", methodName : "renderResults"});
-			return React.createElement(react_ReactType.fromComp(view_table_Table),Object.assign({ },this.props,{ id : "fieldsList", data : this.state.dataTable, dataState : this.dataDisplay.h["fieldsList"], className : "is-striped is-hoverable", fullWidth : true}));
 		case "open":case "update":
-			haxe_Log.trace(this.state.actualState,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 373, className : "view.accounting.directdebit.Edit", methodName : "renderResults"});
+			haxe_Log.trace(this.state.actualState,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 407, className : "view.accounting.directdebit.Edit", methodName : "renderResults"});
 			if(this.state.actualState == null) {
 				return this.state.formApi.renderWait();
 			} else {
@@ -19044,7 +19041,7 @@ view_accounting_directdebit_Edit.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 407, className : "view.accounting.directdebit.Edit", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 441, className : "view.accounting.directdebit.Edit", methodName : "render"});
 		var tmp = this.state.formApi;
 		var tmp1 = react_ReactType.fromComp(React_Fragment);
 		var tmp2 = react_ReactType.fromString("form");
@@ -19054,7 +19051,7 @@ view_accounting_directdebit_Edit.prototype = $extend(React_Component.prototype,{
 	}
 	,updateMenu: function(viewClassPath) {
 		var sideMenu = this.state.sideMenu;
-		haxe_Log.trace(sideMenu.section,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 419, className : "view.accounting.directdebit.Edit", methodName : "updateMenu"});
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 453, className : "view.accounting.directdebit.Edit", methodName : "updateMenu"});
 		var _g = 0;
 		var _g1 = sideMenu.menuBlocks.h["Contact"].items;
 		while(_g < _g1.length) {
@@ -19126,7 +19123,7 @@ view_shared_io_FormApi.renderSelectOptions = function(fel) {
 	while(_g < opts.length) {
 		var opt = opts[_g];
 		++_g;
-		rOpts.push(React.createElement(react_ReactType.fromString("option"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 470, className : "view.shared.io.FormApi", methodName : "renderSelectOptions"})},opt));
+		rOpts.push(React.createElement(react_ReactType.fromString("option"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 472, className : "view.shared.io.FormApi", methodName : "renderSelectOptions"})},opt));
 	}
 	return rOpts;
 };
@@ -19155,8 +19152,8 @@ view_shared_io_FormApi.localDate = function(d) {
 	if(d == null) {
 		d = HxOverrides.dateStr(new Date());
 	}
-	haxe_Log.trace(d,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 649, className : "view.shared.io.FormApi", methodName : "localDate"});
-	haxe_Log.trace(Date.parse(d),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 650, className : "view.shared.io.FormApi", methodName : "localDate"});
+	haxe_Log.trace(d,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 651, className : "view.shared.io.FormApi", methodName : "localDate"});
+	haxe_Log.trace(Date.parse(d),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 652, className : "view.shared.io.FormApi", methodName : "localDate"});
 	return DateTools.format(new Date(Date.parse(d)),"%d.%m.%Y %H:%M");
 };
 view_shared_io_FormApi.obj2map = function(obj,fields) {
@@ -19294,16 +19291,17 @@ view_shared_io_FormApi.prototype = {
 			var c = js_Boot.getClass(this.comp);
 			haxe_Log.trace(c.__name__,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 199, className : "view.shared.io.FormApi", methodName : "callMethod"});
 		}
-		return this.executeMethod(method);
+		return this.executeMethod(method,new FormData(e.target.form));
 	}
 	,executeMethod: function(method,r) {
 		haxe_Log.trace(method,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 205, className : "view.shared.io.FormApi", methodName : "executeMethod"});
+		haxe_Log.trace(r,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 206, className : "view.shared.io.FormApi", methodName : "executeMethod"});
 		var fun = Reflect.field(this.comp,method);
 		if(Reflect.isFunction(fun)) {
-			fun.apply(this.comp,r);
+			fun.apply(this.comp,[r]);
 			return true;
 		}
-		haxe_Log.trace("" + method + " is not a function",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 214, className : "view.shared.io.FormApi", methodName : "executeMethod"});
+		haxe_Log.trace("" + method + " is not a function",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 215, className : "view.shared.io.FormApi", methodName : "executeMethod"});
 		return false;
 	}
 	,getUrl: function(action,targetSection) {
@@ -19342,7 +19340,7 @@ view_shared_io_FormApi.prototype = {
 			return null;
 		}
 		if(this.sM.section != null) {
-			haxe_Log.trace(this.sM.section + ":" + this.comp.props.match.params.section,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 268, className : "view.shared.io.FormApi", methodName : "render"});
+			haxe_Log.trace(this.sM.section + ":" + this.comp.props.match.params.section,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 270, className : "view.shared.io.FormApi", methodName : "render"});
 			if(this.sM.section != this.comp.props.match.params.section && this.comp.props.match.params.section != null) {
 				this.sM.section = this.comp.props.match.params.section;
 			}
@@ -19356,19 +19354,19 @@ view_shared_io_FormApi.prototype = {
 	,renderField: function(name,k,state) {
 		var formField = state.fields.h[name];
 		if(k == 0) {
-			haxe_Log.trace(state.handleChange,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 286, className : "view.shared.io.FormApi", methodName : "renderField"});
+			haxe_Log.trace(state.handleChange,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 288, className : "view.shared.io.FormApi", methodName : "renderField"});
 		}
 		var _g = formField.type;
 		if(_g == null) {
-			return [React.createElement(react_ReactType.fromString("label"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 294, className : "view.shared.io.FormApi", methodName : "renderField"})},formField.label),React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 294, className : "view.shared.io.FormApi", methodName : "renderField"}), name : name, defaultValue : state.values.h[name], onChange : formField.disabled ? null : state.handleChange, readOnly : formField.disabled})];
+			return [React.createElement(react_ReactType.fromString("label"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 296, className : "view.shared.io.FormApi", methodName : "renderField"})},formField.label),React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 296, className : "view.shared.io.FormApi", methodName : "renderField"}), name : name, defaultValue : state.values.h[name], onChange : formField.disabled ? null : state.handleChange, readOnly : formField.disabled})];
 		} else if(_g == "Hidden") {
-			return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 292, className : "view.shared.io.FormApi", methodName : "renderField"}), name : name, type : "hidden", defaultValue : state.values.h[name], readOnly : formField.disabled});
+			return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 294, className : "view.shared.io.FormApi", methodName : "renderField"}), name : name, type : "hidden", defaultValue : state.values.h[name], readOnly : formField.disabled});
 		} else {
-			return [React.createElement(react_ReactType.fromString("label"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 294, className : "view.shared.io.FormApi", methodName : "renderField"})},formField.label),React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 294, className : "view.shared.io.FormApi", methodName : "renderField"}), name : name, defaultValue : state.values.h[name], onChange : formField.disabled ? null : state.handleChange, readOnly : formField.disabled})];
+			return [React.createElement(react_ReactType.fromString("label"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 296, className : "view.shared.io.FormApi", methodName : "renderField"})},formField.label),React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 296, className : "view.shared.io.FormApi", methodName : "renderField"}), name : name, defaultValue : state.values.h[name], onChange : formField.disabled ? null : state.handleChange, readOnly : formField.disabled})];
 		}
 	}
 	,renderElements: function(cState) {
-		haxe_Log.trace(Lambda.empty(cState.data),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 303, className : "view.shared.io.FormApi", methodName : "renderElements"});
+		haxe_Log.trace(Lambda.empty(cState.data),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 305, className : "view.shared.io.FormApi", methodName : "renderElements"});
 		if(Lambda.empty(cState.data)) {
 			return null;
 		}
@@ -19382,7 +19380,7 @@ view_shared_io_FormApi.prototype = {
 		while(field_current < field_length) {
 			var field = field_keys[field_current++];
 			var tmp = react_ReactType.fromString("div");
-			var tmp1 = shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 312, className : "view.shared.io.FormApi", methodName : "renderElements"});
+			var tmp1 = shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 314, className : "view.shared.io.FormApi", methodName : "renderElements"});
 			var tmp2 = cState.fields.h[field].type == "Hidden" ? null : "formField";
 			var tmp3 = this.renderField(field,k,cState);
 			elements.push(React.createElement(tmp,{ key : tmp1, className : tmp2},tmp3));
@@ -19449,7 +19447,7 @@ view_shared_io_FormApi.prototype = {
 		var col = 0;
 		while(name_current < name_length) {
 			var name = name_keys[name_current++];
-			cols.push(React.createElement(react_ReactType.fromString("div"),{ key : shared_Utils.genKey(name + "_" + col++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 389, className : "view.shared.io.FormApi", methodName : "renderColumns"}), className : "col", 'data-name' : name},this.renderRows(name)));
+			cols.push(React.createElement(react_ReactType.fromString("div"),{ key : shared_Utils.genKey(name + "_" + col++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 391, className : "view.shared.io.FormApi", methodName : "renderColumns"}), className : "col", 'data-name' : name},this.renderRows(name)));
 		}
 		return cols;
 	}
@@ -19467,7 +19465,7 @@ view_shared_io_FormApi.prototype = {
 				continue;
 			}
 			var formField = this._fstate.fields.h[name];
-			cols.push(React.createElement(react_ReactType.fromString("div"),{ key : shared_Utils.genKey(c++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 405, className : "view.shared.io.FormApi", methodName : "renderColumnHeaders"}), className : "col"},React.createElement(react_ReactType.fromString("div"),{ className : "form-table-cell"},React.createElement(react_ReactType.fromString("div"),{ className : "header", 'data-name' : name},formField.label))));
+			cols.push(React.createElement(react_ReactType.fromString("div"),{ key : shared_Utils.genKey(c++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 407, className : "view.shared.io.FormApi", methodName : "renderColumnHeaders"}), className : "col"},React.createElement(react_ReactType.fromString("div"),{ className : "form-table-cell"},React.createElement(react_ReactType.fromString("div"),{ className : "header", 'data-name' : name},formField.label))));
 		}
 		return cols;
 	}
@@ -19475,16 +19473,16 @@ view_shared_io_FormApi.prototype = {
 		var model = fF.name;
 		var _g = fF.type;
 		if(_g == null) {
-			return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 435, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, type : "hidden"});
+			return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 437, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, type : "hidden"});
 		} else {
 			switch(_g) {
 			case "Checkbox":
-				return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 424, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, disabled : fF.disabled});
+				return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 426, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, disabled : fF.disabled});
 			case "Hidden":
 				if(fF.primary) {
 					return null;
 				} else {
-					return React.createElement(react_ReactType.fromString("inputl"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 427, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, type : "hidden"});
+					return React.createElement(react_ReactType.fromString("inputl"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 429, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, type : "hidden"});
 				}
 				break;
 			case "Select":
@@ -19492,7 +19490,7 @@ view_shared_io_FormApi.prototype = {
 				var tmp1 = view_shared_io_FormApi.renderSelectOptions(fF.value);
 				return React.createElement(tmp,{ name : model},tmp1);
 			default:
-				return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 435, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, type : "hidden"});
+				return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 437, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, type : "hidden"});
 			}
 		}
 	}
@@ -19500,7 +19498,7 @@ view_shared_io_FormApi.prototype = {
 		var elements = [];
 		var k = 0;
 		var tmp = react_ReactType.fromString("div");
-		var tmp1 = { key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 446, className : "view.shared.io.FormApi", methodName : "renderRows"}), className : "form-table-cell", style : { minHeight : "0px", height : "0px", overflow : "hidden", padding : "0px 0.3rem"}};
+		var tmp1 = { key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 448, className : "view.shared.io.FormApi", methodName : "renderRows"}), className : "form-table-cell", style : { minHeight : "0px", height : "0px", overflow : "hidden", padding : "0px 0.3rem"}};
 		var tmp2 = this._fstate.fields.h[name];
 		elements.push(React.createElement(tmp,tmp1,React.createElement(react_ReactType.fromString("div"),{ className : "header", 'data-name' : name},tmp2.label)));
 		var _g = 0;
@@ -19508,7 +19506,7 @@ view_shared_io_FormApi.prototype = {
 		while(_g < _g1.length) {
 			var fF = _g1[_g];
 			++_g;
-			elements.push(React.createElement(react_ReactType.fromString("div"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 455, className : "view.shared.io.FormApi", methodName : "renderRows"}), className : "form-table-cell"},this.renderRowCell(fF,k++)));
+			elements.push(React.createElement(react_ReactType.fromString("div"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 457, className : "view.shared.io.FormApi", methodName : "renderRows"}), className : "form-table-cell"},this.renderRowCell(fF,k++)));
 		}
 		return elements;
 	}
@@ -19520,7 +19518,7 @@ view_shared_io_FormApi.prototype = {
 		return React.createElement(react_ReactType.fromString("section"),{ ref : this.modalFormTableHeader, className : "modal-card-body header"},this.renderColumnHeaders());
 	}
 	,renderModalScreen: function(content) {
-		haxe_Log.trace(App.modalBox,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 532, className : "view.shared.io.FormApi", methodName : "renderModalScreen"});
+		haxe_Log.trace(App.modalBox,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 534, className : "view.shared.io.FormApi", methodName : "renderModalScreen"});
 		this.modalFormTableBody = React.createRef();
 		react_ReactRef.get_current(App.modalBox).classList.toggle("is-active");
 		var click = function(_) {
@@ -19536,11 +19534,11 @@ view_shared_io_FormApi.prototype = {
 		return ReactDOM.render(React.createElement(tmp,{ },tmp1,tmp3),react_ReactRef.get_current(App.modalBox));
 	}
 	,adjustModalFormColumns: function() {
-		haxe_Log.trace(react_ReactRef.get_current(this.modalFormTableHeader),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 559, className : "view.shared.io.FormApi", methodName : "adjustModalFormColumns"});
-		haxe_Log.trace(react_ReactRef.get_current(this.modalFormTableBody).children,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 561, className : "view.shared.io.FormApi", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(react_ReactRef.get_current(this.modalFormTableHeader),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 561, className : "view.shared.io.FormApi", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(react_ReactRef.get_current(this.modalFormTableBody).children,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 563, className : "view.shared.io.FormApi", methodName : "adjustModalFormColumns"});
 		var bodyCols = react_ReactRef.get_current(this.modalFormTableBody).children;
 		var headerCols = react_ReactRef.get_current(this.modalFormTableHeader).children;
-		haxe_Log.trace(bodyCols,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 564, className : "view.shared.io.FormApi", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(bodyCols,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 566, className : "view.shared.io.FormApi", methodName : "adjustModalFormColumns"});
 		if(bodyCols == null) {
 			return;
 		}
@@ -19554,11 +19552,11 @@ view_shared_io_FormApi.prototype = {
 	}
 	,closeWait: function() {
 		this.comp.setState({ loading : false});
-		haxe_Log.trace("Done waiting",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 580, className : "view.shared.io.FormApi", methodName : "closeWait"});
+		haxe_Log.trace("Done waiting",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 582, className : "view.shared.io.FormApi", methodName : "closeWait"});
 	}
 	,renderWait: function() {
 		if(this.comp.state.values != null && this.comp.state.values.h["loadResult"] != null) {
-			haxe_Log.trace(this.comp.state.values.h["closeAfter"] != -1 ? "Y" : "N",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 591, className : "view.shared.io.FormApi", methodName : "renderWait"});
+			haxe_Log.trace(this.comp.state.values.h["closeAfter"] != -1 ? "Y" : "N",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 593, className : "view.shared.io.FormApi", methodName : "renderWait"});
 			if(this.comp.state.values.h["closeAfter"] != -1) {
 				var t = haxe_Timer.delay($bind(this,this.closeWait),this.comp.state.values.h["closeAfter"] != null ? this.comp.state.values.h["closeAfter"] : 8000);
 			}
@@ -19674,10 +19672,10 @@ view_accounting_directdebit_List.prototype = $extend(React_Component.prototype,{
 	}
 	,processReturnDebitStatements: function(_) {
 		haxe_Log.trace(this.state.dataTable,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 201, className : "view.accounting.directdebit.List", methodName : "processReturnDebitStatements"});
-		var p = this.props.update({ classPath : "data.ReturnDebitStatements", action : "insert", mandator : 1, data : haxe_Serializer.run(this.state.dataTable), table : "debit_return_statements", resolveMessage : { success : "Rücklastschriften wurden verarbeitet", failure : "Rücklastschriften konnten nicht verarbeitet werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
+		var p = this.props.update({ classPath : "data.DebitReturnStatements", action : "insert", mandator : 1, data : haxe_Serializer.run(this.state.dataTable), table : "debit_return_statements", resolveMessage : { success : "Rücklastschriften wurden verarbeitet", failure : "Rücklastschriften konnten nicht verarbeitet werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
 		p.then(function(data) {
 			haxe_Log.trace(haxe_Unserializer.run(data.dataInfo.h["data"]),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 220, className : "view.accounting.directdebit.List", methodName : "processReturnDebitStatements"});
-			haxe_Log.trace(shared_Utils.getAllByKey(haxe_Unserializer.run(data.dataInfo.h["data"]),"ba_id"),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 221, className : "view.accounting.directdebit.List", methodName : "processReturnDebitStatements"});
+			haxe_Log.trace(shared_Utils.getAllByKey(haxe_Unserializer.run(data.dataInfo.h["data"]),"id"),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 221, className : "view.accounting.directdebit.List", methodName : "processReturnDebitStatements"});
 		});
 	}
 	,loadLocal: function() {
@@ -21180,7 +21178,7 @@ view_accounting_returndebit_List.prototype = $extend(React_Component.prototype,{
 		_g1.h["jCond"] = "drs.sepa_code=code";
 		_g.h["sepa_return_codes"] = _g1;
 		var dS = _g;
-		var params = { dbUser : this.props.userState.dbUser, devIP : App.devIP, jwt : this.props.userState.dbUser.jwt, classPath : "data.ReturnDebitStatements", action : "get", dataSource : haxe_Serializer.run(dS), limit : this.props.limit, resolveMessage : { success : "Rücklastschriften wurde geladen", failure : "Rücklastschriften konnte nicht geladen werden"}, offset : offset > 0 ? offset : 0, joinID : "drs.id"};
+		var params = { dbUser : this.props.userState.dbUser, devIP : App.devIP, jwt : this.props.userState.dbUser.jwt, classPath : "data.DebitReturnStatements", action : "get", dataSource : haxe_Serializer.run(dS), limit : this.props.limit, resolveMessage : { success : "Rücklastschriften wurde geladen", failure : "Rücklastschriften konnte nicht geladen werden"}, offset : offset > 0 ? offset : 0, joinID : "drs.id"};
 		var p = this.props.load(params);
 		p.then(function(data) {
 			if(data.dataRows.length > 0) {
@@ -21197,10 +21195,10 @@ view_accounting_returndebit_List.prototype = $extend(React_Component.prototype,{
 	}
 	,processReturnDebitStatements: function(_) {
 		haxe_Log.trace(this.state.dataTable,{ fileName : "view/accounting/returndebit/List.hx", lineNumber : 218, className : "view.accounting.returndebit.List", methodName : "processReturnDebitStatements"});
-		var p = this.props.update({ classPath : "data.ReturnDebitStatements", action : "insert", mandator : 1, data : haxe_Serializer.run(this.state.dataTable), table : "debit_return_statements", resolveMessage : { success : "Rücklastschriften wurden verarbeitet", failure : "Rücklastschriften konnten nicht verarbeitet werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
+		var p = this.props.update({ classPath : "data.DebitReturnStatements", action : "insert", mandator : 1, data : haxe_Serializer.run(this.state.dataTable), table : "debit_return_statements", resolveMessage : { success : "Rücklastschriften wurden verarbeitet", failure : "Rücklastschriften konnten nicht verarbeitet werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
 		p.then(function(data) {
 			haxe_Log.trace(haxe_Unserializer.run(data.dataInfo.h["data"]),{ fileName : "view/accounting/returndebit/List.hx", lineNumber : 237, className : "view.accounting.returndebit.List", methodName : "processReturnDebitStatements"});
-			haxe_Log.trace(shared_Utils.getAllByKey(haxe_Unserializer.run(data.dataInfo.h["data"]),"ba_id"),{ fileName : "view/accounting/returndebit/List.hx", lineNumber : 238, className : "view.accounting.returndebit.List", methodName : "processReturnDebitStatements"});
+			haxe_Log.trace(shared_Utils.getAllByKey(haxe_Unserializer.run(data.dataInfo.h["data"]),"id"),{ fileName : "view/accounting/returndebit/List.hx", lineNumber : 238, className : "view.accounting.returndebit.List", methodName : "processReturnDebitStatements"});
 		});
 	}
 	,render: function() {
@@ -23301,7 +23299,7 @@ view_data_contacts_Deals.prototype = $extend(React_Component.prototype,{
 	,render: function() {
 		var tmp = react_ReactType.fromString("div");
 		var tmp1 = react_ReactType.fromString("form");
-		var tmp2 = { key : "dealsList", ref : this.props.formRef, className : "tabComponentForm2 formField", name : "dealsList"};
+		var tmp2 = { key : "dealsList", ref : this.props.formRef, className : "tabComponentForm2", name : "dealsList"};
 		var tmp3 = this.renderResults();
 		return React.createElement(tmp,{ className : "t_caption"},"Spenden",React.createElement(tmp1,tmp2,tmp3));
 	}
@@ -23758,15 +23756,15 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 var view_data_contacts_List = function(props) {
 	React_Component.call(this,props);
 	this.dataDisplay = model_contacts_ContactsModel.dataGridDisplay;
-	this.state = App.initEState({ dataTable : [], loading : true, contactData : new haxe_ds_IntMap(), selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "data.Contacts", label : "Liste", section : "List", items : view_data_contacts_List.menuItems},{ section : props.match.params.section == null ? "List" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
+	this.state = App.initEState({ dataTable : [], loading : true, contactData : new haxe_ds_IntMap(), selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "data.Contacts", hasForm : true, label : "Liste", section : "List", items : view_data_contacts_List.menuItems},{ section : props.match.params.section == null ? "List" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
 	if(props.match.params.section == null || props.match.params.action == null) {
 		var baseUrl = props.match.path.split(":section")[0];
-		haxe_Log.trace("redirecting to " + baseUrl + "List/get",{ fileName : "view/data/contacts/List.hx", lineNumber : 97, className : "view.data.contacts.List", methodName : "new"});
+		haxe_Log.trace("redirecting to " + baseUrl + "List/get",{ fileName : "view/data/contacts/List.hx", lineNumber : 98, className : "view.data.contacts.List", methodName : "new"});
 		props.history.push("" + baseUrl + "List/get");
 	} else {
-		haxe_Log.trace(props.match.params,{ fileName : "view/data/contacts/List.hx", lineNumber : 104, className : "view.data.contacts.List", methodName : "new"});
+		haxe_Log.trace(props.match.params,{ fileName : "view/data/contacts/List.hx", lineNumber : 105, className : "view.data.contacts.List", methodName : "new"});
 	}
-	haxe_Log.trace(this.state.loading,{ fileName : "view/data/contacts/List.hx", lineNumber : 106, className : "view.data.contacts.List", methodName : "new"});
+	haxe_Log.trace(this.state.loading,{ fileName : "view/data/contacts/List.hx", lineNumber : 107, className : "view.data.contacts.List", methodName : "new"});
 };
 $hxClasses["view.data.contacts.List"] = view_data_contacts_List;
 view_data_contacts_List.__name__ = "view.data.contacts.List";
@@ -23791,7 +23789,7 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 	,dbData: null
 	,dbMetaData: null
 	,'delete': function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 118, className : "view.data.contacts.List", methodName : "delete"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 119, className : "view.data.contacts.List", methodName : "delete"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
 	}
 	,get: function(filter) {
@@ -23799,31 +23797,31 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 		if(filter == null) {
 			filter = { mandator : this.props.userState.dbUser.mandator};
 		}
-		haxe_Log.trace("hi " + Std.string(filter),{ fileName : "view/data/contacts/List.hx", lineNumber : 126, className : "view.data.contacts.List", methodName : "get"});
+		haxe_Log.trace("hi " + Std.string(filter),{ fileName : "view/data/contacts/List.hx", lineNumber : 127, className : "view.data.contacts.List", methodName : "get"});
 		var offset = 0;
 		if(filter != null && filter.page != null) {
 			offset = this.props.limit * filter.page | 0;
 		}
-		haxe_Log.trace(this.props.match.params,{ fileName : "view/data/contacts/List.hx", lineNumber : 132, className : "view.data.contacts.List", methodName : "get"});
+		haxe_Log.trace(this.props.match.params,{ fileName : "view/data/contacts/List.hx", lineNumber : 133, className : "view.data.contacts.List", methodName : "get"});
 		var p = this.props.load({ classPath : "data.Contacts", action : "get", filter : filter, limit : this.props.limit, offset : offset > 0 ? offset : 0, table : "contacts", resolveMessage : { success : "Kontaktliste wurde geladen", failure : "Kontaktliste konnte nicht geladen werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
 		p.then(function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 150, className : "view.data.contacts.List", methodName : "get"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 151, className : "view.data.contacts.List", methodName : "get"});
 			if(data.dataRows.length < 5 && data.dataRows.length > 0) {
-				haxe_Log.trace(data.dataRows,{ fileName : "view/data/contacts/List.hx", lineNumber : 153, className : "view.data.contacts.List", methodName : "get"});
+				haxe_Log.trace(data.dataRows,{ fileName : "view/data/contacts/List.hx", lineNumber : 154, className : "view.data.contacts.List", methodName : "get"});
 			}
 			_gthis.setState({ loading : false, dataTable : data.dataRows, dataCount : Std.parseInt(data.dataInfo.h["count"]), pageCount : Math.ceil(Std.parseInt(data.dataInfo.h["count"]) / _gthis.props.limit)});
 		});
 	}
 	,edit: function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 167, className : "view.data.contacts.List", methodName : "edit"});
-		haxe_Log.trace(Reflect.fields(ev),{ fileName : "view/data/contacts/List.hx", lineNumber : 168, className : "view.data.contacts.List", methodName : "edit"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 168, className : "view.data.contacts.List", methodName : "edit"});
+		haxe_Log.trace(Reflect.fields(ev),{ fileName : "view/data/contacts/List.hx", lineNumber : 169, className : "view.data.contacts.List", methodName : "edit"});
 	}
 	,restore: function() {
 		var _gthis = this;
-		haxe_Log.trace(Reflect.fields(this.props.dataStore),{ fileName : "view/data/contacts/List.hx", lineNumber : 178, className : "view.data.contacts.List", methodName : "restore"});
+		haxe_Log.trace(Reflect.fields(this.props.dataStore),{ fileName : "view/data/contacts/List.hx", lineNumber : 173, className : "view.data.contacts.List", methodName : "restore"});
 		if(this.props.dataStore != null && this.props.dataStore.contactsDbData != null) {
 			this.setState({ dataTable : this.props.dataStore.contactsDbData.dataRows, dataCount : Std.parseInt(this.props.dataStore.contactsDbData.dataInfo.h["count"]), pageCount : Math.ceil(Std.parseInt(this.props.dataStore.contactsDbData.dataInfo.h["count"]) / this.props.limit)},function() {
-				haxe_Log.trace(_gthis.state.dataTable,{ fileName : "view/data/contacts/List.hx", lineNumber : 188, className : "view.data.contacts.List", methodName : "restore"});
+				haxe_Log.trace(_gthis.state.dataTable,{ fileName : "view/data/contacts/List.hx", lineNumber : 183, className : "view.data.contacts.List", methodName : "restore"});
 				_gthis.props.history.push("" + _gthis.props.match.path.split(":section")[0] + "List/get/" + (_gthis.props.match.params.id != null ? _gthis.props.match.params.id : ""));
 			});
 		} else {
@@ -23834,10 +23832,10 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 	,selectionClear: function() {
 		var match = react_ReactUtil.copy(this.props.match);
 		match.params.action = "get";
-		haxe_Log.trace(this.state.dataTable.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 209, className : "view.data.contacts.List", methodName : "selectionClear"});
+		haxe_Log.trace(this.state.dataTable.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 204, className : "view.data.contacts.List", methodName : "selectionClear"});
 		this.props.select(0,null,this.props.parentComponent,"UnselectAll");
 		var trs = window.document.querySelectorAll("#contactList .gridItem.selected");
-		haxe_Log.trace(trs.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 214, className : "view.data.contacts.List", methodName : "selectionClear"});
+		haxe_Log.trace(trs.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 209, className : "view.data.contacts.List", methodName : "selectionClear"});
 		var _g = 0;
 		var _g1 = trs.length;
 		while(_g < _g1) {
@@ -23856,19 +23854,19 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 		_g.h["get"] = value;
 		this.dataAccess = _g;
 		if(this.props.userState != null) {
-			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/data/contacts/List.hx", lineNumber : 237, className : "view.data.contacts.List", methodName : "componentDidMount"});
+			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/data/contacts/List.hx", lineNumber : 232, className : "view.data.contacts.List", methodName : "componentDidMount"});
 		}
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/List.hx", lineNumber : 238, className : "view.data.contacts.List", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/List.hx", lineNumber : 233, className : "view.data.contacts.List", methodName : "componentDidMount"});
 		this.state.formApi.doAction();
 	}
 	,renderResults: function() {
 		var pState = this.props.parentComponent.state;
-		haxe_Log.trace(this.state.dataTable.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 248, className : "view.data.contacts.List", methodName : "renderResults"});
+		haxe_Log.trace(this.state.dataTable.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 243, className : "view.data.contacts.List", methodName : "renderResults"});
 		if(this.props.dataStore.contactsDbData != null) {
 			var tmp = this.props.dataStore.contactsDbData.dataRows[0];
-			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/data/contacts/List.hx", lineNumber : 250, className : "view.data.contacts.List", methodName : "renderResults"});
+			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/data/contacts/List.hx", lineNumber : 245, className : "view.data.contacts.List", methodName : "renderResults"});
 		} else {
-			haxe_Log.trace(this.props.dataStore.contactsDbData,{ fileName : "view/data/contacts/List.hx", lineNumber : 251, className : "view.data.contacts.List", methodName : "renderResults"});
+			haxe_Log.trace(this.props.dataStore.contactsDbData,{ fileName : "view/data/contacts/List.hx", lineNumber : 246, className : "view.data.contacts.List", methodName : "renderResults"});
 		}
 		if(this.state.dataTable.length == 0) {
 			return this.state.formApi.renderWait();
@@ -23880,15 +23878,20 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 286, className : "view.data.contacts.List", methodName : "render"});
-		return this.state.formApi.render(this.renderResults());
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 281, className : "view.data.contacts.List", methodName : "render"});
+		var tmp = this.state.formApi;
+		var tmp1 = react_ReactType.fromComp(React_Fragment);
+		var tmp2 = react_ReactType.fromString("form");
+		var tmp3 = this.renderResults();
+		var tmp4 = React.createElement(tmp2,{ className : "tabComponentForm"},tmp3);
+		return tmp.render(React.createElement(tmp1,{ },tmp4));
 	}
 	,componentWillUnmount: function() {
-		haxe_Log.trace("...",{ fileName : "view/data/contacts/List.hx", lineNumber : 293, className : "view.data.contacts.List", methodName : "componentWillUnmount"});
+		haxe_Log.trace("...",{ fileName : "view/data/contacts/List.hx", lineNumber : 292, className : "view.data.contacts.List", methodName : "componentWillUnmount"});
 	}
 	,updateMenu: function(viewClassPath) {
 		var sideMenu = this.state.sideMenu;
-		haxe_Log.trace(sideMenu.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 299, className : "view.data.contacts.List", methodName : "updateMenu"});
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 298, className : "view.data.contacts.List", methodName : "updateMenu"});
 		var _g = 0;
 		var _g1 = sideMenu.menuBlocks.h["List"].items;
 		while(_g < _g1.length) {
@@ -24226,11 +24229,16 @@ view_data_deals_List.prototype = $extend(React_Component.prototype,{
 	}
 	,render: function() {
 		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/data/deals/List.hx", lineNumber : 224, className : "view.data.deals.List", methodName : "render"});
-		return this.state.formApi.render(this.renderResults());
+		var tmp = this.state.formApi;
+		var tmp1 = react_ReactType.fromComp(React_Fragment);
+		var tmp2 = react_ReactType.fromString("form");
+		var tmp3 = this.renderResults();
+		var tmp4 = React.createElement(tmp2,{ className : "tabComponentForm"},tmp3);
+		return tmp.render(React.createElement(tmp1,{ },tmp4));
 	}
 	,updateMenu: function(viewClassPath) {
 		var sideMenu = this.state.sideMenu;
-		haxe_Log.trace(sideMenu.section,{ fileName : "view/data/deals/List.hx", lineNumber : 233, className : "view.data.deals.List", methodName : "updateMenu"});
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/data/deals/List.hx", lineNumber : 237, className : "view.data.deals.List", methodName : "updateMenu"});
 		var _g = 0;
 		var _g1 = sideMenu.menuBlocks.h["List"].items;
 		while(_g < _g1.length) {
@@ -24327,7 +24335,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 			}
 			this.visibleColumns++;
 			this.gridStyle += hC.flexGrow != null ? " " + hC.flexGrow + "fr" : " max-content";
-			headerRow.push(React.createElement(react_ReactType.fromString("div"),{ key : field + "header", className : "gridHeadItem " + (hC.headerClassName != null ? hC.headerClassName : hC.className != null ? hC.className : "")},hC.label != null ? hC.label : hC.name,React.createElement(react_ReactType.fromString("span"),{ className : "sort-box fa fa-sort"})));
+			headerRow.push(React.createElement(react_ReactType.fromString("span"),{ key : field + "header", className : "gridHeadItem " + (hC.headerClassName != null ? hC.headerClassName : hC.className != null ? hC.className : "")},hC.label != null ? hC.label : hC.name,React.createElement(react_ReactType.fromString("span"),{ className : "sort-box fa fa-sort"})));
 		}
 		return headerRow;
 	}
@@ -24573,7 +24581,7 @@ $hxClasses["view.shared.Menu"] = view_shared_Menu;
 view_shared_Menu.__name__ = "view.shared.Menu";
 view_shared_Menu.mapDispatchToProps = function(dispatch) {
 	return { switchSection : function(url) {
-		haxe_Log.trace(url,{ fileName : "view/shared/Menu.hx", lineNumber : 62, className : "view.shared.Menu", methodName : "mapDispatchToProps"});
+		haxe_Log.trace(url,{ fileName : "view/shared/Menu.hx", lineNumber : 67, className : "view.shared.Menu", methodName : "mapDispatchToProps"});
 		dispatch(redux_Action.map(action_LocationAction.Push(url)));
 	}};
 };
@@ -24589,8 +24597,8 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 		if(enable == null) {
 			enable = true;
 		}
-		haxe_Log.trace(new haxe_ds__$StringMap_StringMapKeyIterator(this.state.items.h),{ fileName : "view/shared/Menu.hx", lineNumber : 92, className : "view.shared.Menu", methodName : "enableItem"});
-		haxe_Log.trace("" + id + " " + (enable == null ? "null" : "" + enable),{ fileName : "view/shared/Menu.hx", lineNumber : 93, className : "view.shared.Menu", methodName : "enableItem"});
+		haxe_Log.trace(new haxe_ds__$StringMap_StringMapKeyIterator(this.state.items.h),{ fileName : "view/shared/Menu.hx", lineNumber : 97, className : "view.shared.Menu", methodName : "enableItem"});
+		haxe_Log.trace("" + id + " " + (enable == null ? "null" : "" + enable),{ fileName : "view/shared/Menu.hx", lineNumber : 98, className : "view.shared.Menu", methodName : "enableItem"});
 		if(!Object.prototype.hasOwnProperty.call(this.state.items.h,id)) {
 			return null;
 		}
@@ -24598,20 +24606,24 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 		item.disabled = !enable;
 		return !item.disabled;
 	}
-	,clear: function() {
-		var inputs = window.document.querySelectorAll(".formRow .input");
-		var el;
-		var _g = 0;
-		var _g1 = inputs.length;
-		while(_g < _g1) {
-			var i = _g++;
-			el = js_Boot.__cast(inputs[i] , HTMLInputElement);
-			el.value = "";
-		}
+	,clear: function(evt) {
+		evt.preventDefault();
+		var form = evt.target.form;
+		form.reset();
 	}
-	,find: function() {
-		var inputs = window.document.querySelectorAll(".formRow .input");
-		haxe_Log.trace(inputs.length,{ fileName : "view/shared/Menu.hx", lineNumber : 112, className : "view.shared.Menu", methodName : "find"});
+	,find: function(evt) {
+		evt.preventDefault();
+		var form = evt.target.form;
+		var fD = new FormData(form);
+		if(Reflect.isFunction(Reflect.field(this.props.parentComponent,"find"))) {
+			return this.props.parentComponent.find(fD);
+		}
+		var fDe = fD.entries();
+		fD.forEach(function(d) {
+			haxe_Log.trace(d,{ fileName : "view/shared/Menu.hx", lineNumber : 140, className : "view.shared.Menu", methodName : "find"});
+		});
+		var inputs = window.document.querySelectorAll(".formRow input");
+		haxe_Log.trace(inputs.length,{ fileName : "view/shared/Menu.hx", lineNumber : 144, className : "view.shared.Menu", methodName : "find"});
 		var el;
 		var param = { };
 		var _g = 0;
@@ -24619,12 +24631,12 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 		while(_g < _g1) {
 			var i = _g++;
 			el = js_Boot.__cast(inputs[i] , HTMLInputElement);
-			haxe_Log.trace(i + ":" + el.name + "::" + el.value,{ fileName : "view/shared/Menu.hx", lineNumber : 117, className : "view.shared.Menu", methodName : "find"});
+			haxe_Log.trace(i + ":" + el.name + "::" + el.value,{ fileName : "view/shared/Menu.hx", lineNumber : 149, className : "view.shared.Menu", methodName : "find"});
 			if(StringTools.trim(el.value) != "") {
 				param[el.name] = el.value;
 			}
 		}
-		this.props.parentComponent.get(view_shared_io_BaseForm.filter(this.props.parentComponent.props,param));
+		return this.props.parentComponent.get(view_shared_io_BaseForm.filter(this.props.parentComponent.props,param));
 	}
 	,renderHeader: function() {
 		var _gthis = this;
@@ -24666,12 +24678,21 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 			var tmp2 = react_ReactType.fromString("div");
 			var tmp4 = "pblock" + i;
 			i += 1;
-			panels1.push(React.createElement(tmp,tmp1,tmp3,React.createElement(tmp2,{ id : tmp4, className : "panel-block body-" + (i - 1), children : _gthis.renderItems(block.items)})));
+			panels1.push(React.createElement(tmp,tmp1,tmp3,React.createElement(tmp2,{ id : tmp4, className : "panel-block body-" + (i - 1), children : _gthis.renderBlock(block,i)})));
 		});
 		return panels;
 	}
-	,renderItems: function(items) {
+	,renderBlock: function(block,i) {
+		var items = this.renderItems(block);
+		if(block.hasForm) {
+			return React.createElement(react_ReactType.fromString("form"),{ key : "f_" + i, name : block.dataClassPath},items);
+		} else {
+			return items;
+		}
+	}
+	,renderItems: function(block) {
 		var _gthis = this;
+		var items = block.items;
 		if(items == null || items.length == 0) {
 			return null;
 		}
@@ -24688,23 +24709,46 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 			}
 			var items1;
 			if(item.separator) {
-				items1 = React.createElement(react_ReactType.fromString("hr"),{ key : i++, className : "menuSeparator"});
+				items1 = React.createElement(react_ReactType.fromString("hr"),{ key : "s_" + i++, className : "menuSeparator"});
 			} else {
 				var type = item.formField == null ? "Button" : item.formField.type == null ? "Text" : item.formField.type;
 				if(type != "Button") {
-					_gthis.hasForm = true;
+					block.hasForm = true;
 				}
 				switch(type) {
+				case "Radio":
+					var o = 0;
+					var _g2 = [];
+					var h = item.formField.options.h;
+					var _g1_h = h;
+					var _g1_keys = Object.keys(h);
+					var _g1_length = _g1_keys.length;
+					var _g1_current = 0;
+					while(_g1_current < _g1_length) {
+						var key = _g1_keys[_g1_current++];
+						var _g2_key = key;
+						var _g2_value = _g1_h[key];
+						var k = _g2_key;
+						var v = _g2_value;
+						var items2 = react_ReactType.fromComp(React_Fragment);
+						var items3 = React.createElement(react_ReactType.fromString("span"),{ key : "o_" + o++},v," ",React.createElement(react_ReactType.fromString("input"),{ type : "radio", name : item.formField.name, value : v}));
+						_g2.push(React.createElement(items2,{ },items3));
+					}
+					var options = _g2;
+					var items4 = react_ReactType.fromString("div");
+					var items5 = React.createElement(react_ReactType.fromString("label"),{ },item.label);
+					items1 = React.createElement(items4,{ key : "fr_" + i++, className : "formRow"},items5,React.createElement(react_ReactType.fromString("div"),{ className : "formRow2"},options));
+					break;
 				case "Text":
-					var items2 = react_ReactType.fromString("div");
-					var items3 = React.createElement(react_ReactType.fromString("label"),{ htmlFor : item.formField.name, className : ""},item.label);
-					items1 = React.createElement(items2,{ key : "uf" + i++, id : "findForm_" + i, className : "formRow"},items3,React.createElement(react_ReactType.fromString("input"),{ id : item.formField.name, type : "text", name : item.formField.name, onChange : item.formField.handleChange, className : "input"}));
+					var items6 = react_ReactType.fromString("div");
+					var items7 = React.createElement(react_ReactType.fromString("label"),{ htmlFor : item.formField.name, className : ""},item.label);
+					items1 = React.createElement(items6,{ key : "uf" + i++, id : "findForm_" + i, className : "formRow"},items7,React.createElement(react_ReactType.fromString("input"),{ id : item.formField.name, type : "text", name : item.formField.name, onChange : item.formField.handleChange, className : "input"}));
 					break;
 				case "Upload":
-					var items4 = react_ReactType.fromString("div");
-					var items5 = React.createElement(react_ReactType.fromString("input"),{ id : item.formField.name, type : "file", name : item.formField.name, onChange : item.formField.handleChange, className : "fileinput"});
-					var items6 = React.createElement(react_ReactType.fromString("label"),{ htmlFor : item.formField.name, className : "button"},item.label);
-					items1 = React.createElement(items4,{ key : "up" + i++, id : "uploadForm", className : "uploadBox"},items5,items6,React.createElement(B,{ onClick : item.handler, 'data-action' : item.action, 'data-section' : item.section, disabled : item.disabled},item.formField.submit));
+					var items8 = react_ReactType.fromString("div");
+					var items9 = React.createElement(react_ReactType.fromString("input"),{ id : item.formField.name, type : "file", name : item.formField.name, onChange : item.formField.handleChange, className : "fileinput"});
+					var items10 = React.createElement(react_ReactType.fromString("label"),{ htmlFor : item.formField.name, className : "button"},item.label);
+					items1 = React.createElement(items8,{ key : "up" + i++, id : "uploadForm", className : "uploadBox"},items9,items10,React.createElement(B,{ onClick : item.handler, 'data-action' : item.action, 'data-section' : item.section, disabled : item.disabled},item.formField.submit));
 					break;
 				default:
 					items1 = React.createElement(B,{ key : "bu" + i++, onClick : _gthis.props.itemHandler, 'data-action' : item.action, 'data-then' : item.then, 'data-section' : item.section, disabled : item.disabled},item.label);
@@ -24713,10 +24757,8 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 			result[i1] = items1;
 		}
 		var items = Lambda.array(result);
-		if(this.hasForm) {
-			items.push(React.createElement(B,{ key : "bu" + i++, onClick : $bind(this,this.find), 'data-action' : "find", 'data-then' : null},"Finden"));
-			items.push(React.createElement(B,{ key : "bu" + i++, onClick : $bind(this,this.clear), 'data-action' : "clear", 'data-then' : null},"Zurücksetzen"));
-		}
+		items.push(React.createElement(B,{ key : "bu" + i++, onClick : $bind(this,this.find), 'data-action' : "find", 'data-then' : null},"Finden"));
+		items.push(React.createElement(B,{ key : "bu" + i++, onClick : $bind(this,this.clear), 'data-action' : "clear", 'data-then' : null},"Zurücksetzen"));
 		return items;
 	}
 	,render: function() {
@@ -25328,6 +25370,7 @@ var view_stats_History = function(props) {
 	if(props.match.params.section == null) {
 		haxe_Log.trace("reme",{ fileName : "view/stats/History.hx", lineNumber : 64, className : "view.stats.History", methodName : "new"});
 		var baseUrl = props.match.path.split(":section")[0];
+		haxe_Log.trace("pushing2: " + baseUrl + "Charts/get",{ fileName : "view/stats/History.hx", lineNumber : 67, className : "view.stats.History", methodName : "new"});
 		props.history.push("" + baseUrl + "Charts/get");
 	}
 	this.state = App.initEState({ dataTable : [], loading : false, values : new haxe_ds_StringMap()},this);
@@ -25335,24 +25378,24 @@ var view_stats_History = function(props) {
 $hxClasses["view.stats.History"] = view_stats_History;
 view_stats_History.__name__ = "view.stats.History";
 view_stats_History.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace("ok",{ fileName : "view/stats/History.hx", lineNumber : 99, className : "view.stats.History", methodName : "mapDispatchToProps"});
+	haxe_Log.trace("ok",{ fileName : "view/stats/History.hx", lineNumber : 101, className : "view.stats.History", methodName : "mapDispatchToProps"});
 	return { };
 };
 view_stats_History.mapStateToProps = function(aState) {
-	haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/stats/History.hx", lineNumber : 108, className : "view.stats.History", methodName : "mapStateToProps"});
+	haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/stats/History.hx", lineNumber : 110, className : "view.stats.History", methodName : "mapStateToProps"});
 	if(aState.dataStore.contactData != null) {
-		haxe_Log.trace(aState.dataStore.contactData.keys().next(),{ fileName : "view/stats/History.hx", lineNumber : 110, className : "view.stats.History", methodName : "mapStateToProps"});
+		haxe_Log.trace(aState.dataStore.contactData.keys().next(),{ fileName : "view/stats/History.hx", lineNumber : 112, className : "view.stats.History", methodName : "mapStateToProps"});
 	}
 	if(aState.dataStore.contactsDbData != null) {
 		var tmp = aState.dataStore.contactsDbData.dataRows[0];
-		haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/stats/History.hx", lineNumber : 112, className : "view.stats.History", methodName : "mapStateToProps"});
+		haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/stats/History.hx", lineNumber : 114, className : "view.stats.History", methodName : "mapStateToProps"});
 	} else {
-		haxe_Log.trace(aState.dataStore,{ fileName : "view/stats/History.hx", lineNumber : 115, className : "view.stats.History", methodName : "mapStateToProps"});
-		haxe_Log.trace(Reflect.fields(aState.dataStore),{ fileName : "view/stats/History.hx", lineNumber : 116, className : "view.stats.History", methodName : "mapStateToProps"});
+		haxe_Log.trace(aState.dataStore,{ fileName : "view/stats/History.hx", lineNumber : 117, className : "view.stats.History", methodName : "mapStateToProps"});
+		haxe_Log.trace(Reflect.fields(aState.dataStore),{ fileName : "view/stats/History.hx", lineNumber : 118, className : "view.stats.History", methodName : "mapStateToProps"});
 	}
-	haxe_Log.trace(App.store.getState().dataStore.contactsDbData,{ fileName : "view/stats/History.hx", lineNumber : 118, className : "view.stats.History", methodName : "mapStateToProps"});
+	haxe_Log.trace(App.store.getState().dataStore.contactsDbData,{ fileName : "view/stats/History.hx", lineNumber : 120, className : "view.stats.History", methodName : "mapStateToProps"});
 	var bState = { dataStore : aState.dataStore, userState : aState.userState};
-	haxe_Log.trace(bState.dataStore.contactData,{ fileName : "view/stats/History.hx", lineNumber : 125, className : "view.stats.History", methodName : "mapStateToProps"});
+	haxe_Log.trace(bState.dataStore.contactData,{ fileName : "view/stats/History.hx", lineNumber : 127, className : "view.stats.History", methodName : "mapStateToProps"});
 	return bState;
 };
 view_stats_History.__super__ = React_Component;
@@ -25364,15 +25407,15 @@ view_stats_History.prototype = $extend(React_Component.prototype,{
 			this.setState({ hasError : true});
 		} catch( _g ) {
 			var ex = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(ex,{ fileName : "view/stats/History.hx", lineNumber : 83, className : "view.stats.History", methodName : "componentDidCatch"});
+			haxe_Log.trace(ex,{ fileName : "view/stats/History.hx", lineNumber : 85, className : "view.stats.History", methodName : "componentDidCatch"});
 		}
-		haxe_Log.trace(error,{ fileName : "view/stats/History.hx", lineNumber : 85, className : "view.stats.History", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "view/stats/History.hx", lineNumber : 87, className : "view.stats.History", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
-		haxe_Log.trace(this.props.location.pathname,{ fileName : "view/stats/History.hx", lineNumber : 131, className : "view.stats.History", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.location.pathname,{ fileName : "view/stats/History.hx", lineNumber : 133, className : "view.stats.History", methodName : "componentDidMount"});
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/stats/History.hx", lineNumber : 142, className : "view.stats.History", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/stats/History.hx", lineNumber : 144, className : "view.stats.History", methodName : "render"});
 		if(this.props.match.params.section == "Charts") {
 			return React.createElement(react_ReactType.fromComp(view_stats_history_Charts),Object.assign({ },this.props,{ limit : 100, parentComponent : this, formApi : this.state.formApi, fullWidth : true, sideMenu : this.state.sideMenu}));
 		} else {
@@ -25525,9 +25568,9 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 			var maxCount = Math.round(shared_Utils.keyMax(this.state.dataTable,"count"));
 			var cRatio = cH / maxCount;
 			var sRatio = cH / maxSum;
-			haxe_Log.trace("" + maxCount + " => " + maxSum + " " + cW + ": " + cRatio + " " + sRatio + " " + this.state.dataTable.length + " svg: " + Std.string(this.svg != null ? this.svg : null),{ fileName : "view/stats/history/Charts.hx", lineNumber : 278, className : "view.stats.history.Charts", methodName : "draw"});
+			haxe_Log.trace("" + maxCount + " => " + maxSum + " " + cW + ": " + cRatio + " " + sRatio + " " + this.state.dataTable.length + " svg: " + Std.string(this.svg != null ? this.svg : null),{ fileName : "view/stats/history/Charts.hx", lineNumber : 277, className : "view.stats.history.Charts", methodName : "draw"});
 			var tmp = this.state.dataTable[0];
-			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/stats/history/Charts.hx", lineNumber : 279, className : "view.stats.history.Charts", methodName : "draw"});
+			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/stats/history/Charts.hx", lineNumber : 278, className : "view.stats.history.Charts", methodName : "draw"});
 			var iW = iX - 2;
 			if(this.svg != null) {
 				return;
@@ -25539,9 +25582,9 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 			mainGradient.append("stop").attr("class","stop-bottom").attr("offset","0");
 			mainGradient.append("stop").attr("class","stop-top").attr("offset","1");
 			var stop1 = mainGradient.selectAll("stop").node();
-			haxe_Log.trace(stop1.classList.value,{ fileName : "view/stats/history/Charts.hx", lineNumber : 310, className : "view.stats.history.Charts", methodName : "draw"});
-			haxe_Log.trace(stop1.nextElementSibling.classList.value,{ fileName : "view/stats/history/Charts.hx", lineNumber : 311, className : "view.stats.history.Charts", methodName : "draw"});
-			haxe_Log.trace(this.svg,{ fileName : "view/stats/history/Charts.hx", lineNumber : 319, className : "view.stats.history.Charts", methodName : "draw"});
+			haxe_Log.trace(stop1.classList.value,{ fileName : "view/stats/history/Charts.hx", lineNumber : 309, className : "view.stats.history.Charts", methodName : "draw"});
+			haxe_Log.trace(stop1.nextElementSibling.classList.value,{ fileName : "view/stats/history/Charts.hx", lineNumber : 310, className : "view.stats.history.Charts", methodName : "draw"});
+			haxe_Log.trace(this.svg,{ fileName : "view/stats/history/Charts.hx", lineNumber : 318, className : "view.stats.history.Charts", methodName : "draw"});
 			this.svg.selectAll(null).data(this.state.dataTable).enter().append("rect").attr("x",function(d,i) {
 				return i * iX;
 			}).attr("y",function(d,i) {
@@ -25559,8 +25602,8 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,drawLegend: function(top,h,lW,iW,iX) {
-		haxe_Log.trace(this.svg,{ fileName : "view/stats/history/Charts.hx", lineNumber : 345, className : "view.stats.history.Charts", methodName : "drawLegend"});
-		haxe_Log.trace("top:" + top + " height:" + h + " width:" + lW,{ fileName : "view/stats/history/Charts.hx", lineNumber : 346, className : "view.stats.history.Charts", methodName : "drawLegend"});
+		haxe_Log.trace(this.svg,{ fileName : "view/stats/history/Charts.hx", lineNumber : 344, className : "view.stats.history.Charts", methodName : "drawLegend"});
+		haxe_Log.trace("top:" + top + " height:" + h + " width:" + lW,{ fileName : "view/stats/history/Charts.hx", lineNumber : 345, className : "view.stats.history.Charts", methodName : "drawLegend"});
 		var legend = this.svg.append("g").attr("x",0).attr("transform","translate(0 " + top + ")").attr("id","legend").attr("width",lW).attr("height",h).style("fill","rgba(0,0,0,0)");
 		var _this = this.state.dataTable;
 		var result = new Array(_this.length);
@@ -25597,7 +25640,7 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,renderResults: function() {
-		haxe_Log.trace(this.props.match.params.section + (":" + this.props.match.params.action + "::") + Std.string(this.state.dataTable != null),{ fileName : "view/stats/history/Charts.hx", lineNumber : 417, className : "view.stats.history.Charts", methodName : "renderResults"});
+		haxe_Log.trace(this.props.match.params.section + (":" + this.props.match.params.action + "::") + Std.string(this.state.dataTable != null),{ fileName : "view/stats/history/Charts.hx", lineNumber : 416, className : "view.stats.history.Charts", methodName : "renderResults"});
 		if(this.state.dataTable.length == 0) {
 			return this.state.formApi.renderWait();
 		}
@@ -25608,14 +25651,14 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,getCellData: function(cP) {
-		haxe_Log.trace(cP,{ fileName : "view/stats/history/Charts.hx", lineNumber : 437, className : "view.stats.history.Charts", methodName : "getCellData"});
+		haxe_Log.trace(cP,{ fileName : "view/stats/history/Charts.hx", lineNumber : 436, className : "view.stats.history.Charts", methodName : "getCellData"});
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/stats/history/Charts.hx", lineNumber : 444, className : "view.stats.history.Charts", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/stats/history/Charts.hx", lineNumber : 443, className : "view.stats.history.Charts", methodName : "render"});
 		return this.state.formApi.render(this.renderResults());
 	}
 	,componentWillUnmount: function() {
-		haxe_Log.trace("...",{ fileName : "view/stats/history/Charts.hx", lineNumber : 451, className : "view.stats.history.Charts", methodName : "componentWillUnmount"});
+		haxe_Log.trace("...",{ fileName : "view/stats/history/Charts.hx", lineNumber : 450, className : "view.stats.history.Charts", methodName : "componentWillUnmount"});
 	}
 	,__class__: view_stats_history_Charts
 });
@@ -26310,7 +26353,7 @@ model_accounting_AccountsModel.dataAccess = (function($this) {
 		_g2.h["creation_date"] = { label : "Erstellt", type : "Hidden", displayFormat : "d.m.Y", disabled : true};
 		_g2.h["sign_date"] = { label : "Erteilt", type : "DatePicker", displayFormat : "d.m.Y"};
 		_g2.h["bank_name"] = { label : "Bank", type : "Text"};
-		_g2.h["iban"] = { label : "IBAN", type : "Text"};
+		_g2.h["iban"] = { label : "IBAN", type : "Text", className : "tableNums"};
 		var _g3 = new haxe_ds_StringMap();
 		_g3.h["active"] = "Aktiv";
 		_g3.h["passive"] = "Passiv";
@@ -26341,7 +26384,7 @@ model_accounting_AccountsModel.gridColumns = (function($this) {
 		}
 	}};
 	_g.h["contact"] = { label : "Kontakt", show : false, useAsIndex : false};
-	_g.h["iban"] = { label : "IBAN"};
+	_g.h["iban"] = { label : "IBAN", className : "tableNums"};
 	_g.h["status"] = { label : "Status", className : "tCenter", cellFormat : function(v) {
 		var className = v == "active" ? "active fas fa-heart" : "passive far fa-heart";
 		return React.createElement(react_ReactType.fromString("span"),{ className : className});
@@ -26383,7 +26426,7 @@ model_accounting_DebitModel.dataAccess = (function($this) {
 	{
 		var _g1 = new haxe_ds_StringMap();
 		var _g2 = new haxe_ds_StringMap();
-		_g2.h["filter"] = "ba_id";
+		_g2.h["filter"] = "id";
 		_g1.h["booking_requests"] = _g2;
 		var _g2 = new haxe_ds_StringMap();
 		_g2.h["id"] = { type : "Hidden"};
@@ -26416,25 +26459,7 @@ model_accounting_DebitModel.gridColumns = (function($this) {
 		return options_h[v];
 	}};
 	_g.h["zahlpfl_name_kto_or_iban"] = { label : "Iban", className : "tableNums"};
-	_g.h["ba_id"] = { label : "Buchungsanforderung ID", show : false};
-	$r = _g;
-	return $r;
-}(this));
-model_accounting_DebitModel.listColumns = (function($this) {
-	var $r;
-	var _g = new haxe_ds_StringMap();
-	_g.h["id"] = { label : "VertragsID", flexGrow : 0, className : "tableNums"};
-	_g.h["sepa_code"] = { label : "Sepa Code", flexGrow : 0, className : "tRight"};
-	_g.h["iban"] = { label : "Iban"};
-	_g.h["ba_id"] = { label : "Buchungsanforderung ID", flexGrow : 1};
-	_g.h["amount"] = { label : "Betrag", className : "euro", headerClassName : "tRight"};
-	$r = _g;
-	return $r;
-}(this));
-model_accounting_DebitModel.dataDisplay = (function($this) {
-	var $r;
-	var _g = new haxe_ds_StringMap();
-	_g.h["rDebitList"] = { columns : model_accounting_DebitModel.listColumns};
+	_g.h["id"] = { label : "Buchungsanforderung ID", show : false};
 	$r = _g;
 	return $r;
 }(this));
@@ -26476,7 +26501,7 @@ model_accounting_ReturnDebitModel.listReturnDebitColumns = (function($this) {
 	_g.h["sepa_code"] = { label : "Sepa Code"};
 	_g.h["iban"] = { label : "Iban", className : "tableNums", flexGrow : 1, headerClassName : "tRight"};
 	_g.h["mandat_id"] = { label : "SpendenID", className : "tableNums"};
-	_g.h["ba_id"] = { label : "Buchungsanforderung ID", className : "tableNums"};
+	_g.h["id"] = { label : "Buchungsanforderung ID", className : "tableNums"};
 	_g.h["amount"] = { label : "Betrag", className : "euro", headerClassName : "tRight"};
 	$r = _g;
 	return $r;
@@ -26495,7 +26520,7 @@ model_accounting_ReturnDebitModel.listReturnDebitJoins = (function($this) {
 	}};
 	_g1.h["sepa_code"] = { label : "Sepa Code"};
 	_g1.h["deal_id"] = { label : "SpendenID", className : "tableNums"};
-	_g1.h["ba_id"] = { label : "Buchungsanforderung ID", className : "tableNums"};
+	_g1.h["id"] = { label : "Buchungsanforderung ID", className : "tableNums"};
 	_g1.h["amount"] = { label : "Betrag", className : "euro", headerClassName : "tRight"};
 	$r = [{ alias : "drs", columns : _g, jCond : "", table : "debit_return_statements"},{ alias : "br", columns : _g1, jCond : "", table : "booking_requests"}];
 	return $r;
@@ -26514,7 +26539,7 @@ model_accounting_ReturnDebitModel.base = (function($this) {
 	_g.h["sepa_code"] = { label : "Sepa Code"};
 	_g.h["iban"] = { label : "Iban", className : "tableNums", flexGrow : 1, headerClassName : "tRight"};
 	_g.h["deal_id"] = { label : "SpendenID", className : "tableNums"};
-	_g.h["ba_id"] = { label : "Buchungsanforderung ID", className : "tableNums"};
+	_g.h["id"] = { label : "Buchungsanforderung ID", className : "tableNums"};
 	_g.h["amount"] = { label : "Betrag", className : "euro", headerClassName : "tRight"};
 	$r = _g;
 	return $r;
@@ -26532,32 +26557,8 @@ model_accounting_ReturnDebitModel.gridColumns = (function($this) {
 	_g.h["sepa_code"] = { label : "Sepa Code"};
 	_g.h["iban"] = { label : "Iban", className : "tableNums", flexGrow : 1, headerClassName : "tRight"};
 	_g.h["deal_id"] = { label : "SpendenID", className : "tableNums"};
-	_g.h["ba_id"] = { label : "Buchungsanforderung ID", className : "tableNums"};
+	_g.h["id"] = { label : "Buchungsanforderung ID", className : "tableNums"};
 	_g.h["amount"] = { label : "Betrag", className : "euro", headerClassName : "tRight"};
-	$r = _g;
-	return $r;
-}(this));
-model_accounting_ReturnDebitModel.listColumns = (function($this) {
-	var $r;
-	var _g = new haxe_ds_StringMap();
-	_g.h["id"] = { label : "VertragsID", flexGrow : 0, className : "tRight tableNums"};
-	_g.h["value_date"] = { label : "Wertstellung", cellFormat : function(v) {
-		if(v == null) {
-			return null;
-		}
-		return DateTools.format(HxOverrides.strDate(v),"%d.%m.%Y");
-	}};
-	_g.h["sepa_code"] = { label : "Sepa Code", flexGrow : 0, className : "tRight"};
-	_g.h["iban"] = { label : "Iban"};
-	_g.h["ba_id"] = { label : "Buchungsanforderung ID", flexGrow : 1};
-	_g.h["amount"] = { label : "Betrag", className : "euro", headerClassName : "tRight"};
-	$r = _g;
-	return $r;
-}(this));
-model_accounting_ReturnDebitModel.dataDisplay = (function($this) {
-	var $r;
-	var _g = new haxe_ds_StringMap();
-	_g.h["rDebitList"] = { columns : model_accounting_ReturnDebitModel.listColumns};
 	$r = _g;
 	return $r;
 }(this));
@@ -26761,14 +26762,14 @@ model_deals_DealsModel.gridColumns = (function($this) {
 		}
 		return DateTools.format(HxOverrides.strDate(v),"%d.%m.%Y");
 	}};
+	_g.h["cycle"] = { label : "Turnus", flexGrow : 1};
+	_g.h["amount"] = { label : "Betrag", cellFormat : function(v) {
+		return App.sprintf("%01.2f €",v).replace(".",",");
+	}, className : "tRight tableNums"};
 	_g.h["active"] = { label : "Status", className : "tCenter", cellFormat : function(v) {
 		var className = v ? "active fas fa-heart" : "passive far fa-heart";
 		return React.createElement(react_ReactType.fromString("span"),{ className : className});
 	}};
-	_g.h["cycle"] = { label : "Turnus"};
-	_g.h["amount"] = { label : "Betrag", cellFormat : function(v) {
-		return App.sprintf("%01.2f €",v).replace(".",",");
-	}, className : "tRight tableNums"};
 	$r = _g;
 	return $r;
 }(this));
@@ -26852,7 +26853,7 @@ model_stats_HistoryModel.dataAccess = (function($this) {
 		_g2.h["gender"] = { label : "Geschlecht", type : "Select", options : _g3};
 		_g2.h["comments"] = { label : "Kommentar"};
 		_g2.h["use_email"] = { label : "Post per Email", type : "Checkbox"};
-		_g2.h["ba_id"] = { type : "Hidden"};
+		_g2.h["id"] = { type : "Hidden"};
 		_g2.h["edited_by"] = { type : "Hidden"};
 		_g2.h["mandator"] = { type : "Hidden"};
 		_g.h["update"] = { source : _g1, view : _g2};
@@ -26943,10 +26944,14 @@ view_accounting_DirectDebits.__jsxStatic = view_accounting_DirectDebits._renderW
 view_accounting_ReturnDebits.displayName = "ReturnDebits";
 view_accounting_ReturnDebits._renderWrapper = (redux_react_ReactRedux.connect(view_accounting_ReturnDebits.mapStateToProps,view_accounting_ReturnDebits.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_accounting_ReturnDebits));
 view_accounting_ReturnDebits.__jsxStatic = view_accounting_ReturnDebits._renderWrapper;
-view_accounting_directdebit_Edit.menuItems = [{ label : "Anzeigen", action : "get"},{ label : "Download", action : "download"},{ label : "Bearbeiten", action : "edit"},{ label : "Neu Erstellen", action : "createDirectDebit", formField : { name : "directDebitFile", submit : "Herunterladen", type : "Button", handleChange : function(evt) {
-	haxe_Log.trace(Reflect.fields(evt),{ fileName : "view/accounting/directdebit/Edit.hx", lineNumber : 79, className : "view.accounting.directdebit.Edit", methodName : "menuItems"});
-}}, handler : function(_) {
-}}];
+view_accounting_directdebit_Edit.menuItems = (function($this) {
+	var $r;
+	var _g = new haxe_ds_StringMap();
+	_g.h["1"] = "1";
+	_g.h["15"] = "15";
+	$r = [{ label : "Anzeigen", action : "get"},{ label : "Download", action : "download"},{ label : "Bearbeiten", action : "edit"},{ label : "Neu Erstellen", action : "create", formField : { name : "directDebitFile", type : "Button"}},{ separator : true},{ label : "Buchungstag", formField : { name : "booking_day", type : "Radio", options : _g}}];
+	return $r;
+}(this));
 view_accounting_directdebit_Edit.displayName = "Edit";
 view_accounting_directdebit_Edit._renderWrapper = (redux_react_ReactRedux.connect(view_accounting_directdebit_Edit.mapStateToProps,view_accounting_directdebit_Edit.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_accounting_directdebit_Edit));
 view_accounting_directdebit_Edit.__jsxStatic = view_accounting_directdebit_Edit._renderWrapper;

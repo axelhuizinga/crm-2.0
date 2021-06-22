@@ -198,7 +198,9 @@ class FormApi
 			trace(getUrl(eTarget.dataset.action));
 			trace(Type.getClassName(Type.getClass(comp)));
 		}
-		return executeMethod(method,  new FormData(untyped e.target.form));
+		var formEl:FormElement = untyped e.target.form;
+		trace(formEl);
+		return executeMethod(method,  (formEl != null? new FormData(formEl):null));
 	}
 
 	function executeMethod(method:String, ?r:Dynamic) {

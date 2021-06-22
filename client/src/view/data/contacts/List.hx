@@ -80,6 +80,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			sideMenu:FormApi.initSideMenu( this,
 				{
 					dataClassPath:'data.Contacts',
+					hasForm:true,
 					label:'Liste',
 					section: 'List',
 					items: menuItems

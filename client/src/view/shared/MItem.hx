@@ -11,11 +11,12 @@ typedef MItem =
 	?actions:Array<Function>,
 	?className:String,
 	?classPath:String,
-	?form:FormState,
+	//?form:FormState,
 	?formField:FormField,
 	?section:String,
 	?disabled:Bool,	
 	?handler:Function,//default:action
+	?options:Array<FormField>,
 	?id:String,
 	?img:String,
 	?info:String,

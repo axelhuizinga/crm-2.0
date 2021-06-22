@@ -64,7 +64,7 @@ class DirectDebits extends ReactComponentOf<DataFormProps,FormState>
 		return function(aState:AppState) 
 		{
 			var uState = aState.userState;
-			trace(uState);		
+			//trace(uState);		
 			return {
 				userState:uState
 			};

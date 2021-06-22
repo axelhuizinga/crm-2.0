@@ -7,12 +7,12 @@ typedef MenuBlock =
 	?dataClassPath:String,
 	?disabled:Bool,
 	?className:String,
-	?hasForm:Bool,
-	?onActivate:Function,
+	?hasFindForm:Bool,
 	?img:String,
 	?info:String,
 	?isActive:Bool,
 	?items:Array<MItem>,
 	?label:String,	
+	?onActivate:Function,
 	?section:String
 }

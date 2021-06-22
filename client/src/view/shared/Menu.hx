@@ -57,7 +57,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 {
 	var menuRef:ReactRef<DivElement>;
 	var aW:Int;
-	var hasForm:Bool;
+	var hasFindForm:Bool;
 
 	static function mapDispatchToProps(dispatch:Dispatch):MenuProps
     {
@@ -82,7 +82,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		super(props);
 		//trace(props);
 		//trace(props.menuBlocks);
-		hasForm = false;
+		hasFindForm = false;
 		state = {
 			hidden:props.hidden||false,
 			items: new StringMap()
@@ -213,7 +213,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	{
 		//trace(block);
 		var items:ReactFragment = renderItems(block);
-		return block.hasForm ? jsx('<form name=${block.dataClassPath} key=${"f_"+i}>$items</form>'):items;
+		return block.hasFindForm ? jsx('<form name=${block.dataClassPath} key=${"f_"+i}>$items</form>'):items;
 	}
 
 	function renderItems(block:MenuBlock):ReactFragment
@@ -223,7 +223,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			return null;
 		var B:ReactType = ${bulma_components.Button};
 		var i:Int = 1;
-		var items =  items.map(function(item:MItem) 
+		var rItems =  items.map(function(item:MItem):ReactFragment
 		{
 			if(item.id != null && !state.items.exists(item.id))
 			{
@@ -236,17 +236,17 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			type = (item.formField==null?Button:(item.formField.type==null?FormInputElement.Text: item.formField.type));
 			//trace(i + ':' + type);
 			if(type!=Button)
-				block.hasForm = true;
+				block.hasFindForm = true;
 			return switch(type)
 			{
 				case Radio: 
 					var o:Int = 0;
 					var options:ReactFragment = [
 					for(k=>v in item.formField.options.keyValueIterator()){
-						jsx('<><span key=${"o_"+(o++)Y}>${v} <input type="radio" name=${item.formField.name} value=${v} /></span></>');
+						jsx('<span key=${"o_"+(o++)Y}>${v} <input type="radio" name=${item.formField.name} value=${v} /></span>');
 					}];
 					jsx('<div className="formRow" key=${"fr_"+(i++)} >
-					<label>${item.label}</label><div className="formRow2">$options</div>
+					<label key=${"l_"+i}>${item.label}</label><div  key=${"opt_"+i} className="formRow2">$options</div>
 					</div>');	
 				/*case File:
 					jsx('<div key=${"uf"+(i++)}  id="uploadForm"   className="uploadBox" >
@@ -257,8 +257,8 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				</div>');*/
 				case Text:
 					jsx('<div key=${"uf"+(i++)}  id="findForm_${i}"   className="formRow" >
-					<label htmlFor=${item.formField.name} className="" >${item.label}</label>
-					<input  id=${item.formField.name} type="text" name=${item.formField.name} onChange=${item.formField.handleChange} className="input"  />
+					<label htmlFor=${item.formField.name} className=""  key=${"l_"+i}>${item.label}</label>
+					<input  id=${item.formField.name} type="text" name=${item.formField.name} onChange=${item.formField.handleChange} className="input"  key=${"i_"+i} />
 				</div>');
 				case Upload:
 					//trace(item.formField.handleChange);
@@ -274,12 +274,12 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					jsx('<$B key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then}
 					data-section=${item.section} disabled=${item.disabled}>${item.label}</$B>');
 			}
-		}).array();
-		if(true||hasForm){			
-			items.push(jsx('<$B key=${"bu"+(i++)} onClick=${find} data-action="find" data-then=${null}>Finden</$B>'));
-			items.push(jsx('<$B key=${"bu"+(i++)} onClick=${clear} data-action="clear" data-then=${null}>Zurücksetzen</$B>'));
+		});
+		if(true||hasFindForm){			
+			rItems.push(jsx('<$B key=${"bu"+(i++)} onClick=${find} data-action="find" data-then=${null}>Finden</$B>'));
+			rItems.push(jsx('<$B key=${"bu"+(i++)} onClick=${clear} data-action="clear" data-then=${null}>Zurücksetzen</$B>'));
 		}
-		return items;
+		return rItems;
 	}
 	
 	override public function render()

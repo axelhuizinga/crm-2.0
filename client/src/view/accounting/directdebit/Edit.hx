@@ -71,14 +71,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Anzeigen',action:'get'},
 		{label:'Download', action:'download'},
 		{label:'Bearbeiten',action:'edit'},
-		{label:'Neu Erstellen',action:'create',
-			formField:{				
-				name:'directDebitFile',
-				type: FormInputElement.Button
-			}
+		{label:'Neu Erstellen',action:'create',//name:'directDebitFile', type: FormInputElement.Button,
+			options:[
+			{label: 'Buchungstag', name: 'booking_day', type: Radio, options: ['1'=>'1','15'=>'15']}]
 		},
-		{separator: true},		
-		{label: 'Buchungstag',formField: { name: 'booking_day', type: Radio, options: ['1'=>'1','15'=>'15']}},
+		/*{separator: true},		
+		{formField:},*/
 	];
 	var dataAccess:DataAccess;	
 	//var dataDisplay:Map<String,DataState>;
@@ -132,7 +130,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				},
 				{
 					dataClassPath:'data.DirectDebits',
-					hasForm:false,
+					hasFindForm:false,
 					label:'Bearbeiten',
 					section: 'Edit',
 					items: menuItems

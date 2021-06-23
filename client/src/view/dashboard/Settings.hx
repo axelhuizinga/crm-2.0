@@ -52,7 +52,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 			hasError:false,
 			mounted:false,
 			loading:true,
-			sideMenu:FormApi.initSideMenu2( this,
+			sideMenu:FormApi.initSideMenuMulti( this,
 				[
 					{
 						dataClassPath:'auth.User',

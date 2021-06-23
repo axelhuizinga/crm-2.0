@@ -311,6 +311,27 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		return fS;
 	}
 
+	public static function initSectionState(init:Dynamic, ?comp:Dynamic)
+	{
+		var fS:FormState =
+		{
+			clean: true,
+			formApi:new FormApi(comp, comp.props.parentComponent.state.sideMenu),
+			formBuilder:new FormBuilder(comp),
+			hasError: false,
+			mounted: false,
+			sideMenu: comp.props.parentComponent.state.sideMenu
+		};
+		if(init != null)
+		{
+			for(f in Reflect.fields(init))
+			{
+				Reflect.setField(fS, f, Reflect.field(init, f));
+			}
+		}
+		return fS;
+	}
+
 	public static function jsxDump(el:Dynamic):String
 	{
 		Out.dumpObject(el);

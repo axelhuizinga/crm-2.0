@@ -1,6 +1,6 @@
 package view.accounting.directdebit;
 
-import view.accounting.returndebit.Files;
+//import view.accounting.returndebit.Files;
 import haxe.Serializer;
 import js.html.Event;
 import action.DataAction;
@@ -85,7 +85,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		state =  App.initEState({
 			action:(props.match.params.action==null?'get':props.match.params.action),
 			loading:true,
-			sideMenu:FormApi.initSideMenu2( this,			
+			sideMenu:FormApi.initSideMenuMulti( this,			
 				[
 					{
 						dataClassPath:'admin.Debit',//Rücklastschriften (admin.ImportCamt)

@@ -256,8 +256,7 @@ class FormApi
 	public static function mHandlers(e:InputEvent)
 	{
 		e.preventDefault();
-	}	
-
+	}
 	
 	public function render(content:ReactFragment)
 	{
@@ -626,15 +625,10 @@ class FormApi
 
 	public static function initSideMenu(comp:Dynamic, sMb:MenuBlock, sM:MenuProps):MenuProps
 	{
-		return initSideMenu2(comp,[sMb],sM);
-		for(sI in sMb.items)
-			if(sI.section == null)
-				sI.section = sM.section;
-		sM.menuBlocks = [sM.section => sMb];
-		return sM;
+		return initSideMenuMulti(comp,[sMb],sM);
 	}
 
-	public static function initSideMenu2(comp:Dynamic, sMa:Array<MenuBlock>, sM:MenuProps):MenuProps
+	public static function initSideMenuMulti(comp:Dynamic, sMa:Array<MenuBlock>, sM:MenuProps):MenuProps
 	{
 		var sma:MenuBlock;
 		sM.menuBlocks = [

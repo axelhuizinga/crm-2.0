@@ -50,7 +50,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			loading:true,*/
 		App.initEState({
 			//dataTable:[],loading:false,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
-			sideMenu:FormApi.initSideMenu2( this,
+			sideMenu:FormApi.initSideMenuMulti( this,
 				[
 					{
 						dataClassPath:'admin.SyncExternal',

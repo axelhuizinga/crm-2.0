@@ -68,15 +68,13 @@ using StringTools;
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
+		{label:'Neu Erstellen',action:'create', disabled:false,//name:'directDebitFile', type: FormInputElement.Button,
+			options:[
+			{label: 'Buchungstag', name: 'booking_day', type: Radio, options: ['1'=>'1','15'=>'15']}]
+		},		
 		{label:'Anzeigen',action:'get'},
 		{label:'Download', action:'download'},
 		{label:'Bearbeiten',action:'edit'},
-		{label:'Neu Erstellen',action:'create',//name:'directDebitFile', type: FormInputElement.Button,
-			options:[
-			{label: 'Buchungstag', name: 'booking_day', type: Radio, options: ['1'=>'1','15'=>'15']}]
-		},
-		/*{separator: true},		
-		{formField:},*/
 	];
 	var dataAccess:DataAccess;	
 	//var dataDisplay:Map<String,DataState>;
@@ -112,15 +110,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
 		//dataDisplay = DebitModel.dataDisplay;
 
-				
-		state =  App.initEState({
+		state =  App.initSectionState({
 			//dataTable:[],
 			actualState:null,
 			initialData:null,
 			loading:false,
 			mHandlers:menuItems,
 			selectedRows:[],
-			sideMenu:FormApi.initSideMenu2( this,
+			sideMenu:props.parentComponent.state.sideMenu,/*FormApi.initSideMenuMulti( this,
 			[	
 				{
 					dataClassPath:'data.DirectDebits',
@@ -139,7 +136,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			{	
 				section: props.match.params.section==null? 'Edit':props.match.params.section, 
 				sameWidth: true
-			}),	
+			}),*/
 			/*storeListener:App.store.subscribe(function(){
 				trace(App.store.getState().dataStore);
 			}),*/
@@ -178,6 +175,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	public function create(fd:FormData):Void {
 		//var fd:FormData = arg;//[0];
 		trace(fd);
+		if(fd==null)
+			return;
 		trace(fd.entries().next());
 		var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){
 			fd.append('devIP',App.devIP);
@@ -438,11 +437,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
-		<>
 			<form className="tabComponentForm"  >
 				${renderResults()}
 			</form>
-		</>'));		
+		'));		
 	}
 	
 	function updateMenu(?viewClassPath:String):MenuProps

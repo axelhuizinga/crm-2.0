@@ -86,7 +86,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		state =  App.initEState({
 			action:(props.match.params.action==null?'listReturnDebit':props.match.params.action),
 			loading:true,
-			sideMenu:FormApi.initSideMenu2( this,			
+			sideMenu:FormApi.initSideMenuMulti( this,			
 				[
 					{
 						dataClassPath:'admin.Debit',//Rücklastschriften (admin.ImportCamt)

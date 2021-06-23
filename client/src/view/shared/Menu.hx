@@ -2,6 +2,7 @@ package view.shared;
 
 //import js.lib.Reflect;
 //import model.FormInputElement;
+import js.lib.Reflect;
 import js.html.FormElement;
 import js.html.Element;
 import js.html.FormData;
@@ -58,6 +59,19 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	var menuRef:ReactRef<DivElement>;
 	var aW:Int;
 	var hasFindForm:Bool;
+	
+	static function printProps(props:Dynamic):String{
+		var dump:String = '';
+		for(f in Reflect.fields(props)){
+			if(f=='parentComponent'){
+				var o = props.parentComponent;
+				dump += 'parentComponent.props.match.url:' + o.props.match.url + "\n";
+			}
+			else
+				dump += f + ':' + Std.string(Reflect.field(props, f)) + "\n";
+		}
+		return dump;
+	}
 
 	static function mapDispatchToProps(dispatch:Dispatch):MenuProps
     {
@@ -81,7 +95,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	{
 		super(props);
 		//trace(props);
-		//trace(props.menuBlocks);
+		trace(props.menuBlocks);
 		hasFindForm = false;
 		state = {
 			hidden:props.hidden||false,
@@ -215,6 +229,28 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		var items:ReactFragment = renderItems(block);
 		return block.hasFindForm ? jsx('<form name=${block.dataClassPath} key=${"f_"+i}>$items</form>'):items;
 	}
+	function renderItemForm(formFields:Array<FormField>):ReactFragment{
+		var formFieldElements:Array<ReactFragment> = [];
+		var i = 0;
+		for(fF in formFields){
+			formFieldElements.push(
+				switch(fF.type){
+					case Radio: 
+						var o:Int = 0;
+						var options:ReactFragment = [
+						for(k=>v in fF.options.keyValueIterator()){
+							jsx('<span key=${"o_"+(o++)}>${v} <input type="radio" name=${fF.name} value=${v} /></span>');
+						}];
+						jsx('<div className="formRow" key=${"fr_"+(i++)} >
+						<label key=${"l_"+i}>${fF.label}</label><div  key=${"opt_"+i} className="formRow2">$options</div>
+						</div>');	
+					default:
+						null;					
+				}
+			);
+		}
+		return formFieldElements;
+	}
 
 	function renderItems(block:MenuBlock):ReactFragment
 	{
@@ -271,11 +307,18 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 
 				default:
 					//trace('key:${"bu"+(i)}');
-					jsx('<$B key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then}
-					data-section=${item.section} disabled=${item.disabled}>${item.label}</$B>');
+					if(item.options!=null&&item.options.length>0){
+
+						jsx('<form key=${"bu"+(i++)} name=${item.action}>
+						${renderItemForm(item.options)}
+						<$B key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then} 					data-section=${item.section} disabled=${item.disabled==false?null:true}>${item.label}</$B>
+						</form>');
+					}
+					else
+						jsx('<$B key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then} 					data-section=${item.section} disabled=${item.disabled==false?null:true}>${item.label}</$B>');
 			}
 		});
-		if(true||hasFindForm){			
+		if(hasFindForm){			
 			rItems.push(jsx('<$B key=${"bu"+(i++)} onClick=${find} data-action="find" data-then=${null}>Finden</$B>'));
 			rItems.push(jsx('<$B key=${"bu"+(i++)} onClick=${clear} data-action="clear" data-then=${null}>Zurücksetzen</$B>'));
 		}
@@ -352,6 +395,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			return;
 		}
 		//trace(Type.getClass(props.parentComponent));
+		trace(printProps(props));
 		props.parentComponent.state.sideMenu.instance = this;
 		if(props.sameWidth && state.sameWidth == null)
 		{

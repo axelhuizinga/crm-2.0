@@ -154,7 +154,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		state =  App.initEState({
 			data:['hint'=>'Rücklastschriften zum Hochladen auswählen'],
 			action:(props.match.params.action==null?'importReturnDebit':props.match.params.action),
-			sideMenu:FormApi.initSideMenu2( this,			
+			sideMenu:FormApi.initSideMenuMulti( this,			
 			[
 				{
 					dataClassPath:'admin.Debit',

@@ -1,5 +1,6 @@
 package view.accounting;
 
+import view.shared.MItem;
 import model.accounting.DebitModel;
 import loader.AjaxLoader;
 import action.async.UserAccess;
@@ -54,7 +55,27 @@ class DirectDebits extends ReactComponentOf<DataFormProps,FormState>
 			props.history.push('${baseUrl}Edit');
 			}		
 		state =  App.initEState({
-			loading:false
+			loading:false,
+			sideMenu:FormApi.initSideMenuMulti( this,
+				[	
+					{
+						dataClassPath:'data.DirectDebits',
+						label:'Gesamtliste',
+						section: 'List',
+						items:List.menuItems
+					},
+					{
+						dataClassPath:'data.DirectDebits',
+						hasFindForm:false,
+						label:'Bearbeiten',
+						section: 'Edit',
+						items: Edit.menuItems
+					}
+				],				
+				{	
+					section: props.match.params.section==null? 'Edit':props.match.params.section, 
+					sameWidth: true
+				})
 		},this);	
 		
 		trace(Reflect.fields(props));
@@ -80,12 +101,12 @@ class DirectDebits extends ReactComponentOf<DataFormProps,FormState>
 	override public function render() 
 		{
 			trace(props.match.params.section);
-			//trace(state.sideMenu); 
+			//trace(state.sideMenu); sideMenu=${state.sideMenu}
 			return switch(props.match.params.section)
 			{
 				case "Edit":
 					jsx('
-						<$Edit ${...props} fullWidth={true} sideMenu=${state.sideMenu}/>
+						<$Edit ${...props} fullWidth={true} parentComponent=${this}/>
 					');					
 				case "List":
 					jsx('

@@ -271,6 +271,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			var type:FormInputElement;
 			type = (item.formField==null?Button:(item.formField.type==null?FormInputElement.Text: item.formField.type));
 			//trace(i + ':' + type);
+			var dis:Bool = !(item.disabled==null||item.disabled==false);
 			if(type!=Button)
 				block.hasFindForm = true;
 			return switch(type)
@@ -297,12 +298,12 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					<input  id=${item.formField.name} type="text" name=${item.formField.name} onChange=${item.formField.handleChange} className="input"  key=${"i_"+i} />
 				</div>');
 				case Upload:
-					//trace(item.formField.handleChange);
+					//trace(item.formField.handleChange);					
 					jsx('<div key=${"up"+(i++)}  id="uploadForm"  className="uploadBox" >
 					<input id=${item.formField.name} type="file" name=${item.formField.name} onChange=${item.formField.handleChange} className="fileinput"  />
 					<label htmlFor=${item.formField.name} className="button" >${item.label}</label>
 					<$B onClick=${item.handler} data-action=${item.action}
-				data-section=${item.section} disabled=${item.disabled}>${item.formField.submit}</$B>
+				data-section=${item.section} disabled=${dis} >${item.formField.submit}</$B>
 				</div>');
 
 				default:
@@ -311,11 +312,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 
 						jsx('<form key=${"bu"+(i++)} name=${item.action}>
 						${renderItemForm(item.options)}
-						<$B key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then} 					data-section=${item.section} disabled=${item.disabled==false?null:true}>${item.label}</$B>
+						<$B key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then} 					data-section=${item.section} disabled=${dis}>${item.label}</$B>
 						</form>');
 					}
 					else
-						jsx('<$B key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then} 					data-section=${item.section} disabled=${item.disabled==false?null:true}>${item.label}</$B>');
+						jsx('<$B key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then} 					data-section=${item.section} disabled=${dis} >${item.label}</$B>');
 			}
 		});
 		if(hasFindForm){			
@@ -395,7 +396,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			return;
 		}
 		//trace(Type.getClass(props.parentComponent));
-		trace(printProps(props));
+		//trace(printProps(props));
 		props.parentComponent.state.sideMenu.instance = this;
 		if(props.sameWidth && state.sameWidth == null)
 		{

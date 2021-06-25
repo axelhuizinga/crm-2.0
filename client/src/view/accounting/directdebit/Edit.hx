@@ -68,13 +68,13 @@ using StringTools;
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
-		{label:'Neu Erstellen',action:'create', disabled:false,//name:'directDebitFile', type: FormInputElement.Button,
+		{label:'Neu Erstellen',action:'create', //name:'directDebitFile', type: FormInputElement.Button,
 			options:[
 			{label: 'Buchungstag', name: 'booking_day', type: Radio, options: ['1'=>'1','15'=>'15']}]
 		},		
-		{label:'Anzeigen',action:'get'},
-		{label:'Download', action:'download'},
-		{label:'Bearbeiten',action:'edit'},
+		{label:'Anzeigen',action:'get', disabled:true},
+		{label:'Download', action:'download', disabled:true},
+		{label:'Bearbeiten',action:'edit', disabled:true},
 	];
 	var dataAccess:DataAccess;	
 	//var dataDisplay:Map<String,DataState>;

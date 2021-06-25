@@ -203,7 +203,8 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			// Map DataFieldName to DisplayFieldName, 		
 			if(props.dataState.titleMap!=null){
 				for( key => val in props.dataState.titleMap){
-					if(cD.name==val && rdMap.exists(key)&&rdMap.exists(val)){
+					//if(cD.name==val && rdMap.exists(key)&&rdMap.exists(val)){
+					if(cD.name==val && rdMap.exists(key)){
 						cD.title = rdMap.get(key);
 					}
 				}

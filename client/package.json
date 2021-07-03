@@ -16,7 +16,7 @@
     "history": "^4.10.1",
     "jquery": "^3.6.0",
     "kind-of": "^6.0.3",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "node-forge": "^0.10.0",
     "prop-types": "15.6.2",
     "react": "16.9",

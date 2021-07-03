@@ -14,6 +14,7 @@
     "font-awesome": "^4.7.0",
     "haxe-modular": "^0.12.1",
     "history": "^4.10.1",
+    "jquery": "^3.6.0",
     "kind-of": "^6.0.3",
     "lodash": "^4.17.19",
     "node-forge": "^0.10.0",

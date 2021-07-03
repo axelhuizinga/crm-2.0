@@ -12,6 +12,7 @@
 -lib js-object
 -lib json2object
 -lib tink_core
+-lib hx3compat
 
 -cp /opt/src/lib
 -cp ../lib

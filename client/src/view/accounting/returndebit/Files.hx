@@ -1,5 +1,11 @@
 package view.accounting.returndebit;
 
+import js.jquery.Helper;
+import js.jquery.JQuery;
+
+import js.html.Document;
+import js.html.XMLDocument;
+import js.html.FileList;
 import js.lib.Reflect;
 import data.DataState;
 import model.accounting.AccountsModel;
@@ -34,6 +40,7 @@ import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
 import action.async.CRUD;
 import js.lib.Promise;
+import js.jquery.*;
 import db.DBAccessProps;
 import action.async.LivePBXSync;
 import state.AppState;
@@ -75,21 +82,23 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	public static var menuItems:Array<MItem> = [		
 		{
 			id:'returnDebitFile',
-			label:'Auswahl',action:'importReturnDebit', disabled: true,
+			label:'Auswahl',action:'importReturnDebit', disabled: true,options: [{multiple: true}],
 			formField:{				
-				name:'returnDebitFile',
-				submit:'Hochladen',
+				name:'returnDebitFile',				
+				submit:'Importieren',
 				type:FormInputElement.Upload,
 				handleChange: function(evt:Event) {
 					//trace(Reflect.fields(evt));
-					var finput = cast Browser.document.getElementById('returnDebitFile');
+					Files._instance.parseCamt(untyped evt.target.files);
+
+					/*var finput = cast Browser.document.getElementById('returnDebitFile');
 					trace(finput.value);
 					//trace(_instance);
 					var val = (finput.value == ''?'':finput.value.split('\\').pop());
-					trace(Files._instance.state.sideMenu.instance.enableItem('returnDebitFile'));
-					Files._instance.setState({
-						action:'ReturnDebitsFileSelected',data:['hint'=>'Zum Upload ausgewählt:${val}']
-					});
+					trace(Files._instance.state.sideMenu.instance.enableItem('returnDebitFile'));*/
+					/*Files._instance.setState({
+						action:'ReturnDebitsFileSelected',data:['hint'=>'${xml}']
+					});*/
 				}
 			},
 			handler: function(_) {				
@@ -288,12 +297,12 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	 * Upload selected ReturnDebits File
 	 * @param _ 
 	 */
+	
 	public function importReturnDebit(_):Void
 	{
 		var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){
 			var finput = cast  Browser.document.getElementById('returnDebitFile');
 			trace(state.action + '::' + finput.files[0]);
-			//var reader:FileReader = new FileReader();
 			var uFile:Blob = cast(finput.files[0], Blob);
 			trace(uFile);
 			if(uFile==null){
@@ -364,7 +373,27 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		
 	}
 
-	public function registerORM(refModel:String,orm:ORM) {
+	public function parseCamt(files:FileList) {
+		//VALUES(:id,:sepa_code,:iban,:ba_id,:amount,:mandator)
+		var dT:Array<Map<String, Dynamic>> = new Array();			
+		var xml:String = '';
+		for(file in files){
+			var reader:FileReader = new FileReader();
+			reader.onload = function(e:Event){
+				xml = untyped e.target.result;
+				trace(xml);
+				var xmlDoc:Document = JQuery.parseXML(xml);
+				var camt:JQuery = Helper.J(xmlDoc);
+				var sepa = camt.find('RtrInf Cd');
+				trace(sepa.length);
+			}
+			reader.readAsText(file);						
+		}		
+
+		//setState({action:'showImportedReturnDebit',dataTable:dT,loading:false});		
+	}
+
+	/*public function registerORM(refModel:String,orm:ORM) {
 		if(ormRefs.exists(refModel)){
 			ormRefs.get(refModel).orms.set(orm.id,orm);
 			trace(refModel);
@@ -381,7 +410,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			trace('OrmRef $refModel created!');
 		}
 		setState({ormRefs:ormRefs});
-	}
+	}*/
 
 	function showSelectedAccounts(?ev:Event) {
 		//trace('---' + Type.typeof(ormRefs['accounts'].compRef));

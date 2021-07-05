@@ -108,7 +108,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 
 	public function enableItem(id:String,?enable:Bool = true):Bool
 	{
-		trace(state.items.keys());
+		//trace(state.items.keys());
 		trace('$id $enable');
 		if(!state.items.exists(id))
 			return null;

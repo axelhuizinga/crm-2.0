@@ -587,6 +587,11 @@ input::-moz-focus-inner {
 {
 	padding: .25rem 1rem;
 }
+.err{
+	color:rgb(73, 30, 67);
+	width: 50%;
+	margin: 1rem auto;
+}
 
 .error, .error::placeholder { color: red!important;}
 
@@ -718,12 +723,14 @@ form.modal-card-body{
 
 /*FORMS * CONTAINER*/
 .formsContainer{
+	
+	/*margin: 0.8rem 0 0 0.8rem;
 	display: flex;
 	flex-direction: column;
-	flex-grow: 1;
-	/*margin: 0.8rem 0 0 0.8rem;*/
+	flex-grow: 1;*/
 	overflow: auto;
 	max-width: 82%;
+	margin: 0 auto;
 }
 
 /*FORMS * ELEMENTS*/
@@ -794,7 +801,7 @@ form{
 	color:$darkBlue;
 }
 
-input[name="accordion-select"], .panel-block {
+input[name="accordion-select"], .panel-block, .hide{
   display:none;
   /*visibility: collapse;
   height:0px;*/
@@ -1028,12 +1035,11 @@ form td, form caption
 	margin: 0.32rem auto;
 	font-size: 1.0rem;
 	grid-auto-rows:  min-content;
-	grid-template-columns: 1fr 1fr;
-	/*grid-template-columns: minmax(50% auto);*/
-	overflow-y: visible;
-	min-width: 80%;
-	/*min-width: min-content;
-	padding-right: 1rem;*/
+	/*grid-template-columns: 1fr 1fr;
+	grid-template-columns: minmax(50% auto);min-width: 80%;*/
+	overflow-y: visible;	
+	border: thin solid #aaa;
+	border-radius: 0.2rem 0.2rem 0 0;
 	white-space: nowrap;
 }
 .grid_menu

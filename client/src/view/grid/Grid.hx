@@ -95,13 +95,13 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		//trace('pageCount=${props.parentComponent.state.pageCount} dataCount=${props.parentComponent.state.dataCount} limit=${props.parentComponent.props.limit}');	
 
 		return jsx('		
-		<Fragment>
+		<div className="grid_container">
 			<div className="grid_box" ref=${gridRef} id=${props.id} key=${"grid_list"+props.id}>		
 					${headerRows}				
 					${renderRows()}
 			</div>					
 			${renderPager(props.parentComponent)}
-		</Fragment>');		
+		</div>');		
 	}
 
 	public function renderPager(comp:Dynamic):ReactFragment
@@ -158,8 +158,9 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			${hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
 			</span>
 			'));
+			trace(hC.label +':' + hC.flexGrow);
 		}
-		//trace('$visibleColumns $gridStyle');
+		trace('$visibleColumns $gridStyle');
 		return headerRow;
 	}	
 
@@ -253,6 +254,8 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)	
 	{
 		trace(headerUpdated+ ':' + headerRef +' cmp state:' + (prevState==state?'Y':'N')); 
+		var grid:Element = gridRef.current;
+		grid.style.setProperty('grid-template-columns', gridStyle);		
 	}
 	
 	function editRow(ev:Event) {

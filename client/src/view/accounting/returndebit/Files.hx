@@ -84,7 +84,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			id:'returnDebitFile',
 			label:'Auswahl',action:'importReturnDebit', disabled: true,options: [{multiple: true}],
 			formField:{				
-				name:'returnDebitFile',				
+				name:'returnDebitData',				
 				submit:'Importieren',
 				type:FormInputElement.Upload,
 				handleChange: function(evt:Event) {
@@ -295,10 +295,11 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 
 	/**
 	 * Upload selected ReturnDebits File
+	 * @deprecated "Replaced by import of ReturnDebits data"
 	 * @param _ 
 	 */
 	
-	public function importReturnDebit(_):Void
+	public function uploadReturnDebit(_):Void
 	{
 		var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){
 			var finput = cast  Browser.document.getElementById('returnDebitFile');
@@ -348,7 +349,80 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			var dT:Array<Map<String, Dynamic>> = new Array();			
 			for(dR in rD.rlData)
 				dT.push(Utils.dynToMap(dR));
-			setState({action:'showImportedReturnDebit',dataTable:dT,loading:false});
+			setState({action:'showLoadedReturnDebit',dataTable:dT,loading:false});
+			trace(dT.length);
+			//state.loading = false;
+			var baseUrl:String = props.match.path.split(':section')[0];			
+			//props.history.push('${baseUrl}List');
+			App.store.dispatch(Status(Update( 
+				{	
+					text:dT.count() + ' Rücklastschriften Importiert'
+				}
+			)));
+			
+		}, function (r:Dynamic) {//rejected callback
+			trace(r);
+			App.store.dispatch(Status(Update( 
+				{	className:'',
+					text:(r.error==null?'':r.error)
+				}
+			)));
+			
+			setState({action:'ReturnDebitsFileSelected',data:['hint'=>'Importfehler:${Std.string(r.error)}'],loading:false});
+			//setState({action:'showError', errors: ['Importfehler'=>Std.string(r.error)],loading:false});
+		});
+		
+	}
+
+	/**
+	 * Import ReturnDebits Data
+	 * @param _ 
+	 */
+	
+	 public function importReturnDebit(fd:FormData):Void
+	{
+		var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){
+			var finput = cast  Browser.document.getElementById('returnDebitFile');
+			trace(state.action + '::' + finput.files[0]);
+			var uFile:Blob = cast(finput.files[0], Blob);
+			trace(uFile);
+			if(uFile==null){
+				reject({error:new Error('Keine Datei ausgewählt')});
+			}
+			
+			var xhr = new js.html.XMLHttpRequest();
+			xhr.open('POST', '${App.config.api}', true);
+			xhr.onerror = function(e) {
+				trace(e);
+				trace(e.type);
+				reject({error:e});
+			}
+			xhr.withCredentials = true;
+			xhr.onload = function(e) {
+				trace(xhr.status);
+				if (xhr.status != 200) {				
+					trace(xhr.statusText);
+					reject({error:xhr.statusText});
+				}
+				trace(xhr.response.length);
+				resolve(xhr.response);
+				//onLoaded(haxe.io.Bytes.ofData(xhr.response));
+			}
+			trace(Files._instance.state.sideMenu.instance.enableItem('returnDebitFile',false));
+			xhr.send(fd);
+			setState({action:'importReturnDebit',loading:true});
+		});
+		
+		iPromise.then(function (r:Dynamic) {
+			//trace(r);
+			var rD:{rlData:Array<Dynamic>} = Json.parse(r);
+			if(rD.rlData != null)
+				trace(rD.rlData.length);
+			//trace(rD);
+			var dT:Array<Map<String, Dynamic>> = new Array();			
+			for(dR in rD.rlData)
+				dT.push(Utils.dynToMap(dR));
+			setState({action:'showLoadedReturnDebit',dataTable:dT,loading:false});
 			trace(dT.length);
 			//state.loading = false;
 			var baseUrl:String = props.match.path.split(':section')[0];			
@@ -374,18 +448,43 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	public function parseCamt(files:FileList) {
-		//VALUES(:id,:sepa_code,:iban,:ba_id,:amount,:mandator)
+		state.errors = [];			
 		var dT:Array<Map<String, Dynamic>> = new Array();			
+		var valid_codes:Array<String> = untyped Std.string(DealsModel.dataAccess['open'].view['sepa_code'].options.keys().keys).split(',');
 		var xml:String = '';
 		for(file in files){
 			var reader:FileReader = new FileReader();
 			reader.onload = function(e:Event){
 				xml = untyped e.target.result;
-				trace(xml);
+				//trace(xml);
 				var xmlDoc:Document = JQuery.parseXML(xml);
 				var camt:JQuery = Helper.J(xmlDoc);
-				var sepa = camt.find('RtrInf Cd');
-				trace(sepa.length);
+				var returnDebit:JQuery = camt.find('Ntry:has(RtrInf Cd)');				
+				trace(returnDebit.length);
+				returnDebit.each(function(i,el){
+					//trace(i +':' +  Helper.JTHIS.find('RtrInf Cd')[0].textContent);
+					if(!valid_codes.contains(Helper.JTHIS.find('RtrInf Cd')[0].textContent))
+						state.errors[Std.string(i)]=el.outerHTML;
+					//TODO: change value for id to client_id after changing model to same client for all mandates
+					else
+						dT.push([
+						'id' => Std.parseInt(Helper.JTHIS.find('MndtId')[0].textContent),
+						'ba_id'=> Helper.JTHIS.find('EndToEndId')[0].textContent,
+						'name'=> Helper.JTHIS.find('Dbtr>Nm')[0].textContent,
+						'iban'=> Helper.JTHIS.find('DbtrAcct IBAN')[0].textContent,
+						'title'=> (Helper.JTHIS.find('RtrInf AddtlInf').length>0?
+							Helper.JTHIS.find('RtrInf AddtlInf')[0].textContent:''),
+						'sepa_code'=> Helper.JTHIS.find('RtrInf Cd')[0].textContent,
+						'value_date'=> Helper.JTHIS.find('ValDt>Dt')[0].textContent,
+						'deal_id'=> Std.parseInt(Helper.JTHIS.find('MndtId')[0].textContent),
+						'amount'=>App.sprintf("%.2f", Helper.JTHIS.find('Ntry>Amt')[0].textContent)
+					]);
+				});
+				setState({action:'showLoadedReturnDebit',dataTable:dT,loading:false});
+				trace(dT.length);
+				if(dT.length>0){
+					trace(Files._instance.state.sideMenu.instance.enableItem('returnDebitData',true));
+				}
 			}
 			reader.readAsText(file);						
 		}		
@@ -470,8 +569,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				}				
 			}
 		];
-		return jsx('<Fragment key="relData">
+		//return jsx('<Fragment key="relData">
+		return jsx('<Fragment>
 			$dGrid
+			<div className=${state.errors.empty()?"hide":"err"}><pre>${state.errors.toString()}</pre></div>
 			${FormsView}
 			</Fragment>');
 
@@ -491,9 +592,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			return state.formApi.renderWait();
 		return state.formApi.render(switch(state.action)
 		{
-			case 'showImportedReturnDebit':
-				//(state.dataTable == null? state.formApi.renderWait():
-				relData(jsx('<Grid id="importedReturnDebit" data=${state.dataTable}
+			//(state.dataTable == null? state.formApi.renderWait():
+			//case 'showImportedReturnDebit':
+			case 'showLoadedReturnDebit':
+				relData(jsx('<Grid id="loadedReturnDebit" data=${state.dataTable}
 				${...props} dataState=${dataDisplay["rDebitList"]} key="importedReturnDebitList" 
 				parentComponent=${this} className="is-striped is-hoverable" />			
 				'));			

@@ -92,14 +92,17 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		}		
 	
 		var headerRows:ReactFragment = renderHeaderDisplay();
-		//trace('pageCount=${props.parentComponent.state.pageCount} dataCount=${props.parentComponent.state.dataCount} limit=${props.parentComponent.props.limit}');	
+		//trace('pageCount=${props.parentComponent.state.pageCount} dataCount=${props.parentComponent.state.dataCount} limit=${props.parentComponent.props.limit}');	<div className="grid_border_box"></div>	
 
 		return jsx('		
 		<div className="grid_container">
-			<div className="grid_box" ref=${gridRef} id=${props.id} key=${"grid_list"+props.id}>		
+			
+				<div className="grid_box grid${visibleColumns}c" ref=${gridRef} id=${props.id} key=${"grid_list"+props.id}>		
 					${headerRows}				
 					${renderRows()}
-			</div>					
+					
+				</div>	
+			
 			${renderPager(props.parentComponent)}
 		</div>');		
 	}
@@ -143,6 +146,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		if(props.dataState==null)
 			return null;
 		var headerRow:Array<ReactFragment> = [];
+		visibleColumns = 0;
 		//var headerRow:String = '';
 		//trace(props.dataState.columns.keys());
 		gridStyle = '';
@@ -254,8 +258,6 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)	
 	{
 		trace(headerUpdated+ ':' + headerRef +' cmp state:' + (prevState==state?'Y':'N')); 
-		var grid:Element = gridRef.current;
-		grid.style.setProperty('grid-template-columns', gridStyle);		
 	}
 	
 	function editRow(ev:Event) {

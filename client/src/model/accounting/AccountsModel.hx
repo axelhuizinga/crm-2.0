@@ -45,8 +45,8 @@ class AccountsModel
 				return n.join(' ');
 			}
 		},	
-		'sign_date'=>{label:'Erteilt',cellFormat:function(v:String) return v!=null? DateTools.format(Date.fromString(v), "%d.%m.%Y"):''},	
-		'contact'=>{label:'Kontakt',show:false, useAsIndex: false},				
+		'contact'=>{label:'ID',className: 'tableNums'},	
+		'sign_date'=>{label:'Erteilt',cellFormat:function(v:String) return v!=null? DateTools.format(Date.fromString(v), "%d.%m.%Y"):''},
 		'iban'=>{label:'IBAN',className: 'tableNums'},	
 		'status' => {label:'Status', className: 'tCenter',
 			cellFormat:function(v:String) 

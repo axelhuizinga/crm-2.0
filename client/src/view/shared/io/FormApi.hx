@@ -258,7 +258,7 @@ class FormApi
 		e.preventDefault();
 	}
 	
-	public function render(content:ReactFragment)
+	public function render(content:ReactFragment, err:ReactFragment = null)
 	{
 		if(sM==null){
 			//trace(content);
@@ -278,6 +278,7 @@ class FormApi
 				${content}
 				</div>
 				<$Menu className="menu" ${...sM} parentComponent=${comp} itemHandler=${itemHandler} />
+				${err}
 			</div>			
 		');
 	}///${...comp.props}

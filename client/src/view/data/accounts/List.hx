@@ -180,6 +180,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		if(state.loading || state.dataTable == null || state.dataTable.length == 0)
 			return state.formApi.renderWait();
 		trace('###########loading:' + state.loading);
+		trace(state.dataTable[0]);
 		return switch(props.match.params.action)
 		{
 			case 'get':

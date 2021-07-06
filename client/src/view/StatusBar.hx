@@ -55,6 +55,7 @@ typedef StatusBarState =
 class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>	
 {
 	var mounted:Bool = false;
+	var itimer:Timer;
 	var timer:Timer;
 	
 	public function new(?props:StatusBarProps,?context:Dynamic)
@@ -73,7 +74,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 		var d:Date = Date.now();
 		var s:Int = d.getSeconds();
 		//trace('start delay at $s set timer start in ${(60 - s ) } seconds');
-		Timer.delay(function(){
+		itimer = Timer.delay(function(){
 			//trace('timer start at ${Date.now().getSeconds()}');
 			//this.setState({ date: Date.now()});
 			state.date = Date.now();
@@ -87,6 +88,8 @@ class StatusBar extends ReactComponentOf<StatusBarProps,StatusBarState>
 	override public function componentWillUnmount()
 	{
 		mounted = false;
+		if(itimer != null)
+			itimer.stop();
 		if(timer !=null)
 			timer.stop();
 	}	

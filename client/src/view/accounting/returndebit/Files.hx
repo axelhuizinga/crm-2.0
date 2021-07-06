@@ -162,6 +162,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		trace(menuItems[0].formField);
 		state =  App.initEState({
 			data:['hint'=>'Rücklastschriften zum Hochladen auswählen'],
+			errors:[],
 			action:(props.match.params.action==null?'importReturnDebit':props.match.params.action),
 			sideMenu:FormApi.initSideMenuMulti( this,			
 			[
@@ -459,11 +460,12 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				//trace(xml);
 				var xmlDoc:Document = JQuery.parseXML(xml);
 				var camt:JQuery = Helper.J(xmlDoc);
-				var returnDebit:JQuery = camt.find('Ntry:has(RtrInf Cd)');				
+				var returnDebit:JQuery = camt.find('Ntry:has(RtrInf Rsn Cd)');				
 				trace(returnDebit.length);
 				returnDebit.each(function(i,el){
+					var sepa_code:String = Helper.JTHIS.find('RtrInf Rsn Cd')[0].textContent;
 					//trace(i +':' +  Helper.JTHIS.find('RtrInf Cd')[0].textContent);
-					if(!valid_codes.contains(Helper.JTHIS.find('RtrInf Cd')[0].textContent))
+					if(!valid_codes.contains(sepa_code))
 						state.errors[Std.string(i)]=el.outerHTML;
 					//TODO: change value for id to client_id after changing model to same client for all mandates
 					else
@@ -474,7 +476,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 						'iban'=> Helper.JTHIS.find('DbtrAcct IBAN')[0].textContent,
 						'title'=> (Helper.JTHIS.find('RtrInf AddtlInf').length>0?
 							Helper.JTHIS.find('RtrInf AddtlInf')[0].textContent:''),
-						'sepa_code'=> Helper.JTHIS.find('RtrInf Cd')[0].textContent,
+						'sepa_code'=> sepa_code,
 						'value_date'=> Helper.JTHIS.find('ValDt>Dt')[0].textContent,
 						'deal_id'=> Std.parseInt(Helper.JTHIS.find('MndtId')[0].textContent),
 						'amount'=>App.sprintf("%.2f", Helper.JTHIS.find('Ntry>Amt')[0].textContent)
@@ -543,6 +545,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			dbUser:param.userState.dbUser,
 			devIP:App.devIP
 		}, this);*/
+		trace(ormRefs.keys());
 		var FormsView:ReactFragment = [
 			for(model in ['deals','contacts','accounts']){
 				if(ormRefs.exists(model))
@@ -569,11 +572,9 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				}				
 			}
 		];
-		//return jsx('<Fragment key="relData">
+		//return jsx('<Fragment key="relData">${FormsView}
 		return jsx('<Fragment>
-			$dGrid
-			<div className=${state.errors.empty()?"hide":"err"}><pre>${state.errors.toString()}</pre></div>
-			${FormsView}
+			$dGrid			
 			</Fragment>');
 
 		/*return jsx('<Fragment key="relData">
@@ -595,10 +596,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			//(state.dataTable == null? state.formApi.renderWait():
 			//case 'showImportedReturnDebit':
 			case 'showLoadedReturnDebit':
-				relData(jsx('<Grid id="loadedReturnDebit" data=${state.dataTable}
+				jsx('<Grid id="loadedReturnDebit" data=${state.dataTable}
 				${...props} dataState=${dataDisplay["rDebitList"]} key="importedReturnDebitList" 
 				parentComponent=${this} className="is-striped is-hoverable" />			
-				'));			
+				');			
 			case 'showError':
 				return jsx('				
 					<div className="hint">Fehler:${state.errors.toString()}</div>					
@@ -610,7 +611,8 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				else{
 					null;
 				}				
-		});
+		}, state.errors.empty()?null:jsx('<div className="err"><p className="hint">${state.errors.toString()}</p></div>')
+		);
 		return null;
 	}	
 }

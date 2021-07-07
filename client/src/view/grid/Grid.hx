@@ -162,7 +162,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			${hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
 			</span>
 			'));
-			trace(hC.label +':' + hC.flexGrow);
+			//trace(hC.label +':' + hC.flexGrow);
 		}
 		trace('$visibleColumns $gridStyle');
 		return headerRow;

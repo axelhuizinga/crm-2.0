@@ -41,6 +41,7 @@ import view.shared.MenuBlock;
 import view.shared.MenuProps;
 import view.shared.MenuState;
 
+using tools.ClassInfo;
 using Lambda;
 
 /**
@@ -95,7 +96,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	{
 		super(props);
 		//trace(props);
-		trace(props.menuBlocks);
+		//trace(props.menuBlocks);
 		hasFindForm = false;
 		state = {
 			hidden:props.hidden||false,
@@ -108,11 +109,20 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 
 	public function enableItem(id:String,?enable:Bool = true):Bool
 	{
-		//trace(state.items.keys());
+		trace(state.items.keyNames().join('|'));
 		trace('$id $enable');
 		if(!state.items.exists(id))
 			return null;
 		var item = state.items.get(id);
+		if(item.formField!=null&&item.formField.submit!=null){
+			trace('looking4:#${item.id+"_submit"}');
+			var submit = Browser.document.querySelector('#${item.id+"_submit"}');
+			if(enable)
+				submit.removeAttribute('disabled');
+			else
+				submit.setAttribute('disabled',enable?'false':'true');
+			trace(item);
+		}
 		item.disabled = !enable;
 		return !item.disabled;
 	}
@@ -227,8 +237,9 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	{
 		//trace(block);
 		var items:ReactFragment = renderItems(block);
-		return block.hasFindForm ? jsx('<form name=${block.dataClassPath} key=${"f_"+i}>$items</form>'):items;
+		return block.hasFindForm ? jsx('<form name=${block.dataClassPath} key=${"f_"+i}>$items</form>'):jsx('<>${items}</>');
 	}
+
 	function renderItemForm(formFields:Array<FormField>):ReactFragment{
 		var formFieldElements:Array<ReactFragment> = [];
 		var i = 0;
@@ -272,8 +283,8 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			type = (item.formField==null?Button:(item.formField.type==null?FormInputElement.Text: item.formField.type));
 			//trace(i + ':' + type);
 			var dis:Bool = !(item.disabled==null||item.disabled==false);
-			if(type!=Button)
-				block.hasFindForm = true;
+			//if(type!=Button)
+				//block.hasFindForm = true;
 			return switch(type)
 			{
 				case Radio: 
@@ -300,10 +311,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				case Upload:
 					//trace(item.formField.handleChange);		
 					if(item.options!=null&&item.options.length==1&&item.options[0].multiple){
+						//jsx('');
 						jsx('<div key=${"up"+(i++)}  id="uploadForm"  className="uploadBox" >
 						<input id=${item.formField.name} type="file" name=${item.formField.name} onChange=${item.formField.handleChange} className="fileinput" multiple />
 						<label htmlFor=${item.formField.name} className="button" >${item.label}</label>
-						<$B onClick=${item.handler} data-action=${item.action}
+						<$B onClick=${item.handler} data-action=${item.action} id=${item.id+"_submit"} 
 					data-section=${item.section} disabled=${dis} >${item.formField.submit}</$B>
 					</div>');
 					}

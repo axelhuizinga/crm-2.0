@@ -90,18 +90,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				handleChange: function(evt:Event) {
 					//trace(Reflect.fields(evt));
 					Files._instance.parseCamt(untyped evt.target.files);
-
-					/*var finput = cast Browser.document.getElementById('returnDebitFile');
-					trace(finput.value);
-					//trace(_instance);
-					var val = (finput.value == ''?'':finput.value.split('\\').pop());
-					trace(Files._instance.state.sideMenu.instance.enableItem('returnDebitFile'));*/
-					/*Files._instance.setState({
-						action:'ReturnDebitsFileSelected',data:['hint'=>'${xml}']
-					});*/
 				}
 			},
-			handler: function(_) {				
+			handler: function(e:Event) {				
+				e.preventDefault();
 				var finput = cast Browser.document.getElementById('returnDebitFile');
 				//var files = php.Lib.hashOfAssociativeArray(finput.files);
 				
@@ -112,10 +104,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				//trace(finput.files.get('returnDebitFile'));
 			}/**/
 		},
-		{id:'close',label:'Schließen',action:'close', disabled:true},		
+		/*{id:'close',label:'Schließen',action:'close', disabled:true},		
 		//{label:'Speichern + Schließen',action:'update', then:'close'},
 		{id:'update',label:'Speichern',action:'update', disabled:true},
-		{id:'reset',label:'Zurücksetzen',action:'reset', disabled:true},
+		{id:'reset',label:'Zurücksetzen',action:'reset', disabled:true},*/
 	];	
 
 	var dataAccess:DataAccess;	
@@ -485,7 +477,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				setState({action:'showLoadedReturnDebit',dataTable:dT,loading:false});
 				trace(dT.length);
 				if(dT.length>0){
-					trace(Files._instance.state.sideMenu.instance.enableItem('returnDebitData',true));
+					trace(Files._instance.state.sideMenu.instance.enableItem('returnDebitFile',true));
 				}
 			}
 			reader.readAsText(file);						

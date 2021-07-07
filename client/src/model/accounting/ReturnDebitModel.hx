@@ -96,11 +96,11 @@ class ReturnDebitModel
 			 return DateTools.format(Date.fromString(v), "%d.%m.%Y");
 		}},
 		'sepa_code'=>{label:'Sepa Code' },
-		'iban'=>{label:'Iban', className: 'tableNums', flexGrow:0, headerClassName: 'tRight'},						
+		'iban'=>{label:'Iban', className: 'tableNums', flexGrow:0},						
 		'deal_id'=>{label: 'SpendenID', className: 'tableNums'},		
 		'id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
 		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
-		//'processed'=>{label: 'Verarbeitet'}
+		//'processed'=>{label: 'Verarbeitet'}, headerClassName: 'tRight'
 	];
 
 	public static var gridColumns:Map<String,DataColumn> = [
@@ -114,10 +114,10 @@ class ReturnDebitModel
 		}},
 		'sepa_code'=>{label:'Sepa Code' },
 		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
-		'iban'=>{label:'Iban', className: 'tableNums', flexGrow:0, headerClassName: 'tRight'},						
+		'iban'=>{label:'Iban', className: 'tableNums',  headerClassName: 'tRight'},						
 		'deal_id'=>{label: 'SpendenID', className: 'tableNums'},		
 		'ba_id'=>{label: 'Buchungsanforderung ID', className: 'tableNums'},		
-		//'processed'=>{label: 'Verarbeitet'}
+		//'processed'=>{label: 'Verarbeitet'}flexGrow:0,
 	];	
 
 	/*public static var listColumns:Map<String,DataColumn> = [

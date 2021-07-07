@@ -97,7 +97,7 @@ class BinaryLoader {
 		xhr.open('POST', url, true);
 		//xhr.setRequestHeader('Origin', 'https://${App.devIP}:9000');
 		//xhr.setRequestHeader('Access-Control-Request-Method', 'POST');
-		//xhr.setRequestHeader('Access-Control-Allow-Origin', 'https://${App.devIP}:9000');
+		//xhr.setRequestHeader('Access-Control-Allow-Origin', 'https://dev.pitverwaltung.de');
 		//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
 		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
 		xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;

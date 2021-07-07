@@ -32,5 +32,4 @@ typedef FormField = {
 	?id:Int,
 	?jwt:String,
 	?validate:String->Bool
-
 }

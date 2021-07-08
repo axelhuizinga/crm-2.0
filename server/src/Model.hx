@@ -328,10 +328,9 @@ class Model
 	public function execute(sql:String, noSend:Bool=false):NativeArray
 	{
 		//trace(sql);	
-		if(setValues.length>0)
-		trace(setValues.length);
-		if(filterValues.length>0)
-		trace(filterValues.toString());
+		//if(setValues.length>0)trace(setValues.length);
+		
+		//if(filterValues.length>0)	trace(filterValues.toString());
 		var stmt:PDOStatement =  S.dbh.prepare(sql,Syntax.array(null));
 		if (S.dbh.errorCode()!='00000')
 		{
@@ -346,17 +345,17 @@ class Model
 		var data:NativeArray = null;
 		var success: Bool;
 		var i:Int = 0;
-		trace(setValues.length);
+		//trace(setValues.length);
 		if(setValues.length>0)
 		{
 			for (fV in setValues)
 			{
 				var type:Int = PDO.PARAM_STR; //dbFieldTypes.get(fV[0]);
-				trace(fV);
+				//trace(fV);
 				if(fV=='date_null'){
 					type = PDO.PARAM_INT;
 					fV = Syntax.code("NULL");
-					trace(fV);
+					//trace(fV);
 				}
 				values2bind[i++] = fV;
 				//trace(Std.string(Global.count(values2bind)) +':' + fV);
@@ -392,11 +391,11 @@ class Model
 				S.sendErrors(dbData,['execute' =>S.errorInfo(stmt.errorInfo())]);
 			}
 			dbData.dataInfo['count'] = Std.string(stmt.rowCount());			
-			trace('>>$action<<');
+			//trace('>>$action<<');
 			if(action=='update'||action=='delete'||action=='insert')
 			{
 				if(noSend){
-					trace('$action row done');
+					//trace('$action row done');
 				}
 				else{
 					//EXIT

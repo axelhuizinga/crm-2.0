@@ -103,15 +103,15 @@ class DebitReturnStatements extends Model
 		return ['dummy'=>666];
 	}
 	
-	function insert():Array<String>
+	function insert():Void//Array<String>
 	{		
 		trace(table+':'+dbData.dataInfo);		
 		//var iData:Dynamic = Unserializer.run(dbData.dataInfo.get('data'));
-		//var iData:Array<Map<String,Dynamic>> = Unserializer.run(dbData.dataInfo.get('data'));
-		var iData:Array<Map<String,Dynamic>> = dbData.dataInfo.get('data');
+		var iData:Array<Map<String,Dynamic>> = Unserializer.run(dbData.dataInfo.get('data'));
+		//var iData:Array<Map<String,Dynamic>> = dbData.dataInfo.get('data');
 		if(iData==null)
-			return  null;		
-		trace(iData);
+			S.sendInfo(dbData);		
+		trace(iData[0]);
 		trace(Type.typeof(iData[0]));
 		if(table != null)
 		{
@@ -120,7 +120,7 @@ class DebitReturnStatements extends Model
 				S.tableFields(table).map(function (f)return quoteIdent(f));
 			tableNames = [table];
 			queryFields = fieldNames.join(',');
-			trace(fieldNames);
+			trace(queryFields);
 		}
 		else
 			tableNames = [];
@@ -135,7 +135,6 @@ class DebitReturnStatements extends Model
 				for (k in row.keys())
 					if(tableFields.contains(k))
 						fields.push(k);
-				trace(setValues.length);				
 				var rps = fields.map( function(_) return '?').join(',');
 				setPlaceholders.push('($rps)');
 			}			
@@ -144,15 +143,18 @@ class DebitReturnStatements extends Model
 			}
 			setSql = 'VALUES ${setPlaceholders.join(",\n")}';
 			var sqlBf:StringBuf = new StringBuf();
-			trace(queryFields);
+			//trace(queryFields);
 			sqlBf.add('INSERT INTO ');
-			sqlBf.add('${quoteIdent(tableNames[0])} (${fields.join(",")}) ${setSql} ON CONFLICT DO NOTHING RETURNING id');			
-			//trace(sqlBf.toString());
+			sqlBf.add('${quoteIdent(tableNames[0])} (${fields.join(",")}) ${setSql} ON CONFLICT (ba_id) DO UPDATE SET sepa_code=\'${setValues[3]}\' RETURNING id');			
+			trace(sqlBf.toString());
 			//trace(setValues.toString());
-			ids.push(cast untyped execute(sqlBf.toString(),true)[0]);
+			ids.push(cast untyped execute(sqlBf.toString(),true)[0]['id']);
 		}
 		trace(ids);
-		return ids;
+		dbData.dataInfo['data'] = ids;
+		trace(dbData);
+		S.sendData(dbData);
+		//return ids;
 	}
 
 	function sync()	

@@ -20,7 +20,7 @@ import haxe.Exception;
 import model.ORM;
 import js.html.Element;
 import js.html.FormElement;
-import hxbit.Serializer;
+import haxe.Serializer;
 import js.lib.Error;
 import js.html.Event;
 import shared.Utils;
@@ -92,7 +92,8 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 					Files._instance.parseCamt(untyped evt.target.files);
 				}
 			},
-			handler: function(e:Event) {				
+			handler: function(e:Event) {	
+				trace(e);			
 				e.preventDefault();
 				var finput = cast Browser.document.getElementById('returnDebitFile');
 				//var files = php.Lib.hashOfAssociativeArray(finput.files);
@@ -242,7 +243,8 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 					}
 				}
 				trace(App.store.getState().dataStore.returnDebitsData.toString());
-			}						
+			},
+			update: function(param:DBAccessProps) return dispatch(CRUD.update(param)),
         }
 	}	
 
@@ -271,7 +273,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{	
 		trace(props.match.params.action);
-		state.formApi.doAction('importReturnDebitFile');
+		//state.formApi.doAction('importReturnDebitFile');
 	}
 	
 	public function delete(ev:ReactEvent):Void
@@ -292,7 +294,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	 * @param _ 
 	 */
 	
-	public function uploadReturnDebit(_):Void
+	/*public function uploadReturnDebit(_):Void
 	{
 		var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){
 			var finput = cast  Browser.document.getElementById('returnDebitFile');
@@ -365,44 +367,46 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			//setState({action:'showError', errors: ['Importfehler'=>Std.string(r.error)],loading:false});
 		});
 		
-	}
+	}*/
 
 	/**
 	 * Import ReturnDebits Data
 	 * @param _ 
 	 */
 	
-	 public function importReturnDebit(fd:FormData):Void
+	 public function importReturnDebit(ev:Event):Void
 	{
+		trace(ev);
 		var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){
-			var finput = cast  Browser.document.getElementById('returnDebitFile');
-			trace(state.action + '::' + finput.files[0]);
-			var uFile:Blob = cast(finput.files[0], Blob);
-			trace(uFile);
-			if(uFile==null){
-				reject({error:new Error('Keine Datei ausgewählt')});
+
+			if(state.dataTable.length<1){
+				reject({error:new Error('Keine Daten')});
 			}
-			
-			var xhr = new js.html.XMLHttpRequest();
-			xhr.open('POST', '${App.config.api}', true);
-			xhr.onerror = function(e) {
-				trace(e);
-				trace(e.type);
-				reject({error:e});
-			}
-			xhr.withCredentials = true;
-			xhr.onload = function(e) {
-				trace(xhr.status);
-				if (xhr.status != 200) {				
-					trace(xhr.statusText);
-					reject({error:xhr.statusText});
+			trace('go on');
+			//fd.append('action','returnDebitData');		
+
+			var p:Promise<DbData> = props.update(
+				{
+					classPath:'data.DebitReturnStatements',
+					action:'insert',
+					mandator:1,
+					data: Serializer.run(state.dataTable),
+					table:'debit_return_statements',
+					resolveMessage:{					
+						success:'Rücklastschriften wurden verarbeitet',
+						failure:'Rücklastschriften konnten nicht verarbeitet werden'
+					},
+					dbUser:props.userState.dbUser,
+					devIP: App.devIP
 				}
-				trace(xhr.response.length);
-				resolve(xhr.response);
-				//onLoaded(haxe.io.Bytes.ofData(xhr.response));
-			}
-			trace(Files._instance.state.sideMenu.instance.enableItem('returnDebitFile',false));
-			xhr.send(fd);
+			);
+			p.then(function(data:DbData)
+			{			
+				trace(data);
+				//trace(Unserializer.run(data.dataInfo['data'])); 
+				//trace(Utils.getAllByKey(Unserializer.run(data.dataInfo['data']),'id')); 
+				//setState({loading:false, dataTable:data.dataRows});
+			});
 			setState({action:'importReturnDebit',loading:true});
 		});
 		
@@ -418,8 +422,6 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			setState({action:'showLoadedReturnDebit',dataTable:dT,loading:false});
 			trace(dT.length);
 			//state.loading = false;
-			var baseUrl:String = props.match.path.split(':section')[0];			
-			//props.history.push('${baseUrl}List');
 			App.store.dispatch(Status(Update( 
 				{	
 					text:dT.count() + ' Rücklastschriften Importiert'
@@ -434,7 +436,6 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				}
 			)));
 			
-			setState({action:'ReturnDebitsFileSelected',data:['hint'=>'Importfehler:${Std.string(r.error)}'],loading:false});
 			//setState({action:'showError', errors: ['Importfehler'=>Std.string(r.error)],loading:false});
 		});
 		

@@ -117,11 +117,14 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		if(item.formField!=null&&item.formField.submit!=null){
 			trace('looking4:#${item.id+"_submit"}');
 			var submit = Browser.document.querySelector('#${item.id+"_submit"}');
-			if(enable)
+			if(enable){
 				submit.removeAttribute('disabled');
+				submit.addEventListener('click',item.handler);
+			}
 			else
 				submit.setAttribute('disabled',enable?'false':'true');
-			trace(item);
+			trace(item.handler);
+			//trace(getEventListeners(submit)))
 		}
 		item.disabled = !enable;
 		return !item.disabled;
@@ -310,13 +313,14 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				</div>');
 				case Upload:
 					//trace(item.formField.handleChange);		
+					trace(item.handler);
 					if(item.options!=null&&item.options.length==1&&item.options[0].multiple){
 						//jsx('');
 						jsx('<div key=${"up"+(i++)}  id="uploadForm"  className="uploadBox" >
 						<input id=${item.formField.name} type="file" name=${item.formField.name} onChange=${item.formField.handleChange} className="fileinput" multiple />
 						<label htmlFor=${item.formField.name} className="button" >${item.label}</label>
-						<$B onClick=${item.handler} data-action=${item.action} id=${item.id+"_submit"} 
-					data-section=${item.section} disabled=${dis} >${item.formField.submit}</$B>
+						<button onClick=${item.handler} data-action=${item.action} id=${item.id+"_submit"} className="act" 
+					data-section=${item.section} disabled=${dis} >${item.formField.submit}</button>
 					</div>');
 					}
 					else

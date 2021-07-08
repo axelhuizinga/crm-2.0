@@ -341,7 +341,7 @@ class S
 		Sys.exit(0);
 	}
 	
-	public static function sendData(dbData:DbData, data:RData):Bool
+	public static function sendData(dbData:DbData, ?data:RData):Bool
 	{
 		var s:Serializer = new Serializer();
 		//trace(data.info);
@@ -429,8 +429,8 @@ class S
 		trace('OK ${b.length}');
 		if(Lib.isCli())
 			return false;		
-		Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');
-		Web.setHeader("Access-Control-Allow-Credentials", "true");
+		//Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');
+		//Web.setHeader("Access-Control-Allow-Credentials", "true");
 		setHeader('application/octet-stream');		
 		var out = File.write("php://output", true);
 		out.bigEndian = true;
@@ -449,7 +449,7 @@ class S
 		if(S.devIP!=null&&S.devIP!=''){
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 		Web.setHeader("Access-Control-Allow-Credentials", "true");			
-			Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
+		Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
 			trace('https://${S.devIP}:9000');
 		}
 		else {

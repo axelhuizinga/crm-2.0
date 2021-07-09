@@ -89,6 +89,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				type:FormInputElement.Upload,
 				handleChange: function(evt:Event) {
 					//trace(Reflect.fields(evt));
+					evt.preventDefault();
 					Files._instance.parseCamt(untyped evt.target.files);
 				}
 			},
@@ -376,11 +377,11 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	
 	 public function importReturnDebit(ev:Event):Void
 	{
-		trace(ev);
-		var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){
+		//trace(ev);
+		/*var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){*/
 
 			if(state.dataTable.length<1){
-				reject({error:new Error('Keine Daten')});
+				trace({error:new Error('Keine Daten')});
 			}
 			trace('go on');
 			//fd.append('action','returnDebitData');		
@@ -407,11 +408,11 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 				//trace(Utils.getAllByKey(Unserializer.run(data.dataInfo['data']),'id')); 
 				//setState({loading:false, dataTable:data.dataRows});
 			});
-			setState({action:'importReturnDebit',loading:true});
-		});
+			//setState({action:'importReturnDebit',loading:true});
+		/*});
 		
 		iPromise.then(function (r:Dynamic) {
-			//trace(r);
+			trace(r);
 			var rD:{rlData:Array<Dynamic>} = Json.parse(r);
 			if(rD.rlData != null)
 				trace(rD.rlData.length);
@@ -437,7 +438,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			)));
 			
 			//setState({action:'showError', errors: ['Importfehler'=>Std.string(r.error)],loading:false});
-		});
+		});*/
 		
 	}
 
@@ -475,6 +476,10 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 						'amount'=>App.sprintf("%.2f", Helper.JTHIS.find('Ntry>Amt')[0].textContent)
 					]);
 				});
+				if(dT.length==0){
+					setState({data:['hint'=>'Keine Rücklastschriften gefunden']});
+				}
+				else
 				setState({action:'showLoadedReturnDebit',dataTable:dT,loading:false});
 				trace(dT.length);
 				if(dT.length>0){
@@ -486,25 +491,6 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 
 		//setState({action:'showImportedReturnDebit',dataTable:dT,loading:false});		
 	}
-
-	/*public function registerORM(refModel:String,orm:ORM) {
-		if(ormRefs.exists(refModel)){
-			ormRefs.get(refModel).orms.set(orm.id,orm);
-			trace(refModel);
-			//setState({ormRefs:ormRefs});
-			//setState({loading:false, actualState:deal, initialData: copy(deal)});
-			//setState(copy(state,{ormRefs:ormRefs}));
-			//state.ormRefs = ormRefs;
-			//trace(Reflect.fields(state));
-			//setState({ormRefs:ormRefs});
-		}
-		else{
-			ormRefs.set(refModel, {
-				orms:[orm.id=>orm], compRef:this});
-			trace('OrmRef $refModel created!');
-		}
-		setState({ormRefs:ormRefs});
-	}*/
 
 	function showSelectedAccounts(?ev:Event) {
 		//trace('---' + Type.typeof(ormRefs['accounts'].compRef));

@@ -325,7 +325,8 @@ class Model
 		S.sendData(dbData,rData);
 	}
 	
-	public function execute(sql:String, noSend:Bool=false):NativeArray
+	public function execute(sql:String, noSend:Bool = false, fMode:Int = 2//PDO.FETCH_ASSOC
+		):NativeArray
 	{
 		//trace(sql);	
 		//if(setValues.length>0)trace(setValues.length);
@@ -405,7 +406,7 @@ class Model
 			}
 			if (Std.parseInt(dbData.dataInfo['count'])>0)
 			{
-				data = stmt.fetchAll(PDO.FETCH_ASSOC);
+				data = stmt.fetchAll(fMode);
 			}			
 			//trace(Lib.toHaxeArray(data).join(','));		
 			
@@ -429,7 +430,7 @@ class Model
 			num_rows = stmt.rowCount();
 			if (num_rows>0)
 			{
-				data = stmt.fetchAll(PDO.FETCH_ASSOC);				
+				data = stmt.fetchAll(fMode);				
 			}			
 			trace(Std.string(data).substr(0,150));
 			return(data);	

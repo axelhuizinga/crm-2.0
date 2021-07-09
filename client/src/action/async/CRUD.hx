@@ -110,8 +110,9 @@ class CRUD
 			//trace(param);
 			//if(param.dataSource != null)
 				//trace(param.dataSource.get('contacts').get('data'));
-			
-			var dbData:DbData = DbDataTools.create();
+				var dbData:DbData = DbDataTools.create();
+				var data:DbData = DbDataTools.create();
+				
 			//trace(getState());
 			return new Promise<Dynamic>(function(resolve, reject){
 				try{
@@ -125,17 +126,22 @@ class CRUD
 					trace('LoginError');
 					reject('Du musst dich neu anmelden!');
 				}	
-				trace(param.data);
+				//trace(param.data);
 				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
 					'${App.config.api}', 
-					param,
-					function(data:DbData)
+					param,					
+					function(sData:DbData)
+					//function(sData:Dynamic)
 					{				
-						//trace(data);
+						trace(data);
+						/*if(sData!=null){
+							//data = new Unserializer(sData).unserialize();
+							data = Unserializer.run(sData);
+						}*/
 						if(data.dataErrors != null && data.dataErrors.keys().hasNext())
 							trace(data.dataErrors);
 						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
-							trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
+							//trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
 
 						if(data.dataErrors.exists('lastError'))
 						{
@@ -159,7 +165,7 @@ class CRUD
 									text:(param.resolveMessage==null?'':param.resolveMessage.success)		
 								}
 							)));
-							resolve('updated');
+							resolve(data);
 						}
 					}
 				);

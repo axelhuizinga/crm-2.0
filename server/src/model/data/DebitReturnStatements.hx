@@ -7,6 +7,7 @@ import haxe.ds.IntMap;
 import haxe.Unserializer;
 import php.Lib;
 import php.db.PDOStatement;
+import php.db.PDO;
 import comments.CommentString.*;
 
 import php.NativeArray;
@@ -146,12 +147,12 @@ class DebitReturnStatements extends Model
 			//trace(queryFields);
 			sqlBf.add('INSERT INTO ');
 			sqlBf.add('${quoteIdent(tableNames[0])} (${fields.join(",")}) ${setSql} ON CONFLICT (ba_id) DO UPDATE SET sepa_code=\'${setValues[3]}\' RETURNING id');			
-			trace(sqlBf.toString());
+			//trace(sqlBf.toString());
 			//trace(setValues.toString());
-			ids.push(cast untyped execute(sqlBf.toString(),true)[0]['id']);
+			ids.push(cast untyped execute(sqlBf.toString(),true, PDO.FETCH_COLUMN)[0]);
 		}
-		trace(ids);
-		dbData.dataInfo['data'] = ids;
+		//trace(ids);
+		dbData.dataInfo = ['data' => ids ];
 		trace(dbData);
 		S.sendData(dbData);
 		//return ids;
@@ -160,6 +161,9 @@ class DebitReturnStatements extends Model
 	function sync()	
 	{
 		//trace(param);
+		var returnReasons = Lib.toHaxeArray( S.dbh.query(
+			'SELECT code FROM sepa_return_codes WHERE locale="de_DE"').fetchAll(PDO.FETCH_COLUMN));
+		trace(returnReasons.join('|'));
 	}
 		
 }

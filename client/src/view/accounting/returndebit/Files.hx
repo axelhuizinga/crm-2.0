@@ -196,16 +196,15 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
-	static function mapStateToProps(aState:AppState) 
+	/*static function mapStateToProps(aState:AppState) 
 	{
 		if(_instance!=null)
-		trace(Reflect.fields(_instance.props).join('|'));
-		
+		//trace(Reflect.fields(_instance.props).join('|'));		
 		return {
 			//userState:aState.userState
 			//dummy:aState.dataStore.returnDebitsData.toString()
 		};
-	}
+	}*/
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
@@ -378,67 +377,36 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	 public function importReturnDebit(ev:Event):Void
 	{
 		//trace(ev);
-		/*var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){*/
 
-			if(state.dataTable.length<1){
-				trace({error:new Error('Keine Daten')});
+
+		if(state.dataTable.length<1){
+			trace({error:new Error('Keine Daten')});
+		}
+		trace('go on');
+		//setState({action:'importReturnDebit',loading:true});
+
+		var p:Promise<DbData> = props.update(
+			{
+				classPath:'data.DebitReturnStatements',
+				action:'insert',
+				mandator:1,
+				data: Serializer.run(state.dataTable),
+				table:'debit_return_statements',
+				resolveMessage:{					
+					success:'Rücklastschriften wurden verarbeitet',
+					failure:'Rücklastschriften konnten nicht verarbeitet werden'
+				},
+				dbUser:props.userState.dbUser,
+				devIP: App.devIP
 			}
-			trace('go on');
-			//fd.append('action','returnDebitData');		
-
-			var p:Promise<DbData> = props.update(
-				{
-					classPath:'data.DebitReturnStatements',
-					action:'insert',
-					mandator:1,
-					data: Serializer.run(state.dataTable),
-					table:'debit_return_statements',
-					resolveMessage:{					
-						success:'Rücklastschriften wurden verarbeitet',
-						failure:'Rücklastschriften konnten nicht verarbeitet werden'
-					},
-					dbUser:props.userState.dbUser,
-					devIP: App.devIP
-				}
-			);
-			p.then(function(data:DbData)
-			{			
-				trace(data);
-				//trace(Unserializer.run(data.dataInfo['data'])); 
-				//trace(Utils.getAllByKey(Unserializer.run(data.dataInfo['data']),'id')); 
-				//setState({loading:false, dataTable:data.dataRows});
-			});
-			//setState({action:'importReturnDebit',loading:true});
-		/*});
-		
-		iPromise.then(function (r:Dynamic) {
-			trace(r);
-			var rD:{rlData:Array<Dynamic>} = Json.parse(r);
-			if(rD.rlData != null)
-				trace(rD.rlData.length);
-			//trace(rD);
-			var dT:Array<Map<String, Dynamic>> = new Array();			
-			for(dR in rD.rlData)
-				dT.push(Utils.dynToMap(dR));
-			setState({action:'showLoadedReturnDebit',dataTable:dT,loading:false});
-			trace(dT.length);
-			//state.loading = false;
-			App.store.dispatch(Status(Update( 
-				{	
-					text:dT.count() + ' Rücklastschriften Importiert'
-				}
-			)));
-			
-		}, function (r:Dynamic) {//rejected callback
-			trace(r);
-			App.store.dispatch(Status(Update( 
-				{	className:'',
-					text:(r.error==null?'':r.error)
-				}
-			)));
-			
-			//setState({action:'showError', errors: ['Importfehler'=>Std.string(r.error)],loading:false});
-		});*/
+		);
+		p.then(function(data:DbData)
+		{			
+			trace(data);
+			//trace(Unserializer.run(data.dataInfo['data'])); 
+			//trace(Utils.getAllByKey(Unserializer.run(data.dataInfo['data']),'id')); 
+			//setState({loading:false, dataTable:data.dataRows});
+		});
 		
 	}
 

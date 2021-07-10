@@ -53,8 +53,9 @@ import php.Web;
 //import tjson.TJSON;
 import haxe.Json;
 import haxe.extern.EitherType;
-import hxbit.Serializer;
 import sys.io.File;
+import hxbit.Serializer;
+
 import comments.CommentString.*;
 
 using Lambda;
@@ -427,6 +428,7 @@ class S
 	public static function sendbytes(b:Bytes, ?loop:Bool):Bool
 	{		
 		trace('OK ${b.length}');
+		//trace(new Serializer().unserialize(b, DbData));
 		if(Lib.isCli())
 			return false;		
 		//Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');

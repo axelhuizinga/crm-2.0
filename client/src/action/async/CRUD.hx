@@ -111,7 +111,6 @@ class CRUD
 			//if(param.dataSource != null)
 				//trace(param.dataSource.get('contacts').get('data'));
 				var dbData:DbData = DbDataTools.create();
-				var data:DbData = DbDataTools.create();
 				
 			//trace(getState());
 			return new Promise<Dynamic>(function(resolve, reject){
@@ -130,14 +129,10 @@ class CRUD
 				var bL:XMLHttpRequest = BinaryLoader.dbQuery(
 					'${App.config.api}', 
 					param,					
-					function(sData:DbData)
+					function(data:DbData)
 					//function(sData:Dynamic)
 					{				
 						trace(data);
-						/*if(sData!=null){
-							//data = new Unserializer(sData).unserialize();
-							data = Unserializer.run(sData);
-						}*/
 						if(data.dataErrors != null && data.dataErrors.keys().hasNext())
 							trace(data.dataErrors);
 						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))

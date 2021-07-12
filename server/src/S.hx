@@ -156,7 +156,7 @@ class S
 		else{
 			dbQuery = Model.binary();
 			params = dbQuery.dbParams;
-			trace(dbQuery.dbParams);
+			//trace(dbQuery.dbParams);
 			trace(dbQuery.relations);
 			trace(Util.rels2string(dbQuery.relations));
 			S.devIP = params['devIP'];
@@ -203,7 +203,7 @@ class S
 				params = dbQuery.dbParams;
 			params.set('mandator',dbQuery.dbUser.mandator);
 			user_id = dbQuery.dbUser.id;
-			trace(params);
+			//trace(params);
 			if(Lib.isCli())
 				safeLog(params);
 			else 
@@ -731,7 +731,8 @@ class S
 
 	static function saveRequest(req:Dynamic, ?logOnly:Bool=true):Bool
 	{
-		trace(Json.stringify(req));
+		//trace(Json.stringify(req));
+		trace(logOnly);
 		if(logOnly){
 			Util.safeLog(Json.stringify(req));
 			return true;			

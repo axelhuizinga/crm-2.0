@@ -543,7 +543,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			//(state.dataTable == null? state.formApi.renderWait():
 			//case 'showImportedReturnDebit':
 			case 'showLoadedReturnDebit':
-				jsx('<Grid id="loadedReturnDebit" data=${state.dataTable}
+				jsx('<Grid id="loadedReturnDebit" data=${state.dataTable} readOnly=${true} 
 				${...props} dataState=${dataDisplay["rDebitList"]} key="importedReturnDebitList" 
 				parentComponent=${this} className="is-striped is-hoverable" />			
 				');			

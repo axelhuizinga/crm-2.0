@@ -56,6 +56,7 @@ typedef GridProps =
 	?onDoubleClick:Event->Void,
 	?onSort:Int->Void,
 	?parentComponent:Dynamic,
+	?readOnly:Bool,
 	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>
 }
 

@@ -116,7 +116,7 @@ class Model
 	{
 		var param:Map<String,Dynamic> = dbQuery.dbParams;
 		//param.set('dbUser',dbQuery.dbUser);
-		trace(param);
+		//trace(param);
 		var cl:Class<Dynamic> = Type.resolveClass('model.' + param.get('classPath'));
 		//trace(cl);
 		if (cl == null)
@@ -435,7 +435,8 @@ class Model
 			trace(Std.string(data).substr(0,150));
 			return(data);	
 		}
-		S.sendErrors(dbData, ['error'=> S.errorInfo(stmt.errorInfo())]);
+		//S.sendErrors(dbData, ['error'=> S.errorInfo(stmt.errorInfo())]);
+		trace(stmt.errorInfo());
 		return null;
 	}
 	
@@ -949,8 +950,8 @@ class Model
 		}
 	
 		data.rows = new NativeArray();
-		dbData = new DbData();
-		dbData.dataInfo = dbData.dataInfo.copyStringMap(param);
+		dbData = new DbData();//'param' => dbData.dataInfo.copyStringMap(param),
+		dbData.dataInfo = ['action' => param.get('action')];
 		filterSql = '';
 		filterValues = new Array();
 		setValues = new Array();

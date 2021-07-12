@@ -219,13 +219,21 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			//trace(cD);"r"+cD.pos.row+"c"+cD.pos.column
 			//trace(row + ':' + cD.id + '_' + cD.pos.column);
 			//trace(cD.name+':'+cD.title+':'+cD.show);
-			if (cD.show)
+			if (cD.show)				
 				rCs.push(
-			jsx('<div className=${cD.className} key=${cD.id + '_' + cD.name} data-value=${cD.data} 
+					if(!props.readOnly)
+						jsx('<div className=${cD.className} key=${cD.id + '_' + cD.name} data-value=${cD.data} 
 			data-id=${cD.id} data-name=${cD.name} title=${cD.title} 
 			data-gridpos=${cD.pos.row+"_"+cD.pos.column} onClick=${select} onDoubleClick=${editRow}>
 				${(cD.dataDisplay==null||cD.dataDisplay==''?<span>&nbsp;</span>:cD.dataDisplay)}
-			</div>'));
+			</div>')
+					else
+						jsx('<div className=${cD.className} key=${cD.id + '_' + cD.name} data-value=${cD.data} 
+			data-id=${cD.id} data-name=${cD.name} title=${cD.title} 
+			data-gridpos=${cD.pos.row+"_"+cD.pos.column}>
+				${(cD.dataDisplay==null||cD.dataDisplay==''?<span>&nbsp;</span>:cD.dataDisplay)}
+			</div>')					
+				);
 		}
 		return rCs;
 	}

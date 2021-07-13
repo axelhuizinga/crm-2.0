@@ -1,7 +1,7 @@
 package shared;
 
 import shared.DBMetaData.DataField;
-import hxbit.Serializable;
+//import hxbit.Serializable;
 import App;
 
 @:enum

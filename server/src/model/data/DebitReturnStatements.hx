@@ -1,4 +1,5 @@
 package model.data;
+import shared.DbData;
 import php.Global;
 import db.DataSource;
 import db.DbRelation;
@@ -29,10 +30,11 @@ class DebitReturnStatements extends Model
 	var rbaIds:Array<String>;
 	var returnReasons:Array<Dynamic>;
 
-	public function new(?param:Map<String,Dynamic>) 
+	//public function new(?param:Map<String,String>, ?ipost:Map<String,Dynamic>) 
+	public function new(?param:Map<String,String>) 
 	{
 		super(param);
-		trace(setValues.length);
+		//trace(setValues.length);
 		rbaIds = [];
 		returnReasons = Lib.toHaxeArray( S.dbh.query(
 			"SELECT code FROM sepa_return_codes WHERE locale='de_DE'").fetchAll(PDO.FETCH_COLUMN));
@@ -115,6 +117,7 @@ class DebitReturnStatements extends Model
 	
 	function insert():Void//Array<String>
 	{		
+		//trace(table+':'+dbData.dataInfo.get('data'));		
 		trace(table+':'+dbData.dataInfo);		
 		//var iData:Dynamic = Unserializer.run(dbData.dataInfo.get('data'));
 		iData = Unserializer.run(dbData.dataInfo.get('data'));
@@ -123,8 +126,8 @@ class DebitReturnStatements extends Model
 			S.sendInfo(dbData);		
 		trace(iData[0]);
 		
-		dbData.dataInfo['inserted'] = new Map<String,Dynamic>();//,'statementBaIds' => statementBaIds];
-		dbData.dataInfo['rows'] = iData.length;//,'statementBaIds' => statementBaIds];
+		//dbData.dataInfoRows = new Map<String,Dynamic>();//,'statementBaIds' => statementBaIds];
+		dbData.dataInfo['rows'] = Std.string(iData.length);//,'statementBaIds' => statementBaIds];
 		//dbData.dataInfo = ['inserted' => new Map<String,Dynamic>(), 'rows' => iData.length ];//,'statementBaIds' => statementBaIds];
 		trace(Type.typeof(iData[0]));
 		if(table != null)
@@ -163,11 +166,13 @@ class DebitReturnStatements extends Model
 			var data:NativeArray = execute(sqlBf.toString(),true, PDO.FETCH_COLUMN);
 			if(data == null || !data.iterator().hasNext()){
 				// INSERT failed
-				dbData.dataInfo['inserted'][row['ba_id']] = 'INSERT failed4:' + row['ba_id'] + '::' + (
+				trace(sqlBf.toString());
+				trace(S.dbh.errorInfo());
+				/*dbData.dataInfo['inserted'][row['ba_id']] = 'INSERT failed4:' + row['ba_id'] + '::' + (
 					S.dbh.errorInfo()[2] == null ? 
 					' schon eingetragen!' : 
 					Std.string(S.dbh.errorInfo())
-				);
+				);*/
 				continue;
 			}
 			var rba_id:String = data[0];
@@ -176,7 +181,8 @@ class DebitReturnStatements extends Model
 		//trace(ids);
 		trace(dbData);
 		sync();
-		S.sendData(dbData);
+		S.sendInfo(new DbData(),dbData.dataInfo);
+		//S.sendData(dbData);
 		//return ids;
 	}
 	

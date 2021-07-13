@@ -11,7 +11,7 @@ import haxe.Json;
 import haxe.ds.Map;
 import haxe.io.Bytes;
 import js.html.XMLHttpRequest;
-import hxbit.Serializer;
+//import hxbit.Serializer;
 import json2object.JsonParser;
 /*import js.html.FormData;
 import js.html.FormDataIterator;

@@ -3,9 +3,9 @@ import db.DbQuery;
 import state.DataAccessState;
 import state.UserState;
 import haxe.ds.Map;
-import hxbit.Schema;
+/*import hxbit.Schema;
 import hxbit.Serializable;
-import hxbit.Serializer;
+import hxbit.Serializer;*/
 
 /**
  * ...
@@ -25,7 +25,7 @@ typedef DbRequestParam = {
 	?userState:UserState
 };
 
-class DbParam implements Serializable 
+class DbParam// implements Serializable 
 {
 
 	@:s public var dataParams:Map<String,Dynamic>;

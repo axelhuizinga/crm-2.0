@@ -1,5 +1,7 @@
 package;
 
+import json2object.JsonWriter;
+import json2object.JsonParser;
 import db.DBAccessProps;
 import comments.CommentString.*;
 import php.Global;
@@ -13,10 +15,10 @@ import S.ColDef;
 import haxe.Unserializer;
 
 import haxe.io.Bytes;
-import hxbit.Serializer;
 import php.Lib;
 import php.NativeArray;
 import model.VicidialUsers;
+import me.cunity.php.Debug;
 import php.Syntax;
 import php.Web;
 import php.db.PDO;
@@ -902,9 +904,9 @@ class Model
 				return json(postKV);			
 		}
 		
-		var pData = Bytes.ofString((
+		var pData:String = (
 			Lib.isCli()? Sys.args()[0]:
-			Global.file_get_contents('php://input')));
+			Global.file_get_contents('php://input'));
 
 		trace(pData.length);
 		if(pData.length==0)
@@ -912,8 +914,10 @@ class Model
 			S.send('got no pData');
 			return null;
 		}
-		var s:Serializer = new Serializer();
-		return s.unserialize(pData, DbQuery);
+		var s:JsonParser<DbQuery> = new JsonParser<DbQuery>();
+		s.fromJson(pData,Debug.logFile);
+		return s.value;
+		//return s.unserialize(pData, DbQuery);
 	}
 
 	public static function json(pKV:KeyValueIterator<String,String>):DbQuery
@@ -932,7 +936,7 @@ class Model
 		return null;//s.unserialize(pData, DbQuery);
 	}	
 	
-	public function new(?param:Map<String,Dynamic>) 
+	public function new(?param:Map<String,String>) 
 	{
 		this.param = param;
 		//trace(param);
@@ -949,9 +953,11 @@ class Model
 			trace(Syntax.code("ini_get('memory_limit')"));
 		}
 	
-		data.rows = new NativeArray();
 		dbData = new DbData();//'param' => dbData.dataInfo.copyStringMap(param),
-		dbData.dataInfo = ['action' => param.get('action')];
+		dbData.dataInfo = dbData.dataInfo.copyStringMap(param);
+		dbData.dataInfo['action'] = param.get('action');
+		data.rows = new NativeArray();
+		//dbData.dataInfo = ['action' => param.get('action')];
 		filterSql = '';
 		filterValues = new Array();
 		setValues = new Array();
@@ -1181,20 +1187,20 @@ class Model
 		return ret;
 	}*/
 		
-	function serializeRows(rows:NativeArray):Bytes
+	function serializeRows(rows:NativeArray):String
 	{
-		var s:Serializer = new Serializer();
+		var s = new JsonWriter<DbData>();
 		Syntax.foreach(rows, function(k:Int, v:Dynamic)
 		{
 			dbData.dataRows.push(Lib.hashOfAssociativeArray(v));
 		});
 		trace(dbData);
-		return s.serialize(dbData);
+		return s.write(dbData);
 	}
 	
 	function sendRows(rows:NativeArray):Bool
 	{
-		var s:Serializer = new Serializer();
+		var s = new JsonWriter<DbData>();
 		
 		Syntax.foreach(rows, function(k:Int, v:Dynamic)
 		{
@@ -1204,9 +1210,10 @@ class Model
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 		Web.setHeader("Access-Control-Allow-Credentials", "true");
 		Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');
-		var out = File.write("php://output", true);
+		/*var out = File.write("php://output", true);
 		out.bigEndian = true;
-		out.write(s.serialize(dbData));
+		out.write(s.serialize(dbData));*/
+		Sys.print(s.write(dbData));
 		Sys.exit(0);
 		return true;
 	}

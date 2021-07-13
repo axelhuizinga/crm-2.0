@@ -135,9 +135,9 @@ class CRUD
 						trace(data);
 						if(data.dataErrors != null && data.dataErrors.keys().hasNext())
 							trace(data.dataErrors);
-						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
+						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))							
+							trace(data.dataInfo.get('dataSource'));
 							//trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
-
 						if(data.dataErrors.exists('lastError'))
 						{
 							dispatch(User(LoginError({lastError: data.dataErrors.get('lastError')})));

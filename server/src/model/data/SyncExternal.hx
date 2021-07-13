@@ -188,7 +188,7 @@ class SyncExternal extends Model
                return dbData;
             } 
         }        
-        dbData.dataInfo = ['saveContactDetails' => 'OK', 'updatedRows' => updated];
+        dbData.dataInfo = ['saveContactDetails' => 'OK', 'updatedRows' => Std.string(updated)];
         trace(dbData.dataInfo);
 		return dbData; 
     }

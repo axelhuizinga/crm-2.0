@@ -1,6 +1,5 @@
 -lib haxe-loader
 -lib history
--lib hxbit
 -lib react-next
 -lib react-types
 -lib react-router-4

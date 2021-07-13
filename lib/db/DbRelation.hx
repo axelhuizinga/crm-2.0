@@ -1,8 +1,9 @@
 package db;
 import haxe.ds.StringMap;
-import hxbit.Serializable;
+//import hxbit.Serializable;
 
-class DbRelation implements hxbit.Serializable{
+class DbRelation// implements hxbit.Serializable
+{
 
 	@:s public var alias:String;
 	@:s public var fields:Array<String>;

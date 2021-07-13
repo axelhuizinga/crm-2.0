@@ -3,8 +3,8 @@ import db.DBAccessProps;
 import db.DbUser;
 import db.DbRelation;
 import haxe.ds.Map;
-import hxbit.Schema;
-import hxbit.Serializable;
+/*import hxbit.Schema;
+import hxbit.Serializable;*/
 import state.UserState;
 
 /**
@@ -12,9 +12,9 @@ import state.UserState;
  * @author axel@cunity.me
  */
 
-class DbQuery implements hxbit.Serializable 
+class DbQuery// implements hxbit.Serializable 
 {
-	@:s public var dbParams:Map<String,Dynamic>;
+	@:s public var dbParams:Map<String,String>;
 	@:s public var relations:Map<String,DbRelation>;
 	@:s public var dbUser:DbUser;
 

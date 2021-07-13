@@ -58,18 +58,19 @@ class Upload {
 					};
 					//var sQuery:DbQuery = new DbQuery(dbAccProps);
 					//Model.dispatch(sQuery);
-					var ipost:Map<String,Dynamic> = Lib.hashOfAssociativeArray(SuperGlobal._POST);
-					ipost.set('action', 'insert');
+					/*var ipost:Map<String,Dynamic> = Lib.hashOfAssociativeArray(SuperGlobal._POST);
+					ipost.set();
 					var rlData:Array<Dynamic> = Json.parse(result).rlData;
 
 					ipost.set('data', [
 						for(row in rlData)
 							Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(row))
 					]);
-					//ipost.set('data', Serializer.run(Json.parse(result).rlData));
-					ipost.set('table', 'debit_return_statements');
-					trace(ipost);
-					var dRS:DebitReturnStatements = new DebitReturnStatements(ipost);
+					//ipost.set('data', );
+					//ipost.set('table', 'debit_return_statements');
+					trace(ipost);*/
+					var dRS:DebitReturnStatements = new DebitReturnStatements(
+						['action'=>'insert','data' => Serializer.run(Json.parse(result).rlData),'table'=> 'debit_return_statements']);
 					//trace(dRS.getStati(ids,ipost.get('mandator')));
 					trace(result);
 					S.send(result,true);

@@ -82,7 +82,7 @@ class User extends Model
 	{
 		trace(joinSql);
 		trace(filterSql);
-		S.sendbytes(serializeRows(doSelect()));
+		S.send(serializeRows(doSelect()));
 	}
 	
 	public function getExternalUserData():Map<String, Dynamic>
@@ -120,7 +120,7 @@ class User extends Model
 			}
 			// USER AUTHORIZED
 			var assoc:Dynamic = stmt.fetch(PDO.FETCH_ASSOC);
-			var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(assoc);	
+			var res:Map<String,String> = Lib.hashOfAssociativeArray(assoc);	
 			//dbData.dataInfo['id'] = res['id'];
 			//dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(assoc);		
 			dbData.dataInfo = res;		
@@ -195,7 +195,7 @@ class User extends Model
 			}
 			// USER AUTHORIZED
 			var assoc:Dynamic = stmt.fetch(PDO.FETCH_ASSOC);
-			var res:Map<String,Dynamic> = Lib.hashOfAssociativeArray(assoc);	
+			var res:Map<String,String> = Lib.hashOfAssociativeArray(assoc);	
 			//dbData.dataInfo['id'] = res['id'];
 			//dbData.dataInfo['user_data'] = Lib.objectOfAssociativeArray(assoc);		
 			dbData.dataInfo = res;		
@@ -204,7 +204,7 @@ class User extends Model
 			dbData.dataInfo['loggedIn'] = 'true';
 			trace(res['user_name']+':'+res['change_pass_required']);
 			trace('change_pass_required'+(res['change_pass_required']=='true'?'Y':'N'));
-			if (res['change_pass_required']==true || res['change_pass_required']=='true')
+			if (res['change_pass_required']=='true')
 				return UserAuth.PassChangeRequired(dbData);
 			return UserAuth.AuthOK(dbData);			
 		}
@@ -383,7 +383,7 @@ X-Mailer: HaxeMail
 	{
 		var res = update();
 		trace(res);
-		S.sendbytes(serializeRows(doSelect()));
+		S.send(serializeRows(doSelect()));
 		//S.send('OK');
 		return true;
 	}

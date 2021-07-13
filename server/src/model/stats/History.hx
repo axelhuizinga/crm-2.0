@@ -77,7 +77,7 @@ class History extends Model
 		trace(sql);
 		var hData:NativeArray = fetchAll(sql,S.dbh);
 		S.dbh.commit();
-		dbData.dataInfo = ['count'=>Lib.toHaxeArray(hData).length];
+		dbData.dataInfo ['count']= Std.string(Lib.toHaxeArray(hData).length);
 		sendRows(hData);
 	}
 }

@@ -21,6 +21,7 @@ import model.ORM;
 import js.html.Element;
 import js.html.FormElement;
 import haxe.Serializer;
+//import hxbit.Serializer;
 import js.lib.Error;
 import js.html.Event;
 import shared.Utils;
@@ -389,8 +390,8 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			{
 				classPath:'data.DebitReturnStatements',
 				action:'insert',
-				mandator:1,
 				data: Serializer.run(state.dataTable),
+				mandator:1,
 				table:'debit_return_statements',
 				resolveMessage:{					
 					success:'Rücklastschriften wurden verarbeitet',

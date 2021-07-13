@@ -54,8 +54,9 @@ import php.Web;
 import haxe.Json;
 import haxe.extern.EitherType;
 import sys.io.File;
-import hxbit.Serializer;
 
+import json2object.JsonParser;
+import json2object.JsonWriter;
 import comments.CommentString.*;
 
 using Lambda;
@@ -321,7 +322,7 @@ class S
 		Sys.exit(untyped Std.string(r));		
 	}
 	
-	public static function send(r:String, ?json:Bool = false)
+	public static function send(r:String, ?json:Bool = false):Bool
 	{
 		if (!headerSent && !Lib.isCli())
 		{
@@ -340,11 +341,12 @@ class S
 		Sys.print(r);
 		trace('client req from ${params.get('devIP')} done at ${Sys.time()-ts} ms');
 		Sys.exit(0);
+		return true;
 	}
 	
 	public static function sendData(dbData:DbData, ?data:RData):Bool
 	{
-		var s:Serializer = new Serializer();
+		var w = new JsonWriter<DbData>();//hxbit.Serializer
 		//trace(data.info);
 		if(data != null){
 			dbData.dataInfo = dbData.dataInfo.copyStringMap(data.info);
@@ -368,7 +370,7 @@ class S
 			trace(dbData.dataRows.length);
 			return true;			 
 		 }		
-		return sendbytes(s.serialize(dbData));
+		return send(w.write(dbData));
 	}
 
 	public static function checkStmt(dbConn:PDO, stmt:PDOStatement, err:String, ?pos:PosInfos):Bool
@@ -397,7 +399,8 @@ class S
 		if(dbData==null)
 			dbData = new DbData();
 		//trace(dbData);
-		var s:Serializer = new Serializer();
+		//var s:Serializer = new Serializer();
+		var writer = new json2object.JsonWriter<DbData>();
 		if (err != null)
 		{
 			for (k in err.keys())
@@ -406,12 +409,13 @@ class S
 			}
 		}
 		trace(dbData.dataErrors);
-		return sendbytes(s.serialize(dbData));
+		return send(writer.write(dbData));
 	}
 	
 	public static function sendInfo(dbData:DbData, ?info:Map<String,Dynamic>):Bool
 	{
-		var s:Serializer = new Serializer();
+		//var s:Serializer = new Serializer();
+		var writer = new json2object.JsonWriter<DbData>();
 		if (info != null)
 		{
 			for (k in info.keys())
@@ -422,7 +426,8 @@ class S
 		//trace('done at ${Sys.time()-ts} ms');
 		//trace(dbData.dataErrors);
 		//trace(dbData);
-		return sendbytes(s.serialize(dbData));
+		return send(writer.write(dbData));
+		//return sendbytes(s.serialize(dbData));
 	}
 	
 	public static function sendbytes(b:Bytes, ?loop:Bool):Bool

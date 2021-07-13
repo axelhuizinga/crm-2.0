@@ -4,16 +4,16 @@ import shared.FieldFormat;
 import js.html.FormElement;
 import haxe.ds.IntMap;
 import haxe.ds.Map;
-import hxbit.Schema;
+/*import hxbit.Schema;
 import hxbit.Serializable;
 import hxbit.Serializer;
-
+*/
 /**
  * ...
  * @author axel@cunity.me
  */
 
-class DBMetaData implements Serializable 
+class DBMetaData// implements Serializable 
 {
 
 	@:s public var dataErrors:Map<String,Dynamic>;

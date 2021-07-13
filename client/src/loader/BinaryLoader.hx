@@ -12,7 +12,6 @@ import shared.DbData;
  */
 
 import haxe.io.Bytes;
-import hxbit.Serializer;
 import js.html.FileReader;
 import js.html.FormData;
 import js.html.XMLHttpRequest; 
@@ -30,18 +29,18 @@ class BinaryLoader {
 		//trace(dbAP.relations);
 		//trace(dbAP);
 		//trace('${dbAP.classPath}.${dbAP.action} filter:${dbAP.filter} table:${dbAP.table}');
-		var s:Serializer = new Serializer();
+		var s = new json2object.JsonWriter<DbQuery>();
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbAP);//.toHex();
 		//Out.dumpObject(dbQuery);
-		var b:Bytes = s.serialize(dbQuery);
-		bl.param = b.getData();
+		//var b:Bytes = s.serialize(dbQuery);
+		bl.param = s.write(dbQuery);
 		bl.cB = onLoaded;
 		bl.load();
 		return bl.xhr;
 	}
 
-	public static function go(url:String, dbAP:DBAccessProps, onLoaded:DBAccessJsonResponse->Void){
+	/*public static function go(url:String, dbAP:DBAccessProps, onLoaded:DBAccessJsonResponse->Void){
 		//trace(dbAP);
 		var s:Serializer = new Serializer();
 		var bl:BinaryLoader = new BinaryLoader(url);
@@ -52,7 +51,7 @@ class BinaryLoader {
 		bl.dBa = onLoaded;
 		bl.loadJson();
 		return bl.xhr;
-	}
+	}*/
 
 
 	var cB:DbData->Void;	
@@ -72,11 +71,11 @@ class BinaryLoader {
 	}
 
 	//public dynamic function onLoaded( bytes : haxe.io.Bytes ) {
-	public function onLoaded( bytes : haxe.io.Bytes ) {
+	public function onLoaded( bytes : String ) {
 		//trace(bytes.length);
 		if(bytes!=null && bytes.length>0){
-			var u:Serializer = new Serializer();
-			var data:DbData = u.unserialize(bytes, DbData);
+			var u = new json2object.JsonParser<DbData>();
+			var data:DbData = u.fromJson(bytes);
 			cB(data);			
 		}
 		else 
@@ -100,7 +99,7 @@ class BinaryLoader {
 		//xhr.setRequestHeader('Access-Control-Allow-Origin', 'https://dev.pitverwaltung.de');
 		//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
 		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
-		xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;
+		//xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;
 		
 		//xhr.onerror = function(e) onError(xhr.statusText);
 		xhr.onerror = function(e) {
@@ -116,7 +115,8 @@ class BinaryLoader {
 				return;
 			}
 			//trace(xhr.response.length);
-			onLoaded(haxe.io.Bytes.ofData(xhr.response));
+			onLoaded(xhr.response);
+			//onLoaded(haxe.io.Bytes.ofData(xhr.response));
 		}
 		
 	/*	xhr.onprogress = function(e) {

@@ -7,7 +7,7 @@ import php.Lib;
 import me.cunity.debug.Out;
 import me.cunity.php.Debug;
 import haxe.PosInfos;
-import hxbit.Serializer;
+
 import haxe.io.Bytes;
 import db.DbQuery;
 import db.DBAccessProps;
@@ -192,7 +192,7 @@ class Util
 					devIP:App.devIP
 				},
 	 */
-	public static function buildDbQuery(param:Map<String,Dynamic>):String {
+	/*public static function buildDbQuery(param:Map<String,Dynamic>):String {
 		S.dbQuery.dbUser.password='XXX';
 		var dbQP:DBAccessProps = {
 			dbUser:S.dbQuery.dbUser,
@@ -209,7 +209,7 @@ class Util
 		S.safeLog(dbQuery);
 		var b:Bytes = s.serialize(dbQuery);
 		return b.toString();
-	}
+	}*/
 
 	/**
 	 * Convert Map to Object

@@ -5,7 +5,7 @@ import haxe.Exception;
 import Model.RData;
 import php.Global;
 import haxe.io.Bytes;
-import hxbit.Serializer;
+
 
 import php.Lib;
 import php.NativeArray;
@@ -128,7 +128,7 @@ class Forms extends Model
 		return stmt;		
 	}		
 	
-	public function saveTableFields()
+	/*public function saveTableFields()
 	{
 		var dBytes:Bytes = Bytes.ofString(param.get('dbData'));
 		var s:Serializer = new Serializer();
@@ -144,7 +144,7 @@ class Forms extends Model
 			UPDATE crm.table_fields SET $fields WHERE id=${Std.parseInt(k)}
 			*/;
 			
-			var stmt:PDOStatement = S.dbh.prepare(sql, Util.initNativeArray());
+			/*var stmt:PDOStatement = S.dbh.prepare(sql, Util.initNativeArray());
 			if( !Model.paramExecute(stmt, Lib.associativeArrayOfHash(pData.dataParams[k])))
 			{
 				S.sendErrors(dbData,['${action}' => stmt.errorInfo()]);
@@ -155,5 +155,5 @@ class Forms extends Model
 			}
 		}
 		S.sendInfo(dbData, ['saveTableFields' => 'OK', 'updatedRows' => updated]);
-	}
+	}*/
 }

@@ -38,7 +38,7 @@ class SyncExternalContacts extends Model
 	var keys:Array<String>;	
 	var synced:Int;
 
-	public function new(param:Map<String,Dynamic>):Void
+	public function new(param:Map<String,String>):Void
 	{
 		super(param);
 
@@ -327,7 +327,7 @@ class SyncExternalContacts extends Model
 			return;
 		}
 		trace('done');
-		dbData.dataInfo['offset'] = offset.int;
+		dbData.dataInfo['offset'] = Std.string(offset.int);
 		trace(dbData.dataInfo);
 		S.sendData(dbData, null);
 	}
@@ -512,7 +512,7 @@ WHERE cl.client_id>${min_id}
 		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		if(!(offset.int>0))
 		{
-			dbData.dataInfo['totalRecords'] = count();
+			dbData.dataInfo['totalRecords'] = Std.string(count());
 		}
 		return res;
 	}

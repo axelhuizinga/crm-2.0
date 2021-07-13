@@ -2,7 +2,7 @@
 -lib jwt
 -lib random
 -lib tjson
--lib hxbit
+-lib json2object
 #-lib smtpmailer
 
 -cp /opt/src/lib

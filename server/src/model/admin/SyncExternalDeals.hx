@@ -16,7 +16,7 @@ class SyncExternalDeals extends Model
 	var keys:Array<String>;	
 	var synced:Int;
 
-	public function new(param:Map<String,Dynamic>):Void
+	public function new(param:Map<String,String>):Void
 	{
 		super(param);	
 		//self.table = 'columns';
@@ -241,7 +241,7 @@ class SyncExternalDeals extends Model
 			synced++;
 		}
         trace('done');
-		dbData.dataInfo['offset'] = Std.parseInt(S.params.get('offset')) + synced;
+		dbData.dataInfo['offset'] = Std.string(Std.parseInt(S.params.get('offset')) + synced);
 		trace(dbData.dataInfo);
         //S.sendData(dbData, null);
 		S.sendInfo(dbData,['imported'=>'OK:' + stmt.rowCount()]);

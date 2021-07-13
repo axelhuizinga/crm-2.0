@@ -6,7 +6,7 @@ import haxe.ds.IntMap;
 import haxe.ds.Map;
 import hxbit.Schema;
 import hxbit.Serializable;
-import hxbit.Serializer;
+
 
 /**
  * ...

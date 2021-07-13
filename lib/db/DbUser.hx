@@ -1,8 +1,9 @@
 package db;
 import me.cunity.debug.Out;
-import hxbit.Serializable;
 
-class DbUser implements hxbit.Serializable{
+
+class DbUser// implements hxbit.Serializable
+{
 	
 	@:s public var active:Bool;
 	@:s public var change_pass_required:Bool;

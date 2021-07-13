@@ -2,7 +2,7 @@ package model.tools;
 import Model.RData;
 import php.Global;
 import haxe.io.Bytes;
-import hxbit.Serializer;
+
 
 import php.Lib;
 import php.NativeArray;
@@ -20,7 +20,7 @@ import sys.io.File;
  */
 class Jsonb extends Model
 {
-	public function new(param:Map<String,Dynamic>):Void
+	public function new(param:Map<String,String>):Void
 	{
 		super(param);	
 		//self.table = 'columns';
@@ -101,7 +101,7 @@ class Jsonb extends Model
 		}
 	}		
 	
-	public function saveTableFields()
+	/*public function saveTableFields()
 	{
 		var dBytes:Bytes = Bytes.ofString(param.get('dbData'));
 		var s:Serializer = new Serializer();
@@ -117,7 +117,7 @@ class Jsonb extends Model
 			UPDATE crm.table_fields SET $fields WHERE id=${Std.parseInt(k)}
 			*/;
 			
-			var stmt:PDOStatement = S.dbh.prepare(sql, Util.initNativeArray());
+			/*var stmt:PDOStatement = S.dbh.prepare(sql, Util.initNativeArray());
 			if( !Model.paramExecute(stmt, Lib.associativeArrayOfHash(pData.dataParams[k])))
 			{
 				S.sendErrors(dbData,['${action}' => stmt.errorInfo()]);
@@ -128,5 +128,5 @@ class Jsonb extends Model
 			}
 		}
 		S.sendInfo(dbData, ['saveTableFields' => 'OK', 'updatedRows' => updated]);
-	}
+	}*/
 }

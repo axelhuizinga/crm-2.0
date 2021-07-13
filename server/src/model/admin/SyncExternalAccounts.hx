@@ -32,7 +32,7 @@ class SyncExternalAccounts extends Model
 	static var keys:Array<String> = S.tableFields('accounts');	
 	var synced:Int;
 
-	public function new(param:Map<String,Dynamic>):Void
+	public function new(param:Map<String,String>):Void
 	{
 		super(param);	
 		if(param.exists('synced'))

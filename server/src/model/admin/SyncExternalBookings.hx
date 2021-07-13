@@ -219,9 +219,9 @@ ORDER BY buchungsanforderungID
 		if(offset.int==0)
 		{
 			//stmt = S.syncDbh.query(sql);
-			var totalRes = Syntax.code('count({0})',res);//stmt.fetchColumn();
+			var totalRes:String = Syntax.code('count({0})',res);//stmt.fetchColumn();
 			trace(totalRes);
-			totalCount = dbData.dataInfo['totalRecords'] = Std.parseInt(totalRes);
+			totalCount = Std.parseInt(dbData.dataInfo['totalRecords'] = totalRes);
 		}
 		return res;
 	}

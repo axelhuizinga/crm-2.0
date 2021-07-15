@@ -5,6 +5,7 @@ package shared;
  * @author axel@cunity.me
  */
 
+import hxjsonast.Json;
 import redux.Redux.Dispatch;
 import haxe.Constraints.Function;
 import react.ReactDOM;
@@ -119,6 +120,13 @@ class Utils
 		return key;
 	}
 	
+	public static function json2Dyn(j:Json, d:Dynamic={}):Dynamic{
+		return switch(j){
+			case JObject(fields:Array<JObjectField>):
+
+		}
+	}
+
 	public static function stateToDataParams(dT:Dynamic):Map<String,Map<String,Dynamic>>
    	{
       	return  [
@@ -142,7 +150,19 @@ class Utils
       	];
   	}	
 
-	public static function MapToDyn(map:Map<String,Dynamic>):Dynamic
+	public static function dyn2map(d:Dynamic):Map<String,Dynamic>
+	{
+		var map:Map<String,Dynamic> = [];
+		for(f in Reflect.fields(d)){
+			trace(f);
+			map[f] = Reflect.field(d,f);
+			// TODO: check4recursion
+		}
+			//Reflect.setField(obj, k, v);
+		return map;
+	}
+
+	public static function map2dyn(map:Map<String,Dynamic>):Dynamic
 	{
 		var obj:Dynamic = {};
 		for(k=>v in map.keyValueIterator())

@@ -13,31 +13,39 @@ import state.UserState;
  * @author axel@cunity.me
  */
 
-class DbQuery// implements hxbit.Serializable 
+class DbQuery// implements hxbit.Serializable @:s 
 {
-	@:s public var dbParams:Map<String,String>;
-	@:s public var relations:Map<String,DbRelation>;
-	@:s public var dbUser:DbUser;
+	/*@:jcustomparse(DbQuery.dbUserParse)
+	@:jcustomwrite(DbQuery.dbUserWrite)
+	public var dbUser:DbUser;
+	@:jcustomparse(DbQuery.dbParamsParse)
+	@:jcustomwrite(DbQuery.dbParamsWrite)
+	@:jcustomparse(DbQuery.relationsParse)
+	@:jcustomwrite(DbQuery.relationsWrite)	*/
+	public var relations:Map<String,DbRelation>;
+	public var dbParams:Map<String,String>;
 
-	public static function customWrite(v:DbQuery):String {
+	public static function relationsWrite(v:Map<String,DbRelation>):String {
 		trace(v);
-		return v.getTime() + '';
+		return  '';
 	}
 
-	public static function customParse(val:Json, name:String):DbQuery{
-		var dp:DBAccessProps = {};
-		
+	public static function relationsParse(val:Json, name:String):Map<String,DbRelation>{
+		var dp:DBAccessProps = {action:'load'};
+		trace(val);
+		return [];
 	}
 
 	public function new(?dp:DBAccessProps) 
 	{
 		dbParams = new Map();
 		if(dp!=null){
-			dbUser = dp.dbUser;		
-			relations = dp.relations;
+			//dbUser = dp.dbUser;		
+			//relations = dp.relations;
 			for(f in Reflect.fields(dp)){
 				switch (f){
-					case '__uid'|'dbUser'|'relations'|'getCLID'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':
+					case '__uid'|'getCLID'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':
+					//case '__uid'|'dbUser'|'relations'|'getCLID'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':					
 						//SKIP
 					default:
 						var v = Reflect.field(dp,f);

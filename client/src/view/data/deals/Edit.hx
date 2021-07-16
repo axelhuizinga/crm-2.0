@@ -176,7 +176,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//dbMetaData = new  DBMetaData();
 		//dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
 		//trace(dbMetaData.dataFields.get(111));
-		var s:hxbit.Serializer = new hxbit.Serializer();
+		//var s:hxbit.Serializer = new hxbit.Serializer();
 		
 		//return;
 		state.formApi.requests.push( null);

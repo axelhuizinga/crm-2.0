@@ -120,11 +120,30 @@ class Utils
 		return key;
 	}
 	
-	public static function json2Dyn(j:Json, d:Dynamic={}):Dynamic{
-		return switch(j){
-			case JObject(fields:Array<JObjectField>):
-
+	public static function json2Dyn(j:Json, ?d:Dynamic):Dynamic{
+		var jD:Dynamic = updateDyn({},d);
+		switch(j.value){
+			case JObject(fields)://:Array<JObjectField>
+				//Reflect.setField(jD, );
+				trace(fields.length);
+				if(fields.length>0){
+					trace(fields[0]);
+				}
+			case JString(s):
+				trace(s);
+			case JNumber(s)://:String
+				trace(s);
+			case JArray(values)://:Array<Json>
+				trace(values.length);
+				if(values.length>0){
+					trace(values[0]);
+				}
+			case JBool(b)://:Bool
+				trace(b);
+			default:
+				trace('nothing');
 		}
+		return jD;
 	}
 
 	public static function stateToDataParams(dT:Dynamic):Map<String,Map<String,Dynamic>>

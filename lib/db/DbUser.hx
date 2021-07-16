@@ -1,9 +1,11 @@
 package db;
+import hxjsonast.Json;
 import me.cunity.debug.Out;
 
 
 class DbUser// implements hxbit.Serializable
 {
+	
 	
 	@:s public var active:Bool;
 	@:s public var change_pass_required:Bool;
@@ -28,6 +30,18 @@ class DbUser// implements hxbit.Serializable
 	@:s public var user_group:Int;
 	@:s public var user_name:String;
 
+
+	public static function dbUserWrite(u:DbUser):String {
+		trace(u);
+		return  '';
+	}
+
+	public static function dbUserParse(val:Json, name:String):DbUser{
+		var dp:DBAccessProps = {action:'load'};
+		trace(val);
+		return null;
+	}
+		
 	public function new(p:Dynamic){		
 		//trace(p);
 		//Out.dumpVar(p);

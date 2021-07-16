@@ -7,7 +7,7 @@ class DbRelation// implements hxbit.Serializable
 
 	@:s public var alias:String;
 	@:s public var fields:Array<String>;
-	@:s public var filter:Dynamic;
+	@:s public var filter:Array<String>;
 	@:s public var jCond:String;
 
 	public function new(p:Dynamic){

@@ -91,7 +91,7 @@ class LivePBXSync
 						)));
 						//return resolve(DbDataTools.create(['Error'=>'?']));
 					} 
-					if(data.dataInfo['offset']==null||data.dataInfo['offset']==0)
+					if(data.dataInfo['offset']==null||Std.parseInt(data.dataInfo['offset'])==0)
 					{
 						return dispatch(Status(Update(
 							{
@@ -322,7 +322,7 @@ class LivePBXSync
 							)));
 						} 
 						trace(data.dataInfo);
-						if(data.dataInfo['missing'] >0 && data.dataInfo['got'] != data.dataInfo['missing'])
+						if(Std.parseInt(data.dataInfo['missing']) >0 && data.dataInfo['got'] != data.dataInfo['missing'])
 						{
 							resolve(data);
 							trace('...');
@@ -333,7 +333,7 @@ class LivePBXSync
 							}
 
 						trace('got:' + Std.parseInt(untyped 666));
-						if(data.dataInfo['got']>0 && data.dataInfo['last_import_cid'] == data.dataInfo['max_client_id'])
+						if(Std.parseInt(data.dataInfo['got'])>0 && data.dataInfo['last_import_cid'] == data.dataInfo['max_client_id'])
 						{
 							resolve(data);
 							trace('...');
@@ -343,7 +343,7 @@ class LivePBXSync
 								text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert'
 							})));
 						}	
-						if(data.dataInfo['got']>0)
+						if(Std.parseInt(data.dataInfo['got'])>0)
 						{
 							//LOOP UNTIL LIMIT
 							dispatch(Status(Update(
@@ -352,12 +352,12 @@ class LivePBXSync
 									text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert - lade weitere'
 								})));
 							if(!props.onlyNew){
-								props.offset += data.dataInfo['got'];
+								props.offset += Std.parseInt(data.dataInfo['got']);
 							}																							
 							trace('next loop:${props}');
 							return dispatch(checkAll(props));
 						}
-						trace((data.dataInfo['got'] >0 && data.dataInfo['last_import_cid'] != data.dataInfo['max_client_id'] ? 'loop':'no'));
+						trace((Std.parseInt(data.dataInfo['got']) >0 && data.dataInfo['last_import_cid'] != data.dataInfo['max_client_id'] ? 'loop':'no'));
 						resolve(data);
 						return null;
 					}
@@ -393,7 +393,7 @@ class LivePBXSync
 				function(data:DbData)
 				{			
 					trace(data.dataInfo);
-					if(data.dataInfo.exists('loginTask')&&data.dataInfo.get('loginTask')==LoginTask.Login){
+					if(data.dataInfo.exists('loginTask')&& untyped data.dataInfo.get('loginTask')==LoginTask.Login){
 						reject( App.store.dispatch(User(LoginError(
 							{
 								dbUser:props.userState.dbUser,
@@ -462,7 +462,7 @@ class LivePBXSync
 						)));
 					} 
 					trace(data.dataInfo);
-					if(data.dataInfo['missing'] >0 && data.dataInfo['got'] != data.dataInfo['missing'])
+					if(Std.parseInt(data.dataInfo['missing']) >0 && data.dataInfo['got'] != data.dataInfo['missing'])
 						{
 							return dispatch(Status(Update(
 							{
@@ -470,7 +470,7 @@ class LivePBXSync
 								text:'Fehler ${data.dataInfo['got']} von ${data.dataInfo['missing']} Aktualisiert'})));
 							}
 
-						if(data.dataInfo['got']>0 && data.dataInfo['last_import_cid'] == data.dataInfo['max_client_id'])
+						if(Std.parseInt(data.dataInfo['got'])>0 && data.dataInfo['last_import_cid'] == data.dataInfo['max_client_id'])
 						{
 							return dispatch(Status(Update(
 							{
@@ -478,7 +478,7 @@ class LivePBXSync
 								text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert'
 							})));
 						}	
-						if(data.dataInfo['got']>0)
+						if(Std.parseInt(data.dataInfo['got'])>0)
 						{
 							//LOOP UNTIL LIMIT
 							dispatch(Status(Update(
@@ -487,12 +487,12 @@ class LivePBXSync
 									text:'${data.dataInfo['got']} von ${data.dataInfo['missing']} aktualisiert - lade weitere'
 								})));
 							if(!props.onlyNew){
-								props.offset += data.dataInfo['got'];
+								props.offset += Std.parseInt(data.dataInfo['got']);
 							}																							
 							trace('next loop:${props}');
 							return dispatch(importContacts(props));
 						}
-						trace((data.dataInfo['got'] >0 && data.dataInfo['last_import_cid'] != data.dataInfo['max_client_id'] ? 'loop':'no'));
+						trace((Std.parseInt(data.dataInfo['got']) >0 && data.dataInfo['last_import_cid'] != data.dataInfo['max_client_id'] ? 'loop':'no'));
 						return null;
 					// first=>
 					/*if(data.dataInfo['got']==null)

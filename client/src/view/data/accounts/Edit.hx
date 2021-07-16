@@ -1,6 +1,5 @@
 package view.data.accounts;
 import action.async.CRUD;
-import hxbit.NetworkHost.NetworkClient;
 import haxe.Json;
 import js.lib.Promise;
 import haxe.ds.IntMap;

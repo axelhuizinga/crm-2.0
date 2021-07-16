@@ -209,7 +209,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			)));
 
 			trace('${offset} < ${data.dataInfo['maxImport']}');
-			if(offset < data.dataInfo['maxImport']){
+			if(offset < Std.parseInt(data.dataInfo['maxImport'])){
 				//LOOP UNTIL LIMIT
 				trace('next loop:${data.dataInfo}');
 				return doSyncAll2(cast data.dataInfo);

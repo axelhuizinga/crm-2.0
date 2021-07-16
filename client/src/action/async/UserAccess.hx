@@ -63,12 +63,12 @@ class UserAccess {
 						userState.lastError = data.dataErrors.iterator().next();
 						return dispatch(User(LoginError(userState)));
 					}
-					if (data.dataInfo['jwtExpired'])
+					if (data.dataInfo['jwtExpired']!='')
 					{
 						userState.lastError = data.dataInfo['jwtExpired'];
 						return dispatch(User(LoginExpired(userState)));
 					}
-					if (data.dataInfo['online'])
+					if (data.dataInfo['online']!='')
 					{
 						//trace(aState.userState);			
 						aState.userState.new_pass = '';
@@ -76,7 +76,7 @@ class UserAccess {
 						aState.userState.dbUser.first_name = data.dataInfo['first_name'];
 						aState.userState.dbUser.last_name = data.dataInfo['last_name'];
 						aState.userState.dbUser.last_login = data.dataInfo['last_login'];
-						aState.userState.dbUser.id = data.dataInfo['id'];
+						aState.userState.dbUser.id = Std.parseInt(data.dataInfo['id']);
 						aState.userState.dbUser.jwt = data.dataInfo['jwt'];
 						aState.userState.dbUser.password = '';
 						aState.userState.dbUser.change_pass_required = false;						

@@ -649,8 +649,8 @@ form.modal-card-body{
 .formsContainer{
 	display: flex;
 	/*margin: 0.8rem 0 0 0.8rem;
-	flex-direction: column;
-	flex-grow: 1;*/
+	flex-direction: column;*/
+	flex-grow: 1;
 	overflow: auto;
 	max-width: 82%;
 	margin: 0 auto;
@@ -1116,6 +1116,7 @@ form td, form caption
 .grid_container{
 	padding-right: 1px;
 	overflow-x: hidden;
+	margin: 1rem auto;
 }
 /*.item--contained {
     grid-column: container;

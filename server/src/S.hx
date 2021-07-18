@@ -1,4 +1,5 @@
 package;
+import haxe.Serializer;
 import shared.Utils;
 import haxe.Exception;
 import haxe.CallStack;
@@ -55,8 +56,8 @@ import haxe.Json;
 import haxe.extern.EitherType;
 import sys.io.File;
 
-import json2object.JsonParser;
-import json2object.JsonWriter;
+//import json2object.JsonParser;
+//import json2object.JsonWriter;
 import comments.CommentString.*;
 
 using Lambda;
@@ -157,8 +158,8 @@ class S
 		else{
 			dbQuery = Model.binary();
 			params = dbQuery.dbParams;
-			//trace(dbQuery.dbParams);
-			trace(dbQuery.relations);
+			trace(dbQuery.dbParams.get('classPath'));
+			//trace(dbQuery);
 			trace(Util.rels2string(dbQuery.relations));
 			S.devIP = params['devIP'];
 			//if(dbQuery!=null)trace(dbQuery.dbUser);
@@ -346,7 +347,7 @@ class S
 	
 	public static function sendData(dbData:DbData, ?data:RData):Bool
 	{
-		var w = new JsonWriter<DbData>();//hxbit.Serializer
+		//var w = new JsonWriter<DbData>();//hxbit.Serializer
 		//trace(data.info);
 		if(data != null){
 			dbData.dataInfo = dbData.dataInfo.copyStringMap(data.info);
@@ -370,7 +371,7 @@ class S
 			trace(dbData.dataRows.length);
 			return true;			 
 		 }		
-		return send(w.write(dbData));
+		return send(Serializer.run(dbData));
 	}
 
 	public static function checkStmt(dbConn:PDO, stmt:PDOStatement, err:String, ?pos:PosInfos):Bool
@@ -400,7 +401,7 @@ class S
 			dbData = new DbData();
 		//trace(dbData);
 		//var s:Serializer = new Serializer();
-		var writer = new json2object.JsonWriter<DbData>();
+		//var writer = new json2object.JsonWriter<DbData>();
 		if (err != null)
 		{
 			for (k in err.keys())
@@ -409,13 +410,14 @@ class S
 			}
 		}
 		trace(dbData.dataErrors);
-		return send(writer.write(dbData));
+		return send(Serializer.run(dbData));
+		//return send(writer.write(dbData));
 	}
 	
 	public static function sendInfo(dbData:DbData, ?info:Map<String,Dynamic>):Bool
 	{
 		//var s:Serializer = new Serializer();
-		var writer = new json2object.JsonWriter<DbData>();
+		//var writer = new json2object.JsonWriter<DbData>();
 		if (info != null)
 		{
 			for (k in info.keys())
@@ -426,8 +428,8 @@ class S
 		//trace('done at ${Sys.time()-ts} ms');
 		//trace(dbData.dataErrors);
 		//trace(dbData);
-		return send(writer.write(dbData));
-		//return sendbytes(s.serialize(dbData));
+		//return send(writer.write(dbData));
+		return send(Serializer.run(dbData));
 	}
 	
 	public static function sendbytes(b:Bytes, ?loop:Bool):Bool

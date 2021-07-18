@@ -246,7 +246,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		//trace(props.match.params.section);		
 		return state.formApi.render(jsx('
 		<>
-			<form className="tabComponentForm2"  >
+			<form className="tabComponentForm"  >
 				${renderResults()}
 			</form>
 		</>'));		

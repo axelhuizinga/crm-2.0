@@ -23,7 +23,7 @@ import sys.io.File;
  */
 class Forms extends Model
 {
-	public function new(param:Map<String,Dynamic>):Void
+	public function new(param:Map<String,String>):Void
 	{
 		super(param);			
 		trace(param);

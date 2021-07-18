@@ -1,5 +1,7 @@
 package loader;
 
+import haxe.Unserializer;
+import haxe.Serializer;
 import db.DBAccessProps;
 import db.DbQuery;
 import haxe.Json;
@@ -29,6 +31,25 @@ class BinaryLoader {
 		//trace(dbAP.relations);
 		//trace(dbAP);
 		//trace('${dbAP.classPath}.${dbAP.action} filter:${dbAP.filter} table:${dbAP.table}');
+		var s = new Serializer();
+		//var s = new json2object.JsonWriter<DbQuery>();
+		var bl:BinaryLoader = new BinaryLoader(url);
+		var dbQuery = new DbQuery(dbAP);//.toHex();
+		//trace(dbQuery);
+		//Out.dumpObject(dbQuery);
+		//var b:Bytes = s.serialize(dbQuery);
+		s.serialize(dbQuery);
+		bl.param = s.toString();
+		bl.cB = onLoaded;
+		bl.load();
+		return bl.xhr;
+	}
+
+	/*public static function jsonQuery(url:String,dbAP:DBAccessProps, onLoaded:DbData->Void) {
+		//trace(url);
+		//trace(dbAP.relations);
+		//trace(dbAP);
+		//trace('${dbAP.classPath}.${dbAP.action} filter:${dbAP.filter} table:${dbAP.table}');
 		var s = new json2object.JsonWriter<DbQuery>();
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbAP);//.toHex();
@@ -39,7 +60,7 @@ class BinaryLoader {
 		bl.cB = onLoaded;
 		bl.load();
 		return bl.xhr;
-	}
+	}	*/
 
 	/*public static function go(url:String, dbAP:DBAccessProps, onLoaded:DBAccessJsonResponse->Void){
 		//trace(dbAP);
@@ -73,17 +94,25 @@ class BinaryLoader {
 
 	//public dynamic function onLoaded( bytes : haxe.io.Bytes ) {
 	public function onLoaded( bytes : String ) {
-		//trace(bytes.length);
+		//trace(bytes);
 		if(bytes!=null && bytes.length>0){
-			var u = new json2object.JsonParser<DbData>();
-			var data:DbData = u.fromJson(bytes);
+			//var u = new Unserializer();
+			/*var something = Unserializer.run(bytes);
+			trace(something);*/
+			var data:DbData = Unserializer.run(bytes);
+			trace(data);
 			cB(data);			
 		}
 		else 
 			trace('got nothing');
 
 	}
-
+	/**
+	 * [Description]			var u = new json2object.JsonParser<DbData>();
+			var data:DbData = u.fromJson(bytes);
+	 * @param cur 
+	 * @param max 
+	 */
 	public dynamic function onProgress( cur : Int, max : Int ) {
 	}
 

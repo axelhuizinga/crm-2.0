@@ -1,7 +1,8 @@
 package;
 
-import json2object.JsonWriter;
-import json2object.JsonParser;
+import haxe.Serializer;
+//import json2object.JsonWriter;
+//import json2object.JsonParser;
 import db.DBAccessProps;
 import comments.CommentString.*;
 import php.Global;
@@ -914,10 +915,8 @@ class Model
 			S.send('got no pData');
 			return null;
 		}
-		var s:JsonParser<DbQuery> = new JsonParser<DbQuery>();
-		s.fromJson(pData,Debug.logFile);
-		return s.value;
-		//return s.unserialize(pData, DbQuery);
+
+		return Unserializer.run(pData);
 	}
 
 	public static function json(pKV:KeyValueIterator<String,String>):DbQuery
@@ -1189,18 +1188,18 @@ class Model
 		
 	function serializeRows(rows:NativeArray):String
 	{
-		var s = new JsonWriter<DbData>();
+		//var s = new JsonWriter<DbData>();
 		Syntax.foreach(rows, function(k:Int, v:Dynamic)
 		{
 			dbData.dataRows.push(Lib.hashOfAssociativeArray(v));
 		});
-		trace(dbData);
-		return s.write(dbData);
+		//trace(dbData);
+		return Serializer.run(dbData);
 	}
 	
 	function sendRows(rows:NativeArray):Bool
 	{
-		var s = new JsonWriter<DbData>();
+		//var s = new JsonWriter<DbData>();
 		
 		Syntax.foreach(rows, function(k:Int, v:Dynamic)
 		{
@@ -1213,7 +1212,8 @@ class Model
 		/*var out = File.write("php://output", true);
 		out.bigEndian = true;
 		out.write(s.serialize(dbData));*/
-		Sys.print(s.write(dbData));
+		//Sys.print(s.write(dbData));
+		Sys.print(Serializer.run(dbData));
 		Sys.exit(0);
 		return true;
 	}

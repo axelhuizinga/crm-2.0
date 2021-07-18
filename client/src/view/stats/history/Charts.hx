@@ -194,7 +194,6 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 			params,
 			function(data:DbData)
 			{			
-				//UserAccess.jwtCheck(data);
 				trace(data.dataInfo);
 				trace(data.dataParams);
 				trace(data.dataRows.length);
@@ -256,7 +255,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 		chartBox.style.width = cW + 'px';
 		var cH:Int = chartBox.offsetHeight-1;
 		var lH:Int = cH*0.064>24?Math.round(cH*0.064):24;
-		trace('cH:$cH lH:$lH');
+		trace('cH:$cH cW:$cW lH:$lH');
 		cH -= lH;
 		//var formatTime = D3.time.format;//("%b %Y");//TimeFormat.iso(
 		var months = 'Jan,Feb,Mar,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez'.split(',');
@@ -274,7 +273,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 		var maxCount:Int = Math.round(Utils.keyMax(state.dataTable, 'count'));
 		var cRatio:Float = cH/maxCount;
 		var sRatio:Float = cH/maxSum;
-		trace('$maxCount => $maxSum $cW: $cRatio $sRatio ${state.dataTable.length} svg: ${svg!=null?svg:null}');
+		trace('$maxCount => $maxSum $cW / ${cH+lH}: $cRatio $sRatio ${state.dataTable.length} svg: ${svg!=null?svg:null}');
 		trace(state.dataTable[0]);
 		
 		//var iW:Int = Math.floor(cW/state.dataTable.length)-2;

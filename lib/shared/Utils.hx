@@ -5,7 +5,6 @@ package shared;
  * @author axel@cunity.me
  */
 
-import hxjsonast.Json;
 import redux.Redux.Dispatch;
 import haxe.Constraints.Function;
 import react.ReactDOM;
@@ -120,7 +119,7 @@ class Utils
 		return key;
 	}
 	
-	public static function json2Dyn(j:Json, ?d:Dynamic):Dynamic{
+	/*public static function json2Dyn(j:Json, ?d:Dynamic):Dynamic{
 		var jD:Dynamic = updateDyn({},d);
 		switch(j.value){
 			case JObject(fields)://:Array<JObjectField>
@@ -144,7 +143,7 @@ class Utils
 				trace('nothing');
 		}
 		return jD;
-	}
+	}*/
 
 	public static function stateToDataParams(dT:Dynamic):Map<String,Map<String,Dynamic>>
    	{

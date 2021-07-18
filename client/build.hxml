@@ -9,9 +9,10 @@
 -lib reselect
 -lib event-types 
 -lib js-object
--lib json2object
+#-lib json2object
 -lib tink_core
 -lib hx3compat
+-lib hxbit
 
 -cp /opt/src/lib
 -cp ../lib

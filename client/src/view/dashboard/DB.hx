@@ -12,7 +12,7 @@ import haxe.ds.Map;
 import haxe.io.Bytes;
 import js.html.XMLHttpRequest;
 //import hxbit.Serializer;
-import json2object.JsonParser;
+//import json2object.JsonParser;
 /*import js.html.FormData;
 import js.html.FormDataIterator;
 import js.html.HTMLCollection;*/

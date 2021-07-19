@@ -1,4 +1,5 @@
 package view.data.accounts;
+import model.Account;
 import action.async.CRUD;
 import haxe.Json;
 import js.lib.Promise;
@@ -143,8 +144,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//trace(Reflect.fields(aState));
 		if(state.actualState != null)
 			trace('length:' + state.actualState.fieldsModified.length + ':' + state.actualState.fieldsModified.join('|') );
-		if(state.actualState == null || state.actualState.fieldsModified.length==0)
+		if(state.actualState == null || state.actualState.fieldsModified.length==0){
+			trace('no data 2 update at state.actualState');
 			return;
+
+		}
 		var data2save = state.actualState.allModified();
 		var doc:Document = Browser.window.document;
 
@@ -279,10 +283,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}*/
 		else if(actualState==null){
 			actualState = copy(initialState);
+			trace(actualState);
 			actualState = view.shared.io.Observer.run(actualState, function(newState){
 				actualState = newState;
 				trace(actualState);
 			});	
+			trace(actualState);
 		}
 		if(formRef.current != null)
 		{

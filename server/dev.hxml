@@ -2,10 +2,9 @@
 -lib jwt
 -lib random
 -lib tjson
-#-lib json2object 
+
 #-lib smtpmailer
 
--cp /opt/src/lib
 -cp ../lib
 -cp lib
 -cp src

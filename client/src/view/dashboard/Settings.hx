@@ -73,7 +73,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 						items: Design.menuItems
 					},										
 				],
-				{section: 'bookmarks',	sameWidth: true}
+				{section: props.match.params.section==null? 'User':props.match.params.section,	sameWidth: true}
 			)
 		};
 		if(props.match.params.section!=null)

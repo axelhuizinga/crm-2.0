@@ -144,7 +144,6 @@ class SyncExternalBookings extends Model{
 		S.sendErrors(dbData,['importAll'=>'NOTOK']);
 	}
 
-
 	public function syncBookingRequests(dbh:PDO,minID:Int=0):Void 
 	{		
 		var bookings:NativeArray = null;

@@ -120,7 +120,7 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 
 		return jsx('
 			<div className="tabComponentForm"  >
-				dummy	
+				bookmarks dummy	
 			</div>		
 		');
 	}

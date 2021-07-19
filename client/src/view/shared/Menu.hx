@@ -247,8 +247,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		var formFieldElements:Array<ReactFragment> = [];
 		var i = 0;
 		for(fF in formFields){
+			trace(fF.type);
 			formFieldElements.push(
 				switch(fF.type){
+					case Checkbox:
+						jsx('<span key=${"l_"+(i++)}>${fF.label}<input type="checkbox" name=${fF.name} /></span>');
 					case Radio: 
 						var o:Int = 0;
 						var options:ReactFragment = [

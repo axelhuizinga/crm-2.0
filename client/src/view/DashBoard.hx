@@ -161,13 +161,13 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 				null;
 		}<li className=${props.location.pathname.indexOf(props.to) == 0 ?"is-active":""}>
 		<$NavLink to=${props.to}>${props.children}</$NavLink></li>
-	}*/
+	}
 	
 	function internalRedirect(path:String = '/DashBoard/Settings')
 	{
 		props.history.push(path);
 		return null;
-	}
+	}*/
 	
 /*	function TabLink(rprops)
 	{

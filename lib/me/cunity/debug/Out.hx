@@ -263,7 +263,7 @@ class Out{
 			dumpJLayout(jQ.parent(), true, i);
 	}
 	#end
-	
+
 	public static function dumpObjectRSafe(root:Dynamic, recursive:Bool = false, ?i:PosInfos)
 	{
 		var oCopy:Dynamic = {};
@@ -353,7 +353,11 @@ class Out{
 		_trace(untyped ret);
 	}
 #end
-
+	public static function dumpKeys(it:Iterator<String>):String {
+		var kN:Array<String> = [];
+		while(it.hasNext()){kN.push(it.next());}
+		return kN.join('|');
+	}
 
 	public static function dumpObject(ob:Dynamic, ?i:haxe.PosInfos) 
 	{

@@ -1,4 +1,6 @@
 package view.dashboard;
+import js.html.FormDataIterator;
+import js.html.FormData;
 import haxe.Constraints.Function;
 import shared.DbParam;
 import shared.Utils;
@@ -47,7 +49,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		//{label:'BuchungsDaten',action:'importAllBookingRequests'},
 		
 		//{label:'Stammdaten Import ',action:'importContacts'},
-		{label:'BuchungsAnforderungen ',action:'checkBookingRequests'},
+		{label:'BuchungsAnforderungen ',action:'checkBookingRequests',options:[
+			{label: 'Update', name: 'sync_now', type:Checkbox}]},
 		{label:'Kontakt Daten ',action:'checkContacts'},		
 		{label:'Spenden Daten ',action:'checkDeals'},
 		{label:'Konto Daten ',action:'checkAccounts'}
@@ -268,8 +271,17 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		}));
 	}	
 
-	public function checkBookingRequests():Void
+	//public function checkBookingRequests(?fD:Array<FormData>):Void
+	public function checkBookingRequests(?fD:FormData):Void
 	{
+		if(fD!=null){
+			trace(fD);
+			/*fi:FormDataIterator = fD[0].entries();
+			while (var fn = fi.next()){
+				trace(fi);
+			}*/
+			trace(fD.get('sync_now'));
+		}
 		App.store.dispatch(Status(Update(
 		{
 			className:'',

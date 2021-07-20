@@ -48,8 +48,9 @@ class Util
 		
 		//Syntax.code("error_log({0})", table);
 		//Syntax.code("error_log({0})", Std.string(row));
-		//trace(meta);
+		//trace(meta.toString());
 		//Out.dumpVar(meta);
+//		trace(Std.string(row));
 
 		for(k => v in meta.keyValueIterator())
 		{
@@ -61,11 +62,11 @@ class Util
 			//var kv:Dynamic = (v['native_type']=='bytea'?Bytes.ofString(row[k]).:row[k]);	
 			var kv:Dynamic = row[k];
 			var pdoType:Int = v['pdo_type'];			
-			//trace('$pdoType::${v['native_type']}: $k => $kv');
+			trace('$pdoType::${v['native_type']}: $k => $kv');
 			//if(kv==null||kv.indexOf('0000-00-00')==0||kv=='')
 			if(kv==null||kv==''||pdoType>1&&kv.indexOf('0000-')==0)
 			{
-				//trace (v['native_type']);
+				trace (k + ':' + v['native_type']);
 				switch (v['native_type'])
 				{
 					case 'date'|'datetime'|'timestamp':
@@ -92,11 +93,11 @@ class Util
 		}
 	}
 
-	public static function bindClientDataNum(table:String, stmt:PDOStatement, row:NativeArray, dbData:DbData)
+	public static function bindClientDataNum(table:String, stmt:PDOStatement, row:NativeArray, dbData:DbData):NativeArray
 	{
 		var meta:Map<String, NativeArray> = S.columnsMeta(table);
-		trace(Out.dumpKeys(meta.keys()));
-		trace(Lib.toHaxeArray(Global.array_keys(row)).join('|'));
+		//trace(Out.dumpKeys(meta.keys()));
+		//trace(Lib.toHaxeArray(Global.array_keys(row)).join('|'));
 		var i:Int = 0;
 		try{
 			for(k => v in meta.keyValueIterator())
@@ -105,13 +106,16 @@ class Util
 					//continue;				
 				var pdoType:Int = v['pdo_type'];
 				if(Global.array_key_exists(i,row)){
-				trace (k+':'+i+':'+v['native_type']+'::'+row[i]);
+				//trace (k+':'+i+':'+v['native_type']+'::'+row[i]);
+				//trace('$pdoType::${v['native_type']}: $k => $v');
 					if(row[i]==null||row[i].indexOf('0000-00-00')==0||row[i]=='')
 					{										
 						switch (v['native_type'])
 						{
 							case 'date'|'datetime'|'timestamp':
+							//trace('$pdoType::${v['native_type']}: $k => $v');
 							pdoType = PDO.PARAM_NULL;
+							row[i] = null;
 							case 'text'|'varchar':
 							row[i] = '';
 							case 'int8':
@@ -119,11 +123,11 @@ class Util
 							row[i] = 0;
 						}
 					}
-					trace('$k => $pdoType:${row[i]}');
-					trace('pdoType: $pdoType == ${PDO.PARAM_INT }');
+					//trace('$k => $pdoType:${row[i]}');
+					//trace('pdoType: $pdoType == ${PDO.PARAM_INT }');
 					if(!stmt.bindValue(':$k',row[i], pdoType))//row[i]==null?1:
 					{
-						//trace('$k => $v');
+						trace('$k => $v');
 						S.sendErrors(dbData,['bindValue'=>'${row[i]}:$pdoType']);
 					}
 				}
@@ -135,6 +139,7 @@ class Util
 			trace('i:$i');
 			trace(ex.message);
 		}
+		return row;
 	}
 
 	/**
@@ -356,7 +361,7 @@ class Util
 				//Util.safeLog([for (k in Lib.hashOfAssociativeArray(val).keys())k].join('|'),pos);
 				sLog += '$f:';
 				for (k=>v in Lib.hashOfAssociativeArray(val).keyValueIterator()){
-					sLog += k.indexOf('pass') == -1 ? '$k:${Std.string(v)}' : '$k:xxx';
+					sLog += k.indexOf('pass') == -1 ? '$k:${Std.string(v)} ' : '$k:xxx';
 				};
 				sLog += '\n';
 				continue;

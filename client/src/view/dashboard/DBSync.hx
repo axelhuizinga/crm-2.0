@@ -1,4 +1,7 @@
 package view.dashboard;
+import js.Browser;
+import js.html.Window;
+import js.html.Document;
 import js.html.FormDataIterator;
 import js.html.FormData;
 import haxe.Constraints.Function;
@@ -171,6 +174,63 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		)*/null);
 	}
 	
+	public function getMissingExternalBookings(?cB:Function) {
+		setState({loading:true});
+		var p:Promise<DbData> = props.load(			
+		{
+			classPath:'admin.SyncExternalBookings',
+			action:'getMissing',
+			extDB: true,
+			filter:{mandator:'1'},
+			limit:4000,
+			offset:0,
+			table:'booking_requests',
+			dbUser:props.userState.dbUser,
+			devIP:App.devIP,
+			//maxImport:4000,
+			//relations:new Map()
+		});
+		p.then(function(data:DbData){
+			if(data.dataInfo['offset']==null)
+			{
+				return App.store.dispatch(Status(Update(
+				{
+					className:'error',
+					text:'Fehler 0  Aktualisiert'}
+				)));//${data.dataInfo['classPath']}
+			}					
+			var offset = Std.parseInt(data.dataInfo['offset']);
+			App.store.dispatch(Status(Update(
+				{
+					className:' ',
+					text:'${offset} von ${data.dataInfo['maxImport']} aktualisiert'
+				}
+			)));
+
+			trace('${offset} < ${data.dataInfo['maxImport']}');
+			if(offset < Std.parseInt(data.dataInfo['maxImport'])){
+				//LOOP UNTIL LIMIT
+				trace('next loop:${data.dataInfo}');
+				return doSyncAll2(cast data.dataInfo);
+			}					
+			else{
+				setState({loading:false});
+				App.store.dispatch(Status(Update(
+					{
+						className:' ',
+						text:'${offset} von ${data.dataInfo['maxImport']} aktualisiert'
+					}
+				)));
+				if(cB != null ){
+					cB();					
+				}
+				return p;
+			}
+
+		});//*/
+		return p;
+	}
+
 	public function importAccounts2(_):Void
 	{
 		trace(props.userState.dbUser.first_name);
@@ -276,11 +336,17 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	{
 		if(fD!=null){
 			trace(fD);
-			/*fi:FormDataIterator = fD[0].entries();
+			/*fi:FormDataIterator = fD.entries();
 			while (var fn = fi.next()){
 				trace(fi);
-			}*/
+			}*/ 
 			trace(fD.get('sync_now'));
+			if(fD.get('sync_now')=='on'){
+				getMissingExternalBookings(function() {
+					untyped Browser.document.querySelector('[name="checkBookingRequests"] [name="sync_now"]').checked = false;
+					//fD.set('sync_now',)
+				});
+			}
 		}
 		App.store.dispatch(Status(Update(
 		{

@@ -148,10 +148,11 @@ class SyncExternalBookings extends Model{
 	{		
 		var bookings:NativeArray = null;
 		var dD:Map<String,Dynamic> = Util.map2fieldsNum(bookings[0], keys);
+		trace(dD.toString());
 		var dNames:Array<String> = [for(k in dD.keys()) k];		
-		dNames = dNames.filter(function(n:String) {
+		/*dNames = dNames.filter(function(n:String) {
 			return n!='id'&&n!='mandator';
-		});
+		});*/
 		var dPlaceholders:Array<String> =  [for(k in dNames) k].map(function (k) return ':$k');
 		trace(dPlaceholders);
 		var sql:String = comment(unindent, format) /*
@@ -164,12 +165,15 @@ class SyncExternalBookings extends Model{
 			//	LOAD LIVE PBX DATA
 			bookings = getCrmData(minID);
 			var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
-			trace('totalRecords:' + dbData.dataInfo['totalRecords']);
+			//trace('totalRecords:' + dbData.dataInfo['totalRecords']);
 			for(row in bookings.iterator())
 			{
-				trace(synced);
-				Util.bindClientDataNum(table,stmt,row,dbData);			
-				if(!stmt.execute()){
+				//trace(synced);
+				//trace(row);
+				//trace(Std.string(row));
+				row = Util.bindClientDataNum(table,stmt,row,dbData);		
+				//trace(Std.string(row[25]));	
+				if(!stmt.execute(row)){
 					trace(row);
 					trace(stmt.errorInfo());
 					S.sendErrors(dbData, ['execute'=>Lib.hashOfAssociativeArray(stmt.errorInfo()),
@@ -180,14 +184,14 @@ class SyncExternalBookings extends Model{
 			}
 			// GOT LIVE PBX DATA
 
-			trace('totalCount:${totalCount} offset:${offset.int} + synced:${synced}');
+			//trace('totalCount:${totalCount} offset:${offset.int} + synced:${synced}');
 			offset = Util.offset(synced);
 			if(offset.int+limit.int>totalCount)
 			{
 				limit = Util.limit(totalCount - offset.int);
 			}										
-			trace('offset:'+ offset.int);
-			trace(param);
+			//trace('offset:'+ offset.int);
+			//trace(param);
 		}
 		trace('done');
 		Sys.exit(S.sendInfo(dbData, ['importedBookingRequests'=>'OK'])?1:0);
@@ -196,7 +200,7 @@ class SyncExternalBookings extends Model{
 	public function getCrmData(maxImported:Int=0):NativeArray
 	{		        
         var sql = comment(unindent,format)/*
-		SELECT * FROM buchungs_anforderungen WHERE `buchungsanforderungID`>$maxImported 
+		SELECT *, 1 AS 'mandator' FROM buchungs_anforderungen WHERE `buchungsanforderungID`>$maxImported 
 ORDER BY buchungsanforderungID 
 */;
 		trace('loading $sql ${limit.sql} ${offset.sql}' + S.syncDbh.getAttribute(PDO.ATTR_SERVER_INFO));
@@ -212,8 +216,9 @@ ORDER BY buchungsanforderungID
 		{
 			trace(stmt.errorInfo());
 		}
-		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_NUM):null);
 		//trace(res);
+		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_NUM):null);
+		//var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_BOTH):null);
 		trace(Syntax.code('count({0})',res));
 		if(offset.int==0)
 		{

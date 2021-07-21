@@ -49,13 +49,13 @@ class Pager extends ReactComponentOfProps<PagerProps>
 		super(props);
 		linkCount = (props.linkCount>0?props.linkCount:7);
 		firstEllipsis = props.total > linkCount;
-		secondEllipsis = total > props.linkCount*2;
+		secondEllipsis = props.total > props.linkCount*2;
 	}
 	function renderPageLinks():ReactFragment
 	{
 		return jsx('						
 			<$ReactPaginate pageCount=${props.pageCount}>'
-		;)
+		);
 		return null;
 	}
 

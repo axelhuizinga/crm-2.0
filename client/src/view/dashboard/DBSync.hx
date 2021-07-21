@@ -1,4 +1,6 @@
 package view.dashboard;
+import js.html.InputElement;
+import js.html.MenuItemElement;
 import js.Browser;
 import js.html.Window;
 import js.html.Document;
@@ -342,17 +344,34 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			}*/ 
 			trace(fD.get('sync_now'));
 			if(fD.get('sync_now')=='on'){
+				App.store.dispatch(Status(Update(
+					{
+						className:'',
+						text:'Aktualisiere Buchungsanforderungen'}
+					)));				
 				getMissingExternalBookings(function() {
-					untyped Browser.document.querySelector('[name="checkBookingRequests"] [name="sync_now"]').checked = false;
+
+					loadBookingRequestsCount();//[name="checkBookingRequests"] [name="checkBookingRequests"] 
+					untyped Browser.document.querySelector('[name="sync_now"]').checked = false;
+					trace(cast(Browser.document.querySelector('[name="sync_now"]'),InputElement).checked?'Yes':'No');
 					//fD.set('sync_now',)
 				});
 			}
+			else
+				loadBookingRequestsCount();
+			return;
 		}
+		else
+			loadBookingRequestsCount();
+		
+	}
+
+	function loadBookingRequestsCount() {
 		App.store.dispatch(Status(Update(
 		{
 			className:'',
-			text:'Aktualisiere Buchungsanforderungen'}
-		)));
+			text:'Lade Anzahl Buchungsanforderungen'}
+		)));		
 		var pro:Promise<Dynamic> = action.async.LivePBXSync.check({
 			limit:1000,
 			userState:props.userState,

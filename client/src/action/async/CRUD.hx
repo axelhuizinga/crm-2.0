@@ -151,7 +151,7 @@ class CRUD
 									text:(param.resolveMessage==null?data.dataErrors.toString():param.resolveMessage.failure)
 								}
 							)));							
-							reject(param.resolveMessage);
+							reject(param.resolveMessage==null?param.resolveMessage.failure:data.dataErrors.toString());
 						}
 						else{
 

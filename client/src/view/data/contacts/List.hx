@@ -1,5 +1,6 @@
 package view.data.contacts;
 
+import shared.Utils;
 import js.html.DivElement;
 import action.async.CRUD;
 import data.DataState;
@@ -97,7 +98,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			var baseUrl:String = props.match.path.split(':section')[0];
 			trace('redirecting to ${baseUrl}List/get');
 			props.history.push('${baseUrl}List/get');
-			//get(null);
+			get(null);
 		}
 		else 
 		{
@@ -122,14 +123,21 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 	public function get(filter:Dynamic=null):Void
 	{
-		if(filter == null)
-			filter = {mandator:props.userState.dbUser.mandator};
-		trace('hi $filter');
 		var offset:Int = 0;
 		if(filter != null && filter.page!=null)
 		{
+			trace(filter);
 			offset = Std.int(props.limit * filter.page);
-		}
+			Reflect.deleteField(filter,'page');
+		}		
+		//if(filter == null)
+		filter = Utils.extend(filter, (props.match.params.id!=null?
+			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
+			{mandator:props.userState.dbUser.mandator})
+		);
+		//{mandator:props.userState.dbUser.mandator}
+		trace('hi $filter');
+
 		trace(props.match.params);
 		var p:Promise<DbData> = props.load(
 			{

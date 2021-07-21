@@ -648,8 +648,8 @@ form.modal-card-body{
 /*FORMS * CONTAINER*/
 .formsContainer{
 	display: flex;
-	/*margin: 0.8rem 0 0 0.8rem;
-	flex-direction: column;*/
+	/*margin: 0.8rem 0 0 0.8rem;*/
+	flex-direction: column;
 	flex-grow: 1;
 	overflow: auto;
 	max-width: 82%;
@@ -1214,6 +1214,7 @@ form td, form caption
 
 .formField .grid_box{
 	grid-gap: 1rem;
+	padding: 0.5rem 1rem;
 }
 /*** D3 CHARTS ***/
 

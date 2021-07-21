@@ -100,7 +100,7 @@ class BinaryLoader {
 			/*var something = Unserializer.run(bytes);
 			trace(something);*/
 			var data:DbData = Unserializer.run(bytes);
-			trace(data);
+			//trace(data);
 			cB(data);			
 		}
 		else 

@@ -1,8 +1,10 @@
 package view.data.qc;
+import data.DataState;
 import react.router.RouterMatch;
 import js.Browser;
 import js.html.NodeList;
 import js.html.TableRowElement;
+import lib.shared.Utils;
 import action.DataAction;
 import state.AppState;
 import haxe.Constraints.Function;
@@ -41,7 +43,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	//	{label:'Auswahl alle',action:'selectionAll'},
 	];
 	
-	var dataAccess:DataAccess;	
+	var dataAccess:DataAccess;
 	var dataDisplay:Map<String,DataState>;
 	var formApi:FormApi;
 	var formBuilder:FormBuilder;
@@ -56,7 +58,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		//baseForm =new BaseForm(this);
-		dataDisplay = ContactsModel.dataDisplay;
+		dataDisplay = ContactsModel.dataGridDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			dataTable:[],
@@ -106,28 +108,50 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var data = state.formApi.selectedRowsMap(state);
 	}
 
-	public function get(ev:Dynamic):Void
+	public function get(filter:Dynamic=null):Void
 	{
-		trace('hi $ev');
 		var offset:Int = 0;
-		if(ev != null && ev.page!=null)
+		if(filter != null && filter.page!=null)
 		{
-			offset = Std.int(props.limit * ev.page);
-		}
-		var params:Dynamic = {
-			id:props.userState.dbUser.id,
-			jwt:props.userState.dbUser.jwt,
-			classPath:'data.Contacts',
-			action:'get',
-			filter:(props.match.params.id!=null?'id|${props.match.params.id}':'mandator|1,'),
-			devIP:App.devIP,
-			limit:props.limit,
-			offset:offset>0?offset:0,
-			table:'contacts'
-		};
+			trace(filter);
+			offset = Std.int(props.limit * filter.page);
+			Reflect.deleteField(filter,'page');
+		}		
+		//if(filter == null)
+		filter = Utils.extend(filter, (props.match.params.id!=null?
+			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
+			{mandator:props.userState.dbUser.mandator })
+		);
+		/*var dS:db.DataSource = [
+			'contacts' => [
+				'alias' => 'con',
+				'fields' => dataDisplay.keys(),
+				//	TODO: BUILD FILTER FUNCTION
+				'filter' => filter,
+			],				
+			'vicicial_list' => [
+				'alias' => 'v'
+				'jCond' => 'con.id=vendor_lead_code'
+			],
+			'sepa_return_codes' => [
+				'fields' => 'description',
+				'jCond' => 'drs.sepa_code=code'
+			]
+		];*/
+		trace('hi $filter');
 		BinaryLoader.create(
 			'${App.config.api}', 
-			params,
+			{
+				id:props.userState.dbUser.id,
+				jwt:props.userState.dbUser.jwt,
+				classPath:'data.Contacts',
+				action:'get',
+				filter:filter,
+				devIP:App.devIP,
+				limit:props.limit,
+				offset:offset>0?offset:0,
+				table:'contacts'
+			},
 			function(data:DbData)
 			{			
 				//UserAccess.jwtCheck(data);
@@ -138,22 +162,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				{
 					if(!data.dataErrors.keys().hasNext())
 					{
-						/*var dRows:Array<Dynamic> = [];
-						for(row in data.dataRows)
-						{
-							var rO:Dynamic = {};
-							for(k=>v in row.keyValueIterator())
-								Reflect.setField(rO, k , v);
-							dRows.push(rO);						
-						}*/
-						//trace(props.storeContactsList);
-						//trace(props.parentComponent.storeContactsList);
-						
-						//if(props.storeContactsList !=null)
-						//props.storeContactsList(data);
 						setState({
-						//props.parentComponent.setStateFromChild({
-							//rows:dRows,
 							dataTable:data.dataRows,
 							dataCount:Std.parseInt(data.dataInfo['count']),
 							pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)

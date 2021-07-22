@@ -106,7 +106,7 @@ class ContactsModel
 		'contactList' => {columns:listColumns}
 	];	
 
-	public static var dataGridDisplay:Map<String,data.DataState> = [
+	public static var dataGridDisplay:Map<String,DataState> = [
 		'contactList' => {columns:gridColumns}
 	];	
 }

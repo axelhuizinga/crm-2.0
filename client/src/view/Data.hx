@@ -128,7 +128,13 @@ class Data extends ReactComponentOf<DataProps,CompState>
 		<>
 			<div className="tabNav2" >
 				<$Tabs className="is-boxed" >
-					<$TabLink to="/Data/Contacts" ${...props} >Kontakte</$TabLink>
+					<$TabLink to=${{
+						key:props.location.key,
+						hash:'',
+						pathname:"/Data/Contacts",
+						search:'',
+						state:props.location.state.extend({contact:props.location.hash})
+					}} ${...props} >Kontakte</$TabLink>
 					<$TabLink to=${{
 						key:props.location.key,
 						hash:'',

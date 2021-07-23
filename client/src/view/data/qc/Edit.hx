@@ -1,4 +1,21 @@
 package view.data.qc;
+
+import data.DataState;
+import model.deals.DealsModel;
+import model.accounting.AccountsModel;
+import model.ORM;
+import haxe.Exception;
+import react.ReactNode.ReactNodeOf;
+import view.data.contacts.Accounts;
+import view.data.contacts.Deals;
+import haxe.ds.StringMap;
+import haxe.Timer;
+import react.ReactDOM;
+import react.ReactUtil;
+import db.DbRelation;
+import db.DbQuery;
+import db.DBAccessProps;
+import action.async.CRUD;
 import haxe.CallStack;
 import me.cunity.debug.Out;
 import haxe.rtti.Rtti;
@@ -9,15 +26,16 @@ import haxe.ds.IntMap;
 import action.AppAction;
 import action.DataAction;
 import action.async.DBAccess;
-import db.DBAccessProps;
+import bulma_components.Button;
 import js.html.HTMLOptionsCollection;
 import js.html.HTMLPropertiesCollection;
 import me.cunity.debug.Out.DebugOutput;
 import js.html.Document;
 import js.Browser;
 import js.html.Window;
-import js.html.HTMLCollection;
 import js.html.HTMLFormControlsCollection;
+import js.html.FormElement;
+import js.html.HTMLCollection;
 import js.html.SelectElement;
 import haxe.macro.Type.Ref;
 import js.html.InputElement;
@@ -33,6 +51,7 @@ import react.ReactEvent;
 import react.ReactRef;
 import react.ReactMacro.jsx;
 import react.ReactUtil.copy;
+import redux.Redux.Dispatch;
 import shared.DbData;
 import shared.DBMetaData;
 import view.shared.FormBuilder;
@@ -51,45 +70,67 @@ import model.Contact;
 
 using  shared.Utils;
 using Lambda;
+using StringTools;
 
 /**
  * 
  */
-
+@:connect
 class Edit extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
-		{label:'Schließen',action:'restore',section: 'List'},		
-		{label:'Speichern + Schließen',action:'updateAndClose'},
+		{label:'Schließen',action:'close'},		
+		//{label:'Speichern + Schließen',action:'update', then:'close'},
 		{label:'Speichern',action:'update'},
-		{label:'Neu', action:'insert'},
-		{label:'Löschen',action:'delete'}
-	];
+		{label:'Zurücksetzen',action:'reset'},
+		{separator:true},
+		//{label:'Spenden Bearbeiten',action:'showSelectedDeals', disabled:true, section: 'Edit', classPath:'view.data.contacts.Deals'},	
+		//{label:'Konten Bearbeiten',action:'listAccounts', disabled:true, section: 'Edit', classPath:'view.data.contacts.Accounts'},
+		{label:'Verlauf',action:'listHistory', section: 'Edit', classPath:'view.data.contacts.History'}
+	];	
+	public static var classPath = Type.getClassName(Edit);
 
-	var contact:Contact;
-	var dbData: shared.DbData;
-	var dbMetaData:shared.DBMetaData;
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
+	var dealsAreOpen:Bool;
 	var formApi:FormApi;
 	var formBuilder:FormBuilder;
 	var formFields:DataDisplay;
+	var dealsFormRef:ReactRef<FormElement>;
 	var formRef:ReactRef<FormElement>;
 	var fieldNames:Array<String>;
+	var ormRefs:Map<String,ORMComps>;
+	var accountsFormRef:ReactRef<FormElement>;
+	var historyFormRef:ReactRef<FormElement>;
 	var baseForm:BaseForm;
-	
+	var contact:Contact;
+	var dbData: shared.DbData;
+	var dbMetaData:shared.DBMetaData;
+	var modals:Map<String,Bool>;	
+	var mounted:Bool = false;
+	var _trace:Bool = false;
+	var dealDataAccess:DataAccess;
+	var dealFieldNames:Array<String>;
+	var dealDataDisplay:Map<String,DataState>;
+	var accountDataAccess:DataAccess;
+	var accountFieldNames:Array<String>;
+	var accountDataDisplay:Map<String,DataState>;
+
 	public function new(props) 
 	{
 		super(props);
+		ormRefs = new Map();
+		_trace = true;
+		accountsFormRef = React.createRef();
+		dealsFormRef = React.createRef();
+		formRef = React.createRef();
+		historyFormRef = React.createRef();
 		trace(props.match.params);
-		state = initialState = {
-			//id:null,//2000328,
-			//edited_by: props.user.id,
-			//mandator: props.user.mandator
-		};	
-
+		//TODO: EDIT MULTIPLE CONTACTS
+		if(props.dataStore.contactData != null && props.match.params.id == null)
+			props.match.params.id = Std.string(props.dataStore.contactData.keys().next());		
 		//REDIRECT WITHOUT ID OR edit action
-		if(props.match.params.id==null && ~/edit(\/)*$/.match(props.match.params.action) )
+		if(props.match.params.id==null && ~/open(\/)*$/.match(props.match.params.action) )
 		{
 			trace('nothing selected - redirect');
 			var baseUrl:String = props.match.path.split(':section')[0];
@@ -97,64 +138,29 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			return;
 		}		
 		dataAccess = ContactsModel.dataAccess;
-		fieldNames = initFieldNames(dataAccess['update'].view.keys());
+		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
 		dataDisplay = ContactsModel.dataDisplay;
-		//trace('...' + Reflect.fields(props));
-		//formRef = React.createRef();
-		/*if(props.match.params.id!=null)
-			initialState.id = Std.parseInt(props.match.params.id);
-		
+		//DEALS
+		dealDataAccess = DealsModel.dataAccess;
+		dealFieldNames = BaseForm.initFieldNames(dealDataAccess['open'].view.keys());
+		dealDataDisplay = DealsModel.dataDisplay;
+		//ACCOUNTS
+		accountDataAccess = AccountsModel.dataAccess;
+		accountFieldNames = BaseForm.initFieldNames(accountDataAccess['open'].view.keys());
+		accountDataDisplay = AccountsModel.dataDisplay;
+
 		if(props.dataStore.contactData != null)
-		trace(props.dataStore.contactData.keys().next());
-		//Out.dumpStack(CallStack.callStack());
-		// FOR NOW IGNORE THE dataStore and Observer
-		if(initialState.id!=null && props.dataStore.contactData != null && props.dataStore.contactData.exists(initialState.id))
-		{
-			actualState = {edited_by: props.user.id,mandator: props.user.mandator};
-			initialState = loadContactData(initialState.id);
-			//actualState = copy(initialState);
-			//select(props.data['id'], 
-					//[Std.int(props.data['id'])=>props.data], props.parentComponent.props.match);
-			trace(actualState.creation_date);	
-			trace(contact.fieldsModified);
-			//props.select(initialState.id,[initialState.id => initialState], props.match);
-			//OK we got the data
-		/*	actualState = view.shared.io.Observer.run(actualState, function(newState){
-				actualState = newState;
-				trace(actualState);
-			});	
-		}
-		else if(initialState.id!=null && (props.dataStore.contactData == null || !props.dataStore.contactData.exists(initialState.id))){			
-			//actualState = copy(initialState);
-			trace(actualState);
-			trace('no data - redirect');
-			var baseUrl:String = props.match.path.split(':section')[0];
-			props.history.push('${baseUrl}List/get');
-			return;			
-		}*/
-		
+			trace(props.dataStore.contactData.keys().next());
+				
 		state =  App.initEState({
-			dataTable:[],
-			actualState:{edited_by: props.userState.dbUser.id,mandator: props.userState.dbUser.mandator},
-			initialState:loadContactData(props.match.params.id),
+			//dataTable:[],
+			actualState:null,
+			initialData:null,
+			mHandlers:menuItems,
 			loading:false,
-			mHandlers:[
-				{
-					handler:mHandlers,
-					handlerAction:SaveAndClose,
-					label:'Speichern + Schließen',
-				},
-				{
-					handler:mHandlers,
-					handlerAction:Save,
-					label:'Speichern',
-				},
-				{
-					handler:mHandlers,
-					handlerAction:Close,
-					label:'Schließen',
-				}				
-			],
+			model:'contacts',
+			ormRefs:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
+			relDataComps:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
 				{
@@ -166,221 +172,240 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				,{	
 					section: props.match.params.section==null? 'Edit':props.match.params.section, 
 					sameWidth: true
-				}				
-			),	
+				}),	
 			/*storeListener:App.store.subscribe(function(){
 				trace(App.store.getState().dataStore);
 			}),*/
-			values:new Map<String,Dynamic>()
+			values:new Map<String,ReactComponentOf<DataFormProps,FormState>>()
 		},this);
-		trace(state.initialState.id);
+		
+		trace(state.initialData);
+		//trace(state.initialData.id);
+		//loadContactData(Std.parseInt(props.match.params.id));
 	}
 
-	function loadContactData(id:Int)
+	public function close() {
+		// TODO: CHECK IF MODIFIED + ASK FOR SAVING / DISCARDING
+		//var baseUrl:String = props.match.path.split(':section')[0];
+		props.history.push('${props.match.path.split(':section')[0]}List/get');
+	}
+
+	function showSelectedAccounts(?ev:Event) {
+		//trace('---' + Type.typeof(ormRefs['accounts'].compRef));
+		trace('---' + ormRefs['accounts'].compRef.state.dataGrid.state.selectedRows);
+		var sRows:IntMap<Bool> = ormRefs['accounts'].compRef.state.dataGrid.state.selectedRows;
+		for(k in sRows.keys()){
+			ormRefs['accounts'].compRef.props.loadData(k,ormRefs['accounts'].compRef);
+		}
+	}
+
+	function showSelectedDeals(?ev:Event) {
+		//trace(state.sideMenu);
+		//Browser.document.querySelector('#deals').scrollIntoView();
+		//trace(Reflect.fields(dealsRef.current));
+		//dealsRef.scrollIntoView();
+		//trace(ormRefs);
+		trace('---' + Type.typeof(state.relDataComps));
+		//trace('---' + ormRefs['deals'].compRef.state.dataGrid.state.selectedRows);
+		trace('---' + state.relDataComps.keys().hasNext());
+		//trace('---' + props.children);
+		var sRows:IntMap<Bool> = ormRefs['deals'].compRef.state.dataGrid.state.selectedRows;
+		for(k in sRows.keys()){
+			ormRefs['deals'].compRef.props.loadData(k,ormRefs['deals'].compRef);
+		}
+		//dealsFormRef.current.scrollIntoView();
+		trace(dealsFormRef.current);
+		trace(dealsFormRef.current.querySelectorAll('.selected').length);
+		if(ev != null){
+			var targetEl:Element = cast(ev.target, Element);
+			trace(Std.string(targetEl.dataset.id));
+		}
+	}
+
+	function loadContactData(id:Int):Void
 	{
 		trace('loading:$id');
 		if(id == null)
-			return null;
+			return;
 		var p:Promise<DbData> = props.load(
 			{
 				classPath:'data.Contacts',
 				action:'get',
-				filter:({id:$id,mandator:1}),
+				filter:{id:id,mandator:1},
+				resolveMessage:{
+					success:'Kontakt ${id} wurde geladen',
+					failure:'Kontakt ${id} konnte nicht geladen werden'
+				},
 				table:'contacts',
-				userState:props.userState
+				dbUser:props.userState.dbUser,
+				devIP:App.devIP
 			}
 		);
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
-			setState({loading:false, dataTable:data.dataRows});
-		});
-		var data = props.dataStore.contactData.get(id);
-		trace(data);	
-		for(k=>v in data.keyValueIterator())
-		{
-			try{
-				//trace('$k:$v');
-				Reflect.setField(actualState,k, v);
-				}
-			catch(ex:Dynamic)
+			if(data.dataRows.length==1)
 			{
-				trace(ex);
-			}		
-		}
-		
-		contact = new Contact(actualState, dataAccess['update'].view);
-		//contact = actualState;
-		trace(actualState);
-		//trace('Rtti:' + Rtti.getRtti(Contact).fields[0].meta);
-		trace(contact.fieldsModified);		
-		trace('contact.fieldsModified:' + contact.fieldsModified);		
-		//initialState = copy(actualState);
-		BaseForm.compareStates(this);	
-		//trace(actualState);	
-		//trace(initialState);	
-		/*actualState = view.shared.io.Observer.run(initialState, function(newState){
-				actualState = newState;
-			trace(actualState);
-		});*/
-		//props.select(initialState.id,[initialState.id => initialState], props.match);
-		return initialState;
+				var data = data.dataRows[0];
+				trace(data);	
+				//if( mounted)
+				var contact:Contact = new Contact(data);
+				if(mounted)
+					setState({loading:false, actualState:contact, initialData:copy(contact)});
+				//state = copy({loading:false, actualState:contact, initialData:contact});
+				trace('$mounted ${contact.id}');
+				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
+				//setState({initialData:copy(state.actualState)});
+				trace(props.location.pathname + ':' + untyped state.actualState.date_of_birth);
+				props.history.replace(props.location.pathname.replace('open','update'));
+			}
+		});
 	}
-	
-	/*static function mapStateToProps(aState:AppState) 
-	{
-		trace(aState);
-		return {
-			userState:aState.user
-		};
-	}*/
 	
 	public function delete(ev:ReactEvent):Void
 	{
 		trace(state.selectedRows.length);
 		var data = state.formApi.selectedRowsMap(state);
 	}
+
+	public function update2():Void
+	{
+		var data2save = state.actualState.allModified();
+		//{edited_by:props.userState.dbUser.id}
+	}
+
+	override function componentDidCatch(error, info) {
+		// Display fallback UI
+		//if(state.mounted)
+		try{
+			this.setState({ hasError: true });
+		}
+		catch(ex:Dynamic)
+		{if(_trace) trace(ex);}
+		
+		if(_trace) trace(error);
+		Out.dumpStack(CallStack.callStack());
+	}		
 		
 	override public function componentDidMount():Void 
 	{	
-		trace('mounted');
-		//initSession();
+		trace('mounted:' + mounted);
+		mounted = true;
+		trace(props.children);
+
+		if(props.match.params.id != null){
+			trace(props.match.params);
+			loadContactData(Std.parseInt(props.match.params.id));	
+		}
+		trace(props.children);
 	}
 	
-	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
-		trace('propsChanged:${nextProps!=props}');
-		trace('stateChanged:${nextState!=state}');
-		// FOR NOW IGNORE THE dataStore and Observer
-		if(false && props.dataStore != null && actualState == null)
-		{
-			actualState = loadContactData(initialState.id);
-			setState({
-				initialState:actualState,
-				actualState:actualState
-			});
-		}		
+	/*override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
+		trace('propsChanged:${nextProps!=props} stateChanged:${nextState!=state}');				
 		if(nextState!=state)
 			return true;
 		return nextProps!=props;
-	}
+	}*/
 
 	override public function componentWillUnmount() {
 		//state.storeListener();
 		return;
-		var actData:IntMap<Map<String,Dynamic>> = [initialState.id => [
-		for(f in Reflect.fields(actualState))
-			f => Reflect.field(actualState,f)		
+		var actData:IntMap<Map<String,Dynamic>> = [state.initialData.id => [
+		for(f in Reflect.fields(state.actualState))
+			f => Reflect.field(state.actualState,f)		
 		]];
 		trace(actData);
 		App.store.dispatch(DataAction.SelectActContacts(actData));
 	}
 
-	override function mHandlers(event:Event) {
-		//trace(Reflect.fields(event));
-		//trace(Type.typeof(event));
-		event.preventDefault();
-		//var target:FormElement = cast(event.target, FormElement);
-		var target:InputElement = cast(event.target, InputElement);
-		//trace(Reflect.fields(target));
-		trace(target.value);
-		var dataSet:DOMStringMap = target.dataset;
-		trace(dataSet.action);
-		//var elements:HTMLCollection = target.elements;
-		//trace(elements.each(function(name:String, el:Dynamic)
-		//trace(elements.dynaMap());
-		//trace(state.actualState);
-		trace(state.initialState.id);
-		/*{
-			//trace('$name => $el');
-			//trace(el.value);
-		});		
-		var doc:Document = Browser.window.document;
-
-		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
-		var elements:HTMLCollection = formElement.elements;
-		for(k in dataAccess['update'].view.keys())
-		{
-			if(k=='id')
-				continue;
-			try 
-			{
-				var item:Dynamic = elements.namedItem(k);
-				//trace('$k => ${item.type}:' + item.value);
-				Reflect.setField(actualState, item.name, switch (item.type)
-				{
-					//case DateControl|DateTimrControl:
-
-					case 'checkbox':
-					//trace('${item.name}:${item.checked?true:false}');
-					item.checked?1:0;
-					case 'select-multiple'|'select-one':
-					var sOpts:HTMLOptionsCollection = item.selectedOptions;
-					//trace (sOpts.length);
-					sOpts.length>1 ? [for(o in 0...sOpts.length)sOpts[o].value ].join('|'):item.value;
-					default:
-					//trace('${item.name}:${item.value}');
-					item.value;
-				});			
-			}
-			catch(ex:Dynamic)
-			{
-				trace(ex);
-			}
-		}
-		//setState({actualState: actualState});
-		compareStates();
-		//trace(initialState);
-		//trace(actualState);*/
-		update();
+	public function registerRelDataComp(rDC:ReactComponentOf<DataFormProps,FormState>) {
+		
 	}
 
+	function registerOrmRef(ref:Dynamic) {
+		//trace(Type.typeof(ref));
+		switch(Type.typeof(ref)){
+			case TNull:
+				//do nothing
+			case TObject:
+				trace(Reflect.fields(ref));					
+				trace(Type.getClass(ref));					
+				//trace(ref.props);
+				//trace(ref.state);
+				//trace(ref.state.model);
+				if(ref.props !=null && ref.props.model!= null){						
+					//ormRefs[ref.props.model] = ref;
+					//ormRefs[ref.props.model] = ref.props.formRef.current;
+				}
+			case TClass(func)://matches component classes, i.e. ReactComponentOf<DataFormProps,FormState>
+				//trace(func);
+				var cL:Dynamic = Type.getClass(ref);
+				if(cL!=null){
+					//trace(Type.getClassName(cL));
+					try{
+						//trace(Reflect.fields(ref.props));
+						//trace(Reflect.fields(ref.state));
+						//trace(ref.state.model);
+						if(ref.props !=null && ref.props.model!= null){						
+							ormRefs[ref.props.model] = {
+								compRef:ref,
+								orms:new IntMap()
+							}
+						}
+					}
+					catch(ex:Exception){
+						trace(ex);
+					}
+				}
+				default:
+				trace(ref);
+		}
+	};
+
+	public function registerORM(refModel:String,orm:ORM) {
+		if(ormRefs.exists(refModel)){
+			ormRefs.get(refModel).orms.set(orm.id,orm);
+			trace(refModel);
+			setState({ormRefs:ormRefs});
+			//setState(copy(state,{ormRefs:ormRefs}));
+			//state.ormRefs = ormRefs;
+			trace(Reflect.fields(state));
+			//setState({ormRefs:ormRefs});
+		}
+		else{
+			trace('OrmRef $refModel not found!');
+		}
+	}
 
 	function update()
 	{
-		//trace(Reflect.fields(aState));
+		for(k=>v in state.relDataComps.keyValueIterator()){
+			trace('$k=>${v.props.save}');
+			v.props.save(v);
+		}
+		if(state.actualState != null)
+			trace('length:' + state.actualState.fieldsModified.length + ':' + state.actualState.fieldsModified.join('|') );
+		if(state.actualState == null || state.actualState.fieldsModified.length==0)
+			return;
+		var data2save = state.actualState.allModified();
 		var doc:Document = Browser.window.document;
 
 		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
 		var elements:HTMLCollection = formElement.elements;
-		for(k in dataAccess['update'].view.keys())
-		{
-			if(k=='id')
-				continue;
-			try 
-			{
-				var item:Dynamic = elements.namedItem(k);
-				//trace('$k => ${item.type}:' + item.value);
-				Reflect.setField(actualState, item.name, switch (item.type)
-				{
-					//case DateControl|DateTimrControl:
-
-					case 'checkbox':
-					//trace('${item.name}:${item.checked?true:false}');
-					item.checked?1:0;
-					case 'select-multiple'|'select-one':
-					var sOpts:HTMLOptionsCollection = item.selectedOptions;
-					//trace (sOpts.length);
-					sOpts.length>1 ? [for(o in 0...sOpts.length)sOpts[o].value ].join('|'):item.value;
-					default:
-					//trace('${item.name}:${item.value}');
-					item.value;
-				});			
-			}
-			catch(ex:Dynamic)
-			{
-				trace(ex);
-			}
-		}
-		//setState({actualState: actualState});
-		compareStates();
-		var aState:Dynamic = copy(actualState);
-		var dbaProps:DBAccessProps = 
-		{
-			action:'update',
+		var aState:Dynamic = copy(state.actualState);
+		var dbQ:DBAccessProps = {
 			classPath:'data.Contacts',
-			dataSource:null,
-		//	table:'contacts',
-			userState:props.user
-		};
+			action:'update',
+			data:data2save,
+			filter:{id:state.actualState.id,mandator:1},
+			resolveMessage:{
+				success:'Kontakt ${state.actualState.id} wurde aktualisiert',
+				failure:'Kontakt ${state.actualState.id} konnte nicht aktualisiert werden'
+			},
+			table:'contacts',
+			dbUser:props.userState.dbUser,
+			devIP:App.devIP
+		}
+		trace(props.match.params.action);
 		switch (props.match.params.action)
 		{
 			case 'insert':
@@ -390,137 +415,174 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					if(Reflect.field(aState,f)=='')
 						Reflect.deleteField(aState,f);
 				}
-				//Reflect.deleteField(aState,'id');
-				//Reflect.deleteField(aState,'creation_date');				
-				dbaProps.dataSource = [
-					"contacts" => [
-						"data" => aState,
-						"fields" => contact.fieldsModified
-					]
-				];
 			case 'delete'|'get':
-				dbaProps.dataSource = [
+				dbQ.dataSource = [
 					"contacts" => [
-						"filter" => 'id|${state.initialState.id}'
+						"filter" => {id:state.initialData.id}
 					]
 				];	
 			case 'update':
 				//Reflect.deleteField(aState,'creation_date');
-				trace('${initialState.id} :: creation_date: ${aState.creation_date} ${state.initialState.creation_date}');
-				//var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialState.id);
+				trace('${state.initialData.id} :: creation_date: ${aState.creation_date} ${state.initialData.creation_date}');
+				//var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialData.id);
 				//trace();
-				trace(contact.modified() + ':${contact.fieldsModified}');
-				for(f in fieldNames)
-				{
-					//UPDATE FIELDS WITH VALUES CHANGED
-					if(Reflect.field(aState,f)!=Reflect.field(initialState,f))
-					{
-						trace('$f:${Reflect.field(aState,f)}==${Reflect.field(initialState,f)}<<');
-						Reflect.setProperty(contact, f, Reflect.field(aState,f));
-					}						
-				}
-				//trace(aState);
-				//trace(initialState);
-				if(!contact.modified())
+				if(state.actualState != null)
+				trace(state.actualState.modified() + ':${state.actualState.fieldsModified}');
+
+				trace(state.actualState.id);
+				if(!state.actualState.modified())
 				{
 					//TODO: NOCHANGE ACTION => Display Feedback nothing to save
 					trace('nothing modified');
 					return;
 				}
-
-				dbaProps.dataSource = [
+				trace(state.actualState.allModified());
+				/*dbQ.dataSource = [
 					"contacts" => [
-						"data" => contact.store(),
-						"filter" => 'id|${initialState.id}'
+						"data" => state.actualState.allModified(),
+						"filter" => {id:state.actualState.id}
 					]
 				];
-				trace(dbaProps.dataSource["contacts"]["filter"]);
+				trace(dbQ.dataSource["contacts"]["filter"]);*/
 		}
-		props.store.dispatch(DBAccess.execute(dbaProps));
-		//App.store.dispatch(DBAccess.execute(dbaProps).then(function(d:Dynamic)trace(d)));
-
-		//props.parentComponent.props.edit(dbaProps);
+		
+		//App.store.dispatch(CRUD.update(dbQ));	
+		var p:Promise<Dynamic> = App.store.dispatch(CRUD.update(dbQ));	
+		p.then(function(d:Dynamic){
+			trace(d);
+			loadContactData(state.actualState.id);
+		});
 	}
 
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.dataTable != null));
+		//trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.actualState != null));
 		//trace('###########loading:' + state.loading);
-		trace('########### action:' + props.match.params.action);
+		//trace('########### action:' + props.match.params.action);
 
 		return switch(props.match.params.action)
 		{
-			case 'update':
+			case 'open'|'update':
 				//trace(state.mHandlers);
-				//trace(actualState);
+				//trace(state.actualState.id);
 				/*var fields:Map<String,FormField> = [
-					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 				];*/
-				(actualState==null ? state.formApi.renderWait():
-				state.formBuilder.renderForm({
+				(state.actualState==null ? state.formApi.renderWait():
+				jsx('<>
+				${state.formBuilder.renderForm({
 					mHandlers:state.mHandlers,
 					fields:[
-						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
 					model:'contact',
-					ref:formRef,
+					ref:null,					
 					title: 'Stammdaten' 
-				},actualState));
+				},state.actualState)}
+				${relData()}
+				${relDataLists()}
+				</>
+				'));
 				//null;
 			case 'insert':
-				trace(actualState);
+				//trace(state.actualState);
 				state.formBuilder.renderForm({
 					mHandlers:state.mHandlers,
 					fields:[
-						for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
+						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
 					model:'contact',
-					ref:formRef,
-					title: 'Stammdaten' 
-				},actualState);
+					ref:null,
+					title: 'Kontakt - Neue Stammdaten' 
+				},state.actualState);
 			default:
 				null;
 		}
 	}
 	
+	function relData():ReactFragment {
+		return [
+			for(model in ['deals','accounts']){
+				if(ormRefs.exists(model))
+				for(orm in ormRefs[model].orms.array()) {
+					${orm.formBuilder.renderForm({
+						//mHandlers:state.mHandlers,
+						fields:
+							if(model=='deals')
+								[for(k in dealDataAccess['open'].view.keys())
+									k => dealDataAccess['open'].view[k]]
+							else 
+								[for(k in accountDataAccess['open'].view.keys())
+									k => accountDataAccess['open'].view[k]]							
+						,
+						model:model,
+						ref:null,					
+						title: (model=='deals'?'Spenden':'Konten')
+					},orm)}
+				}
+				
+			}
+		];
+	}//'Kontakt - Bearbeite ' + 
+
+	function relDataLists():ReactFragment {
+
+		return jsx('
+		<>
+			<$Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" key="deals" onDoubleClick=${showSelectedDeals}  filter=${{contact:props.match.params.id, mandator:'1'}}></$Deals>
+			<$Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" key="accounts" action="get"  onDoubleClick=${showSelectedAccounts} filter=${{contact:props.match.params.id, mandator:'1'}}></$Accounts>
+		</>
+		');
+	}
+	/**				//${relData()} 
+	 * 	
+			isActive=${true}
+	 */
+	
 	override function render():ReactFragment
 	{
 		trace(props.match.params.action);		
-		//trace('state.loading: ${state.loading}');		
+		if(state.initialData==null)
+			return null;
+		//trace(state.modals);
+		//trace('state.loading: ${state.loading}');	
+		
 		return switch(props.match.params.action)
 		{	
-			case 'update':
-			 //(state.loading || state.initialState.edited_by==0 ? state.formApi.renderWait():
+			case 'open':
+			 //(state.loading || state.initialData.edited_by==0 ? state.formApi.renderWait():
 				state.formApi.render(jsx('
-						${renderResults()}
+					${renderResults()}
 				'));	
 			case 'insert':
 				state.formApi.render(jsx('
-						${renderResults()}
+					${renderResults()}
 				'));		
 			default:
 				state.formApi.render(jsx('
-						${renderResults()}
+					${renderResults()}		
 				'));			
 		}
 	}
-	
-	function updateMenu(?viewClassPath:String):MenuProps
-	{
-		var sideMenu = state.sideMenu;
-		trace(sideMenu.section);
-		for(mI in sideMenu.menuBlocks['Contact'].items)
-		{
-			switch(mI.action)
-			{
-				case 'editTableFields':
-					mI.disabled = state.selectedRows.length==0;
-				case 'save':
-					mI.disabled = state.clean;
-				default:
-			}			
-		}
-		return sideMenu;
+
+	public function select(id:Int, 
+		?data:StringMap<StringMap<Dynamic>>, 
+		?match:RouterMatch) {
+		trace(id);
 	}
 
+	static function mapDispatchToProps(dispatch:Dispatch) {
+		trace('here we should be ready to load');
+        return {
+            load: function(param:DBAccessProps) return dispatch(CRUD.read(param))
+        };
+	}
+		
+	static function mapStateToProps(aState:AppState) 
+	{
+		return {
+			userState:aState.userState
+		};
+	}
+		
 }

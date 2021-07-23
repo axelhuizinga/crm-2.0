@@ -35,7 +35,7 @@ class BinaryLoader {
 		//var s = new json2object.JsonWriter<DbQuery>();
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbAP);//.toHex();
-		//trace(dbQuery);
+		trace(dbQuery);
 		//Out.dumpObject(dbQuery);
 		//var b:Bytes = s.serialize(dbQuery);
 		s.serialize(dbQuery);

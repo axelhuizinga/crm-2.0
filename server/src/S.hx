@@ -94,6 +94,7 @@ class S
 	public static var secret:String;
 	public static var dbh:PDO;
 	public static var syncDbh:PDO;
+	public static var viciboxDbh:PDO;
 	public static var last_request_time:Date;
 	public static var host:String;
 	public static var request_scheme:String;
@@ -178,12 +179,13 @@ class S
 				action = params.get('action');		
 				if(params.get('extDB'))
 				{
-					//CONNECT DIALER DB	
+					//CONNECT DIALER CRM DB	
 					trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM');
 					syncDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM',
 						dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
 					//trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
 				}
+
 				#if debug
 				dbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);	
 				params.set('debug',true);
@@ -224,12 +226,18 @@ class S
 			//host=$dbHost;
 		dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
 			Syntax.array([PDO.ATTR_PERSISTENT,true]));
-		
+		if(params.get('viciboxDB')){
+			//CONNECT DIALER DB	
+			trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxDB');					
+			viciboxDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxDB',
+				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
+			trace(viciboxDbh);
+		}		
 		//trace(dbh);!=null
 		trace('$devIP connect2syncDB:'+ (params.get('extDB')||params.get('action').indexOf('sync')==0?'Y':'N'));
 		if(params.get('extDB')||params.get('action').indexOf('sync')==0)
 		{
-			//CONNECT DIALER DB	
+			//CONNECT dialer crm DB	
 			trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM');
 			syncDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM',
 				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));

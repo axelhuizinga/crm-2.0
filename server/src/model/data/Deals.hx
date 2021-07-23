@@ -1,4 +1,8 @@
 package model.data;
+import php.db.PDO;
+import php.Lib;
+import php.db.PDOStatement;
+import php.NativeArray;
 import Model;
 
 class Deals extends Model
@@ -13,9 +17,18 @@ class Deals extends Model
 	function go():Void {
 		trace(action);
 		switch(action){
+			case 'getQC':
+				getQC();
 			case _:
 				run();
 		}		
 	}	
+
+	function getQC(){
+		var stmt:PDOStatement = S.viciboxDbh.query('SELECT * FROM vicidial_list WHERE list_id=1900 AND status="NEW"');
+		var qcData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		sendRows(qcData);
+		//qc_deals:NativeArray = execute('');
+	}
 	
 }

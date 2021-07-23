@@ -33,6 +33,7 @@ typedef DBAccessProps = {
 	?dbUser:DbUser,
 	?devIP:String,	
 	?extDB:Bool,	
+	?viciboxDB:Bool,
 	?filter:Dynamic,
 	?data:Dynamic,	
 	?order:Dynamic,

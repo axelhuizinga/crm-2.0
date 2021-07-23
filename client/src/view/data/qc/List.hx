@@ -1,10 +1,11 @@
 package view.data.qc;
+import shared.Utils;
 import data.DataState;
 import react.router.RouterMatch;
 import js.Browser;
 import js.html.NodeList;
 import js.html.TableRowElement;
-import lib.shared.Utils;
+import shared.Utils;
 import action.DataAction;
 import state.AppState;
 import haxe.Constraints.Function;
@@ -27,7 +28,7 @@ import view.shared.io.FormApi;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import loader.BinaryLoader;
-import view.table.Table;
+import view.grid.Grid;
 import model.Contact;
 
 @:connect
@@ -67,7 +68,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
 				{
-					dataClassPath:'data.Contacts',
+					dataClassPath:'data.Deals',
 					label:'Liste',
 					section: 'List',
 					items: menuItems
@@ -122,35 +123,21 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
 			{mandator:props.userState.dbUser.mandator })
 		);
-		/*var dS:db.DataSource = [
-			'contacts' => [
-				'alias' => 'con',
-				'fields' => dataDisplay.keys(),
-				//	TODO: BUILD FILTER FUNCTION
-				'filter' => filter,
-			],				
-			'vicicial_list' => [
-				'alias' => 'v'
-				'jCond' => 'con.id=vendor_lead_code'
-			],
-			'sepa_return_codes' => [
-				'fields' => 'description',
-				'jCond' => 'drs.sepa_code=code'
-			]
-		];*/
 		trace('hi $filter');
 		BinaryLoader.create(
 			'${App.config.api}', 
 			{
 				id:props.userState.dbUser.id,
 				jwt:props.userState.dbUser.jwt,
-				classPath:'data.Contacts',
-				action:'get',
+				classPath:'data.Deals',
+				action:'getQC',
+				viciboxDB: true,
 				filter:filter,
+				dbUser:props.userState.dbUser,
 				devIP:App.devIP,
 				limit:props.limit,
 				offset:offset>0?offset:0,
-				table:'contacts'
+				table:'vicidial_list'
 			},
 			function(data:DbData)
 			{			
@@ -275,11 +262,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{//  ${...props}
 			case 'get':
 				jsx('
-					<form className="tabComponentForm" >
-						<$Table id="fieldsList" data=${state.dataTable}  parentComponent=${this}
-						${...props} dataState = ${dataDisplay["contactList"]} renderPager=${{function()BaseForm.renderPager(this);}}
-						className="is-striped is-hoverable" fullWidth=${true}/>
-					</form>
+					<Grid id="contactList" data=${state.dataTable}
+				${...props} dataState = ${dataDisplay["contactList"]} 
+				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>		
 				');
 			default:
 				null;
@@ -297,7 +282,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
-				${renderResults()}
+		<form className="tabComponentForm"  >
+			${renderResults()}
+		</form>
 		'));		
 	}
 

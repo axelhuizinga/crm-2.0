@@ -28,8 +28,8 @@ import react.ReactUtil;
 import react.ReactType;
 import redux.Redux.Dispatch;
 import action.async.LiveDataAccess;
-import view.data.contacts.List;
-import view.data.contacts.Edit;
+import view.data.qc.List;
+import view.data.qc.Edit;
 
 import model.contacts.ContactsModel;
 import action.async.DBAccess;

@@ -25,7 +25,7 @@ class Deals extends Model
 	}	
 
 	function getQC(){
-		var stmt:PDOStatement = S.viciboxDbh.query('SELECT * FROM vicidial_list WHERE list_id=1900 AND status="NEW"');
+		var stmt:PDOStatement = S.viciboxDbh.query('SELECT * FROM vicidial_list WHERE list_id=1900 AND status="NEW" ORDER BY last_local_call_time');
 		var qcData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		sendRows(qcData);
 		//qc_deals:NativeArray = execute('');

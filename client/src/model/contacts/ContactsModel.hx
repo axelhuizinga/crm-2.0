@@ -61,6 +61,22 @@ class ContactsModel
 			]
 		}
 	];
+	
+	public static var qcColumns:Map<String,DataColumn> = [
+		'first_name'=>{label:'Vorname', flexGrow:0},
+		'last_name'=>{label:'Name', flexGrow:0},
+		//'email'=>{label:'Email'},
+		'phone_number'=>{label:'Telefon'},				
+		'address1'=>{label: 'Straße', showSearch:false},		
+		'address2'=>{label: 'Nr.', showSearch:false},		
+		//'care_of'=>{label: 'Adresszusatz', flexGrow:1, showSearch:false},
+		'postal_code'=>{label: 'PLZ'},
+		'city'=>{label: 'Ort'},
+		'id' => {label:'Kontakt ID',show:false},
+		'list_id' => {show:false},
+		'last_local_call_time'=>{label: 'Datum',cellFormat: function(v:String) return v!=null? DateTools.format(Date.fromString(v), "%d.%m.%Y"):''},
+		'lead_id' => {show:false},
+	];
 
 	public static var gridColumns:Map<String,DataColumn> = [
 		'first_name'=>{label:'Vorname', flexGrow:0},
@@ -108,5 +124,9 @@ class ContactsModel
 
 	public static var dataGridDisplay:Map<String,DataState> = [
 		'contactList' => {columns:gridColumns}
+	];	
+
+	public static var qcListDisplay:Map<String,DataState> = [
+		'contactList' => {columns:qcColumns}
 	];	
 }

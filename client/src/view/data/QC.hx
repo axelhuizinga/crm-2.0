@@ -1,5 +1,6 @@
 package view.data;
 
+import view.grid.GridProps.GridState;
 import action.DataAction;
 import data.DataState;
 import haxe.Constraints.Function;
@@ -63,8 +64,14 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 	var dataAccess:DataAccess;	
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
-	
-	public static var initialState:Contact;
+	var parentState:FormState;
+	//static var _me:QC;
+	/**
+	 * 		if(parentState.relDataComps!=null){
+			parentState.relDataComps[Type.getClassName(Type.getClass(this))] = this;
+		}
+	 */
+	//public static var initialState:Contact;
 
 	public function new(props) 
 	{
@@ -111,8 +118,12 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 			},
 			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
 			{
-				trace('select:$id selectType:${selectType}');
-				//dispatch(DataAction.CreateSelect(id,data,match));
+				//trace('select:$id selectType:${selectType}' + state.dataGrid);
+				if(id<0){
+					trace('nono...');
+					return;
+				}
+				//dispatch(DataAction.CreateSelect(id,data,match));contactListQC
 				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
 			},
 			//setStateFromChild(cState:FormState)
@@ -156,6 +167,9 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{	
 		trace(props.location.pathname);
+		if(parentState.relDataComps!=null){
+			parentState.relDataComps[Type.getClassName(Type.getClass(this))] = this;
+		}		
 		//setState({mounted:true});
 		return;
 		var baseUrl:String = props.match.path.split(':section')[0];

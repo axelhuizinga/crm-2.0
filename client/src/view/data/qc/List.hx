@@ -59,7 +59,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		//baseForm =new BaseForm(this);
-		dataDisplay = ContactsModel.dataGridDisplay;
+		dataDisplay = ContactsModel.qcListDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			dataTable:[],
@@ -137,6 +137,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				devIP:App.devIP,
 				limit:props.limit,
 				offset:offset>0?offset:0,
+				order:'last_local_call_time',
 				table:'vicidial_list'
 			},
 			function(data:DbData)
@@ -258,11 +259,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		if( state.dataTable.length==0)
 			return state.formApi.renderWait();
 		//trace('###########loading:' + state.rows[0]);
+		trace(state.dataTable[0]);
 		return switch(props.match.params.action)
 		{//  ${...props}
 			case 'get':
 				jsx('
-					<Grid id="contactList" data=${state.dataTable}
+					<Grid id="contactListQC" data=${state.dataTable} selectBy="lead_id" 
 				${...props} dataState = ${dataDisplay["contactList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>		
 				');

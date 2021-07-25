@@ -179,7 +179,8 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			className:(columnDataState.className==null?rowClass:columnDataState.className +' '+ rowClass),
 			data:rdMap[fN],
 			dataDisplay:columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap[fN]):rdMap[fN],
-			id:rdMap['id'],
+			id:(rdMap['id']==null&&props.selectBy!=null?rdMap[props.selectBy]:rdMap['id']),
+			//id:rdMap['id'],
 			name:fN,
 			pos:{column:column, row:row},
 			show:columnDataState.show != false,
@@ -219,7 +220,10 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			//trace(cD);"r"+cD.pos.row+"c"+cD.pos.column
 			//trace(row + ':' + cD.id + '_' + cD.pos.column);
 			//trace(cD.name+':'+cD.title+':'+cD.show);
-			if (cD.show)				
+			if (cD.show){
+			/*	if(cD.id==null&&props.selectBy!=null){
+					cD.id = 
+				}*/
 				rCs.push(
 					if(!props.readOnly)
 						jsx('<div className=${cD.className} key=${cD.id + '_' + cD.name} data-value=${cD.data} 
@@ -234,6 +238,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 				${(cD.dataDisplay==null||cD.dataDisplay==''?<span>&nbsp;</span>:cD.dataDisplay)}
 			</div>')					
 				);
+			}
 		}
 		return rCs;
 	}

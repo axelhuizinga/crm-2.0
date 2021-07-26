@@ -69,6 +69,7 @@ class LiveDataAccess
 			if(props.id == null)
 				return null;
 			var aState:AppState = getState();
+			//trace(aState);
 			var tableRoot:Array<String> = FormApi.getTableRoot(props.match);			
 			trace(tableRoot);
 			trace(Reflect.fields(aState));
@@ -102,6 +103,15 @@ class LiveDataAccess
 					aState.locationStore.history.push('${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}',
 					{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
 					return dispatch(DataAction.SelectDeals(props.data));
+				case 'QC':
+					sData = aState.dataStore.qcData;
+					//trace(sData);
+					//trace(Type.getInstanceFields(Type.getClass(sData)));
+					sData = selectType(props.id, props.data, sData, props.selectType);
+					trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
+					trace(sData);
+					//aState.locationStore.history.push('${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}',					{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
+					return dispatch(DataAction.SelectQCs(sData));					
 				default:
 					return null;
 			}		

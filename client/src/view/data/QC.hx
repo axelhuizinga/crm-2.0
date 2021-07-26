@@ -118,7 +118,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 			},
 			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
 			{
-				//trace('select:$id selectType:${selectType}' + state.dataGrid);
+				trace('select:$id selectType:${selectType}' + data.toString());
 				if(id<0){
 					trace('nono...');
 					return;
@@ -166,10 +166,8 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 		
 	override public function componentDidMount():Void 
 	{	
-		trace(props.location.pathname);
-		if(parentState.relDataComps!=null){
-			parentState.relDataComps[Type.getClassName(Type.getClass(this))] = this;
-		}		
+		trace(props.location.pathname +':' + state.uid);
+
 		//setState({mounted:true});
 		return;
 		var baseUrl:String = props.match.path.split(':section')[0];

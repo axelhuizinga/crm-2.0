@@ -74,8 +74,9 @@ class ContactsModel
 		'city'=>{label: 'Ort'},
 		'id' => {label:'Kontakt ID',show:false},
 		'list_id' => {show:false},
-		'last_local_call_time'=>{label: 'Datum',cellFormat: function(v:String) return v!=null? DateTools.format(Date.fromString(v), "%d.%m.%Y"):''},
+		'entry_list_id' => {show:false},
 		'lead_id' => {show:false},
+		'last_local_call_time'=>{label: 'Datum',cellFormat: function(v:String) return v!=null? DateTools.format(Date.fromString(v), "%d.%m.%Y"):''},
 	];
 
 	public static var gridColumns:Map<String,DataColumn> = [

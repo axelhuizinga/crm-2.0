@@ -54,6 +54,7 @@ enum  DataAction
 	SelectBookings(sData:IntMap<Map<String,Dynamic>>);
 	SelectReturnDebits(sData:IntMap<Map<String,Dynamic>>);
 	SelectDeals(sData:IntMap<Map<String,Dynamic>>);
+	SelectQCs(sData:IntMap<Map<String,Dynamic>>);
 	Sync(dataAccess:DBAccessProps);
 	UpStore(sData:IntMap<Map<String,Dynamic>>);
 	Unselect(id:Int);

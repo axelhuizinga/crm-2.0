@@ -1,5 +1,6 @@
 package view.grid;
 
+import react.router.ReactRouter;
 import react.ReactUtil;
 import haxe.Exception;
 import js.html.TimeElement;
@@ -34,6 +35,7 @@ import react.ReactRef;
 import react.ReactComponent.ReactFragment;
 import react.ReactComponent;
 import react.ReactComponent.*;
+import react.router.ReactRouter.matchPath;
 import react.ReactMacro.jsx;
 import shared.Utils;
 
@@ -42,6 +44,7 @@ import shared.Utils;
  * @author axel@cunity.me
  */
 
+ @:wrap(ReactRouter.withRouter)
 class Grid extends ReactComponentOf<GridProps, GridState>
 {
 	var fieldNames:Array<String>;
@@ -190,14 +193,15 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 
 	function renderCells(rdMap:Map<String,Dynamic>, row:Int):ReactFragment
 	{
-		//trace(rdMap.toString());
+		trace(rdMap.toString());
 		//trace('|'+rdMap['h'].keys().next()+'|');
-		//trace(state.selectedRows.toString());
+		trace(state.selectedRows.toString());
 		var column:Int = 0;
-
+		//
+		var id:String = (props.selectBy!=null&&props.selectBy.length>0?props.selectBy:'id');
 		var rowClass = (row % 2 == 0?'gridItem even':'gridItem odd');
 
-		if(state.selectedRows.exists(rdMap.get('id')))
+		if(state.selectedRows.exists(rdMap.get(id)))
 			rowClass += ' selected';		
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
 			return map2DataCell(rdMap, fN, column++, row, rowClass);
@@ -332,7 +336,11 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		}		
 
 		setState({selectedRows:selectedNow});
-		props.parentComponent.props.select(el.dataset.id,[el.dataset.id => getRowData(rowEls)], props.parentComponent, SelectType.One);
+		trace(props.parentComponent.state.uid);
+		var match = ReactRouter.matchPath(Browser.location.pathname,{});
+		trace(Reflect.fields(props).join('|'));
+		trace(untyped props.match);
+		props.parentComponent.props.select(el.dataset.id,[el.dataset.id => getRowData(rowEls)], untyped props.match, SelectType.One);
 		state._selecting = false;
 	}
 	
@@ -365,7 +373,8 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	}
 	
 	//function getRowData(rCs:NodeList):StringMap<Dynamic> {
-	function getRowData(rCs:Array<Element>):StringMap<Dynamic> {
+	function getRowData(rCs:Array<Element>):StringMap<Dynamic> {		
+		//trace(rCs.length);
 		if(rCs.length==0)
 			return null;
 		/*for (el in rCs){

@@ -52,6 +52,7 @@ typedef FormState =
 	?dataTable:Array<Map<String,Dynamic>>,
 	?dataCount:Int,
 	?dbQueryParam:DBAccessProps,
+	?errors:Map<String,String>,
 	?ormRefs:Map<String,ORMComps>,
 	?relDataComps:Map<String,ReactComponentOf<DataFormProps,FormState>>,
 	?fields:Map<String,FormField>,//VIEW FORMFIELDS
@@ -83,8 +84,8 @@ typedef FormState =
 	?sideMenu:MenuProps,
 	?storeListener:redux.Redux.Unsubscribe,
 	?submitted:Bool,
-	?errors:Map<String,String>,
-	?title:String
+	?title:String,
+	?uid:String
 }
 
 typedef FormView = {

@@ -126,11 +126,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		formRef = React.createRef();
 		historyFormRef = React.createRef();
 		trace(props.match.params);
-		//TODO: EDIT MULTIPLE CONTACTS
-		if(props.dataStore.contactData != null && props.match.params.id == null)
-			props.match.params.id = Std.string(props.dataStore.contactData.keys().next());		
+		trace(Reflect.fields(props.dataStore).join('|'));
+		trace(props.dataStore.qcData);
+	
+		if(props.match.params.id == null)
+			props.match.params.id = Std.string(props.dataStore.qcData.keys().next());		
 		//REDIRECT WITHOUT ID OR edit action
-		if(props.match.params.id==null && ~/open(\/)*$/.match(props.match.params.action) )
+		if(props.match.params.id==null && ~/update(\/)*$/.match(props.match.params.action) )
 		{
 			trace('nothing selected - redirect');
 			var baseUrl:String = props.match.path.split(':section')[0];
@@ -304,6 +306,29 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		if(nextState!=state)
 			return true;
 		return nextProps!=props;
+			static function mapStateToProps(aState:AppState) 
+	{
+		//trace(aState.dataStore.contactData);
+		trace(Reflect.fields(aState));
+		if(aState.dataStore.contactData != null)
+		trace(aState.dataStore.contactData.keys().next());
+		if(aState.dataStore.contactsDbData != null)
+		trace(aState.dataStore.contactsDbData.dataRows[0]);
+		else 
+		{
+			trace(aState.dataStore);
+			trace(Reflect.fields(aState.dataStore));
+		}
+		trace(App.store.getState().dataStore.contactsDbData);
+		var bState =  {
+			dataStore:aState.dataStore,
+			userState:aState.userState,
+			//idLoaded:aState.dataStore.contactData.keys().next()
+		};
+		//trace(bState);
+		trace(bState.dataStore.contactData);
+		return bState;
+	}
 	}*/
 
 	override public function componentWillUnmount() {
@@ -580,9 +605,32 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		
 	static function mapStateToProps(aState:AppState) 
 	{
+		//trace(aState.dataStore.contactData);
+		trace(Reflect.fields(aState));
+		if(aState.dataStore.qcData != null)
+		trace(aState.dataStore.qcData.keys().next());
+		if(aState.dataStore.contactsDbData != null)
+		trace(aState.dataStore.contactsDbData.dataRows[0]);
+		else 
+		{
+			trace(aState.dataStore);
+			trace(Reflect.fields(aState.dataStore));
+		}
+		trace(App.store.getState().dataStore.contactsDbData);
+		var bState =  {
+			dataStore:aState.dataStore,
+			userState:aState.userState,
+			//idLoaded:aState.dataStore.contactData.keys().next()
+		};
+		//trace(bState);
+		trace(bState.dataStore.contactData);
+		return bState;
+	}
+	/*static function mapStateToProps(aState:AppState) 
+	{
 		return {
 			userState:aState.userState
 		};
-	}
+	}*/
 		
 }

@@ -18,7 +18,6 @@ import history.History;
 import history.Location;
 import history.TransitionManager;
 import js.Browser;
-
 import me.cunity.debug.Out;
 import view.UiView;
 import action.AppAction;
@@ -49,6 +48,7 @@ import redux.Store;
 import redux.StoreBuilder.*;
 import redux.thunk.Thunk;
 import redux.thunk.ThunkMiddleware;
+import uuid.Uuid;
 import view.shared.io.FormApi;
 import view.shared.FormBuilder;
 
@@ -144,7 +144,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		}
 	}
 
-	static function startHistoryListener(store:Store<AppState>, history:History):TUnlisten
+	static function historyListener(store:Store<AppState>, history:History):TUnlisten
 	{
 		//trace(history);
 		store.dispatch(Location(InitHistory(history)));
@@ -170,7 +170,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//trace(config);
 		//trace(devIP);
 		//trace(state);
-		tul = startHistoryListener(store, state.locationStore.history);
+		tul = historyListener(store, state.locationStore.history);
 		//store.subscribe(saveToLocalStorage);
 		//var uBCC:Dynamic = react.WinCom.useBrowserContextCommunication('appGlobal');
 
@@ -307,6 +307,10 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			{
 				Reflect.setField(fS, f, Reflect.field(init, f));
 			}
+		}
+		if(comp!=null){		
+			fS.uid = Uuid.nanoId();
+			fS.relDataComps = [fS.uid => comp];
 		}
 		return fS;
 	}

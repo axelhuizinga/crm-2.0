@@ -24,6 +24,8 @@ typedef DataAccessState =
 	?accountActData:IntMap<Map<String,Dynamic>>,
 	?accountsDbData:DbData,
 	?accountData:IntMap<Map<String,Dynamic>>,	
+	?qcActData:IntMap<Map<String,Dynamic>>,
+	?qcData:IntMap<Map<String,Dynamic>>,	
 	?returnDebitsData:IntMap<Map<String,Dynamic>>,	
 	?dealsDbData:DbData,
     ?source:DBsource,

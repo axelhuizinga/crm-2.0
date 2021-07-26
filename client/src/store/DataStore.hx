@@ -29,8 +29,9 @@ class DataStore
 		initState = {
 			//dbData:new DbData(),			
 			contactData: new IntMap(),
-			dealData: new IntMap(),
+			dealData: new IntMap(),			
 			accountData: new IntMap(),
+			qcData: new IntMap(),
 			returnDebitsData: new IntMap()
 		};
 		trace('ok');
@@ -54,6 +55,11 @@ class DataStore
 				}			
 				copy(state, {
 					contactsDbData:data,
+				});
+			case SelectQCs(sData):
+				trace(sData.keys().keysList());
+				copy(state,{
+					qcData:sData
 				});
 			case Restore:
 				state;

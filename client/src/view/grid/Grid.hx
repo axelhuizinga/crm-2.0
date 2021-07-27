@@ -182,7 +182,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			className:(columnDataState.className==null?rowClass:columnDataState.className +' '+ rowClass),
 			data:rdMap[fN],
 			dataDisplay:columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap[fN]):rdMap[fN],
-			id:(rdMap['id']==null&&props.selectBy!=null?rdMap[props.selectBy]:rdMap['id']),
+			id:(rdMap['id']==null&&props.findBy!=null?rdMap[props.findBy]:rdMap['id']),
 			//id:rdMap['id'],
 			name:fN,
 			pos:{column:column, row:row},
@@ -193,12 +193,12 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 
 	function renderCells(rdMap:Map<String,Dynamic>, row:Int):ReactFragment
 	{
-		trace(rdMap.toString());
+		//trace(rdMap.toString());
 		//trace('|'+rdMap['h'].keys().next()+'|');
-		trace(state.selectedRows.toString());
+		//trace(state.selectedRows.toString());
 		var column:Int = 0;
 		//
-		var id:String = (props.selectBy!=null&&props.selectBy.length>0?props.selectBy:'id');
+		var id:String = (props.findBy!=null&&props.findBy.length>0?props.findBy:'id');
 		var rowClass = (row % 2 == 0?'gridItem even':'gridItem odd');
 
 		if(state.selectedRows.exists(rdMap.get(id)))
@@ -225,7 +225,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			//trace(row + ':' + cD.id + '_' + cD.pos.column);
 			//trace(cD.name+':'+cD.title+':'+cD.show);
 			if (cD.show){
-			/*	if(cD.id==null&&props.selectBy!=null){
+			/*	if(cD.id==null&&props.findBy!=null){
 					cD.id = 
 				}*/
 				rCs.push(
@@ -321,7 +321,8 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			if(selectedNow.exists(rN)){
 				setState({selectedRows:new IntMap()});		
 				state._selecting = false;
-				props.parentComponent.props.select(el.dataset.id,[el.dataset.id => getRowData(rowEls)], props.parentComponent, SelectType.Unselect);
+				props.parentComponent.props.select(el.dataset.id,[el.dataset.id => getRowData(rowEls)], props.parentComponent, 
+				SelectType.Unselect);
 				return;				
 			}
 			else{
@@ -340,7 +341,8 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		var match = ReactRouter.matchPath(Browser.location.pathname,{});
 		trace(Reflect.fields(props).join('|'));
 		trace(untyped props.match);
-		props.parentComponent.props.select(el.dataset.id,[el.dataset.id => getRowData(rowEls)], untyped props.match, SelectType.One);
+		props.parentComponent.props.select(el.dataset.id,[el.dataset.id => getRowData(rowEls)],props.parentComponent
+		, SelectType.One);
 		state._selecting = false;
 	}
 	

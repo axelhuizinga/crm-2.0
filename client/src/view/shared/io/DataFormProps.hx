@@ -33,6 +33,7 @@ typedef DataFormProps =
 	?limit:Int,	
 	?load:DBAccessProps->Promise<DbData>,
 	?loadData:Int->ReactComponentOf<DataFormProps,FormState>->Void,
+	?model:String,
 	?formRef:ReactRef<FormElement>,
 	?parentComponent:Dynamic,
 	?select:Function, // Int->IntMap<Map<String,Dynamic>>->RouterMatch->SelectType,
@@ -47,5 +48,5 @@ typedef DataFormProps =
 	?save:ReactComponentOf<DataFormProps,FormState>->Promise<DbData>,
 	?update:DBAccessProps->Promise<DbData>,	
 	userState:UserState,
-	model:String
+	?findBy:String
 }

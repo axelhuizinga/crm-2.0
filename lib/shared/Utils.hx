@@ -5,6 +5,7 @@ package shared;
  * @author axel@cunity.me
  */
 
+import haxe.ds.IntMap;
 import redux.Redux.Dispatch;
 import haxe.Constraints.Function;
 import react.ReactDOM;
@@ -167,7 +168,21 @@ class Utils
             	f => Reflect.field(d, f)
       	];
   	}	
-
+	
+	public static function dynArray2IntMap(d:Array<Map<String,Dynamic>>,?findBy:String='id'):IntMap<Map<String,Dynamic>>
+	{
+		var map:IntMap<Map<String,Dynamic>> = new IntMap();
+		//trace(findBy);
+		for(el in d){			
+			//trace(Std.string(el));
+			//trace(el[findBy]);
+			map.set(el[findBy], el);
+			// TODO: check4recursion
+		}
+			//Reflect.setField(obj, k, v);
+		return map;
+	}
+	
 	public static function dyn2map(d:Dynamic):Map<String,Dynamic>
 	{
 		var map:Map<String,Dynamic> = [];

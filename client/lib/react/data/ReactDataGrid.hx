@@ -110,7 +110,7 @@ typedef RowSelection =
 	?onRowsSelected:Function,
 	?onRowsDeselected:Function,
 	?showCheckbox:Bool,
-	selectBy:Dynamic
+	findBy:Dynamic
 }
 
 typedef ReactDataGridProps={

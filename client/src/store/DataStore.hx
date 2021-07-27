@@ -39,7 +39,7 @@ class DataStore
 	
 	public function reduce(state:DataAccessState, action:DataAction):DataAccessState
 	{
-		trace(action);
+		//trace(action);
 		trace(Reflect.fields(state));
 		trace(state.dealData);
 		//return nul018l;
@@ -56,10 +56,18 @@ class DataStore
 				copy(state, {
 					contactsDbData:data,
 				});
+			case QCsLoaded(data):				
+				//trace(data.keys().keysList());
+				trace(Reflect.fields(data).join('|'));
+				copy(state,{					
+					//qcData:data
+					qcData:Utils.dynArray2IntMap(data.dataRows,'lead_id')
+				});				
 			case SelectQCs(sData):
 				trace(sData.keys().keysList());
+				trace(sData);
 				copy(state,{
-					qcData:sData
+					qcActData:sData
 				});
 			case Restore:
 				state;

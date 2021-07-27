@@ -245,7 +245,7 @@ class LiveData {
 	}
 
 	public static function  select(props:SDataProps){
-		var actPath:Array<String> = FormApi.getTableRoot(props.match);			
+		var actPath:Array<String> = FormApi.getTableRoot();			
 		trace(actPath);
 		var sData:IntMap<Map<String,Dynamic>> = App.store.getState().dataStore.returnDebitsData;
 		switch(actPath[1])

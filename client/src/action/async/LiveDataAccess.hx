@@ -1,5 +1,7 @@
 package action.async;
 
+import js.Browser;
+import react.router.ReactRouter;
 import js.lib.Promise;
 import haxe.ds.StringMap;
 import haxe.ds.IntMap;
@@ -66,11 +68,15 @@ class LiveDataAccess
 	public static function select(props:LiveDataProps) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			if(props.id == null)
+			if(props.id == null){
+				trace(Reflect.fields(props).join('|'));
 				return null;
+
+			}
+
 			var aState:AppState = getState();
 			//trace(aState);
-			var tableRoot:Array<String> = FormApi.getTableRoot(props.match);			
+			var tableRoot:Array<String> = FormApi.getTableRoot();			
 			trace(tableRoot);
 			trace(Reflect.fields(aState));
 			//trace(aState);
@@ -110,8 +116,9 @@ class LiveDataAccess
 					sData = selectType(props.id, props.data, sData, props.selectType);
 					trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
 					trace(sData);
-					//aState.locationStore.history.push('${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}',					{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
+					//return dispatch(AppAction.Data(sData));					
 					return dispatch(DataAction.SelectQCs(sData));					
+					//aState.locationStore.history.push('${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}',					{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
 				default:
 					return null;
 			}		
@@ -151,7 +158,7 @@ class LiveDataAccess
 				return null;
 			trace(props.data);
 			var aState:AppState = getState();
-			var tableRoot:Array<String> = FormApi.getTableRoot(props.match);			
+			var tableRoot:Array<String> = FormApi.getTableRoot();			
 			trace(tableRoot);
 			//trace(Reflect.fields(aState));
 			//trace(aState);function(resolve, reject)

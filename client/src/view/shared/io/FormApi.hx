@@ -1,6 +1,7 @@
 package view.shared.io;
 
 //import js.lib.Reflect;
+import js.Browser;
 import css.Overflow.OverflowCompo;
 import haxe.Timer;
 import state.AppState;
@@ -176,6 +177,15 @@ class FormApi
 		var eTarget:Element = cast(e.target, Element);
 		//trace(Type.typeof(eTarget));
 		var targetSection = eTarget.dataset.section;
+		if(targetSection=='Edit'){
+			//checkSelection
+			if(!comp.state.dataGrid.state.selectedRows.keys().hasNext())
+			{
+				return false;
+			}
+			//comp.checkSelection();
+			//if(App.store.getState().)
+		}
 		trace('>>$targetSection<< ${comp.props.match.params.section}');
 		if(eTarget.dataset.then != null)
 			comp.props.location.state.extend({then:eTarget.dataset.then});
@@ -229,13 +239,19 @@ class FormApi
 		return '${baseUrl}${targetSection==null?section:targetSection}/${action}${id}';
 	}
 
-	public static function getTableRoot(match:RouterMatch):Array<String>
+	//public static function getTableRoot(match:RouterMatch):Array<String>
+	public static function getTableRoot():Array<String>
 	{
-		//trace(match);
-		trace(Reflect.fields(match).join('|'));
+		//trace(match);var match = ReactRouter.matchPath(Browser.location.pathname,{});
+		//trace(Reflect.fields(props).join('|'));
+		var tR:Array<String> = Browser.location.pathname.split('/');
+		tR.shift();
+		trace(tR.toString());
+		return tR.concat([Browser.location.pathname]);
+		/*trace(Reflect.fields(match).join('|'));
 		var baseUrl:String = match.path.split('/:section')[0];
 		var newUrl = '${baseUrl}/${match.params.section}/${match.params.action}';
-		return ~/^\//.replace(baseUrl,'').split('/').concat([newUrl]);
+		return ~/^\//.replace(baseUrl,'').split('/').concat([newUrl]);*/
 	}
 
 	public function toParams(to:String):String

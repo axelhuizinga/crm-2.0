@@ -87,11 +87,13 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 			var baseUrl:String = props.match.path.split(':section')[0];
 			props.history.push('${baseUrl}List/get');
 		}		
-		
-		state =  App.initEState({
-			dataTable:[],loading:false,contactData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
-		},this);
-		//trace(state.contactData);
+		else{
+			state =  App.initEState({
+				dataTable:[],loading:false,contactData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
+			},this);
+			trace(state.uid);			
+		}
+
 		//trace(state.loading);		
 	}
 	
@@ -116,7 +118,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
 			},
-			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
+			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,comp:QC, ?selectType:SelectType)
 			{
 				trace('select:$id selectType:${selectType}' + data.toString());
 				if(id<0){
@@ -124,7 +126,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 					return;
 				}
 				//dispatch(DataAction.CreateSelect(id,data,match));contactListQC
-				dispatch(LiveDataAccess.select({id:id,data:data,match:match,selectType: selectType}));
+				dispatch(LiveDataAccess.select({id:id,data:data,match:comp.props.match,selectType: selectType}));
 			},
 			//setStateFromChild(cState:FormState)
 			/*:function (data:IntMap<Map<String,Dynamic>>)
@@ -150,28 +152,27 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 		trace(aState.dataStore.contactsDbData.dataRows[0]);
 		else 
 		{
-			trace(aState.dataStore);
+			//trace(aState.dataStore);
 			trace(Reflect.fields(aState.dataStore));
+		/*	if(aState.dataStore.qcData.dataRows!=null){
+				trace(aState.dataStore.qcData.dataRows.length);
+			}*/
 		}
 		trace(App.store.getState().dataStore.contactsDbData);
 		var bState =  {
 			dataStore:aState.dataStore,
 			userState:aState.userState,
+			findBy:"lead_id"
 			//idLoaded:aState.dataStore.contactData.keys().next()
 		};
 		//trace(bState);
-		trace(bState.dataStore.contactData);
+		//trace(bState.dataStore.contactData);
 		return bState;
 	}
 		
 	override public function componentDidMount():Void 
 	{	
-		trace(props.location.pathname +':' + state.uid);
-
-		//setState({mounted:true});
-		return;
-		var baseUrl:String = props.match.path.split(':section')[0];
-		trace(props.match);
+		trace(props.location.pathname +':' + (state==null?'':state.uid));
 	}
 	
 	override function render():ReactFragment

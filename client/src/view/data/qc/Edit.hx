@@ -126,11 +126,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		formRef = React.createRef();
 		historyFormRef = React.createRef();
 		trace(props.match.params);
-		trace(Reflect.fields(props.dataStore).join('|'));
-		trace(props.dataStore.qcData);
-	
+		trace('props:' + Reflect.fields(props).join('|'));
+		trace(Reflect.fields(props.dataStore.qcData).join('|'));
+
 		if(props.match.params.id == null)
-			props.match.params.id = Std.string(props.dataStore.qcData.keys().next());		
+			props.match.params.id = untyped Std.string(props.dataStore.qcActData.keys().next());//dataRows[0].lead_id);dataRows[0].	
+		if(Reflect.fields(props).has('dataStore')){
+			trace(props.dataStore.qcData.get(Std.parseInt(props.match.params.id)));
+		}	
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/update(\/)*$/.match(props.match.params.action) )
 		{
@@ -590,11 +593,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
-	public function select(id:Int, 
+	/*public function select(id:Int, 
 		?data:StringMap<StringMap<Dynamic>>, 
 		?match:RouterMatch) {
 		trace(id);
-	}
+	}*/
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		trace('here we should be ready to load');
@@ -608,12 +611,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//trace(aState.dataStore.contactData);
 		trace(Reflect.fields(aState));
 		if(aState.dataStore.qcData != null)
-		trace(aState.dataStore.qcData.keys().next());
+		trace(Std.string(aState.dataStore.qcData.keys().next()));
 		if(aState.dataStore.contactsDbData != null)
 		trace(aState.dataStore.contactsDbData.dataRows[0]);
 		else 
 		{
-			trace(aState.dataStore);
+			//trace(aState.dataStore);
 			trace(Reflect.fields(aState.dataStore));
 		}
 		trace(App.store.getState().dataStore.contactsDbData);

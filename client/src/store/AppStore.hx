@@ -86,7 +86,11 @@ class AppStore
 					trace(data.dataRows);
 					copy(state,
 						{dataStore:{contactsDbData:data}});
-
+					case QCsLoaded(data):
+						trace(data.dataRows.length);
+						copy(state,							
+							{dataStore:{qcData:Utils.dynArray2IntMap(data.dataRows,'lead_id')}});
+							//{dataStore:{qcData:data}});
 					default:
 						state;
 				}

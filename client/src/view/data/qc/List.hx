@@ -1,4 +1,5 @@
 package view.data.qc;
+import js.lib.Promise;
 import shared.Utils;
 import data.DataState;
 import react.router.RouterMatch;
@@ -97,8 +98,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	static function mapStateToProps(aState:AppState) 
 	{
-		trace ('never');
+		
+		//trace ('never');
+		trace (aState.dataStore.qcData.keys().next());
+		//trace ('never');
 		return {
+			dataStore:aState.dataStore,
 			userState:aState.userState
 		};
 	}
@@ -148,13 +153,20 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				trace(data.dataRows.length);
 				if(data.dataRows.length>0) 
 				{
-					if(!data.dataErrors.keys().hasNext())
-					{
+					trace(!data.dataErrors.keys().hasNext()?'Y':'N');					
+					if(!data.dataErrors.keys().hasNext()){
+						// LOAD DATA INTO DATAROWS
+						//trace(data.dataRows[0]);
 						setState({
 							dataTable:data.dataRows,
 							dataCount:Std.parseInt(data.dataInfo['count']),
 							pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
 						});
+						var p:Promise<Dynamic> = App.store.dispatch(DataAction.QCsLoaded(data));
+						//trace(Std.string(p));
+						/*p.then(function(d:Dynamic) {
+							trace(d);
+						});*/
 					}
 					else 
 						setState({values: ['loadResult'=>'Kein Ergebnis','closeAfter'=>-1]});					
@@ -230,7 +242,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		//
 		if(props.userState.dbUser != null)
 		trace('yeah: ${props.userState.dbUser.first_name}');
-		trace(props.match.params.action);
+		//trace(props.match.params.action);
+		trace(state.uid);
 		state.formApi.doAction();
 /*		if(props.match.params.action != null)
 		//dbData = FormApi.init(this, props);
@@ -252,19 +265,19 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		//trace(dataDisplay["userList"]);
 		var pState:FormState = props.parentComponent.state;
 		trace(state.dataTable.length);
-		if(props.dataStore.contactsDbData != null)
-		trace(props.dataStore.contactsDbData.dataRows[0]);
-		else trace(props.dataStore.contactsDbData);
+		//if(props.dataStore.contactsDbData != null)
+		//trace(props.dataStore.contactsDbData.dataRows[0]);
+		//else trace(props.dataStore.contactsDbData);
 		trace(state.loading);
 		if( state.dataTable.length==0)
 			return state.formApi.renderWait();
 		//trace('###########loading:' + state.rows[0]);
-		trace(state.dataTable[0]);
+		//trace(state.dataTable[0]);
 		return switch(props.match.params.action)
 		{//  ${...props}
 			case 'get':
 				jsx('
-					<Grid id="contactListQC" data=${state.dataTable} selectBy="lead_id" 
+					<Grid id="contactListQC" data=${state.dataTable} findBy="lead_id" 
 				${...props} dataState = ${dataDisplay["contactList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>		
 				');

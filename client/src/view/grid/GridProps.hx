@@ -51,7 +51,7 @@ typedef GridProps =
 	?filterable:Dynamic,
 	?itemsPerPage:Int,
 	?id:String,
-	?selectBy:String,
+	?findBy:String,
 	?onFilter:String->Void,
 	?onPageChange:SortProps->Void,	
 	?onDoubleClick:Event->Void,

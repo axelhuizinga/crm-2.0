@@ -160,7 +160,9 @@ class S
 			dbQuery = Model.binary();
 			params = dbQuery.dbParams;
 			trace(dbQuery.dbParams.get('classPath'));
+			trace(params);
 			//trace(dbQuery);
+
 			trace(Util.rels2string(dbQuery.relations));
 			S.devIP = params['devIP'];
 			//if(dbQuery!=null)trace(dbQuery.dbUser);

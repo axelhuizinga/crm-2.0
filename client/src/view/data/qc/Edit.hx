@@ -111,7 +111,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	var _trace:Bool = false;
 	var dealDataAccess:DataAccess;
 	var dealFieldNames:Array<String>;
-	var dealDataDisplay:Map<String,DataState>;
+	var qcData:Map<String,Dynamic>;
 	var accountDataAccess:DataAccess;
 	var accountFieldNames:Array<String>;
 	var accountDataDisplay:Map<String,DataState>;
@@ -132,7 +132,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		if(props.match.params.id == null)
 			props.match.params.id = untyped Std.string(props.dataStore.qcActData.keys().next());//dataRows[0].lead_id);dataRows[0].	
 		if(Reflect.fields(props).has('dataStore')){
-			trace(props.dataStore.qcData.get(Std.parseInt(props.match.params.id)));
+			qcData = props.dataStore.qcData.get(Std.parseInt(props.match.params.id));
+			trace(qcData['entry_list_id']);
 		}	
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/update(\/)*$/.match(props.match.params.action) )
@@ -148,12 +149,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//DEALS
 		dealDataAccess = DealsModel.dataAccess;
 		dealFieldNames = BaseForm.initFieldNames(dealDataAccess['open'].view.keys());
-		dealDataDisplay = DealsModel.dataDisplay;
+		//dealDataDisplay = DealsModel.dataDisplay;
 		//ACCOUNTS
 		accountDataAccess = AccountsModel.dataAccess;
 		accountFieldNames = BaseForm.initFieldNames(accountDataAccess['open'].view.keys());
 		accountDataDisplay = AccountsModel.dataDisplay;
-
+		trace(dataAccess['open']);
 		if(props.dataStore.contactData != null)
 			trace(props.dataStore.contactData.keys().next());
 				
@@ -169,7 +170,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenu( this,
 				{
-					dataClassPath:'data.Contacts',
+					dataClassPath:'data.Deals',
 					label:'Bearbeiten',
 					section: 'Edit',
 					items: menuItems
@@ -183,10 +184,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			}),*/
 			values:new Map<String,ReactComponentOf<DataFormProps,FormState>>()
 		},this);
-		
+		loadQC();
 		trace(state.initialData);
 		//trace(state.initialData.id);
-		//loadContactData(Std.parseInt(props.match.params.id));
+		//loadQC(Std.parseInt(props.match.params.id));
 	}
 
 	public function close() {
@@ -227,21 +228,22 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
-	function loadContactData(id:Int):Void
-	{
-		trace('loading:$id');
-		if(id == null)
+	function loadQC():Void
+	{		
+		trace('loading:${qcData["lead_id"]}');
+		if(qcData == null)
 			return;
 		var p:Promise<DbData> = props.load(
 			{
-				classPath:'data.Contacts',
-				action:'get',
-				filter:{id:id,mandator:1},
+				classPath:'data.Deals',
+				action:'doQC',
+				filter:{lead_id:qcData["lead_id"],entry_list_id:qcData["entry_list_id"],mandator:1},
 				resolveMessage:{
-					success:'Kontakt ${id} wurde geladen',
-					failure:'Kontakt ${id} konnte nicht geladen werden'
+					success:'QC ${qcData["lead_id"]} wurde geladen',
+					failure:'QC ${qcData["lead_id"]} konnte nicht geladen werden'
 				},
-				table:'contacts',
+				table:'vicidial_list',
+				viciboxDB:true,
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP
 			}
@@ -253,7 +255,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				var data = data.dataRows[0];
 				trace(data);	
 				//if( mounted)
-				var contact:Contact = new Contact(data);
+				/*var contact:Contact = new Contact(data);
 				if(mounted)
 					setState({loading:false, actualState:contact, initialData:copy(contact)});
 				//state = copy({loading:false, actualState:contact, initialData:contact});
@@ -261,7 +263,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
 				//setState({initialData:copy(state.actualState)});
 				trace(props.location.pathname + ':' + untyped state.actualState.date_of_birth);
-				props.history.replace(props.location.pathname.replace('open','update'));
+				props.history.replace(props.location.pathname.replace('open','update'));*/
 			}
 		});
 	}
@@ -297,10 +299,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		mounted = true;
 		trace(props.children);
 
-		if(props.match.params.id != null){
+		/*if(props.match.params.id != null){
 			trace(props.match.params);
-			loadContactData(Std.parseInt(props.match.params.id));	
-		}
+			loadQC();	
+		}*/
 		trace(props.children);
 	}
 	
@@ -407,8 +409,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	function update()
 	{
 		for(k=>v in state.relDataComps.keyValueIterator()){
-			trace('$k=>${v.props.save}');
-			v.props.save(v);
+			//trace('$k=>${v.props.save}');
+			trace(k);
+			//v.props.save(v);
 		}
 		if(state.actualState != null)
 			trace('length:' + state.actualState.fieldsModified.length + ':' + state.actualState.fieldsModified.join('|') );
@@ -478,7 +481,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var p:Promise<Dynamic> = App.store.dispatch(CRUD.update(dbQ));	
 		p.then(function(d:Dynamic){
 			trace(d);
-			loadContactData(state.actualState.id);
+			//loadQC(state.actualState.id);
 		});
 	}
 
@@ -491,7 +494,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{
 			case 'open'|'update':
-				//trace(state.mHandlers);
+				
 				//trace(state.actualState.id);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
@@ -505,13 +508,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					],
 					model:'contact',
 					ref:null,					
-					title: 'Stammdaten' 
+					title: 'Quality Control' 
 				},state.actualState)}
-				${relData()}
-				${relDataLists()}
+				${relData()}				
 				</>
 				'));
-				//null;
+				//null;${relDataLists()}
 			case 'insert':
 				//trace(state.actualState);
 				state.formBuilder.renderForm({
@@ -570,8 +572,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	override function render():ReactFragment
 	{
 		trace(props.match.params.action);		
-		if(state.initialData==null)
-			return null;
+		//if(state.initialData==null)			return null;
 		//trace(state.modals);
 		//trace('state.loading: ${state.loading}');	
 		

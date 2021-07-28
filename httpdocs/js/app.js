@@ -278,7 +278,7 @@ var App = function(props) {
 	var ti = null;
 	App.store = this.initStore(history_BrowserHistory.createBrowserHistory({ basename : "/", getUserConfirmation : state_CState.confirmTransition}));
 	this.state = App.store.getState();
-	this.tul = App.startHistoryListener(App.store,this.state.locationStore.history);
+	this.tul = App.historyListener(App.store,this.state.locationStore.history);
 	window.onresize = function() {
 		if(ti != null) {
 			ti.stop();
@@ -318,10 +318,10 @@ var App = function(props) {
 };
 $hxClasses["App"] = App;
 App.__name__ = "App";
-App.startHistoryListener = function(store,history) {
+App.historyListener = function(store,history) {
 	store.dispatch(redux_Action.map(action_AppAction.Location(action_LocationAction.InitHistory(history))));
 	return history.listen(function(location,action) {
-		haxe_Log.trace(location.pathname,{ fileName : "App.hx", lineNumber : 153, className : "App", methodName : "startHistoryListener"});
+		haxe_Log.trace(location.pathname,{ fileName : "App.hx", lineNumber : 153, className : "App", methodName : "historyListener"});
 		store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ path : location.pathname, text : ""}))));
 	});
 };
@@ -357,6 +357,12 @@ App.initEState = function(init,comp) {
 			fS2[f] = Reflect.field(init,f);
 		}
 	}
+	if(comp != null) {
+		fS2.uid = uuid_Uuid.nanoId();
+		var _g = new haxe_ds_StringMap();
+		_g.h[fS2.uid] = comp;
+		fS2.relDataComps = _g;
+	}
 	return fS2;
 };
 App.initSectionState = function(init,comp) {
@@ -373,7 +379,7 @@ App.initSectionState = function(init,comp) {
 	return fS;
 };
 App.jsxDump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 337, className : "App", methodName : "jsxDump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 341, className : "App", methodName : "jsxDump"});
 	return "OK";
 };
 App.queryString2 = function(params) {
@@ -400,7 +406,7 @@ App.queryString2 = function(params) {
 		result[i] = query;
 	}
 	var query = result.join("&");
-	haxe_Log.trace(query,{ fileName : "App.hx", lineNumber : 356, className : "App", methodName : "queryString2"});
+	haxe_Log.trace(query,{ fileName : "App.hx", lineNumber : 360, className : "App", methodName : "queryString2"});
 	return query;
 };
 App.__super__ = React_Component;
@@ -1390,18 +1396,20 @@ var action_DataAction = $hxEnums["action.DataAction"] = { __ename__:"action.Data
 	,Update: ($_=function(uData) { return {_hx_index:1,uData:uData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="Update",$_.__params__ = ["uData"],$_)
 	,Error: ($_=function(data) { return {_hx_index:2,data:data,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="Error",$_.__params__ = ["data"],$_)
 	,ContactsLoaded: ($_=function(data) { return {_hx_index:3,data:data,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="ContactsLoaded",$_.__params__ = ["data"],$_)
-	,Restore: {_hx_name:"Restore",_hx_index:4,__enum__:"action.DataAction",toString:$estr}
-	,SelectAccounts: ($_=function(sData) { return {_hx_index:5,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="SelectAccounts",$_.__params__ = ["sData"],$_)
-	,SelectActContacts: ($_=function(sData) { return {_hx_index:6,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="SelectActContacts",$_.__params__ = ["sData"],$_)
-	,SelectContacts: ($_=function(sData) { return {_hx_index:7,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="SelectContacts",$_.__params__ = ["sData"],$_)
-	,SelectBookings: ($_=function(sData) { return {_hx_index:8,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="SelectBookings",$_.__params__ = ["sData"],$_)
-	,SelectReturnDebits: ($_=function(sData) { return {_hx_index:9,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="SelectReturnDebits",$_.__params__ = ["sData"],$_)
-	,SelectDeals: ($_=function(sData) { return {_hx_index:10,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="SelectDeals",$_.__params__ = ["sData"],$_)
-	,Sync: ($_=function(dataAccess) { return {_hx_index:11,dataAccess:dataAccess,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="Sync",$_.__params__ = ["dataAccess"],$_)
-	,UpStore: ($_=function(sData) { return {_hx_index:12,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="UpStore",$_.__params__ = ["sData"],$_)
-	,Unselect: ($_=function(id) { return {_hx_index:13,id:id,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="Unselect",$_.__params__ = ["id"],$_)
+	,QCsLoaded: ($_=function(data) { return {_hx_index:4,data:data,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="QCsLoaded",$_.__params__ = ["data"],$_)
+	,Restore: {_hx_name:"Restore",_hx_index:5,__enum__:"action.DataAction",toString:$estr}
+	,SelectAccounts: ($_=function(sData) { return {_hx_index:6,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="SelectAccounts",$_.__params__ = ["sData"],$_)
+	,SelectActContacts: ($_=function(sData) { return {_hx_index:7,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="SelectActContacts",$_.__params__ = ["sData"],$_)
+	,SelectContacts: ($_=function(sData) { return {_hx_index:8,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="SelectContacts",$_.__params__ = ["sData"],$_)
+	,SelectBookings: ($_=function(sData) { return {_hx_index:9,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="SelectBookings",$_.__params__ = ["sData"],$_)
+	,SelectReturnDebits: ($_=function(sData) { return {_hx_index:10,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="SelectReturnDebits",$_.__params__ = ["sData"],$_)
+	,SelectDeals: ($_=function(sData) { return {_hx_index:11,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="SelectDeals",$_.__params__ = ["sData"],$_)
+	,SelectQCs: ($_=function(sData) { return {_hx_index:12,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="SelectQCs",$_.__params__ = ["sData"],$_)
+	,Sync: ($_=function(dataAccess) { return {_hx_index:13,dataAccess:dataAccess,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="Sync",$_.__params__ = ["dataAccess"],$_)
+	,UpStore: ($_=function(sData) { return {_hx_index:14,sData:sData,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="UpStore",$_.__params__ = ["sData"],$_)
+	,Unselect: ($_=function(id) { return {_hx_index:15,id:id,__enum__:"action.DataAction",toString:$estr}; },$_._hx_name="Unselect",$_.__params__ = ["id"],$_)
 };
-action_DataAction.__constructs__ = [action_DataAction.Execute,action_DataAction.Update,action_DataAction.Error,action_DataAction.ContactsLoaded,action_DataAction.Restore,action_DataAction.SelectAccounts,action_DataAction.SelectActContacts,action_DataAction.SelectContacts,action_DataAction.SelectBookings,action_DataAction.SelectReturnDebits,action_DataAction.SelectDeals,action_DataAction.Sync,action_DataAction.UpStore,action_DataAction.Unselect];
+action_DataAction.__constructs__ = [action_DataAction.Execute,action_DataAction.Update,action_DataAction.Error,action_DataAction.ContactsLoaded,action_DataAction.QCsLoaded,action_DataAction.Restore,action_DataAction.SelectAccounts,action_DataAction.SelectActContacts,action_DataAction.SelectContacts,action_DataAction.SelectBookings,action_DataAction.SelectReturnDebits,action_DataAction.SelectDeals,action_DataAction.SelectQCs,action_DataAction.Sync,action_DataAction.UpStore,action_DataAction.Unselect];
 var action_LocationAction = $hxEnums["action.LocationAction"] = { __ename__:"action.LocationAction",__constructs__:null
 	,Pop: ($_=function(url,state) { return {_hx_index:0,url:url,state:state,__enum__:"action.LocationAction",toString:$estr}; },$_._hx_name="Pop",$_.__params__ = ["url","state"],$_)
 	,Push: ($_=function(url,state) { return {_hx_index:1,url:url,state:state,__enum__:"action.LocationAction",toString:$estr}; },$_._hx_name="Push",$_.__params__ = ["url","state"],$_)
@@ -1504,7 +1512,7 @@ action_async_CRUD.update = function(param) {
 					}
 					if(haxe_ds_StringMap.stringify(data.dataErrors.h) != "{}") {
 						dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "error", text : param.resolveMessage == null ? haxe_ds_StringMap.stringify(data.dataErrors.h) : param.resolveMessage.failure}))));
-						reject(param.resolveMessage);
+						reject(param.resolveMessage == null ? param.resolveMessage.failure : haxe_ds_StringMap.stringify(data.dataErrors.h));
 					} else {
 						dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : param.resolveMessage == null ? "" : param.resolveMessage.success}))));
 						resolve(data);
@@ -1661,9 +1669,9 @@ action_async_LiveDataAccess.storeData = function(id,action) {
 			return null;
 		}
 		var aState = getState();
-		haxe_Log.trace(aState.dataStore.contactData,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 49, className : "action.async.LiveDataAccess", methodName : "storeData"});
+		haxe_Log.trace(aState.dataStore.contactData,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 51, className : "action.async.LiveDataAccess", methodName : "storeData"});
 		if(id == "Contacts") {
-			if(action._hx_index == 4) {
+			if(action._hx_index == 5) {
 				return dispatch(redux_Action.map(action_DataAction.Restore));
 			} else {
 				return null;
@@ -1676,13 +1684,14 @@ action_async_LiveDataAccess.storeData = function(id,action) {
 action_async_LiveDataAccess.select = function(props) {
 	return redux_thunk_Thunk.Action(function(dispatch,getState) {
 		if(props.id == null) {
+			haxe_Log.trace(Reflect.fields(props).join("|"),{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 72, className : "action.async.LiveDataAccess", methodName : "select"});
 			return null;
 		}
 		var aState = getState();
-		var tableRoot = view_shared_io_FormApi.getTableRoot(props.match);
-		haxe_Log.trace(tableRoot,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 73, className : "action.async.LiveDataAccess", methodName : "select"});
-		haxe_Log.trace(Reflect.fields(aState),{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 74, className : "action.async.LiveDataAccess", methodName : "select"});
-		haxe_Log.trace(props.data,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 76, className : "action.async.LiveDataAccess", methodName : "select"});
+		var tableRoot = view_shared_io_FormApi.getTableRoot();
+		haxe_Log.trace(tableRoot,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 80, className : "action.async.LiveDataAccess", methodName : "select"});
+		haxe_Log.trace(Reflect.fields(aState),{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 81, className : "action.async.LiveDataAccess", methodName : "select"});
+		haxe_Log.trace(props.data,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 83, className : "action.async.LiveDataAccess", methodName : "select"});
 		var sData = null;
 		switch(tableRoot[1]) {
 		case "Accounts":
@@ -1695,19 +1704,25 @@ action_async_LiveDataAccess.select = function(props) {
 		case "Contacts":
 			sData = aState.dataStore.contactData;
 			sData = action_async_LiveDataAccess.selectType(props.id,props.data,sData,props.selectType);
-			haxe_Log.trace("" + tableRoot[2] + "/" + view_shared_io_FormApi.params(shared_Utils.keysList(sData.keys())),{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 90, className : "action.async.LiveDataAccess", methodName : "select"});
-			haxe_Log.trace(sData,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 91, className : "action.async.LiveDataAccess", methodName : "select"});
+			haxe_Log.trace("" + tableRoot[2] + "/" + view_shared_io_FormApi.params(shared_Utils.keysList(sData.keys())),{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 97, className : "action.async.LiveDataAccess", methodName : "select"});
+			haxe_Log.trace(sData,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 98, className : "action.async.LiveDataAccess", methodName : "select"});
 			return dispatch(redux_Action.map(action_DataAction.SelectContacts(sData)));
 		case "Deals":
 			sData = aState.dataStore.dealData;
 			sData = action_async_LiveDataAccess.selectType(props.id,props.data,sData,props.selectType);
-			haxe_Log.trace(sData,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 100, className : "action.async.LiveDataAccess", methodName : "select"});
-			haxe_Log.trace("" + tableRoot[2] + "/" + view_shared_io_FormApi.params(shared_Utils.keysList(sData.keys())),{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 101, className : "action.async.LiveDataAccess", methodName : "select"});
+			haxe_Log.trace(sData,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 107, className : "action.async.LiveDataAccess", methodName : "select"});
+			haxe_Log.trace("" + tableRoot[2] + "/" + view_shared_io_FormApi.params(shared_Utils.keysList(sData.keys())),{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 108, className : "action.async.LiveDataAccess", methodName : "select"});
 			var aState1 = aState.locationStore.history;
 			var tmp = "" + tableRoot[2] + "#" + view_shared_io_FormApi.params(shared_Utils.keysList(sData.keys()));
 			var tmp1 = "" + tableRoot[2] + "#" + view_shared_io_FormApi.params(shared_Utils.keysList(sData.keys()));
 			aState1.push(tmp,{ activeContactUrl : tmp1});
 			return dispatch(redux_Action.map(action_DataAction.SelectDeals(props.data)));
+		case "QC":
+			sData = aState.dataStore.qcData;
+			sData = action_async_LiveDataAccess.selectType(props.id,props.data,sData,props.selectType);
+			haxe_Log.trace("" + tableRoot[2] + "/" + view_shared_io_FormApi.params(shared_Utils.keysList(sData.keys())),{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 117, className : "action.async.LiveDataAccess", methodName : "select"});
+			haxe_Log.trace(sData,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 118, className : "action.async.LiveDataAccess", methodName : "select"});
+			return dispatch(redux_Action.map(action_DataAction.SelectQCs(sData)));
 		default:
 			return null;
 		}
@@ -1740,7 +1755,7 @@ action_async_LiveDataAccess.selectType = function(id,data,sData,sT) {
 		sData = new haxe_ds_IntMap();
 		return sData;
 	default:
-		haxe_Log.trace(data,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 130, className : "action.async.LiveDataAccess", methodName : "selectType"});
+		haxe_Log.trace(data,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 147, className : "action.async.LiveDataAccess", methodName : "selectType"});
 		sData = new haxe_ds_IntMap();
 		sData.h[id] = data.h[id];
 		return sData;
@@ -1751,10 +1766,10 @@ action_async_LiveDataAccess.sSelect = function(props) {
 		if(props.id == null) {
 			return null;
 		}
-		haxe_Log.trace(props.data,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 142, className : "action.async.LiveDataAccess", methodName : "sSelect"});
+		haxe_Log.trace(props.data,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 159, className : "action.async.LiveDataAccess", methodName : "sSelect"});
 		var aState = getState();
-		var tableRoot = view_shared_io_FormApi.getTableRoot(props.match);
-		haxe_Log.trace(tableRoot,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 145, className : "action.async.LiveDataAccess", methodName : "sSelect"});
+		var tableRoot = view_shared_io_FormApi.getTableRoot();
+		haxe_Log.trace(tableRoot,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 162, className : "action.async.LiveDataAccess", methodName : "sSelect"});
 		var sData = null;
 		return new Promise(function(resolve,reject) {
 			if(tableRoot[1] == "ReturnDebits") {
@@ -1770,8 +1785,8 @@ action_async_LiveDataAccess.sSelect = function(props) {
 	});
 };
 action_async_LiveDataAccess.sSelectType = function(id,data,sData,sT) {
-	haxe_Log.trace(sT,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 200, className : "action.async.LiveDataAccess", methodName : "sSelectType"});
-	haxe_Log.trace(data,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 201, className : "action.async.LiveDataAccess", methodName : "sSelectType"});
+	haxe_Log.trace(sT,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 217, className : "action.async.LiveDataAccess", methodName : "sSelectType"});
+	haxe_Log.trace(data,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 218, className : "action.async.LiveDataAccess", methodName : "sSelectType"});
 	switch(sT) {
 	case "All":
 		sData = new haxe_ds_IntMap();
@@ -1798,7 +1813,7 @@ action_async_LiveDataAccess.sSelectType = function(id,data,sData,sT) {
 		sData = new haxe_ds_IntMap();
 		return sData;
 	default:
-		haxe_Log.trace(data,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 221, className : "action.async.LiveDataAccess", methodName : "sSelectType"});
+		haxe_Log.trace(data,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 238, className : "action.async.LiveDataAccess", methodName : "sSelectType"});
 		sData = new haxe_ds_IntMap();
 		sData.h[id] = data.h[id];
 		return sData;
@@ -1838,7 +1853,7 @@ action_async_LiveDataAccess.sSelectType1 = function(id,data,sData,sT) {
 		sData = new haxe_ds_StringMap();
 		return sData;
 	default:
-		haxe_Log.trace(data,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 248, className : "action.async.LiveDataAccess", methodName : "sSelectType1"});
+		haxe_Log.trace(data,{ fileName : "action/async/LiveDataAccess.hx", lineNumber : 265, className : "action.async.LiveDataAccess", methodName : "sSelectType1"});
 		sData = new haxe_ds_StringMap();
 		sData.h[id] = data.h[id];
 		return sData;
@@ -2922,6 +2937,231 @@ haxe_Exception.prototype = $extend(Error.prototype,{
 	,__class__: haxe_Exception
 	,__properties__: {get_native:"get_native",get_previous:"get_previous",get_stack:"get_stack",get_message:"get_message"}
 });
+var haxe_Int32 = {};
+haxe_Int32.ucompare = function(a,b) {
+	if(a < 0) {
+		if(b < 0) {
+			return ~b - ~a | 0;
+		} else {
+			return 1;
+		}
+	}
+	if(b < 0) {
+		return -1;
+	} else {
+		return a - b | 0;
+	}
+};
+var haxe_Int64 = {};
+haxe_Int64.divMod = function(dividend,divisor) {
+	if(divisor.high == 0) {
+		switch(divisor.low) {
+		case 0:
+			throw haxe_Exception.thrown("divide by zero");
+		case 1:
+			var this1 = new haxe__$Int64__$_$_$Int64(dividend.high,dividend.low);
+			var this2 = new haxe__$Int64__$_$_$Int64(0,0);
+			return { quotient : this1, modulus : this2};
+		}
+	}
+	var divSign = dividend.high < 0 != divisor.high < 0;
+	var modulus;
+	if(dividend.high < 0) {
+		var high = ~dividend.high;
+		var low = ~dividend.low + 1 | 0;
+		if(low == 0) {
+			var ret = high++;
+			high = high | 0;
+		}
+		var this1 = new haxe__$Int64__$_$_$Int64(high,low);
+		modulus = this1;
+	} else {
+		var this1 = new haxe__$Int64__$_$_$Int64(dividend.high,dividend.low);
+		modulus = this1;
+	}
+	if(divisor.high < 0) {
+		var high = ~divisor.high;
+		var low = ~divisor.low + 1 | 0;
+		if(low == 0) {
+			var ret = high++;
+			high = high | 0;
+		}
+		var this1 = new haxe__$Int64__$_$_$Int64(high,low);
+		divisor = this1;
+	}
+	var this1 = new haxe__$Int64__$_$_$Int64(0,0);
+	var quotient = this1;
+	var this1 = new haxe__$Int64__$_$_$Int64(0,1);
+	var mask = this1;
+	while(!(divisor.high < 0)) {
+		var v = haxe_Int32.ucompare(divisor.high,modulus.high);
+		var cmp = v != 0 ? v : haxe_Int32.ucompare(divisor.low,modulus.low);
+		var b = 1;
+		b &= 63;
+		if(b == 0) {
+			var this1 = new haxe__$Int64__$_$_$Int64(divisor.high,divisor.low);
+			divisor = this1;
+		} else if(b < 32) {
+			var this2 = new haxe__$Int64__$_$_$Int64(divisor.high << b | divisor.low >>> 32 - b,divisor.low << b);
+			divisor = this2;
+		} else {
+			var this3 = new haxe__$Int64__$_$_$Int64(divisor.low << b - 32,0);
+			divisor = this3;
+		}
+		var b1 = 1;
+		b1 &= 63;
+		if(b1 == 0) {
+			var this4 = new haxe__$Int64__$_$_$Int64(mask.high,mask.low);
+			mask = this4;
+		} else if(b1 < 32) {
+			var this5 = new haxe__$Int64__$_$_$Int64(mask.high << b1 | mask.low >>> 32 - b1,mask.low << b1);
+			mask = this5;
+		} else {
+			var this6 = new haxe__$Int64__$_$_$Int64(mask.low << b1 - 32,0);
+			mask = this6;
+		}
+		if(cmp >= 0) {
+			break;
+		}
+	}
+	while(true) {
+		var b_high = 0;
+		var b_low = 0;
+		if(!(mask.high != b_high || mask.low != b_low)) {
+			break;
+		}
+		var v = haxe_Int32.ucompare(modulus.high,divisor.high);
+		if((v != 0 ? v : haxe_Int32.ucompare(modulus.low,divisor.low)) >= 0) {
+			var this1 = new haxe__$Int64__$_$_$Int64(quotient.high | mask.high,quotient.low | mask.low);
+			quotient = this1;
+			var high = modulus.high - divisor.high | 0;
+			var low = modulus.low - divisor.low | 0;
+			if(haxe_Int32.ucompare(modulus.low,divisor.low) < 0) {
+				var ret = high--;
+				high = high | 0;
+			}
+			var this2 = new haxe__$Int64__$_$_$Int64(high,low);
+			modulus = this2;
+		}
+		var b = 1;
+		b &= 63;
+		if(b == 0) {
+			var this3 = new haxe__$Int64__$_$_$Int64(mask.high,mask.low);
+			mask = this3;
+		} else if(b < 32) {
+			var this4 = new haxe__$Int64__$_$_$Int64(mask.high >>> b,mask.high << 32 - b | mask.low >>> b);
+			mask = this4;
+		} else {
+			var this5 = new haxe__$Int64__$_$_$Int64(0,mask.high >>> b - 32);
+			mask = this5;
+		}
+		var b1 = 1;
+		b1 &= 63;
+		if(b1 == 0) {
+			var this6 = new haxe__$Int64__$_$_$Int64(divisor.high,divisor.low);
+			divisor = this6;
+		} else if(b1 < 32) {
+			var this7 = new haxe__$Int64__$_$_$Int64(divisor.high >>> b1,divisor.high << 32 - b1 | divisor.low >>> b1);
+			divisor = this7;
+		} else {
+			var this8 = new haxe__$Int64__$_$_$Int64(0,divisor.high >>> b1 - 32);
+			divisor = this8;
+		}
+	}
+	if(divSign) {
+		var high = ~quotient.high;
+		var low = ~quotient.low + 1 | 0;
+		if(low == 0) {
+			var ret = high++;
+			high = high | 0;
+		}
+		var this1 = new haxe__$Int64__$_$_$Int64(high,low);
+		quotient = this1;
+	}
+	if(dividend.high < 0) {
+		var high = ~modulus.high;
+		var low = ~modulus.low + 1 | 0;
+		if(low == 0) {
+			var ret = high++;
+			high = high | 0;
+		}
+		var this1 = new haxe__$Int64__$_$_$Int64(high,low);
+		modulus = this1;
+	}
+	return { quotient : quotient, modulus : modulus};
+};
+var haxe__$Int64__$_$_$Int64 = function(high,low) {
+	this.high = high;
+	this.low = low;
+};
+$hxClasses["haxe._Int64.___Int64"] = haxe__$Int64__$_$_$Int64;
+haxe__$Int64__$_$_$Int64.__name__ = "haxe._Int64.___Int64";
+haxe__$Int64__$_$_$Int64.prototype = {
+	high: null
+	,low: null
+	,__class__: haxe__$Int64__$_$_$Int64
+};
+var haxe_Int64Helper = function() { };
+$hxClasses["haxe.Int64Helper"] = haxe_Int64Helper;
+haxe_Int64Helper.__name__ = "haxe.Int64Helper";
+haxe_Int64Helper.fromFloat = function(f) {
+	if(isNaN(f) || !isFinite(f)) {
+		throw haxe_Exception.thrown("Number is NaN or Infinite");
+	}
+	var noFractions = f - f % 1;
+	if(noFractions > 9007199254740991) {
+		throw haxe_Exception.thrown("Conversion overflow");
+	}
+	if(noFractions < -9007199254740991) {
+		throw haxe_Exception.thrown("Conversion underflow");
+	}
+	var this1 = new haxe__$Int64__$_$_$Int64(0,0);
+	var result = this1;
+	var neg = noFractions < 0;
+	var rest = neg ? -noFractions : noFractions;
+	var i = 0;
+	while(rest >= 1) {
+		var curr = rest % 2;
+		rest /= 2;
+		if(curr >= 1) {
+			var a_high = 0;
+			var a_low = 1;
+			var b = i;
+			b &= 63;
+			var b1;
+			if(b == 0) {
+				var this1 = new haxe__$Int64__$_$_$Int64(a_high,a_low);
+				b1 = this1;
+			} else if(b < 32) {
+				var this2 = new haxe__$Int64__$_$_$Int64(a_high << b | a_low >>> 32 - b,a_low << b);
+				b1 = this2;
+			} else {
+				var this3 = new haxe__$Int64__$_$_$Int64(a_low << b - 32,0);
+				b1 = this3;
+			}
+			var high = result.high + b1.high | 0;
+			var low = result.low + b1.low | 0;
+			if(haxe_Int32.ucompare(low,result.low) < 0) {
+				var ret = high++;
+				high = high | 0;
+			}
+			var this4 = new haxe__$Int64__$_$_$Int64(high,low);
+			result = this4;
+		}
+		++i;
+	}
+	if(neg) {
+		var high = ~result.high;
+		var low = ~result.low + 1 | 0;
+		if(low == 0) {
+			var ret = high++;
+			high = high | 0;
+		}
+		var this1 = new haxe__$Int64__$_$_$Int64(high,low);
+		result = this1;
+	}
+	return result;
+};
 var haxe_Log = function() { };
 $hxClasses["haxe.Log"] = haxe_Log;
 haxe_Log.__name__ = "haxe.Log";
@@ -3789,6 +4029,300 @@ haxe_ValueException.prototype = $extend(haxe_Exception.prototype,{
 	}
 	,__class__: haxe_ValueException
 });
+var haxe_crypto_Md5 = function() {
+};
+$hxClasses["haxe.crypto.Md5"] = haxe_crypto_Md5;
+haxe_crypto_Md5.__name__ = "haxe.crypto.Md5";
+haxe_crypto_Md5.make = function(b) {
+	var h = new haxe_crypto_Md5().doEncode(haxe_crypto_Md5.bytes2blks(b));
+	var out = new haxe_io_Bytes(new ArrayBuffer(16));
+	var p = 0;
+	out.b[p++] = h[0] & 255;
+	out.b[p++] = h[0] >> 8 & 255;
+	out.b[p++] = h[0] >> 16 & 255;
+	out.b[p++] = h[0] >>> 24;
+	out.b[p++] = h[1] & 255;
+	out.b[p++] = h[1] >> 8 & 255;
+	out.b[p++] = h[1] >> 16 & 255;
+	out.b[p++] = h[1] >>> 24;
+	out.b[p++] = h[2] & 255;
+	out.b[p++] = h[2] >> 8 & 255;
+	out.b[p++] = h[2] >> 16 & 255;
+	out.b[p++] = h[2] >>> 24;
+	out.b[p++] = h[3] & 255;
+	out.b[p++] = h[3] >> 8 & 255;
+	out.b[p++] = h[3] >> 16 & 255;
+	out.b[p++] = h[3] >>> 24;
+	return out;
+};
+haxe_crypto_Md5.bytes2blks = function(b) {
+	var nblk = (b.length + 8 >> 6) + 1;
+	var blks = [];
+	var blksSize = nblk * 16;
+	var _g = 0;
+	var _g1 = blksSize;
+	while(_g < _g1) {
+		var i = _g++;
+		blks[i] = 0;
+	}
+	var i = 0;
+	while(i < b.length) {
+		blks[i >> 2] |= b.b[i] << (((b.length << 3) + i & 3) << 3);
+		++i;
+	}
+	blks[i >> 2] |= 128 << (b.length * 8 + i) % 4 * 8;
+	var l = b.length * 8;
+	var k = nblk * 16 - 2;
+	blks[k] = l & 255;
+	blks[k] |= (l >>> 8 & 255) << 8;
+	blks[k] |= (l >>> 16 & 255) << 16;
+	blks[k] |= (l >>> 24 & 255) << 24;
+	return blks;
+};
+haxe_crypto_Md5.prototype = {
+	bitOR: function(a,b) {
+		var lsb = a & 1 | b & 1;
+		var msb31 = a >>> 1 | b >>> 1;
+		return msb31 << 1 | lsb;
+	}
+	,bitXOR: function(a,b) {
+		var lsb = a & 1 ^ b & 1;
+		var msb31 = a >>> 1 ^ b >>> 1;
+		return msb31 << 1 | lsb;
+	}
+	,bitAND: function(a,b) {
+		var lsb = a & 1 & (b & 1);
+		var msb31 = a >>> 1 & b >>> 1;
+		return msb31 << 1 | lsb;
+	}
+	,addme: function(x,y) {
+		var lsw = (x & 65535) + (y & 65535);
+		var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+		return msw << 16 | lsw & 65535;
+	}
+	,rol: function(num,cnt) {
+		return num << cnt | num >>> 32 - cnt;
+	}
+	,cmn: function(q,a,b,x,s,t) {
+		return this.addme(this.rol(this.addme(this.addme(a,q),this.addme(x,t)),s),b);
+	}
+	,ff: function(a,b,c,d,x,s,t) {
+		return this.cmn(this.bitOR(this.bitAND(b,c),this.bitAND(~b,d)),a,b,x,s,t);
+	}
+	,gg: function(a,b,c,d,x,s,t) {
+		return this.cmn(this.bitOR(this.bitAND(b,d),this.bitAND(c,~d)),a,b,x,s,t);
+	}
+	,hh: function(a,b,c,d,x,s,t) {
+		return this.cmn(this.bitXOR(this.bitXOR(b,c),d),a,b,x,s,t);
+	}
+	,ii: function(a,b,c,d,x,s,t) {
+		return this.cmn(this.bitXOR(c,this.bitOR(b,~d)),a,b,x,s,t);
+	}
+	,doEncode: function(x) {
+		var a = 1732584193;
+		var b = -271733879;
+		var c = -1732584194;
+		var d = 271733878;
+		var step;
+		var i = 0;
+		while(i < x.length) {
+			var olda = a;
+			var oldb = b;
+			var oldc = c;
+			var oldd = d;
+			step = 0;
+			a = this.ff(a,b,c,d,x[i],7,-680876936);
+			d = this.ff(d,a,b,c,x[i + 1],12,-389564586);
+			c = this.ff(c,d,a,b,x[i + 2],17,606105819);
+			b = this.ff(b,c,d,a,x[i + 3],22,-1044525330);
+			a = this.ff(a,b,c,d,x[i + 4],7,-176418897);
+			d = this.ff(d,a,b,c,x[i + 5],12,1200080426);
+			c = this.ff(c,d,a,b,x[i + 6],17,-1473231341);
+			b = this.ff(b,c,d,a,x[i + 7],22,-45705983);
+			a = this.ff(a,b,c,d,x[i + 8],7,1770035416);
+			d = this.ff(d,a,b,c,x[i + 9],12,-1958414417);
+			c = this.ff(c,d,a,b,x[i + 10],17,-42063);
+			b = this.ff(b,c,d,a,x[i + 11],22,-1990404162);
+			a = this.ff(a,b,c,d,x[i + 12],7,1804603682);
+			d = this.ff(d,a,b,c,x[i + 13],12,-40341101);
+			c = this.ff(c,d,a,b,x[i + 14],17,-1502002290);
+			b = this.ff(b,c,d,a,x[i + 15],22,1236535329);
+			a = this.gg(a,b,c,d,x[i + 1],5,-165796510);
+			d = this.gg(d,a,b,c,x[i + 6],9,-1069501632);
+			c = this.gg(c,d,a,b,x[i + 11],14,643717713);
+			b = this.gg(b,c,d,a,x[i],20,-373897302);
+			a = this.gg(a,b,c,d,x[i + 5],5,-701558691);
+			d = this.gg(d,a,b,c,x[i + 10],9,38016083);
+			c = this.gg(c,d,a,b,x[i + 15],14,-660478335);
+			b = this.gg(b,c,d,a,x[i + 4],20,-405537848);
+			a = this.gg(a,b,c,d,x[i + 9],5,568446438);
+			d = this.gg(d,a,b,c,x[i + 14],9,-1019803690);
+			c = this.gg(c,d,a,b,x[i + 3],14,-187363961);
+			b = this.gg(b,c,d,a,x[i + 8],20,1163531501);
+			a = this.gg(a,b,c,d,x[i + 13],5,-1444681467);
+			d = this.gg(d,a,b,c,x[i + 2],9,-51403784);
+			c = this.gg(c,d,a,b,x[i + 7],14,1735328473);
+			b = this.gg(b,c,d,a,x[i + 12],20,-1926607734);
+			a = this.hh(a,b,c,d,x[i + 5],4,-378558);
+			d = this.hh(d,a,b,c,x[i + 8],11,-2022574463);
+			c = this.hh(c,d,a,b,x[i + 11],16,1839030562);
+			b = this.hh(b,c,d,a,x[i + 14],23,-35309556);
+			a = this.hh(a,b,c,d,x[i + 1],4,-1530992060);
+			d = this.hh(d,a,b,c,x[i + 4],11,1272893353);
+			c = this.hh(c,d,a,b,x[i + 7],16,-155497632);
+			b = this.hh(b,c,d,a,x[i + 10],23,-1094730640);
+			a = this.hh(a,b,c,d,x[i + 13],4,681279174);
+			d = this.hh(d,a,b,c,x[i],11,-358537222);
+			c = this.hh(c,d,a,b,x[i + 3],16,-722521979);
+			b = this.hh(b,c,d,a,x[i + 6],23,76029189);
+			a = this.hh(a,b,c,d,x[i + 9],4,-640364487);
+			d = this.hh(d,a,b,c,x[i + 12],11,-421815835);
+			c = this.hh(c,d,a,b,x[i + 15],16,530742520);
+			b = this.hh(b,c,d,a,x[i + 2],23,-995338651);
+			a = this.ii(a,b,c,d,x[i],6,-198630844);
+			d = this.ii(d,a,b,c,x[i + 7],10,1126891415);
+			c = this.ii(c,d,a,b,x[i + 14],15,-1416354905);
+			b = this.ii(b,c,d,a,x[i + 5],21,-57434055);
+			a = this.ii(a,b,c,d,x[i + 12],6,1700485571);
+			d = this.ii(d,a,b,c,x[i + 3],10,-1894986606);
+			c = this.ii(c,d,a,b,x[i + 10],15,-1051523);
+			b = this.ii(b,c,d,a,x[i + 1],21,-2054922799);
+			a = this.ii(a,b,c,d,x[i + 8],6,1873313359);
+			d = this.ii(d,a,b,c,x[i + 15],10,-30611744);
+			c = this.ii(c,d,a,b,x[i + 6],15,-1560198380);
+			b = this.ii(b,c,d,a,x[i + 13],21,1309151649);
+			a = this.ii(a,b,c,d,x[i + 4],6,-145523070);
+			d = this.ii(d,a,b,c,x[i + 11],10,-1120210379);
+			c = this.ii(c,d,a,b,x[i + 2],15,718787259);
+			b = this.ii(b,c,d,a,x[i + 9],21,-343485551);
+			a = this.addme(a,olda);
+			b = this.addme(b,oldb);
+			c = this.addme(c,oldc);
+			d = this.addme(d,oldd);
+			i += 16;
+		}
+		return [a,b,c,d];
+	}
+	,__class__: haxe_crypto_Md5
+};
+var haxe_crypto_Sha1 = function() {
+};
+$hxClasses["haxe.crypto.Sha1"] = haxe_crypto_Sha1;
+haxe_crypto_Sha1.__name__ = "haxe.crypto.Sha1";
+haxe_crypto_Sha1.make = function(b) {
+	var h = new haxe_crypto_Sha1().doEncode(haxe_crypto_Sha1.bytes2blks(b));
+	var out = new haxe_io_Bytes(new ArrayBuffer(20));
+	var p = 0;
+	out.b[p++] = h[0] >>> 24;
+	out.b[p++] = h[0] >> 16 & 255;
+	out.b[p++] = h[0] >> 8 & 255;
+	out.b[p++] = h[0] & 255;
+	out.b[p++] = h[1] >>> 24;
+	out.b[p++] = h[1] >> 16 & 255;
+	out.b[p++] = h[1] >> 8 & 255;
+	out.b[p++] = h[1] & 255;
+	out.b[p++] = h[2] >>> 24;
+	out.b[p++] = h[2] >> 16 & 255;
+	out.b[p++] = h[2] >> 8 & 255;
+	out.b[p++] = h[2] & 255;
+	out.b[p++] = h[3] >>> 24;
+	out.b[p++] = h[3] >> 16 & 255;
+	out.b[p++] = h[3] >> 8 & 255;
+	out.b[p++] = h[3] & 255;
+	out.b[p++] = h[4] >>> 24;
+	out.b[p++] = h[4] >> 16 & 255;
+	out.b[p++] = h[4] >> 8 & 255;
+	out.b[p++] = h[4] & 255;
+	return out;
+};
+haxe_crypto_Sha1.bytes2blks = function(b) {
+	var nblk = (b.length + 8 >> 6) + 1;
+	var blks = [];
+	var _g = 0;
+	var _g1 = nblk * 16;
+	while(_g < _g1) {
+		var i = _g++;
+		blks[i] = 0;
+	}
+	var _g = 0;
+	var _g1 = b.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var p = i >> 2;
+		blks[p] |= b.b[i] << 24 - ((i & 3) << 3);
+	}
+	var i = b.length;
+	var p = i >> 2;
+	blks[p] |= 128 << 24 - ((i & 3) << 3);
+	blks[nblk * 16 - 1] = b.length * 8;
+	return blks;
+};
+haxe_crypto_Sha1.prototype = {
+	doEncode: function(x) {
+		var w = [];
+		var a = 1732584193;
+		var b = -271733879;
+		var c = -1732584194;
+		var d = 271733878;
+		var e = -1009589776;
+		var i = 0;
+		while(i < x.length) {
+			var olda = a;
+			var oldb = b;
+			var oldc = c;
+			var oldd = d;
+			var olde = e;
+			var j = 0;
+			while(j < 80) {
+				if(j < 16) {
+					w[j] = x[i + j];
+				} else {
+					var num = w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16];
+					w[j] = num << 1 | num >>> 31;
+				}
+				var t = (a << 5 | a >>> 27) + this.ft(j,b,c,d) + e + w[j] + this.kt(j);
+				e = d;
+				d = c;
+				c = b << 30 | b >>> 2;
+				b = a;
+				a = t;
+				++j;
+			}
+			a += olda;
+			b += oldb;
+			c += oldc;
+			d += oldd;
+			e += olde;
+			i += 16;
+		}
+		return [a,b,c,d,e];
+	}
+	,ft: function(t,b,c,d) {
+		if(t < 20) {
+			return b & c | ~b & d;
+		}
+		if(t < 40) {
+			return b ^ c ^ d;
+		}
+		if(t < 60) {
+			return b & c | b & d | c & d;
+		}
+		return b ^ c ^ d;
+	}
+	,kt: function(t) {
+		if(t < 20) {
+			return 1518500249;
+		}
+		if(t < 40) {
+			return 1859775393;
+		}
+		if(t < 60) {
+			return -1894007588;
+		}
+		return -899497514;
+	}
+	,__class__: haxe_crypto_Sha1
+};
 var haxe_ds_Either = $hxEnums["haxe.ds.Either"] = { __ename__:"haxe.ds.Either",__constructs__:null
 	,Left: ($_=function(v) { return {_hx_index:0,v:v,__enum__:"haxe.ds.Either",toString:$estr}; },$_._hx_name="Left",$_.__params__ = ["v"],$_)
 	,Right: ($_=function(v) { return {_hx_index:1,v:v,__enum__:"haxe.ds.Either",toString:$estr}; },$_._hx_name="Right",$_.__params__ = ["v"],$_)
@@ -4263,12 +4797,67 @@ var haxe_io_Bytes = function(data) {
 };
 $hxClasses["haxe.io.Bytes"] = haxe_io_Bytes;
 haxe_io_Bytes.__name__ = "haxe.io.Bytes";
+haxe_io_Bytes.ofString = function(s,encoding) {
+	if(encoding == haxe_io_Encoding.RawNative) {
+		var buf = new Uint8Array(s.length << 1);
+		var _g = 0;
+		var _g1 = s.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var c = s.charCodeAt(i);
+			buf[i << 1] = c & 255;
+			buf[i << 1 | 1] = c >> 8;
+		}
+		return new haxe_io_Bytes(buf.buffer);
+	}
+	var a = [];
+	var i = 0;
+	while(i < s.length) {
+		var c = s.charCodeAt(i++);
+		if(55296 <= c && c <= 56319) {
+			c = c - 55232 << 10 | s.charCodeAt(i++) & 1023;
+		}
+		if(c <= 127) {
+			a.push(c);
+		} else if(c <= 2047) {
+			a.push(192 | c >> 6);
+			a.push(128 | c & 63);
+		} else if(c <= 65535) {
+			a.push(224 | c >> 12);
+			a.push(128 | c >> 6 & 63);
+			a.push(128 | c & 63);
+		} else {
+			a.push(240 | c >> 18);
+			a.push(128 | c >> 12 & 63);
+			a.push(128 | c >> 6 & 63);
+			a.push(128 | c & 63);
+		}
+	}
+	return new haxe_io_Bytes(new Uint8Array(a).buffer);
+};
 haxe_io_Bytes.ofData = function(b) {
 	var hb = b.hxBytes;
 	if(hb != null) {
 		return hb;
 	}
 	return new haxe_io_Bytes(b);
+};
+haxe_io_Bytes.ofHex = function(s) {
+	if((s.length & 1) != 0) {
+		throw haxe_Exception.thrown("Not a hex string (odd number of digits)");
+	}
+	var a = [];
+	var i = 0;
+	var len = s.length >> 1;
+	while(i < len) {
+		var high = s.charCodeAt(i * 2);
+		var low = s.charCodeAt(i * 2 + 1);
+		high = (high & 15) + ((high & 64) >> 6) * 9;
+		low = (low & 15) + ((low & 64) >> 6) * 9;
+		a.push((high << 4 | low) & 255);
+		++i;
+	}
+	return new haxe_io_Bytes(new Uint8Array(a).buffer);
 };
 haxe_io_Bytes.prototype = {
 	length: null
@@ -4317,6 +4906,26 @@ haxe_io_Bytes.prototype = {
 			break;
 		}
 		return s;
+	}
+	,toHex: function() {
+		var s_b = "";
+		var chars = [];
+		var str = "0123456789abcdef";
+		var _g = 0;
+		var _g1 = str.length;
+		while(_g < _g1) {
+			var i = _g++;
+			chars.push(HxOverrides.cca(str,i));
+		}
+		var _g = 0;
+		var _g1 = this.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var c = this.b[i];
+			s_b += String.fromCodePoint(chars[c >> 4]);
+			s_b += String.fromCodePoint(chars[c & 15]);
+		}
+		return s_b;
 	}
 	,__class__: haxe_io_Bytes
 };
@@ -6050,6 +6659,7 @@ loader_BinaryLoader.dbQuery = function(url,dbAP,onLoaded) {
 	var s = new haxe_Serializer();
 	var bl = new loader_BinaryLoader(url);
 	var dbQuery = new db_DbQuery(dbAP);
+	haxe_Log.trace(dbQuery,{ fileName : "loader/BinaryLoader.hx", lineNumber : 38, className : "loader.BinaryLoader", methodName : "dbQuery"});
 	s.serialize(dbQuery);
 	bl.param = s.toString();
 	bl.cB = onLoaded;
@@ -6065,7 +6675,6 @@ loader_BinaryLoader.prototype = {
 	,onLoaded: function(bytes) {
 		if(bytes != null && bytes.length > 0) {
 			var data = haxe_Unserializer.run(bytes);
-			haxe_Log.trace(data,{ fileName : "loader/BinaryLoader.hx", lineNumber : 103, className : "loader.BinaryLoader", methodName : "onLoaded"});
 			this.cB(data);
 		} else {
 			haxe_Log.trace("got nothing",{ fileName : "loader/BinaryLoader.hx", lineNumber : 107, className : "loader.BinaryLoader", methodName : "onLoaded"});
@@ -6234,6 +6843,11 @@ me_cunity_debug_Out._dumpObjectTree = function(root,parent,recursive,i) {
 		haxe_Log.trace(ex,{ fileName : "me/cunity/debug/Out.hx", lineNumber : 337, className : "me.cunity.debug.Out", methodName : "_dumpObjectTree"});
 	}
 };
+me_cunity_debug_Out.dumpKeys = function(it) {
+	var kN = [];
+	while(it.hasNext()) kN.push(it.next());
+	return kN.join("|");
+};
 me_cunity_debug_Out.dumpObject = function(ob,i) {
 	var tClass = js_Boot.getClass(ob);
 	var m = "dumpObject:" + Std.string(ob != null ? js_Boot.getClass(ob) : ob) + "\n";
@@ -6272,7 +6886,7 @@ me_cunity_debug_Out.dumpStack = function(sA,i) {
 		me_cunity_debug_Out.itemToString(item,b);
 		b.b += "\n";
 	}
-	haxe_Log.trace(b.b,{ fileName : "me/cunity/debug/Out.hx", lineNumber : 405, className : "me.cunity.debug.Out", methodName : "dumpStack", customParams : [i]});
+	haxe_Log.trace(b.b,{ fileName : "me/cunity/debug/Out.hx", lineNumber : 409, className : "me.cunity.debug.Out", methodName : "dumpStack", customParams : [i]});
 };
 me_cunity_debug_Out.itemToString = function(s,b) {
 	switch(s._hx_index) {
@@ -7939,6 +8553,19 @@ shared_Utils.dynToMap = function(d) {
 	}
 	return _g;
 };
+shared_Utils.dynArray2IntMap = function(d,findBy) {
+	if(findBy == null) {
+		findBy = "id";
+	}
+	var map = new haxe_ds_IntMap();
+	var _g = 0;
+	while(_g < d.length) {
+		var el = d[_g];
+		++_g;
+		map.h[el.h[findBy]] = el;
+	}
+	return map;
+};
 shared_Utils.dyn2map = function(d) {
 	var map = new haxe_ds_StringMap();
 	var _g = 0;
@@ -7946,7 +8573,7 @@ shared_Utils.dyn2map = function(d) {
 	while(_g < _g1.length) {
 		var f = _g1[_g];
 		++_g;
-		haxe_Log.trace(f,{ fileName : "shared/Utils.hx", lineNumber : 175, className : "shared.Utils", methodName : "dyn2map"});
+		haxe_Log.trace(f,{ fileName : "shared/Utils.hx", lineNumber : 190, className : "shared.Utils", methodName : "dyn2map"});
 		var v = Reflect.field(d,f);
 		map.h[f] = v;
 	}
@@ -7977,7 +8604,7 @@ shared_Utils.keyMax = function(d,key) {
 	if(d.length == 0) {
 		return res;
 	}
-	haxe_Log.trace(Type.typeof(d[0]),{ fileName : "shared/Utils.hx", lineNumber : 201, className : "shared.Utils", methodName : "keyMax"});
+	haxe_Log.trace(Type.typeof(d[0]),{ fileName : "shared/Utils.hx", lineNumber : 216, className : "shared.Utils", methodName : "keyMax"});
 	var _g = 0;
 	while(_g < d.length) {
 		var el = d[_g];
@@ -8049,11 +8676,16 @@ store_AppStore.prototype = {
 		case 3:
 			var dataAction = action.action;
 			haxe_Log.trace(dataAction,{ fileName : "store/AppStore.hx", lineNumber : 82, className : "store.AppStore", methodName : "reduce"});
-			if(dataAction._hx_index == 3) {
+			switch(dataAction._hx_index) {
+			case 3:
 				var data = dataAction.data;
 				haxe_Log.trace(data.dataRows,{ fileName : "store/AppStore.hx", lineNumber : 86, className : "store.AppStore", methodName : "reduce"});
 				return react_ReactUtil.copy(state,{ dataStore : { contactsDbData : data}});
-			} else {
+			case 4:
+				var data = dataAction.data;
+				haxe_Log.trace(data.dataRows.length,{ fileName : "store/AppStore.hx", lineNumber : 90, className : "store.AppStore", methodName : "reduce"});
+				return react_ReactUtil.copy(state,{ dataStore : { qcData : shared_Utils.dynArray2IntMap(data.dataRows,"lead_id")}});
+			default:
 				return state;
 			}
 			break;
@@ -8098,8 +8730,8 @@ store_ConfigStore.prototype = {
 	,__class__: store_ConfigStore
 };
 var store_DataStore = function() {
-	this.initState = { contactData : new haxe_ds_IntMap(), dealData : new haxe_ds_IntMap(), accountData : new haxe_ds_IntMap(), returnDebitsData : new haxe_ds_IntMap()};
-	haxe_Log.trace("ok",{ fileName : "store/DataStore.hx", lineNumber : 36, className : "store.DataStore", methodName : "new"});
+	this.initState = { contactData : new haxe_ds_IntMap(), dealData : new haxe_ds_IntMap(), accountData : new haxe_ds_IntMap(), qcData : new haxe_ds_IntMap(), returnDebitsData : new haxe_ds_IntMap()};
+	haxe_Log.trace("ok",{ fileName : "store/DataStore.hx", lineNumber : 37, className : "store.DataStore", methodName : "new"});
 };
 $hxClasses["store.DataStore"] = store_DataStore;
 store_DataStore.__name__ = "store.DataStore";
@@ -8108,13 +8740,12 @@ store_DataStore.prototype = {
 	initState: null
 	,store: null
 	,reduce: function(state,action) {
-		haxe_Log.trace(action,{ fileName : "store/DataStore.hx", lineNumber : 41, className : "store.DataStore", methodName : "reduce"});
-		haxe_Log.trace(Reflect.fields(state),{ fileName : "store/DataStore.hx", lineNumber : 42, className : "store.DataStore", methodName : "reduce"});
-		haxe_Log.trace(state.dealData,{ fileName : "store/DataStore.hx", lineNumber : 43, className : "store.DataStore", methodName : "reduce"});
+		haxe_Log.trace(Reflect.fields(state),{ fileName : "store/DataStore.hx", lineNumber : 43, className : "store.DataStore", methodName : "reduce"});
+		haxe_Log.trace(state.dealData,{ fileName : "store/DataStore.hx", lineNumber : 44, className : "store.DataStore", methodName : "reduce"});
 		switch(action._hx_index) {
 		case 1:
 			var uData = action.uData;
-			haxe_Log.trace(uData,{ fileName : "store/DataStore.hx", lineNumber : 90, className : "store.DataStore", methodName : "reduce"});
+			haxe_Log.trace(uData,{ fileName : "store/DataStore.hx", lineNumber : 104, className : "store.DataStore", methodName : "reduce"});
 			var cData = state.contactData;
 			var uDataIt = uData.iterator();
 			var row = null;
@@ -8133,38 +8764,47 @@ store_DataStore.prototype = {
 		case 3:
 			var data = action.data;
 			if(data.dataRows != null) {
-				haxe_Log.trace(data.dataRows.length,{ fileName : "store/DataStore.hx", lineNumber : 50, className : "store.DataStore", methodName : "reduce"});
-				haxe_Log.trace(react_ReactUtil.copy(state,{ contactsDbData : data}).contactsDbData.dataRows.length,{ fileName : "store/DataStore.hx", lineNumber : 51, className : "store.DataStore", methodName : "reduce"});
+				haxe_Log.trace(data.dataRows.length,{ fileName : "store/DataStore.hx", lineNumber : 51, className : "store.DataStore", methodName : "reduce"});
+				haxe_Log.trace(react_ReactUtil.copy(state,{ contactsDbData : data}).contactsDbData.dataRows.length,{ fileName : "store/DataStore.hx", lineNumber : 52, className : "store.DataStore", methodName : "reduce"});
 			}
 			return react_ReactUtil.copy(state,{ contactsDbData : data});
 		case 4:
-			return state;
+			var data = action.data;
+			haxe_Log.trace(Reflect.fields(data).join("|"),{ fileName : "store/DataStore.hx", lineNumber : 61, className : "store.DataStore", methodName : "reduce"});
+			return react_ReactUtil.copy(state,{ qcData : shared_Utils.dynArray2IntMap(data.dataRows,"lead_id")});
 		case 5:
-			var sData = action.sData;
-			return react_ReactUtil.copy(state,{ contactData : sData});
+			return state;
 		case 6:
 			var sData = action.sData;
-			haxe_Log.trace(sData,{ fileName : "store/DataStore.hx", lineNumber : 67, className : "store.DataStore", methodName : "reduce"});
-			return react_ReactUtil.copy(state,{ contactActData : sData});
+			return react_ReactUtil.copy(state,{ contactData : sData});
 		case 7:
 			var sData = action.sData;
-			haxe_Log.trace(sData,{ fileName : "store/DataStore.hx", lineNumber : 73, className : "store.DataStore", methodName : "reduce"});
-			haxe_Log.trace(shared_Utils.keysList(state.contactData.keys()),{ fileName : "store/DataStore.hx", lineNumber : 75, className : "store.DataStore", methodName : "reduce"});
-			return react_ReactUtil.copy(state,{ contactData : sData});
-		case 9:
+			haxe_Log.trace(sData,{ fileName : "store/DataStore.hx", lineNumber : 81, className : "store.DataStore", methodName : "reduce"});
+			return react_ReactUtil.copy(state,{ contactActData : sData});
+		case 8:
 			var sData = action.sData;
-			haxe_Log.trace(shared_Utils.keysList(sData.keys()),{ fileName : "store/DataStore.hx", lineNumber : 85, className : "store.DataStore", methodName : "reduce"});
-			return react_ReactUtil.copy(state,{ returnDebitsData : sData});
+			haxe_Log.trace(sData,{ fileName : "store/DataStore.hx", lineNumber : 87, className : "store.DataStore", methodName : "reduce"});
+			haxe_Log.trace(shared_Utils.keysList(state.contactData.keys()),{ fileName : "store/DataStore.hx", lineNumber : 89, className : "store.DataStore", methodName : "reduce"});
+			return react_ReactUtil.copy(state,{ contactData : sData});
 		case 10:
 			var sData = action.sData;
-			haxe_Log.trace(shared_Utils.keysList(sData.keys()),{ fileName : "store/DataStore.hx", lineNumber : 80, className : "store.DataStore", methodName : "reduce"});
+			haxe_Log.trace(shared_Utils.keysList(sData.keys()),{ fileName : "store/DataStore.hx", lineNumber : 99, className : "store.DataStore", methodName : "reduce"});
+			return react_ReactUtil.copy(state,{ returnDebitsData : sData});
+		case 11:
+			var sData = action.sData;
+			haxe_Log.trace(shared_Utils.keysList(sData.keys()),{ fileName : "store/DataStore.hx", lineNumber : 94, className : "store.DataStore", methodName : "reduce"});
 			return react_ReactUtil.copy(state,{ dealData : sData});
+		case 12:
+			var sData = action.sData;
+			haxe_Log.trace(shared_Utils.keysList(sData.keys()),{ fileName : "store/DataStore.hx", lineNumber : 67, className : "store.DataStore", methodName : "reduce"});
+			haxe_Log.trace(sData,{ fileName : "store/DataStore.hx", lineNumber : 68, className : "store.DataStore", methodName : "reduce"});
+			return react_ReactUtil.copy(state,{ qcActData : sData});
 		default:
 			return state;
 		}
 	}
 	,middleware: function(action,next) {
-		haxe_Log.trace($hxEnums[action.__enum__].__constructs__[action._hx_index]._hx_name,{ fileName : "store/DataStore.hx", lineNumber : 108, className : "store.DataStore", methodName : "middleware"});
+		haxe_Log.trace($hxEnums[action.__enum__].__constructs__[action._hx_index]._hx_name,{ fileName : "store/DataStore.hx", lineNumber : 122, className : "store.DataStore", methodName : "middleware"});
 		switch(action._hx_index) {
 		case 0:
 			var data = action.dataAccess;
@@ -8173,7 +8813,7 @@ store_DataStore.prototype = {
 			var data = action.data;
 			this.store.dispatch(redux_Action.map(action_AppAction.Data(action)));
 			return next();
-		case 11:
+		case 13:
 			var data = action.dataAccess;
 			return this.store.dispatch(action_async_LivePBXSync.importContacts(data));
 		default:
@@ -10625,6 +11265,623 @@ tools_ClassInfo.keyNames = function(map) {
 	}
 	return _g;
 };
+var uuid_Uuid = function() { };
+$hxClasses["uuid.Uuid"] = uuid_Uuid;
+uuid_Uuid.__name__ = "uuid.Uuid";
+uuid_Uuid.splitmix64_seed = function(index) {
+	var a_high = index >> 31;
+	var a_low = index;
+	var b_high = -1640531527;
+	var b_low = 2135587861;
+	var high = a_high + b_high | 0;
+	var low = a_low + b_low | 0;
+	if(haxe_Int32.ucompare(low,a_low) < 0) {
+		var ret = high++;
+		high = high | 0;
+	}
+	var this1 = new haxe__$Int64__$_$_$Int64(high,low);
+	var result = this1;
+	var b = 30;
+	b &= 63;
+	var b1;
+	if(b == 0) {
+		var this1 = new haxe__$Int64__$_$_$Int64(result.high,result.low);
+		b1 = this1;
+	} else if(b < 32) {
+		var this1 = new haxe__$Int64__$_$_$Int64(result.high >> b,result.high << 32 - b | result.low >>> b);
+		b1 = this1;
+	} else {
+		var this1 = new haxe__$Int64__$_$_$Int64(result.high >> 31,result.high >> b - 32);
+		b1 = this1;
+	}
+	var a_high = result.high ^ b1.high;
+	var a_low = result.low ^ b1.low;
+	var b_high = -1084733587;
+	var b_low = 484763065;
+	var mask = 65535;
+	var al = a_low & mask;
+	var ah = a_low >>> 16;
+	var bl = b_low & mask;
+	var bh = b_low >>> 16;
+	var p00 = haxe_Int32._mul(al,bl);
+	var p10 = haxe_Int32._mul(ah,bl);
+	var p01 = haxe_Int32._mul(al,bh);
+	var p11 = haxe_Int32._mul(ah,bh);
+	var low = p00;
+	var high = (p11 + (p01 >>> 16) | 0) + (p10 >>> 16) | 0;
+	p01 <<= 16;
+	low = low + p01 | 0;
+	if(haxe_Int32.ucompare(low,p01) < 0) {
+		var ret = high++;
+		high = high | 0;
+	}
+	p10 <<= 16;
+	low = low + p10 | 0;
+	if(haxe_Int32.ucompare(low,p10) < 0) {
+		var ret = high++;
+		high = high | 0;
+	}
+	high = high + (haxe_Int32._mul(a_low,b_high) + haxe_Int32._mul(a_high,b_low) | 0) | 0;
+	var this1 = new haxe__$Int64__$_$_$Int64(high,low);
+	result = this1;
+	var b = 27;
+	b &= 63;
+	var b1;
+	if(b == 0) {
+		var this1 = new haxe__$Int64__$_$_$Int64(result.high,result.low);
+		b1 = this1;
+	} else if(b < 32) {
+		var this1 = new haxe__$Int64__$_$_$Int64(result.high >> b,result.high << 32 - b | result.low >>> b);
+		b1 = this1;
+	} else {
+		var this1 = new haxe__$Int64__$_$_$Int64(result.high >> 31,result.high >> b - 32);
+		b1 = this1;
+	}
+	var a_high = result.high ^ b1.high;
+	var a_low = result.low ^ b1.low;
+	var b_high = -1798288965;
+	var b_low = 321982955;
+	var mask = 65535;
+	var al = a_low & mask;
+	var ah = a_low >>> 16;
+	var bl = b_low & mask;
+	var bh = b_low >>> 16;
+	var p00 = haxe_Int32._mul(al,bl);
+	var p10 = haxe_Int32._mul(ah,bl);
+	var p01 = haxe_Int32._mul(al,bh);
+	var p11 = haxe_Int32._mul(ah,bh);
+	var low = p00;
+	var high = (p11 + (p01 >>> 16) | 0) + (p10 >>> 16) | 0;
+	p01 <<= 16;
+	low = low + p01 | 0;
+	if(haxe_Int32.ucompare(low,p01) < 0) {
+		var ret = high++;
+		high = high | 0;
+	}
+	p10 <<= 16;
+	low = low + p10 | 0;
+	if(haxe_Int32.ucompare(low,p10) < 0) {
+		var ret = high++;
+		high = high | 0;
+	}
+	high = high + (haxe_Int32._mul(a_low,b_high) + haxe_Int32._mul(a_high,b_low) | 0) | 0;
+	var this1 = new haxe__$Int64__$_$_$Int64(high,low);
+	result = this1;
+	var b = 31;
+	b &= 63;
+	var b1;
+	if(b == 0) {
+		var this1 = new haxe__$Int64__$_$_$Int64(result.high,result.low);
+		b1 = this1;
+	} else if(b < 32) {
+		var this1 = new haxe__$Int64__$_$_$Int64(result.high >> b,result.high << 32 - b | result.low >>> b);
+		b1 = this1;
+	} else {
+		var this1 = new haxe__$Int64__$_$_$Int64(result.high >> 31,result.high >> b - 32);
+		b1 = this1;
+	}
+	var this1 = new haxe__$Int64__$_$_$Int64(result.high ^ b1.high,result.low ^ b1.low);
+	return this1;
+};
+uuid_Uuid.randomFromRange = function(min,max) {
+	var s1 = uuid_Uuid.state0;
+	var s0 = uuid_Uuid.state1;
+	uuid_Uuid.state0 = s0;
+	var b = 23;
+	b &= 63;
+	var b1;
+	if(b == 0) {
+		var this1 = new haxe__$Int64__$_$_$Int64(s1.high,s1.low);
+		b1 = this1;
+	} else if(b < 32) {
+		var this1 = new haxe__$Int64__$_$_$Int64(s1.high << b | s1.low >>> 32 - b,s1.low << b);
+		b1 = this1;
+	} else {
+		var this1 = new haxe__$Int64__$_$_$Int64(s1.low << b - 32,0);
+		b1 = this1;
+	}
+	var this1 = new haxe__$Int64__$_$_$Int64(s1.high ^ b1.high,s1.low ^ b1.low);
+	s1 = this1;
+	var a_high = s1.high ^ s0.high;
+	var a_low = s1.low ^ s0.low;
+	var b = 18;
+	b &= 63;
+	var b1;
+	if(b == 0) {
+		var this1 = new haxe__$Int64__$_$_$Int64(s1.high,s1.low);
+		b1 = this1;
+	} else if(b < 32) {
+		var this1 = new haxe__$Int64__$_$_$Int64(s1.high >>> b,s1.high << 32 - b | s1.low >>> b);
+		b1 = this1;
+	} else {
+		var this1 = new haxe__$Int64__$_$_$Int64(0,s1.high >>> b - 32);
+		b1 = this1;
+	}
+	var a_high1 = a_high ^ b1.high;
+	var a_low1 = a_low ^ b1.low;
+	var b = 5;
+	b &= 63;
+	var b1;
+	if(b == 0) {
+		var this1 = new haxe__$Int64__$_$_$Int64(s0.high,s0.low);
+		b1 = this1;
+	} else if(b < 32) {
+		var this1 = new haxe__$Int64__$_$_$Int64(s0.high >>> b,s0.high << 32 - b | s0.low >>> b);
+		b1 = this1;
+	} else {
+		var this1 = new haxe__$Int64__$_$_$Int64(0,s0.high >>> b - 32);
+		b1 = this1;
+	}
+	var this1 = new haxe__$Int64__$_$_$Int64(a_high1 ^ b1.high,a_low1 ^ b1.low);
+	uuid_Uuid.state1 = this1;
+	var a = uuid_Uuid.state1;
+	var high = a.high + s0.high | 0;
+	var low = a.low + s0.low | 0;
+	if(haxe_Int32.ucompare(low,a.low) < 0) {
+		var ret = high++;
+		high = high | 0;
+	}
+	var this1 = new haxe__$Int64__$_$_$Int64(high,low);
+	var x = max - min + 1;
+	var this2 = new haxe__$Int64__$_$_$Int64(x >> 31,x);
+	var result = haxe_Int64.divMod(this1,this2).modulus.low;
+	if(result < 0) {
+		result = -result;
+	}
+	return result + min;
+};
+uuid_Uuid.randomByte = function() {
+	return uuid_Uuid.randomFromRange(0,255);
+};
+uuid_Uuid.fromShort = function(shortUuid,separator,fromAlphabet) {
+	if(fromAlphabet == null) {
+		fromAlphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+	}
+	if(separator == null) {
+		separator = "-";
+	}
+	var uuid = uuid_Uuid.convert(shortUuid,fromAlphabet,"0123456789abcdef");
+	return uuid_Uuid.hexToUuid(uuid,separator);
+};
+uuid_Uuid.toShort = function(uuid,separator,toAlphabet) {
+	if(toAlphabet == null) {
+		toAlphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+	}
+	if(separator == null) {
+		separator = "-";
+	}
+	uuid = StringTools.replace(uuid,separator,"").toLowerCase();
+	return uuid_Uuid.convert(uuid,"0123456789abcdef",toAlphabet);
+};
+uuid_Uuid.fromNano = function(nanoUuid,separator,fromAlphabet) {
+	if(fromAlphabet == null) {
+		fromAlphabet = "_-0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	}
+	if(separator == null) {
+		separator = "-";
+	}
+	var uuid = uuid_Uuid.convert(nanoUuid,fromAlphabet,"0123456789abcdef");
+	return uuid_Uuid.hexToUuid(uuid,separator);
+};
+uuid_Uuid.toNano = function(uuid,separator,toAlphabet) {
+	if(toAlphabet == null) {
+		toAlphabet = "_-0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	}
+	if(separator == null) {
+		separator = "-";
+	}
+	uuid = StringTools.replace(uuid,separator,"").toLowerCase();
+	return uuid_Uuid.convert(uuid,"0123456789abcdef",toAlphabet);
+};
+uuid_Uuid.v1 = function(node,optClockSequence,msecs,optNsecs,randomFunc,separator,shortUuid,toAlphabet) {
+	if(toAlphabet == null) {
+		toAlphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+	}
+	if(shortUuid == null) {
+		shortUuid = false;
+	}
+	if(separator == null) {
+		separator = "-";
+	}
+	if(optNsecs == null) {
+		optNsecs = -1;
+	}
+	if(msecs == null) {
+		msecs = -1;
+	}
+	if(optClockSequence == null) {
+		optClockSequence = -1;
+	}
+	if(randomFunc == null) {
+		randomFunc = uuid_Uuid.randomByte;
+	}
+	var buffer = new haxe_io_Bytes(new ArrayBuffer(16));
+	if(node == null) {
+		node = new haxe_io_Bytes(new ArrayBuffer(6));
+		var v = randomFunc();
+		node.b[0] = v;
+		var v = randomFunc();
+		node.b[1] = v;
+		var v = randomFunc();
+		node.b[2] = v;
+		var v = randomFunc();
+		node.b[3] = v;
+		var v = randomFunc();
+		node.b[4] = v;
+		var v = randomFunc();
+		node.b[5] = v;
+		node.b[0] |= 1;
+	}
+	if(uuid_Uuid.clockSequenceBuffer == -1) {
+		uuid_Uuid.clockSequenceBuffer = (randomFunc() << 8 | randomFunc()) & 16383;
+	}
+	var clockSeq = optClockSequence;
+	if(optClockSequence == -1) {
+		clockSeq = uuid_Uuid.clockSequenceBuffer;
+	}
+	if(msecs == -1) {
+		msecs = HxOverrides.now() / 1000;
+	}
+	var nsecs = optNsecs;
+	if(optNsecs == -1) {
+		nsecs = uuid_Uuid.lastNSecs + 1;
+	}
+	var dt = msecs - uuid_Uuid.lastMSecs + (nsecs - uuid_Uuid.lastNSecs) / 10000;
+	if(dt < 0 && optClockSequence == -1) {
+		clockSeq = clockSeq + 1 & 16383;
+	}
+	if((dt < 0 || msecs > uuid_Uuid.lastMSecs) && optNsecs == -1) {
+		nsecs = 0;
+	}
+	if(nsecs >= 10000) {
+		throw haxe_Exception.thrown("Can't create more than 10M uuids/sec");
+	}
+	uuid_Uuid.lastMSecs = msecs;
+	uuid_Uuid.lastNSecs = nsecs;
+	uuid_Uuid.clockSequenceBuffer = clockSeq;
+	msecs += 12219292800000;
+	var this1 = new haxe__$Int64__$_$_$Int64(1,0);
+	var dvs = this1;
+	var a = haxe_Int64Helper.fromFloat(msecs);
+	var b_high = 0;
+	var b_low = 268435455;
+	var a_high = a.high & b_high;
+	var a_low = a.low & b_low;
+	var b_high = 0;
+	var b_low = 10000;
+	var mask = 65535;
+	var al = a_low & mask;
+	var ah = a_low >>> 16;
+	var bl = b_low & mask;
+	var bh = b_low >>> 16;
+	var p00 = haxe_Int32._mul(al,bl);
+	var p10 = haxe_Int32._mul(ah,bl);
+	var p01 = haxe_Int32._mul(al,bh);
+	var p11 = haxe_Int32._mul(ah,bh);
+	var low = p00;
+	var high = (p11 + (p01 >>> 16) | 0) + (p10 >>> 16) | 0;
+	p01 <<= 16;
+	low = low + p01 | 0;
+	if(haxe_Int32.ucompare(low,p01) < 0) {
+		var ret = high++;
+		high = high | 0;
+	}
+	p10 <<= 16;
+	low = low + p10 | 0;
+	if(haxe_Int32.ucompare(low,p10) < 0) {
+		var ret = high++;
+		high = high | 0;
+	}
+	high = high + (haxe_Int32._mul(a_low,b_high) + haxe_Int32._mul(a_high,b_low) | 0) | 0;
+	var a_high = high;
+	var a_low = low;
+	var b_high = nsecs >> 31;
+	var b_low = nsecs;
+	var high = a_high + b_high | 0;
+	var low = a_low + b_low | 0;
+	if(haxe_Int32.ucompare(low,a_low) < 0) {
+		var ret = high++;
+		high = high | 0;
+	}
+	var this1 = new haxe__$Int64__$_$_$Int64(high,low);
+	var tl = haxe_Int64.divMod(this1,dvs).modulus.low;
+	buffer.b[0] = tl >>> 24 & 255;
+	buffer.b[1] = tl >>> 16 & 255;
+	buffer.b[2] = tl >>> 8 & 255;
+	buffer.b[3] = tl & 255;
+	var a = haxe_Int64.divMod(haxe_Int64Helper.fromFloat(msecs),dvs).quotient;
+	var b_high = 0;
+	var b_low = 10000;
+	var mask = 65535;
+	var al = a.low & mask;
+	var ah = a.low >>> 16;
+	var bl = b_low & mask;
+	var bh = b_low >>> 16;
+	var p00 = haxe_Int32._mul(al,bl);
+	var p10 = haxe_Int32._mul(ah,bl);
+	var p01 = haxe_Int32._mul(al,bh);
+	var p11 = haxe_Int32._mul(ah,bh);
+	var low = p00;
+	var high = (p11 + (p01 >>> 16) | 0) + (p10 >>> 16) | 0;
+	p01 <<= 16;
+	low = low + p01 | 0;
+	if(haxe_Int32.ucompare(low,p01) < 0) {
+		var ret = high++;
+		high = high | 0;
+	}
+	p10 <<= 16;
+	low = low + p10 | 0;
+	if(haxe_Int32.ucompare(low,p10) < 0) {
+		var ret = high++;
+		high = high | 0;
+	}
+	high = high + (haxe_Int32._mul(a.low,b_high) + haxe_Int32._mul(a.high,b_low) | 0) | 0;
+	var a_high = high;
+	var a_low = low;
+	var b_high = 0;
+	var b_low = 268435455;
+	var this_high = a_high & b_high;
+	var this_low = a_low & b_low;
+	var tmh = this_low;
+	buffer.b[4] = tmh >>> 8 & 255;
+	buffer.b[5] = tmh & 255;
+	buffer.b[6] = tmh >>> 24 & 15 | 16;
+	buffer.b[7] = tmh >>> 16 & 255;
+	buffer.b[8] = clockSeq >>> 8 | 128;
+	buffer.b[9] = clockSeq & 255;
+	buffer.b[10] = node.b[0];
+	buffer.b[11] = node.b[1];
+	buffer.b[12] = node.b[2];
+	buffer.b[13] = node.b[3];
+	buffer.b[14] = node.b[4];
+	buffer.b[15] = node.b[5];
+	var uuid = uuid_Uuid.stringify(buffer,separator);
+	if(shortUuid) {
+		uuid = uuid_Uuid.toShort(uuid,separator,toAlphabet);
+	}
+	return uuid;
+};
+uuid_Uuid.v3 = function(name,namespace,separator,shortUuid,toAlphabet) {
+	if(toAlphabet == null) {
+		toAlphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+	}
+	if(shortUuid == null) {
+		shortUuid = false;
+	}
+	if(separator == null) {
+		separator = "-";
+	}
+	if(namespace == null) {
+		namespace = "";
+	}
+	namespace = StringTools.replace(namespace,"-","");
+	var buffer = haxe_crypto_Md5.make(haxe_io_Bytes.ofHex(namespace + haxe_io_Bytes.ofString(name).toHex()));
+	buffer.b[6] = buffer.b[6] & 15 | 48;
+	buffer.b[8] = buffer.b[8] & 63 | 128;
+	var uuid = uuid_Uuid.stringify(buffer,separator);
+	if(shortUuid) {
+		uuid = uuid_Uuid.toShort(uuid,separator,toAlphabet);
+	}
+	return uuid;
+};
+uuid_Uuid.v4 = function(randBytes,randomFunc,separator,shortUuid,toAlphabet) {
+	if(toAlphabet == null) {
+		toAlphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+	}
+	if(shortUuid == null) {
+		shortUuid = false;
+	}
+	if(separator == null) {
+		separator = "-";
+	}
+	if(randomFunc == null) {
+		randomFunc = uuid_Uuid.randomByte;
+	}
+	var buffer = randBytes;
+	if(buffer == null) {
+		buffer = new haxe_io_Bytes(new ArrayBuffer(16));
+		var v = randomFunc();
+		buffer.b[0] = v;
+		var v = randomFunc();
+		buffer.b[1] = v;
+		var v = randomFunc();
+		buffer.b[2] = v;
+		var v = randomFunc();
+		buffer.b[3] = v;
+		var v = randomFunc();
+		buffer.b[4] = v;
+		var v = randomFunc();
+		buffer.b[5] = v;
+		var v = randomFunc();
+		buffer.b[6] = v;
+		var v = randomFunc();
+		buffer.b[7] = v;
+		var v = randomFunc();
+		buffer.b[8] = v;
+		var v = randomFunc();
+		buffer.b[9] = v;
+		var v = randomFunc();
+		buffer.b[10] = v;
+		var v = randomFunc();
+		buffer.b[11] = v;
+		var v = randomFunc();
+		buffer.b[12] = v;
+		var v = randomFunc();
+		buffer.b[13] = v;
+		var v = randomFunc();
+		buffer.b[14] = v;
+		var v = randomFunc();
+		buffer.b[15] = v;
+	} else if(buffer.length < 16) {
+		throw haxe_Exception.thrown("Random bytes should be at least 16 bytes");
+	}
+	buffer.b[6] = buffer.b[6] & 15 | 64;
+	buffer.b[8] = buffer.b[8] & 63 | 128;
+	var uuid = uuid_Uuid.stringify(buffer,separator);
+	if(shortUuid) {
+		uuid = uuid_Uuid.toShort(uuid,separator,toAlphabet);
+	}
+	return uuid;
+};
+uuid_Uuid.v5 = function(name,namespace,separator,shortUuid,toAlphabet) {
+	if(toAlphabet == null) {
+		toAlphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+	}
+	if(shortUuid == null) {
+		shortUuid = false;
+	}
+	if(separator == null) {
+		separator = "-";
+	}
+	if(namespace == null) {
+		namespace = "";
+	}
+	namespace = StringTools.replace(namespace,"-","");
+	var buffer = haxe_crypto_Sha1.make(haxe_io_Bytes.ofHex(namespace + haxe_io_Bytes.ofString(name).toHex()));
+	buffer.b[6] = buffer.b[6] & 15 | 80;
+	buffer.b[8] = buffer.b[8] & 63 | 128;
+	var uuid = uuid_Uuid.stringify(buffer,separator);
+	if(shortUuid) {
+		uuid = uuid_Uuid.toShort(uuid,separator,toAlphabet);
+	}
+	return uuid;
+};
+uuid_Uuid.stringify = function(data,separator) {
+	if(separator == null) {
+		separator = "-";
+	}
+	return uuid_Uuid.hexToUuid(data.toHex(),separator);
+};
+uuid_Uuid.parse = function(uuid,separator) {
+	if(separator == null) {
+		separator = "-";
+	}
+	return haxe_io_Bytes.ofHex(StringTools.replace(uuid,separator,""));
+};
+uuid_Uuid.validate = function(uuid,separator) {
+	if(separator == null) {
+		separator = "-";
+	}
+	if(separator == "") {
+		uuid = HxOverrides.substr(uuid,0,8) + "-" + HxOverrides.substr(uuid,8,4) + "-" + HxOverrides.substr(uuid,12,4) + "-" + HxOverrides.substr(uuid,16,4) + "-" + HxOverrides.substr(uuid,20,12);
+	} else if(separator != "-") {
+		uuid = StringTools.replace(uuid,separator,"-");
+	}
+	return uuid_Uuid.regexp.match(uuid);
+};
+uuid_Uuid.version = function(uuid,separator) {
+	if(separator == null) {
+		separator = "-";
+	}
+	uuid = StringTools.replace(uuid,separator,"");
+	return Std.parseInt("0x" + HxOverrides.substr(uuid,12,1));
+};
+uuid_Uuid.hexToUuid = function(hex,separator) {
+	return HxOverrides.substr(hex,0,8) + separator + HxOverrides.substr(hex,8,4) + separator + HxOverrides.substr(hex,12,4) + separator + HxOverrides.substr(hex,16,4) + separator + HxOverrides.substr(hex,20,12);
+};
+uuid_Uuid.convert = function(number,fromAlphabet,toAlphabet) {
+	var fromBase = fromAlphabet.length;
+	var toBase = toAlphabet.length;
+	var len = number.length;
+	var buf = "";
+	var this1 = new Array(len);
+	var numberMap = this1;
+	var divide = 0;
+	var newlen = 0;
+	var _g = 0;
+	var _g1 = len;
+	while(_g < _g1) {
+		var i = _g++;
+		numberMap[i] = fromAlphabet.indexOf(number.charAt(i));
+	}
+	while(true) {
+		divide = 0;
+		newlen = 0;
+		var _g = 0;
+		var _g1 = len;
+		while(_g < _g1) {
+			var i = _g++;
+			divide = divide * fromBase + numberMap[i];
+			if(divide >= toBase) {
+				numberMap[newlen++] = Math.floor(divide / toBase);
+				divide %= toBase;
+			} else if(newlen > 0) {
+				numberMap[newlen++] = 0;
+			}
+		}
+		len = newlen;
+		buf = toAlphabet.charAt(divide) + buf;
+		if(!(newlen != 0)) {
+			break;
+		}
+	}
+	return buf;
+};
+uuid_Uuid.nanoId = function(len,alphabet,randomFunc) {
+	if(alphabet == null) {
+		alphabet = "_-0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	}
+	if(len == null) {
+		len = 21;
+	}
+	if(randomFunc == null) {
+		randomFunc = uuid_Uuid.randomByte;
+	}
+	if(alphabet == null) {
+		throw haxe_Exception.thrown("Alphabet cannot be null");
+	}
+	if(alphabet.length == 0 || alphabet.length >= 256) {
+		throw haxe_Exception.thrown("Alphabet must contain between 1 and 255 symbols");
+	}
+	if(len <= 0) {
+		throw haxe_Exception.thrown("Length must be greater than zero");
+	}
+	var mask = (2 << Math.floor(Math.log(alphabet.length - 1) / Math.log(2))) - 1;
+	var step = Math.ceil(1.6 * mask * len / alphabet.length);
+	var sb_b = "";
+	while(sb_b.length != len) {
+		var _g = 0;
+		var _g1 = step;
+		while(_g < _g1) {
+			var i = _g++;
+			var rnd = randomFunc();
+			var aIndex = rnd & mask;
+			if(aIndex < alphabet.length) {
+				sb_b += Std.string(alphabet.charAt(aIndex));
+				if(sb_b.length == len) {
+					break;
+				}
+			}
+		}
+	}
+	return sb_b;
+};
+uuid_Uuid.short = function(toAlphabet,randomFunc) {
+	if(toAlphabet == null) {
+		toAlphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+	}
+	return uuid_Uuid.v4(null,randomFunc,null,true,toAlphabet);
+};
 var view_Accounting = function(props,context) {
 	this.mounted = false;
 	React_Component.call(this,props);
@@ -10741,13 +11998,6 @@ view_DashBoard.prototype = $extend(React_Component.prototype,{
 		var tmp1 = React.createElement(view_StatusBar._renderWrapper,this.props);
 		return React.createElement(tmp,{ },tmp6,tmp7,tmp1);
 	}
-	,internalRedirect: function(path) {
-		if(path == null) {
-			path = "/DashBoard/Settings";
-		}
-		this.props.history.push(path);
-		return null;
-	}
 	,__class__: view_DashBoard
 });
 var view_Data = function(props) {
@@ -10829,36 +12079,40 @@ view_Data.prototype = $extend(React_Component.prototype,{
 		var tmp = react_ReactType.fromComp(React_Fragment);
 		var tmp1 = react_ReactType.fromString("div");
 		var tmp2 = react_ReactType.fromComp(bulma_$components_Tabs);
-		var tmp3 = React.createElement(react_ReactType.fromComp(view_shared_TabLink),Object.assign({ },this.props,{ to : "/Data/Contacts"}),"Kontakte");
-		var tmp4 = react_ReactType.fromComp(view_shared_TabLink);
-		var tmp5 = this.props;
-		var tmp6 = this.props.location.key;
-		var tmp7 = shared_Utils.extend(this.props.location.state,{ contact : this.props.location.hash});
-		var tmp8 = React.createElement(tmp4,Object.assign({ },tmp5,{ to : { key : tmp6, hash : "", pathname : "/Data/Deals", search : "", state : tmp7}}),"Spenden");
-		var tmp4 = react_ReactType.fromComp(view_shared_TabLink);
-		var tmp5 = this.props;
-		var tmp6 = this.props.location.key;
-		var tmp7 = this.props.location.hash;
+		var tmp3 = react_ReactType.fromComp(view_shared_TabLink);
+		var tmp4 = this.props;
+		var tmp5 = this.props.location.key;
+		var tmp6 = shared_Utils.extend(this.props.location.state,{ contact : this.props.location.hash});
+		var tmp7 = React.createElement(tmp3,Object.assign({ },tmp4,{ to : { key : tmp5, hash : "", pathname : "/Data/Contacts", search : "", state : tmp6}}),"Kontakte");
+		var tmp3 = react_ReactType.fromComp(view_shared_TabLink);
+		var tmp4 = this.props;
+		var tmp5 = this.props.location.key;
+		var tmp6 = shared_Utils.extend(this.props.location.state,{ contact : this.props.location.hash});
+		var tmp8 = React.createElement(tmp3,Object.assign({ },tmp4,{ to : { key : tmp5, hash : "", pathname : "/Data/Deals", search : "", state : tmp6}}),"Spenden");
+		var tmp3 = react_ReactType.fromComp(view_shared_TabLink);
+		var tmp4 = this.props;
+		var tmp5 = this.props.location.key;
+		var tmp6 = this.props.location.hash;
 		var tmp9 = shared_Utils.extend(this.props.location.state,{ contact : this.props.location.hash});
-		var tmp10 = React.createElement(tmp4,Object.assign({ },tmp5,{ to : { key : tmp6, hash : tmp7, pathname : "/Data/Accounts", search : "", state : tmp9}}),"Konten");
-		var tmp4 = React.createElement(react_ReactType.fromComp(view_shared_TabLink),Object.assign({ },this.props,{ to : "/Data/QC"}),"QC");
-		var tmp5 = React.createElement(tmp1,{ className : "tabNav2"},React.createElement(tmp2,{ className : "is-boxed"},tmp3,tmp8,tmp10,tmp4));
+		var tmp10 = React.createElement(tmp3,Object.assign({ },tmp4,{ to : { key : tmp5, hash : tmp6, pathname : "/Data/Accounts", search : "", state : tmp9}}),"Konten");
+		var tmp3 = React.createElement(react_ReactType.fromComp(view_shared_TabLink),Object.assign({ },this.props,{ to : "/Data/QC"}),"QC");
+		var tmp4 = React.createElement(tmp1,{ className : "tabNav2"},React.createElement(tmp2,{ className : "is-boxed"},tmp7,tmp8,tmp10,tmp3));
 		var tmp1 = react_ReactType.fromString("div");
 		var tmp2 = react_ReactType.fromComp(react_router_Switch);
 		var tmp3 = React.createElement(react_ReactType.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/Data/Contacts/:section?/:action?/:id?", component : react_ReactType.fromComp(view_data_Contacts)}));
-		var tmp4 = React.createElement(react_ReactType.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/Data/Deals/:section?/:action?/:id?", component : react_ReactType.fromComp(view_data_Deals)}));
+		var tmp5 = React.createElement(react_ReactType.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/Data/Deals/:section?/:action?/:id?", component : react_ReactType.fromComp(view_data_Deals)}));
 		var tmp6 = React.createElement(react_ReactType.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/Data/Accounts/:section?/:action?/:id?", component : react_ReactType.fromComp(view_data_Accounts)}));
 		var tmp7 = React.createElement(react_ReactType.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/Data/QC/:section?/:action?/:id?", component : react_ReactType.fromComp(view_data_QC)}));
-		var tmp8 = React.createElement(tmp1,{ className : "tabContent2"},React.createElement(tmp2,{ },tmp3,tmp4,tmp6,tmp7));
+		var tmp8 = React.createElement(tmp1,{ className : "tabContent2"},React.createElement(tmp2,{ },tmp3,tmp5,tmp6,tmp7));
 		var tmp1 = React.createElement(view_StatusBar._renderWrapper,this.props);
-		return React.createElement(tmp,{ },tmp5,tmp8,tmp1);
+		return React.createElement(tmp,{ },tmp4,tmp8,tmp1);
 	}
 	,renderComponent: function(props) {
 		if(this._trace) {
-			haxe_Log.trace(props.location,{ fileName : "view/Data.hx", lineNumber : 164, className : "view.Data", methodName : "renderComponent"});
+			haxe_Log.trace(props.location,{ fileName : "view/Data.hx", lineNumber : 170, className : "view.Data", methodName : "renderComponent"});
 		}
 		if(this._trace) {
-			haxe_Log.trace(props.match,{ fileName : "view/Data.hx", lineNumber : 165, className : "view.Data", methodName : "renderComponent"});
+			haxe_Log.trace(props.match,{ fileName : "view/Data.hx", lineNumber : 171, className : "view.Data", methodName : "renderComponent"});
 		}
 		return null;
 	}
@@ -10867,7 +12121,7 @@ view_Data.prototype = $extend(React_Component.prototype,{
 			path = "/Data/Contacts/List/get";
 		}
 		if(this._trace) {
-			haxe_Log.trace("" + this.props.location.pathname + " " + path,{ fileName : "view/Data.hx", lineNumber : 171, className : "view.Data", methodName : "internalRedirect"});
+			haxe_Log.trace("" + this.props.location.pathname + " " + path,{ fileName : "view/Data.hx", lineNumber : 177, className : "view.Data", methodName : "internalRedirect"});
 		}
 		if(this.props.location.pathname != path) {
 			if(path != this.props.location.pathname) {
@@ -11719,11 +12973,11 @@ view_shared_io_FormApi.dyn2map = function(d) {
 	}
 	return _g;
 };
-view_shared_io_FormApi.getTableRoot = function(match) {
-	var baseUrl = match.path.split("/:section")[0];
-	var newUrl = "" + baseUrl + "/" + match.params.section + "/" + match.params.action;
-	var _this_r = new RegExp("^/","".split("u").join(""));
-	return baseUrl.replace(_this_r,"").split("/").concat([newUrl]);
+view_shared_io_FormApi.getTableRoot = function() {
+	var tR = $global.location.pathname.split("/");
+	tR.shift();
+	haxe_Log.trace(tR.toString(),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 249, className : "view.shared.io.FormApi", methodName : "getTableRoot"});
+	return tR.concat([$global.location.pathname]);
 };
 view_shared_io_FormApi.mHandlers = function(e) {
 	e.preventDefault();
@@ -11745,7 +12999,7 @@ view_shared_io_FormApi.renderSelectOptions = function(fel) {
 	while(_g < opts.length) {
 		var opt = opts[_g];
 		++_g;
-		rOpts.push(React.createElement(react_ReactType.fromString("option"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 474, className : "view.shared.io.FormApi", methodName : "renderSelectOptions"})},opt));
+		rOpts.push(React.createElement(react_ReactType.fromString("option"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 492, className : "view.shared.io.FormApi", methodName : "renderSelectOptions"})},opt));
 	}
 	return rOpts;
 };
@@ -11774,8 +13028,8 @@ view_shared_io_FormApi.localDate = function(d) {
 	if(d == null) {
 		d = HxOverrides.dateStr(new Date());
 	}
-	haxe_Log.trace(d,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 648, className : "view.shared.io.FormApi", methodName : "localDate"});
-	haxe_Log.trace(Date.parse(d),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 649, className : "view.shared.io.FormApi", methodName : "localDate"});
+	haxe_Log.trace(d,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 666, className : "view.shared.io.FormApi", methodName : "localDate"});
+	haxe_Log.trace(Date.parse(d),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 667, className : "view.shared.io.FormApi", methodName : "localDate"});
 	return DateTools.format(new Date(Date.parse(d)),"%d.%m.%Y %H:%M");
 };
 view_shared_io_FormApi.obj2map = function(obj,fields) {
@@ -11821,7 +13075,7 @@ view_shared_io_FormApi.prototype = {
 		if(this.comp.props.match != null && (this.comp.props.match.params.action != null || defaultAction != null)) {
 			var action = this.comp.props.match.params.action != null ? this.comp.props.match.params.action : defaultAction;
 			var c = js_Boot.getClass(this.comp);
-			haxe_Log.trace("going 2 call " + c.__name__ + " " + action,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 100, className : "view.shared.io.FormApi", methodName : "doAction"});
+			haxe_Log.trace("going 2 call " + c.__name__ + " " + action,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 101, className : "view.shared.io.FormApi", methodName : "doAction"});
 			this.executeMethod(action);
 		}
 	}
@@ -11837,8 +13091,8 @@ view_shared_io_FormApi.prototype = {
 	}
 	,createStateValues: function(data,view) {
 		var vState = new haxe_ds_StringMap();
-		haxe_Log.trace(new haxe_ds__$StringMap_StringMapKeyIterator(data.h),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 113, className : "view.shared.io.FormApi", methodName : "createStateValues"});
-		haxe_Log.trace(new haxe_ds__$StringMap_StringMapKeyIterator(view.h),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 114, className : "view.shared.io.FormApi", methodName : "createStateValues"});
+		haxe_Log.trace(new haxe_ds__$StringMap_StringMapKeyIterator(data.h),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 114, className : "view.shared.io.FormApi", methodName : "createStateValues"});
+		haxe_Log.trace(new haxe_ds__$StringMap_StringMapKeyIterator(view.h),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 115, className : "view.shared.io.FormApi", methodName : "createStateValues"});
 		var h = data.h;
 		var k_h = h;
 		var k_keys = Object.keys(h);
@@ -11851,7 +13105,7 @@ view_shared_io_FormApi.prototype = {
 				vState.h[k] = v;
 			}
 		}
-		haxe_Log.trace(vState == null ? "null" : haxe_ds_StringMap.stringify(vState.h),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 123, className : "view.shared.io.FormApi", methodName : "createStateValues"});
+		haxe_Log.trace(vState == null ? "null" : haxe_ds_StringMap.stringify(vState.h),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 124, className : "view.shared.io.FormApi", methodName : "createStateValues"});
 		return vState;
 	}
 	,selectedRowsMap: function(state) {
@@ -11885,21 +13139,26 @@ view_shared_io_FormApi.prototype = {
 	,itemHandler: function(e) {
 		e.preventDefault();
 		var action = (js_Boot.__cast(e.target , HTMLButtonElement)).getAttribute("data-action");
-		haxe_Log.trace(action,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 169, className : "view.shared.io.FormApi", methodName : "itemHandler"});
+		haxe_Log.trace(action,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 170, className : "view.shared.io.FormApi", methodName : "itemHandler"});
 		this.callMethod(action,e);
 	}
 	,callMethod: function(method,e) {
 		var eTarget = js_Boot.__cast(e.target , HTMLElement);
 		var targetSection = eTarget.dataset.section;
-		haxe_Log.trace(">>" + targetSection + "<< " + this.comp.props.match.params.section,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 179, className : "view.shared.io.FormApi", methodName : "callMethod"});
+		if(targetSection == "Edit") {
+			if(!this.comp.state.dataGrid.state.selectedRows.keys().hasNext()) {
+				return false;
+			}
+		}
+		haxe_Log.trace(">>" + targetSection + "<< " + this.comp.props.match.params.section,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 189, className : "view.shared.io.FormApi", methodName : "callMethod"});
 		if(eTarget.dataset.then != null) {
 			shared_Utils.extend(this.comp.props.location.state,{ then : eTarget.dataset.then});
 		}
-		haxe_Log.trace(this.comp.props.location.state,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 182, className : "view.shared.io.FormApi", methodName : "callMethod"});
+		haxe_Log.trace(this.comp.props.location.state,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 192, className : "view.shared.io.FormApi", methodName : "callMethod"});
 		if(targetSection != null && targetSection != this.comp.props.match.params.section) {
-			haxe_Log.trace("" + targetSection + "." + method,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 185, className : "view.shared.io.FormApi", methodName : "callMethod"});
+			haxe_Log.trace("" + targetSection + "." + method,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 195, className : "view.shared.io.FormApi", methodName : "callMethod"});
 			if(method == "reset" && this.comp.props.location.state != null && this.comp.props.location.state.activeContactUrl != null) {
-				haxe_Log.trace("goBack",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 189, className : "view.shared.io.FormApi", methodName : "callMethod"});
+				haxe_Log.trace("goBack",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 199, className : "view.shared.io.FormApi", methodName : "callMethod"});
 				this.comp.props.history.goBack();
 				return true;
 			}
@@ -11909,23 +13168,23 @@ view_shared_io_FormApi.prototype = {
 			return true;
 		}
 		if(targetSection != null) {
-			haxe_Log.trace(this.getUrl(eTarget.dataset.action),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 198, className : "view.shared.io.FormApi", methodName : "callMethod"});
+			haxe_Log.trace(this.getUrl(eTarget.dataset.action),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 208, className : "view.shared.io.FormApi", methodName : "callMethod"});
 			var c = js_Boot.getClass(this.comp);
-			haxe_Log.trace(c.__name__,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 199, className : "view.shared.io.FormApi", methodName : "callMethod"});
+			haxe_Log.trace(c.__name__,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 209, className : "view.shared.io.FormApi", methodName : "callMethod"});
 		}
 		var formEl = e.target.form;
-		haxe_Log.trace(formEl,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 202, className : "view.shared.io.FormApi", methodName : "callMethod"});
+		haxe_Log.trace(formEl,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 212, className : "view.shared.io.FormApi", methodName : "callMethod"});
 		return this.executeMethod(method,formEl != null ? new FormData(formEl) : null);
 	}
 	,executeMethod: function(method,r) {
-		haxe_Log.trace(method,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 207, className : "view.shared.io.FormApi", methodName : "executeMethod"});
-		haxe_Log.trace(r,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 208, className : "view.shared.io.FormApi", methodName : "executeMethod"});
+		haxe_Log.trace(method,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 217, className : "view.shared.io.FormApi", methodName : "executeMethod"});
+		haxe_Log.trace(r,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 218, className : "view.shared.io.FormApi", methodName : "executeMethod"});
 		var fun = Reflect.field(this.comp,method);
 		if(Reflect.isFunction(fun)) {
 			fun.apply(this.comp,[r]);
 			return true;
 		}
-		haxe_Log.trace("" + method + " is not a function",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 217, className : "view.shared.io.FormApi", methodName : "executeMethod"});
+		haxe_Log.trace("" + method + " is not a function",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 227, className : "view.shared.io.FormApi", methodName : "executeMethod"});
 		return false;
 	}
 	,getUrl: function(action,targetSection) {
@@ -11964,7 +13223,7 @@ view_shared_io_FormApi.prototype = {
 			return null;
 		}
 		if(this.sM.section != null) {
-			haxe_Log.trace(this.sM.section + ":" + this.comp.props.match.params.section,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 271, className : "view.shared.io.FormApi", methodName : "render"});
+			haxe_Log.trace(this.sM.section + ":" + this.comp.props.match.params.section,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 289, className : "view.shared.io.FormApi", methodName : "render"});
 			if(this.sM.section != this.comp.props.match.params.section && this.comp.props.match.params.section != null) {
 				this.sM.section = this.comp.props.match.params.section;
 			}
@@ -11978,19 +13237,19 @@ view_shared_io_FormApi.prototype = {
 	,renderField: function(name,k,state) {
 		var formField = state.fields.h[name];
 		if(k == 0) {
-			haxe_Log.trace(state.handleChange,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 290, className : "view.shared.io.FormApi", methodName : "renderField"});
+			haxe_Log.trace(state.handleChange,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 308, className : "view.shared.io.FormApi", methodName : "renderField"});
 		}
 		var _g = formField.type;
 		if(_g == null) {
-			return [React.createElement(react_ReactType.fromString("label"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 298, className : "view.shared.io.FormApi", methodName : "renderField"})},formField.label),React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 298, className : "view.shared.io.FormApi", methodName : "renderField"}), name : name, defaultValue : state.values.h[name], onChange : formField.disabled ? null : state.handleChange, readOnly : formField.disabled})];
+			return [React.createElement(react_ReactType.fromString("label"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 316, className : "view.shared.io.FormApi", methodName : "renderField"})},formField.label),React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 316, className : "view.shared.io.FormApi", methodName : "renderField"}), name : name, defaultValue : state.values.h[name], onChange : formField.disabled ? null : state.handleChange, readOnly : formField.disabled})];
 		} else if(_g == "Hidden") {
-			return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 296, className : "view.shared.io.FormApi", methodName : "renderField"}), name : name, type : "hidden", defaultValue : state.values.h[name], readOnly : formField.disabled});
+			return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 314, className : "view.shared.io.FormApi", methodName : "renderField"}), name : name, type : "hidden", defaultValue : state.values.h[name], readOnly : formField.disabled});
 		} else {
-			return [React.createElement(react_ReactType.fromString("label"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 298, className : "view.shared.io.FormApi", methodName : "renderField"})},formField.label),React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 298, className : "view.shared.io.FormApi", methodName : "renderField"}), name : name, defaultValue : state.values.h[name], onChange : formField.disabled ? null : state.handleChange, readOnly : formField.disabled})];
+			return [React.createElement(react_ReactType.fromString("label"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 316, className : "view.shared.io.FormApi", methodName : "renderField"})},formField.label),React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 316, className : "view.shared.io.FormApi", methodName : "renderField"}), name : name, defaultValue : state.values.h[name], onChange : formField.disabled ? null : state.handleChange, readOnly : formField.disabled})];
 		}
 	}
 	,renderElements: function(cState) {
-		haxe_Log.trace(Lambda.empty(cState.data),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 307, className : "view.shared.io.FormApi", methodName : "renderElements"});
+		haxe_Log.trace(Lambda.empty(cState.data),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 325, className : "view.shared.io.FormApi", methodName : "renderElements"});
 		if(Lambda.empty(cState.data)) {
 			return null;
 		}
@@ -12004,7 +13263,7 @@ view_shared_io_FormApi.prototype = {
 		while(field_current < field_length) {
 			var field = field_keys[field_current++];
 			var tmp = react_ReactType.fromString("div");
-			var tmp1 = shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 316, className : "view.shared.io.FormApi", methodName : "renderElements"});
+			var tmp1 = shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 334, className : "view.shared.io.FormApi", methodName : "renderElements"});
 			var tmp2 = cState.fields.h[field].type == "Hidden" ? null : "formField";
 			var tmp3 = this.renderField(field,k,cState);
 			elements.push(React.createElement(tmp,{ key : tmp1, className : tmp2},tmp3));
@@ -12071,7 +13330,7 @@ view_shared_io_FormApi.prototype = {
 		var col = 0;
 		while(name_current < name_length) {
 			var name = name_keys[name_current++];
-			cols.push(React.createElement(react_ReactType.fromString("div"),{ key : shared_Utils.genKey(name + "_" + col++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 393, className : "view.shared.io.FormApi", methodName : "renderColumns"}), className : "col", 'data-name' : name},this.renderRows(name)));
+			cols.push(React.createElement(react_ReactType.fromString("div"),{ key : shared_Utils.genKey(name + "_" + col++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 411, className : "view.shared.io.FormApi", methodName : "renderColumns"}), className : "col", 'data-name' : name},this.renderRows(name)));
 		}
 		return cols;
 	}
@@ -12089,7 +13348,7 @@ view_shared_io_FormApi.prototype = {
 				continue;
 			}
 			var formField = this._fstate.fields.h[name];
-			cols.push(React.createElement(react_ReactType.fromString("div"),{ key : shared_Utils.genKey(c++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 409, className : "view.shared.io.FormApi", methodName : "renderColumnHeaders"}), className : "col"},React.createElement(react_ReactType.fromString("div"),{ className : "form-table-cell"},React.createElement(react_ReactType.fromString("div"),{ className : "header", 'data-name' : name},formField.label))));
+			cols.push(React.createElement(react_ReactType.fromString("div"),{ key : shared_Utils.genKey(c++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 427, className : "view.shared.io.FormApi", methodName : "renderColumnHeaders"}), className : "col"},React.createElement(react_ReactType.fromString("div"),{ className : "form-table-cell"},React.createElement(react_ReactType.fromString("div"),{ className : "header", 'data-name' : name},formField.label))));
 		}
 		return cols;
 	}
@@ -12097,16 +13356,16 @@ view_shared_io_FormApi.prototype = {
 		var model = fF.name;
 		var _g = fF.type;
 		if(_g == null) {
-			return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 439, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, type : "hidden"});
+			return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 457, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, type : "hidden"});
 		} else {
 			switch(_g) {
 			case "Checkbox":
-				return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 428, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, disabled : fF.disabled});
+				return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 446, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, disabled : fF.disabled});
 			case "Hidden":
 				if(fF.primary) {
 					return null;
 				} else {
-					return React.createElement(react_ReactType.fromString("inputl"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 431, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, type : "hidden"});
+					return React.createElement(react_ReactType.fromString("inputl"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 449, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, type : "hidden"});
 				}
 				break;
 			case "Select":
@@ -12114,7 +13373,7 @@ view_shared_io_FormApi.prototype = {
 				var tmp1 = view_shared_io_FormApi.renderSelectOptions(fF.value);
 				return React.createElement(tmp,{ name : model},tmp1);
 			default:
-				return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 439, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, type : "hidden"});
+				return React.createElement(react_ReactType.fromString("input"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 457, className : "view.shared.io.FormApi", methodName : "renderRowCell"}), name : model, type : "hidden"});
 			}
 		}
 	}
@@ -12122,7 +13381,7 @@ view_shared_io_FormApi.prototype = {
 		var elements = [];
 		var k = 0;
 		var tmp = react_ReactType.fromString("div");
-		var tmp1 = { key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 450, className : "view.shared.io.FormApi", methodName : "renderRows"}), className : "form-table-cell", style : { minHeight : "0px", height : "0px", overflow : "hidden", padding : "0px 0.3rem"}};
+		var tmp1 = { key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 468, className : "view.shared.io.FormApi", methodName : "renderRows"}), className : "form-table-cell", style : { minHeight : "0px", height : "0px", overflow : "hidden", padding : "0px 0.3rem"}};
 		var tmp2 = this._fstate.fields.h[name];
 		elements.push(React.createElement(tmp,tmp1,React.createElement(react_ReactType.fromString("div"),{ className : "header", 'data-name' : name},tmp2.label)));
 		var _g = 0;
@@ -12130,7 +13389,7 @@ view_shared_io_FormApi.prototype = {
 		while(_g < _g1.length) {
 			var fF = _g1[_g];
 			++_g;
-			elements.push(React.createElement(react_ReactType.fromString("div"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 459, className : "view.shared.io.FormApi", methodName : "renderRows"}), className : "form-table-cell"},this.renderRowCell(fF,k++)));
+			elements.push(React.createElement(react_ReactType.fromString("div"),{ key : shared_Utils.genKey(k++,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 477, className : "view.shared.io.FormApi", methodName : "renderRows"}), className : "form-table-cell"},this.renderRowCell(fF,k++)));
 		}
 		return elements;
 	}
@@ -12142,7 +13401,7 @@ view_shared_io_FormApi.prototype = {
 		return React.createElement(react_ReactType.fromString("section"),{ ref : this.modalFormTableHeader, className : "modal-card-body header"},this.renderColumnHeaders());
 	}
 	,renderModalScreen: function(content) {
-		haxe_Log.trace(App.modalBox,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 536, className : "view.shared.io.FormApi", methodName : "renderModalScreen"});
+		haxe_Log.trace(App.modalBox,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 554, className : "view.shared.io.FormApi", methodName : "renderModalScreen"});
 		this.modalFormTableBody = React.createRef();
 		react_ReactRef.get_current(App.modalBox).classList.toggle("is-active");
 		var click = function(_) {
@@ -12158,11 +13417,11 @@ view_shared_io_FormApi.prototype = {
 		return ReactDOM.render(React.createElement(tmp,{ },tmp1,tmp3),react_ReactRef.get_current(App.modalBox));
 	}
 	,adjustModalFormColumns: function() {
-		haxe_Log.trace(react_ReactRef.get_current(this.modalFormTableHeader),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 563, className : "view.shared.io.FormApi", methodName : "adjustModalFormColumns"});
-		haxe_Log.trace(react_ReactRef.get_current(this.modalFormTableBody).children,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 565, className : "view.shared.io.FormApi", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(react_ReactRef.get_current(this.modalFormTableHeader),{ fileName : "view/shared/io/FormApi.hx", lineNumber : 581, className : "view.shared.io.FormApi", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(react_ReactRef.get_current(this.modalFormTableBody).children,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 583, className : "view.shared.io.FormApi", methodName : "adjustModalFormColumns"});
 		var bodyCols = react_ReactRef.get_current(this.modalFormTableBody).children;
 		var headerCols = react_ReactRef.get_current(this.modalFormTableHeader).children;
-		haxe_Log.trace(bodyCols,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 568, className : "view.shared.io.FormApi", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(bodyCols,{ fileName : "view/shared/io/FormApi.hx", lineNumber : 586, className : "view.shared.io.FormApi", methodName : "adjustModalFormColumns"});
 		if(bodyCols == null) {
 			return;
 		}
@@ -12176,11 +13435,11 @@ view_shared_io_FormApi.prototype = {
 	}
 	,closeWait: function() {
 		this.comp.setState({ loading : false});
-		haxe_Log.trace("Done waiting",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 584, className : "view.shared.io.FormApi", methodName : "closeWait"});
+		haxe_Log.trace("Done waiting",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 602, className : "view.shared.io.FormApi", methodName : "closeWait"});
 	}
 	,renderWait: function() {
 		if(this.comp.state.values != null && this.comp.state.values.h["loadResult"] != null) {
-			haxe_Log.trace(this.comp.state.values.h["closeAfter"] != -1 ? "Y" : "N",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 595, className : "view.shared.io.FormApi", methodName : "renderWait"});
+			haxe_Log.trace(this.comp.state.values.h["closeAfter"] != -1 ? "Y" : "N",{ fileName : "view/shared/io/FormApi.hx", lineNumber : 613, className : "view.shared.io.FormApi", methodName : "renderWait"});
 			if(this.comp.state.values.h["closeAfter"] != -1) {
 				var t = haxe_Timer.delay($bind(this,this.closeWait),this.comp.state.values.h["closeAfter"] != null ? this.comp.state.values.h["closeAfter"] : 8000);
 			}
@@ -12333,7 +13592,7 @@ view_accounting_directdebit_List.prototype = $extend(React_Component.prototype,{
 				return React.createElement(react_ReactType.fromString("div"),{ className : "hint"},tmp);
 			}
 		} else if(_g == "get") {
-			return React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ id : "rDebitList", data : this.state.dataTable, dataState : this.dataDisplay.h["rDebitList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
+			return React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "rDebitList", data : this.state.dataTable, dataState : this.dataDisplay.h["rDebitList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
 		} else if(this.state.data == null) {
 			return null;
 		} else {
@@ -12456,13 +13715,13 @@ view_accounting_returndebit_AccountForm.prototype = $extend(React_Component.prot
 				return null;
 			case "get":
 				haxe_Log.trace(this.state.dataTable,{ fileName : "view/accounting/returndebit/AccountForm.hx", lineNumber : 194, className : "view.accounting.returndebit.AccountForm", methodName : "renderResults"});
-				return React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
+				return React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
 			case "insert":
 				haxe_Log.trace(this.dataDisplay.h["accountsList"],{ fileName : "view/accounting/returndebit/AccountForm.hx", lineNumber : 208, className : "view.accounting.returndebit.AccountForm", methodName : "renderResults"});
 				haxe_Log.trace(Std.string(this.state.dataTable[29].h["id"]) + "<<<",{ fileName : "view/accounting/returndebit/AccountForm.hx", lineNumber : 209, className : "view.accounting.returndebit.AccountForm", methodName : "renderResults"});
-				return React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], className : "is-striped is-hoverable", fullWidth : true}));
+				return React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], className : "is-striped is-hoverable", fullWidth : true}));
 			case "update":
-				return React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], className : "is-striped is-hoverable", fullWidth : true}));
+				return React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], className : "is-striped is-hoverable", fullWidth : true}));
 			default:
 				return null;
 			}
@@ -12804,7 +14063,7 @@ view_accounting_returndebit_DealForm.prototype = $extend(React_Component.prototy
 				return null;
 			case "get":
 				var tmp = react_ReactType.fromComp(React_Fragment);
-				var tmp1 = React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ id : "dealsList", data : this.state.dataTable, dataState : this.dataDisplay.h["dealsList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
+				var tmp1 = React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "dealsList", data : this.state.dataTable, dataState : this.dataDisplay.h["dealsList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
 				var tmp2 = this.renderForm();
 				return React.createElement(tmp,{ },tmp1,tmp2);
 			default:
@@ -13073,7 +14332,7 @@ view_shared_io_LiveData.registerORM = function(parent,refModel,orm) {
 	}
 };
 view_shared_io_LiveData.select = function(props) {
-	var actPath = view_shared_io_FormApi.getTableRoot(props.match);
+	var actPath = view_shared_io_FormApi.getTableRoot();
 	haxe_Log.trace(actPath,{ fileName : "view/shared/io/LiveData.hx", lineNumber : 249, className : "view.shared.io.LiveData", methodName : "select"});
 	var sData = App.store.getState().dataStore.returnDebitsData;
 	if(actPath[1] == "ReturnDebits") {
@@ -13709,7 +14968,7 @@ view_accounting_returndebit_Files.prototype = $extend(React_Component.prototype,
 				var tmp3 = haxe_ds_StringMap.stringify(this.state.errors.h);
 				return React.createElement(tmp2,{ className : "hint"},"Fehler:",tmp3);
 			case "showLoadedReturnDebit":
-				tmp1 = React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ key : "importedReturnDebitList", id : "loadedReturnDebit", data : this.state.dataTable, readOnly : true, dataState : this.dataDisplay.h["rDebitList"], parentComponent : this, className : "is-striped is-hoverable"}));
+				tmp1 = React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ key : "importedReturnDebitList", id : "loadedReturnDebit", data : this.state.dataTable, readOnly : true, dataState : this.dataDisplay.h["rDebitList"], parentComponent : this, className : "is-striped is-hoverable"}));
 				break;
 			default:
 				if(this.state.data != null && Object.prototype.hasOwnProperty.call(this.state.data.h,"hint")) {
@@ -13850,7 +15109,7 @@ view_accounting_returndebit_List.prototype = $extend(React_Component.prototype,{
 				return React.createElement(react_ReactType.fromString("div"),{ className : "hint"},tmp);
 			}
 		} else if(_g == "listReturnDebit") {
-			return React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ id : "returnDebitList", data : this.state.dataTable, dataState : this.dataDisplay.h["rDebitData"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
+			return React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "returnDebitList", data : this.state.dataTable, dataState : this.dataDisplay.h["rDebitData"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
 		} else if(this.state.data == null) {
 			return null;
 		} else {
@@ -14085,7 +15344,7 @@ var view_dashboard_DBSync = function(props) {
 	this.dataDisplay = view_dashboard_model_DBSyncModel.dataDisplay;
 	this.dataAccess = view_dashboard_model_DBSyncModel.dataAccess(props.match.params.action);
 	this.formFields = view_dashboard_model_DBSyncModel.formFields(props.match.params.action);
-	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 79, className : "view.dashboard.DBSync", methodName : "new"});
+	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 87, className : "view.dashboard.DBSync", methodName : "new"});
 	this.state = App.initEState({ loading : false, dataTable : [], formBuilder : new view_shared_FormBuilder(this), actualState : { edited_by : props.userState.dbUser.id, mandator : props.userState.dbUser.mandator}, initialState : { edited_by : props.userState.dbUser.id, mandator : props.userState.dbUser.mandator}, values : new haxe_ds_StringMap()},this);
 };
 $hxClasses["view.dashboard.DBSync"] = view_dashboard_DBSync;
@@ -14111,10 +15370,10 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	,dbData: null
 	,dbMetaData: null
 	,createFieldList: function(ev) {
-		haxe_Log.trace("hi :)",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 108, className : "view.dashboard.DBSync", methodName : "createFieldList"});
+		haxe_Log.trace("hi :)",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 116, className : "view.dashboard.DBSync", methodName : "createFieldList"});
 	}
 	,editTableFields: function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 117, className : "view.dashboard.DBSync", methodName : "editTableFields"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 125, className : "view.dashboard.DBSync", methodName : "editTableFields"});
 	}
 	,initStateFromDataTable: function(dt) {
 		var iS = { };
@@ -14130,7 +15389,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			var k_current = 0;
 			while(k_current < k_length) {
 				var k = k_keys[k_current++];
-				haxe_Log.trace(k,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 128, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
+				haxe_Log.trace(k,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 136, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
 				if(this.dataDisplay.h["fieldsList"].columns.h[k].cellFormat == view_dashboard_model_DBSyncModel.formatBool) {
 					rS[k] = dR.h[k] == "Y";
 				} else {
@@ -14139,14 +15398,39 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			}
 			iS[dR.h["id"]] = rS;
 		}
-		haxe_Log.trace(iS,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 138, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
+		haxe_Log.trace(iS,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 146, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
 		return iS;
 	}
 	,saveTableFields: function(vA) {
-		haxe_Log.trace(vA,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 144, className : "view.dashboard.DBSync", methodName : "saveTableFields"});
+		haxe_Log.trace(vA,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 152, className : "view.dashboard.DBSync", methodName : "saveTableFields"});
+	}
+	,getMissingExternalBookings: function(cB) {
+		var _gthis = this;
+		this.setState({ loading : true});
+		var p = this.props.load({ classPath : "admin.SyncExternalBookings", action : "getMissing", extDB : true, filter : { mandator : "1"}, limit : 4000, offset : 0, table : "booking_requests", dbUser : this.props.userState.dbUser, devIP : App.devIP});
+		p.then(function(data) {
+			if(data.dataInfo.h["offset"] == null) {
+				return App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "error", text : "Fehler 0  Aktualisiert"}))));
+			}
+			var offset = Std.parseInt(data.dataInfo.h["offset"]);
+			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "" + offset + " von " + data.dataInfo.h["maxImport"] + " aktualisiert"}))));
+			haxe_Log.trace("" + offset + " < " + data.dataInfo.h["maxImport"],{ fileName : "view/dashboard/DBSync.hx", lineNumber : 212, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
+			if(offset < Std.parseInt(data.dataInfo.h["maxImport"])) {
+				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 215, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
+				return _gthis.doSyncAll2(data.dataInfo);
+			} else {
+				_gthis.setState({ loading : false});
+				App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "" + offset + " von " + data.dataInfo.h["maxImport"] + " aktualisiert"}))));
+				if(cB != null) {
+					cB();
+				}
+				return p;
+			}
+		});
+		return p;
 	}
 	,importAccounts2: function(_) {
-		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 173, className : "view.dashboard.DBSync", methodName : "importAccounts2"});
+		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 238, className : "view.dashboard.DBSync", methodName : "importAccounts2"});
 		this.setState({ loading : true});
 		this.doSyncAll2({ classPath : "admin.SyncExternalAccounts", action : "importContacts", extDB : true, filter : { mandator : "1"}, limit : 1000, offset : 0, table : "accounts", dbUser : this.props.userState.dbUser, devIP : App.devIP, maxImport : 4000});
 	}
@@ -14159,9 +15443,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			}
 			var offset = Std.parseInt(data.dataInfo.h["offset"]);
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "" + offset + " von " + data.dataInfo.h["maxImport"] + " aktualisiert"}))));
-			haxe_Log.trace("" + offset + " < " + data.dataInfo.h["maxImport"],{ fileName : "view/dashboard/DBSync.hx", lineNumber : 211, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
+			haxe_Log.trace("" + offset + " < " + data.dataInfo.h["maxImport"],{ fileName : "view/dashboard/DBSync.hx", lineNumber : 276, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
 			if(offset < Std.parseInt(data.dataInfo.h["maxImport"])) {
-				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 214, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
+				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 279, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
 				return _gthis.doSyncAll2(data.dataInfo);
 			} else {
 				_gthis.setState({ loading : false});
@@ -14171,32 +15455,52 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		return p;
 	}
 	,importContacts2: function(_) {
-		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 234, className : "view.dashboard.DBSync", methodName : "importContacts2"});
+		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 299, className : "view.dashboard.DBSync", methodName : "importContacts2"});
 		App.store.dispatch(action_async_LivePBXSync.importContacts({ devIP : App.devIP, limit : 4000, maxImport : 4000, userState : this.props.userState, offset : 0, classPath : "admin.SyncExternalContacts", action : "importContacts"}));
 	}
 	,importAllBookingRequests2: function(_) {
-		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 248, className : "view.dashboard.DBSync", methodName : "importAllBookingRequests2"});
+		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 313, className : "view.dashboard.DBSync", methodName : "importAllBookingRequests2"});
 		App.store.dispatch(action_async_LivePBXSync.importContacts({ limit : 50000, maxImport : 50000, userState : this.props.userState, offset : 100000, table : "booking_requests", classPath : "admin.SyncExternalBookings", action : "importContacts"}));
 	}
 	,importBookingRequests2: function() {
 		App.store.dispatch(redux_Action.map(action_async_LivePBXSync.importBookingRequests({ limit : 25000, offset : 0, classPath : "admin.SyncExternalBookings", action : "syncBookingRequests", userState : this.props.userState})));
 	}
-	,checkBookingRequests: function() {
+	,checkBookingRequests: function(fD) {
 		var _gthis = this;
-		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Buchungsanforderungen"}))));
+		if(fD != null) {
+			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 340, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+			haxe_Log.trace(fD.get("sync_now"),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 345, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+			if(fD.get("sync_now") == "on") {
+				App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Buchungsanforderungen"}))));
+				this.getMissingExternalBookings(function() {
+					_gthis.loadBookingRequestsCount();
+					window.document.querySelector("[name=\"sync_now\"]").checked = false;
+					haxe_Log.trace((js_Boot.__cast(window.document.querySelector("[name=\"sync_now\"]") , HTMLInputElement)).checked ? "Yes" : "No",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 356, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+				});
+			} else {
+				this.loadBookingRequestsCount();
+			}
+			return;
+		} else {
+			this.loadBookingRequestsCount();
+		}
+	}
+	,loadBookingRequestsCount: function() {
+		var _gthis = this;
+		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Lade Anzahl Buchungsanforderungen"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "bookingRequestsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 288, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
-			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 289, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 385, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
+			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 386, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "bookingRequestsCount";
 			_g.h["buchungsAnforderungenCount"] = props.dataInfo.h["buchungsAnforderungenCount"];
 			_g.h["bookingRequestsCount"] = props.dataInfo.h["bookingRequestsCount"];
 			_gthis1.setState({ data : _g});
-			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 300, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 397, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 302, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 399, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
 		});
 	}
 	,checkAccounts: function() {
@@ -14204,7 +15508,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Konten"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "accountsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 322, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 419, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "accountsCount";
@@ -14212,7 +15516,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["accountsCount"] = props.dataInfo.h["accountsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 329, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 426, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
 		});
 	}
 	,checkContacts: function() {
@@ -14220,7 +15524,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Kontakte"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "clientsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 349, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 446, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "contactsCount";
@@ -14228,7 +15532,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["contactsCount"] = props.dataInfo.h["contactsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 356, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 453, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 		});
 	}
 	,checkDeals: function() {
@@ -14236,7 +15540,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Spenden"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "dealsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 376, className : "view.dashboard.DBSync", methodName : "checkDeals"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 473, className : "view.dashboard.DBSync", methodName : "checkDeals"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "dealsCount";
@@ -14244,7 +15548,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["dealsCount"] = props.dataInfo.h["dealsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 383, className : "view.dashboard.DBSync", methodName : "checkDeals"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 480, className : "view.dashboard.DBSync", methodName : "checkDeals"});
 			App.store.dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ dbUser : _gthis.props.userState.dbUser, lastError : "Du musst dich neu anmelden!"}))));
 		});
 	}
@@ -14252,9 +15556,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "Synchronisiere Kontakte, Spenden + Konten"}))));
 		var pro = App.store.dispatch(action_async_LivePBXSync.checkAll({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "admin.SyncExternal", action : "checkAll"}));
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 410, className : "view.dashboard.DBSync", methodName : "checkAll"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 507, className : "view.dashboard.DBSync", methodName : "checkAll"});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 412, className : "view.dashboard.DBSync", methodName : "checkAll"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 509, className : "view.dashboard.DBSync", methodName : "checkAll"});
 		});
 	}
 	,displaySummary: function() {
@@ -14269,11 +15573,11 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,syncUserDetails2: function(_) {
 		var _gthis = this;
-		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 453, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
-		haxe_Log.trace(this.props.userState.dbUser,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 454, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 550, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+		haxe_Log.trace(this.props.userState.dbUser,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 551, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
 		loader_BinaryLoader.create("" + Std.string(App.config.api),{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, fields : "id,table_name,field_name,disabled,element,required,use_as_index", classPath : "admin.SyncExternal", action : "syncUserDetails", devIP : App.devIP, dbUser : this.props.userState.dbUser},function(data) {
-			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 470, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 472, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 567, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 569, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
 			if(data.dataRows.length > 0) {
 				_gthis.setState({ dataTable : data.dataRows});
 			}
@@ -14282,9 +15586,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,proxy_showUserList: function(_) {
 		var _gthis = this;
-		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 487, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
+		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 584, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
 		loader_BinaryLoader.create("https://pitverwaltung.de/sync/proxy.php",{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, fields : "id,table_name,field_name,disabled,element,required,use_as_index", classPath : "admin.SyncExternal", action : "syncUserDetails", target : "syncUsers.php", devIP : App.devIP},function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 505, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 602, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
 			if(data.dataRows.length > 0) {
 				_gthis.setState({ dataTable : data.dataRows});
 			}
@@ -14292,11 +15596,11 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,componentDidMount: function() {
 		if(this.props.userState != null) {
-			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 522, className : "view.dashboard.DBSync", methodName : "componentDidMount"});
+			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 619, className : "view.dashboard.DBSync", methodName : "componentDidMount"});
 		}
 	}
 	,go: function(aState) {
-		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 527, className : "view.dashboard.DBSync", methodName : "go"});
+		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 624, className : "view.dashboard.DBSync", methodName : "go"});
 		var dbaProps_action = this.props.match.params.action;
 		var dbaProps_classPath = "data.Contacts";
 		var dbaProps_dataSource = null;
@@ -14311,7 +15615,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			while(_g < _g1.length) {
 				var f = _g1[_g];
 				++_g;
-				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 541, className : "view.dashboard.DBSync", methodName : "go"});
+				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 638, className : "view.dashboard.DBSync", methodName : "go"});
 				if(Reflect.field(aState,f) == "") {
 					Reflect.deleteField(aState,f);
 				}
@@ -14329,7 +15633,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 561, className : "view.dashboard.DBSync", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 658, className : "view.dashboard.DBSync", methodName : "render"});
 		var tmp = this.state.formApi;
 		var tmp1 = react_ReactType.fromComp(React_Fragment);
 		var tmp2 = react_ReactType.fromString("form");
@@ -14339,13 +15643,13 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,renderResults: function() {
 		if(this.state.data != null) {
-			haxe_Log.trace(Std.string(this.state.data.h["action"]) + ":",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 573, className : "view.dashboard.DBSync", methodName : "renderResults"});
+			haxe_Log.trace(Std.string(this.state.data.h["action"]) + ":",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 670, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		}
-		haxe_Log.trace(this.state.loading,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 574, className : "view.dashboard.DBSync", methodName : "renderResults"});
+		haxe_Log.trace(this.state.loading,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 671, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		if(this.state.data == null) {
 			return React.createElement(react_ReactType.fromString("div"),{ className : "flex0 cCenter"},this.state.formApi.renderWait());
 		}
-		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 577, className : "view.dashboard.DBSync", methodName : "renderResults"});
+		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 674, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		var _g = this.state.data.h["action"];
 		if(_g == null) {
 			return null;
@@ -14420,7 +15724,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 				}
 				break;
 			case "importClientList":
-				haxe_Log.trace(this.state.actualState,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 581, className : "view.dashboard.DBSync", methodName : "renderResults"});
+				haxe_Log.trace(this.state.actualState,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 678, className : "view.dashboard.DBSync", methodName : "renderResults"});
 				if(this.state.actualState == null) {
 					return this.state.formApi.renderWait();
 				} else {
@@ -14434,7 +15738,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,updateMenu: function(viewClassPath) {
 		var sideMenu = this.state.sideMenu;
-		haxe_Log.trace(sideMenu.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 639, className : "view.dashboard.DBSync", methodName : "updateMenu"});
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 736, className : "view.dashboard.DBSync", methodName : "updateMenu"});
 		var _g = 0;
 		var _g1 = sideMenu.menuBlocks.h["DBSync"].items;
 		while(_g < _g1.length) {
@@ -14529,7 +15833,7 @@ view_dashboard_Roles.prototype = $extend(React_Component.prototype,{
 });
 var view_dashboard_Settings = function(props) {
 	React_Component.call(this,props);
-	this.state = { clean : true, hasError : false, mounted : false, loading : true, sideMenu : view_shared_io_FormApi.initSideMenuMulti(this,[{ dataClassPath : "auth.User", label : "UserDaten", section : "user", items : view_shared_io_User.menuItems},{ dataClassPath : "settings.Bookmarks", label : "Lesezeichen", section : "bookmarks", items : view_shared_io_Bookmarks.menuItems},{ dataClassPath : "settings.Design", label : "Design", section : "design", items : view_shared_io_Design.menuItems}],{ section : "bookmarks", sameWidth : true})};
+	this.state = { clean : true, hasError : false, mounted : false, loading : true, sideMenu : view_shared_io_FormApi.initSideMenuMulti(this,[{ dataClassPath : "auth.User", label : "UserDaten", section : "user", items : view_shared_io_User.menuItems},{ dataClassPath : "settings.Bookmarks", label : "Lesezeichen", section : "bookmarks", items : view_shared_io_Bookmarks.menuItems},{ dataClassPath : "settings.Design", label : "Design", section : "design", items : view_shared_io_Design.menuItems}],{ section : props.match.params.section == null ? "User" : props.match.params.section, sameWidth : true})};
 	if(props.match.params.section != null) {
 		haxe_Log.trace(props.match.params.section,{ fileName : "view/dashboard/Settings.hx", lineNumber : 81, className : "view.dashboard.Settings", methodName : "new"});
 	}
@@ -14881,14 +16185,14 @@ view_data_Contacts.mapDispatchToProps = function(dispatch) {
 			id = -1;
 		}
 		if(view_data_Contacts._strace) {
-			haxe_Log.trace("select:" + id + " selectType:" + selectType,{ fileName : "view/data/Contacts.hx", lineNumber : 118, className : "view.data.Contacts", methodName : "mapDispatchToProps"});
+			haxe_Log.trace("select:" + id + " selectType:" + selectType,{ fileName : "view/data/Contacts.hx", lineNumber : 119, className : "view.data.Contacts", methodName : "mapDispatchToProps"});
 		}
 		dispatch(redux_Action.map(action_async_LiveDataAccess.select({ id : id, data : data, match : component.props.match, selectType : selectType})));
 	}};
 };
 view_data_Contacts.mapStateToProps = function(aState) {
 	if(view_data_Contacts._strace) {
-		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/data/Contacts.hx", lineNumber : 129, className : "view.data.Contacts", methodName : "mapStateToProps"});
+		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/data/Contacts.hx", lineNumber : 132, className : "view.data.Contacts", methodName : "mapStateToProps"});
 	}
 	var bState = { dataStore : aState.dataStore, userState : aState.userState};
 	return bState;
@@ -14916,18 +16220,18 @@ view_data_Contacts.prototype = $extend(React_Component.prototype,{
 	}
 	,componentDidMount: function() {
 		if(this._trace) {
-			haxe_Log.trace(this.props.location.pathname,{ fileName : "view/data/Contacts.hx", lineNumber : 147, className : "view.data.Contacts", methodName : "componentDidMount"});
+			haxe_Log.trace(this.props.location.pathname,{ fileName : "view/data/Contacts.hx", lineNumber : 150, className : "view.data.Contacts", methodName : "componentDidMount"});
 		}
 	}
 	,render: function() {
 		if(this._trace) {
-			haxe_Log.trace(this.state.sideMenu,{ fileName : "view/data/Contacts.hx", lineNumber : 157, className : "view.data.Contacts", methodName : "render"});
+			haxe_Log.trace(this.state.sideMenu,{ fileName : "view/data/Contacts.hx", lineNumber : 160, className : "view.data.Contacts", methodName : "render"});
 		}
 		if(this._trace) {
-			haxe_Log.trace(this.props.match.params.section,{ fileName : "view/data/Contacts.hx", lineNumber : 158, className : "view.data.Contacts", methodName : "render"});
+			haxe_Log.trace(this.props.match.params.section,{ fileName : "view/data/Contacts.hx", lineNumber : 161, className : "view.data.Contacts", methodName : "render"});
 		}
 		if(this._trace) {
-			haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/Contacts.hx", lineNumber : 159, className : "view.data.Contacts", methodName : "render"});
+			haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/Contacts.hx", lineNumber : 162, className : "view.data.Contacts", methodName : "render"});
 		}
 		switch(this.props.match.params.section) {
 		case "Edit":
@@ -14942,7 +16246,7 @@ view_data_Contacts.prototype = $extend(React_Component.prototype,{
 		this.setState(cState);
 	}
 	,importClientList: function(_) {
-		haxe_Log.trace("setState loading true => " + Std.string(this.state.loading),{ fileName : "view/data/Contacts.hx", lineNumber : 206, className : "view.data.Contacts", methodName : "importClientList"});
+		haxe_Log.trace("setState loading true => " + Std.string(this.state.loading),{ fileName : "view/data/Contacts.hx", lineNumber : 209, className : "view.data.Contacts", methodName : "importClientList"});
 		this.setState({ loading : true});
 	}
 	,__class__: view_data_Contacts
@@ -15023,44 +16327,48 @@ var view_data_QC = function(props) {
 	React_Component.call(this,props);
 	this.dataAccess = model_contacts_ContactsModel.dataAccess;
 	this.dataDisplay = model_contacts_ContactsModel.dataDisplay;
-	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/data/QC.hx", lineNumber : 74, className : "view.data.QC", methodName : "new"});
-	haxe_Log.trace(props.match.params,{ fileName : "view/data/QC.hx", lineNumber : 75, className : "view.data.QC", methodName : "new"});
+	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/data/QC.hx", lineNumber : 81, className : "view.data.QC", methodName : "new"});
+	haxe_Log.trace(props.match.params,{ fileName : "view/data/QC.hx", lineNumber : 82, className : "view.data.QC", methodName : "new"});
 	if(props.match.params.section == null) {
-		haxe_Log.trace("reme",{ fileName : "view/data/QC.hx", lineNumber : 79, className : "view.data.QC", methodName : "new"});
+		haxe_Log.trace("reme",{ fileName : "view/data/QC.hx", lineNumber : 86, className : "view.data.QC", methodName : "new"});
 		var baseUrl = props.match.path.split(":section")[0];
 		props.history.push("" + baseUrl + "List/get");
+	} else {
+		this.state = App.initEState({ dataTable : [], loading : false, contactData : new haxe_ds_IntMap(), selectedRows : [], values : new haxe_ds_StringMap()},this);
+		haxe_Log.trace(this.state.uid,{ fileName : "view/data/QC.hx", lineNumber : 94, className : "view.data.QC", methodName : "new"});
 	}
-	this.state = App.initEState({ dataTable : [], loading : false, contactData : new haxe_ds_IntMap(), selectedRows : [], values : new haxe_ds_StringMap()},this);
 };
 $hxClasses["view.data.QC"] = view_data_QC;
 view_data_QC.__name__ = "view.data.QC";
 view_data_QC.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace("ok",{ fileName : "view/data/QC.hx", lineNumber : 106, className : "view.data.QC", methodName : "mapDispatchToProps"});
+	haxe_Log.trace("ok",{ fileName : "view/data/QC.hx", lineNumber : 115, className : "view.data.QC", methodName : "mapDispatchToProps"});
 	return { storeData : function(id,action) {
 		dispatch(redux_Action.map(action_async_LiveDataAccess.storeData(id,action)));
-	}, select : function(id,data,match,selectType) {
+	}, select : function(id,data,comp,selectType) {
 		if(id == null) {
 			id = -1;
 		}
-		haxe_Log.trace("select:" + id + " selectType:" + selectType,{ fileName : "view/data/QC.hx", lineNumber : 114, className : "view.data.QC", methodName : "mapDispatchToProps"});
-		dispatch(redux_Action.map(action_async_LiveDataAccess.select({ id : id, data : data, match : match, selectType : selectType})));
+		haxe_Log.trace("select:" + id + " selectType:" + selectType + data.toString(),{ fileName : "view/data/QC.hx", lineNumber : 123, className : "view.data.QC", methodName : "mapDispatchToProps"});
+		if(id < 0) {
+			haxe_Log.trace("nono...",{ fileName : "view/data/QC.hx", lineNumber : 125, className : "view.data.QC", methodName : "mapDispatchToProps"});
+			return;
+		}
+		dispatch(redux_Action.map(action_async_LiveDataAccess.select({ id : id, data : data, match : comp.props.match, selectType : selectType})));
 	}};
 };
 view_data_QC.mapStateToProps = function(aState) {
-	haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/data/QC.hx", lineNumber : 135, className : "view.data.QC", methodName : "mapStateToProps"});
+	haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/data/QC.hx", lineNumber : 148, className : "view.data.QC", methodName : "mapStateToProps"});
 	if(aState.dataStore.contactData != null) {
-		haxe_Log.trace(aState.dataStore.contactData.keys().next(),{ fileName : "view/data/QC.hx", lineNumber : 137, className : "view.data.QC", methodName : "mapStateToProps"});
+		haxe_Log.trace(aState.dataStore.contactData.keys().next(),{ fileName : "view/data/QC.hx", lineNumber : 150, className : "view.data.QC", methodName : "mapStateToProps"});
 	}
 	if(aState.dataStore.contactsDbData != null) {
 		var tmp = aState.dataStore.contactsDbData.dataRows[0];
-		haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/data/QC.hx", lineNumber : 139, className : "view.data.QC", methodName : "mapStateToProps"});
+		haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/data/QC.hx", lineNumber : 152, className : "view.data.QC", methodName : "mapStateToProps"});
 	} else {
-		haxe_Log.trace(aState.dataStore,{ fileName : "view/data/QC.hx", lineNumber : 142, className : "view.data.QC", methodName : "mapStateToProps"});
-		haxe_Log.trace(Reflect.fields(aState.dataStore),{ fileName : "view/data/QC.hx", lineNumber : 143, className : "view.data.QC", methodName : "mapStateToProps"});
+		haxe_Log.trace(Reflect.fields(aState.dataStore),{ fileName : "view/data/QC.hx", lineNumber : 156, className : "view.data.QC", methodName : "mapStateToProps"});
 	}
-	haxe_Log.trace(App.store.getState().dataStore.contactsDbData,{ fileName : "view/data/QC.hx", lineNumber : 145, className : "view.data.QC", methodName : "mapStateToProps"});
-	var bState = { dataStore : aState.dataStore, userState : aState.userState};
-	haxe_Log.trace(bState.dataStore.contactData,{ fileName : "view/data/QC.hx", lineNumber : 152, className : "view.data.QC", methodName : "mapStateToProps"});
+	haxe_Log.trace(App.store.getState().dataStore.contactsDbData,{ fileName : "view/data/QC.hx", lineNumber : 161, className : "view.data.QC", methodName : "mapStateToProps"});
+	var bState = { dataStore : aState.dataStore, userState : aState.userState, findBy : "lead_id"};
 	return bState;
 };
 view_data_QC.__super__ = React_Component;
@@ -15069,27 +16377,28 @@ view_data_QC.prototype = $extend(React_Component.prototype,{
 	,dataAccess: null
 	,dbData: null
 	,dbMetaData: null
+	,parentState: null
 	,componentDidCatch: function(error,info) {
 		try {
 			this.setState({ hasError : true});
 		} catch( _g ) {
 			var ex = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(ex,{ fileName : "view/data/QC.hx", lineNumber : 98, className : "view.data.QC", methodName : "componentDidCatch"});
+			haxe_Log.trace(ex,{ fileName : "view/data/QC.hx", lineNumber : 107, className : "view.data.QC", methodName : "componentDidCatch"});
 		}
-		haxe_Log.trace(error,{ fileName : "view/data/QC.hx", lineNumber : 100, className : "view.data.QC", methodName : "componentDidCatch"});
-		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "view/data/QC.hx", lineNumber : 101, className : "view.data.QC", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "view/data/QC.hx", lineNumber : 109, className : "view.data.QC", methodName : "componentDidCatch"});
+		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "view/data/QC.hx", lineNumber : 110, className : "view.data.QC", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
-		haxe_Log.trace(this.props.location.pathname,{ fileName : "view/data/QC.hx", lineNumber : 158, className : "view.data.QC", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.location.pathname + ":" + (this.state == null ? "" : this.state.uid),{ fileName : "view/data/QC.hx", lineNumber : 175, className : "view.data.QC", methodName : "componentDidMount"});
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/data/QC.hx", lineNumber : 168, className : "view.data.QC", methodName : "render"});
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/QC.hx", lineNumber : 169, className : "view.data.QC", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/data/QC.hx", lineNumber : 181, className : "view.data.QC", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/QC.hx", lineNumber : 182, className : "view.data.QC", methodName : "render"});
 		switch(this.props.match.params.section) {
 		case "Edit":
-			return React.createElement(view_data_contacts_Edit._renderWrapper,Object.assign({ },this.props,{ parentComponent : this, formApi : this.state.formApi, fullWidth : true, sideMenu : this.state.sideMenu}));
+			return React.createElement(view_data_qc_Edit._renderWrapper,Object.assign({ },this.props,{ parentComponent : this, formApi : this.state.formApi, fullWidth : true, sideMenu : this.state.sideMenu}));
 		case "List":
-			return React.createElement(view_data_contacts_List._renderWrapper,Object.assign({ },this.props,{ limit : 100, parentComponent : this, formApi : this.state.formApi, fullWidth : true, sideMenu : this.state.sideMenu}));
+			return React.createElement(view_data_qc_List._renderWrapper,Object.assign({ },this.props,{ limit : 100, parentComponent : this, formApi : this.state.formApi, fullWidth : true, sideMenu : this.state.sideMenu}));
 		default:
 			return null;
 		}
@@ -15101,11 +16410,11 @@ view_data_QC.prototype = $extend(React_Component.prototype,{
 });
 var view_data_accounts_Edit = function(props) {
 	React_Component.call(this,props);
-	haxe_Log.trace(props.match.params,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 69, className : "view.data.accounts.Edit", methodName : "new"});
+	haxe_Log.trace(props.match.params,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 70, className : "view.data.accounts.Edit", methodName : "new"});
 	this.dataAccess = model_accounting_AccountsModel.dataAccess;
 	this.initialState = null;
 	if(props.match.params.id == null && new EReg("update(/)*$","").match(props.match.params.action)) {
-		haxe_Log.trace("nothing selected - redirect",{ fileName : "view/data/accounts/Edit.hx", lineNumber : 80, className : "view.data.accounts.Edit", methodName : "new"});
+		haxe_Log.trace("nothing selected - redirect",{ fileName : "view/data/accounts/Edit.hx", lineNumber : 81, className : "view.data.accounts.Edit", methodName : "new"});
 		var baseUrl = props.match.path.split(":section")[0];
 		props.history.push("" + baseUrl + "List/get");
 		return;
@@ -15121,14 +16430,14 @@ var view_data_accounts_Edit = function(props) {
 		this.fieldNames.push(k);
 	}
 	this.dataDisplay = model_accounting_AccountsModel.dataDisplay;
-	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 91, className : "view.data.accounts.Edit", methodName : "new"});
+	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 92, className : "view.data.accounts.Edit", methodName : "new"});
 	this.formRef = React.createRef();
 	this.state = App.initEState({ dataTable : [], formBuilder : new view_shared_FormBuilder(this), initialState : this.initialState, loading : false, selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "data.Accounts", label : "Bearbeiten", section : "Edit", items : view_data_accounts_Edit.menuItems},{ section : props.match.params.section == null ? "Edit" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
 };
 $hxClasses["view.data.accounts.Edit"] = view_data_accounts_Edit;
 view_data_accounts_Edit.__name__ = "view.data.accounts.Edit";
 view_data_accounts_Edit.mapStateToProps = function(aState) {
-	haxe_Log.trace(aState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 242, className : "view.data.accounts.Edit", methodName : "mapStateToProps"});
+	haxe_Log.trace(aState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 246, className : "view.data.accounts.Edit", methodName : "mapStateToProps"});
 	return { userState : aState.userState};
 };
 view_data_accounts_Edit.__super__ = React_Component;
@@ -15142,14 +16451,15 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 	,actualState: null
 	,initialState: null
 	,loadContactData: function(id) {
-		haxe_Log.trace("loading:" + id,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 123, className : "view.data.accounts.Edit", methodName : "loadContactData"});
+		haxe_Log.trace("loading:" + id,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 124, className : "view.data.accounts.Edit", methodName : "loadContactData"});
 		return null;
 	}
 	,update: function() {
 		if(this.state.actualState != null) {
-			haxe_Log.trace("length:" + this.state.actualState.fieldsModified.length + ":" + this.state.actualState.fieldsModified.join("|"),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 145, className : "view.data.accounts.Edit", methodName : "update"});
+			haxe_Log.trace("length:" + this.state.actualState.fieldsModified.length + ":" + this.state.actualState.fieldsModified.join("|"),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 146, className : "view.data.accounts.Edit", methodName : "update"});
 		}
 		if(this.state.actualState == null || this.state.actualState.fieldsModified.length == 0) {
+			haxe_Log.trace("no data 2 update at state.actualState",{ fileName : "view/data/accounts/Edit.hx", lineNumber : 148, className : "view.data.accounts.Edit", methodName : "update"});
 			return;
 		}
 		var data2save = this.state.actualState.allModified();
@@ -15160,7 +16470,7 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 		var dbaProps_dataSource = null;
 		var dbaProps_userState = this.props.userState;
 		var dbQ = { classPath : "data.Accounts", action : "update", data : data2save, filter : { id : this.state.actualState.id, mandator : 1}, resolveMessage : { success : "Konto " + this.state.actualState.id + " wurde aktualisiert", failure : "Konto " + this.state.actualState.id + " konnte nicht aktualisiert werden"}, table : "accounts", dbUser : this.props.userState.dbUser, devIP : App.devIP};
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 175, className : "view.data.accounts.Edit", methodName : "update"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 179, className : "view.data.accounts.Edit", methodName : "update"});
 		switch(this.props.match.params.action) {
 		case "delete":case "get":
 			var _g = new haxe_ds_StringMap();
@@ -15175,23 +16485,23 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 			while(_g < _g1.length) {
 				var f = _g1[_g];
 				++_g;
-				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/accounts/Edit.hx", lineNumber : 182, className : "view.data.accounts.Edit", methodName : "update"});
+				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/accounts/Edit.hx", lineNumber : 186, className : "view.data.accounts.Edit", methodName : "update"});
 				if(Reflect.field(aState,f) == "") {
 					Reflect.deleteField(aState,f);
 				}
 			}
 			break;
 		case "update":
-			haxe_Log.trace("" + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 202, className : "view.data.accounts.Edit", methodName : "update"});
+			haxe_Log.trace("" + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 206, className : "view.data.accounts.Edit", methodName : "update"});
 			if(this.state.actualState != null) {
-				haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 206, className : "view.data.accounts.Edit", methodName : "update"});
+				haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 210, className : "view.data.accounts.Edit", methodName : "update"});
 			}
-			haxe_Log.trace(this.state.actualState.id,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 218, className : "view.data.accounts.Edit", methodName : "update"});
+			haxe_Log.trace(this.state.actualState.id,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 222, className : "view.data.accounts.Edit", methodName : "update"});
 			if(!this.state.actualState.modified()) {
-				haxe_Log.trace("nothing modified",{ fileName : "view/data/accounts/Edit.hx", lineNumber : 222, className : "view.data.accounts.Edit", methodName : "update"});
+				haxe_Log.trace("nothing modified",{ fileName : "view/data/accounts/Edit.hx", lineNumber : 226, className : "view.data.accounts.Edit", methodName : "update"});
 				return;
 			}
-			haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 225, className : "view.data.accounts.Edit", methodName : "update"});
+			haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 229, className : "view.data.accounts.Edit", methodName : "update"});
 			var _g = new haxe_ds_StringMap();
 			var _g1 = new haxe_ds_StringMap();
 			var value = this.state.actualState.allModified();
@@ -15199,13 +16509,13 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 			_g1.h["filter"] = { id : this.state.actualState.id};
 			_g.h["contacts"] = _g1;
 			dbaProps_dataSource = _g;
-			haxe_Log.trace(dbaProps_dataSource.h["contacts"].h["filter"],{ fileName : "view/data/accounts/Edit.hx", lineNumber : 232, className : "view.data.accounts.Edit", methodName : "update"});
+			haxe_Log.trace(dbaProps_dataSource.h["contacts"].h["filter"],{ fileName : "view/data/accounts/Edit.hx", lineNumber : 236, className : "view.data.accounts.Edit", methodName : "update"});
 			break;
 		}
 		App.store.dispatch(redux_Action.map(action_async_CRUD.update(dbQ)));
 	}
 	,'delete': function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 250, className : "view.data.accounts.Edit", methodName : "delete"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 254, className : "view.data.accounts.Edit", methodName : "delete"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
 	}
 	,componentDidMount: function() {
@@ -15213,21 +16523,23 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 		window.addEventListener("beforeunload",$bind(this,this.sessionStore));
 		var sessAccounts = window.sessionStorage.getItem("contacts");
 		if(sessAccounts != null) {
-			haxe_Log.trace(JSON.parse(sessAccounts),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 260, className : "view.data.accounts.Edit", methodName : "componentDidMount"});
+			haxe_Log.trace(JSON.parse(sessAccounts),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 264, className : "view.data.accounts.Edit", methodName : "componentDidMount"});
 			this.actualState = JSON.parse(sessAccounts);
-			haxe_Log.trace(this.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 262, className : "view.data.accounts.Edit", methodName : "componentDidMount"});
+			haxe_Log.trace(this.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 266, className : "view.data.accounts.Edit", methodName : "componentDidMount"});
 			this.forceUpdate();
 		} else if(this.actualState == null) {
 			this.actualState = react_ReactUtil.copy(this.initialState);
+			haxe_Log.trace(this.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 286, className : "view.data.accounts.Edit", methodName : "componentDidMount"});
 			this.actualState = view_shared_io_Observer.run(this.actualState,function(newState) {
 				_gthis.actualState = newState;
-				haxe_Log.trace(_gthis.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 284, className : "view.data.accounts.Edit", methodName : "componentDidMount"});
+				haxe_Log.trace(_gthis.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 289, className : "view.data.accounts.Edit", methodName : "componentDidMount"});
 			});
+			haxe_Log.trace(this.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 291, className : "view.data.accounts.Edit", methodName : "componentDidMount"});
 		}
 		if(react_ReactRef.get_current(this.formRef) != null) {
 			react_ReactRef.get_current(this.formRef).addEventListener("keyup",$bind(this,this.handleChange));
 			react_ReactRef.get_current(this.formRef).addEventListener("mouseup",function(ev) {
-				haxe_Log.trace(ev.target.value,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 296, className : "view.data.accounts.Edit", methodName : "componentDidMount"});
+				haxe_Log.trace(ev.target.value,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 302, className : "view.data.accounts.Edit", methodName : "componentDidMount"});
 			});
 		}
 		if(this.props.dataStore != null && this.actualState == null) {
@@ -15236,8 +16548,8 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,shouldComponentUpdate: function(nextProps,nextState) {
-		haxe_Log.trace("propsChanged:" + Std.string(nextProps != this.props),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 311, className : "view.data.accounts.Edit", methodName : "shouldComponentUpdate"});
-		haxe_Log.trace("stateChanged:" + Std.string(nextState != this.state),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 312, className : "view.data.accounts.Edit", methodName : "shouldComponentUpdate"});
+		haxe_Log.trace("propsChanged:" + Std.string(nextProps != this.props),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 317, className : "view.data.accounts.Edit", methodName : "shouldComponentUpdate"});
+		haxe_Log.trace("stateChanged:" + Std.string(nextState != this.state),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 318, className : "view.data.accounts.Edit", methodName : "shouldComponentUpdate"});
 		if(nextState != this.state) {
 			return true;
 		}
@@ -15247,12 +16559,12 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 		return;
 	}
 	,sessionStore: function() {
-		haxe_Log.trace(this.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 330, className : "view.data.accounts.Edit", methodName : "sessionStore"});
+		haxe_Log.trace(this.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 336, className : "view.data.accounts.Edit", methodName : "sessionStore"});
 		window.sessionStorage.setItem("contacts",JSON.stringify(this.actualState));
 		window.removeEventListener("beforeunload",$bind(this,this.sessionStore));
 	}
 	,doChange: function(name,value) {
-		haxe_Log.trace("" + name + ": " + value,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 336, className : "view.data.accounts.Edit", methodName : "doChange"});
+		haxe_Log.trace("" + name + ": " + value,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 342, className : "view.data.accounts.Edit", methodName : "doChange"});
 		if(name != null && name != "") {
 			this.actualState[name] = value;
 		}
@@ -15261,14 +16573,14 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 	,handleChange: function(e) {
 		var el = e.target;
 		if(el.name != "" && el.name != null) {
-			haxe_Log.trace(">>" + Std.string(el.name) + "=>" + Std.string(el.value) + "<<",{ fileName : "view/data/accounts/Edit.hx", lineNumber : 349, className : "view.data.accounts.Edit", methodName : "handleChange"});
+			haxe_Log.trace(">>" + Std.string(el.name) + "=>" + Std.string(el.value) + "<<",{ fileName : "view/data/accounts/Edit.hx", lineNumber : 355, className : "view.data.accounts.Edit", methodName : "handleChange"});
 			this.actualState[el.name] = el.value;
-			haxe_Log.trace(this.actualState.last_name,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 352, className : "view.data.accounts.Edit", methodName : "handleChange"});
+			haxe_Log.trace(this.actualState.last_name,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 358, className : "view.data.accounts.Edit", methodName : "handleChange"});
 		}
 	}
 	,mHandlers: function(event) {
 		event.preventDefault();
-		haxe_Log.trace(this.state.initialState.id,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 367, className : "view.data.accounts.Edit", methodName : "mHandlers"});
+		haxe_Log.trace(this.state.initialState.id,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 373, className : "view.data.accounts.Edit", methodName : "mHandlers"});
 		var doc = window.document;
 		var formElement = js_Boot.__cast(doc.querySelector("form[name=\"contact\"]") , HTMLFormElement);
 		var elements = formElement.elements;
@@ -15312,14 +16624,14 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 				o[field] = value;
 			} catch( _g3 ) {
 				var ex = haxe_Exception.caught(_g3).unwrap();
-				haxe_Log.trace(ex,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 402, className : "view.data.accounts.Edit", methodName : "mHandlers"});
+				haxe_Log.trace(ex,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 408, className : "view.data.accounts.Edit", methodName : "mHandlers"});
 			}
 		}
-		haxe_Log.trace(this.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 406, className : "view.data.accounts.Edit", methodName : "mHandlers"});
+		haxe_Log.trace(this.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 412, className : "view.data.accounts.Edit", methodName : "mHandlers"});
 		this.go(this.actualState);
 	}
 	,go: function(aState) {
-		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 413, className : "view.data.accounts.Edit", methodName : "go"});
+		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/data/accounts/Edit.hx", lineNumber : 419, className : "view.data.accounts.Edit", methodName : "go"});
 		var dbaProps = { action : this.props.match.params.action, classPath : "data.Accounts", dataSource : null, table : "contacts", userState : this.props.userState};
 		switch(this.props.match.params.action) {
 		case "delete":case "get":
@@ -15335,7 +16647,7 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 			while(_g < _g1.length) {
 				var f = _g1[_g];
 				++_g;
-				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/accounts/Edit.hx", lineNumber : 427, className : "view.data.accounts.Edit", methodName : "go"});
+				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/accounts/Edit.hx", lineNumber : 433, className : "view.data.accounts.Edit", methodName : "go"});
 				if(Reflect.field(aState,f) == "") {
 					Reflect.deleteField(aState,f);
 				}
@@ -15373,7 +16685,7 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 	,renderResults: function() {
 		switch(this.props.match.params.action) {
 		case "insert":
-			haxe_Log.trace(this.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 491, className : "view.data.accounts.Edit", methodName : "renderResults"});
+			haxe_Log.trace(this.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 497, className : "view.data.accounts.Edit", methodName : "renderResults"});
 			var tmp = this.state.formBuilder;
 			var tmp1 = this.state.mHandlers;
 			var _g = new haxe_ds_StringMap();
@@ -15388,7 +16700,7 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 			}
 			return tmp.renderForm({ mHandlers : tmp1, fields : _g, model : "contact", formRef : this.formRef, title : "Kontakt - Neue Stammdaten"},this.actualState);
 		case "update":
-			haxe_Log.trace(this.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 475, className : "view.data.accounts.Edit", methodName : "renderResults"});
+			haxe_Log.trace(this.actualState,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 481, className : "view.data.accounts.Edit", methodName : "renderResults"});
 			if(this.actualState == null) {
 				return this.state.formApi.renderWait();
 			} else {
@@ -15412,7 +16724,7 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 508, className : "view.data.accounts.Edit", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 514, className : "view.data.accounts.Edit", methodName : "render"});
 		switch(this.props.match.params.action) {
 		case "insert":
 			return this.state.formApi.render(this.renderResults());
@@ -15424,7 +16736,7 @@ view_data_accounts_Edit.prototype = $extend(React_Component.prototype,{
 	}
 	,updateMenu: function(viewClassPath) {
 		var sideMenu = this.state.sideMenu;
-		haxe_Log.trace(sideMenu.section,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 531, className : "view.data.accounts.Edit", methodName : "updateMenu"});
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/data/accounts/Edit.hx", lineNumber : 537, className : "view.data.accounts.Edit", methodName : "updateMenu"});
 		var _g = 0;
 		var _g1 = sideMenu.menuBlocks.h["Contact"].items;
 		while(_g < _g1.length) {
@@ -15542,7 +16854,7 @@ view_data_accounts_List.prototype = $extend(React_Component.prototype,{
 		case "delete":
 			return null;
 		case "get":
-			return React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
+			return React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
 		default:
 			return null;
 		}
@@ -15690,11 +17002,11 @@ view_data_contacts_Accounts.prototype = $extend(React_Component.prototype,{
 			case "delete":
 				return null;
 			case "get":
-				return React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
+				return React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
 			case "insert":
-				return React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], className : "is-striped is-hoverable", fullWidth : true}));
+				return React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], className : "is-striped is-hoverable", fullWidth : true}));
 			case "update":
-				return React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], className : "is-striped is-hoverable", fullWidth : true}));
+				return React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "accountsList", data : this.state.dataTable, dataState : this.dataDisplay.h["accountsList"], className : "is-striped is-hoverable", fullWidth : true}));
 			default:
 				return null;
 			}
@@ -15918,7 +17230,7 @@ view_data_contacts_Deals.prototype = $extend(React_Component.prototype,{
 				return null;
 			case "get":
 				var tmp = react_ReactType.fromComp(React_Fragment);
-				var tmp1 = React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ id : "dealsList", data : this.state.dataTable, dataState : this.dataDisplay.h["dealsList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
+				var tmp1 = React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "dealsList", data : this.state.dataTable, dataState : this.dataDisplay.h["dealsList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
 				var tmp2 = this.renderForm();
 				return React.createElement(tmp,{ },tmp1,tmp2);
 			default:
@@ -15972,7 +17284,7 @@ var view_data_contacts_Edit = function(props) {
 	this.formRef = React.createRef();
 	this.historyFormRef = React.createRef();
 	haxe_Log.trace(props.match.params,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 128, className : "view.data.contacts.Edit", methodName : "new"});
-	if(props.dataStore.contactData != null) {
+	if(props.dataStore.contactData != null && props.match.params.id == null) {
 		var tmp = props.dataStore.contactData.keys().next();
 		props.match.params.id = Std.string(tmp);
 	}
@@ -16000,7 +17312,7 @@ var view_data_contacts_Edit = function(props) {
 $hxClasses["view.data.contacts.Edit"] = view_data_contacts_Edit;
 view_data_contacts_Edit.__name__ = "view.data.contacts.Edit";
 view_data_contacts_Edit.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace("here we should be ready to load",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 573, className : "view.data.contacts.Edit", methodName : "mapDispatchToProps"});
+	haxe_Log.trace("here we should be ready to load",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 581, className : "view.data.contacts.Edit", methodName : "mapDispatchToProps"});
 	return { load : function(param) {
 		return dispatch(redux_Action.map(action_async_CRUD.read(param)));
 	}};
@@ -16119,9 +17431,10 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		this.mounted = true;
 		haxe_Log.trace(this.props.children,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 293, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
 		if(this.props.match.params.id != null) {
+			haxe_Log.trace(this.props.match.params,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 296, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
 			this.loadContactData(Std.parseInt(this.props.match.params.id));
 		}
-		haxe_Log.trace(this.props.children,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 297, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.children,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 299, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
 	}
 	,componentWillUnmount: function() {
 		return;
@@ -16134,8 +17447,8 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		case 0:
 			break;
 		case 4:
-			haxe_Log.trace(Reflect.fields(ref),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 328, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
-			haxe_Log.trace(js_Boot.getClass(ref),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 329, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
+			haxe_Log.trace(Reflect.fields(ref),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 330, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
+			haxe_Log.trace(js_Boot.getClass(ref),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 331, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
 			var tmp = ref.props != null && ref.props.model != null;
 			break;
 		case 6:
@@ -16151,22 +17464,22 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 					}
 				} catch( _g ) {
 					var ex = haxe_Exception.caught(_g);
-					haxe_Log.trace(ex,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 354, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
+					haxe_Log.trace(ex,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 356, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
 				}
 			}
 			break;
 		default:
-			haxe_Log.trace(ref,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 358, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
+			haxe_Log.trace(ref,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 360, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
 		}
 	}
 	,registerORM: function(refModel,orm) {
 		if(Object.prototype.hasOwnProperty.call(this.ormRefs.h,refModel)) {
 			this.ormRefs.h[refModel].orms.h[orm.id] = orm;
-			haxe_Log.trace(refModel,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 365, className : "view.data.contacts.Edit", methodName : "registerORM"});
+			haxe_Log.trace(refModel,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 367, className : "view.data.contacts.Edit", methodName : "registerORM"});
 			this.setState({ ormRefs : this.ormRefs});
-			haxe_Log.trace(Reflect.fields(this.state),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 369, className : "view.data.contacts.Edit", methodName : "registerORM"});
+			haxe_Log.trace(Reflect.fields(this.state),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 371, className : "view.data.contacts.Edit", methodName : "registerORM"});
 		} else {
-			haxe_Log.trace("OrmRef " + refModel + " not found!",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 373, className : "view.data.contacts.Edit", methodName : "registerORM"});
+			haxe_Log.trace("OrmRef " + refModel + " not found!",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 375, className : "view.data.contacts.Edit", methodName : "registerORM"});
 		}
 	}
 	,update: function() {
@@ -16182,11 +17495,13 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 			var _g1_value = _g_h[key];
 			var k = _g1_key;
 			var v = _g1_value;
-			haxe_Log.trace("" + k + "=>" + Std.string(v.props.save),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 380, className : "view.data.contacts.Edit", methodName : "update"});
-			v.props.save(v);
+			if(Reflect.field(v,"props") != null && Reflect.field(v.props,"save") != null) {
+				haxe_Log.trace("save:" + k,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 383, className : "view.data.contacts.Edit", methodName : "update"});
+				v.props.save(v);
+			}
 		}
 		if(this.state.actualState != null) {
-			haxe_Log.trace("length:" + this.state.actualState.fieldsModified.length + ":" + this.state.actualState.fieldsModified.join("|"),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 384, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace("length:" + this.state.actualState.fieldsModified.length + ":" + this.state.actualState.fieldsModified.join("|"),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 392, className : "view.data.contacts.Edit", methodName : "update"});
 		}
 		if(this.state.actualState == null || this.state.actualState.fieldsModified.length == 0) {
 			return;
@@ -16197,7 +17512,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		var elements = formElement.elements;
 		var aState = react_ReactUtil.copy(this.state.actualState);
 		var dbQ = { classPath : "data.Contacts", action : "update", data : data2save, filter : { id : this.state.actualState.id, mandator : 1}, resolveMessage : { success : "Kontakt " + this.state.actualState.id + " wurde aktualisiert", failure : "Kontakt " + this.state.actualState.id + " konnte nicht aktualisiert werden"}, table : "contacts", dbUser : this.props.userState.dbUser, devIP : App.devIP};
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 406, className : "view.data.contacts.Edit", methodName : "update"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 414, className : "view.data.contacts.Edit", methodName : "update"});
 		switch(this.props.match.params.action) {
 		case "delete":case "get":
 			var _g = new haxe_ds_StringMap();
@@ -16212,28 +17527,28 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 			while(_g < _g1.length) {
 				var f = _g1[_g];
 				++_g;
-				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 412, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 420, className : "view.data.contacts.Edit", methodName : "update"});
 				if(Reflect.field(aState,f) == "") {
 					Reflect.deleteField(aState,f);
 				}
 			}
 			break;
 		case "update":
-			haxe_Log.trace("" + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 424, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace("" + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 432, className : "view.data.contacts.Edit", methodName : "update"});
 			if(this.state.actualState != null) {
-				haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 428, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 436, className : "view.data.contacts.Edit", methodName : "update"});
 			}
-			haxe_Log.trace(this.state.actualState.id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 430, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace(this.state.actualState.id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 438, className : "view.data.contacts.Edit", methodName : "update"});
 			if(!this.state.actualState.modified()) {
-				haxe_Log.trace("nothing modified",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 434, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace("nothing modified",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 442, className : "view.data.contacts.Edit", methodName : "update"});
 				return;
 			}
-			haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 437, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 445, className : "view.data.contacts.Edit", methodName : "update"});
 			break;
 		}
 		var p = App.store.dispatch(redux_Action.map(action_async_CRUD.update(dbQ)));
 		p.then(function(d) {
-			haxe_Log.trace(d,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 450, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace(d,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 458, className : "view.data.contacts.Edit", methodName : "update"});
 			_gthis.loadContactData(_gthis.state.actualState.id);
 		});
 	}
@@ -16365,7 +17680,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		return React.createElement(tmp,{ },tmp1,tmp2);
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 542, className : "view.data.contacts.Edit", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 550, className : "view.data.contacts.Edit", methodName : "render"});
 		if(this.state.initialData == null) {
 			return null;
 		}
@@ -16379,7 +17694,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,select: function(id,data,match) {
-		haxe_Log.trace(id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 569, className : "view.data.contacts.Edit", methodName : "select"});
+		haxe_Log.trace(id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 577, className : "view.data.contacts.Edit", methodName : "select"});
 	}
 	,__class__: view_data_contacts_Edit
 });
@@ -16389,12 +17704,13 @@ var view_data_contacts_List = function(props) {
 	this.state = App.initEState({ dataTable : [], loading : true, contactData : new haxe_ds_IntMap(), selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "data.Contacts", hasFindForm : true, label : "Liste", section : "List", items : view_data_contacts_List.menuItems},{ section : props.match.params.section == null ? "List" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
 	if(props.match.params.section == null || props.match.params.action == null) {
 		var baseUrl = props.match.path.split(":section")[0];
-		haxe_Log.trace("redirecting to " + baseUrl + "List/get",{ fileName : "view/data/contacts/List.hx", lineNumber : 98, className : "view.data.contacts.List", methodName : "new"});
+		haxe_Log.trace("redirecting to " + baseUrl + "List/get",{ fileName : "view/data/contacts/List.hx", lineNumber : 99, className : "view.data.contacts.List", methodName : "new"});
 		props.history.push("" + baseUrl + "List/get");
+		this.get(null);
 	} else {
-		haxe_Log.trace(props.match.params,{ fileName : "view/data/contacts/List.hx", lineNumber : 105, className : "view.data.contacts.List", methodName : "new"});
+		haxe_Log.trace(props.match.params,{ fileName : "view/data/contacts/List.hx", lineNumber : 106, className : "view.data.contacts.List", methodName : "new"});
 	}
-	haxe_Log.trace(this.state.loading,{ fileName : "view/data/contacts/List.hx", lineNumber : 107, className : "view.data.contacts.List", methodName : "new"});
+	haxe_Log.trace(this.state.loading,{ fileName : "view/data/contacts/List.hx", lineNumber : 108, className : "view.data.contacts.List", methodName : "new"});
 };
 $hxClasses["view.data.contacts.List"] = view_data_contacts_List;
 view_data_contacts_List.__name__ = "view.data.contacts.List";
@@ -16419,39 +17735,39 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 	,dbData: null
 	,dbMetaData: null
 	,'delete': function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 119, className : "view.data.contacts.List", methodName : "delete"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 120, className : "view.data.contacts.List", methodName : "delete"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
 	}
 	,get: function(filter) {
 		var _gthis = this;
-		if(filter == null) {
-			filter = { mandator : this.props.userState.dbUser.mandator};
-		}
-		haxe_Log.trace("hi " + Std.string(filter),{ fileName : "view/data/contacts/List.hx", lineNumber : 127, className : "view.data.contacts.List", methodName : "get"});
 		var offset = 0;
 		if(filter != null && filter.page != null) {
+			haxe_Log.trace(filter,{ fileName : "view/data/contacts/List.hx", lineNumber : 129, className : "view.data.contacts.List", methodName : "get"});
 			offset = this.props.limit * filter.page | 0;
+			Reflect.deleteField(filter,"page");
 		}
-		haxe_Log.trace(this.props.match.params,{ fileName : "view/data/contacts/List.hx", lineNumber : 133, className : "view.data.contacts.List", methodName : "get"});
+		filter = shared_Utils.extend(filter,this.props.match.params.id != null ? { id : this.props.match.params.id, mandator : this.props.userState.dbUser.mandator} : { mandator : this.props.userState.dbUser.mandator});
+		haxe_Log.trace("hi " + Std.string(filter),{ fileName : "view/data/contacts/List.hx", lineNumber : 139, className : "view.data.contacts.List", methodName : "get"});
+		haxe_Log.trace(this.props.match.params,{ fileName : "view/data/contacts/List.hx", lineNumber : 141, className : "view.data.contacts.List", methodName : "get"});
 		var p = this.props.load({ classPath : "data.Contacts", action : "get", filter : filter, limit : this.props.limit, offset : offset > 0 ? offset : 0, table : "contacts", resolveMessage : { success : "Kontaktliste wurde geladen", failure : "Kontaktliste konnte nicht geladen werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
 		p.then(function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 151, className : "view.data.contacts.List", methodName : "get"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 159, className : "view.data.contacts.List", methodName : "get"});
 			if(data.dataRows.length < 5 && data.dataRows.length > 0) {
-				haxe_Log.trace(data.dataRows,{ fileName : "view/data/contacts/List.hx", lineNumber : 154, className : "view.data.contacts.List", methodName : "get"});
+				haxe_Log.trace(data.dataRows,{ fileName : "view/data/contacts/List.hx", lineNumber : 162, className : "view.data.contacts.List", methodName : "get"});
 			}
 			_gthis.setState({ loading : false, dataTable : data.dataRows, dataCount : Std.parseInt(data.dataInfo.h["count"]), pageCount : Math.ceil(Std.parseInt(data.dataInfo.h["count"]) / _gthis.props.limit)});
 		});
 	}
 	,edit: function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 168, className : "view.data.contacts.List", methodName : "edit"});
-		haxe_Log.trace(Reflect.fields(ev),{ fileName : "view/data/contacts/List.hx", lineNumber : 169, className : "view.data.contacts.List", methodName : "edit"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 176, className : "view.data.contacts.List", methodName : "edit"});
+		haxe_Log.trace(Reflect.fields(ev),{ fileName : "view/data/contacts/List.hx", lineNumber : 177, className : "view.data.contacts.List", methodName : "edit"});
 	}
 	,restore: function() {
 		var _gthis = this;
-		haxe_Log.trace(Reflect.fields(this.props.dataStore),{ fileName : "view/data/contacts/List.hx", lineNumber : 173, className : "view.data.contacts.List", methodName : "restore"});
+		haxe_Log.trace(Reflect.fields(this.props.dataStore),{ fileName : "view/data/contacts/List.hx", lineNumber : 181, className : "view.data.contacts.List", methodName : "restore"});
 		if(this.props.dataStore != null && this.props.dataStore.contactsDbData != null) {
 			this.setState({ dataTable : this.props.dataStore.contactsDbData.dataRows, dataCount : Std.parseInt(this.props.dataStore.contactsDbData.dataInfo.h["count"]), pageCount : Math.ceil(Std.parseInt(this.props.dataStore.contactsDbData.dataInfo.h["count"]) / this.props.limit)},function() {
-				haxe_Log.trace(_gthis.state.dataTable,{ fileName : "view/data/contacts/List.hx", lineNumber : 183, className : "view.data.contacts.List", methodName : "restore"});
+				haxe_Log.trace(_gthis.state.dataTable,{ fileName : "view/data/contacts/List.hx", lineNumber : 191, className : "view.data.contacts.List", methodName : "restore"});
 				_gthis.props.history.push("" + _gthis.props.match.path.split(":section")[0] + "List/get/" + (_gthis.props.match.params.id != null ? _gthis.props.match.params.id : ""));
 			});
 		} else {
@@ -16462,10 +17778,10 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 	,selectionClear: function() {
 		var match = react_ReactUtil.copy(this.props.match);
 		match.params.action = "get";
-		haxe_Log.trace(this.state.dataTable.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 204, className : "view.data.contacts.List", methodName : "selectionClear"});
+		haxe_Log.trace(this.state.dataTable.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 212, className : "view.data.contacts.List", methodName : "selectionClear"});
 		this.props.select(0,null,this.props.parentComponent,"UnselectAll");
 		var trs = window.document.querySelectorAll("#contactList .gridItem.selected");
-		haxe_Log.trace(trs.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 209, className : "view.data.contacts.List", methodName : "selectionClear"});
+		haxe_Log.trace(trs.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 217, className : "view.data.contacts.List", methodName : "selectionClear"});
 		var _g = 0;
 		var _g1 = trs.length;
 		while(_g < _g1) {
@@ -16484,31 +17800,31 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 		_g.h["get"] = value;
 		this.dataAccess = _g;
 		if(this.props.userState != null) {
-			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/data/contacts/List.hx", lineNumber : 232, className : "view.data.contacts.List", methodName : "componentDidMount"});
+			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/data/contacts/List.hx", lineNumber : 240, className : "view.data.contacts.List", methodName : "componentDidMount"});
 		}
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/List.hx", lineNumber : 233, className : "view.data.contacts.List", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/List.hx", lineNumber : 241, className : "view.data.contacts.List", methodName : "componentDidMount"});
 		this.state.formApi.doAction();
 	}
 	,renderResults: function() {
 		var pState = this.props.parentComponent.state;
-		haxe_Log.trace(this.state.dataTable.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 243, className : "view.data.contacts.List", methodName : "renderResults"});
+		haxe_Log.trace(this.state.dataTable.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 251, className : "view.data.contacts.List", methodName : "renderResults"});
 		if(this.props.dataStore.contactsDbData != null) {
 			var tmp = this.props.dataStore.contactsDbData.dataRows[0];
-			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/data/contacts/List.hx", lineNumber : 245, className : "view.data.contacts.List", methodName : "renderResults"});
+			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/data/contacts/List.hx", lineNumber : 253, className : "view.data.contacts.List", methodName : "renderResults"});
 		} else {
-			haxe_Log.trace(this.props.dataStore.contactsDbData,{ fileName : "view/data/contacts/List.hx", lineNumber : 246, className : "view.data.contacts.List", methodName : "renderResults"});
+			haxe_Log.trace(this.props.dataStore.contactsDbData,{ fileName : "view/data/contacts/List.hx", lineNumber : 254, className : "view.data.contacts.List", methodName : "renderResults"});
 		}
 		if(this.state.dataTable.length == 0) {
 			return this.state.formApi.renderWait();
 		}
 		if(this.props.match.params.action == "get") {
-			return React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ id : "contactList", data : this.state.dataTable, dataState : this.dataDisplay.h["contactList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
+			return React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "contactList", data : this.state.dataTable, dataState : this.dataDisplay.h["contactList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
 		} else {
 			return null;
 		}
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 281, className : "view.data.contacts.List", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 289, className : "view.data.contacts.List", methodName : "render"});
 		var tmp = this.state.formApi;
 		var tmp1 = react_ReactType.fromComp(React_Fragment);
 		var tmp2 = react_ReactType.fromString("form");
@@ -16517,11 +17833,11 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 		return tmp.render(React.createElement(tmp1,{ },tmp4));
 	}
 	,componentWillUnmount: function() {
-		haxe_Log.trace("...",{ fileName : "view/data/contacts/List.hx", lineNumber : 292, className : "view.data.contacts.List", methodName : "componentWillUnmount"});
+		haxe_Log.trace("...",{ fileName : "view/data/contacts/List.hx", lineNumber : 300, className : "view.data.contacts.List", methodName : "componentWillUnmount"});
 	}
 	,updateMenu: function(viewClassPath) {
 		var sideMenu = this.state.sideMenu;
-		haxe_Log.trace(sideMenu.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 298, className : "view.data.contacts.List", methodName : "updateMenu"});
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 306, className : "view.data.contacts.List", methodName : "updateMenu"});
 		var _g = 0;
 		var _g1 = sideMenu.menuBlocks.h["List"].items;
 		while(_g < _g1.length) {
@@ -16851,7 +18167,7 @@ view_data_deals_List.prototype = $extend(React_Component.prototype,{
 		case "delete":
 			return null;
 		case "get":
-			return React.createElement(react_ReactType.fromComp(view_grid_Grid),Object.assign({ },this.props,{ id : "dealsList", data : this.state.dataTable, dataState : this.dataDisplay.h["dealsList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
+			return React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "dealsList", data : this.state.dataTable, dataState : this.dataDisplay.h["dealsList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
 		default:
 			return null;
 		}
@@ -16889,6 +18205,599 @@ view_data_deals_List.prototype = $extend(React_Component.prototype,{
 		return sideMenu;
 	}
 	,__class__: view_data_deals_List
+});
+var view_data_qc_Edit = function(props) {
+	this._trace = false;
+	this.mounted = false;
+	React_Component.call(this,props);
+	this.ormRefs = new haxe_ds_StringMap();
+	this._trace = true;
+	this.accountsFormRef = React.createRef();
+	this.dealsFormRef = React.createRef();
+	this.formRef = React.createRef();
+	this.historyFormRef = React.createRef();
+	haxe_Log.trace(props.match.params,{ fileName : "view/data/qc/Edit.hx", lineNumber : 128, className : "view.data.qc.Edit", methodName : "new"});
+	haxe_Log.trace("props:" + Reflect.fields(props).join("|"),{ fileName : "view/data/qc/Edit.hx", lineNumber : 129, className : "view.data.qc.Edit", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(props.dataStore.qcData).join("|"),{ fileName : "view/data/qc/Edit.hx", lineNumber : 130, className : "view.data.qc.Edit", methodName : "new"});
+	if(props.match.params.id == null) {
+		var tmp = props.dataStore.qcActData.keys().next();
+		props.match.params.id = Std.string(tmp);
+	}
+	if(Lambda.has(Reflect.fields(props),"dataStore")) {
+		this.qcData = props.dataStore.qcData.h[Std.parseInt(props.match.params.id)];
+		haxe_Log.trace(this.qcData.h["entry_list_id"],{ fileName : "view/data/qc/Edit.hx", lineNumber : 136, className : "view.data.qc.Edit", methodName : "new"});
+	}
+	if(props.match.params.id == null && new EReg("update(/)*$","").match(props.match.params.action)) {
+		haxe_Log.trace("nothing selected - redirect",{ fileName : "view/data/qc/Edit.hx", lineNumber : 141, className : "view.data.qc.Edit", methodName : "new"});
+		var baseUrl = props.match.path.split(":section")[0];
+		props.history.push("" + baseUrl + "List/get");
+		return;
+	}
+	this.dataAccess = model_contacts_ContactsModel.dataAccess;
+	this.fieldNames = view_shared_io_BaseForm.initFieldNames(new haxe_ds__$StringMap_StringMapKeyIterator(this.dataAccess.h["open"].view.h));
+	this.dataDisplay = model_contacts_ContactsModel.dataDisplay;
+	this.dealDataAccess = model_deals_DealsModel.dataAccess;
+	this.dealFieldNames = view_shared_io_BaseForm.initFieldNames(new haxe_ds__$StringMap_StringMapKeyIterator(this.dealDataAccess.h["open"].view.h));
+	this.accountDataAccess = model_accounting_AccountsModel.dataAccess;
+	this.accountFieldNames = view_shared_io_BaseForm.initFieldNames(new haxe_ds__$StringMap_StringMapKeyIterator(this.accountDataAccess.h["open"].view.h));
+	this.accountDataDisplay = model_accounting_AccountsModel.dataDisplay;
+	haxe_Log.trace(this.dataAccess.h["open"],{ fileName : "view/data/qc/Edit.hx", lineNumber : 157, className : "view.data.qc.Edit", methodName : "new"});
+	if(props.dataStore.contactData != null) {
+		haxe_Log.trace(props.dataStore.contactData.keys().next(),{ fileName : "view/data/qc/Edit.hx", lineNumber : 159, className : "view.data.qc.Edit", methodName : "new"});
+	}
+	this.state = App.initEState({ actualState : null, initialData : null, mHandlers : view_data_qc_Edit.menuItems, loading : false, model : "contacts", ormRefs : new haxe_ds_StringMap(), relDataComps : new haxe_ds_StringMap(), selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "data.Deals", label : "Bearbeiten", section : "Edit", items : view_data_qc_Edit.menuItems},{ section : props.match.params.section == null ? "Edit" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
+	this.loadQC();
+	haxe_Log.trace(this.state.initialData,{ fileName : "view/data/qc/Edit.hx", lineNumber : 188, className : "view.data.qc.Edit", methodName : "new"});
+};
+$hxClasses["view.data.qc.Edit"] = view_data_qc_Edit;
+view_data_qc_Edit.__name__ = "view.data.qc.Edit";
+view_data_qc_Edit.mapDispatchToProps = function(dispatch) {
+	haxe_Log.trace("here we should be ready to load",{ fileName : "view/data/qc/Edit.hx", lineNumber : 604, className : "view.data.qc.Edit", methodName : "mapDispatchToProps"});
+	return { load : function(param) {
+		return dispatch(redux_Action.map(action_async_CRUD.read(param)));
+	}};
+};
+view_data_qc_Edit.mapStateToProps = function(aState) {
+	haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/data/qc/Edit.hx", lineNumber : 613, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
+	if(aState.dataStore.qcData != null) {
+		haxe_Log.trace(Std.string(aState.dataStore.qcData.keys().next()),{ fileName : "view/data/qc/Edit.hx", lineNumber : 615, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
+	}
+	if(aState.dataStore.contactsDbData != null) {
+		var tmp = aState.dataStore.contactsDbData.dataRows[0];
+		haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/data/qc/Edit.hx", lineNumber : 617, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
+	} else {
+		haxe_Log.trace(Reflect.fields(aState.dataStore),{ fileName : "view/data/qc/Edit.hx", lineNumber : 621, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
+	}
+	haxe_Log.trace(App.store.getState().dataStore.contactsDbData,{ fileName : "view/data/qc/Edit.hx", lineNumber : 623, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
+	var bState = { dataStore : aState.dataStore, userState : aState.userState};
+	haxe_Log.trace(bState.dataStore.contactData,{ fileName : "view/data/qc/Edit.hx", lineNumber : 630, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
+	return bState;
+};
+view_data_qc_Edit.__super__ = React_Component;
+view_data_qc_Edit.prototype = $extend(React_Component.prototype,{
+	dataAccess: null
+	,dataDisplay: null
+	,dealsAreOpen: null
+	,formApi: null
+	,formBuilder: null
+	,formFields: null
+	,dealsFormRef: null
+	,formRef: null
+	,fieldNames: null
+	,ormRefs: null
+	,accountsFormRef: null
+	,historyFormRef: null
+	,baseForm: null
+	,contact: null
+	,dbData: null
+	,dbMetaData: null
+	,modals: null
+	,mounted: null
+	,_trace: null
+	,dealDataAccess: null
+	,dealFieldNames: null
+	,qcData: null
+	,accountDataAccess: null
+	,accountFieldNames: null
+	,accountDataDisplay: null
+	,close: function() {
+		this.props.history.push("" + this.props.match.path.split(":section")[0] + "List/get");
+	}
+	,showSelectedAccounts: function(ev) {
+		haxe_Log.trace("---" + Std.string(this.ormRefs.h["accounts"].compRef.state.dataGrid.state.selectedRows),{ fileName : "view/data/qc/Edit.hx", lineNumber : 201, className : "view.data.qc.Edit", methodName : "showSelectedAccounts"});
+		var sRows = this.ormRefs.h["accounts"].compRef.state.dataGrid.state.selectedRows;
+		var k = sRows.keys();
+		while(k.hasNext()) {
+			var k1 = k.next();
+			this.ormRefs.h["accounts"].compRef.props.loadData(k1,this.ormRefs.h["accounts"].compRef);
+		}
+	}
+	,showSelectedDeals: function(ev) {
+		haxe_Log.trace("---" + Std.string(Type.typeof(this.state.relDataComps)),{ fileName : "view/data/qc/Edit.hx", lineNumber : 214, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
+		var h = this.state.relDataComps.h;
+		var inlStringMapKeyIterator_h = h;
+		var inlStringMapKeyIterator_keys = Object.keys(h);
+		var inlStringMapKeyIterator_length = inlStringMapKeyIterator_keys.length;
+		var inlStringMapKeyIterator_current = 0;
+		haxe_Log.trace("---" + Std.string(inlStringMapKeyIterator_current < inlStringMapKeyIterator_length),{ fileName : "view/data/qc/Edit.hx", lineNumber : 216, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
+		var sRows = this.ormRefs.h["deals"].compRef.state.dataGrid.state.selectedRows;
+		var k = sRows.keys();
+		while(k.hasNext()) {
+			var k1 = k.next();
+			this.ormRefs.h["deals"].compRef.props.loadData(k1,this.ormRefs.h["deals"].compRef);
+		}
+		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef),{ fileName : "view/data/qc/Edit.hx", lineNumber : 223, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
+		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef).querySelectorAll(".selected").length,{ fileName : "view/data/qc/Edit.hx", lineNumber : 224, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
+		if(ev != null) {
+			var targetEl = js_Boot.__cast(ev.target , HTMLElement);
+			haxe_Log.trace(Std.string(targetEl.dataset.id),{ fileName : "view/data/qc/Edit.hx", lineNumber : 227, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
+		}
+	}
+	,loadQC: function() {
+		haxe_Log.trace("loading:" + Std.string(this.qcData.h["lead_id"]),{ fileName : "view/data/qc/Edit.hx", lineNumber : 233, className : "view.data.qc.Edit", methodName : "loadQC"});
+		if(this.qcData == null) {
+			return;
+		}
+		var p = this.props.load({ classPath : "data.Deals", action : "doQC", filter : { lead_id : this.qcData.h["lead_id"], entry_list_id : this.qcData.h["entry_list_id"], mandator : 1}, resolveMessage : { success : "QC " + Std.string(this.qcData.h["lead_id"]) + " wurde geladen", failure : "QC " + Std.string(this.qcData.h["lead_id"]) + " konnte nicht geladen werden"}, table : "vicidial_list", viciboxDB : true, dbUser : this.props.userState.dbUser, devIP : App.devIP});
+		p.then(function(data) {
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/qc/Edit.hx", lineNumber : 252, className : "view.data.qc.Edit", methodName : "loadQC"});
+			if(data.dataRows.length == 1) {
+				var data1 = data.dataRows[0];
+				haxe_Log.trace(data1 == null ? "null" : haxe_ds_StringMap.stringify(data1.h),{ fileName : "view/data/qc/Edit.hx", lineNumber : 256, className : "view.data.qc.Edit", methodName : "loadQC"});
+			}
+		});
+	}
+	,'delete': function(ev) {
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/qc/Edit.hx", lineNumber : 273, className : "view.data.qc.Edit", methodName : "delete"});
+		var data = this.state.formApi.selectedRowsMap(this.state);
+	}
+	,update2: function() {
+		var data2save = this.state.actualState.allModified();
+	}
+	,componentDidCatch: function(error,info) {
+		try {
+			this.setState({ hasError : true});
+		} catch( _g ) {
+			var ex = haxe_Exception.caught(_g).unwrap();
+			if(this._trace) {
+				haxe_Log.trace(ex,{ fileName : "view/data/qc/Edit.hx", lineNumber : 290, className : "view.data.qc.Edit", methodName : "componentDidCatch"});
+			}
+		}
+		if(this._trace) {
+			haxe_Log.trace(error,{ fileName : "view/data/qc/Edit.hx", lineNumber : 292, className : "view.data.qc.Edit", methodName : "componentDidCatch"});
+		}
+		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "view/data/qc/Edit.hx", lineNumber : 293, className : "view.data.qc.Edit", methodName : "componentDidCatch"});
+	}
+	,componentDidMount: function() {
+		haxe_Log.trace("mounted:" + Std.string(this.mounted),{ fileName : "view/data/qc/Edit.hx", lineNumber : 298, className : "view.data.qc.Edit", methodName : "componentDidMount"});
+		this.mounted = true;
+		haxe_Log.trace(this.props.children,{ fileName : "view/data/qc/Edit.hx", lineNumber : 300, className : "view.data.qc.Edit", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.children,{ fileName : "view/data/qc/Edit.hx", lineNumber : 306, className : "view.data.qc.Edit", methodName : "componentDidMount"});
+	}
+	,componentWillUnmount: function() {
+		return;
+	}
+	,registerRelDataComp: function(rDC) {
+	}
+	,registerOrmRef: function(ref) {
+		var _g = Type.typeof(ref);
+		switch(_g._hx_index) {
+		case 0:
+			break;
+		case 4:
+			haxe_Log.trace(Reflect.fields(ref),{ fileName : "view/data/qc/Edit.hx", lineNumber : 360, className : "view.data.qc.Edit", methodName : "registerOrmRef"});
+			haxe_Log.trace(js_Boot.getClass(ref),{ fileName : "view/data/qc/Edit.hx", lineNumber : 361, className : "view.data.qc.Edit", methodName : "registerOrmRef"});
+			var tmp = ref.props != null && ref.props.model != null;
+			break;
+		case 6:
+			var func = _g.c;
+			var cL = js_Boot.getClass(ref);
+			if(cL != null) {
+				try {
+					if(ref.props != null && ref.props.model != null) {
+						var this1 = this.ormRefs;
+						var k = ref.props.model;
+						var v = { compRef : ref, orms : new haxe_ds_IntMap()};
+						this1.h[k] = v;
+					}
+				} catch( _g ) {
+					var ex = haxe_Exception.caught(_g);
+					haxe_Log.trace(ex,{ fileName : "view/data/qc/Edit.hx", lineNumber : 386, className : "view.data.qc.Edit", methodName : "registerOrmRef"});
+				}
+			}
+			break;
+		default:
+			haxe_Log.trace(ref,{ fileName : "view/data/qc/Edit.hx", lineNumber : 390, className : "view.data.qc.Edit", methodName : "registerOrmRef"});
+		}
+	}
+	,registerORM: function(refModel,orm) {
+		if(Object.prototype.hasOwnProperty.call(this.ormRefs.h,refModel)) {
+			this.ormRefs.h[refModel].orms.h[orm.id] = orm;
+			haxe_Log.trace(refModel,{ fileName : "view/data/qc/Edit.hx", lineNumber : 397, className : "view.data.qc.Edit", methodName : "registerORM"});
+			this.setState({ ormRefs : this.ormRefs});
+			haxe_Log.trace(Reflect.fields(this.state),{ fileName : "view/data/qc/Edit.hx", lineNumber : 401, className : "view.data.qc.Edit", methodName : "registerORM"});
+		} else {
+			haxe_Log.trace("OrmRef " + refModel + " not found!",{ fileName : "view/data/qc/Edit.hx", lineNumber : 405, className : "view.data.qc.Edit", methodName : "registerORM"});
+		}
+	}
+	,update: function() {
+		var h = this.state.relDataComps.h;
+		var _g_h = h;
+		var _g_keys = Object.keys(h);
+		var _g_length = _g_keys.length;
+		var _g_current = 0;
+		while(_g_current < _g_length) {
+			var key = _g_keys[_g_current++];
+			var _g1_key = key;
+			var _g1_value = _g_h[key];
+			var k = _g1_key;
+			var v = _g1_value;
+			haxe_Log.trace(k,{ fileName : "view/data/qc/Edit.hx", lineNumber : 413, className : "view.data.qc.Edit", methodName : "update"});
+		}
+		if(this.state.actualState != null) {
+			haxe_Log.trace("length:" + this.state.actualState.fieldsModified.length + ":" + this.state.actualState.fieldsModified.join("|"),{ fileName : "view/data/qc/Edit.hx", lineNumber : 417, className : "view.data.qc.Edit", methodName : "update"});
+		}
+		if(this.state.actualState == null || this.state.actualState.fieldsModified.length == 0) {
+			return;
+		}
+		var data2save = this.state.actualState.allModified();
+		var doc = window.document;
+		var formElement = js_Boot.__cast(doc.querySelector("form[name=\"contact\"]") , HTMLFormElement);
+		var elements = formElement.elements;
+		var aState = react_ReactUtil.copy(this.state.actualState);
+		var dbQ = { classPath : "data.Contacts", action : "update", data : data2save, filter : { id : this.state.actualState.id, mandator : 1}, resolveMessage : { success : "Kontakt " + this.state.actualState.id + " wurde aktualisiert", failure : "Kontakt " + this.state.actualState.id + " konnte nicht aktualisiert werden"}, table : "contacts", dbUser : this.props.userState.dbUser, devIP : App.devIP};
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/qc/Edit.hx", lineNumber : 439, className : "view.data.qc.Edit", methodName : "update"});
+		switch(this.props.match.params.action) {
+		case "delete":case "get":
+			var _g = new haxe_ds_StringMap();
+			var _g1 = new haxe_ds_StringMap();
+			_g1.h["filter"] = { id : this.state.initialData.id};
+			_g.h["contacts"] = _g1;
+			dbQ.dataSource = _g;
+			break;
+		case "insert":
+			var _g = 0;
+			var _g1 = this.fieldNames;
+			while(_g < _g1.length) {
+				var f = _g1[_g];
+				++_g;
+				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/qc/Edit.hx", lineNumber : 445, className : "view.data.qc.Edit", methodName : "update"});
+				if(Reflect.field(aState,f) == "") {
+					Reflect.deleteField(aState,f);
+				}
+			}
+			break;
+		case "update":
+			haxe_Log.trace("" + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/data/qc/Edit.hx", lineNumber : 457, className : "view.data.qc.Edit", methodName : "update"});
+			if(this.state.actualState != null) {
+				haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/data/qc/Edit.hx", lineNumber : 461, className : "view.data.qc.Edit", methodName : "update"});
+			}
+			haxe_Log.trace(this.state.actualState.id,{ fileName : "view/data/qc/Edit.hx", lineNumber : 463, className : "view.data.qc.Edit", methodName : "update"});
+			if(!this.state.actualState.modified()) {
+				haxe_Log.trace("nothing modified",{ fileName : "view/data/qc/Edit.hx", lineNumber : 467, className : "view.data.qc.Edit", methodName : "update"});
+				return;
+			}
+			haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/data/qc/Edit.hx", lineNumber : 470, className : "view.data.qc.Edit", methodName : "update"});
+			break;
+		}
+		var p = App.store.dispatch(redux_Action.map(action_async_CRUD.update(dbQ)));
+		p.then(function(d) {
+			haxe_Log.trace(d,{ fileName : "view/data/qc/Edit.hx", lineNumber : 483, className : "view.data.qc.Edit", methodName : "update"});
+		});
+	}
+	,renderResults: function() {
+		switch(this.props.match.params.action) {
+		case "insert":
+			var tmp = this.state.formBuilder;
+			var tmp1 = this.state.mHandlers;
+			var _g = new haxe_ds_StringMap();
+			var h = this.dataAccess.h["open"].view.h;
+			var k_h = h;
+			var k_keys = Object.keys(h);
+			var k_length = k_keys.length;
+			var k_current = 0;
+			while(k_current < k_length) {
+				var k = k_keys[k_current++];
+				_g.h[k] = this.dataAccess.h["open"].view.h[k];
+			}
+			return tmp.renderForm({ mHandlers : tmp1, fields : _g, model : "contact", ref : null, title : "Kontakt - Neue Stammdaten"},this.state.actualState);
+		case "open":case "update":
+			if(this.state.actualState == null) {
+				return this.state.formApi.renderWait();
+			} else {
+				var tmp = react_ReactType.fromComp(React_Fragment);
+				var tmp1 = this.state.formBuilder;
+				var tmp2 = this.state.mHandlers;
+				var _g = new haxe_ds_StringMap();
+				var h = this.dataAccess.h["open"].view.h;
+				var k_h = h;
+				var k_keys = Object.keys(h);
+				var k_length = k_keys.length;
+				var k_current = 0;
+				while(k_current < k_length) {
+					var k = k_keys[k_current++];
+					_g.h[k] = this.dataAccess.h["open"].view.h[k];
+				}
+				var tmp3 = tmp1.renderForm({ mHandlers : tmp2, fields : _g, model : "contact", ref : null, title : "Quality Control"},this.state.actualState);
+				var tmp1 = this.relData();
+				return React.createElement(tmp,{ },tmp3,tmp1);
+			}
+			break;
+		default:
+			return null;
+		}
+	}
+	,relData: function() {
+		var _g = [];
+		var model = "deals";
+		if(Object.prototype.hasOwnProperty.call(this.ormRefs.h,model)) {
+			var _g1 = 0;
+			var _g2 = Lambda.array(this.ormRefs.h[model].orms);
+			while(_g1 < _g2.length) {
+				var orm = _g2[_g1];
+				++_g1;
+				var orm1 = orm.formBuilder;
+				var tmp;
+				if(model == "deals") {
+					var _g3 = new haxe_ds_StringMap();
+					var h = this.dealDataAccess.h["open"].view.h;
+					var k_h = h;
+					var k_keys = Object.keys(h);
+					var k_length = k_keys.length;
+					var k_current = 0;
+					while(k_current < k_length) {
+						var k = k_keys[k_current++];
+						_g3.h[k] = this.dealDataAccess.h["open"].view.h[k];
+					}
+					tmp = _g3;
+				} else {
+					var _g4 = new haxe_ds_StringMap();
+					var h1 = this.accountDataAccess.h["open"].view.h;
+					var k_h1 = h1;
+					var k_keys1 = Object.keys(h1);
+					var k_length1 = k_keys1.length;
+					var k_current1 = 0;
+					while(k_current1 < k_length1) {
+						var k1 = k_keys1[k_current1++];
+						_g4.h[k1] = this.accountDataAccess.h["open"].view.h[k1];
+					}
+					tmp = _g4;
+				}
+				_g.push(orm1.renderForm({ fields : tmp, model : model, ref : null, title : model == "deals" ? "Spenden" : "Konten"},orm));
+			}
+		}
+		var model = "accounts";
+		if(Object.prototype.hasOwnProperty.call(this.ormRefs.h,model)) {
+			var _g1 = 0;
+			var _g2 = Lambda.array(this.ormRefs.h[model].orms);
+			while(_g1 < _g2.length) {
+				var orm = _g2[_g1];
+				++_g1;
+				var orm1 = orm.formBuilder;
+				var tmp;
+				if(model == "deals") {
+					var _g3 = new haxe_ds_StringMap();
+					var h = this.dealDataAccess.h["open"].view.h;
+					var k_h = h;
+					var k_keys = Object.keys(h);
+					var k_length = k_keys.length;
+					var k_current = 0;
+					while(k_current < k_length) {
+						var k = k_keys[k_current++];
+						_g3.h[k] = this.dealDataAccess.h["open"].view.h[k];
+					}
+					tmp = _g3;
+				} else {
+					var _g4 = new haxe_ds_StringMap();
+					var h1 = this.accountDataAccess.h["open"].view.h;
+					var k_h1 = h1;
+					var k_keys1 = Object.keys(h1);
+					var k_length1 = k_keys1.length;
+					var k_current1 = 0;
+					while(k_current1 < k_length1) {
+						var k1 = k_keys1[k_current1++];
+						_g4.h[k1] = this.accountDataAccess.h["open"].view.h[k1];
+					}
+					tmp = _g4;
+				}
+				_g.push(orm1.renderForm({ fields : tmp, model : model, ref : null, title : model == "deals" ? "Spenden" : "Konten"},orm));
+			}
+		}
+		return _g;
+	}
+	,relDataLists: function() {
+		var tmp = react_ReactType.fromComp(React_Fragment);
+		var tmp1 = React.createElement(view_data_contacts_Deals._renderWrapper,{ key : "deals", formRef : this.dealsFormRef, parentComponent : this, model : "deals", action : "get", onDoubleClick : $bind(this,this.showSelectedDeals), filter : { contact : this.props.match.params.id, mandator : "1"}});
+		var tmp2 = React.createElement(view_data_contacts_Accounts._renderWrapper,{ key : "accounts", formRef : this.accountsFormRef, parentComponent : this, model : "accounts", action : "get", onDoubleClick : $bind(this,this.showSelectedAccounts), filter : { contact : this.props.match.params.id, mandator : "1"}});
+		return React.createElement(tmp,{ },tmp1,tmp2);
+	}
+	,render: function() {
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/qc/Edit.hx", lineNumber : 574, className : "view.data.qc.Edit", methodName : "render"});
+		switch(this.props.match.params.action) {
+		case "insert":
+			return this.state.formApi.render(this.renderResults());
+		case "open":
+			return this.state.formApi.render(this.renderResults());
+		default:
+			return this.state.formApi.render(this.renderResults());
+		}
+	}
+	,__class__: view_data_qc_Edit
+});
+var view_data_qc_List = function(props) {
+	React_Component.call(this,props);
+	this.dataDisplay = model_contacts_ContactsModel.qcListDisplay;
+	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/data/qc/List.hx", lineNumber : 64, className : "view.data.qc.List", methodName : "new"});
+	this.state = App.initEState({ dataTable : [], loading : false, contactData : new haxe_ds_IntMap(), selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "data.Deals", label : "Liste", section : "List", items : view_data_qc_List.menuItems},{ section : props.match.params.section == null ? "List" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
+	if(props.match.params.section == null || props.match.params.action == null) {
+		var baseUrl = props.match.path.split(":section")[0];
+		haxe_Log.trace("redirecting to " + baseUrl + "List/get",{ fileName : "view/data/qc/List.hx", lineNumber : 87, className : "view.data.qc.List", methodName : "new"});
+		props.history.push("" + baseUrl + "List/get");
+		this.get(null);
+	} else {
+		haxe_Log.trace(props.match.params,{ fileName : "view/data/qc/List.hx", lineNumber : 94, className : "view.data.qc.List", methodName : "new"});
+	}
+	haxe_Log.trace(this.state.loading,{ fileName : "view/data/qc/List.hx", lineNumber : 96, className : "view.data.qc.List", methodName : "new"});
+};
+$hxClasses["view.data.qc.List"] = view_data_qc_List;
+view_data_qc_List.__name__ = "view.data.qc.List";
+view_data_qc_List.mapStateToProps = function(aState) {
+	haxe_Log.trace(aState.dataStore.qcData.keys().next(),{ fileName : "view/data/qc/List.hx", lineNumber : 103, className : "view.data.qc.List", methodName : "mapStateToProps"});
+	return { dataStore : aState.dataStore, userState : aState.userState};
+};
+view_data_qc_List.__super__ = React_Component;
+view_data_qc_List.prototype = $extend(React_Component.prototype,{
+	dataAccess: null
+	,dataDisplay: null
+	,formApi: null
+	,formBuilder: null
+	,formFields: null
+	,fieldNames: null
+	,baseForm: null
+	,contact: null
+	,dbData: null
+	,dbMetaData: null
+	,'delete': function(ev) {
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/qc/List.hx", lineNumber : 113, className : "view.data.qc.List", methodName : "delete"});
+		var data = this.state.formApi.selectedRowsMap(this.state);
+	}
+	,get: function(filter) {
+		var _gthis = this;
+		var offset = 0;
+		if(filter != null && filter.page != null) {
+			haxe_Log.trace(filter,{ fileName : "view/data/qc/List.hx", lineNumber : 122, className : "view.data.qc.List", methodName : "get"});
+			offset = this.props.limit * filter.page | 0;
+			Reflect.deleteField(filter,"page");
+		}
+		filter = shared_Utils.extend(filter,this.props.match.params.id != null ? { id : this.props.match.params.id, mandator : this.props.userState.dbUser.mandator} : { mandator : this.props.userState.dbUser.mandator});
+		haxe_Log.trace("hi " + Std.string(filter),{ fileName : "view/data/qc/List.hx", lineNumber : 131, className : "view.data.qc.List", methodName : "get"});
+		loader_BinaryLoader.create("" + Std.string(App.config.api),{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, classPath : "data.Deals", action : "getQC", viciboxDB : true, filter : filter, dbUser : this.props.userState.dbUser, devIP : App.devIP, limit : this.props.limit, offset : offset > 0 ? offset : 0, order : "last_local_call_time", table : "vicidial_list"},function(data) {
+			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/data/qc/List.hx", lineNumber : 151, className : "view.data.qc.List", methodName : "get"});
+			haxe_Log.trace(data.dataParams == null ? "null" : haxe_ds_StringMap.stringify(data.dataParams.h),{ fileName : "view/data/qc/List.hx", lineNumber : 152, className : "view.data.qc.List", methodName : "get"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/qc/List.hx", lineNumber : 153, className : "view.data.qc.List", methodName : "get"});
+			if(data.dataRows.length > 0) {
+				var h = data.dataErrors.h;
+				var inlStringMapKeyIterator_h = h;
+				var inlStringMapKeyIterator_keys = Object.keys(h);
+				var inlStringMapKeyIterator_length = inlStringMapKeyIterator_keys.length;
+				var inlStringMapKeyIterator_current = 0;
+				haxe_Log.trace(inlStringMapKeyIterator_current >= inlStringMapKeyIterator_length ? "Y" : "N",{ fileName : "view/data/qc/List.hx", lineNumber : 156, className : "view.data.qc.List", methodName : "get"});
+				var h = data.dataErrors.h;
+				var inlStringMapKeyIterator_h = h;
+				var inlStringMapKeyIterator_keys = Object.keys(h);
+				var inlStringMapKeyIterator_length = inlStringMapKeyIterator_keys.length;
+				var inlStringMapKeyIterator_current = 0;
+				if(inlStringMapKeyIterator_current >= inlStringMapKeyIterator_length) {
+					_gthis.setState({ dataTable : data.dataRows, dataCount : Std.parseInt(data.dataInfo.h["count"]), pageCount : Math.ceil(Std.parseInt(data.dataInfo.h["count"]) / _gthis.props.limit)});
+					var p = App.store.dispatch(redux_Action.map(action_DataAction.QCsLoaded(data)));
+				} else {
+					var _gthis1 = _gthis;
+					var _g = new haxe_ds_StringMap();
+					_g.h["loadResult"] = "Kein Ergebnis";
+					_g.h["closeAfter"] = -1;
+					_gthis1.setState({ values : _g});
+				}
+			}
+		});
+	}
+	,edit: function(ev) {
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/qc/List.hx", lineNumber : 180, className : "view.data.qc.List", methodName : "edit"});
+		haxe_Log.trace(Reflect.fields(ev),{ fileName : "view/data/qc/List.hx", lineNumber : 181, className : "view.data.qc.List", methodName : "edit"});
+	}
+	,restore: function() {
+		var _gthis = this;
+		haxe_Log.trace(Reflect.fields(this.props.dataStore),{ fileName : "view/data/qc/List.hx", lineNumber : 185, className : "view.data.qc.List", methodName : "restore"});
+		if(this.props.dataStore != null && this.props.dataStore.contactsDbData != null) {
+			this.setState({ dataTable : this.props.dataStore.contactsDbData.dataRows, dataCount : Std.parseInt(this.props.dataStore.contactsDbData.dataInfo.h["count"]), pageCount : Math.ceil(Std.parseInt(this.props.dataStore.contactsDbData.dataInfo.h["count"]) / this.props.limit)},function() {
+				haxe_Log.trace(_gthis.state.dataTable,{ fileName : "view/data/qc/List.hx", lineNumber : 195, className : "view.data.qc.List", methodName : "restore"});
+				_gthis.props.history.push("" + _gthis.props.match.path.split(":section")[0] + "List/get/" + (_gthis.props.match.params.id != null ? _gthis.props.match.params.id : ""));
+			});
+		} else {
+			this.props.history.push("" + this.props.match.path.split(":section")[0] + "List/get/" + (this.props.match.params.id != null ? this.props.match.params.id : ""));
+			this.get(null);
+		}
+	}
+	,selectionClear: function() {
+		var match = react_ReactUtil.copy(this.props.match);
+		match.params.action = "get";
+		haxe_Log.trace(this.state.dataTable.length,{ fileName : "view/data/qc/List.hx", lineNumber : 216, className : "view.data.qc.List", methodName : "selectionClear"});
+		this.props.select(0,null,match,"UnselectAll");
+		var trs = window.document.querySelectorAll(".tabComponentForm tr");
+		haxe_Log.trace(trs.length,{ fileName : "view/data/qc/List.hx", lineNumber : 221, className : "view.data.qc.List", methodName : "selectionClear"});
+		var _g = 0;
+		var _g1 = trs.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var tre = js_Boot.__cast(trs.item(i) , HTMLTableRowElement);
+			if(tre.classList.contains("is-selected")) {
+				haxe_Log.trace("unselect:" + tre.dataset.id,{ fileName : "view/data/qc/List.hx", lineNumber : 225, className : "view.data.qc.List", methodName : "selectionClear"});
+				tre.classList.remove("is-selected");
+			}
+		}
+		window.document.querySelector("[class=\"grid-container-inner\"]").scrollTop = 0;
+	}
+	,componentDidMount: function() {
+		var _g = new haxe_ds_StringMap();
+		var _g1 = new haxe_ds_StringMap();
+		var value = new haxe_ds_StringMap();
+		_g1.h["contacts"] = value;
+		var value = { source : _g1, view : new haxe_ds_StringMap()};
+		_g.h["get"] = value;
+		this.dataAccess = _g;
+		if(this.props.userState.dbUser != null) {
+			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/data/qc/List.hx", lineNumber : 244, className : "view.data.qc.List", methodName : "componentDidMount"});
+		}
+		haxe_Log.trace(this.state.uid,{ fileName : "view/data/qc/List.hx", lineNumber : 246, className : "view.data.qc.List", methodName : "componentDidMount"});
+		this.state.formApi.doAction();
+	}
+	,renderResults: function() {
+		haxe_Log.trace(this.props.match.params.section + (":" + this.props.match.params.action + "::") + Std.string(this.state.dataTable != null),{ fileName : "view/data/qc/List.hx", lineNumber : 264, className : "view.data.qc.List", methodName : "renderResults"});
+		var pState = this.props.parentComponent.state;
+		haxe_Log.trace(this.state.dataTable.length,{ fileName : "view/data/qc/List.hx", lineNumber : 267, className : "view.data.qc.List", methodName : "renderResults"});
+		haxe_Log.trace(this.state.loading,{ fileName : "view/data/qc/List.hx", lineNumber : 271, className : "view.data.qc.List", methodName : "renderResults"});
+		if(this.state.dataTable.length == 0) {
+			return this.state.formApi.renderWait();
+		}
+		if(this.props.match.params.action == "get") {
+			return React.createElement(view_grid_Grid._renderWrapper,Object.assign({ },this.props,{ id : "contactListQC", data : this.state.dataTable, findBy : "lead_id", dataState : this.dataDisplay.h["contactList"], parentComponent : this, className : "is-striped is-hoverable", fullWidth : true}));
+		} else {
+			return null;
+		}
+	}
+	,getCellData: function(cP) {
+		haxe_Log.trace(cP,{ fileName : "view/data/qc/List.hx", lineNumber : 291, className : "view.data.qc.List", methodName : "getCellData"});
+	}
+	,render: function() {
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/data/qc/List.hx", lineNumber : 298, className : "view.data.qc.List", methodName : "render"});
+		var tmp = this.state.formApi;
+		var tmp1 = react_ReactType.fromString("form");
+		var tmp2 = this.renderResults();
+		return tmp.render(React.createElement(tmp1,{ className : "tabComponentForm"},tmp2));
+	}
+	,componentWillUnmount: function() {
+		haxe_Log.trace("...",{ fileName : "view/data/qc/List.hx", lineNumber : 307, className : "view.data.qc.List", methodName : "componentWillUnmount"});
+	}
+	,updateMenu: function(viewClassPath) {
+		var sideMenu = this.state.sideMenu;
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/data/qc/List.hx", lineNumber : 313, className : "view.data.qc.List", methodName : "updateMenu"});
+		var _g = 0;
+		var _g1 = sideMenu.menuBlocks.h["List"].items;
+		while(_g < _g1.length) {
+			var mI = _g1[_g];
+			++_g;
+			var _g2 = mI.action;
+			if(_g2 != null) {
+				switch(_g2) {
+				case "delete":case "update":
+					mI.disabled = this.state.selectedRows.length == 0;
+					break;
+				default:
+				}
+			}
+		}
+		return sideMenu;
+	}
+	,__class__: view_data_qc_List
 });
 var view_grid_Grid = function(props) {
 	React_Component.call(this,props);
@@ -16938,7 +18847,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		var tmp = react_ReactType.fromString("div");
 		var tmp1 = react_ReactType.fromString("nav");
 		return React.createElement(tmp,{ id : "pct", className : "paginationContainer"},React.createElement(tmp1,{ },React.createElement(react_ReactType.fromComp(react_ReactPaginate),{ previousLabel : "<", breakLinkClassName : "pagination-link", pageLinkClassName : "pagination-link", nextLinkClassName : "pagination-next", previousLinkClassName : "pagination-previous", nextLabel : ">", breakLabel : "...", breakClassName : "break-me", pageCount : comp.state.pageCount, marginPagesDisplayed : 2, pageRangeDisplayed : 5, onPageChange : function(data) {
-			haxe_Log.trace("" + Std.string(comp.props.match.params.action) + "  " + data.selected,{ fileName : "view/grid/Grid.hx", lineNumber : 129, className : "view.grid.Grid", methodName : "renderPager"});
+			haxe_Log.trace("" + Std.string(comp.props.match.params.action) + "  " + data.selected,{ fileName : "view/grid/Grid.hx", lineNumber : 132, className : "view.grid.Grid", methodName : "renderPager"});
 			var fun = Reflect.field(comp,comp.props.match.params.action);
 			if(Reflect.isFunction(fun)) {
 				fun.apply(comp,[{ page : data.selected}]);
@@ -16967,7 +18876,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 			this.gridStyle += hC.flexGrow != null ? " " + hC.flexGrow + "fr" : " max-content";
 			headerRow.push(React.createElement(react_ReactType.fromString("span"),{ key : field + "header", className : "gridHeadItem " + (hC.headerClassName != null ? hC.headerClassName : hC.className != null ? hC.className : "")},hC.label != null ? hC.label : hC.name,React.createElement(react_ReactType.fromString("span"),{ className : "sort-box fa fa-sort"})));
 		}
-		haxe_Log.trace("" + this.visibleColumns + " " + this.gridStyle,{ fileName : "view/grid/Grid.hx", lineNumber : 167, className : "view.grid.Grid", methodName : "renderHeaderDisplay"});
+		haxe_Log.trace("" + this.visibleColumns + " " + this.gridStyle,{ fileName : "view/grid/Grid.hx", lineNumber : 170, className : "view.grid.Grid", methodName : "renderHeaderDisplay"});
 		return headerRow;
 	}
 	,map2DataCell: function(rdMap,fN,column,row,rowClass) {
@@ -16976,13 +18885,14 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 			var v = null;
 			rdMap.h[fN] = v;
 		}
-		return { cellFormat : columnDataState.cellFormat, className : columnDataState.className == null ? rowClass : Std.string(columnDataState.className) + " " + rowClass, data : rdMap.h[fN], dataDisplay : columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap.h[fN]) : rdMap.h[fN], id : rdMap.h["id"], name : fN, pos : { column : column, row : row}, show : columnDataState.show != false, title : rdMap.h["title"]};
+		return { cellFormat : columnDataState.cellFormat, className : columnDataState.className == null ? rowClass : Std.string(columnDataState.className) + " " + rowClass, data : rdMap.h[fN], dataDisplay : columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap.h[fN]) : rdMap.h[fN], id : rdMap.h["id"] == null && this.props.findBy != null ? rdMap.h[this.props.findBy] : rdMap.h["id"], name : fN, pos : { column : column, row : row}, show : columnDataState.show != false, title : rdMap.h["title"]};
 	}
 	,renderCells: function(rdMap,row) {
 		var _gthis = this;
 		var column = 0;
+		var id = this.props.findBy != null && this.props.findBy.length > 0 ? this.props.findBy : "id";
 		var rowClass = row % 2 == 0 ? "gridItem even" : "gridItem odd";
-		if(this.state.selectedRows.h.hasOwnProperty(rdMap.h["id"])) {
+		if(this.state.selectedRows.h.hasOwnProperty(rdMap.h[id])) {
 			rowClass += " selected";
 		}
 		var _this = this.fieldNames;
@@ -17044,7 +18954,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 	,componentDidMount: function() {
 		if(this.gridRef == null || react_ReactRef.get_current(this.gridRef) == null) {
 			var c = js_Boot.getClass(this.props.parentComponent);
-			haxe_Log.trace(c.__name__,{ fileName : "view/grid/Grid.hx", lineNumber : 257, className : "view.grid.Grid", methodName : "componentDidMount"});
+			haxe_Log.trace(c.__name__,{ fileName : "view/grid/Grid.hx", lineNumber : 266, className : "view.grid.Grid", methodName : "componentDidMount"});
 			return;
 		}
 		this.props.parentComponent.state.dataGrid = this;
@@ -17052,7 +18962,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		grid.style.setProperty("grid-template-columns",this.gridStyle);
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace(Std.string(this.headerUpdated) + ":" + Std.string(this.headerRef) + " cmp state:" + (prevState == this.state ? "Y" : "N"),{ fileName : "view/grid/Grid.hx", lineNumber : 268, className : "view.grid.Grid", methodName : "componentDidUpdate"});
+		haxe_Log.trace(Std.string(this.headerUpdated) + ":" + Std.string(this.headerRef) + " cmp state:" + (prevState == this.state ? "Y" : "N"),{ fileName : "view/grid/Grid.hx", lineNumber : 277, className : "view.grid.Grid", methodName : "componentDidUpdate"});
 	}
 	,editRow: function(ev) {
 		var _gthis = this;
@@ -17065,7 +18975,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		haxe_Timer.delay(function() {
 			_gthis.state._prevent = false;
 		},view_grid_Grid.clickDelay * 2);
-		haxe_Log.trace("here we go :)" + Std.string(this.props.onDoubleClick),{ fileName : "view/grid/Grid.hx", lineNumber : 280, className : "view.grid.Grid", methodName : "editRow"});
+		haxe_Log.trace("here we go :)" + Std.string(this.props.onDoubleClick),{ fileName : "view/grid/Grid.hx", lineNumber : 289, className : "view.grid.Grid", methodName : "editRow"});
 		if(this.props.onDoubleClick != null) {
 			this.props.onDoubleClick(ev);
 		}
@@ -17080,7 +18990,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		},view_grid_Grid.clickDelay);
 	}
 	,highLightRow: function(evtOrId) {
-		haxe_Log.trace("evtOrId",{ fileName : "view/grid/Grid.hx", lineNumber : 297, className : "view.grid.Grid", methodName : "highLightRow"});
+		haxe_Log.trace("evtOrId",{ fileName : "view/grid/Grid.hx", lineNumber : 306, className : "view.grid.Grid", methodName : "highLightRow"});
 		if(this.state._selecting) {
 			return;
 		}
@@ -17090,7 +19000,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		var rowCells = window.document.querySelectorAll(".gridItem[data-id=\"" + el.dataset.id + "\"]");
 		var rowEls = Array.from(rowCells);
 		var selectedNow = this.state.selectedRows.copy();
-		haxe_Log.trace(el.dataset.id + ":" + Std.string(this.state._selecting) + " ctrlKey:" + Std.string(evtOrId.ctrlKey),{ fileName : "view/grid/Grid.hx", lineNumber : 309, className : "view.grid.Grid", methodName : "highLightRow"});
+		haxe_Log.trace(el.dataset.id + ":" + Std.string(this.state._selecting) + " ctrlKey:" + Std.string(evtOrId.ctrlKey),{ fileName : "view/grid/Grid.hx", lineNumber : 318, className : "view.grid.Grid", methodName : "highLightRow"});
 		if(!evtOrId.ctrlKey && !evtOrId.shiftKey) {
 			if(selectedNow.h.hasOwnProperty(rN)) {
 				this.setState({ selectedRows : new haxe_ds_IntMap()});
@@ -17107,10 +19017,14 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 				var _g = new haxe_ds_IntMap();
 				_g.h[rN] = true;
 				selectedNow = _g;
-				haxe_Log.trace(selectedNow,{ fileName : "view/grid/Grid.hx", lineNumber : 322, className : "view.grid.Grid", methodName : "highLightRow"});
+				haxe_Log.trace(selectedNow,{ fileName : "view/grid/Grid.hx", lineNumber : 332, className : "view.grid.Grid", methodName : "highLightRow"});
 			}
 		}
 		this.setState({ selectedRows : selectedNow});
+		haxe_Log.trace(this.props.parentComponent.state.uid,{ fileName : "view/grid/Grid.hx", lineNumber : 340, className : "view.grid.Grid", methodName : "highLightRow"});
+		var match = react_router_ReactRouter.matchPath($global.location.pathname,{ });
+		haxe_Log.trace(Reflect.fields(this.props).join("|"),{ fileName : "view/grid/Grid.hx", lineNumber : 342, className : "view.grid.Grid", methodName : "highLightRow"});
+		haxe_Log.trace(this.props.match,{ fileName : "view/grid/Grid.hx", lineNumber : 343, className : "view.grid.Grid", methodName : "highLightRow"});
 		var tmp = this.props.parentComponent.props.select;
 		var el1 = el.dataset.id;
 		var _g = new haxe_ds_StringMap();
@@ -17128,10 +19042,10 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		while(_g < cells.length) {
 			var cell = cells[_g];
 			++_g;
-			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "view/grid/Grid.hx", lineNumber : 341, className : "view.grid.Grid", methodName : "showDims"});
+			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "view/grid/Grid.hx", lineNumber : 356, className : "view.grid.Grid", methodName : "showDims"});
 			s += cell.getBoundingClientRect().width;
 		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "view/grid/Grid.hx", lineNumber : 344, className : "view.grid.Grid", methodName : "showDims"});
+		haxe_Log.trace(" sum:" + s,{ fileName : "view/grid/Grid.hx", lineNumber : 359, className : "view.grid.Grid", methodName : "showDims"});
 	}
 	,nodeDims: function(n) {
 		var i = 0;
@@ -17142,10 +19056,10 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 			var cell = cells[_g];
 			++_g;
 			var dRect = (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().toJSON();
-			haxe_Log.trace(dRect,{ fileName : "view/grid/Grid.hx", lineNumber : 355, className : "view.grid.Grid", methodName : "nodeDims"});
+			haxe_Log.trace(dRect,{ fileName : "view/grid/Grid.hx", lineNumber : 370, className : "view.grid.Grid", methodName : "nodeDims"});
 			s += (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().width;
 		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "view/grid/Grid.hx", lineNumber : 359, className : "view.grid.Grid", methodName : "nodeDims"});
+		haxe_Log.trace(" sum:" + s,{ fileName : "view/grid/Grid.hx", lineNumber : 374, className : "view.grid.Grid", methodName : "nodeDims"});
 	}
 	,getRowData: function(rCs) {
 		if(rCs.length == 0) {
@@ -17355,33 +19269,41 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 		while(_g < formFields.length) {
 			var fF = formFields[_g];
 			++_g;
+			haxe_Log.trace(fF.type,{ fileName : "view/shared/Menu.hx", lineNumber : 250, className : "view.shared.Menu", methodName : "renderItemForm"});
 			var _g1 = fF.type;
 			var tmp;
 			if(_g1 == null) {
 				tmp = null;
-			} else if(_g1 == "Radio") {
-				var o = 0;
-				var _g2 = [];
-				var h = fF.options.h;
-				var _g1_h = h;
-				var _g1_keys = Object.keys(h);
-				var _g1_length = _g1_keys.length;
-				var _g1_current = 0;
-				while(_g1_current < _g1_length) {
-					var key = _g1_keys[_g1_current++];
-					var _g2_key = key;
-					var _g2_value = _g1_h[key];
-					var k = _g2_key;
-					var v = _g2_value;
-					_g2.push(React.createElement(react_ReactType.fromString("span"),{ key : "o_" + o++},v," ",React.createElement(react_ReactType.fromString("input"),{ type : "radio", name : fF.name, value : v})));
-				}
-				var options = _g2;
-				var tmp1 = react_ReactType.fromString("div");
-				var tmp2 = i++;
-				var tmp3 = React.createElement(react_ReactType.fromString("label"),{ key : "l_" + i},fF.label);
-				tmp = React.createElement(tmp1,{ key : "fr_" + tmp2, className : "formRow"},tmp3,React.createElement(react_ReactType.fromString("div"),{ key : "opt_" + i, className : "formRow2"},options));
 			} else {
-				tmp = null;
+				switch(_g1) {
+				case "Checkbox":
+					tmp = React.createElement(react_ReactType.fromString("span"),{ key : "l_" + i++},fF.label,React.createElement(react_ReactType.fromString("input"),{ type : "checkbox", name : fF.name}));
+					break;
+				case "Radio":
+					var o = 0;
+					var _g2 = [];
+					var h = fF.options.h;
+					var _g1_h = h;
+					var _g1_keys = Object.keys(h);
+					var _g1_length = _g1_keys.length;
+					var _g1_current = 0;
+					while(_g1_current < _g1_length) {
+						var key = _g1_keys[_g1_current++];
+						var _g2_key = key;
+						var _g2_value = _g1_h[key];
+						var k = _g2_key;
+						var v = _g2_value;
+						_g2.push(React.createElement(react_ReactType.fromString("span"),{ key : "o_" + o++},v," ",React.createElement(react_ReactType.fromString("input"),{ type : "radio", name : fF.name, value : v})));
+					}
+					var options = _g2;
+					var tmp1 = react_ReactType.fromString("div");
+					var tmp2 = i++;
+					var tmp3 = React.createElement(react_ReactType.fromString("label"),{ key : "l_" + i},fF.label);
+					tmp = React.createElement(tmp1,{ key : "fr_" + tmp2, className : "formRow"},tmp3,React.createElement(react_ReactType.fromString("div"),{ key : "opt_" + i, className : "formRow2"},options));
+					break;
+				default:
+					tmp = null;
+				}
 			}
 			formFieldElements.push(tmp);
 		}
@@ -17440,7 +19362,7 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 					tmp = React.createElement(tmp4,{ key : "uf" + tmp5, id : "findForm_" + i, className : "formRow"},tmp6,React.createElement(react_ReactType.fromString("input"),{ key : "i_" + i, id : item.formField.name, type : "text", name : item.formField.name, onChange : item.formField.handleChange, className : "input"}));
 					break;
 				case "Upload":
-					haxe_Log.trace(item.handler,{ fileName : "view/shared/Menu.hx", lineNumber : 316, className : "view.shared.Menu", methodName : "renderItems"});
+					haxe_Log.trace(item.handler,{ fileName : "view/shared/Menu.hx", lineNumber : 319, className : "view.shared.Menu", methodName : "renderItems"});
 					if(item.options != null && item.options.length == 1 && item.options[0].multiple) {
 						var tmp7 = react_ReactType.fromString("div");
 						var tmp8 = React.createElement(react_ReactType.fromString("input"),{ id : item.formField.name, type : "file", name : item.formField.name, onChange : item.formField.handleChange, className : "fileinput", multiple : true});
@@ -17618,7 +19540,7 @@ view_shared_io_Bookmarks.prototype = $extend(React_Component.prototype,{
 	,render: function() {
 		haxe_Log.trace(this.state,{ fileName : "view/shared/io/Bookmarks.hx", lineNumber : 116, className : "view.shared.io.Bookmarks", methodName : "render"});
 		haxe_Log.trace(this.props.match.params,{ fileName : "view/shared/io/Bookmarks.hx", lineNumber : 119, className : "view.shared.io.Bookmarks", methodName : "render"});
-		return React.createElement(react_ReactType.fromString("div"),{ className : "tabComponentForm"},"dummy");
+		return React.createElement(react_ReactType.fromString("div"),{ className : "tabComponentForm"},"bookmarks dummy");
 	}
 	,updateMenu: function(viewClassPath) {
 		if(this.state == null) {
@@ -18169,22 +20091,22 @@ view_stats_Preview.prototype = $extend(React_Component.prototype,{
 var view_stats_history_Charts = function(props) {
 	React_Component.call(this,props);
 	this.dataDisplay = model_stats_HistoryModel.dataDisplay;
-	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/stats/history/Charts.hx", lineNumber : 131, className : "view.stats.history.Charts", methodName : "new"});
+	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/stats/history/Charts.hx", lineNumber : 133, className : "view.stats.history.Charts", methodName : "new"});
 	this.state = App.initEState({ dataTable : [], loading : false, selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "reports.History", label : "Charts", section : "Charts", items : view_stats_history_Charts.menuItems},{ section : props.match.params.section == null ? "Chart" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
 	if(props.match.params.section == null || props.match.params.action == null) {
 		var baseUrl = props.match.path.split(":section")[0];
-		haxe_Log.trace("redirecting to " + baseUrl + "Charts/get",{ fileName : "view/stats/history/Charts.hx", lineNumber : 154, className : "view.stats.history.Charts", methodName : "new"});
+		haxe_Log.trace("redirecting to " + baseUrl + "Charts/get",{ fileName : "view/stats/history/Charts.hx", lineNumber : 156, className : "view.stats.history.Charts", methodName : "new"});
 		props.history.push("" + baseUrl + "Charts/get");
 		this.get(null);
 	} else {
 		this.state.formApi.doAction();
 	}
-	haxe_Log.trace(this.state.loading,{ fileName : "view/stats/history/Charts.hx", lineNumber : 162, className : "view.stats.history.Charts", methodName : "new"});
+	haxe_Log.trace(this.state.loading,{ fileName : "view/stats/history/Charts.hx", lineNumber : 164, className : "view.stats.history.Charts", methodName : "new"});
 };
 $hxClasses["view.stats.history.Charts"] = view_stats_history_Charts;
 view_stats_history_Charts.__name__ = "view.stats.history.Charts";
 view_stats_history_Charts.mapStateToProps = function(aState) {
-	haxe_Log.trace("never",{ fileName : "view/stats/history/Charts.hx", lineNumber : 167, className : "view.stats.history.Charts", methodName : "mapStateToProps"});
+	haxe_Log.trace("never",{ fileName : "view/stats/history/Charts.hx", lineNumber : 169, className : "view.stats.history.Charts", methodName : "mapStateToProps"});
 	return { userState : aState.userState};
 };
 view_stats_history_Charts.__super__ = React_Component;
@@ -18201,16 +20123,16 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 	,svg: null
 	,get: function(ev) {
 		var _gthis = this;
-		haxe_Log.trace("hi " + Std.string(ev),{ fileName : "view/stats/history/Charts.hx", lineNumber : 175, className : "view.stats.history.Charts", methodName : "get"});
+		haxe_Log.trace("hi " + Std.string(ev),{ fileName : "view/stats/history/Charts.hx", lineNumber : 177, className : "view.stats.history.Charts", methodName : "get"});
 		var offset = 0;
 		if(ev != null && ev.page != null) {
 			offset = this.props.limit * ev.page | 0;
 		}
 		var params = { dbUser : this.props.userState.dbUser, classPath : "stats.History", action : "get", filter : this.props.filter == null ? "termin<date_trunc('month', CURRENT_DATE)" : this.props.filter, devIP : App.devIP, limit : this.props.limit, offset : offset > 0 ? offset : 0, order : "termin", table : "booking_requests"};
 		loader_BinaryLoader.dbQuery("" + Std.string(App.config.api),params,function(data) {
-			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/stats/history/Charts.hx", lineNumber : 197, className : "view.stats.history.Charts", methodName : "get"});
-			haxe_Log.trace(data.dataParams == null ? "null" : haxe_ds_StringMap.stringify(data.dataParams.h),{ fileName : "view/stats/history/Charts.hx", lineNumber : 198, className : "view.stats.history.Charts", methodName : "get"});
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/stats/history/Charts.hx", lineNumber : 199, className : "view.stats.history.Charts", methodName : "get"});
+			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/stats/history/Charts.hx", lineNumber : 199, className : "view.stats.history.Charts", methodName : "get"});
+			haxe_Log.trace(data.dataParams == null ? "null" : haxe_ds_StringMap.stringify(data.dataParams.h),{ fileName : "view/stats/history/Charts.hx", lineNumber : 200, className : "view.stats.history.Charts", methodName : "get"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/stats/history/Charts.hx", lineNumber : 201, className : "view.stats.history.Charts", methodName : "get"});
 			if(data.dataRows.length > 0) {
 				var h = data.dataErrors.h;
 				var inlStringMapKeyIterator_h = h;
@@ -18222,7 +20144,7 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 					if(_gthis.chartBox == null) {
 						_gthis.chartBox = window.document.querySelector(".chartBox");
 					}
-					haxe_Log.trace(_gthis.chartBox,{ fileName : "view/stats/history/Charts.hx", lineNumber : 214, className : "view.stats.history.Charts", methodName : "get"});
+					haxe_Log.trace(_gthis.chartBox,{ fileName : "view/stats/history/Charts.hx", lineNumber : 216, className : "view.stats.history.Charts", methodName : "get"});
 					if(_gthis.chartBox != null) {
 						_gthis.draw();
 					}
@@ -18245,27 +20167,27 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 		_g.h["get"] = value;
 		this.dataAccess = _g;
 		if(this.props.userState.dbUser != null) {
-			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/stats/history/Charts.hx", lineNumber : 237, className : "view.stats.history.Charts", methodName : "componentDidMount"});
+			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/stats/history/Charts.hx", lineNumber : 239, className : "view.stats.history.Charts", methodName : "componentDidMount"});
 		}
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/stats/history/Charts.hx", lineNumber : 238, className : "view.stats.history.Charts", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/stats/history/Charts.hx", lineNumber : 240, className : "view.stats.history.Charts", methodName : "componentDidMount"});
 		if(this.chartBox == null) {
 			this.chartBox = window.document.querySelector(".chartBox");
 		}
-		haxe_Log.trace(this.chartBox,{ fileName : "view/stats/history/Charts.hx", lineNumber : 243, className : "view.stats.history.Charts", methodName : "componentDidMount"});
+		haxe_Log.trace(this.chartBox,{ fileName : "view/stats/history/Charts.hx", lineNumber : 245, className : "view.stats.history.Charts", methodName : "componentDidMount"});
 		if(this.chartBox != null) {
 			this.draw();
 		}
 	}
 	,draw: function() {
 		if(this.state.dataTable != null && this.state.dataTable.length > 0) {
-			haxe_Log.trace(this.chartBox.outerHTML,{ fileName : "view/stats/history/Charts.hx", lineNumber : 251, className : "view.stats.history.Charts", methodName : "draw"});
+			haxe_Log.trace(this.chartBox.outerHTML,{ fileName : "view/stats/history/Charts.hx", lineNumber : 253, className : "view.stats.history.Charts", methodName : "draw"});
 			var cW = this.chartBox.offsetWidth;
 			var iX = Math.floor(cW / this.state.dataTable.length);
 			cW = iX * this.state.dataTable.length;
 			this.chartBox.style.width = cW + "px";
 			var cH = this.chartBox.offsetHeight - 1;
 			var lH = cH * 0.064 > 24 ? Math.round(cH * 0.064) : 24;
-			haxe_Log.trace("cH:" + cH + " cW:" + cW + " lH:" + lH,{ fileName : "view/stats/history/Charts.hx", lineNumber : 258, className : "view.stats.history.Charts", methodName : "draw"});
+			haxe_Log.trace("cH:" + cH + " cW:" + cW + " lH:" + lH,{ fileName : "view/stats/history/Charts.hx", lineNumber : 260, className : "view.stats.history.Charts", methodName : "draw"});
 			cH -= lH;
 			var months = "Jan,Feb,Mar,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez".split(",");
 			var formatDate = function(dd) {
@@ -18276,9 +20198,9 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 			var maxCount = Math.round(shared_Utils.keyMax(this.state.dataTable,"count"));
 			var cRatio = cH / maxCount;
 			var sRatio = cH / maxSum;
-			haxe_Log.trace("" + maxCount + " => " + maxSum + " " + cW + " / " + (cH + lH) + ": " + cRatio + " " + sRatio + " " + this.state.dataTable.length + " svg: " + Std.string(this.svg != null ? this.svg : null),{ fileName : "view/stats/history/Charts.hx", lineNumber : 276, className : "view.stats.history.Charts", methodName : "draw"});
+			haxe_Log.trace("" + maxCount + " => " + maxSum + " " + cW + " / " + (cH + lH) + ": " + cRatio + " " + sRatio + " " + this.state.dataTable.length + " svg: " + Std.string(this.svg != null ? this.svg : null),{ fileName : "view/stats/history/Charts.hx", lineNumber : 278, className : "view.stats.history.Charts", methodName : "draw"});
 			var tmp = this.state.dataTable[0];
-			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/stats/history/Charts.hx", lineNumber : 277, className : "view.stats.history.Charts", methodName : "draw"});
+			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/stats/history/Charts.hx", lineNumber : 279, className : "view.stats.history.Charts", methodName : "draw"});
 			var iW = iX - 2;
 			if(this.svg != null) {
 				return;
@@ -18290,9 +20212,9 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 			mainGradient.append("stop").attr("class","stop-bottom").attr("offset","0");
 			mainGradient.append("stop").attr("class","stop-top").attr("offset","1");
 			var stop1 = mainGradient.selectAll("stop").node();
-			haxe_Log.trace(stop1.classList.value,{ fileName : "view/stats/history/Charts.hx", lineNumber : 308, className : "view.stats.history.Charts", methodName : "draw"});
-			haxe_Log.trace(stop1.nextElementSibling.classList.value,{ fileName : "view/stats/history/Charts.hx", lineNumber : 309, className : "view.stats.history.Charts", methodName : "draw"});
-			haxe_Log.trace(this.svg,{ fileName : "view/stats/history/Charts.hx", lineNumber : 317, className : "view.stats.history.Charts", methodName : "draw"});
+			haxe_Log.trace(stop1.classList.value,{ fileName : "view/stats/history/Charts.hx", lineNumber : 310, className : "view.stats.history.Charts", methodName : "draw"});
+			haxe_Log.trace(stop1.nextElementSibling.classList.value,{ fileName : "view/stats/history/Charts.hx", lineNumber : 311, className : "view.stats.history.Charts", methodName : "draw"});
+			haxe_Log.trace(this.svg,{ fileName : "view/stats/history/Charts.hx", lineNumber : 319, className : "view.stats.history.Charts", methodName : "draw"});
 			this.svg.selectAll(null).data(this.state.dataTable).enter().append("rect").attr("x",function(d,i) {
 				return i * iX;
 			}).attr("y",function(d,i) {
@@ -18300,9 +20222,13 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 			}).attr("width",iW).attr("height",function(d,i) {
 				return Math.ceil(parseFloat(d.get("sum")) * sRatio);
 			}).attr("class","gblue").on("mouseover",function(d) {
-				var avg = App.sprintf("%.2f",Std.parseInt(d.get("sum")) / Std.parseInt(d.get("count")));
+				var dSum = Std.parseInt(d.get("sum"));
+				var dCount = Std.parseInt(d.get("count"));
+				var dCount = d.get("count");
+				haxe_Log.trace(d.get("count") + ":" + dCount,{ fileName : "view/stats/history/Charts.hx", lineNumber : 330, className : "view.stats.history.Charts", methodName : "draw"});
+				var avg = StringTools.replace(App.sprintf("%.2f",dSum / dCount),".",",");
 				div.transition().duration(200).style("opacity",.9);
-				div.html(formatDate(d) + "<br/>" + Std.parseInt(d.get("sum")) + ("€<br>" + d.get("count") + " Spenden") + ("<br>" + avg + " €/Spende")).style("left",d3.event.pageX + "px").style("top",d3.event.pageY - 28 + "px");
+				div.html(formatDate(d) + "<br/>" + dSum + ("&thinsp;€<br>" + dCount + " Spenden") + ("<br>" + avg + " €/Spende")).style("left",d3.event.pageX + "px").style("top",d3.event.pageY - 28 + "px");
 			}).on("mouseout",function(d) {
 				div.transition().duration(500).style("opacity",0);
 			});
@@ -18310,8 +20236,8 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,drawLegend: function(top,h,lW,iW,iX) {
-		haxe_Log.trace(this.svg,{ fileName : "view/stats/history/Charts.hx", lineNumber : 343, className : "view.stats.history.Charts", methodName : "drawLegend"});
-		haxe_Log.trace("top:" + top + " height:" + h + " width:" + lW,{ fileName : "view/stats/history/Charts.hx", lineNumber : 344, className : "view.stats.history.Charts", methodName : "drawLegend"});
+		haxe_Log.trace(this.svg,{ fileName : "view/stats/history/Charts.hx", lineNumber : 353, className : "view.stats.history.Charts", methodName : "drawLegend"});
+		haxe_Log.trace("top:" + top + " height:" + h + " width:" + lW,{ fileName : "view/stats/history/Charts.hx", lineNumber : 354, className : "view.stats.history.Charts", methodName : "drawLegend"});
 		var legend = this.svg.append("g").attr("x",0).attr("transform","translate(0 " + top + ")").attr("id","legend").attr("width",lW).attr("height",h).style("fill","rgba(0,0,0,0)");
 		var _this = this.state.dataTable;
 		var result = new Array(_this.length);
@@ -18348,7 +20274,7 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,renderResults: function() {
-		haxe_Log.trace(this.props.match.params.section + (":" + this.props.match.params.action + "::") + Std.string(this.state.dataTable != null),{ fileName : "view/stats/history/Charts.hx", lineNumber : 415, className : "view.stats.history.Charts", methodName : "renderResults"});
+		haxe_Log.trace(this.props.match.params.section + (":" + this.props.match.params.action + "::") + Std.string(this.state.dataTable != null),{ fileName : "view/stats/history/Charts.hx", lineNumber : 425, className : "view.stats.history.Charts", methodName : "renderResults"});
 		if(this.state.dataTable.length == 0) {
 			return this.state.formApi.renderWait();
 		}
@@ -18359,14 +20285,14 @@ view_stats_history_Charts.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,getCellData: function(cP) {
-		haxe_Log.trace(cP,{ fileName : "view/stats/history/Charts.hx", lineNumber : 435, className : "view.stats.history.Charts", methodName : "getCellData"});
+		haxe_Log.trace(cP,{ fileName : "view/stats/history/Charts.hx", lineNumber : 445, className : "view.stats.history.Charts", methodName : "getCellData"});
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/stats/history/Charts.hx", lineNumber : 442, className : "view.stats.history.Charts", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/stats/history/Charts.hx", lineNumber : 452, className : "view.stats.history.Charts", methodName : "render"});
 		return this.state.formApi.render(this.renderResults());
 	}
 	,componentWillUnmount: function() {
-		haxe_Log.trace("...",{ fileName : "view/stats/history/Charts.hx", lineNumber : 449, className : "view.stats.history.Charts", methodName : "componentWillUnmount"});
+		haxe_Log.trace("...",{ fileName : "view/stats/history/Charts.hx", lineNumber : 459, className : "view.stats.history.Charts", methodName : "componentWillUnmount"});
 	}
 	,__class__: view_stats_history_Charts
 });
@@ -18997,6 +20923,9 @@ css_VerticalAlign.TextBottom = "text-bottom";
 css_VerticalAlign.Middle = "middle";
 css_VerticalAlign.Top = "top";
 css_VerticalAlign.Bottom = "bottom";
+haxe_Int32._mul = Math.imul != null ? Math.imul : function(a,b) {
+	return a * (b & 65535) + (a * (b >>> 16) << 16 | 0) | 0;
+};
 haxe_Serializer.USE_CACHE = false;
 haxe_Serializer.USE_ENUM_INDEX = false;
 haxe_Serializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
@@ -19329,6 +21258,30 @@ model_contacts_ContactsModel.dataAccess = (function($this) {
 	$r = _g;
 	return $r;
 }(this));
+model_contacts_ContactsModel.qcColumns = (function($this) {
+	var $r;
+	var _g = new haxe_ds_StringMap();
+	_g.h["first_name"] = { label : "Vorname", flexGrow : 0};
+	_g.h["last_name"] = { label : "Name", flexGrow : 0};
+	_g.h["phone_number"] = { label : "Telefon"};
+	_g.h["address1"] = { label : "Straße", showSearch : false};
+	_g.h["address2"] = { label : "Nr.", showSearch : false};
+	_g.h["postal_code"] = { label : "PLZ"};
+	_g.h["city"] = { label : "Ort"};
+	_g.h["id"] = { label : "Kontakt ID", show : false};
+	_g.h["list_id"] = { show : false};
+	_g.h["entry_list_id"] = { show : false};
+	_g.h["lead_id"] = { show : false};
+	_g.h["last_local_call_time"] = { label : "Datum", cellFormat : function(v) {
+		if(v != null) {
+			return DateTools.format(HxOverrides.strDate(v),"%d.%m.%Y");
+		} else {
+			return "";
+		}
+	}};
+	$r = _g;
+	return $r;
+}(this));
 model_contacts_ContactsModel.gridColumns = (function($this) {
 	var $r;
 	var _g = new haxe_ds_StringMap();
@@ -19378,6 +21331,13 @@ model_contacts_ContactsModel.dataGridDisplay = (function($this) {
 	var $r;
 	var _g = new haxe_ds_StringMap();
 	_g.h["contactList"] = { columns : model_contacts_ContactsModel.gridColumns};
+	$r = _g;
+	return $r;
+}(this));
+model_contacts_ContactsModel.qcListDisplay = (function($this) {
+	var $r;
+	var _g = new haxe_ds_StringMap();
+	_g.h["contactList"] = { columns : model_contacts_ContactsModel.qcColumns};
 	$r = _g;
 	return $r;
 }(this));
@@ -19600,6 +21560,29 @@ tink_core_Promise.NOISE = new tink_core__$Future_SyncFuture(new tink_core__$Lazy
 tink_core_Promise.NULL = tink_core_Promise.NOISE;
 tink_core_Promise.NEVER = tink_core_Future.NEVER;
 tink_core__$Signal_Disposed.INST = new tink_core__$Signal_Disposed();
+uuid_Uuid.DNS = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
+uuid_Uuid.URL = "6ba7b811-9dad-11d1-80b4-00c04fd430c8";
+uuid_Uuid.ISO_OID = "6ba7b812-9dad-11d1-80b4-00c04fd430c8";
+uuid_Uuid.X500_DN = "6ba7b814-9dad-11d1-80b4-00c04fd430c8";
+uuid_Uuid.NIL = "00000000-0000-0000-0000-000000000000";
+uuid_Uuid.LOWERCASE_BASE26 = "abcdefghijklmnopqrstuvwxyz";
+uuid_Uuid.UPPERCASE_BASE26 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+uuid_Uuid.NO_LOOK_ALIKES_BASE51 = "2346789ABCDEFGHJKLMNPQRTUVWXYZabcdefghijkmnpqrtwxyz";
+uuid_Uuid.FLICKR_BASE58 = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+uuid_Uuid.BASE_70 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-+!@#$^";
+uuid_Uuid.COOKIE_BASE90 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!#$%&'()*+-./:<=>?@[]^_`{|}~";
+uuid_Uuid.NANO_ID_ALPHABET = "_-0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+uuid_Uuid.NUMBERS_BIN = "01";
+uuid_Uuid.NUMBERS_OCT = "01234567";
+uuid_Uuid.NUMBERS_DEC = "0123456789";
+uuid_Uuid.NUMBERS_HEX = "0123456789abcdef";
+uuid_Uuid.lastMSecs = 0;
+uuid_Uuid.lastNSecs = 0;
+uuid_Uuid.clockSequenceBuffer = -1;
+uuid_Uuid.regexp = new EReg("^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$","i");
+uuid_Uuid.rndSeed = HxOverrides.now() / 1000 * 1000 | 0;
+uuid_Uuid.state0 = uuid_Uuid.splitmix64_seed(uuid_Uuid.rndSeed);
+uuid_Uuid.state1 = uuid_Uuid.splitmix64_seed(uuid_Uuid.rndSeed + 1);
 view_Accounting.displayName = "Accounting";
 view_Accounting._renderWrapper = (redux_react_ReactRedux.connect(view_Accounting.mapStateToProps,view_Accounting.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_Accounting));
 view_Accounting.__jsxStatic = view_Accounting._renderWrapper;
@@ -19684,7 +21667,7 @@ view_dashboard_DB.menuItems = [{ label : "getView", action : "getView"},{ label 
 view_dashboard_DB.displayName = "DB";
 view_dashboard_DB._renderWrapper = (redux_react_ReactRedux.connect(view_dashboard_DB.mapStateToProps))(react_ReactTypeOf.fromComp(view_dashboard_DB));
 view_dashboard_DB.__jsxStatic = view_dashboard_DB._renderWrapper;
-view_dashboard_DBSync.menuItems = [{ label : "BuchungsAnforderungen ", action : "checkBookingRequests"},{ label : "Kontakt Daten ", action : "checkContacts"},{ label : "Spenden Daten ", action : "checkDeals"},{ label : "Konto Daten ", action : "checkAccounts"}];
+view_dashboard_DBSync.menuItems = [{ label : "BuchungsAnforderungen ", action : "checkBookingRequests", options : [{ label : "Update", name : "sync_now", type : "Checkbox"}]},{ label : "Kontakt Daten ", action : "checkContacts"},{ label : "Spenden Daten ", action : "checkDeals"},{ label : "Konto Daten ", action : "checkAccounts"}];
 view_dashboard_DBSync.displayName = "DBSync";
 view_dashboard_DBSync._renderWrapper = (redux_react_ReactRedux.connect(view_dashboard_DBSync.mapStateToProps,view_dashboard_DBSync.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_dashboard_DBSync));
 view_dashboard_DBSync.__jsxStatic = view_dashboard_DBSync._renderWrapper;
@@ -19824,8 +21807,19 @@ view_data_deals_List.menuItems = [{ label : "Bearbeiten", action : "open", secti
 view_data_deals_List.displayName = "List";
 view_data_deals_List._renderWrapper = (redux_react_ReactRedux.connect(view_data_deals_List.mapStateToProps,view_data_deals_List.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_data_deals_List));
 view_data_deals_List.__jsxStatic = view_data_deals_List._renderWrapper;
+view_data_qc_Edit.menuItems = [{ label : "Schließen", action : "close"},{ label : "Speichern", action : "update"},{ label : "Zurücksetzen", action : "reset"},{ separator : true},{ label : "Verlauf", action : "listHistory", section : "Edit", classPath : "view.data.contacts.History"}];
+view_data_qc_Edit.classPath = view_data_qc_Edit.__name__;
+view_data_qc_Edit.displayName = "Edit";
+view_data_qc_Edit._renderWrapper = (redux_react_ReactRedux.connect(view_data_qc_Edit.mapStateToProps,view_data_qc_Edit.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_data_qc_Edit));
+view_data_qc_Edit.__jsxStatic = view_data_qc_Edit._renderWrapper;
+view_data_qc_List.menuItems = [{ label : "Bearbeiten", action : "update", section : "Edit"},{ label : "Löschen", action : "delete"},{ label : "Auswahl aufheben", action : "selectionClear"}];
+view_data_qc_List.displayName = "List";
+view_data_qc_List._renderWrapper = (redux_react_ReactRedux.connect(view_data_qc_List.mapStateToProps))(react_ReactTypeOf.fromComp(view_data_qc_List));
+view_data_qc_List.__jsxStatic = view_data_qc_List._renderWrapper;
 view_grid_Grid.clickDelay = 200;
 view_grid_Grid.displayName = "Grid";
+view_grid_Grid._renderWrapper = react_router_ReactRouter.withRouter(react_ReactType.fromComp(view_grid_Grid));
+view_grid_Grid.__jsxStatic = view_grid_Grid._renderWrapper;
 view_shared_DateTime.displayName = "DateTime";
 view_shared_DateTime._renderWrapper = react_intl_ReactIntl.injectIntl(react_ReactType.fromComp(view_shared_DateTime));
 view_shared_DateTime.__jsxStatic = view_shared_DateTime._renderWrapper;

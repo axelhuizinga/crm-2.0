@@ -1148,44 +1148,6 @@ class Model
 		return Syntax.code("json_encode({0},{1})", {content:res}, 64);//JSON_UNESCAPED_SLASHES
 	}
 	
-	/*function getEditorFields(?table_name:String):Map<String,Array<Map<String,String>>>
-	{
-		var sqlBf:StringBuf = new StringBuf();
-		var filterValues:Array<Array<Dynamic>> = new Array();
-		var param:Map<String,String> = new Map();
-		param.set('table', 'fly_crm.editor_fields');
-		
-		param.set('filter', 'field_cost|>-2' + (table_name != null ? 
-		',table_name|' + quoteIdent(table_name): ''));
-		param.set('fields', 'field_name,field_label,field_type,field_options,table_name');
-		param.set('order', 'table_name,field_rank,field_order');
-		param.set('limit', '100');
-		//trace(param);
-		var eFields:Array<Dynamic> = Lib.toHaxeArray( doSelect());
-		//var eFields:NativeArray = doSelect(param, sqlBffilterValueses);
-		//var eFields:Dynamic = doSelect(param, sqlBffilterValueses);
-		//trace(eFields);
-		//trace(eFields.length);
-		var ret:Map<String,Array<Map<String,String>>> = new Map();
-		//var ret:Array<Map<String,String>> = new Array();
-		for (ef in eFields)
-		{
-			var table:String = untyped ef['table_name'];
-			if (!ret.exists(table))
-			{
-				ret.set(table, []);
-			}
-			//var field:Map<String,String> = Lib.hashOfAssociativeArray(ef);
-			//trace(field.get('field_label')+ ':' + field);
-			var a:Array<Map<String,String>> = ret.get(table);
-			a.push(Lib.hashOfAssociativeArray(ef));
-			ret.set(table, a);
-			//return ret;
-		}
-		//trace(ret);
-		return ret;
-	}*/
-		
 	function serializeRows(rows:NativeArray):String
 	{
 		//var s = new JsonWriter<DbData>();

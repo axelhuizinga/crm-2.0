@@ -379,8 +379,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	function update()
 	{
 		for(k=>v in state.relDataComps.keyValueIterator()){
-			trace('$k=>${v.props.save}');
-			v.props.save(v);
+			if(Reflect.field(v, 'props')!=null && Reflect.field(v.props,'save')!=null){				
+				trace('save:' + k);
+				v.props.save(v);
+			}
+			//
+
+			
+			//trace('$k=>$v');
 		}
 		if(state.actualState != null)
 			trace('length:' + state.actualState.fieldsModified.length + ':' + state.actualState.fieldsModified.join('|') );

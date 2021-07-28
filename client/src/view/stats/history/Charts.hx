@@ -36,6 +36,8 @@ import view.shared.io.BaseForm;
 import view.shared.io.DataFormProps;
 import state.FormState;
 
+using StringTools;
+
 typedef ChartDataState =
 {
 	?altGroupPos:Int,
@@ -319,12 +321,20 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 				.attr('x', function(d:Dynamic,i:Int)return i*(iX))
 			.attr('y',function(d:Dynamic,i:Int)return Math.floor(cH - sRatio * Std.parseFloat(d.get('sum')))).attr('width',iW)
 			.attr('height',function(d:Dynamic,i:Int)return Math.ceil(Std.parseFloat(d.get('sum'))*sRatio)).attr("class", "gblue")
-			.on("mouseover", function(d) {	
-				var avg = App.sprintf('%.2f',Std.parseInt(d.get('sum'))/Std.parseInt(d.get('count')));
+			.on("mouseover", function(d) {
+				
+				//trace(Std.string(d));
+				var dSum:Int = Std.parseInt(d.get('sum'));				
+				var dCount:Int = Std.parseInt(d.get('count'));		
+				var dCount:Int = untyped d.get('count');
+				trace(d.get('count')+':'+dCount);
+				var avg = StringTools.replace(App.sprintf('%.2f',dSum/dCount),'.',',');
+				//var avg = App.sprintf('%.2f',Std.parseInt(d.get('sum'))/Std.parseInt(d.get('count')));
             div.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
-			div.html(formatDate(d) + "<br/>"  + Std.parseInt(d.get('sum')) + '€<br>${d.get('count')} Spenden' + '<br>$avg €/Spende')
+			//div.html(formatDate(d) + "<br/>"  + Std.parseInt(d.get('sum')) + '€<br>${d.get('count')} Spenden' + '<br>$avg €/Spende')
+			div.html(formatDate(d) + "<br/>"  + dSum + '&thinsp;€<br>$dCount Spenden' + '<br>$avg €/Spende')	
                 .style("left", (cast D3.event).pageX + "px")	
                 .style("top", ((cast D3.event).pageY - 28) + "px");
             })					

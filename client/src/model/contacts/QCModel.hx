@@ -20,22 +20,24 @@ class QCModel
 					]
 				],
 			view:[
-				'title'=>{label:'Anrede',type:Select,options:[
+				'anrede'=>{label:'Anrede',type:Select,options:[
 						''=>'?',
 						'Herr'=>'Herr',
 						'Frau'=>'Frau',
 						'Familie'=>'Familie',
 						'Firma'=>'Firma'
 					]},
-				'title_pro'=>{label:'Titel'},
 				'first_name'=>{label:'Vorname'},
-				'last_name'=>{label:'Name'},
+				'last_name'=>{label:'Name'},					
+				'address1'=>{label:'Straße'},
+				'address2'=>{label:'Hausnummer'},
+				'co_field'=>{label:'c/o Feld oder Firma'},
+				//'title_pro'=>{label:'Titel'},				
 				'email'=>{label:'Email'},
 				'phone_code'=>{label:'Landesvorwahl'},
 				'phone_number'=>{label:'Telefon'},		
 				'mobile'=>{label:'Mobil'},
 				'fax'=>{label:'Fax'},
-				'company_name'=>{label:'Firmenname'},	
 				'address'=>{label:'Straße'},
 				'address_2'=>{label:'Hausnummer'},
 				'postal_code'=>{label:'PLZ'},

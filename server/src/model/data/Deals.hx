@@ -29,10 +29,14 @@ class Deals extends Model
 	}	
 
 	function getQC(){
-		var stmt:PDOStatement = S.viciboxDbh.query('SELECT * FROM vicidial_list WHERE list_id=1900 AND status="NEW" ORDER BY last_local_call_time');
+		var sql:String = 'SELECT * FROM vicidial_list INNER JOIN vicidial_users ON vicidial_users.user=vicidial_list.owner WHERE list_id=1900 AND status="NEW" ORDER BY last_local_call_time';
+		trace(sql);
+		var stmt:PDOStatement = S.viciboxDbh.query(sql);
 		var qcData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		trace(Std.string(qcData));
+		var t:NativeArray = null;
+		trace(t);
 		sendRows(qcData);
-		//qc_deals:NativeArray = execute('');
 	}
 
 	function doQC() {

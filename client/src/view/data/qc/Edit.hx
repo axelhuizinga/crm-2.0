@@ -253,9 +253,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			if(data.dataRows.length==1)
 			{
 				var data = data.dataRows[0];
-				trace(data);	
+				trace(data);	//*
 				//if( mounted)
-				/*var contact:Contact = new Contact(data);
+				var contact:Contact = new Contact(data);
 				if(mounted)
 					setState({loading:false, actualState:contact, initialData:copy(contact)});
 				//state = copy({loading:false, actualState:contact, initialData:contact});
@@ -263,7 +263,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
 				//setState({initialData:copy(state.actualState)});
 				trace(props.location.pathname + ':' + untyped state.actualState.date_of_birth);
-				props.history.replace(props.location.pathname.replace('open','update'));*/
+				props.history.replace(props.location.pathname.replace('open','update'));
+				
 			}
 		});
 	}
@@ -489,7 +490,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.actualState != null));
 		//trace('###########loading:' + state.loading);
-		//trace('########### action:' + props.match.params.action);
+		trace('########### action:' + props.match.params.action);
 
 		return switch(props.match.params.action)
 		{
@@ -506,7 +507,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					fields:[
 						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
-					model:'contact',
+					model:'qc',
 					ref:null,					
 					title: 'Quality Control' 
 				},state.actualState)}

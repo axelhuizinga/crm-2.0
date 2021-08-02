@@ -56,6 +56,8 @@ class QCModel
 				'use_email'=>{label:'Post per Email',type: Checkbox},
 				'owner' =>{label:'Agent', cellFormat: function(v):String {
 						trace(v);
+						if(App.pbxUserData!=null && App.pbxUserData.exists(v))
+							return App.pbxUserData.get(v)['full_name'];
 						return v;
 					},
 					disabled: true
@@ -82,7 +84,11 @@ class QCModel
 		'list_id' => {show:false},
 		'entry_list_id' => {show:false},
 		'lead_id' => {show:false},
-		'last_local_call_time'=>{label: 'Datum',cellFormat: function(v:String) return v!=null? DateTools.format(Date.fromString(v), "%d.%m.%Y"):''},
+		'last_local_call_time'=>{label: 'Datum',cellFormat: function(v:String) {
+				trace(v);
+				return v!=null? DateTools.format(Date.fromString(v), "%d.%m.%Y"):'';
+			}
+		},
 	];
 
 	public static var gridColumns:Map<String,DataColumn> = [
@@ -119,7 +125,7 @@ class QCModel
 			cellFormat:function(v:String) 
 			{
 				var uState = (v=='active'?'user':'user-slash');
-				//trace(uState);
+				trace(v);
 				return jsx('<span className="fa fa-$uState"></span>');
 			}},
 		'id' => {show:false}

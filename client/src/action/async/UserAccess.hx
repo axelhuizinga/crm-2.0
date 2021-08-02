@@ -375,8 +375,41 @@ class UserAccess {
 			});
 		});	
 	}
-/**
- * 
- */
+	/**
+	 * 
+	 */
+	public static function userList()
+	{
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+			var userState:UserState = getState().userState;
+			return new Promise<DbData>(function(resolve, reject){
+				var state:AppState = getState();
+				var bL:XMLHttpRequest =  BinaryLoader.dbQuery(
+					'${App.config.api}', 
+					{				
+						classPath:'auth.User',
+						action:'getPbxUserData',
+						dbUser: state.userState.dbUser,
+						devIP:App.devIP
+					},
+					function(data:DbData)
+					{
+							if (data.dataErrors.keys().hasNext()){
+								// OK
+							trace(data.dataErrors);
+							//Cookie.set('userState.dbUser.id', Std.string(userState.dbUser.id));
+							reject(data);
+							return null;
+						} else {
+						
+							trace(data.dataRows[0]);
+							resolve(data);
+							return null;
+						}
+					}
+				);
+			});
+		});		
+	}
 	
 }

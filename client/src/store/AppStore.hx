@@ -43,29 +43,14 @@ class AppStore
 	public function new() 
 	{
 		//var user = new UserStore();
-		initState = {
-			 
+		initState = {			 
 			status: {
 				date:Date.now(),
 				path: Browser.location.pathname,
 				text: '',
 				userState:null
 			},
-			userState:null//uStore.store.getState()
-			/*{
-				first_name:'',
-				last_name:'',
-				mandator: 1,
-				id:Cookie.get('userState.dbUser.id')==null?0:Std.parseInt(Cookie.get('userState.dbUser.id')),
-				email:'',
-				pass:'',				
-				change_pass_required:false,
-				online:false,//Cookie.get('userState.dbUser.jwt')!=null && UserAccess.verify(),
-				loginTask: (Browser.location.pathname.startsWith('/ResetPassword')?LoginTask.ResetPassword:LoginTask.Login),
-				last_login:null,
-				jwt:(Cookie.get('userState.dbUser.jwt')==null?'':Cookie.get('userState.dbUser.jwt')),
-				waiting: true
-			}*/
+			userState:null
 		};
 		trace(store);
 	}

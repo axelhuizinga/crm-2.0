@@ -45,7 +45,7 @@ class UserStore implements IReducer<UserAction, UserState>
 				jwt:(Cookie.get('userState.dbUser.jwt')==null?'':Cookie.get('userState.dbUser.jwt'))
 			})
 		};
-		trace(initState);
+		//trace(initState);
 		//Out.dumpObject(store);
 	}
 	

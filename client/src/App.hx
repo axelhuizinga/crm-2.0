@@ -1,3 +1,4 @@
+import js.Lib;
 import jwt.JWT;
 import js.html.FormData;
 import haxe.ds.StringMap;
@@ -78,7 +79,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	public static var devIP = (untyped __devIP__ == 'X'?'':__devIP__);
 	public static var devPassword = '';//(untyped __password__ == 'X' ? '' : __password__);
 	public static var devUser = (untyped __user_name__ == 'X' ? '' : __user_name__);
-	public static var userNames:StringMap<Dynamic>;
+	public static var pbxUserData:Map<String,Map<String,String>>;
 	public static var flatpickr:Function = Webpack.require('flatpickr');
 	public static var German = js.Lib.require('flatpickr/dist/l10n/de.js');
 	static var flat = js.Lib.require('flatpickr/dist/flatpickr.min.css');
@@ -169,13 +170,25 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
 		var ti:Timer = null;
-		if(store==null)
+		if(store==null){
 			store = initStore(BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}));
+			var p:Promise<DbData> = untyped UserAccess.userList();
+			p.then(function(dbData:DbData){
+					trace(dbData.dataRows[0]);
+					pbxUserData =  [
+						for(row in dbData.dataRows) row.get('user') => row
+					];
+				}
+				,function(dbData:DbData){
+					trace(dbData);
+				}
+			);
+		}
 		state = store.getState();
 		//trace(Reflect.fields(state));
 		//trace(config);
 		//trace(state);
-		trace(state.userState.dbUser);
+		trace(state.userState.dbUser.id);
 		//trace(devIP);
 		tul = historyListener(store, state.locationStore.history);
 		//store.subscribe(saveToLocalStorage);
@@ -211,24 +224,10 @@ class App  extends ReactComponentOf<AppProps, AppState>
 				case Valid(jwt):
 					trace(untyped jwt.validUntil - Date.now().getTime());
 					if(untyped jwt.validUntil - Date.now().getTime() > 600000){
+						// AT LEAST 10 min valid
 						state.userState.dbUser.online = true;
 						state.userState.waiting = false;
 						store.dispatch(LoginComplete({waiting:false}));							
-						// AT LEAST 10 min valid
-						/*var p:Promise<DbData> = load();
-						p.then(function(dbData:DbData){
-							trace(dbData.dataErrors.keys().hasNext());
-							if(!dbData.dataErrors.empty() && dbData.dataErrors.exists('jwtError')){
-								//reject()	
-								trace('dispatch LoginExpired');
-								state.userState.dbUser.jwt = '';
-								store.dispatch(LoginExpired({waiting: false, loginTask: Login, dbUser: state.userState.dbUser}));
-							}
-							else{
-								state.userState.dbUser.online = true;
-								store.dispatch(LoginComplete({waiting:false}));					
-							}
-						});*/
 					}else {
 						trace('dispatch LoginExpired');
 						state.userState.dbUser.jwt = '';

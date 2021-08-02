@@ -85,9 +85,23 @@ class User extends Model
 		S.send(serializeRows(doSelect()));
 	}
 	
-	public function getExternalUserData():Map<String, Dynamic>
+	public function getPbxUserData():Void
 	{
-		return null;
+		var dbData:DbData = new DbData();
+		var sql:String = 'SELECT user, full_name, user_group, user_level FROM ${S.dbViciBoxDB}.vicidial_users';
+		var stmt:PDOStatement = S.syncDbh.query(sql);
+		if(untyped stmt==false)
+			{
+				S.sendErrors(dbData, ['getPbxUserData query:'=>S.syncDbh.errorInfo()]);
+			}
+			if(stmt.errorCode() !='00000')
+			{
+				trace(stmt.errorInfo());
+				S.sendErrors(dbData, ['getPbxUserData query:'=>stmt.errorInfo()]);
+			}
+			var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+
+			sendRows(res);
 	}
 	
 	static function userEmail(param:Map<String,Dynamic>):String

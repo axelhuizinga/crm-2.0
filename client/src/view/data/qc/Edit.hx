@@ -127,13 +127,15 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		historyFormRef = React.createRef();
 		trace(props.match.params);
 		trace('props:' + Reflect.fields(props).join('|'));
-		trace(Reflect.fields(props.dataStore.qcData).join('|'));
 
-		if(props.match.params.id == null)
-			props.match.params.id = untyped Std.string(props.dataStore.qcActData.keys().next());//dataRows[0].lead_id);dataRows[0].	
-		if(Reflect.fields(props).has('dataStore')){
+		if(props.match.params.id == null){
+			if(props.dataStore.qcActData != null && props.dataStore.qcActData.keys().hasNext())
+				props.match.params.id = untyped Std.string(props.dataStore.qcActData.keys().next());
+		}
+			//dataRows[0].lead_id);dataRows[0].	
+		if(Reflect.fields(props).has('dataStore') && props.dataStore.qcData != null){
 			qcData = props.dataStore.qcData.get(Std.parseInt(props.match.params.id));
-			trace(qcData['entry_list_id']);
+			trace(qcData);
 		}	
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/update(\/)*$/.match(props.match.params.action) )
@@ -511,10 +513,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					ref:null,					
 					title: 'Quality Control' 
 				},state.actualState)}
-				${relData()}				
+								
 				</>
 				'));
-				//null;${relDataLists()}
+				//null;${relDataLists()}${relData()}
 			case 'insert':
 				//trace(state.actualState);
 				state.formBuilder.renderForm({
@@ -544,7 +546,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 									k => dealDataAccess['open'].view[k]]
 							else 
 								[for(k in accountDataAccess['open'].view.keys())
-									k => accountDataAccess['open'].view[k]]							
+									k => accountDataAccess['open'].view[k]]				
 						,
 						model:model,
 						ref:null,					
@@ -573,7 +575,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	override function render():ReactFragment
 	{
 		trace(props.match.params.action);		
-		//if(state.initialData==null)			return null;
+		if(state==null || state.initialData==null){
+			trace('state: $state');
+			return null;
+		}
 		//trace(state.modals);
 		//trace('state.loading: ${state.loading}');	
 		

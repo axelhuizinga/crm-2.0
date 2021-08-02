@@ -94,6 +94,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	override function render()
 	{
 		//if(props.userState.dbUser !=null)trace(props.userState.dbUser.id);
+		//TODO: USEFUL ERROR MESSAGE!
 		if (state.hasError || props.userState.dbUser == null) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}

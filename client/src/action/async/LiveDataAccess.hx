@@ -110,10 +110,10 @@ class LiveDataAccess
 					{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
 					return dispatch(DataAction.SelectDeals(props.data));
 				case 'QC':
-					sData = aState.dataStore.qcData;
+					//sData = aState.dataStore.qcData;
 					//trace(sData);
 					//trace(Type.getInstanceFields(Type.getClass(sData)));
-					sData = selectType(props.id, props.data, sData, props.selectType);
+					sData = selectType(props.id, props.data, aState.dataStore.qcData, props.selectType);
 					trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
 					trace(sData);
 					//return dispatch(AppAction.Data(sData));					

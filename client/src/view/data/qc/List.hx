@@ -86,7 +86,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			var baseUrl:String = props.match.path.split(':section')[0];
 			trace('redirecting to ${baseUrl}List/get');
 			props.history.push('${baseUrl}List/get');
-			get(null);
+			//get(null);
 		}
 		else 
 		{
@@ -205,7 +205,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			props.history.push(
 				'${props.match.path.split(':section')[0]}List/get/${props.match.params.id!=null?props.match.params.id:''}'
 			);
-			get(null);			
+			//get(null);			
 		}
 		//props.storeData('Contacts', DataAction.Restore);
 	}
@@ -290,7 +290,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	function getCellData(cP:Dynamic) {
 		trace(cP);
 	}
-//cellDataGetter=${getCellData}
 	
 	override function render():ReactFragment
 	{

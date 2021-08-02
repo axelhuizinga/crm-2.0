@@ -83,16 +83,12 @@ class BinaryLoader {
 	public var xhr:XMLHttpRequest;
 	
 	public var url(default, null) : String;
-	#if flash
-	var loader : flash.net.URLLoader;
-	#end
 
 	public function new( url : String ) {
 		this.url = url;
 		xhr = new js.html.XMLHttpRequest();
 	}
 
-	//public dynamic function onLoaded( bytes : haxe.io.Bytes ) {
 	public function onLoaded( bytes : String ) {
 		//trace(bytes);
 		if(bytes!=null && bytes.length>0){

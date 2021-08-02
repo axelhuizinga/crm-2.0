@@ -262,9 +262,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					setState({loading:false, actualState:contact, initialData:copy(contact)});
 				//state = copy({loading:false, actualState:contact, initialData:contact});
 				trace('$mounted ${contact.id}');
-				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
+				if(state.actualState != null){
+					trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
 				//setState({initialData:copy(state.actualState)});
-				trace(props.location.pathname + ':' + untyped state.actualState.date_of_birth);
+					trace(props.location.pathname + ':' + untyped state.actualState.date_of_birth);
+				}
 				props.history.replace(props.location.pathname.replace('open','update'));
 				
 			}
@@ -309,35 +311,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.children);
 	}
 	
-	/*override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
+	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
 		trace('propsChanged:${nextProps!=props} stateChanged:${nextState!=state}');				
-		if(nextState!=state)
-			return true;
+		//if(nextState!=state)			return true;
 		return nextProps!=props;
-			static function mapStateToProps(aState:AppState) 
-	{
-		//trace(aState.dataStore.contactData);
-		trace(Reflect.fields(aState));
-		if(aState.dataStore.contactData != null)
-		trace(aState.dataStore.contactData.keys().next());
-		if(aState.dataStore.contactsDbData != null)
-		trace(aState.dataStore.contactsDbData.dataRows[0]);
-		else 
-		{
-			trace(aState.dataStore);
-			trace(Reflect.fields(aState.dataStore));
-		}
-		trace(App.store.getState().dataStore.contactsDbData);
-		var bState =  {
-			dataStore:aState.dataStore,
-			userState:aState.userState,
-			//idLoaded:aState.dataStore.contactData.keys().next()
-		};
-		//trace(bState);
-		trace(bState.dataStore.contactData);
-		return bState;
 	}
-	}*/
 
 	override public function componentWillUnmount() {
 		//state.storeListener();
@@ -501,9 +479,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				//trace(state.actualState.id);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
-				];*/
-				(state.actualState==null ? state.formApi.renderWait():
-				jsx('<>
+				];
 				${state.formBuilder.renderForm({
 					mHandlers:state.mHandlers,
 					fields:[
@@ -513,7 +489,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					ref:null,					
 					title: 'Quality Control' 
 				},state.actualState)}
-								
+				*/
+				(state.actualState==null ? state.formApi.renderWait():
+				jsx('<>
+				
+							<div className="center"><h3>:)</h3></div>	
 				</>
 				'));
 				//null;${relDataLists()}${relData()}

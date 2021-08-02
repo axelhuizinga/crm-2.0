@@ -122,7 +122,7 @@ class S
 		init();
 		ts = Sys.time();
 		last_request_time = Date.fromTime(ts/1000);
-		var now:String = DateTools.format(Date.now(), "%d.%m.%y %H:%M:%S");		
+		var now:String = DateTools.format(Date.now(), "%d.%m.%y %H:%M:%S - %s");		
 		//trace(last_request_time.toString() + ' == $now' );		
 		trace(DateTools.format(last_request_time, "%d.%m.%y %H:%M:%S") + ' == $now' );		
 		//trace(vD['syncApi']);
@@ -281,7 +281,7 @@ class S
 		}
 	
 		if(jwt != null)
-		trace('jwt.length:' +jwt.length);
+		trace('$action::jwt.length:' +jwt.length);
 		if (jwt.length > 0)
 		{
 			if(User.verify(jwt, id))
@@ -291,12 +291,17 @@ class S
 					Upload.go();
 					exit({'Error':'Upload.go()$action did not send anything'});
 				}
+				/*if(action=='verify'){
+					User.verify();
+				}*/
 				Model.dispatch(dbQuery);		
 				exit({'Error':'Model.dispatch ${params.get('classPath')}.$action did not send anything'});
 			}
 
 		}	
 		User.login(dbQuery.dbUser);		
+		
+		trace(response);
 		exit(response);
 	}
 	

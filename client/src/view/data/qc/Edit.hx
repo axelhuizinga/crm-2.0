@@ -57,7 +57,7 @@ import shared.DBMetaData;
 import view.shared.FormBuilder;
 import view.shared.FormField;
 import state.FormState;
-import model.contacts.ContactsModel;
+import model.qc.QCModel;
 import view.shared.MItem;
 import view.shared.MenuProps;
 import view.shared.io.BaseForm;
@@ -143,9 +143,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			props.history.push('${baseUrl}List/get');
 			return;
 		}		
-		dataAccess = ContactsModel.dataAccess;
+		dataAccess = QCModel.dataAccess;
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
-		dataDisplay = ContactsModel.dataDisplay;
+		dataDisplay = QCModel.dataDisplay;
 		//DEALS
 		dealDataAccess = DealsModel.dataAccess;
 		dealFieldNames = BaseForm.initFieldNames(dealDataAccess['open'].view.keys());
@@ -154,7 +154,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		accountDataAccess = AccountsModel.dataAccess;
 		accountFieldNames = BaseForm.initFieldNames(accountDataAccess['open'].view.keys());
 		accountDataDisplay = AccountsModel.dataDisplay;
-		trace(dataAccess['open']);
+		//trace(dataAccess['open']);
 		if(props.dataStore.contactData != null)
 			trace(props.dataStore.contactData.keys().next());
 				
@@ -421,7 +421,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var data2save = state.actualState.allModified();
 		var doc:Document = Browser.window.document;
 
-		var formElement:FormElement = cast(doc.querySelector('form[name="contact"]'),FormElement);
+		var formElement:FormElement = cast(doc.querySelector('form[name="qc"]'),FormElement);
 		var elements:HTMLCollection = formElement.elements;
 		var aState:Dynamic = copy(state.actualState);
 		var dbQ:DBAccessProps = {

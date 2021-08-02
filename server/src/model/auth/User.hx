@@ -427,13 +427,13 @@ X-Mailer: HaxeMail
 			trace(userInfo);			
 			trace('>$id:${userInfo.id}<'+(id == userInfo.id) + ' ${userInfo.validUntil} - ${Date.now().getTime()} > 0)' + (userInfo.validUntil - Date.now().getTime() > 0));
 			trace(Type.typeof(userInfo.id) +' == ' + SuperGlobal._SERVER['REMOTE_ADDR']);
-			//trace(':'+((userInfo.validUntil - Date.now().getTime()) > 0));
+			trace('$id == ${userInfo.id}@${userInfo.ip} == ${SuperGlobal._SERVER["REMOTE_ADDR"]}:'+(id == userInfo.id && userInfo.ip == SuperGlobal._SERVER['REMOTE_ADDR'] && (userInfo.validUntil - Date.now().getTime()) > 0));
 			if (Lib.isCli() || id == userInfo.id && userInfo.ip == SuperGlobal._SERVER['REMOTE_ADDR'] && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
 				trace('${S.action} calling JWT.verify now...');
 				//trace(JWT.verify(jwt, S.secret));
 				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
-				//trace(jRes);
+				trace(jRes);
 				return switch(jRes)				
 				{
 					case Invalid(payload):
@@ -448,8 +448,6 @@ X-Mailer: HaxeMail
 						// JWT VALID AND NOT OLDER THAN 11 h
 						//trace(dbQuery);
 						//saveRequest(id, dbQuery);		
-						if(S.action=='verify')
-							S.sendInfo(dbData, ['verify'=>'OK','validUntil'=>DateTools.format(Date.fromTime(userInfo.validUntil), "%d.%m.%y %H:%M:%S")]);				
 						true;
 					default:
 						S.sendErrors(new DbData(), ['jwtError'=>jRes]);
@@ -473,6 +471,20 @@ X-Mailer: HaxeMail
 			return false;
 		}
 		
+	}
+
+	public static function userData() {
+		// loadUserInfo
+		var dbData:DbData = new DbData();
+		var stmt:PDOStatement = S.syncDbh.query('SELECT * FROM vicidial_users');
+		if(stmt.rowCount()>0){
+			var dRows:Array<Dynamic> = Lib.toHaxeArray(stmt.fetchAll());
+			for(r in dRows){
+				dbData.dataRows.push(Lib.hashOfAssociativeArray(r));
+			}
+			trace(dbData.dataRows);
+		}
+		return S.sendData(dbData);				
 	}
 	
 }

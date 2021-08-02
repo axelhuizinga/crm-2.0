@@ -15,6 +15,7 @@ typedef BaseField =
 	?dataTable:String,
 	?dataField:String,
 	?preset:Bool,
+	?cellFormat:Function,
 	?displayFormat:String,
 	?type:FormInputElement,
 	?primary:Bool,

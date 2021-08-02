@@ -366,12 +366,13 @@ class FormApi
 				}
 					
 				var fF:FormField = _fstate.fields[name];
-				//trace(name + '=>' + Std.string(fF));
+				if(name=='geburts_datum')
+				trace(name + '=>' + Std.string(fF.displayFormat));
 				formColElements[name].push({
 					className:fF.className,
 					name:name,
 					//?label:String,
-					value: untyped dR[name],
+					value: Std.string(dR[name]),
 					//value:fF.displayFormat == null?dR[name]: fF.displayFormat(dR[name]),
 					//?dataBase:String, 
 					//?dataTable:String,

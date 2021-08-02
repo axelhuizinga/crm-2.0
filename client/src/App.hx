@@ -1,3 +1,6 @@
+import jwt.JWT;
+import js.html.FormData;
+import haxe.ds.StringMap;
 import shared.DbData;
 import js.lib.Promise;
 import react.ReactUtil;
@@ -65,6 +68,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	//static var fa = require('./node_modules/font-awesome/css/font-awesome.min.css');
 	public static var _app:App;
   	static var STYLES = Webpack.require('App.scss');
+  	static var ConfigData = Webpack.require('../config.json');
  
 	public static var browserHistory:History;
 	
@@ -72,8 +76,9 @@ class App  extends ReactComponentOf<AppProps, AppState>
 
 	public static var config:ConfigState = js.Lib.require('config.js').config;
 	public static var devIP = (untyped __devIP__ == 'X'?'':__devIP__);
-	public static var devUser = (untyped __user_name__ == 'X' ? '' : __user_name__);
 	public static var devPassword = '';//(untyped __password__ == 'X' ? '' : __password__);
+	public static var devUser = (untyped __user_name__ == 'X' ? '' : __user_name__);
+	public static var userNames:StringMap<Dynamic>;
 	public static var flatpickr:Function = Webpack.require('flatpickr');
 	public static var German = js.Lib.require('flatpickr/dist/l10n/de.js');
 	static var flat = js.Lib.require('flatpickr/dist/flatpickr.min.css');
@@ -164,12 +169,14 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
 		var ti:Timer = null;
-		store = initStore(BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}));
+		if(store==null)
+			store = initStore(BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}));
 		state = store.getState();
 		//trace(Reflect.fields(state));
 		//trace(config);
-		//trace(devIP);
 		//trace(state);
+		trace(state.userState.dbUser);
+		//trace(devIP);
 		tul = historyListener(store, state.locationStore.history);
 		//store.subscribe(saveToLocalStorage);
 		//var uBCC:Dynamic = react.WinCom.useBrowserContextCommunication('appGlobal');
@@ -193,20 +200,48 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//trace(store);
 		//Out.dumpObject(state.userState);
 		//CState.init(store);		
+		
 		if (!(state.userState.dbUser.id == null || state.userState.dbUser.jwt == ''))
 		{			
-			var p:Promise<DbData> = load();
-			p.then(function(dbData:DbData){
-				trace(dbData.dataErrors.keys().hasNext());
-				if(!dbData.dataErrors.empty() && dbData.dataErrors.exists('jwtError')){
-					//reject()					
-					store.dispatch(LoginExpired({waiting: false, loginTask: Login}));
-				}
-				else{
-					state.userState.dbUser.online = true;
-					store.dispatch(LoginComplete({waiting:false}));					
-				}
-			});
+			//import ConfigData;
+			var jVal:JWTResult<Dynamic> = JWT.verify(state.userState.dbUser.jwt, ConfigData.secret);
+			trace(jVal);
+			
+			switch(jVal){
+				case Valid(jwt):
+					trace(untyped jwt.validUntil - Date.now().getTime());
+					if(untyped jwt.validUntil - Date.now().getTime() > 600000){
+						state.userState.dbUser.online = true;
+						state.userState.waiting = false;
+						store.dispatch(LoginComplete({waiting:false}));							
+						// AT LEAST 10 min valid
+						/*var p:Promise<DbData> = load();
+						p.then(function(dbData:DbData){
+							trace(dbData.dataErrors.keys().hasNext());
+							if(!dbData.dataErrors.empty() && dbData.dataErrors.exists('jwtError')){
+								//reject()	
+								trace('dispatch LoginExpired');
+								state.userState.dbUser.jwt = '';
+								store.dispatch(LoginExpired({waiting: false, loginTask: Login, dbUser: state.userState.dbUser}));
+							}
+							else{
+								state.userState.dbUser.online = true;
+								store.dispatch(LoginComplete({waiting:false}));					
+							}
+						});*/
+					}else {
+						trace('dispatch LoginExpired');
+						state.userState.dbUser.jwt = '';
+						store.dispatch(LoginExpired({waiting: false, loginTask: Login, dbUser: state.userState.dbUser}));
+					}
+					//trace(untyped jwt.validUntil);
+					//trace(Date.now().getTime());
+				case Invalid(jwt):
+					trace(jwt);
+				default:
+					trace(jVal);
+			}
+
 		}
 		else
 		{// WE HAVE EITHER NO VALID JWT OR id
@@ -217,12 +252,25 @@ class App  extends ReactComponentOf<AppProps, AppState>
 						ReactUtil.copy( state.userState, {waiting:false}))));
 		}
 		//trace(Reflect.fields(state));
+		/*var fd:FormData = new FormData();
+		fd.append('action','userData');
+		fd.append('classPath','auth.User');
+		fd.append('devIP',devIP);
+		var xhr = new js.html.XMLHttpRequest();
+		xhr.open('POST',config.api,false);
+		xhr.onreadystatechange = function () {
+			if(xhr.readyState==4 && xhr.status==200){
+				trace(xhr.responseText);
+			}
+		}
+		xhr.send();		*/
+
 	}
 	
-	function load():Promise<DbData> {
+	/*function load():Promise<DbData> {
 		return cast store.dispatch(
 			action.async.UserAccess.verify());
-	}
+	}*/
 
 	public function gGet(key:String):Dynamic
 	{

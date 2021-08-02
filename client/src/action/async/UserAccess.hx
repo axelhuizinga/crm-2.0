@@ -338,14 +338,18 @@ class UserAccess {
 					if (!data.dataErrors.empty())
 					{
 						trace(data.dataErrors);
-						return resolve(data);
-						/*return dispatch(User(LoginError(
+						//return reject(data);
+						/*return resolve(data);
+
+						dispatch(User(LoginError(
 						{
 							//dbUser:state.userState.dbUser, 
 							lastError:data.dataErrors.iterator().next(),
-							loginTask: data.dataInfo['loginTask'],
+							loginTask:Login,//LoginExpired()),// <<<<<cast (data.dataInfo['loginTask']),
 							waiting: false
 						})));*/
+						return resolve(data);
+						//return reject(data);
 					}	
 					var uData = data.dataRows[0];
 					//var uProps:Dynamic = {};

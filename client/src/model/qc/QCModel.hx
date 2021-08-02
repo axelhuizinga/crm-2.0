@@ -1,4 +1,4 @@
-package model.contacts;
+package model.qc;
 
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
@@ -15,8 +15,8 @@ class QCModel
 	public static var dataAccess:DataAccess = [
 		'open' => {
 			source:[
-				"vicidial_list" => [
-					"filter" => 'lead_id'
+				"contacts" => [
+					"filter" => 'id'
 					]
 				],
 			view:[
@@ -27,14 +27,14 @@ class QCModel
 						'Familie'=>'Familie',
 						'Firma'=>'Firma'
 					]},
-				//'title_pro'=>{label:'Titel'},
+				'title_pro'=>{label:'Titel'},
 				'first_name'=>{label:'Vorname'},
 				'last_name'=>{label:'Name'},
 				'email'=>{label:'Email'},
-				'phone_code'=>{label:'Landesvorwahl'},
+				//'phone_code'=>{label:'Landesvorwahl'},
 				'phone_number'=>{label:'Telefon'},		
 				'mobile'=>{label:'Mobil'},
-				'fax'=>{label:'Fax'},
+				//'fax'=>{label:'Fax'},
 				'company_name'=>{label:'Firmenname'},	
 				'address'=>{label:'Straße'},
 				'address_2'=>{label:'Hausnummer'},
@@ -43,16 +43,23 @@ class QCModel
 				'state'=>{label:'Status',type:Select,options:['active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
 				'country_code'=>{label:'Land'},
 				'co_field'=>{label: 'Adresszusatz'},
-				//'creation_date'=>{label: 'Hinzugefügt', type:DateTimePicker, disabled: true, displayFormat: "d.m.Y H:i:S"}, 
-				'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: "d.m.Y"},
-				/*'gender'=>{label:'Geschlecht',type:Select,options:[
+				'creation_date'=>{label: 'Hinzugefügt', type:Hidden, disabled: true, 
+					displayFormat: "d.m.Y H:i:S"}, 
+				'geburts_datum'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: "d.m.Y"},
+				'gender'=>{label:'Geschlecht',type:Select,options:[
 						''=>'?',
 						'M'=>'Männlich',
 						'F'=>'Weiblich'
 					]
-				},*/
+				},
 				'comments'=>{label:'Kommentar'},
-				//'use_email'=>{label:'Post per Email',type: Checkbox},
+				'use_email'=>{label:'Post per Email',type: Checkbox},
+				'owner' =>{label:'Agent', cellFormat: function(v):String {
+						trace(v);
+						return v;
+					},
+					disabled: true
+				},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},				
 				'mandator'=>{type:Hidden},
@@ -127,6 +134,6 @@ class QCModel
 	];	
 
 	public static var qcListDisplay:Map<String,DataState> = [
-		'contactList' => {columns:qcColumns}
+		'qcList' => {columns:qcColumns}
 	];	
 }

@@ -99,7 +99,9 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		}
 		if (props.userState.waiting)
 		{
+			
 			trace('waiting hero');
+			trace(props.userState);
 			return jsx('
 			<section className="hero is-alt is-fullheight">
 			  <div className="hero-body">

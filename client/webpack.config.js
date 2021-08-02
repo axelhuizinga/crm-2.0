@@ -40,6 +40,7 @@ module.exports = () =>{
 		entry: {
 			app: './build.hxml'
 		},
+		externals:localConf.externals,
 	//"info-verbosity":'verbose',
 		mode: buildMode,
 		// Generation options (destination, naming pattern,...)

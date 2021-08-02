@@ -145,11 +145,11 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 	static function mapStateToProps(aState:AppState) 
 	{
 		//trace(aState.dataStore.contactData);
-		trace(Reflect.fields(aState));
-		if(aState.dataStore.contactData != null)
-		trace(aState.dataStore.contactData.keys().next());
+		//trace(Reflect.fields(aState));
+		if(aState.dataStore.contactData != null && aState.dataStore.contactData.keys().hasNext())
+			trace(aState.dataStore.contactData.keys().next());
 		if(aState.dataStore.contactsDbData != null)
-		trace(aState.dataStore.contactsDbData.dataRows[0]);
+			trace(aState.dataStore.contactsDbData.dataRows[0]);
 		else 
 		{
 			//trace(aState.dataStore);
@@ -158,7 +158,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 				trace(aState.dataStore.qcData.dataRows.length);
 			}*/
 		}
-		trace(App.store.getState().dataStore.contactsDbData);
+		//trace(App.store.getState().dataStore.contactsDbData);
 		var bState =  {
 			dataStore:aState.dataStore,
 			userState:aState.userState,
@@ -178,8 +178,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 	override function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		trace(props.match.params.section);					
-		trace(props.match.params.action);	
+		trace(props.match.params.section +':' +props.match.params.action);	
 		return switch(props.match.params.section)
 		{
 			case "List":

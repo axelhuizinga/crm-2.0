@@ -33,9 +33,7 @@ class Deals extends Model
 		trace(sql);
 		var stmt:PDOStatement = S.viciboxDbh.query(sql);
 		var qcData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
-		trace(Std.string(qcData));
-		var t:NativeArray = null;
-		trace(t);
+		//trace(Std.string(qcData));
 		sendRows(qcData);
 	}
 

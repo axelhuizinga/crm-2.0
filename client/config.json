@@ -1,3 +1,4 @@
 {
-    "hello": "This is an asynchronous module" 
+    "hello": "This is a local config module" ,
+	"secret": "some!Weird06_"
 }

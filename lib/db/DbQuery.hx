@@ -32,7 +32,7 @@ class DbQuery// implements hxbit.Serializable @:s
 					default:
 						var v = Reflect.field(dp,f);
 						dbParams.set(f, v);
-						trace(f +':'+dbParams.get(f));
+						//trace(f +':'+dbParams.get(f));
 				}
 			}			
 		}

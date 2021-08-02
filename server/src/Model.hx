@@ -119,7 +119,7 @@ class Model
 	{
 		var param:Map<String,Dynamic> = dbQuery.dbParams;
 		//param.set('dbUser',dbQuery.dbUser);
-		//trace(param);
+		trace(param);
 		var cl:Class<Dynamic> = Type.resolveClass('model.' + param.get('classPath'));
 		//trace(cl);
 		if (cl == null)

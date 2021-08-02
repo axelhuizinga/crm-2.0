@@ -10,13 +10,13 @@ import view.shared.FormInputElement;
  * @author axel@cunity.me
  */
 
-class ContactsModel
+class QCModel
 {
 	public static var dataAccess:DataAccess = [
 		'open' => {
 			source:[
-				"contacts" => [
-					"filter" => 'id'
+				"vicidial_list" => [
+					"filter" => 'lead_id'
 					]
 				],
 			view:[
@@ -27,7 +27,7 @@ class ContactsModel
 						'Familie'=>'Familie',
 						'Firma'=>'Firma'
 					]},
-				'title_pro'=>{label:'Titel'},
+				//'title_pro'=>{label:'Titel'},
 				'first_name'=>{label:'Vorname'},
 				'last_name'=>{label:'Name'},
 				'email'=>{label:'Email'},
@@ -42,18 +42,17 @@ class ContactsModel
 				'city'=>{label:'Ort'},
 				'state'=>{label:'Status',type:Select,options:['active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
 				'country_code'=>{label:'Land'},
-				'care_of'=>{label: 'Adresszusatz'},
-				'creation_date'=>{label: 'Hinzugefügt', type:DateTimePicker, disabled: true, 
-					displayFormat: "d.m.Y H:i:S"}, 
+				'co_field'=>{label: 'Adresszusatz'},
+				//'creation_date'=>{label: 'Hinzugefügt', type:DateTimePicker, disabled: true, displayFormat: "d.m.Y H:i:S"}, 
 				'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: "d.m.Y"},
-				'gender'=>{label:'Geschlecht',type:Select,options:[
+				/*'gender'=>{label:'Geschlecht',type:Select,options:[
 						''=>'?',
 						'M'=>'Männlich',
 						'F'=>'Weiblich'
 					]
-				},
+				},*/
 				'comments'=>{label:'Kommentar'},
-				'use_email'=>{label:'Post per Email',type: Checkbox},
+				//'use_email'=>{label:'Post per Email',type: Checkbox},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},				
 				'mandator'=>{type:Hidden},
@@ -128,6 +127,6 @@ class ContactsModel
 	];	
 
 	public static var qcListDisplay:Map<String,DataState> = [
-		'qcList' => {columns:qcColumns}
+		'contactList' => {columns:qcColumns}
 	];	
 }

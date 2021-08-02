@@ -9,6 +9,7 @@
 -lib reselect
 -lib event-types 
 -lib js-object
+-lib jwt
 #-lib json2object
 -lib tink_core
 -lib hx3compat

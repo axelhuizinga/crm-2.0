@@ -37,7 +37,7 @@
     "sprintf-js": "^1.1.2",
     "tar": "4.4.15",
     "terser-webpack-plugin": "^4.1.0",
-    "underscore": "^1.9.1",
+    "underscore": "^1.12.1",
     "url-loader": "^1.1.2",
     "url-parse": "1.4.3",
     "yargs-parser": "^13.1.2"

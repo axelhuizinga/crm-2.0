@@ -35,7 +35,7 @@
     "react-window-communication-hook": "^1.4.1",
     "redux": "^4.0.0",
     "sprintf-js": "^1.1.2",
-    "tar": "2.2.2",
+    "tar": "4.4.15",
     "terser-webpack-plugin": "^4.1.0",
     "underscore": "^1.9.1",
     "url-loader": "^1.1.2",

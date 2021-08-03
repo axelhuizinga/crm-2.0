@@ -89,6 +89,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Verlauf',action:'listHistory', section: 'Edit', classPath:'view.data.contacts.History'}
 	];	
 	public static var classPath = Type.getClassName(Edit);
+	static var _c:Int;
 
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
@@ -186,7 +187,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			}),*/
 			values:new Map<String,ReactComponentOf<DataFormProps,FormState>>()
 		},this);
-		loadQC();
+		if(_c == null){
+			_c = 1;
+		}
+		else{
+			_c++;
+		}
+		trace(_c);		
+		//loadQC();
 		trace(state.initialData);
 		//trace(state.initialData.id);
 		//loadQC(Std.parseInt(props.match.params.id));
@@ -249,6 +257,18 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP
 			}
+			/*{
+				classPath:'data.Contacts',
+				action:'get',
+				filter:{id:qcData["lead_id"],mandator:1},
+				resolveMessage:{
+					success:'Kontakt ${qcData["lead_id"]} wurde geladen',
+					failure:'Kontakt ${qcData["lead_id"]} konnte nicht geladen werden'
+				},
+				table:'contacts',
+				dbUser:props.userState.dbUser,
+				devIP:App.devIP
+			}*/
 		);
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
@@ -300,22 +320,32 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		
 	override public function componentDidMount():Void 
 	{	
-		trace('mounted:' + mounted);
+		trace('$_c mounted:' + mounted);
 		mounted = true;
-		trace(props.children);
+		//trace(props.children);
 
-		/*if(props.match.params.id != null){
+		if(props.match.params.id != null && _c == 1){
 			trace(props.match.params);
 			loadQC();	
-		}*/
-		trace(props.children);
+		}
+		//trace(props.children);
 	}
 	
-	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
-		trace('propsChanged:${nextProps!=props} stateChanged:${nextState!=state}');				
-		//if(nextState!=state)			return true;
-		return nextProps!=props;
-	}
+	/*override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
+		trace('$_c propsChanged:${nextProps!=props} stateChanged:${nextState!=state}');				
+		if(nextState!=state)
+			trace(nextState.actualState!=null?untyped nextState.actualState.owner:'???');
+			//trace(Utils.diff(state,nextState).toString());
+			
+		if(nextProps!=props)
+			trace(Utils.diff(props,nextProps).toString());		
+		if(_c>1)
+			return false;
+		else 
+			return nextState!=state;
+		//return nextProps!=props;
+		return nextState!=state || nextProps!=props;
+	}*/
 
 	override public function componentWillUnmount() {
 		//state.storeListener();
@@ -492,11 +522,18 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				*/
 				(state.actualState==null ? state.formApi.renderWait():
 				jsx('<>
-				
-							<div className="center"><h3>:)</h3></div>	
+				${state.formBuilder.renderForm({
+					mHandlers:state.mHandlers,
+					fields:[
+						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
+					],
+					model:'contact',
+					ref:null,					
+					title: 'Stammdaten' 
+				},state.actualState)}					
 				</>
 				'));
-				//null;${relDataLists()}${relData()}
+				//null;${relDataLists()}${relData()}<div className="center"><h3>:)</h3></div>	
 			case 'insert':
 				//trace(state.actualState);
 				state.formBuilder.renderForm({
@@ -556,7 +593,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(props.match.params.action);		
 		if(state==null || state.initialData==null){
-			trace('state: $state');
+			//trace('state: $state');
+			trace('stateOrInitiealData is null');
+			
 			return null;
 		}
 		//trace(state.modals);

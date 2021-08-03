@@ -65,6 +65,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;
 	var parentState:FormState;
+	static var _c:Int;
 	//static var _me:QC;
 	/**
 	 * 		if(parentState.relDataComps!=null){
@@ -93,8 +94,13 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 			},this);
 			trace(state.uid);			
 		}
-
-		//trace(state.loading);		
+		if(_c == null){
+			_c = 1;
+		}
+		else{
+			_c++;
+		}
+		trace(_c);		
 	}
 	
 	override function componentDidCatch(error, info) {
@@ -196,6 +202,17 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 
 	public function setStateFromChild(cState:FormState) {
 		setState(cState);
+	}
+
+	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
+		trace('$_c propsChanged:${nextProps!=props} stateChanged:${nextState!=state}');				
+		/*if(nextState!=state)
+			trace(Utils.diff(state,nextState).toString());
+		if(nextProps!=props)
+			trace(Utils.diff(props,nextProps).toString());		
+		if(_c>1)
+		return false;*/
+		return nextProps!=props || nextState!=state;
 	}
 
 }

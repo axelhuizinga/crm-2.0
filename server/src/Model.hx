@@ -1161,7 +1161,7 @@ class Model
 	
 	function sendRows(rows:NativeArray):Bool
 	{
-		//var s = new JsonWriter<DbData>();
+		trace(Global.count(rows));
 		
 		Syntax.foreach(rows, function(k:Int, v:Dynamic)
 		{

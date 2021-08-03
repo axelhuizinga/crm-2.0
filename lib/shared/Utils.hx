@@ -153,8 +153,18 @@ class Utils
             	f => dynToMap(Reflect.field(dT, f))
       		];
 	   	}
-	   
-	  	public static function dynArray2MapArray(dT:Array<Dynamic>):Array<Map<String,Dynamic>> {
+		
+	public static function diff(d1:Dynamic, d2:Dynamic):Map<String,String> {
+		var rDiff:Map<String,String> = [];
+		for(f in Reflect.fields(d1)){
+			if(Reflect.field(d1,f) != Reflect.field(d2,f)){
+				rDiff[f] = '${Reflect.field(d1,f)} => ${Reflect.field(d2,f)}';
+			}
+		}
+		return rDiff;
+	}
+			   
+	public static function dynArray2MapArray(dT:Array<Dynamic>):Array<Map<String,Dynamic>> {	   
 		    return [
 				for(dR in dT)
 					dynToMap(dR)

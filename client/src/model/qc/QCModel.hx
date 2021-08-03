@@ -55,7 +55,9 @@ class QCModel
 				'comments'=>{label:'Kommentar'},
 				'use_email'=>{label:'Post per Email',type: Checkbox},
 				'owner' =>{label:'Agent', cellFormat: function(v):String {
-						trace(v);
+						trace('App.pbxUserData ${App.pbxUserData!=null}');
+						if(App.pbxUserData!=null)
+						trace(' && exists($v): ${App.pbxUserData.exists(v)}');
 						if(App.pbxUserData!=null && App.pbxUserData.exists(v))
 							return App.pbxUserData.get(v)['full_name'];
 						return v;

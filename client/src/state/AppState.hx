@@ -10,7 +10,7 @@ import state.UserState;
 
 typedef AppState =
 {
-	?app:App,
+	//?app:App,
 	?config:ConfigState,
 	?formStates:Map<String, FormState>,
 	?dataStore:DataAccessState,

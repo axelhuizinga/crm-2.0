@@ -237,8 +237,10 @@ class FormBuilder {
 						</div>
 					</div>');
 				default:
-					renderElement(
-						jsx('<input name=${name} onChange=${onChange} type="text" defaultValue=${value} disabled=${field.disabled}  key=${i++} required=${field.required}/>'),
+					renderElement((field.cellFormat != null?
+						jsx('<input name=${name} onChange=${onChange} type="text" value=${field.cellFormat('6666')} disabled=${field.disabled}  key=${i++} required=${field.required}/>')
+						:
+						jsx('<input name=${name} onChange=${onChange} type="text" defaultValue=${value} disabled=${field.disabled}  key=${i++} required=${field.required}/>')),
 						field.label
 					);
 			}

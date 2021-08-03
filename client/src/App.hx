@@ -1,3 +1,5 @@
+import action.async.CRUD;
+import db.DBAccessProps;
 import js.Lib;
 import jwt.JWT;
 import js.html.FormData;
@@ -61,6 +63,7 @@ using StringTools;
  
 typedef AppProps =
 {
+	?load:DBAccessProps->Promise<DbData>,
 	?waiting:Bool
 }
 
@@ -162,6 +165,13 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		});
 	}	
 
+	static function mapDispatchToProps(dispatch:Dispatch) {
+		trace('here we should be ready to load');
+        return {
+            load: function(param:DBAccessProps) return dispatch(CRUD.read(param))
+        };
+	}
+
   	public function new(?props:AppProps) 
 	{
 		super(props);
@@ -170,9 +180,19 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
 		var ti:Timer = null;
+		
+		trace(props.load);
+		trace(store);
 		if(store==null){
 			store = initStore(BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}));
-			var p:Promise<DbData> = untyped UserAccess.userList();
+			/*var p:Promise<DbData> = untyped store.dispatch(CRUD.read({//props.load({		
+				classPath:'auth.User',
+				action:'getPbxUserData',
+				dbUser: state.userState.dbUser,
+				devIP:App.devIP,
+				extDB:true,	
+				viciboxDB:true,
+			}));//untyped UserAccess.userList();
 			p.then(function(dbData:DbData){
 					trace(dbData.dataRows[0]);
 					pbxUserData =  [
@@ -182,7 +202,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 				,function(dbData:DbData){
 					trace(dbData);
 				}
-			);
+			);*/
 		}
 		state = store.getState();
 		//trace(Reflect.fields(state));
@@ -285,7 +305,26 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	override function componentDidMount()
 	{
 		//trace(state.history);
+		trace(state.userState.dbUser);
 		trace('yeah');
+		var p:Promise<DbData> = cast( store.dispatch(CRUD.read({//props.load({		
+			classPath:'auth.User',
+			action:'getPbxUserData',
+			dbUser: state.userState.dbUser,
+			extDB:true,	
+			viciboxDB:true,			
+			devIP:App.devIP
+		})));//untyped UserAccess.userList();
+		p.then(function(dbData:DbData){
+				trace(dbData.dataRows[0]);
+				pbxUserData =  [
+					for(row in dbData.dataRows) row.get('user') => row
+				];
+			}
+			,function(dbData:DbData){
+				trace(dbData);
+			}
+		);
 	}
 
 	override function   componentDidCatch(error, info) 

@@ -21,7 +21,7 @@ typedef MItem =
 	?img:String,
 	?info:String,
 	?label:String,
-	?separator:Bool,	
+	?separator:Bool,
 	?then:String,	
 	?onlySm:Bool	
 }

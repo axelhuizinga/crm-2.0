@@ -305,7 +305,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	override function componentDidMount()
 	{
 		//trace(state.history);
-		trace(state.userState.dbUser);
+		//trace(state.userState.dbUser);
 		trace('yeah');
 		var p:Promise<DbData> = cast( store.dispatch(CRUD.read({//props.load({		
 			classPath:'auth.User',

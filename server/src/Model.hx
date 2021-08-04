@@ -443,14 +443,16 @@ class Model
 		return null;
 	}
 	
-	public  function query(sql:String, ?resultType):NativeArray
+	public  function query(sql:String, ?resultType, ?dbh:PDO=null):NativeArray
 	{
 		if (resultType == null)
 			resultType = PDO.FETCH_ASSOC;
-		var stm:PDOStatement = S.dbh.query(sql);
+		if(dbh == null)
+			dbh = S.dbh;
+		var stm:PDOStatement = dbh.query(sql);
 		if (! untyped stm)
 		{
-			trace(S.dbh.errorInfo());
+			trace(dbh.errorInfo());
 			Sys.exit(0);
 		}
 		stm.execute(new NativeArray());
@@ -462,10 +464,10 @@ class Model
 		}
 		trace(stm);
 		var res:NativeArray = stm.fetchAll(resultType);
-		Syntax.foreach(res, function(key:String, value:Dynamic){
+		/*Syntax.foreach(res, function(key:String, value:Dynamic){
 			trace('$key => $value'); 
 			res[key] = value;
-		});
+		});*/
 		return res;
 	}
 

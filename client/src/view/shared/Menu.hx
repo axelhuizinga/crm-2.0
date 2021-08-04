@@ -95,8 +95,15 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	public function new(props:MenuProps) 
 	{
 		super(props);
-		//trace(props);
 		//trace(props.menuBlocks);
+		trace(Reflect.fields(props));		
+		//trace(Reflect.fields(props.menuBlocks.iterator().next()));
+		trace(Reflect.fields(props.menuBlocks.iterator().next()));
+		var items:Array<MItem> = props.menuBlocks.iterator().next().items;
+		trace(props.itemHandler);
+		trace(props.parentComponent.state.mHandlers);
+		trace(items);
+
 		hasFindForm = false;
 		state = {
 			hidden:props.hidden||false,
@@ -308,7 +315,16 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					<label htmlFor=${item.formField.name} className="button" >${item.label}</label>
 					<Button onClick=${item.handler} data-action=${item.action}
 				data-section=${item.section} disabled=${item.disabled}>${item.formField.submit}</Button>
-				</div>');*/
+				</div>');<div class="recordings">         <span class="label">2021-08-03 09:24:52 </span><br>     <audio controls="" preload="metadata">      <source src="https://pbx.pitverwaltung.de/RECORDINGS/MP3/2021-08-03/20210803-092450_306636275_POSTSTATUS-all.mp3" type="audio/mpeg">     </audio><br>        </div>*/
+				
+				case Audio:
+					jsx('<div  key=${"uf"+(i++)}  id="findForm_${i}"   className="formRow" >         
+					<label htmlFor=${item.formField.name} key=${"l_"+i}>${item.label}</label> 
+					<audio  id=${item.formField.name} controls="" preload="metadata" >
+					<source src=${item.formField.src} type="audio/mpeg"/>     
+					</audio>
+					</div>');
+
 				case Text:
 					jsx('<div key=${"uf"+(i++)}  id="findForm_${i}"   className="formRow" >
 					<label htmlFor=${item.formField.name} className=""  key=${"l_"+i}>${item.label}</label>

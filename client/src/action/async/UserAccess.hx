@@ -292,7 +292,7 @@ class UserAccess {
 					//Cookie.set('userState.dbUser.jwt', '', 31556926);
 					Cookie.set('userState.dbUser.id', null, null, '/');					
 					trace(Cookie.get('userState.dbUserState.dbUser.jwt'));
-					return dispatch(User(LogOutComplete({dbUser: userState.dbUser, waiting: false})));
+					return dispatch(User(LogOutComplete({dbUser: null, waiting: false})));
 				}
 			});
 			return null;

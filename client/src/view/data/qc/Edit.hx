@@ -83,10 +83,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//{label:'Speichern + Schließen',action:'update', then:'close'},
 		{label:'Speichern',action:'update'},
 		{label:'Zurücksetzen',action:'reset'},
-		{separator:true},
+		{separator: true},		
+		//{label: 'ID',formField: { name: 'id'}},
 		//{label:'Spenden Bearbeiten',action:'showSelectedDeals', disabled:true, section: 'Edit', classPath:'view.data.contacts.Deals'},	
 		//{label:'Konten Bearbeiten',action:'listAccounts', disabled:true, section: 'Edit', classPath:'view.data.contacts.Accounts'},
-		{label:'Verlauf',action:'listHistory', section: 'Edit', classPath:'view.data.contacts.History'}
+		//{label:'Verlauf',action:'listHistory', section: 'Edit', classPath:'view.data.contacts.History'}
 	];	
 	public static var classPath = Type.getClassName(Edit);
 	static var _c:Int;
@@ -251,8 +252,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				resolveMessage:{
 					success:'QC ${qcData["lead_id"]} wurde geladen',
 					failure:'QC ${qcData["lead_id"]} konnte nicht geladen werden'
-				},
-				table:'vicidial_list',
+				},				
+				table:'contacts',
+				//table:'vicidial_list',
 				viciboxDB:true,
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP
@@ -274,10 +276,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			trace(data.dataRows.length); 
 			if(data.dataRows.length==1)
 			{
-				var data = data.dataRows[0];
-				trace(data);	//*
-				//if( mounted)
-				var contact:Contact = new Contact(data);
+				var qcd = data.dataRows[0];
+				//trace(data);	//*
+				if( data.dataInfo.exists('recordings')){
+					trace(data.dataInfo.get('recordings'));
+				}
+				var contact:Contact = new Contact(qcd);
 				if(mounted)
 					setState({loading:false, actualState:contact, initialData:copy(contact)});
 				//state = copy({loading:false, actualState:contact, initialData:contact});
@@ -290,7 +294,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				props.history.replace(props.location.pathname.replace('open','update'));
 				
 			}
-		});
+		},function(data:DbData){trace(data);});
+	}
+
+	function addRecordings(rec:Array<Map<String,String>>){
+		trace(rec);
+		//{separator: true},		
+		//{label: 'ID',formField: { name: 'id'}},
 	}
 	
 	public function delete(ev:ReactEvent):Void
@@ -331,9 +341,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//trace(props.children);
 	}
 	
-	/*override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
-		trace('$_c propsChanged:${nextProps!=props} stateChanged:${nextState!=state}');				
-		if(nextState!=state)
+	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
+		trace('$_c propsChanged:${nextProps!=props} stateChanged:${nextState!=state} returning:' +(nextProps!=props || nextState!=state?'Y':'N') );			
+		/*if(nextState!=state)
 			trace(nextState.actualState!=null?untyped nextState.actualState.owner:'???');
 			//trace(Utils.diff(state,nextState).toString());
 			
@@ -343,9 +353,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			return false;
 		else 
 			return nextState!=state;
-		//return nextProps!=props;
+		//return nextProps!=props;*/
 		return nextState!=state || nextProps!=props;
-	}*/
+	}
 
 	override public function componentWillUnmount() {
 		//state.storeListener();
@@ -594,11 +604,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.action);		
 		if(state==null || state.initialData==null){
 			//trace('state: $state');
-			trace('stateOrInitiealData is null');
+			trace('stateOrInitialData is null');
 			
 			return null;
 		}
-		//trace(state.modals);
+		//trace(state.initialData);
 		//trace('state.loading: ${state.loading}');	
 		
 		return switch(props.match.params.action)

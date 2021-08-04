@@ -24,6 +24,7 @@ typedef BaseField =
 	?required:Bool,
 	//?handleChange:Function,
 	?placeholder:String,
+	?src:String,
 	?submit:String,
 }
 

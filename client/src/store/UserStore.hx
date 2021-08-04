@@ -72,8 +72,9 @@ class UserStore implements IReducer<UserAction, UserState>
 					//Out.dumpObject(state);
 					copy(state, uState);                                             
 			case LogOutComplete(uState):
-				//Out.dumpObject(uState);
-					copy(state, uState);   					
+				state.dbUser = null;
+				state;
+					//copy(state, uState);   					
 			case LogOut(uState):
 				//Out.dumpObject(uState);
 					copy(state, uState);      		

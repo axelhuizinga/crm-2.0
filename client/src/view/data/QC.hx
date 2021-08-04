@@ -205,7 +205,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	override function shouldComponentUpdate(nextProps:DataFormProps, nextState:FormState) {
-		trace('$_c propsChanged:${nextProps!=props} stateChanged:${nextState!=state}');				
+		trace('$_c propsChanged:${nextProps!=props} stateChanged:${nextState!=state} returning:' +(nextProps!=props || nextState!=state?'Y':'N') );				
 		/*if(nextState!=state)
 			trace(Utils.diff(state,nextState).toString());
 		if(nextProps!=props)

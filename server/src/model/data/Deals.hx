@@ -1,4 +1,6 @@
 package model.data;
+import php.Syntax;
+import php.Global;
 import php.db.PDO;
 import php.Lib;
 import php.db.PDOStatement;
@@ -50,7 +52,35 @@ class Deals extends Model
 		var stmt:PDOStatement = S.viciboxDbh.query(
 			'SELECT $qc_fields FROM vicidial_list vl INNER JOIN `custom_${param["filter"].entry_list_id}` cu ON cu.lead_id=vl.lead_id WHERE vl.lead_id=${param["filter"].lead_id}');
 		var qcData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		trace(Global.count(qcData));
+		if(Global.count(qcData)==1){
+			var recordings = getRecordings(param["filter"].lead_id);
+			dbData.dataInfo['recordings'] = recordings;
+			//trace(getRecordings(param["filter"].lead_id));
+			//Syntax('')
+		}
 		sendRows(qcData);		
 	}
-	
+
+	//function getRecordings(lead_id:Dynamic):Array<Map<String,String>>
+	function getRecordings(lead_id:Dynamic):Array<Map<String,String>>
+	{
+		var m_length = 30;
+		var recMap:Array<Map<String,String>> = new Array();
+		//var records:Array<Map<String,String>> = Lib.toHaxeArray(query('SELECT location,start_time,length_in_sec FROM recording_log WHERE lead_id="$lead_id" ORDER BY start_time DESC',null,S.viciboxDbh)).map(function() {
+		var records:NativeArray = query('SELECT location,start_time,length_in_sec FROM recording_log WHERE lead_id="$lead_id" AND length_in_sec > $m_length ORDER BY start_time DESC',null,S.viciboxDbh);
+		Syntax.foreach(records, function(ri:Int, row:NativeArray){			
+			trace('$ri => $row'); 
+			//Syntax.foreach(records, function(key:String, row:NativeArray){
+			//trace('$key => $value'); 
+			recMap.push(Lib.hashOfAssociativeArray(row));
+		});
+		//var rc:Int = records.length;
+		//trace ('$rc == ' + records.length);
+		return recMap;//.filter(function(r:Dynamic) return  (Std.parseInt(untyped r['length_in_sec']) > m_length)).map();		
+		//return Lib.toPhpArray(records.filter(function(r:Dynamic) return  (Std.parseInt(r['length_in_sec']) > 60)));		
+		//TODO: CONFIG FOR MIN LENGTH_IN_SEC, NUM_DISPLAY FOR RECORDINGS	
+		//return Lib.toPhpArray(records.filter(function(r:Dynamic) return untyped Lib.objectOfAssociativeArray(r).length_in_sec > 60));		
+		
+	}
 }

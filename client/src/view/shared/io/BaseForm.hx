@@ -35,6 +35,25 @@ class BaseForm
 {
 	//var comp:ReactComponentOf<DataFormProps,FormState>;
 
+	public static function addRecordings(state:FormState, recs:Array<Map<String,String>>){
+		//trace(rec);
+		var recItems:Array<MItem> = [];
+		for(rec in recs) recItems.push(
+		{
+			//id:'returnDebitFile',
+			label: rec['start_time'],
+			formField:{				
+				//(rec['location'].contains('85.25.93.167')?
+				src: StringTools.replace(rec['location'],'85.25.93.167','pbx.pitverwaltung.de'),//:rec['location'])
+				type:Audio
+			}
+		});
+		state.mHandlers = state.sideMenu.menuBlocks[state.sideMenu.section].items.concat(recItems);
+		trace(state.mHandlers.toString());
+		//{separator: true},		
+		//{label: 'ID',formField: { name: 'id'}},
+	}
+
 	public static function compareStates(comp:Dynamic) {
 		var dObj:ORM = cast(comp.state.actualState, ORM);
 		for(f in Reflect.fields(dObj))

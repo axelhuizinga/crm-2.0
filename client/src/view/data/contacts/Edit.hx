@@ -245,10 +245,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			trace(data.dataRows.length); 
 			if(data.dataRows.length==1)
 			{
-				var data = data.dataRows[0];
-				trace(data);	
-				//if( mounted)
-				var contact:Contact = new Contact(data);
+				var c_data = data.dataRows[0];
+				trace(c_data);	
+				if( data.dataInfo.exists('recordings')){
+					trace(data.dataInfo.get('recordings'));
+					BaseForm.addRecordings(state,data.dataInfo.get('recordings'));
+				}
+				var contact:Contact = new Contact(c_data);
 				if(mounted)
 					setState({loading:false, actualState:contact, initialData:copy(contact)});
 				//state = copy({loading:false, actualState:contact, initialData:contact});

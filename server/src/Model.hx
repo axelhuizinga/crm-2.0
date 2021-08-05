@@ -333,6 +333,9 @@ class Model
 	{
 		//trace(sql);	
 		//if(setValues.length>0)trace(setValues.length);
+		/**
+		 * 
+		 */
 		
 		//if(filterValues.length>0)	trace(filterValues.toString());
 		var stmt:PDOStatement =  S.dbh.prepare(sql,Syntax.array(null));
@@ -970,7 +973,6 @@ class Model
 	}
 
 	function run(){
-
 		if(param.exists('table'))
 			table = param.get('table');
 		if(table != null)
@@ -1077,65 +1079,26 @@ class Model
 		//return fields;
 	}
 
-	/*function createOrUpdateAction(){
+	function getRecordings(lead_id:Dynamic):Array<Map<String,String>>
+	{
+		var m_length = 30;
+		var recMap:Array<Map<String,String>> = new Array();
+		//var records:Array<Map<String,String>> = Lib.toHaxeArray(query('SELECT location,start_time,length_in_sec FROM recording_log WHERE lead_id="$lead_id" ORDER BY start_time DESC',null,S.viciBoxDbh)).map(function() {
+		var records:NativeArray = query('SELECT location,DATE_FORMAT(start_time,"%d.%c.%y %k:%i") start_time,length_in_sec FROM recording_log WHERE lead_id="$lead_id" AND length_in_sec > $m_length ORDER BY start_time DESC',null,S.viciBoxDbh);
+		Syntax.foreach(records, function(ri:Int, row:NativeArray){			
+			trace('$ri => $row'); 
+			//Syntax.foreach(records, function(key:String, row:NativeArray){
+			//trace('$key => $value'); 
+			recMap.push(Lib.hashOfAssociativeArray(row));
+		});
+		//var rc:Int = records.length;
+		//trace ('$rc == ' + records.length);
+		return recMap;//.filter(function(r:Dynamic) return  (Std.parseInt(untyped r['length_in_sec']) > m_length)).map();		
+		//return Lib.toPhpArray(records.filter(function(r:Dynamic) return  (Std.parseInt(r['length_in_sec']) > 60)));		
+		//TODO: CONFIG FOR MIN LENGTH_IN_SEC, NUM_DISPLAY FOR RECORDINGS	
+		//return Lib.toPhpArray(records.filter(function(r:Dynamic) return untyped Lib.objectOfAssociativeArray(r).length_in_sec > 60));		
 		
-		if(param['id']==0||param['id']==null)
-		{
-			//GET MAX actions id for user
-			var sql:String = comment(unindent,format)/**
-			SELECT user_max_action_id(actions) FROM users WHERE id=${S.dbQuery.dbUser.id}
-			**//*;
-			trace(sql);
-			var stmt:PDOStatement = S.dbh.query(sql);			
-			if(untyped stmt==false)
-			{
-				trace(S.dbh.errorInfo());
-				S.sendErrors(dbData, ['GET MAX actions id for user:'=>S.dbh.errorInfo()]);
-			}
-			if(stmt.errorCode() !='00000')
-			{
-				trace(stmt.errorInfo());
-			}
-			if(stmt.execute()){
-				var res:Dynamic = stmt.fetch(PDO.FETCH_OBJ);
-				trace('result:' + res);
-				param['id'] = (res.user_max_action_id==null?1:res.user_max_action_id+1);
-			}
-			else {
-				trace(stmt.errorInfo());
-			}
-			// STORE NEW ACTION user_max_action_id(actions) 
-			var action:String = Util.buildJsonB(actionFields, param);
-			trace(action);
-			sql = comment(unindent,format)/**
-			UPDATE users SET actions = actions || '${action}'
-			WHERE id=${S.dbQuery.dbUser.id}
-			**//*;
-			stmt = S.dbh.query(sql);			
-			if(untyped stmt==false)
-			{
-				trace(S.dbh.errorInfo());
-				S.sendErrors(dbData, ['STORE NEW ACTION for user:'=>S.dbh.errorInfo()]);
-			}
-			if(stmt.errorCode() !='00000')
-			{
-				trace(stmt.errorInfo());
-			}
-			if(!stmt.execute()){				
-				trace(stmt.errorInfo());
-				trace(S.dbh.errorInfo());
-				S.sendErrors(dbData, ['STORE NEW ACTION for user:'=>stmt.errorInfo()]);
-			}
-
-			dbData.dataInfo.set('id', param['id']);
-			trace(dbData.dataInfo);
-			//S.sendData(dbData, null);
-			//S.sendInfo(dbData);			
-			//S.sendInfo(dbData,['id' => param['id']]);			
-			//var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);		
-		}
-		//return '{"action":${props.action}, "classP}' //DBAccessAction
-	}*/
+	}
 	
 	public function json_encode():Void
 	{	

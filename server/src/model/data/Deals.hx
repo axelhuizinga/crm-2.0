@@ -31,9 +31,14 @@ class Deals extends Model
 	}	
 
 	function getQC(){
-		var sql:String = 'SELECT * FROM vicidial_list INNER JOIN vicidial_users ON vicidial_users.user=vicidial_list.owner WHERE list_id=1900 AND status="NEW" ORDER BY last_local_call_time';
+		var vl_fields:String = vicdial_list_fields.map(function(f:String) {
+			return 'vl.${f}';
+		}).join(',');		
+		var sql:String = 'SELECT $vl_fields,full_name FROM vicidial_list vl INNER JOIN vicidial_users vu ON vu.user=vl.owner WHERE list_id=1900 AND status="NEW" ORDER BY last_local_call_time';
 		trace(sql);
-		var stmt:PDOStatement = S.viciboxDbh.query(sql);
+		trace(S.viciBoxDbh);
+
+		var stmt:PDOStatement = S.viciBoxDbh.query(sql);
 		var qcData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		//trace(Std.string(qcData));
 		sendRows(qcData);
@@ -49,7 +54,7 @@ class Deals extends Model
 			return 'cu.${f}';
 		}).join(',');
 		trace('SELECT $qc_fields FROM vicidial_list vl INNER JOIN `custom_${param["filter"].entry_list_id}` cu ON cu.lead_id=vl.lead_id WHERE vl.lead_id=${param["filter"].lead_id}');
-		var stmt:PDOStatement = S.viciboxDbh.query(
+		var stmt:PDOStatement = S.viciBoxDbh.query(
 			'SELECT $qc_fields FROM vicidial_list vl INNER JOIN `custom_${param["filter"].entry_list_id}` cu ON cu.lead_id=vl.lead_id WHERE vl.lead_id=${param["filter"].lead_id}');
 		var qcData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		trace(Global.count(qcData));
@@ -63,12 +68,12 @@ class Deals extends Model
 	}
 
 	//function getRecordings(lead_id:Dynamic):Array<Map<String,String>>
-	function getRecordings(lead_id:Dynamic):Array<Map<String,String>>
+	function getRecordings1(lead_id:Dynamic):Array<Map<String,String>>
 	{
 		var m_length = 30;
 		var recMap:Array<Map<String,String>> = new Array();
-		//var records:Array<Map<String,String>> = Lib.toHaxeArray(query('SELECT location,start_time,length_in_sec FROM recording_log WHERE lead_id="$lead_id" ORDER BY start_time DESC',null,S.viciboxDbh)).map(function() {
-		var records:NativeArray = query('SELECT location,start_time,length_in_sec FROM recording_log WHERE lead_id="$lead_id" AND length_in_sec > $m_length ORDER BY start_time DESC',null,S.viciboxDbh);
+		//var records:Array<Map<String,String>> = Lib.toHaxeArray(query('SELECT location,start_time,length_in_sec FROM recording_log WHERE lead_id="$lead_id" ORDER BY start_time DESC',null,S.viciBoxDbh)).map(function() {
+		var records:NativeArray = query('SELECT location,DATE_FORMAT(start_time,"%T %d.%c.%y") start_time,length_in_sec FROM recording_log WHERE lead_id="$lead_id" AND length_in_sec > $m_length ORDER BY start_time DESC',null,S.viciBoxDbh);
 		Syntax.foreach(records, function(ri:Int, row:NativeArray){			
 			trace('$ri => $row'); 
 			//Syntax.foreach(records, function(key:String, row:NativeArray){

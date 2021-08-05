@@ -100,7 +100,6 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		//trace(Reflect.fields(props.menuBlocks.iterator().next()));
 		trace(Reflect.fields(props.menuBlocks.iterator().next()));
 		var items:Array<MItem> = props.menuBlocks.iterator().next().items;
-		trace(props.itemHandler);
 		trace(props.parentComponent.state.mHandlers);
 		trace(items);
 
@@ -318,9 +317,10 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				</div>');<div class="recordings">         <span class="label">2021-08-03 09:24:52 </span><br>     <audio controls="" preload="metadata">      <source src="https://pbx.pitverwaltung.de/RECORDINGS/MP3/2021-08-03/20210803-092450_306636275_POSTSTATUS-all.mp3" type="audio/mpeg">     </audio><br>        </div>*/
 				
 				case Audio:
-					jsx('<div  key=${"uf"+(i++)}  id="findForm_${i}"   className="formRow" >         
-					<label htmlFor=${item.formField.name} key=${"l_"+i}>${item.label}</label> 
-					<audio  id=${item.formField.name} controls="" preload="metadata" >
+					// htmlFor=${item.formField.name}
+					jsx('<div  key=${"uf"+(i++)}  id="findForm_${i}"   className="formRow1" >         
+					<label key=${"l_"+i}>${item.label}</label> 
+					<audio  key=${"a_"+i} id="aud_${i}" controls="1" preload="metadata" >
 					<source src=${item.formField.src} type="audio/mpeg"/>     
 					</audio>
 					</div>');

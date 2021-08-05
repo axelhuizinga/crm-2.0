@@ -282,8 +282,17 @@ class FormApi
 			//trace(content);
 			return null;
 		}
-		//trace(sM);
-			
+		if(sM.menuBlocks.exists(sM.section)){
+			var mB:MenuBlock = sM.menuBlocks.get(sM.section);
+			if(comp.state.mHandlers != null && comp.state.mHandlers.length>mB.items.length){
+				mB.items = comp.state.mHandlers;
+				sM.menuBlocks.set(sM.section, mB);				
+			}
+
+			//sM.items = 
+			trace(sM.menuBlocks.get(sM.section).items);
+		}
+					
 		if(sM.section != null)//TODO: MONITOR PERFORMANCE + INTEGRITY SETTING SUBMENU SECTION HERE
 		{
 			trace(sM.section +':'+ comp.props.match.params.section);

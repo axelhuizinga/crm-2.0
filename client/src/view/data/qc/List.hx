@@ -136,7 +136,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				jwt:props.userState.dbUser.jwt,
 				classPath:'data.Deals',
 				action:'getQC',
-				viciboxDB: true,
+				viciBoxDB: true,
 				filter:filter,
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP,

@@ -137,7 +137,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//dataRows[0].lead_id);dataRows[0].	
 		if(Reflect.fields(props).has('dataStore') && props.dataStore.qcData != null){
 			qcData = props.dataStore.qcData.get(Std.parseInt(props.match.params.id));
-			trace(qcData);
+			
+			//trace(qcData);
+			trace(Reflect.fields(qcData).join('|'));
 		}	
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/update(\/)*$/.match(props.match.params.action) )
@@ -254,8 +256,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					failure:'QC ${qcData["lead_id"]} konnte nicht geladen werden'
 				},				
 				table:'contacts',
-				//table:'vicidial_list',
-				viciboxDB:true,
+				//table:'vicidial_list',viciBoxDB
+				viciBoxDB:true,
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP
 			}
@@ -280,6 +282,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				//trace(data);	//*
 				if( data.dataInfo.exists('recordings')){
 					trace(data.dataInfo.get('recordings'));
+					BaseForm.addRecordings(state,data.dataInfo.get('recordings'));
 				}
 				var contact:Contact = new Contact(qcd);
 				if(mounted)
@@ -297,8 +300,24 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		},function(data:DbData){trace(data);});
 	}
 
-	function addRecordings(rec:Array<Map<String,String>>){
-		trace(rec);
+	function addRecordings1(recs:Array<Map<String,String>>){
+		//trace(rec);
+		var recItems:Array<MItem> = [];
+		for(rec in recs) recItems.push(
+		{
+			//id:'returnDebitFile',
+			label: rec['start_time'],
+			formField:{				
+				//name:'returnDebitData',				
+				//submit:'Importieren',
+				src: (rec['location'].contains('85.25.93.167')?
+					StringTools.replace(rec['location'],'85.25.93.167','pbx.pitverwaltung.de'):
+					rec['location']),
+				type:Audio
+			}
+		});
+		state.mHandlers = menuItems.concat(recItems);
+		trace(state.mHandlers.toString());
 		//{separator: true},		
 		//{label: 'ID',formField: { name: 'id'}},
 	}
@@ -332,9 +351,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{	
 		trace('$_c mounted:' + mounted);
 		mounted = true;
-		//trace(props.children);
+		//trace(props.children);&& _c == 1
 
-		if(props.match.params.id != null && _c == 1){
+		if(props.match.params.id != null ){
 			trace(props.match.params);
 			loadQC();	
 		}

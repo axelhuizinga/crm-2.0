@@ -94,7 +94,7 @@ class S
 	public static var secret:String;
 	public static var dbh:PDO;
 	public static var syncDbh:PDO;
-	public static var viciboxDbh:PDO;
+	public static var viciBoxDbh:PDO;
 	public static var last_request_time:Date;
 	public static var host:String;
 	public static var request_scheme:String;
@@ -228,15 +228,16 @@ class S
 			//host=$dbHost;
 		dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
 			Syntax.array([PDO.ATTR_PERSISTENT,true]));
-		if(params.get('viciboxDB')){
+		if(params.get('viciBoxDB')){
 			//CONNECT DIALER DB	
 			trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxDB');					
-			viciboxDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxDB',
+			viciBoxDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxDB',
 				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
-			trace(viciboxDbh);
+			trace(viciBoxDbh);
 		}		
 		//trace(dbh);!=null
 		trace('$devIP connect2syncDB:'+ (params.get('extDB')||params.get('action').indexOf('sync')==0?'Y':'N'));
+		trace('$devIP connect2viciBoxDB:'+ (params.get('viciBoxDB')?'Y':'N'));
 		if(params.get('extDB')||params.get('action').indexOf('sync')==0)
 		{
 			//CONNECT dialer crm DB	

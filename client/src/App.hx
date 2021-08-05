@@ -191,7 +191,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 				dbUser: state.userState.dbUser,
 				devIP:App.devIP,
 				extDB:true,	
-				viciboxDB:true,
+				viciBoxDB:true,
 			}));//untyped UserAccess.userList();
 			p.then(function(dbData:DbData){
 					trace(dbData.dataRows[0]);
@@ -312,7 +312,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			action:'getPbxUserData',
 			dbUser: state.userState.dbUser,
 			extDB:true,	
-			viciboxDB:true,			
+			viciBoxDB:true,			
 			devIP:App.devIP
 		})));//untyped UserAccess.userList();
 		p.then(function(dbData:DbData){

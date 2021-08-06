@@ -75,7 +75,7 @@ class SyncExternalDeals extends Model
 	}
 
 	function getAllExtIds():NativeArray {
-		var offset:Int = ( param['offset']>0?param['offset']:0);
+		//var offset:Int = ( param['offset']>0?param['offset']:0);
 		var sql:String = 'SELECT pay_plan_id FROM pay_plan ORDER BY pay_plan_id';
 		var stmt:PDOStatement = S.syncDbh.query(sql);
 		if(untyped stmt==false)
@@ -129,13 +129,15 @@ class SyncExternalDeals extends Model
 	function importAll(){ 
 
 		var start = Sys.time();
-		trace('$start $synced ${param['totalRecords']}');		
-		getAllExtIds();
-		while(synced<param['totalRecords']){
+		trace('$start $synced ${param['totalRecords']}');
+		var ext_ids = getAllExtIds();
+		var max_import = param['totalRecords'] != null?param['totalRecords']:Global.max(ext_ids);
+		
+	//	while(synced<max_import){
 			importExtDeals();
 			//trace('offset:'+ offset.int);
 			//trace(param);
-		}
+	//	}
 		trace('done:' + Std.string(Sys.time()-start));
 		Sys.exit(S.sendInfo(dbData, ['importContacts'=>'OK'])?1:0);
 		
@@ -145,12 +147,14 @@ class SyncExternalDeals extends Model
 	function importExtDeals(where:String='') {
 		/*GET DATA FROM fly_crm */
 		var sql:String = comment(unindent,format)/*
-		SELECT IF(pay_plan_state='active',TRUE,FALSE) active, ${S.dbQuery.dbUser.id} edited_by,1 mandator, pay_plan_id id,client_id contact,creation_date,pay_source_id account,target_id target_account,start_day,start_date,buchungs_tag booking_day,IF(start_day='1','start','middle') booking_run,cycle,amount,IF(product='K',2,3) product ,agent,agency_project project,pay_plan_state,pay_method,end_date,end_reason,repeat_date,cycle_start_date from pay_plan ${where} 
+		SELECT IF(pay_plan_state='active',TRUE,FALSE) active, ${S.dbQuery.dbUser.id} edited_by,1 mandator, pay_plan_id id,pay_plan.client_id contact,pay_plan.creation_date,pay_source_id account,target_id target_account,start_day,start_date,buchungs_tag booking_day,IF(start_day='1','start','middle') booking_run,cycle,amount,IF(product='K',2,3) product ,agent,agency_project project,pay_plan_state,pay_method,end_date,end_reason,repeat_date,cycle_start_date,lead_id from pay_plan 
+		LEFT JOIN clients ON clients.client_id=pay_plan.client_id
+		${where} 
 		ORDER BY pay_plan_id  
 		${limit.sql} ${offset.sql}		
 		*/;
 		trace(sql);
-
+		//Sys.exit(0);
 		var stmt = S.syncDbh.query(sql);
 		S.checkStmt(S.syncDbh,stmt,'importExtDeals deals');
 		var dData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
@@ -265,7 +269,7 @@ class SyncExternalDeals extends Model
 				SET $cSet returning id;
 			*/;
 		//trace(sql);
-		//trace(rD);
+		//trace(untyped rD['id'] + ' lead_id:'+ untyped rD['lead_id']);
 		//Out.dumpObject(DebugOutput.CONSOLE);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		Util.bindClientData('deals',stmt,rD,dbData);
@@ -277,6 +281,8 @@ class SyncExternalDeals extends Model
 			'id'=>Std.string(Syntax.code("{0}['id']",rD))]);
 		}
 		synced++;
+		
+		//trace(rD['']);
 		//trace(synced);
 		return stmt;
 	}	

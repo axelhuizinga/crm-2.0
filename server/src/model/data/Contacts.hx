@@ -1,4 +1,6 @@
 package model.data;
+import haxe.Exception;
+import haxe.macro.Expr.Catch;
 import php.db.PDO;
 import php.Global;
 import Model.RData;
@@ -39,8 +41,8 @@ class Contacts extends Model
 	function go():Void {
 		trace(action);
 		switch(action ){
-			case 'get':
-				getContact();
+			case 'getDetails':
+				getDetails();
 			case 'sync':
 				sync();
 			case _:
@@ -48,7 +50,7 @@ class Contacts extends Model
 		}		
 	}	
 
-	function getContact() {
+	function getDetails() {
 		//var c_fields:Array<String> = buildFieldsSql('contacts',['alias' =>'co']);
 		//trace(c_fields);
 		/*
@@ -57,15 +59,31 @@ class Contacts extends Model
 			rows: doSelect()
 		};
 		trace(rData.rows);*/
+		// TODO: GROUP lead_id's | deals per contact
+		var sql = 'SELECT contacts.*,lead_id FROM contacts 
+		LEFT JOIN deals ON contacts.id = deals.contact 
+		WHERE contacts.id=${param["filter"].id}';			
 		//S.sendData(dbData,rData);
-		var sql = 'SELECT * FROM contacts WHERE id=${param["filter"].id}';		
 		trace(sql);
 		var stmt:PDOStatement = S.dbh.query(sql);
 		var cData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		var lead_id:Int;
 		trace(Global.count(cData));
-		if(Global.count(cData)==1){
-			var recordings = getRecordings(untyped cData[0]['lead_id']);
-			dbData.dataInfo['recordings'] = recordings;
+		//trace(Global.count(cData));
+		if(Global.count(cData)==1){			
+			try{
+				var row:Map<String,String> = Lib.hashOfAssociativeArray(cData[0]);
+				trace(row.toString());
+				if((lead_id = Std.parseInt(row['lead_id'])) != null){
+					var recordings = getRecordings(lead_id);
+					dbData.dataInfo['recordings'] = recordings;						
+				}
+			
+			}
+			catch(e:Exception){
+				trace(e.message);
+			}
+
 		}
 		//sendRows(cData);		
 		S.sendData(dbData,{rows:cData});

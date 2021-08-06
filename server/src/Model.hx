@@ -1083,8 +1083,9 @@ class Model
 	{
 		var m_length = 30;
 		var recMap:Array<Map<String,String>> = new Array();
-		//var records:Array<Map<String,String>> = Lib.toHaxeArray(query('SELECT location,start_time,length_in_sec FROM recording_log WHERE lead_id="$lead_id" ORDER BY start_time DESC',null,S.viciBoxDbh)).map(function() {
-		var records:NativeArray = query('SELECT location,DATE_FORMAT(start_time,"%d.%c.%y %k:%i") start_time,length_in_sec FROM recording_log WHERE lead_id="$lead_id" AND length_in_sec > $m_length ORDER BY start_time DESC',null,S.viciBoxDbh);
+		var sql:String = 'SELECT location,DATE_FORMAT(start_time,"%d.%c.%y %k:%i") start_time,length_in_sec FROM ${S.dbViciBoxDB}. recording_log WHERE lead_id="$lead_id" AND length_in_sec > $m_length ORDER BY start_time DESC';
+		trace(sql);
+		var records:NativeArray = query(sql,null,S.viciBoxDbh);
 		Syntax.foreach(records, function(ri:Int, row:NativeArray){			
 			trace('$ri => $row'); 
 			//Syntax.foreach(records, function(key:String, row:NativeArray){

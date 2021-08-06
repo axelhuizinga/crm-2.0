@@ -447,8 +447,7 @@ X-Mailer: HaxeMail
 				trace('${S.action} calling JWT.verify now...');
 				//trace(JWT.verify(jwt, S.secret));
 				var jRes:JWTResult<Dynamic> = JWT.verify(jwt, S.secret);
-				if(jRes!=null)
-					trace(jRes);
+				//if(jRes!=null)					trace(jRes);
 				return switch(jRes)				
 				{
 					case Invalid(payload):

@@ -230,26 +230,33 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var p:Promise<DbData> = props.load(
 			{
 				classPath:'data.Contacts',
-				action:'get',
+				action:'getDetails',
 				filter:{id:id,mandator:1},
 				resolveMessage:{
 					success:'Kontakt ${id} wurde geladen',
 					failure:'Kontakt ${id} konnte nicht geladen werden'
 				},
 				table:'contacts',
+				viciBoxDB:true,
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP
 			}
 		);
+
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
 			if(data.dataRows.length==1)
 			{
 				var c_data = data.dataRows[0];
-				trace(c_data);	
+				
+				trace(c_data);
+				trace(data.dataInfo.toString());
 				if( data.dataInfo.exists('recordings')){
 					trace(data.dataInfo.get('recordings'));
 					BaseForm.addRecordings(state,data.dataInfo.get('recordings'));
+				}
+				else{
+					trace(data.dataInfo.toString());
 				}
 				var contact:Contact = new Contact(c_data);
 				if(mounted)

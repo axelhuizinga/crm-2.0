@@ -62,11 +62,11 @@ class Util
 			//var kv:Dynamic = (v['native_type']=='bytea'?Bytes.ofString(row[k]).:row[k]);	
 			var kv:Dynamic = row[k];
 			var pdoType:Int = v['pdo_type'];			
-			trace('$pdoType::${v['native_type']}: $k => $kv');
+			//trace('$pdoType::${v['native_type']}: $k => $kv');
 			//if(kv==null||kv.indexOf('0000-00-00')==0||kv=='')
 			if(kv==null||kv==''||pdoType>1&&kv.indexOf('0000-')==0)
 			{
-				trace (k + ':' + v['native_type']);
+				//trace (k + ':' + v['native_type']);
 				switch (v['native_type'])
 				{
 					case 'date'|'datetime'|'timestamp':

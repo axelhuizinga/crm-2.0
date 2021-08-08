@@ -43,10 +43,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 {
 	public static var menuItems:Array<MItem> = [
 		//{label:'Anzeigen',action:'get'},
-		{label:'Bearbeiten',action:'update',section: 'Edit'},
+		{label:'Bearbeiten',action:'update',disabled:true,id:'edit',section: 'Edit'},
 		{label:'Neu', action:'insert',section: 'Edit'},		
-		{label:'Löschen',action:'delete'},
-		{label:'Auswahl aufheben',action:'selectionClear'},
+		{label:'Löschen',action:'delete',disabled:true},
+		{label:'Auswahl aufheben',action:'selectionClear',disabled:true},
 		{separator: true},		
 		{label: 'ID',formField: { name: 'id'}},
 		{label: 'Vorname',formField: { name: 'first_name'}},
@@ -92,6 +92,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				}),
 			values:new Map<String,Dynamic>()
 		},this);
+		trace(Utils.sKeysList(state.relDataComps.keys()));
 		if(props.match.params.section==null||props.match.params.action==null)
 		{
 			//var sData = App.store.getState().dataStore.contactData;			

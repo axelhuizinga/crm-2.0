@@ -375,8 +375,9 @@ class App  extends ReactComponentOf<AppProps, AppState>
 
 		return  ti;
 	} 
-
-	public static function initEState(init:Dynamic, ?comp:Dynamic)
+	
+	//public static function initEState(init:Dynamic, ?comp:Dynamic)
+	public static function initEState(init:Dynamic, comp:Dynamic)
 	{
 		var fS:FormState =
 		{

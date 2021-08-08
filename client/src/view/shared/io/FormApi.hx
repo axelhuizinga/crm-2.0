@@ -164,7 +164,7 @@ class FormApi
 	
 	public function itemHandler(e:Event)
 	{
-		//trace(e);
+		trace(Reflect.fields(e));
 		e.preventDefault();
 		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
 		trace(action);
@@ -177,6 +177,7 @@ class FormApi
 		var eTarget:Element = cast(e.target, Element);
 		//trace(Type.typeof(eTarget));
 		var targetSection = eTarget.dataset.section;
+		trace('>>$targetSection<< ${comp.props.match.params.section}');
 		if(targetSection=='Edit'){
 			//checkSelection
 			if(!comp.state.dataGrid.state.selectedRows.keys().hasNext())
@@ -186,7 +187,6 @@ class FormApi
 			//comp.checkSelection();
 			//if(App.store.getState().)
 		}
-		trace('>>$targetSection<< ${comp.props.match.params.section}');
 		if(eTarget.dataset.then != null)
 			comp.props.location.state.extend({then:eTarget.dataset.then});
 		trace(comp.props.location.state);		
@@ -274,12 +274,13 @@ class FormApi
 	public static function mHandlers(e:InputEvent)
 	{
 		e.preventDefault();
+		trace(Type.getClass(e.target));
 	}
 	
 	public function render(content:ReactFragment, err:ReactFragment = null)
 	{
 		if(sM==null){
-			//trace(content);
+			trace(Type.typeof(content));
 			return null;
 		}
 		if(sM.menuBlocks.exists(sM.section)){
@@ -288,8 +289,6 @@ class FormApi
 				mB.items = comp.state.mHandlers;
 				sM.menuBlocks.set(sM.section, mB);				
 			}
-
-			//sM.items = 
 			trace(sM.menuBlocks.get(sM.section).items);
 		}
 					

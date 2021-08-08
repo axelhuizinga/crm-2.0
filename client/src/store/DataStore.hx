@@ -39,7 +39,7 @@ class DataStore
 	
 	public function reduce(state:DataAccessState, action:DataAction):DataAccessState
 	{
-		//trace(action);
+		trace(action);
 		trace(Reflect.fields(state));
 		trace(state.dealData);
 		//return nul018l;

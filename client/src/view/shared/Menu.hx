@@ -99,9 +99,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		trace(Reflect.fields(props));		
 		//trace(Reflect.fields(props.menuBlocks.iterator().next()));
 		trace(Reflect.fields(props.menuBlocks.iterator().next()));
-		var items:Array<MItem> = props.menuBlocks.iterator().next().items;
+		
+		//var items:Array<MItem> = props.menuBlocks.iterator().next().items;
+		var items:Array<MItem> = props.menuBlocks[props.section].items;
 		trace(props.parentComponent.state.mHandlers);
-		trace(items);
+		trace(props.section + ':' + items);
 
 		hasFindForm = false;
 		state = {
@@ -289,6 +291,12 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				//REGISTER ITEM INTERACTIONSTATE
 				state.items.set(item.id, item);
 			}
+			else{
+				if(item.action != null && !state.items.exists(item.action)){
+					item.id = item.action;
+					state.items.set(item.id, item);
+				}
+			}
 
 			if(item.separator){ return jsx('<hr key=${"s_"+i++} className="menuSeparator"/>');}
 			var type:FormInputElement;
@@ -363,10 +371,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 						jsx('<$B key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then} 					data-section=${item.section} disabled=${dis} >${item.label}</$B>');
 			}
 		});
-		if(hasFindForm){			
+		if(block.hasFindForm){			
 			rItems.push(jsx('<$B key=${"bu"+(i++)} onClick=${find} data-action="find" data-then=${null}>Finden</$B>'));
 			rItems.push(jsx('<$B key=${"bu"+(i++)} onClick=${clear} data-action="clear" data-then=${null}>Zurücksetzen</$B>'));
 		}
+		trace(state.items.keyNames());
 		return rItems;
 	}
 	

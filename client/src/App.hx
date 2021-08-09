@@ -376,9 +376,9 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		return  ti;
 	} 
 	
-	//public static function initEState(init:Dynamic, ?comp:Dynamic)
 	public static function initEState(init:Dynamic, comp:Dynamic)
 	{
+		//var fA:FormApi = new FormApi(comp, init.sideMenu);
 		var fS:FormState =
 		{
 			clean: true,
@@ -394,7 +394,27 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			{
 				Reflect.setField(fS, f, Reflect.field(init, f));
 			}
+		}		
+		if(init.sideMenu!=null && init.sideMenu.items!=null)
+			trace(init.sideMenu.items[0]);
+		if(comp.props.sideMenu !=null && comp.props.sideMenu.items !=null)
+			trace(comp.props.sideMenu.items[0]);
+		if(fS.formApi.sM != null && fS.formApi.sM.items!=null)
+		trace(fS.formApi.sM.items[0]);
+		if(comp.props.match != null && comp.props.match.params.section != null && fS.formApi.sM != null && fS.formApi.sM.menuBlocks.exists(comp.props.match.params.section)){
+			trace(fS.formApi.sM.menuBlocks[comp.props.match.params.section].items[0]);
+			//trace(Utils.arrayKeysList(this.sM.menuBlocks[comp.props.match.params.section].items, 'id'));
 		}
+		/**
+		 * 		if(this.sM != null && comp.props.match != null){
+			
+			//trace(Reflect.fields(this.sM).join('|'));
+			if(comp.props.match.params.section != null && this.sM.menuBlocks.exists(comp.props.match.params.section)){
+				trace(this.sM.menuBlocks[comp.props.match.params.section].items);
+				trace(Utils.arrayKeysList(this.sM.menuBlocks[comp.props.match.params.section].items, 'id'));
+			}
+		}
+		 */
 		if(comp!=null){		
 			fS.uid = Uuid.nanoId();
 			fS.relDataComps = [fS.uid => comp];

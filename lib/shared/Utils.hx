@@ -27,6 +27,19 @@ class Utils
 		}
 	}
 
+	public static function copyObjectArray<T>(oA:Array<T>):Array<T>
+	{
+		var oaCopy:Array<T> = [];
+		for(el in oA)
+		{
+			var elCopy:T = null;
+			for(f in Reflect.fields(el))
+				Reflect.setField(elCopy, f, Reflect.field(el,f));
+			oaCopy.push(elCopy);
+		}
+		return oaCopy;
+	}
+
 	public static function getAllByKey(am:Array<Map<String,String>>, key:String='id'):Array<String> {
 		//return null;
 		return [
@@ -34,6 +47,21 @@ class Utils
 				ma.get(key)
 		];
 	}
+
+
+	public static function arrayKeysList(arr:Array<Dynamic>, key:String):Array<String>
+	{
+		var l:Array<String> = [];
+		if(arr==null)
+			return l;
+		for(el in arr)
+		{
+			//trace(Reflect.fields(el).join('|'));
+			if(Reflect.hasField(el,key))
+				l.push(Reflect.field(el,key));
+		}
+		return l;
+	}	
 
 	public static function keysList(ki:Iterator<Int>):Array<Int>
 	{
@@ -44,7 +72,6 @@ class Utils
 		}
 		return l;
 	}
-
 
 	public static function sKeysList(ki:Iterator<String>):Array<String>
 	{

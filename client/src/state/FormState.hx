@@ -1,5 +1,6 @@
 package state;
 
+import view.shared.Menu;
 import view.grid.Grid;
 import react.ReactComponent.ReactComponentOf;
 import haxe.Constraints.Function;
@@ -47,8 +48,9 @@ typedef FormState =
 	?actualStates:IntMap<ORM>,
 	?clean:Bool,
 	?data:Map<String,Dynamic>,
-	?dataClassPath:String,
 	?dataGrid:Grid,
+	?classPath:String,
+	?dataClassPath:String,
 	?dataTable:Array<Map<String,Dynamic>>,
 	?dataCount:Int,
 	?dbQueryParam:DBAccessProps,
@@ -82,7 +84,7 @@ typedef FormState =
 	?rows:Array<Dynamic>,
 	?section:String,	
 	?sideMenu:MenuProps,
-	//?sideMenuInstance:Menu,
+	?sideMenuInstance:Menu,
 	?storeListener:redux.Redux.Unsubscribe,
 	?submitted:Bool,
 	?title:String,

@@ -74,13 +74,17 @@ class FormApi
 	public var initialState:Dynamic;
 	public var section:ReactComponent;
 	var comp:ReactComponentOf<DataFormProps,FormState>;
-	var sM:MenuProps;
+	public var sM:MenuProps;
 	
 	public function new(rc:ReactComponentOf<DataFormProps,FormState>,?sM:MenuProps)
 	{
 		comp = rc;
-		//trace(Type.getClass(comp));
 		//requests = [];
+		if(comp.props.match != null){
+			trace(comp.props.match.path);
+			trace(comp.props.match.params.section);
+		}
+
 		if(rc.props != null)
 		{
 			//trace(rc.props.match);
@@ -91,6 +95,16 @@ class FormApi
 		}
 		//trace('>>>${props.match.params.action}<<<');
 		//trace(Reflect.fields(sM));
+		//if(rc.props.sideMenu != null)		trace(Utils.arrayKeysList(rc.props.sideMenu.items,'id'));
+		//if(sM != null)		trace(Utils.arrayKeysList(sM.items,'id'));
+		if(this.sM != null && comp.props.match != null){
+			
+			//trace(Reflect.fields(this.sM).join('|'));
+			if(comp.props.match.params.section != null && this.sM.menuBlocks.exists(comp.props.match.params.section)){
+				trace(this.sM.menuBlocks[comp.props.match.params.section].items[0]);
+				trace(Utils.arrayKeysList(this.sM.menuBlocks[comp.props.match.params.section].items, 'id'));
+			}
+		}
 	}	
 
 	public function doAction(?defaultAction:String):Void
@@ -245,6 +259,7 @@ class FormApi
 		//trace(match);var match = ReactRouter.matchPath(Browser.location.pathname,{});
 		//trace(Reflect.fields(props).join('|'));
 		var tR:Array<String> = Browser.location.pathname.split('/');
+		//remove leading empty el
 		tR.shift();
 		trace(tR.toString());
 		return tR.concat([Browser.location.pathname]);
@@ -289,7 +304,7 @@ class FormApi
 				mB.items = comp.state.mHandlers;
 				sM.menuBlocks.set(sM.section, mB);				
 			}
-			trace(sM.menuBlocks.get(sM.section).items);
+			trace(sM.menuBlocks.get(sM.section).items[0]);
 		}
 					
 		if(sM.section != null)//TODO: MONITOR PERFORMANCE + INTEGRITY SETTING SUBMENU SECTION HERE
@@ -659,6 +674,11 @@ class FormApi
 	public static function initSideMenuMulti(comp:Dynamic, sMa:Array<MenuBlock>, sM:MenuProps):MenuProps
 	{
 		var sma:MenuBlock;
+		/*sM.items = [];
+		for (sma in sMa)
+			sM.items = sM.items.concat(sma.items);
+		if(sM.items.length>0)
+			trace(sM.items[0]);*/
 		sM.menuBlocks = [
 			for (sma in sMa)
 				sma.section => sma

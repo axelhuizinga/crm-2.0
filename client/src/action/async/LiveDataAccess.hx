@@ -95,7 +95,12 @@ class LiveDataAccess
 					//trace(Type.getInstanceFields(Type.getClass(sData)));
 					sData = selectType(props.id, props.data, sData, props.selectType);
 					trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
-					trace(sData);
+					//trace(Type.getClassName(Type.getClass(props.component.state.sideMenuInstance)));
+					//trace(props.component.state.sideMenu);
+					if(props.component.state.sideMenuInstance!=null)
+						 props.component.state.sideMenuInstance.enableItems('List',['edit','delete','selectionClear']);
+					//trace(Reflect.fields(props.component.state).join('|'));
+					//if(props.component != null){
 					//aState.locationStore.history.push('${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}',					{activeContactUrl:'${tableRoot[2]}#${FormApi.params(sData.keys().keysList())}'});
 					return dispatch(DataAction.SelectContacts(sData));
 					//return dispatch(DataAction.SelectContacts(props.data, props.selectType));

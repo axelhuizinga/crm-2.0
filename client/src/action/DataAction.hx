@@ -26,7 +26,8 @@ enum abstract SelectType(String) {
 }
 
 typedef LiveDataProps = 
-{
+{	
+	?component:Dynamic,
 	id:Dynamic,
 	?data: IntMap<Map<String,Dynamic>>,
 	?match:RouterMatch,

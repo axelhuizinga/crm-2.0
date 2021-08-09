@@ -55,7 +55,6 @@ using Lambda;
 @:wrap(react.router.ReactRouter.withRouter)
 //@:wrap(ReactRedux.connect(null,mapDispatchToProps))
 class Menu extends ReactComponentOf<MenuProps,MenuState>
-
 {
 	var menuRef:ReactRef<DivElement>;
 	var aW:Int;
@@ -88,7 +87,8 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			};
     }
 	
-	static function mapStateToProps(state:AppState) {
+	static function mapStateToProps(state:MenuState) {
+		trace(Reflect.fields(state).join('|'));
 		return {};
 	}
 
@@ -102,8 +102,9 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		
 		//var items:Array<MItem> = props.menuBlocks.iterator().next().items;
 		var items:Array<MItem> = props.menuBlocks[props.section].items;
+		trace(props.section + ':' + (items==null?'nulll':Std.string(items[0])));
+		props.parentComponent.state.sideMenuInstance = this;
 		trace(props.parentComponent.state.mHandlers);
-		trace(props.section + ':' + items);
 
 		hasFindForm = false;
 		state = {
@@ -113,6 +114,20 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		};
 		//Out.dumpStack(CallStack.callStack());
 		//trace('OK');
+	}
+
+	public function enableItems(section:String, ids:Array<String>, ?enable:Bool = true):Void{
+		if(props.menuBlocks.exists(section)){
+			var mB:MenuBlock = props.menuBlocks[section];
+			for(mI in mB.items){
+				for(id in ids){
+					if(mI.id == id){
+						enableItem(id,enable);
+					}
+				}				
+			}
+			
+		}
 	}
 
 	public function enableItem(id:String,?enable:Bool = true):Bool
@@ -292,7 +307,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				state.items.set(item.id, item);
 			}
 			else{
-				if(item.action != null && !state.items.exists(item.action)){
+				if(item.id == null && item.action != null && !state.items.exists(item.action)){
 					item.id = item.action;
 					state.items.set(item.id, item);
 				}

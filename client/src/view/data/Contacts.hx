@@ -119,7 +119,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 				if(_strace) trace('select:$id selectType:${selectType}');
 				//trace(component);
 				//dispatch(DataAction.CreateSelect(id,data,match));
-				dispatch(LiveDataAccess.select({id:id,data:data,
+				dispatch(LiveDataAccess.select({component:component,id:id,data:data,
 					match:component.props.match,
 					selectType: selectType}));
 			}

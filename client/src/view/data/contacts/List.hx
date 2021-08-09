@@ -41,7 +41,7 @@ import model.Contact;
 @:connect
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
-	public static var menuItems:Array<MItem> = [
+	static var menuItems:Array<MItem> = [
 		//{label:'Anzeigen',action:'get'},
 		{label:'Bearbeiten',action:'update',disabled:true,id:'edit',section: 'Edit'},
 		{label:'Neu', action:'insert',section: 'Edit'},		
@@ -72,7 +72,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		//baseForm =new BaseForm(this);
 		dataDisplay = ContactsModel.dataGridDisplay;
-		//trace('...' + Reflect.fields(props));
+		trace('...' + Reflect.fields(props) + ':' + Std.string(menuItems[0]));
 		state =  App.initEState({
 			dataTable:[],
 			loading:true,
@@ -84,7 +84,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 					hasFindForm:true,
 					label:'Liste',
 					section: 'List',
-					items: menuItems
+					//items: Utils.copyObjectArray(menuItems)
+					items: [for(v in menuItems) js.lib.Object.assign({},v)]
+
 				}					
 				,{
 					section: props.match.params.section==null? 'List':props.match.params.section, 
@@ -168,7 +170,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				dataTable:data.dataRows,
 				dataCount:Std.parseInt(data.dataInfo['count']),
 				pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
-			});			
+			});	
+			//props.loaded(null);
 		});
 	}
 	
@@ -193,8 +196,6 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				props.history.push(
 					'${props.match.path.split(':section')[0]}List/get/${props.match.params.id!=null?props.match.params.id:''}'
 				);
-				//trace(props.history.)
-				//forceUpdate();
 			});			
 		}
 		else 
@@ -211,7 +212,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var match:RouterMatch = copy(props.match);
 		match.params.action = 'get';
 		trace(state.dataTable.length);
-		props.select(0, null,props.parentComponent, UnselectAll);	
+		props.parentComponent.props.select(null, null,this, UnselectAll);	
+		//this.props.select(this, null,props.parentComponent, UnselectAll);	
 		//trace(formRef !=null);
 
 		var trs:NodeList = Browser.document.querySelectorAll('#contactList .gridItem.selected');				
@@ -319,7 +321,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-            load: function(param:DBAccessProps) return dispatch(CRUD.read(param))
+            load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
+			loaded: function (data:DbData) return dispatch(DataAction.ContactsLoaded(data))
         };
 	}
 

@@ -129,6 +129,10 @@ class DataStore
 			case ContactsLoaded(data):
 				store.dispatch(Data(action));
 				next();
+			case SelectContacts(sData):	
+				trace('SelectContacts');
+				//store.dispatch(Data(action));
+				next();				
 			case Execute(data):
 				store.dispatch(DBAccess.execute(data));
 				//next();

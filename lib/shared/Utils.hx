@@ -40,6 +40,14 @@ class Utils
 		return oaCopy;
 	}
 
+	public static function getByKey<T>(am:Array<T>, val:String, key:String='id'):T {
+		//return null;
+		for(ma in am)
+			if(Reflect.field(ma, key)==val)
+				return ma;
+		return null;
+	}
+
 	public static function getAllByKey(am:Array<Map<String,String>>, key:String='id'):Array<String> {
 		//return null;
 		return [

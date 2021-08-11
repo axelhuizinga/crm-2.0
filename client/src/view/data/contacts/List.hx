@@ -226,6 +226,29 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			//}
 		};
 		Browser.document.querySelector('[class="formsContainer"]').scrollTop = 0;
+		// 	RESET MENU
+		/*setState(  App.initEState({
+			dataTable:[],
+			loading:false,
+			contactData:new IntMap(),			
+			selectedRows:[],
+			sideMenu:FormApi.initSideMenu( this,
+				{
+					dataClassPath:'data.Contacts',
+					hasFindForm:true,
+					label:'Liste',
+					section: 'List',
+					//items: Utils.copyObjectArray(menuItems)
+					items: [for(v in menuItems) js.lib.Object.assign({},v)]
+
+				}					
+				,{
+					section: props.match.params.section==null? 'List':props.match.params.section, 
+					sameWidth: true
+				}),
+			values:new Map<String,Dynamic>()
+		},this));*/
+		state.sideMenuInstance.enableItems('List',['edit','delete','selectionClear'],false);
 	}
 		
 	override public function componentDidMount():Void 

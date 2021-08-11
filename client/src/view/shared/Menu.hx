@@ -2,6 +2,7 @@ package view.shared;
 
 //import js.lib.Reflect;
 //import model.FormInputElement;
+import shared.Utils;
 import js.lib.Reflect;
 import js.html.FormElement;
 import js.html.Element;
@@ -117,22 +118,50 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	}
 
 	public function enableItems(section:String, ids:Array<String>, ?enable:Bool = true):Void{
+		trace(section+':'+ids.join('|'));
 		if(props.menuBlocks.exists(section)){
 			var mB:MenuBlock = props.menuBlocks[section];
+			trace(mB.items);
 			for(mI in mB.items){
 				for(id in ids){
-					if(mI.id == id){
-						enableItem(id,enable);
+					if(mI.id == id){						
+						enableBlockItem(section,id,enable);
 					}
 				}				
-			}
-			
+			}			
 		}
 	}
 
+	public function enableBlockItem(block:String,id:String,?enable:Bool = true):Bool
+	{
+		//trace(state.items.keyNames().join('|'));
+		trace('$id $enable');
+		if(!props.menuBlocks.exists(block)||!state.items.exists(id))
+			return null;
+		var item = Utils.getByKey(props.menuBlocks.get(block).items,id);
+		if(item == null){
+			return null;
+		}
+		if(item.formField!=null&&item.formField.submit!=null){
+			trace('looking4:#${item.id+"_submit"}');
+			var submit = Browser.document.querySelector('#${item.id+"_submit"}');
+			if(enable){
+				submit.removeAttribute('disabled');
+				submit.addEventListener('click',item.handler);
+			}
+			else
+				submit.setAttribute('disabled',enable?'false':'true');
+			trace(item.handler);
+			//trace(getEventListeners(submit)))
+		}
+		item.disabled = !enable;
+		trace('$id: ${item.disabled}');
+		return !item.disabled;
+	}	
+
 	public function enableItem(id:String,?enable:Bool = true):Bool
 	{
-		trace(state.items.keyNames().join('|'));
+		//trace(state.items.keyNames().join('|'));
 		trace('$id $enable');
 		if(!state.items.exists(id))
 			return null;
@@ -150,6 +179,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			//trace(getEventListeners(submit)))
 		}
 		item.disabled = !enable;
+		trace('$id: ${item.disabled}');
 		return !item.disabled;
 	}
 
@@ -318,6 +348,8 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			type = (item.formField==null?Button:(item.formField.type==null?FormInputElement.Text: item.formField.type));
 			//trace(i + ':' + type);
 			var dis:Bool = !(item.disabled==null||item.disabled==false);
+			if(item.id=='edit')
+				trace(item);
 			//if(type!=Button)
 				//block.hasFindForm = true;
 			return switch(type)

@@ -342,7 +342,8 @@ class Model
 		if (S.dbh.errorCode()!='00000')
 		{
 			trace(stmt.errorInfo());
-			S.sendErrors(dbData, ['DB' => stmt.errorInfo]);
+			if(!noSend)
+				S.sendErrors(dbData, ['DB' => stmt.errorInfo]);
 			return null;
 		}		
 		var bindTypes:String = '';

@@ -162,7 +162,6 @@ class S
 			trace(dbQuery.dbParams.get('classPath'));
 			trace(params);
 			//trace(dbQuery);
-
 			trace(Util.rels2string(dbQuery.relations));
 			S.devIP = params['devIP'];
 			//if(dbQuery!=null)trace(dbQuery.dbUser);
@@ -177,7 +176,7 @@ class S
 			
 				trace(dbh);
 				//params = Lib.hashOfAssociativeArray(SuperGlobal._POST);
-				trace(params);
+				//trace(params);
 				action = params.get('action');		
 				if(params.get('extDB'))
 				{
@@ -287,6 +286,7 @@ class S
 		{
 			if(User.verify(jwt, id))
 			{
+				// DISPATCH
 				if(action=='returnDebitFile')
 				{
 					Upload.go();

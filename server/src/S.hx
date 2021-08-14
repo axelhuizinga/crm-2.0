@@ -27,6 +27,7 @@ import shared.Upload;
 import model.admin.CreateHistoryTrigger;
 import model.admin.CreateUsers;
 import model.data.Accounts;
+import model.data.Booking;
 import model.data.Contacts;
 import model.data.Deals;
 import model.data.DebitReturnStatements;

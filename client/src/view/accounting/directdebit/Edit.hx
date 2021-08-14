@@ -171,8 +171,54 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//state.formApi.doAction('get');
 	}
 	
-	//public function create(arg:Array<FormData>):Void {
 	public function create(fd:FormData):Void {
+		trace(fd);
+		if(fd==null || fd.get('booking_day')==null)
+			return;
+		var p:Promise<DbData> = props.load(
+			{
+				classPath:'data.Booking',
+				action:'createDirectDebitsCSV',
+				filter:{mandator:1},
+				resolveMessage:{
+					success:'Buchungsdatei für den ${fd.get('booking_day')} wurde geladen',
+					failure:'Buchungsdatei für den ${fd.get('booking_day')} konnte nicht geladen werden'
+				},				
+				//table:'contacts',
+				//table:'vicidial_list',viciBoxDB
+				viciBoxDB:false,
+				dbUser:props.userState.dbUser,
+				devIP:App.devIP
+			}
+		);
+		p.then(function(data:DbData){
+			trace(data); 
+			/*if(data.dataRows.length==1)
+			{
+				var qcd = data.dataRows[0];
+				//trace(data);	//*
+				if( data.dataInfo.exists('recordings')){
+					trace(data.dataInfo.get('recordings'));
+					BaseForm.addRecordings(state,data.dataInfo.get('recordings'));
+				}
+				var contact:Contact = new Contact(qcd);
+				if(mounted)
+					setState({loading:false, actualState:contact, initialData:copy(contact)});
+				//state = copy({loading:false, actualState:contact, initialData:contact});
+				trace('$mounted ${contact.id}');
+				if(state.actualState != null){
+					trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
+				//setState({initialData:copy(state.actualState)});
+					trace(props.location.pathname + ':' + untyped state.actualState.date_of_birth);
+				}
+				props.history.replace(props.location.pathname.replace('open','update'));
+				
+			}*/
+		},function(data:DbData){trace(data);});
+	}
+
+	public function create1(fd:FormData):Void {
+	//public function create(arg:Array<FormData>):Void {
 		//var fd:FormData = arg;//[0];
 		trace(fd);
 		if(fd==null)
@@ -181,6 +227,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var iPromise:Promise<Dynamic> = new Promise(function(resolve, reject){
 			fd.append('devIP',App.devIP);
 			fd.append('action','createDirectDebitsCSV');
+			fd.append('classPath','data.Booking');
+
 			var xhr = new js.html.XMLHttpRequest();
 			xhr.open('POST', '${App.config.api}', true);
 			xhr.onerror = function(e) {

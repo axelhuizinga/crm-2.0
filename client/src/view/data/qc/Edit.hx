@@ -261,18 +261,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				dbUser:props.userState.dbUser,
 				devIP:App.devIP
 			}
-			/*{
-				classPath:'data.Contacts',
-				action:'get',
-				filter:{id:qcData["lead_id"],mandator:1},
-				resolveMessage:{
-					success:'Kontakt ${qcData["lead_id"]} wurde geladen',
-					failure:'Kontakt ${qcData["lead_id"]} konnte nicht geladen werden'
-				},
-				table:'contacts',
-				dbUser:props.userState.dbUser,
-				devIP:App.devIP
-			}*/
 		);
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
@@ -282,6 +270,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				//trace(data);	//*
 				if( data.dataInfo.exists('recordings')){
 					trace(data.dataInfo.get('recordings'));
+					//RESET MENU ITEMS
+					state.mHandlers = menuItems;
 					BaseForm.addRecordings(state,data.dataInfo.get('recordings'));
 				}
 				var contact:Contact = new Contact(qcd);

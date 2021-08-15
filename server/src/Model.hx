@@ -331,7 +331,7 @@ class Model
 	public function execute(sql:String, noSend:Bool = false, fMode:Int = 2//PDO.FETCH_ASSOC
 		):NativeArray
 	{
-		//trace(sql);	
+		trace(sql);	
 		//if(setValues.length>0)trace(setValues.length);
 		/**
 		 * 
@@ -348,7 +348,8 @@ class Model
 		}		
 		var bindTypes:String = '';
 		var values2bind:NativeArray = null;
-		//var dbFieldTypes:Map<String,String> =  Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(S.conf.get('dbFieldTypes')));
+		var dbFieldTypes:Map<String,String> =  Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(S.conf.get('dbFieldTypes')));
+		trace(dbFieldTypes.toString());
 		//trace(filterValues);
 		var data:NativeArray = null;
 		var success: Bool;

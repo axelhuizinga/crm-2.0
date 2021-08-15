@@ -253,6 +253,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				trace(data.dataInfo.toString());
 				if( data.dataInfo.exists('recordings')){
 					trace(data.dataInfo.get('recordings'));
+					//RESET MENU ITEMS
+					state.mHandlers = menuItems;
+					//state.sideMenuInstance.enableItems('List',['edit','delete','selectionClear'],false);
 					BaseForm.addRecordings(state,data.dataInfo.get('recordings'));
 				}
 				else{

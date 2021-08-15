@@ -185,6 +185,8 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section +':' +props.match.params.action);	
+		if(state==null)
+			return null;
 		return switch(props.match.params.section)
 		{
 			case "List":

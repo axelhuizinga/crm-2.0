@@ -1,10 +1,13 @@
 package model;
 
+import haxe.rtti.Meta;
+import react.ReactUtil.copy;
+
 typedef DealProps = {
 	?contact:Int,
 	?creation_date:String,
 	?account:Int,
-	?target_account:Int,
+	?target_account:Int, 
 	?booking_run:String,
 	?start_date:String,
 	?cycle:String,
@@ -22,13 +25,17 @@ typedef DealProps = {
 	?old_active:Bool,
 	?cycle_start_date:String,
 	?last_updated:String,
-	?booking_day:String
+	?booking_day:String,
+	?lead_id:Int
 };
 
+@:keep
 @:rtti
 class Deal extends ORM
 {
 	public static var tableName:String = "deals";
+
+	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(Deal));
 
 	public function new(data:Map<String,String>) {
 		super(data);		
@@ -244,7 +251,7 @@ class Deal extends ORM
 		return last_updated;
 	}	
 		
-	@dataType("deals_booking_day")
+	@dataType("character varying")
 	@:isVar public var booking_day(default,set):String;
 
 	function set_booking_day(booking_day:String):String{
@@ -252,6 +259,16 @@ class Deal extends ORM
 			modified('booking_day');
 		this.booking_day = booking_day ;
 		return booking_day;
+	}	
+		
+	@dataType("bigint")
+	@:isVar public var lead_id(default,set):Int;
+
+	function set_lead_id(lead_id:Int):Int{
+		if(initialized('lead_id'))
+			modified('lead_id');
+		this.lead_id = lead_id ;
+		return lead_id;
 	}	
 	
 }

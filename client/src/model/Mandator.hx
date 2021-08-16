@@ -1,5 +1,8 @@
 package model;
 
+import haxe.rtti.Meta;
+import react.ReactUtil.copy;
+
 typedef MandatorProps = {
 	?contact:Int,
 	?name:String,
@@ -10,10 +13,13 @@ typedef MandatorProps = {
 	?last_updated:String
 };
 
+@:keep
 @:rtti
 class Mandator extends ORM
 {
 	public static var tableName:String = "mandators";
+
+	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(Mandator));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

@@ -2,6 +2,7 @@ package view.shared;
 
 //import js.lib.Reflect;
 //import model.FormInputElement;
+import haxe.rtti.Meta;
 import shared.Utils;
 import js.lib.Reflect;
 import js.html.FormElement;
@@ -208,13 +209,20 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	function find(evt:Event) {
 		evt.preventDefault();
 		//trace(untyped evt.target.form);
+		//trace(Reflect.fields(props.menuBlocks[props.section].items[0]).join('|'));
+		trace(props.menuBlocks[props.section].dataClassPath);
+		trace(Reflect.fields(props.menuBlocks[props.section]).join('|'));
 		//return;
+		trace(Reflect.fields(props.parentComponent.props).join('|'));
+		trace(Reflect.fields(props.parentComponent.state.sideMenu).join('|'));
+		trace(Reflect.fields(Meta.getFields(props.parentComponent.state.sideMenu.orm)).join('|'));
+		trace(props.parentComponent.state.sideMenu.orm._meta_fields);
 		var form:FormElement = untyped evt.target.form;
 		var fD:FormData = new FormData(form);
 		if(Reflect.isFunction(Reflect.field(props.parentComponent, 'find'))){
 			return props.parentComponent.find(fD);
 		}
-		var fDe:FormDataIterator = fD.entries();
+		//var fDe:FormDataIterator = fD.entries();
 		//while(e:Dynamic = fDe.next())
 		fD.forEach(function(d:Dynamic) {
 			trace(d);

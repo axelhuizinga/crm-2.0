@@ -348,8 +348,8 @@ class Model
 		}		
 		var bindTypes:String = '';
 		var values2bind:NativeArray = null;
-		var dbFieldTypes:Map<String,String> =  Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(S.conf.get('dbFieldTypes')));
-		trace(dbFieldTypes.toString());
+		//var dbFieldTypes:Map<String,String> =  Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(S.conf.get('dbFieldTypes')));
+		//trace(dbFieldTypes.toString());
 		//trace(filterValues);
 		var data:NativeArray = null;
 		var success: Bool;

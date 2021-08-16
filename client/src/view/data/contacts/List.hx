@@ -48,7 +48,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Löschen',action:'delete',disabled:true},
 		{label:'Auswahl aufheben',action:'selectionClear',disabled:true},
 		{separator: true},		
-		{label: 'ID',formField: { name: 'id'}},
+		{label: 'ID',formField: { name: 'id',findFormat:function(v:String):String {
+			return v;
+		}}},
 		{label: 'Vorname',formField: { name: 'first_name'}},
 		{label: 'Nachname',formField: { name: 'last_name'}},
 		{label: 'Telefon',formField: { name: 'phone_number'}},
@@ -89,6 +91,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 				}					
 				,{
+					orm:cast Contact,
 					section: props.match.params.section==null? 'List':props.match.params.section, 
 					sameWidth: true
 				}),

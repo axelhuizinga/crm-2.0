@@ -14,6 +14,7 @@ import react.ReactUtil.copy;
 using Lambda;
 
 @:keep
+@:rtti
 class ORM {
 	@dataType("bigint")
 	@:isVar public var id(default,null):Int;
@@ -40,7 +41,7 @@ class ORM {
 
 	public function new(data:Map<String,Dynamic>) {
 		fields = Meta.getFields(Type.getClass(this));	
-		//trace(Std.string(fields));
+		trace(Std.string(untyped Type.getClass(this)._meta_fields));
 		fields.id = {
 			dataType : ['bigint']
 		};

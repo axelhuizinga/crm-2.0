@@ -1,4 +1,5 @@
 package view.shared;
+import model.ORM;
 import view.shared.Menu;
 import haxe.Constraints.Function;
 import react.router.Route.RouteRenderProps;
@@ -14,6 +15,7 @@ typedef MenuProps =
 	?basePath:String,
 	?hidden:Bool,
 	?menuBlocks:Map<String,MenuBlock>,
+	?orm:ORM,
 	?parentComponent:Dynamic,
 	?section:String,
 	?switchSection:Function,

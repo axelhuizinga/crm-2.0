@@ -1,5 +1,8 @@
 package model;
 
+import haxe.rtti.Meta;
+import react.ReactUtil.copy;
+
 typedef UserGroupProps = {
 	?name:String,
 	?description:String,
@@ -9,10 +12,13 @@ typedef UserGroupProps = {
 	?last_updated:String
 };
 
+@:keep
 @:rtti
 class UserGroup extends ORM
 {
 	public static var tableName:String = "user_groups";
+
+	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(UserGroup));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

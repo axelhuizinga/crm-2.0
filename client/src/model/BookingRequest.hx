@@ -1,4 +1,7 @@
-ackage model;
+package model;
+
+import haxe.rtti.Meta;
+import react.ReactUtil.copy;
 
 typedef BookingRequestProps = {
 	?ag_name:String,
@@ -23,7 +26,6 @@ typedef BookingRequestProps = {
 	?vwz7:String,
 	?vwz8:String,
 	?vwz9:String,
-	?id:Int,
 	?tracking_status:String,
 	?anforderungs_datum:String,
 	?rueck_datum:String,
@@ -37,10 +39,13 @@ typedef BookingRequestProps = {
 	?mandator:Int
 };
 
+@:keep
 @:rtti
 class BookingRequest extends ORM
 {
 	public static var tableName:String = "booking_requests";
+
+	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(BookingRequest));
 
 	public function new(data:Map<String,String>) {
 		super(data);		
@@ -264,16 +269,6 @@ class BookingRequest extends ORM
 			modified('vwz9');
 		this.vwz9 = vwz9 ;
 		return vwz9;
-	}	
-		
-	@dataType("bigint")
-	@:isVar public var id(default,set):Int;
-
-	function set_id(id:Int):Int{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
 	}	
 		
 	@dataType("bank_transfers_tracking_status")

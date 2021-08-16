@@ -1,4 +1,5 @@
 package view.shared;
+import model.ORM;
 import haxe.Constraints.Function;
 import js.html.InputEvent;
 import view.shared.FormInputElement;
@@ -7,6 +8,7 @@ typedef BaseField =
 {
 	?className:String,
 	?classPath:String,
+	?disabled:Bool,
 	?name:String,
 	?label:String,
 	?dataBase:String, 
@@ -15,14 +17,10 @@ typedef BaseField =
 	?dataTable:String,
 	?dataField:String,
 	?preset:Bool,
-	?cellFormat:Function,
-	?displayFormat:String,
-	?type:FormInputElement,
 	?primary:Bool,
-	?disabled:Bool,
+	?type:FormInputElement,
 	?multiple:Bool,
 	?required:Bool,
-	//?handleChange:Function,
 	?placeholder:String,
 	?src:String,
 	?submit:String,
@@ -31,7 +29,11 @@ typedef BaseField =
 typedef FormField = {
 	>BaseField,
 	?handleChange:Function,
+	?cellFormat:Function,
+	?findFormat:Function,
+	?displayFormat:String,	
 	?id:Int,
 	?jwt:String,
+	?orm:ORM,
 	?validate:String->Bool
 }

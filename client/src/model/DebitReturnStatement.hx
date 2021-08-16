@@ -1,20 +1,27 @@
 package model;
 
+import haxe.rtti.Meta;
+import react.ReactUtil.copy;
+
 typedef DebitReturnStatementProps = {
 	?sepa_code:String,
 	?iban:String,
-	?id:String,
+	?ba_id:String,
 	?amount:String,
 	?mandator:Int,
-	?updated_at:String,
+	?last_modified:String,
 	?processed:Bool,
-	?created_at:String
+	?created_at:String,
+	?value_date:String
 };
 
+@:keep
 @:rtti
 class DebitReturnStatement extends ORM
 {
 	public static var tableName:String = "debit_return_statements";
+
+	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(DebitReturnStatement));
 
 	public function new(data:Map<String,String>) {
 		super(data);		
@@ -41,13 +48,13 @@ class DebitReturnStatement extends ORM
 	}	
 		
 	@dataType("character varying")
-	@:isVar public var id(default,set):String;
+	@:isVar public var ba_id(default,set):String;
 
-	function set_id(id:String):String{
-		if(initialized('id'))
-			modified('id');
-		this.id = id ;
-		return id;
+	function set_ba_id(ba_id:String):String{
+		if(initialized('ba_id'))
+			modified('ba_id');
+		this.ba_id = ba_id ;
+		return ba_id;
 	}	
 		
 	@dataType("numeric")
@@ -71,13 +78,13 @@ class DebitReturnStatement extends ORM
 	}	
 		
 	@dataType("timestamp with time zone")
-	@:isVar public var updated_at(default,set):String;
+	@:isVar public var last_modified(default,set):String;
 
-	function set_updated_at(updated_at:String):String{
-		if(initialized('updated_at'))
-			modified('updated_at');
-		this.updated_at = updated_at ;
-		return updated_at;
+	function set_last_modified(last_modified:String):String{
+		if(initialized('last_modified'))
+			modified('last_modified');
+		this.last_modified = last_modified ;
+		return last_modified;
 	}	
 		
 	@dataType("boolean")
@@ -98,6 +105,16 @@ class DebitReturnStatement extends ORM
 			modified('created_at');
 		this.created_at = created_at ;
 		return created_at;
+	}	
+		
+	@dataType("date")
+	@:isVar public var value_date(default,set):String;
+
+	function set_value_date(value_date:String):String{
+		if(initialized('value_date'))
+			modified('value_date');
+		this.value_date = value_date ;
+		return value_date;
 	}	
 	
 }

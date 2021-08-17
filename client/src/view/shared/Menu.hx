@@ -4,7 +4,6 @@ package view.shared;
 //import model.FormInputElement;
 import haxe.rtti.Meta;
 import shared.Utils;
-import js.lib.Reflect;
 import js.html.FormElement;
 import js.html.Element;
 import js.html.FormData;
@@ -216,7 +215,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		trace(Reflect.fields(props.parentComponent.props).join('|'));
 		trace(Reflect.fields(props.parentComponent.state.sideMenu).join('|'));
 		trace(Reflect.fields(Meta.getFields(props.parentComponent.state.sideMenu.orm)).join('|'));
-		trace(props.parentComponent.state.sideMenu.orm._meta_fields);
+		//trace(props.parentComponent.state.sideMenu.orm._meta_fields);
 		var form:FormElement = untyped evt.target.form;
 		var fD:FormData = new FormData(form);
 		if(Reflect.isFunction(Reflect.field(props.parentComponent, 'find'))){
@@ -230,16 +229,36 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		//trace(fD.getAll('*'));
 		var inputs:NodeList = Browser.document.querySelectorAll('.formRow input');
 		trace(inputs.length);
+		//trace(props.menuBlocks[props.section].items);
 		var el:InputElement;
 		var param:Dynamic = {};
 		for(i in 0...inputs.length){
 			el = cast( inputs[i], InputElement);
 			trace(i+':'+ el.name + '::' + el.value);
+			el.value = findFormat(el.name, el.value);
 			if(StringTools.trim(el.value)!='')
 				Reflect.setField(param, el.name,el.value);
 		}
 		return props.parentComponent.get(BaseForm.filter(props.parentComponent.props,param));
 	}	
+
+	function findFormat(name:String, v:String):String {
+		var items:Array<MItem> = props.menuBlocks[props.section].items;//cast props.parentComponent.state.sideMenu.orm.menuItems;
+		if(items==null){
+			trace(name);
+			return v;
+		}
+		for(item in items){
+			if(item.formField!=null && item.formField.findFormat != null && item.formField.name == name)
+			{
+				trace('$name.findFormat returned:' + item.formField.findFormat(v));
+				//trace('$name.findFormat returned:' + Reflect.callMethod(item.formField,item.formField.findFormat,[v]));
+
+				return item.formField.findFormat(v);
+			}
+		}
+		return v;
+	}
 
 	function renderHeader():ReactFragment
 	{
@@ -356,7 +375,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			type = (item.formField==null?Button:(item.formField.type==null?FormInputElement.Text: item.formField.type));
 			//trace(i + ':' + type);
 			var dis:Bool = !(item.disabled==null||item.disabled==false);
-			if(item.id=='edit')
+			if(false&&item.formField!=null && item.formField.findFormat !=null)
 				trace(item);
 			//if(type!=Button)
 				//block.hasFindForm = true;

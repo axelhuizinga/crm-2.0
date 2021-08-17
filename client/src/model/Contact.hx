@@ -38,7 +38,7 @@ class Contact extends ORM
 {
 	public static var tableName:String = "contacts";
 
-	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(Contact));
+	//public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(Contact));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

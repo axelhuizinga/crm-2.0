@@ -1,4 +1,5 @@
 package model;
+import view.shared.MItem;
 import haxe.macro.Compiler.NullSafetyMode;
 import view.shared.FormBuilder;
 import me.cunity.tools.StringTool;
@@ -26,7 +27,7 @@ class ORM {
 		return id;
 	}
 	
-	//TODO: LOAD DSEP FROM CONFIG
+	//TODO: LOAD Decimal separator FROM CONFIG
 	static var dsep:String = ',';
 	public static var tableName:String;
 

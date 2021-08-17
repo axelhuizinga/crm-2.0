@@ -49,11 +49,16 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Auswahl aufheben',action:'selectionClear',disabled:true},
 		{separator: true},		
 		{label: 'ID',formField: { name: 'id',findFormat:function(v:String):String {
+			trace(v);
 			return v;
 		}}},
 		{label: 'Vorname',formField: { name: 'first_name'}},
 		{label: 'Nachname',formField: { name: 'last_name'}},
-		{label: 'Telefon',formField: { name: 'phone_number'}},
+		{label: 'Telefon',formField: { name: 'phone_number', findFormat: function(v:String) {
+			v =  ~/^0+/.replace(v, '');
+			trace(v);
+			return v;
+		}}},
 		{label: 'Ort',formField: { name: 'city'}},
 	//	{label:'Auswahl umkehren',action:'selectionInvert'},
 	//	{label:'Auswahl alle',action:'selectionAll'},
@@ -74,7 +79,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		//baseForm =new BaseForm(this);
 		dataDisplay = ContactsModel.dataGridDisplay;
-		trace('...' + Reflect.fields(props) + ':' + Std.string(menuItems[0]));
+		trace('...' + Reflect.fields(props) + ':' + Std.string(menuItems));
 		state =  App.initEState({
 			dataTable:[],
 			loading:true,

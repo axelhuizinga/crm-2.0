@@ -1,4 +1,5 @@
 package view.data.qc;
+import js.html.DivElement;
 import js.lib.Promise;
 import shared.Utils;
 import data.DataState;
@@ -214,19 +215,17 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var match:RouterMatch = copy(props.match);
 		match.params.action = 'get';
 		trace(state.dataTable.length);
-		props.select(0, null,match, UnselectAll);	
-		//trace(formRef !=null);
-
-		var trs:NodeList = Browser.document.querySelectorAll('.tabComponentForm tr');				
-		trace(trs.length);
-		for(i in 0...trs.length){
-			var tre:TableRowElement = cast(trs.item(i), TableRowElement);
-			if(tre.classList.contains('is-selected')){
-				trace('unselect:${tre.dataset.id}');
-				tre.classList.remove('is-selected');
+		props.select(0, null,this, UnselectAll);	
+		var s_cells:NodeList = Browser.document.querySelectorAll('.tabComponentForm .gridItem.selected');
+		trace(s_cells.length);
+		for(i in 0...s_cells.length){
+			var s_cell:DivElement = cast(s_cells.item(i), DivElement);
+			if(s_cell.classList.contains('selected')){
+				trace('unselect:${s_cell.dataset.id}');
+				s_cell.classList.remove('selected');
 			}
 		};
-		Browser.document.querySelector('[class="grid-container-inner"]').scrollTop = 0;
+		//Browser.document.querySelector('[class="grid-container-inner"]').scrollTop = 0;
 	}
 		
 	override public function componentDidMount():Void 

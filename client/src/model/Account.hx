@@ -1,8 +1,5 @@
 package model;
 
-import haxe.rtti.Meta;
-import react.ReactUtil.copy;
-
 typedef AccountProps = {
 	?contact:Int,
 	?bank_name:String,
@@ -23,8 +20,6 @@ typedef AccountProps = {
 class Account extends ORM
 {
 	public static var tableName:String = "accounts";
-
-	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(Account));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

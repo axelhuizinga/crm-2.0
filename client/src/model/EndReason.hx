@@ -1,8 +1,5 @@
 package model;
 
-import haxe.rtti.Meta;
-import react.ReactUtil.copy;
-
 typedef EndReasonProps = {
 	?reason:String,
 	?edited_by:Int,
@@ -14,8 +11,6 @@ typedef EndReasonProps = {
 class EndReason extends ORM
 {
 	public static var tableName:String = "end_reasons";
-
-	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(EndReason));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

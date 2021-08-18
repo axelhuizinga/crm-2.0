@@ -1,8 +1,5 @@
 package model;
 
-import haxe.rtti.Meta;
-import react.ReactUtil.copy;
-
 typedef BookingRequestProps = {
 	?ag_name:String,
 	?ag_konto_or_iban:String,
@@ -44,8 +41,6 @@ typedef BookingRequestProps = {
 class BookingRequest extends ORM
 {
 	public static var tableName:String = "booking_requests";
-
-	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(BookingRequest));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

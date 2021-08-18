@@ -1,8 +1,5 @@
 package model;
 
-import haxe.rtti.Meta;
-import react.ReactUtil.copy;
-
 typedef SepaReturnCodeProps = {
 	?code:String,
 	?description:String,
@@ -14,8 +11,6 @@ typedef SepaReturnCodeProps = {
 class SepaReturnCode extends ORM
 {
 	public static var tableName:String = "sepa_return_codes";
-
-	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(SepaReturnCode));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

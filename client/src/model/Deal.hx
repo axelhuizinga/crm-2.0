@@ -1,13 +1,10 @@
 package model;
 
-import haxe.rtti.Meta;
-import react.ReactUtil.copy;
-
 typedef DealProps = {
 	?contact:Int,
 	?creation_date:String,
 	?account:Int,
-	?target_account:Int, 
+	?target_account:Int,
 	?booking_run:String,
 	?start_date:String,
 	?cycle:String,
@@ -34,8 +31,6 @@ typedef DealProps = {
 class Deal extends ORM
 {
 	public static var tableName:String = "deals";
-
-	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(Deal));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

@@ -1,8 +1,5 @@
 package model;
 
-import haxe.rtti.Meta;
-import react.ReactUtil.copy;
-
 typedef UserProps = {
 	?contact:Int,
 	?last_login:String,
@@ -27,8 +24,6 @@ typedef UserProps = {
 class User extends ORM
 {
 	public static var tableName:String = "users";
-
-	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(User));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

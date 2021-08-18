@@ -1,8 +1,5 @@
 package model;
 
-import haxe.rtti.Meta;
-import react.ReactUtil.copy;
-
 typedef TableFieldProps = {
 	?table_name:String,
 	?mandator:Int,
@@ -21,8 +18,6 @@ typedef TableFieldProps = {
 class TableField extends ORM
 {
 	public static var tableName:String = "table_fields";
-
-	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(TableField));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

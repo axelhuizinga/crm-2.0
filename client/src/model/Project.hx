@@ -1,8 +1,5 @@
 package model;
 
-import haxe.rtti.Meta;
-import react.ReactUtil.copy;
-
 typedef ProjectProps = {
 	?mandator:Int,
 	?name:String,
@@ -19,8 +16,6 @@ typedef ProjectProps = {
 class Project extends ORM
 {
 	public static var tableName:String = "projects";
-
-	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(Project));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

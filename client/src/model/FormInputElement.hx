@@ -1,8 +1,5 @@
 package model;
 
-import haxe.rtti.Meta;
-import react.ReactUtil.copy;
-
 typedef FormInputElementProps = {
 	?type:String
 };
@@ -12,8 +9,6 @@ typedef FormInputElementProps = {
 class FormInputElement extends ORM
 {
 	public static var tableName:String = "form_input_elements";
-
-	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(FormInputElement));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

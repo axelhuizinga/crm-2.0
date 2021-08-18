@@ -126,7 +126,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 			},
 			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,comp:QC, ?selectType:SelectType)
 			{
-				trace('select:$id selectType:${selectType}' + data.toString());
+				trace('select:$id selectType:${selectType}' + (data!=null? data.toString():'null'));
 				if(id<0){
 					trace('nono...');
 					return;
@@ -184,7 +184,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 	override function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		trace(props.match.params.section +':' +props.match.params.action);	
+		trace(props.match.params.section + ':' +props.match.params.action);	
 		if(state==null)
 			return null;
 		return switch(props.match.params.section)

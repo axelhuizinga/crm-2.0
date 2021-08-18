@@ -1,8 +1,5 @@
 package model;
 
-import haxe.rtti.Meta;
-import react.ReactUtil.copy;
-
 typedef DebitReturnStatementProps = {
 	?sepa_code:String,
 	?iban:String,
@@ -20,8 +17,6 @@ typedef DebitReturnStatementProps = {
 class DebitReturnStatement extends ORM
 {
 	public static var tableName:String = "debit_return_statements";
-
-	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(DebitReturnStatement));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

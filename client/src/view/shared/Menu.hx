@@ -103,9 +103,9 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		
 		//var items:Array<MItem> = props.menuBlocks.iterator().next().items;
 		var items:Array<MItem> = props.menuBlocks[props.section].items;
-		trace(props.section + ':' + (items==null?'nulll':Std.string(items[0])));
+		//trace(props.section + ':' + (items==null?'nulll':Std.string(items[0])));
 		props.parentComponent.state.sideMenuInstance = this;
-		trace(props.parentComponent.state.mHandlers);
+		//trace(props.parentComponent.state.mHandlers);
 
 		hasFindForm = false;
 		state = {
@@ -121,7 +121,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		trace(section+':'+ids.join('|'));
 		if(props.menuBlocks.exists(section)){
 			var mB:MenuBlock = props.menuBlocks[section];
-			trace(mB.items);
+			//trace(mB.items);
 			for(mI in mB.items){
 				for(id in ids){
 					if(mI.id == id){						
@@ -135,7 +135,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	public function enableBlockItem(block:String,id:String,?enable:Bool = true):Bool
 	{
 		//trace(state.items.keyNames().join('|'));
-		trace('$id $enable');
+		//trace('$id $enable');
 		if(!props.menuBlocks.exists(block)||!state.items.exists(id))
 			return null;
 		var item = Utils.getByKey(props.menuBlocks.get(block).items,id);
@@ -143,7 +143,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			return null;
 		}
 		if(item.formField!=null&&item.formField.submit!=null){
-			trace('looking4:#${item.id+"_submit"}');
+			//trace('looking4:#${item.id+"_submit"}');
 			var submit = Browser.document.querySelector('#${item.id+"_submit"}');
 			if(enable){
 				submit.removeAttribute('disabled');
@@ -151,11 +151,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			}
 			else
 				submit.setAttribute('disabled',enable?'false':'true');
-			trace(item.handler);
+			//trace(item.handler);
 			//trace(getEventListeners(submit)))
 		}
 		item.disabled = !enable;
-		trace('$id: ${item.disabled}');
+		//trace('$id: ${item.disabled}');
 		return !item.disabled;
 	}	
 

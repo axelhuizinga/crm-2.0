@@ -1,8 +1,5 @@
 package model;
 
-import haxe.rtti.Meta;
-import react.ReactUtil.copy;
-
 typedef RoleProps = {
 	?name:String,
 	?description:String,
@@ -17,8 +14,6 @@ typedef RoleProps = {
 class Role extends ORM
 {
 	public static var tableName:String = "roles";
-
-	public static var _meta_fields:Dynamic<Dynamic<Array<Dynamic>>> = copy(Meta.getFields(ORM), Meta.getFields(Role));
 
 	public function new(data:Map<String,String>) {
 		super(data);		

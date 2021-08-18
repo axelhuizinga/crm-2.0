@@ -1,5 +1,6 @@
 package view.grid;
 
+import react.router.RouterMatch;
 import react.router.ReactRouter;
 import react.ReactUtil;
 import haxe.Exception;
@@ -278,6 +279,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 	}
 	
 	function editRow(ev:Event) {
+		trace(untyped ev.target.nodeName);
 		state.selectTimer.stop();
 		state._prevent = true;
 		var el:Element = cast(ev.target,Element);
@@ -286,14 +288,29 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		Timer.delay(function() {
 			state._prevent = false;
 		},clickDelay*2);
-		trace('here we go :)'+props.onDoubleClick);
+		trace('here we go :) '+ getUrl(el.dataset.action,'Edit'));
+		props.parentComponent.props.history.push(getUrl(el.dataset.action,'Edit'),props.parentComponent.props.location.state);
 		if(props.onDoubleClick != null){
 			props.onDoubleClick(ev);
 		}
 	}
 
+	public function getUrl(?action:String,?targetSection:String):String
+	{
+		var match:RouterMatch = props.parentComponent.props.match;
+		var baseUrl:String = match.path.split(':section')[0];		
+		var section = match.params.section;
+		//trace(props.parentComponent.props.location);trace (aState.dataStore.qcData.keys().next());
+		if(props.parentComponent.state.selectedData!=null)
+		trace(props.parentComponent.state.selectedData.toString());
+		//var id:String = (match.params.id==null||action=='insert'?'':'/${match.params.id}');
+		var id:String = (props.parentComponent.state.selectedData ==null||action=='insert'?'':'/${Utils.keysList(props.parentComponent.state.selectedData.keys())[0]}');
+		return '${baseUrl}${targetSection==null?section:targetSection}/${action}${id}';
+	}
+		
 	function select(e:ReactEvent){
 		//trace(e);
+		trace(untyped e.target.nodeName + ':' + state._prevent);
 		untyped e.persist();
 		state.selectTimer = Timer.delay(function() {
 			if(!state._prevent)
@@ -339,8 +356,9 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		setState({selectedRows:selectedNow});
 		trace(props.parentComponent.state.uid);
 		var match = ReactRouter.matchPath(Browser.location.pathname,{});
-		trace(Reflect.fields(props).join('|'));
-		trace(untyped props.match);
+		//trace(untyped props.match);
+		trace(Type.getClassName(Type.getClass(props.parentComponent)));
+		//trace(Reflect.fields(props).join('|'));
 		props.parentComponent.props.select(el.dataset.id,[el.dataset.id => getRowData(rowEls)],props.parentComponent
 		, SelectType.One);
 		state._selecting = false;

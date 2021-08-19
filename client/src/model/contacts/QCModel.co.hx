@@ -10,7 +10,7 @@ import view.shared.FormInputElement;
  * @author axel@cunity.me
  */
 
-class QCModel
+class QCModel2
 {
 	public static var dataAccess:DataAccess = [
 		'open' => {

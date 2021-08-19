@@ -79,7 +79,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		//baseForm =new BaseForm(this);
 		dataDisplay = ContactsModel.dataGridDisplay;
-		trace('...' + Reflect.fields(props) + ':' + Std.string(menuItems));
+		//trace('...' + Reflect.fields(props) + ':' + Std.string(menuItems));
 		state =  App.initEState({
 			dataTable:[],
 			loading:true,
@@ -294,7 +294,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{//  ${...props}
 			case 'get':
 				jsx('				
-				<Grid id="contactList" data=${state.dataTable}
+				<Grid id="contactList" data=${state.dataTable} doubleClickAction="update" 
 				${...props} dataState = ${dataDisplay["contactList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
 				');			

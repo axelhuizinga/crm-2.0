@@ -435,7 +435,7 @@ class SyncExternalContacts extends Model
 	
 	public function getCrmClients():NativeArray
 	{		        
-
+		var min_age:Int = ( param['min_age']>0?param['min_age']:18);
 		var sql = comment(unindent,format)/*
 SELECT cl.client_id id, cl.*,1 mandator,vl.modify_date,cl.state status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
 IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner
@@ -445,7 +445,17 @@ ON vl.lead_id=cl.lead_id
 ORDER BY client_id
 ${limit.sql} ${offset.sql}
 */;
-		trace(sql);
+		sql = comment(unindent,format)/*
+SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.care_of,cl.storno_grund,IF(YEAR(FROM_DAYS(DATEDIFF(CURDATE(),cl.birth_date)))>$min_age ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,1 mandator,vl.modify_date,cl.state status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
+IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner
+FROM fly_crm.clients cl 
+INNER JOIN asterisk.vicidial_list vl
+ON vl.lead_id=cl.lead_id
+ 
+ORDER BY client_id	
+${limit.sql} ${offset.sql}
+*/;
+		trace(sql);//${where}
 		var stmt:PDOStatement = S.syncDbh.query(sql);
 		trace('loading ${limit} ${offset}');
 		S.checkStmt(S.syncDbh, stmt,'getCrmClients query:');
@@ -457,8 +467,18 @@ ${limit.sql} ${offset.sql}
 
 	public function getMissingClients(where:String):NativeArray
 	{		        
+		var min_age:Int = ( param['min_age']>0?param['min_age']:18);
 		var sql = comment(unindent,format)/*
 	SELECT cl.client_id id, cl.*,1 mandator,vl.modify_date,cl.state status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
+	IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner
+	FROM fly_crm.clients cl 
+	INNER JOIN asterisk.vicidial_list vl
+	ON vl.lead_id=cl.lead_id
+	${where} 
+	ORDER BY client_id	
+	*/;
+	sql = comment(unindent,format)/*
+	SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.care_of,cl.storno_grund,IF(YEAR(FROM_DAYS(DATEDIFF(CURDATE(),cl.birth_date)))>$min_age ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,1 mandator,vl.modify_date,cl.state status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
 	IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner
 	FROM fly_crm.clients cl 
 	INNER JOIN asterisk.vicidial_list vl
@@ -475,7 +495,7 @@ ${limit.sql} ${offset.sql}
 	}	
 	
 
-    public function getCrmData(?min_id=9999999):NativeArray
+    public function getCrmData2(?min_id=9999999):NativeArray
 	{		        
 		trace(min_id);
 		//S.sendErrors(null,['devbreak'=>min_id]);

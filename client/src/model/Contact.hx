@@ -26,7 +26,8 @@ typedef ContactProps = {
 	?edited_by:Int,
 	?merged:Array<Int>,
 	?last_updated:String,
-	?owner:Int
+	?owner:Int,
+	?title_pro:String
 };
 
 @:keep
@@ -297,6 +298,16 @@ class Contact extends ORM
 			modified('owner');
 		this.owner = owner ;
 		return owner;
+	}	
+		
+	@dataType("character varying(80)")
+	@:isVar public var title_pro(default,set):String;
+
+	function set_title_pro(title_pro:String):String{
+		if(initialized('title_pro'))
+			modified('title_pro');
+		this.title_pro = title_pro ;
+		return title_pro;
 	}	
 	
 }

@@ -56,7 +56,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		//{label:'Stammdaten Import ',action:'importContacts'},
 		{label:'BuchungsAnforderungen ',action:'checkBookingRequests',options:[
 			{label: 'Update', name: 'sync_now', type:Checkbox}]},
-		{label:'Kontakt Daten ',action:'checkContacts'},		
+		{label:'Kontakt Daten ',action:'checkContacts', options:[
+			{label: 'Update', name: 'sync_now', type:Checkbox}]},		
 		{label:'Spenden Daten ',action:'checkDeals'},
 		{label:'Konto Daten ',action:'checkAccounts'}
 		
@@ -294,7 +295,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	
-	public function importContacts2(_):Void
+	public function importContacts(_):Void
 	{
 		trace(props.userState.dbUser.first_name);
 		App.store.dispatch(action.async.LivePBXSync.importContacts({
@@ -434,6 +435,24 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			className:'',
 			text:'Aktualisiere Kontakte'}
 		)));
+		trace(Browser.document.querySelector('[name="sync_now"]'));
+		/**
+		 * 			trace(fD.get('sync_now'));
+			if(fD.get('sync_now')=='on'){
+				App.store.dispatch(Status(Update(
+					{
+						className:'',
+						text:'Aktualisiere Buchungsanforderungen'}
+					)));				
+				getMissingExternalBookings(function() {
+
+					loadBookingRequestsCount();//[name="checkBookingRequests"] [name="checkBookingRequests"] 
+					untyped Browser.document.querySelector('[name="sync_now"]').checked = false;
+					trace(cast(Browser.document.querySelector('[name="sync_now"]'),InputElement).checked?'Yes':'No');
+					//fD.set('sync_now',)
+				});
+			}
+		 */
 		var pro:Promise<Dynamic> = action.async.LivePBXSync.check({
 			limit:1000,
 			userState:props.userState,

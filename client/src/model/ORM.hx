@@ -42,7 +42,8 @@ class ORM {
 
 	public function new(data:Map<String,Dynamic>) {
 		fields = Meta.getFields(Type.getClass(this));	
-		trace(Std.string(untyped Type.getClass(this)._meta_fields));
+		//trace(fields);
+		//trace(Std.string(untyped Type.getClass(this)._meta_fields));
 		fields.id = {
 			dataType : ['bigint']
 		};

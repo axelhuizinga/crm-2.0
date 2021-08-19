@@ -81,8 +81,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	public static var menuItems:Array<MItem> = [
 		{label:'Schließen',action:'close'},		
 		//{label:'Speichern + Schließen',action:'update', then:'close'},
-		{label:'Speichern',action:'update'},
+		{label:'Speichern',action:'update'},		
 		{label:'Zurücksetzen',action:'reset'},
+		{label:'QC OK',action:'qcok'},
+		{label:'QC NEGATIV',action:'qcneg'},
 		{separator: true},		
 		//{label: 'ID',formField: { name: 'id'}},
 		//{label:'Spenden Bearbeiten',action:'showSelectedDeals', disabled:true, section: 'Edit', classPath:'view.data.contacts.Deals'},	
@@ -268,17 +270,18 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			{
 				var qcd = data.dataRows[0];
 				//trace(data);	//*
+				trace(qcd);
 				if( data.dataInfo.exists('recordings')){
 					trace(data.dataInfo.get('recordings'));
 					//RESET MENU ITEMS
 					state.mHandlers = menuItems;
 					BaseForm.addRecordings(state,data.dataInfo.get('recordings'));
 				}
-				var contact:Contact = new Contact(qcd);
+				var qc:model.QC = new model.QC(qcd);
 				if(mounted)
-					setState({loading:false, actualState:contact, initialData:copy(contact)});
-				//state = copy({loading:false, actualState:contact, initialData:contact});
-				trace('$mounted ${contact.id}');
+					setState({loading:false, actualState:qc, initialData:copy(qc)});
+				//state = copy({loading:false, actualState:qc, initialData:qc});
+				trace('$mounted ${qc.id}');
 				if(state.actualState != null){
 					trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
 				//setState({initialData:copy(state.actualState)});
@@ -546,9 +549,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					fields:[
 						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
-					model:'contact',
+					model:'qc',
 					ref:null,					
-					title: 'Stammdaten' 
+					title: 'Daten QC' 
 				},state.actualState)}					
 				</>
 				'));
@@ -560,9 +563,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					fields:[
 						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 					],
-					model:'contact',
+					model:'qc',
 					ref:null,
-					title: 'Kontakt - Neue Stammdaten' 
+					title: 'QC - Neue Daten' 
 				},state.actualState);
 			default:
 				null;
@@ -594,7 +597,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		];
 	}//'Kontakt - Bearbeite ' + 
 
-	function relDataLists():ReactFragment {
+	/*function relDataLists():ReactFragment {
 
 		return jsx('
 		<>
@@ -602,7 +605,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			<$Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" key="accounts" action="get"  onDoubleClick=${showSelectedAccounts} filter=${{contact:props.match.params.id, mandator:'1'}}></$Accounts>
 		</>
 		');
-	}
+	}*/
 	/**				//${relData()} 
 	 * 	
 			isActive=${true}

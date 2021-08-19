@@ -80,6 +80,10 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 		dataAccess = ContactsModel.dataAccess;
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
+		state =  App.initEState({
+			dataTable:[],loading:false,contactData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
+		},this);
+		trace(state.uid);	
 		trace(props.match.params);
 		if(props.match.params.section==null)
 		{
@@ -88,12 +92,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 			var baseUrl:String = props.match.path.split(':section')[0];
 			props.history.push('${baseUrl}List/get');
 		}		
-		else{
-			state =  App.initEState({
-				dataTable:[],loading:false,contactData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
-			},this);
-			trace(state.uid);			
-		}
+		
 		if(_c == null){
 			_c = 1;
 		}

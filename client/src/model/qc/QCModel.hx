@@ -20,14 +20,14 @@ class QCModel
 					]
 				],
 			view:[
-				'title'=>{label:'Anrede',type:Select,options:[
+				'anrede'=>{label:'Anrede',type:Select,options:[
 						''=>'?',
 						'Herr'=>'Herr',
 						'Frau'=>'Frau',
 						'Familie'=>'Familie',
 						'Firma'=>'Firma'
 					]},
-				'title_pro'=>{label:'Titel'},
+				'title'=>{label:'Titel'},
 				'first_name'=>{label:'Vorname'},
 				'last_name'=>{label:'Name'},
 				'email'=>{label:'Email'},
@@ -52,7 +52,7 @@ class QCModel
 						'F'=>'Weiblich'
 					]
 				},
-				'comments'=>{label:'Kommentar'},
+				'comments'=>{label:'Kommentar', type:TextArea},
 				'use_email'=>{label:'Post per Email',type: Checkbox},
 				'owner' =>{label:'Agent', cellFormat: function(v):String {
 						trace('App.pbxUserData ${App.pbxUserData!=null}');

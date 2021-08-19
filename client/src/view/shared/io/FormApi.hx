@@ -101,7 +101,7 @@ class FormApi
 			
 			//trace(Reflect.fields(this.sM).join('|'));
 			if(comp.props.match.params.section != null && this.sM.menuBlocks.exists(comp.props.match.params.section)){
-				trace(this.sM.menuBlocks[comp.props.match.params.section].items[0]);
+				//trace(this.sM.menuBlocks[comp.props.match.params.section].items[0]);
 				trace(Utils.arrayKeysList(this.sM.menuBlocks[comp.props.match.params.section].items, 'id'));
 			}
 		}
@@ -192,10 +192,11 @@ class FormApi
 		//trace(Type.typeof(eTarget));
 		var targetSection = eTarget.dataset.section;
 		trace('>>$targetSection<< ${comp.props.match.params.section}');
-		if(targetSection=='Edit'){
+		if(targetSection=='Edit' && comp.state.dataGrid != null){
 			//checkSelection
 			if(!comp.state.dataGrid.state.selectedRows.keys().hasNext())
 			{
+				trace(comp.state.dataGrid.state.selectedRows.toString());
 				return false;
 			}
 			//comp.checkSelection();

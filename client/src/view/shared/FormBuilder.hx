@@ -150,7 +150,7 @@ class FormBuilder {
 						</div>
 					</div>');				
 				case Select:
-					//trace('$i:: $name: $value');
+					trace('$i:: $name: $value');
 				renderElement(
 					jsx('<select name=${name} onChange=${onChange} className=${field.className} defaultValue=${value} key=${i++} 
 						multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
@@ -234,6 +234,13 @@ class FormBuilder {
 						<div className="g_cell" role="cell">${field.label}</div>
 						<div className="g_cell_r" role="cell">
 							Dummy
+						</div>
+					</div>');
+				case TextArea:
+					jsx('<div key=${i++} className="g_row_2 g_span_2" role="rowgroup">
+					<div className="g_cell" key=${i+'_l'} role="cell">${field.label}</div>
+						<div className="g_cell" key=${i+'_r'}role="cell">
+							<textarea name=${name} value=${value} onChange=${onChange}/>
 						</div>
 					</div>');
 				default:

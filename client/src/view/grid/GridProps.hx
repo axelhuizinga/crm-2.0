@@ -43,6 +43,7 @@ typedef GridProps =
 	data:Array<Dynamic>,
 	dataState:DataState,
 	?disableHeader:Bool,
+	?doubleClickAction:String,
 	?oddClassName: String,
 	?evenClassName:String,	
 	?defaultSort:Dynamic,	

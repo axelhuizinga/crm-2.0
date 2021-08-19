@@ -74,7 +74,17 @@ class DealsModel
 				return null;
 			 return DateTools.format(Date.fromString(v), "%d.%m.%Y");
 			}},	
-		'cycle' => {label: 'Turnus',flexGrow:1},
+		'product' => {label: 'Produkt',flexGrow:1, cellFormat:function(v:Int){			
+			 return switch(v){
+				case 2:
+					'Kinderhilfe';
+				case 3:
+					'Tierhilfe';	
+				default:
+					'Kinderhilfe';				
+			 };
+			}},
+		'cycle' => {label: 'Turnus'},
 		'amount' => {label: 'Betrag', cellFormat: function(v) {
 			return App.sprintf('%01.2f €',v).replace('.',',');
 		},className: 'tRight tableNums'},

@@ -300,6 +300,9 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		var match:RouterMatch = props.parentComponent.props.match;
 		var baseUrl:String = match.path.split(':section')[0];		
 		var section = match.params.section;
+		if(action==null||action==''){
+			action = props.doubleClickAction;
+		}
 		//trace(props.parentComponent.props.location);trace (aState.dataStore.qcData.keys().next());
 		if(props.parentComponent.state.selectedData!=null)
 		trace(props.parentComponent.state.selectedData.toString());

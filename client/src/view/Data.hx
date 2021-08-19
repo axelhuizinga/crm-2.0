@@ -149,14 +149,14 @@ class Data extends ReactComponentOf<DataProps,CompState>
 			<$Switch>
 				<$Route path="/Data/Contacts/:section?/:action?/:id?"  ${...props} component={Contacts}/>
 				<$Route path="/Data/Deals/:section?/:action?/:id?"  ${...props} component={Deals}/>
-				<$Route path="/Data/QC/:section?/:action?/:id?"  ${...props} component={QC}/>
+				<$Route path="/Data/QC/:section?/:action?/:id?" ${...props} component={QC}/>
             </$Switch>
 			</div>
 			<$StatusBar ${...props}/>
 		</>
 			');			
     }
-//<$Route >${internalRedirect()}</$Route>
+//<$Route >${internalRedirect()}</$Route>${...props} 
 	function renderComponent(props:RouteRenderProps):ReactElement
 	{
 		if(_trace) trace(props.location);

@@ -1,41 +1,28 @@
 package model;
 
+import model.Contact.ContactProps;
+
 typedef QCProps = {
-	?mandator:Int,
-	?creation_date:String,
-	?status:String,
-	?use_email:Bool,
-	?company_name:String,
-	?care_of:String,
-	?phone_code:String,
-	?phone_number:String,
-	?fax:String,
-	?title:String,
-	?first_name:String,
-	?last_name:String,
-	?address:String,
-	?address_2:String,
-	?city:String,
-	?postal_code:String,
-	?country_code:String,
-	?gender:String,
-	?date_of_birth:String,
-	?mobile:String,
-	?email:String,
-	?comments:String,
-	?edited_by:Int,
-	?merged:Array<Int>,
-	?last_updated:String,
-	?owner:Int
+	>ContactProps,
+
 };
 
 @:rtti
 class QC extends Contact
 {
-	public static var tableName:String = "contacts";
+	public static var tableName:String = "_memory";
+	public static var customFields:Array<String> = 'lead_id,period,anrede,co_field,geburts_datum,account,blz,iban,bank_name,spenden_hoehe,start_monat,buchungs_tag,buchungs_zeitpunkt,mailing,client_status'.split(',');
 
 	public function new(data:Map<String,String>) {
 		super(data);		
+		for(f in customFields)
+		{
+			if(data.exists(f)){
+				var nv:Dynamic = data.get(f);
+				//trace('$f => $nv ' + Reflect.field(fields, f).dataType[0]);
+				Reflect.setField(this, f, nv);				
+			}
+		}
 	}	
 		
 }

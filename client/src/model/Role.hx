@@ -1,13 +1,5 @@
 package model;
 
-typedef RoleProps = {
-	?name:String,
-	?description:String,
-	?permissions:String,
-	?edited_by:Int,
-	?mandator:Int,
-	?last_updated:String
-};
 
 @:keep
 @:rtti

@@ -1,13 +1,5 @@
 package model;
 
-typedef UserGroupProps = {
-	?name:String,
-	?description:String,
-	?can:String,
-	?mandator:Int,
-	?edited_by:Int,
-	?last_updated:String
-};
 
 @:keep
 @:rtti

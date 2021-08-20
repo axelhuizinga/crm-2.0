@@ -153,6 +153,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}		
 		dataAccess = QCModel.dataAccess;
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
+		trace(fieldNames.join('|'));
 		dataDisplay = QCModel.dataDisplay;
 		//DEALS
 		dealDataAccess = DealsModel.dataAccess;
@@ -245,9 +246,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function loadQC():Void
 	{		
-		trace('loading:${qcData["lead_id"]}');
 		if(qcData == null)
 			return;
+		trace('loading:${qcData["lead_id"]}');
 		var p:Promise<DbData> = props.load(
 			{
 				classPath:'data.Deals',
@@ -572,7 +573,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 	
-	function relData():ReactFragment {
+	/*function relData():ReactFragment {
 		return [
 			for(model in ['deals','accounts']){
 				if(ormRefs.exists(model))
@@ -595,7 +596,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				
 			}
 		];
-	}//'Kontakt - Bearbeite ' + 
+	}*/
+	//'Kontakt - Bearbeite ' + 
 
 	/*function relDataLists():ReactFragment {
 

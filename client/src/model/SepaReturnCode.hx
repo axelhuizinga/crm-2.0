@@ -1,10 +1,5 @@
 package model;
 
-typedef SepaReturnCodeProps = {
-	?code:String,
-	?description:String,
-	?locale:String
-};
 
 @:keep
 @:rtti

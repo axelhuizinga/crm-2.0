@@ -1,14 +1,5 @@
 package model;
 
-typedef TargetAccountProps = {
-	?name:String,
-	?bank_name:String,
-	?iban:String,
-	?bic:String,
-	?creditor_id:String,
-	?project:String,
-	?mandator:Int
-};
 
 @:keep
 @:rtti

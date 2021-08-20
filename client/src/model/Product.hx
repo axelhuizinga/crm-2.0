@@ -1,15 +1,5 @@
 package model;
 
-typedef ProductProps = {
-	?name:String,
-	?description:String,
-	?price:String,
-	?attributes:String,
-	?mandator:Int,
-	?active:Bool,
-	?edited_by:Int,
-	?last_updated:String
-};
 
 @:keep
 @:rtti

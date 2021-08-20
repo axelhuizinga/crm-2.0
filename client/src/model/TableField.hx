@@ -1,17 +1,5 @@
 package model;
 
-typedef TableFieldProps = {
-	?table_name:String,
-	?mandator:Int,
-	?field_name:String,
-	?readonly:Bool,
-	?element:String,
-	?any:String,
-	?required:Bool,
-	?use_as_index:Bool,
-	?admin_only:Bool,
-	?field_type:String
-};
 
 @:keep
 @:rtti

@@ -1,16 +1,5 @@
 package model;
 
-typedef DebitReturnStatementProps = {
-	?sepa_code:String,
-	?iban:String,
-	?ba_id:String,
-	?amount:String,
-	?mandator:Int,
-	?last_modified:String,
-	?processed:Bool,
-	?created_at:String,
-	?value_date:String
-};
 
 @:keep
 @:rtti

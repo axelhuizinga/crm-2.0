@@ -1,30 +1,5 @@
 package model;
 
-typedef DealProps = {
-	?contact:Int,
-	?creation_date:String,
-	?account:Int,
-	?target_account:Int,
-	?booking_run:String,
-	?start_date:String,
-	?cycle:String,
-	?amount:String,
-	?product:Int,
-	?agent:Int,
-	?project:Int,
-	?active:Bool,
-	?pay_method:String,
-	?end_date:String,
-	?end_reason:Int,
-	?repeat_date:String,
-	?edited_by:Int,
-	?mandator:Int,
-	?old_active:Bool,
-	?cycle_start_date:String,
-	?last_updated:String,
-	?booking_day:String,
-	?lead_id:Int
-};
 
 @:keep
 @:rtti

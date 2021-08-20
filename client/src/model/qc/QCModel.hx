@@ -31,6 +31,7 @@ class QCModel
 				'first_name'=>{label:'Vorname'},
 				'last_name'=>{label:'Name'},
 				'email'=>{label:'Email'},
+				'use_email'=>{label:'Post per Email',type: Checkbox},
 				//'phone_code'=>{label:'Landesvorwahl'},
 				'phone_number'=>{label:'Telefon'},		
 				'mobile'=>{label:'Mobil'},
@@ -40,9 +41,9 @@ class QCModel
 				'address_2'=>{label:'Hausnummer'},
 				'postal_code'=>{label:'PLZ'},
 				'city'=>{label:'Ort'},
-				'state'=>{label:'Status',type:Select,options:['active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
-				'country_code'=>{label:'Land'},
+				//'state'=>{label:'Status',type:Select,options:['active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
 				'co_field'=>{label: 'Adresszusatz'},
+				'country_code'=>{label:'Land'},
 				'creation_date'=>{label: 'Hinzugefügt', type:Hidden, disabled: true, 
 					displayFormat: "d.m.Y H:i:S"}, 
 				'geburts_datum'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: "d.m.Y"},
@@ -52,8 +53,6 @@ class QCModel
 						'F'=>'Weiblich'
 					]
 				},
-				'comments'=>{label:'Kommentar', type:TextArea},
-				'use_email'=>{label:'Post per Email',type: Checkbox},
 				'owner' =>{label:'Agent', cellFormat: function(v):String {
 						trace('App.pbxUserData ${App.pbxUserData!=null}');
 						if(App.pbxUserData!=null)
@@ -64,13 +63,44 @@ class QCModel
 					},
 					disabled: true
 				},
-				'id' => {type:Hidden},
+				'comments'=>{label:'Kommentar', type:TextArea},				
+				'start_monat'=>{label:'Ab'},
+				'period'=>{label:'Zahlweise',type:Radio,options:[
+					'Monatlich' => 'Monatlich', 
+					'Vierteljährlich' => 'Vierteljährlich', 
+					'Halbjährlich' => 'Halbjährlich', 
+					'Jährlich' => 'Jährlich'
+				]},
+				'spenden_hoehe'=>{label:'Betrag'},
+				'buchungs_tag'=>{label:'Buchungstag'},
+				'buchungs_zeitpunkt'=>{label:'Buchung zum 1. oder 15. ',type:Radio,options:[
+					'1'=>'Monatsanfang',
+					'15'=>'Monatsmitte'
+				]},
+				'account'=>{label:'Kontonummer'},
+				'blz'=>{label:'Bankleitzahl (BLZ)'},
+				'iban'=>{label:'IBAN'},
+				'bank_name'=>{label:'Bankinstitut'},
+				'mailing'=>{label:'InfoBrief',type: Radio,options: [
+					'InfoBrief schicken' => 'InfoBrief schicken',
+					'InfoMail senden' => 'InfoMail senden',
+					'Keine Info gewünscht' => 'Keine Info gewünscht'
+				]},
+				'entry_date'=>{label: 'Verkauf',cellFormat: function(v:String) {
+					//trace(v);
+					return v!=null? DateTools.format(Date.fromString(v), "%d.%m.%Y"):'';
+					//return v;
+				}
+			},
+			//	'address'=>{label:'Straße'},
+			//	'address'=>{label:'Straße'},
 				'edited_by' => {type:Hidden},				
+				'id' => {type:Hidden},
 				'mandator'=>{type:Hidden},
 				'merged'=>{type:Hidden},
 			]
 		}
-	];
+	];//lead_id|period|anrede|account|blz|iban|bank_name|spenden_hoehe|start_monat|buchungs_tag|buchungs_zeitpunkt|mailing|client_status
 	
 	public static var qcColumns:Map<String,DataColumn> = [
 		'first_name'=>{label:'Vorname', flexGrow:0},

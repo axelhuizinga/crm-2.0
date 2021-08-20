@@ -116,7 +116,7 @@ class FormBuilder {
 		return [for(name => field in fields)
 		{
 			var value:Dynamic = Reflect.field(initialData,name);
-			//if(name=='date_of_birth')trace (field.type +' $name:' + value);
+			if(name=='entry_date')trace (field.type +' $name:' + value);
 			//trace('$i::$name');
 			switch (field.type)
 			{
@@ -237,6 +237,8 @@ class FormBuilder {
 						</div>
 					</div>');
 				case TextArea:
+					if(value==null)
+						value='';
 					jsx('<div key=${i++} className="g_row_2 g_span_2" role="rowgroup">
 					<div className="g_cell" key=${i+'_l'} role="cell">${field.label}</div>
 						<div className="g_cell" key=${i+'_r'}role="cell">
@@ -245,7 +247,7 @@ class FormBuilder {
 					</div>');
 				default:
 					renderElement((field.cellFormat != null?
-						jsx('<input name=${name} onChange=${onChange} type="text" value=${field.cellFormat('6666')} disabled=${field.disabled}  key=${i++} required=${field.required}/>')
+						jsx('<input name=${name} onChange=${onChange} type="text" value=${field.cellFormat(value)} disabled=${field.disabled}  key=${i++} required=${field.required}/>')
 						:
 						jsx('<input name=${name} onChange=${onChange} type="text" defaultValue=${value} disabled=${field.disabled}  key=${i++} required=${field.required}/>')),
 						field.label
@@ -257,8 +259,10 @@ class FormBuilder {
     public function renderForm(props:FormState, initialState:Dynamic):ReactFragment
     {
 		trace(props.model);
-		//trace(Std.string(props.fields));
 		//return null;formField<div className="g_block" ></div>${renderForms(props.modals)}
+		//trace(Std.string(props.fields));
+		trace(Reflect.fields(initialState).join('|'));
+		//trace(Std.string(initialState.fields));
 		//trace(props); ref=${props.ref} <div className="g_footer" ></div>	
 		var sK:Int = 0;
 		

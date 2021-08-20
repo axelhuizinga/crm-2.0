@@ -1,8 +1,5 @@
 package model;
 
-typedef ExtIdProps = {
-	?ext_id:Int
-};
 
 @:keep
 @:rtti

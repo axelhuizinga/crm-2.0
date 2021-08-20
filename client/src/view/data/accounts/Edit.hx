@@ -93,7 +93,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		formRef = React.createRef();
 		state =  App.initEState({
 			dataTable:[],
-			formBuilder:new FormBuilder(this),
+			//formBuilder:new FormBuilder(this),
 			initialState:initialState,
 			loading:false,
 			selectedRows:[],
@@ -479,9 +479,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			case 'update':
 				//trace(initialState);
 				trace(actualState);
-				/*var fields:Map<String,FormField> = [
+				var fields:Map<String,FormField> = [
 					for(k in dataAccess['update'].view.keys()) k => dataAccess['update'].view[k]
-				];*/
+				];
+				trace(fields.toString());
 				(actualState==null ? state.formApi.renderWait():
 				state.formBuilder.renderForm({
 					mHandlers:state.mHandlers,

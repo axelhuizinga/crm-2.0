@@ -1,14 +1,5 @@
 package model;
 
-typedef MandatorProps = {
-	?contact:Int,
-	?name:String,
-	?description:String,
-	?any:String,
-	?edited_by:Int,
-	?parent:Int,
-	?last_updated:String
-};
 
 @:keep
 @:rtti

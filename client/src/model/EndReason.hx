@@ -1,10 +1,5 @@
 package model;
 
-typedef EndReasonProps = {
-	?reason:String,
-	?edited_by:Int,
-	?mandator:Int
-};
 
 @:keep
 @:rtti

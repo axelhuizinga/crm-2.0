@@ -1,23 +1,5 @@
 package model;
 
-typedef UserProps = {
-	?contact:Int,
-	?last_login:String,
-	?user_name:String,
-	?active:Bool,
-	?edited_by:Int,
-	?actions:String,
-	?settings:String,
-	?external:String,
-	?user_group:Int,
-	?change_pass_required:Bool,
-	?online:Bool,
-	?last_request_time:String,
-	?last_error:String,
-	?mandator:Int,
-	?last_updated:String,
-	?phash:String
-};
 
 @:keep
 @:rtti

@@ -401,7 +401,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				case Audio:
 					// htmlFor=${item.formField.name}
 					jsx('<div  key=${"uf"+(i++)}  id="findForm_${i}"   className="formRow1" >         
-					<label key=${"l_"+i}>${item.label}</label> 
+					<div key=${"l_"+i}>${item.label}</div> 
 					<audio  key=${"a_"+i} id="aud_${i}" controls="1" preload="metadata" >
 					<source src=${item.formField.src} type="audio/mpeg"/>     
 					</audio>

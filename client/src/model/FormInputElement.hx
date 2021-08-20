@@ -1,8 +1,5 @@
 package model;
 
-typedef FormInputElementProps = {
-	?type:String
-};
 
 @:keep
 @:rtti

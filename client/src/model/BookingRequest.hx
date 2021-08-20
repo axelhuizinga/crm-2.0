@@ -1,40 +1,5 @@
 package model;
 
-typedef BookingRequestProps = {
-	?ag_name:String,
-	?ag_konto_or_iban:String,
-	?ag_blz_or_bic:String,
-	?zahlpfl_name:String,
-	?zahlpfl_name2:String,
-	?zahlpfl_strasse:String,
-	?zahlpfl_name_ort:String,
-	?zahlpfl_name_kto_or_iban:String,
-	?zahlpfl_name_blz_or_bic:String,
-	?betrag:String,
-	?currency:String,
-	?zahlart:String,
-	?termin:String,
-	?vwz1:String,
-	?vwz2:String,
-	?vwz3:String,
-	?vwz4:String,
-	?vwz5:String,
-	?vwz6:String,
-	?vwz7:String,
-	?vwz8:String,
-	?vwz9:String,
-	?tracking_status:String,
-	?anforderungs_datum:String,
-	?rueck_datum:String,
-	?cycle:String,
-	?ref_id:String,
-	?mandat_id:String,
-	?mandat_datum:String,
-	?ag_creditor_id:String,
-	?sequenz:String,
-	?super_ag_name:String,
-	?mandator:Int
-};
 
 @:keep
 @:rtti

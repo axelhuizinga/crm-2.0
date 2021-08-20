@@ -1,19 +1,5 @@
 package model;
 
-typedef AccountProps = {
-	?contact:Int,
-	?bank_name:String,
-	?bic:String,
-	?account:String,
-	?iban:String,
-	?account_holder:String,
-	?sign_date:String,
-	?status:String,
-	?creation_date:String,
-	?edited_by:Int,
-	?last_updated:String,
-	?mandator:Int
-};
 
 @:keep
 @:rtti

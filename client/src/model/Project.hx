@@ -1,15 +1,5 @@
 package model;
 
-typedef ProjectProps = {
-	?mandator:Int,
-	?name:String,
-	?description:String,
-	?edited_by:Int,
-	?provision_percent:String,
-	?cancellation_liable:String,
-	?target_account:Int,
-	?last_updated:String
-};
 
 @:keep
 @:rtti

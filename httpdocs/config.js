@@ -51,8 +51,8 @@ export let config =
 		return scrollbarWidth;
 	},
 	sidebarDims:{
-		minWidth:'15%',
-		maxWidth:'20%'
+		minWidth:'19%',
+		maxWidth:'25%'
 	}
 
 }

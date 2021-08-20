@@ -3,12 +3,21 @@ package model;
 
 @:keep
 @:rtti
-class Contact extends ORM
+class QC1 extends ORM
 {
-	public static var tableName:String = "contacts";
+	public static var tableName:String = "_memory";
+	public static var customFields:Array<String> = 'lead_id,period,anrede,co_field,geburts_datum,account,blz,iban,bank_name,spenden_hoehe,start_monat,buchungs_tag,buchungs_zeitpunkt,mailing,client_status'.split(',');
 
 	public function new(data:Map<String,String>) {
 		super(data);		
+		for(f in customFields)
+		{
+			if(data.exists(f)){
+				var nv:Dynamic = data.get(f);
+				trace('setProperty:$f => $nv ');
+				Reflect.setProperty(this, f, nv);				
+			}
+		}
 	}	
 		
 	@dataType("bigint")
@@ -280,5 +289,4 @@ class Contact extends ORM
 		this.title_pro = title_pro ;
 		return title_pro;
 	}	
-	
 }

@@ -42,7 +42,7 @@ class ORM {
 
 	public function new(data:Map<String,Dynamic>) {
 		fields = Meta.getFields(Type.getClass(this));	
-		//trace(fields);
+		trace(Type.typeof(fields) + ':' + Type.getClassName(Type.getClass(this)));
 		//trace(Std.string(untyped Type.getClass(this)._meta_fields));
 		fields.id = {
 			dataType : ['bigint']
@@ -50,7 +50,7 @@ class ORM {
 		//trace(Std.string(fields));
 		fieldsInitalized = new Array();
 		fieldsModified = new Array();
-		formBuilder = new FormBuilder(this);
+		//formBuilder = new FormBuilder(this);
 		propertyNames = Reflect.fields(fields);
 		state = {};
 
@@ -58,7 +58,7 @@ class ORM {
 		{
 			if(data.exists(f)){
 				var nv:Dynamic = data.get(f);
-				//trace('$f => $nv ' + Reflect.field(fields, f).dataType[0]);
+				trace('$f => $nv ' + Reflect.field(fields, f).dataType[0]);
 				Reflect.setProperty(this, f, switch(Reflect.field(fields, f).dataType[0]){				
 					case('bigint[]'):
 						nv==null?[]:nv;

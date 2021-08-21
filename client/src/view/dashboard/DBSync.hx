@@ -54,15 +54,17 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		
 		//{label:'BenutzerDaten Abgleich',action:'syncUserDetails'},
 		//{label:'BuchungsDaten',action:'importAllBookingRequests'},
-		
+		/*,options:[
+			{label: 'Update', name: 'sync_now', type:Checkbox}]
+			, options:[
+			{label: 'Update', name: 'sync_contacts', type:Checkbox}]
+			*/
 		//{label:'Stammdaten Import ',action:'importContacts'},
-		{label:'BuchungsAnforderungen ',action:'checkBookingRequests',options:[
-			{label: 'Update', name: 'sync_now', type:Checkbox}]},
-		{label:'Kontakt Daten ',action:'checkContacts', options:[
-			{label: 'Update', name: 'sync_contacts', type:Checkbox}]},		
-		{label:'Spenden Daten ',action:'checkDeals'},
-		{label:'Konto Daten ',action:'checkAccounts'}
-		
+		{label:'BuchungsAnforderungen ',action:'checkBookingRequests'},
+		{label:'Kontakt Daten ',action:'checkContacts'},		
+		{label:'Spenden Daten ',action:'checkDeals'},		
+		{label:'Konto Daten ',action:'checkAccounts'}, 
+		{label:'Reset QC Test Daten ',action:'syncQC'}
 		/*{label:'Spenden Import ',action:'importDeals'},
 		{label:'Spenden Update ',action:'syncDeals'},
 		{label:'Konten Import ',action:'importAccounts'},
@@ -111,7 +113,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-			load: function(param:DBAccessProps) return dispatch(CRUD.update(param))			
+			load: function(param:DBAccessProps) return dispatch(CRUD.update(param))	
         }
 	}			
 	public function createFieldList(ev:ReactEvent):Void
@@ -294,6 +296,35 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 
 		});//*/
 		return p;
+	}
+
+	function syncQC():Void {
+		var dbQueryParam:DBAccessProps = {
+			classPath:'data.SyncExternal',
+			action:'sync2dev',
+			extDB: true,
+			filter:{mandator:'1'},
+			//limit:1000,
+			//offset:0,
+			dbUser:props.userState.dbUser,
+			devIP:App.devIP,
+			//maxImport:4000,
+			//relations:new Map()
+		}
+		var p:Promise<DbData> = LivePBXSync.query(dbQueryParam);
+		p.then(function(data:DbData){
+				
+			var offset = Std.parseInt(data.dataInfo['qc_leads']);
+			App.store.dispatch(Status(Update(
+				{
+					className:' ',
+					text:'${offset} von ${data.dataInfo['maxImport']} aktualisiert'
+				}
+			)));
+
+			trace(data);
+			return p;
+		});		
 	}
 
 	

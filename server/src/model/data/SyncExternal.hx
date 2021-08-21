@@ -108,50 +108,74 @@ class SyncExternal extends Model
 		dbData.dataInfo.set('dealsCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
 		S.sendInfo(dbData);	
 	}
-    /*public function syncContactDetails(?contact:Dynamic):Void
-    {
-        var info:Map<String,Dynamic>  = getViciDialData();
-        //var req:Http = new Http(info['syncApi']);
-        //var req:Http = new Http('https://pitverwaltung.de/test/php/test.php');
-        trace(info['syncApi']);
-        //trace(info);
-        var user:String = info['admin'];
-        var pass:String = info['pass'];
-        var url:String = info['syncApi']+'/syncContacts.php';
-        var data:String = Syntax.code("exec({0})", 'curl -d "user=${user}&pass=${pass}" ${url}');
-        //var data:String = untyped __call__('exec','curl -d "user=${user}&pass=${pass}" ${url}');
-        trace(data);
-            //S.saveLog(data);
-            var dRows:Array<Dynamic> = Json.parse(data);
-            trace(dRows.length);
-            //trace(dRows[dRows.length-2]);
-            trace(data.indexOf('phone_data'));
-            //dbData.dataRows = [['length'=>dRows.length]];
-            dbData.dataRows = [];
-            var fNames:Array<String> = Reflect.fields(dRows[0]);
-            if(!fNames.has('phone_data'))
-                fNames.push('phone_data');
-            trace(fNames.has('phone_data'));
-            for(r in dRows)
-            {
-                dbData.dataRows.push(
-                    [
-                        for(n in fNames)
-                        n => Reflect.field(r,n)
-                    ]
-                );
-            }
-            S.sendData(saveContactDetails(), null);
-      };
-        req.onError = function (msg:String)
-        {
-            trace(msg);
-        }
-        req.onStatus = function (s:Int)
-        { trace(s);}
-        req.request(true);
-        trace('done');
-    }*/
+
+	public function sync2dev() {
+		// GET QC LEADS COPIED TO DEV DB
+		syncTable2dev('vicidial_list');
+		var stmt:PDOStatement = S.syncDbh.query('SELECT DISTINCT entry_list_id FROM dev.vicidial_list');
+		var entry_lists:NativeArray = stmt.fetchAll(PDO.FETCH_COLUMN);
+		trace('entry_lists:' +  Global.count(entry_lists));
+		var synced:Int = 0;
+		for(eid in entry_lists){
+			//	GET ALL TABLES STARTING WITH 'custom'
+			var stmt:PDOStatement = S.syncDbh.query('
+			SELECT table_name 
+			from information_schema.tables
+			where table_type = "BASE TABLE"
+				and table_name like "custom_${eid}%"
+			and table_schema = "asterisk"');
+	
+			//S.checkStmt(S.syncDbh, stmt, 'get custom_* tables:'+Std.string(S.syncDbh.errorInfo()));	
+
+			if(stmt.execute()){
+				// success - continue
+				var res:NativeArray = stmt.fetchAll(PDO.FETCH_COLUMN);
+				if(Global.count(res)==0)
+					continue;
+				trace(res);
+				
+					//S.sendInfo(dbData);	
+				for(tname in res){
+				//var it:Iterator<Map<String,Dynamic>> = res.iterator();
+					trace(Std.string(tname));
+					syncTable2dev(tname);
+					synced++;
+				}
+				dbData.dataInfo.set('results',['custom_* tables copied:', synced]);
+			}
+		}
+		S.sendInfo(dbData);	
+	}
+	
+	//function syncTable2dev(table:String, ?entry_lists:String) {
+	function syncTable2dev(table:String) {
+    
+		// 
+		S.syncDbh.exec('CREATE TABLE IF NOT EXISTS dev.$table LIKE asterisk.$table');
+		if(S.syncDbh.errorCode() == '00000'){
+			// CREATED TABLE IF NOT EXISTS
+			trace('TRUNCATE dev.$table');
+			S.syncDbh.exec('TRUNCATE dev.$table');
+			if(S.syncDbh.errorCode() == '00000'){
+				// EMPTIED TABLE		
+				//S.sendInfo(dbData);		
+				// COPY QC DATA	
+				var stmt:PDOStatement = S.syncDbh.query(table == 'vicidial_list'?				
+					//'INSERT INTO dev.$table SELECT * FROM asterisk.$table WHERE list_id=1900':
+					'SELECT COUNT(*) FROM dev.$table':
+					'INSERT INTO dev.$table SELECT * FROM asterisk.$table');
+				
+				if(!stmt.execute()){
+					dbData.dataErrors.set('$table',"copy failed");
+				}
+				trace('synced into $table:' + stmt.rowCount());
+				if(table == 'vicidial_list'){
+					dbData.dataInfo.set('qc_leads:',stmt.rowCount());
+				}
+			}
+		};
+	}
+	
 
     function saveContactDetails():DbData
     {

@@ -367,6 +367,23 @@ class LivePBXSync
 		});
 	}
 
+	public static function query(props:DBAccessProps) {
+		return new Promise<DbData>(function(resolve, reject){
+			
+			trace('creating BinaryLoader ${App.config.api}');
+			var bl:XMLHttpRequest = BinaryLoader.dbQuery(
+				App.config.api,
+				props,
+				function(data:DbData)
+				{			
+					trace(data.dataInfo);
+					resolve(data);
+				}
+			);
+			return null;
+		});
+	}
+
 	public static function check(props:DBAccessProps) {
 		return new Promise<DbData>(function(resolve, reject){
 			if (!props.userState.dbUser.online)

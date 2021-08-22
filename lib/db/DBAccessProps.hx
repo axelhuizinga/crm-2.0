@@ -7,6 +7,7 @@ import state.UserState;
 
 typedef DBAccessAction = {
 	action:String,
+	?actionArgs:Map<String,Dynamic>,
 	?classPath:String,
 	?id:Int,
 	?offset:Int,

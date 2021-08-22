@@ -143,7 +143,7 @@ class FormBuilder {
 					);
 				case Radio:
 					//trace (field.type +' $name:' + value);
-					jsx('<div key=${i++} className="g_row_2" role="rowgroup">
+					jsx('<div key=${i++} className="g_row_2_radio" role="rowgroup" >
 						<div className="g_cell" role="cell" key=${name+'_'+i}>${field.label}</div>
 						<div className="g_cell_r optLabel" role="cell" key=${name+'_opt'}>
 							${renderRadio(name,field.options, value)}
@@ -302,7 +302,7 @@ class FormBuilder {
 	}
 	
 	function onChange(ev:Dynamic) {
-		trace(ev.target.type);
+		//trace(ev.target.type);
 		switch (ev.target.type)
 		{
 			case 'checkbox':

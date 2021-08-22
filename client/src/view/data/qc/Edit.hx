@@ -83,8 +83,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//{label:'Speichern + Schließen',action:'update', then:'close'},
 		{label:'Speichern',action:'update'},		
 		{label:'Zurücksetzen',action:'reset'},
-		{label:'QC OK',action:'qcok'},
-		{label:'QC NEGATIV',action:'qcneg'},
+		{label:'QC OK',action:'qc_ok'},
+		{label:'QC NEGATIV',action:'qc_notok'},
 		{separator: true},		
 		//{label: 'ID',formField: { name: 'id'}},
 		//{label:'Spenden Bearbeiten',action:'showSelectedDeals', disabled:true, section: 'Edit', classPath:'view.data.contacts.Deals'},	
@@ -171,7 +171,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//dataTable:[],
 			actualState:null,
 			initialData:null,
-			mHandlers:menuItems,
+			mHandlers:[for(v in menuItems) js.lib.Object.assign({},v)],
 			loading:false,
 			model:'contacts',
 			ormRefs:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
@@ -182,7 +182,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					dataClassPath:'data.Deals',
 					label:'Bearbeiten',
 					section: 'Edit',
-					items: menuItems
+					items: [for(v in menuItems) js.lib.Object.assign({},v)]
 				}					
 				,{	
 					section: props.match.params.section==null? 'Edit':props.match.params.section, 
@@ -275,7 +275,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				if( data.dataInfo.exists('recordings')){
 					trace(data.dataInfo.get('recordings'));
 					//RESET MENU ITEMS
-					state.mHandlers = menuItems;
+					state.mHandlers = [for(v in menuItems) js.lib.Object.assign({},v)];
 					BaseForm.addRecordings(state,data.dataInfo.get('recordings'));
 				}
 				var qc:model.QC = new model.QC(qcd);
@@ -447,6 +447,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			trace(k);
 			//v.props.save(v);
 		}
+		//1919621165 QCBAD 1800
 		if(state.actualState != null)
 			trace('length:' + state.actualState.fieldsModified.length + ':' + state.actualState.fieldsModified.join('|') );
 		if(state.actualState == null || state.actualState.fieldsModified.length==0)
@@ -458,8 +459,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var elements:HTMLCollection = formElement.elements;
 		var aState:Dynamic = copy(state.actualState);
 		var dbQ:DBAccessProps = {
-			classPath:'data.Contacts',
-			action:'update',
+			classPath:'data.Deals',
+			action:'saveQC',
+			actionArgs:['qcOk'=>1],
 			data:data2save,
 			filter:{id:state.actualState.id,mandator:1},
 			resolveMessage:{

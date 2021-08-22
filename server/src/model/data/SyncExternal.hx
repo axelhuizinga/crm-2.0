@@ -110,8 +110,14 @@ class SyncExternal extends Model
 	}
 
 	public function sync2dev() {
-		// GET QC LEADS COPIED TO DEV DB
+		// GET QC LEADS COPIED TO DEV DB		
+		//var sql:String = 'INSERT INTO dev.$table SELECT * FROM asterisk.$table WHERE list_id=1900';
+		var table:String = 'vicidial_list';
+		var sql:String = 'SELECT lead_id FROM asterisk.$table WHERE list_id=1900';
+		trace(S.syncDbh.query(sql).fetchAll(PDO.FETCH_COLUMN));
 		syncTable2dev('vicidial_list');
+		syncTable2dev('vicidial_list');
+		//S.sendInfo(dbData);	
 		var stmt:PDOStatement = S.syncDbh.query('SELECT DISTINCT entry_list_id FROM dev.vicidial_list');
 		var entry_lists:NativeArray = stmt.fetchAll(PDO.FETCH_COLUMN);
 		trace('entry_lists:' +  Global.count(entry_lists));
@@ -122,7 +128,7 @@ class SyncExternal extends Model
 			SELECT table_name 
 			from information_schema.tables
 			where table_type = "BASE TABLE"
-				and table_name like "custom_${eid}%"
+				and table_name like "custom_${eid}"
 			and table_schema = "asterisk"');
 	
 			//S.checkStmt(S.syncDbh, stmt, 'get custom_* tables:'+Std.string(S.syncDbh.errorInfo()));	
@@ -150,27 +156,41 @@ class SyncExternal extends Model
 	//function syncTable2dev(table:String, ?entry_lists:String) {
 	function syncTable2dev(table:String) {
     
-		// 
+		//S.syncDbh.exec('DROP TABLE dev.$table');
 		S.syncDbh.exec('CREATE TABLE IF NOT EXISTS dev.$table LIKE asterisk.$table');
+		// 
 		if(S.syncDbh.errorCode() == '00000'){
 			// CREATED TABLE IF NOT EXISTS
-			trace('TRUNCATE dev.$table');
-			S.syncDbh.exec('TRUNCATE dev.$table');
+			//trace('DROP dev.$table');
+			S.syncDbh.exec('
+			TRUNCATE TABLE dev.$table;
+			FLUSH TABLE dev.$table;');
 			if(S.syncDbh.errorCode() == '00000'){
 				// EMPTIED TABLE		
+				//var stmtc:PDOStatement = S.syncDbh.query('SELECT COUNT(*) FROM dev.$table');
+				/*var stmtc:PDOStatement = S.syncDbh.query('ALTER TABLE dev.$table AUTO_INCREMENT=1;FLUSH TABLE dev.$table;');
+				if(!stmtc.execute()){
+					dbData.dataErrors.set('$table',"$table count check failed");
+					S.sendErrors(dbData);
+				}
+				else{
+					trace('should be 0:' + Std.string(stmtc.errorInfo()));
+				}*/
 				//S.sendInfo(dbData);		
 				// COPY QC DATA	
-				var stmt:PDOStatement = S.syncDbh.query(table == 'vicidial_list'?				
-					//'INSERT INTO dev.$table SELECT * FROM asterisk.$table WHERE list_id=1900':
-					'SELECT COUNT(*) FROM dev.$table':
-					'INSERT INTO dev.$table SELECT * FROM asterisk.$table');
-				
+				var sql:String = (table == 'vicidial_list'?				
+					'INSERT IGNORE INTO dev.$table SELECT * FROM asterisk.$table WHERE list_id=1900':
+					//'SELECT COUNT(*) FROM dev.$table':
+					'INSERT IGNORE INTO dev.$table SELECT * FROM asterisk.$table');
+				trace(sql);
+				var stmt:PDOStatement = S.syncDbh.query(sql);
+				//trace(stmt.debugDumpParams)
 				if(!stmt.execute()){
 					dbData.dataErrors.set('$table',"copy failed");
 				}
 				trace('synced into $table:' + stmt.rowCount());
 				if(table == 'vicidial_list'){
-					dbData.dataInfo.set('qc_leads:',stmt.rowCount());
+					dbData.dataInfo.set('qc_leads',stmt.rowCount());
 				}
 			}
 		};

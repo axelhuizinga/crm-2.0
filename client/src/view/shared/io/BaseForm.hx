@@ -48,9 +48,24 @@ class BaseForm
 				type:Audio
 			}
 		});
-		state.mHandlers = state.sideMenu.menuBlocks[state.sideMenu.section].items.concat(recItems);
-		trace(state.mHandlers.toString());
+		trace(state.mHandlers.length + '::' + state.sideMenu.menuBlocks[state.sideMenu.section].items.length);
+		state.mHandlers = state.sideMenu.menuBlocks[state.sideMenu.section].items.concat(recItems.filter(function(mi:MItem) {
+			//	TODO: WHY DO WE NEED THIS FILTER?
+			//for(si in state.mHandlers){
+			for(si in state.sideMenu.menuBlocks[state.sideMenu.section].items){			
+				//trace(si);
+				if(si.formField != null && si.formField.src.length >0){
+					//trace(mi.formField.src + ' == ' + si.formField.src);
+					if(mi.formField.src == si.formField.src){ 					
+						return false;
+					}
+				}
+			}
+			return true;
+		}));
 		//{separator: true},		
+		trace(state.mHandlers.length + '::' + state.sideMenu.menuBlocks[state.sideMenu.section].items.length);
+		//trace(state.mHandlers.toString());
 		//{label: 'ID',formField: { name: 'id'}},
 	}
 
@@ -64,8 +79,8 @@ class BaseForm
 
 	public static function doChange(comp:Dynamic,name:String,value:Dynamic) {		
 		//trace(comp.state.actualState);
-		trace(Type.getClassName(Type.getClass(comp)));
-		trace('$name: $value ');
+		//trace(Type.getClassName(Type.getClass(comp)));
+		//trace('$name: $value ');
 		//if(comp.state.actual)
 		//trace('$name: $value ' + Type.typeof(untyped comp.state.ormRefs.get('deals').orms.get(75)));
 		if(name!=null && name!=''){

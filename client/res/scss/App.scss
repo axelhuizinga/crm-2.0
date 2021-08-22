@@ -969,11 +969,10 @@ form td, form caption
 .grid_box
 {
 	display: grid;
-	
 	font-size: 1.0rem;
 	grid-auto-rows:  min-content;
-	/*grid-template-columns: 1fr 1fr;
-	grid-template-columns: minmax(50% auto);min-width: 80%;
+	grid-template-columns: 1fr 1fr;
+	/*grid-template-columns: minmax(50% auto);min-width: 80%;
 	overflow-y: visible;	border-bottom: thin solid #aaa;white-space: nowrap;*/
 	border: thin solid #aaa;	
 	border-radius: 0.2rem 0.2rem 0 0;	
@@ -981,6 +980,8 @@ form td, form caption
 	overflow-x: hidden;
 	margin: 0;
 	white-space: nowrap;
+	width: min-content;
+	margin: auto;
 }
 .grid_border_box{
 	border: thin solid #aaa;
@@ -1072,7 +1073,12 @@ form td, form caption
 	grid-template-columns: 0.6fr 1fr;
 	border: 1px solid #ccc;
 	border-radius: $tabs-boxed-link-radius;
-	max-width: max-content;
+}
+.g_row_2_radio{
+	display: grid;
+	grid-template-columns: min-content 1fr;
+	border: 1px solid #ccc;
+	border-radius: $tabs-boxed-link-radius;
 }
 .g_span_2{
 	grid-column: 1 / span 2;
@@ -1090,14 +1096,15 @@ form td, form caption
 
 .g_cell, .g_cell_r
 {
-	display: flex;
+	
 	align-self: start;
 	height: 1.8rem;
 }
 .g_cell_r{
-	justify-content: end;
+	display: flex;
 	justify-self: end;
-	max-width: max-content;
+	/*justify-content: end;
+	max-width: max-content;*/
 }
 .g_cell_r option{
 	max-width: 200px;

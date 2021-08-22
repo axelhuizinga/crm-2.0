@@ -11,6 +11,8 @@ class Deals extends Model
 {
 	private static var vicdial_list_fields = 'lead_id,entry_date,modify_date,status,user,vendor_lead_code,source_id,list_id,gmt_offset_now,called_since_last_reset,phone_code,phone_number,title,first_name,middle_initial,last_name,address1,address2,address3,city,state,province,postal_code,country_code,gender,date_of_birth,alt_phone,email,security_phrase,comments,called_count,last_local_call_time,rank,owner,entry_list_id'.split(',');		
 
+	private static var qcdb = 'dev';
+
 	public function new(?param:Map<String,String>) 
 	{
 		//table = 'contacts';
@@ -24,26 +26,52 @@ class Deals extends Model
 			case 'getQC':
 				getQC();
 			case 'doQC':
-				doQC();				
+				doQC();		
+			//case 'saveQC':
+			case qc if( ~/qc_*/.match(qc)):
+				saveQC();		
 			case _:
 				run();
 		}		
 	}	
 
+	function saveQC() {
+		trace('...');
+		trace(param);
+		switch (action){
+			case 'qc_ok'|'qc_bad':
+				//SAVE STATE AND MOVE TO LIST
+				var sql:String = 'UPDATE dev.vicidial_list SET status="QCOK", list_id=10000 WHERE lead_id=${param["lead_id"]}';
+				trace(sql);
+			default:
+				trace(action);
+
+		}
+		S.sendInfo(dbData,['saved'=>1]);
+	}
+
+	/**
+	 * Get List of QC leads
+	 */
+
 	function getQC(){
 		var vl_fields:String = vicdial_list_fields.map(function(f:String) {
 			return 'vl.${f}';
 		}).join(',');		
-		var sql:String = 'SELECT $vl_fields,full_name FROM vicidial_list vl INNER JOIN vicidial_users vu ON vu.user=vl.owner WHERE list_id=1900 AND status="NEW" ORDER BY last_local_call_time';
+		var sql:String = 'SELECT $vl_fields,full_name FROM ${qcdb}.vicidial_list vl INNER JOIN vicidial_users vu ON vu.user=vl.owner WHERE list_id=1900 AND status="NEW" ORDER BY last_local_call_time';
 		trace(sql);
-		trace(S.viciBoxDbh);
-
+		trace(S.viciBoxDbh.getAttribute(PDO.ATTR_SERVER_INFO));
+		
 		var stmt:PDOStatement = S.viciBoxDbh.query(sql);
+		trace(stmt.errorInfo());
 		var qcData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		//trace(Std.string(qcData));
 		sendRows(qcData);
 	}
 
+	/**
+	 * Load QC lead data
+	 */
 	function doQC() {
 		var qc_fields:String = vicdial_list_fields.map(function(f:String) {
 			return 'vl.${f}';
@@ -53,9 +81,9 @@ class Deals extends Model
 		qc_fields += ',' + c_fields.map(function(f:String) {
 			return 'cu.${f}';
 		}).join(',');
-		trace('SELECT $qc_fields FROM vicidial_list vl INNER JOIN `custom_${param["filter"].entry_list_id}` cu ON cu.lead_id=vl.lead_id WHERE vl.lead_id=${param["filter"].lead_id}');
+		trace('SELECT $qc_fields FROM ${qcdb}.vicidial_list vl INNER JOIN `custom_${param["filter"].entry_list_id}` cu ON cu.lead_id=vl.lead_id WHERE vl.lead_id=${param["filter"].lead_id}');
 		var stmt:PDOStatement = S.viciBoxDbh.query(
-			'SELECT $qc_fields FROM vicidial_list vl INNER JOIN `custom_${param["filter"].entry_list_id}` cu ON cu.lead_id=vl.lead_id WHERE vl.lead_id=${param["filter"].lead_id}');
+			'SELECT $qc_fields FROM ${qcdb}.vicidial_list vl INNER JOIN `custom_${param["filter"].entry_list_id}` cu ON cu.lead_id=vl.lead_id WHERE vl.lead_id=${param["filter"].lead_id}');
 		var qcData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		trace(Global.count(qcData));
 		if(Global.count(qcData)==1){
@@ -67,25 +95,4 @@ class Deals extends Model
 		sendRows(qcData);		
 	}
 
-	//function getRecordings(lead_id:Dynamic):Array<Map<String,String>>
-	function getRecordings1(lead_id:Dynamic):Array<Map<String,String>>
-	{
-		var m_length = 30;
-		var recMap:Array<Map<String,String>> = new Array();
-		//var records:Array<Map<String,String>> = Lib.toHaxeArray(query('SELECT location,start_time,length_in_sec FROM recording_log WHERE lead_id="$lead_id" ORDER BY start_time DESC',null,S.viciBoxDbh)).map(function() {
-		var records:NativeArray = query('SELECT location,DATE_FORMAT(start_time,"%T %d.%c.%y") start_time,length_in_sec FROM recording_log WHERE lead_id="$lead_id" AND length_in_sec > $m_length ORDER BY start_time DESC',null,S.viciBoxDbh);
-		Syntax.foreach(records, function(ri:Int, row:NativeArray){			
-			trace('$ri => $row'); 
-			//Syntax.foreach(records, function(key:String, row:NativeArray){
-			//trace('$key => $value'); 
-			recMap.push(Lib.hashOfAssociativeArray(row));
-		});
-		//var rc:Int = records.length;
-		//trace ('$rc == ' + records.length);
-		return recMap;//.filter(function(r:Dynamic) return  (Std.parseInt(untyped r['length_in_sec']) > m_length)).map();		
-		//return Lib.toPhpArray(records.filter(function(r:Dynamic) return  (Std.parseInt(r['length_in_sec']) > 60)));		
-		//TODO: CONFIG FOR MIN LENGTH_IN_SEC, NUM_DISPLAY FOR RECORDINGS	
-		//return Lib.toPhpArray(records.filter(function(r:Dynamic) return untyped Lib.objectOfAssociativeArray(r).length_in_sec > 60));		
-		
-	}
 }

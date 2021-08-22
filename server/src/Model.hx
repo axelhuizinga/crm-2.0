@@ -1085,7 +1085,8 @@ class Model
 	{
 		var m_length = 30;
 		var recMap:Array<Map<String,String>> = new Array();
-		var sql:String = 'SELECT location,DATE_FORMAT(start_time,"%d.%c.%y %k:%i") start_time,length_in_sec FROM ${S.dbViciBoxDB}. recording_log WHERE lead_id="$lead_id" AND length_in_sec > $m_length ORDER BY start_time DESC';
+		// ${S.dbViciBoxDB}
+		var sql:String = 'SELECT location,DATE_FORMAT(start_time,"%d.%c.%y %k:%i") start_time,length_in_sec FROM asterisk. recording_log WHERE lead_id="$lead_id" AND length_in_sec > $m_length ORDER BY start_time DESC';
 		trace(sql);
 		var records:NativeArray = query(sql,null,S.viciBoxDbh);
 		Syntax.foreach(records, function(ri:Int, row:NativeArray){			

@@ -130,13 +130,14 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		if(props.dataStore.contactData != null && props.match.params.id == null)
 			props.match.params.id = Std.string(props.dataStore.contactData.keys().next());		
 		//REDIRECT WITHOUT ID OR edit action
-		if(props.match.params.id==null && ~/open(\/)*$/.match(props.match.params.action) )
+		if(props.match.params.id=='null' && ~/open|update(\/)*$/.match(props.match.params.action) )
 		{
 			trace('nothing selected - redirect');
 			var baseUrl:String = props.match.path.split(':section')[0];
 			props.history.push('${baseUrl}List/get');
 			return;
 		}		
+		//trace(props.match.params.id + ':' + props.match.params.id==null && ~/open|update(\/)*$/.match(props.match.params.action));
 		dataAccess = ContactsModel.dataAccess;
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
 		dataDisplay = ContactsModel.dataDisplay;
@@ -152,11 +153,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		if(props.dataStore.contactData != null)
 			trace(props.dataStore.contactData.keys().next());
 				
+		var _iMenuItems:Array<MItem> = [for(v in menuItems) js.lib.Object.assign({},v)];
 		state =  App.initEState({
 			//dataTable:[],
 			actualState:null,
 			initialData:null,
-			mHandlers:menuItems,
+			mHandlers:_iMenuItems,
 			loading:false,
 			model:'contacts',
 			ormRefs:new Map<String,ReactComponentOf<DataFormProps,FormState>>(),
@@ -167,7 +169,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					dataClassPath:'data.Contacts',
 					label:'Bearbeiten',
 					section: 'Edit',
-					items: menuItems
+					items: _iMenuItems
 				}					
 				,{	
 					section: props.match.params.section==null? 'Edit':props.match.params.section, 
@@ -254,7 +256,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				if( data.dataInfo.exists('recordings')){
 					trace(data.dataInfo.get('recordings'));
 					//RESET MENU ITEMS
-					state.mHandlers = menuItems;
+					trace(menuItems.length);
+					state.mHandlers = [for(v in menuItems) js.lib.Object.assign({},v)];
 					//state.sideMenuInstance.enableItems('List',['edit','delete','selectionClear'],false);
 					BaseForm.addRecordings(state,data.dataInfo.get('recordings'));
 				}

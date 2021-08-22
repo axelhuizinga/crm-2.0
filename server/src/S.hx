@@ -209,7 +209,7 @@ class S
 				params = dbQuery.dbParams;
 			params.set('mandator',dbQuery.dbUser.mandator);
 			user_id = dbQuery.dbUser.id;
-			//trace(params);
+			trace(params.get('classPath') + ':' + params.get('action'));
 			if(Lib.isCli())
 				safeLog(params);
 			else 
@@ -227,10 +227,11 @@ class S
 		}
 			//host=$dbHost;
 		dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
-			Syntax.array([PDO.ATTR_PERSISTENT,true]));
+			Syntax.array([PDO.ATTR_PERSISTENT,true]));			
+		
 		if(params.get('viciBoxDB')){
 			//CONNECT DIALER DB	
-			trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxDB');					
+			trace('$dbViciBoxUser mysql:host=$dbViciBoxHost;dbname=$dbViciBoxDB');					
 			viciBoxDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxDB',
 				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
 			trace(viciBoxDbh);

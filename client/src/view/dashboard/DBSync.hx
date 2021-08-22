@@ -299,13 +299,19 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	function syncQC():Void {
+		App.store.dispatch(Status(Update(
+			{
+				className:' ',
+				text:'Aktualisiere QC Test leads'
+			}
+		)));
 		var dbQueryParam:DBAccessProps = {
 			classPath:'data.SyncExternal',
 			action:'sync2dev',
 			extDB: true,
 			filter:{mandator:'1'},
 			//limit:1000,
-			//offset:0,
+			//offset:0, 
 			dbUser:props.userState.dbUser,
 			devIP:App.devIP,
 			//maxImport:4000,
@@ -313,12 +319,13 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		}
 		var p:Promise<DbData> = LivePBXSync.query(dbQueryParam);
 		p.then(function(data:DbData){
-				
+			trace(data.dataInfo);
+			trace(data.dataInfo.keys());
 			var offset = Std.parseInt(data.dataInfo['qc_leads']);
 			App.store.dispatch(Status(Update(
 				{
 					className:' ',
-					text:'${offset} von ${data.dataInfo['maxImport']} aktualisiert'
+					text:'${data.dataInfo['qc_leads']} QC Test leads aktualisiert'
 				}
 			)));
 

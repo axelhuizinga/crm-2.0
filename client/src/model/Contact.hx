@@ -132,23 +132,23 @@ class Contact extends ORM
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var address(default,set):String;
+	@:isVar public var address1(default,set):String;
 
-	function set_address(address:String):String{
-		if(initialized('address'))
-			modified('address');
-		this.address = address ;
-		return address;
+	function set_address1(address1:String):String{
+		if(initialized('address1'))
+			modified('address1');
+		this.address1 = address1 ;
+		return address1;
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var address_2(default,set):String;
+	@:isVar public var address2(default,set):String;
 
-	function set_address_2(address_2:String):String{
-		if(initialized('address_2'))
-			modified('address_2');
-		this.address_2 = address_2 ;
-		return address_2;
+	function set_address2(address2:String):String{
+		if(initialized('address2'))
+			modified('address2');
+		this.address2 = address2 ;
+		return address2;
 	}	
 		
 	@dataType("character varying(50)")

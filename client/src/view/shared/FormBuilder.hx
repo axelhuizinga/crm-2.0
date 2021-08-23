@@ -142,7 +142,7 @@ class FormBuilder {
 						field.label
 					);
 				case Radio:
-					//trace (field.type +' $name:' + value);
+					trace (field.type +' $name:' + value);
 					jsx('<div key=${i++} className="g_row_2_radio" role="rowgroup" >
 						<div className="g_cell" role="cell" key=${name+'_'+i}>${field.label}</div>
 						<div className="g_cell_r optLabel" role="cell" key=${name+'_opt'}>
@@ -150,7 +150,7 @@ class FormBuilder {
 						</div>
 					</div>');				
 				case Select:
-					trace('$i:: $name: $value');
+					//trace('$i:: $name: $value');
 				renderElement(
 					jsx('<select name=${name} onChange=${onChange} className=${field.className} defaultValue=${value} key=${i++} 
 						multiple=${field.multiple}>${renderSelect(name,field.options)}</select>'),
@@ -279,6 +279,7 @@ class FormBuilder {
 			return null;
 		if(mItem.separator)
 			return jsx('<hr className="menuSeparator"/>');
+		trace(mItem.handler);
 		return jsx('<$BButton key=${i++} onClick=${mItem.handler} 
 		data-section=${mItem.section} disabled=${mItem.disabled} type="button" >${mItem.label}</$BButton>');	
 	}

@@ -440,9 +440,14 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			trace(whatever);
 		});
 	}
+	//public function checkAccounts():Void
+	public function checkAccounts(?fD:FormData):Void
+		{
+			if(fD!=null){
+				trace(fD);
+			}
 
-	public function checkAccounts():Void
-	{
+	//{
 		App.store.dispatch(Status(Update(
 		{
 			className:'',
@@ -468,14 +473,20 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		});
 	}
 
-	public function checkContacts():Void
-	{
+	//public function checkContacts():Void
+	public function checkContacts(?fD:FormData):Void
+		{
+			if(fD!=null){
+				trace(fD);
+			}
 		App.store.dispatch(Status(Update(
 		{
 			className:'',
 			text:'Aktualisiere Kontakte'}
 		)));
-		var sync_now:InputElement = cast Browser.document.querySelector('[name="sync_contacts"]');
+		
+		//var sync_now:InputElement = cast Browser.document.querySelector('[name="sync_contacts"]');
+		var sync_now:Dynamic = {checked:false};
 		trace(sync_now.checked);
 		if(sync_now.checked){
 			return importContacts();

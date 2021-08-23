@@ -368,14 +368,18 @@ class LivePBXSync
 	}
 
 	public static function query(props:DBAccessProps) {
-		return new Promise<DbData>(function(resolve, reject){
-			
+		return new Promise<DbData>(function(resolve, reject){			
 			trace('creating BinaryLoader ${App.config.api}');
 			var bl:XMLHttpRequest = BinaryLoader.dbQuery(
 				App.config.api,
 				props,
 				function(data:DbData)
 				{			
+					if(data.dataErrors != [])
+					{
+						trace(data.dataErrors);
+						//reject(data.dataErrors);						
+					}
 					trace(data.dataInfo);
 					resolve(data);
 				}

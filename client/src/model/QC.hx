@@ -22,13 +22,13 @@ class QC extends ORM
 	}	
 		
 	@dataType("timestamp(0) without time zone")
-	@:isVar public var entry_date(default,set):String;
+	@:isVar public var creation_date(default,set):String;
 
-	function set_entry_date(entry_date:String):String{
-		if(initialized('entry_date'))
-			modified('entry_date');
-		this.entry_date = entry_date ;
-		return entry_date;
+	function set_creation_date(creation_date:String):String{
+		if(initialized('creation_date'))
+			modified('creation_date');
+		this.creation_date = creation_date ;
+		return creation_date;
 	}	
 		
 	@dataType("character varying(64)")
@@ -62,13 +62,13 @@ class QC extends ORM
 	}	
 		
 	@dataType("character varying(100)")
-	@:isVar public var care_of(default,set):String;
+	@:isVar public var co_field(default,set):String;
 
-	function set_care_of(care_of:String):String{
-		if(initialized('care_of'))
-			modified('care_of');
-		this.care_of = care_of ;
-		return care_of;
+	function set_co_field(co_field:String):String{
+		if(initialized('co_field'))
+			modified('co_field');
+		this.co_field = co_field ;
+		return co_field;
 	}	
 		
 	@dataType("character varying(10)")
@@ -132,23 +132,23 @@ class QC extends ORM
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var address(default,set):String;
+	@:isVar public var address1(default,set):String;
 
-	function set_address(address:String):String{
-		if(initialized('address'))
-			modified('address');
-		this.address = address ;
-		return address;
+	function set_address1(address1:String):String{
+		if(initialized('address1'))
+			modified('address1');
+		this.address1 = address1 ;
+		return address1;
 	}	
 		
 	@dataType("character varying(64)")
-	@:isVar public var address_2(default,set):String;
+	@:isVar public var address2(default,set):String;
 
-	function set_address_2(address_2:String):String{
-		if(initialized('address_2'))
-			modified('address_2');
-		this.address_2 = address_2 ;
-		return address_2;
+	function set_address2(address2:String):String{
+		if(initialized('address2'))
+			modified('address2');
+		this.address2 = address2 ;
+		return address2;
 	}	
 		
 	@dataType("character varying(50)")
@@ -281,10 +281,10 @@ class QC extends ORM
 		return title_pro;
 	}	
 		
-	@dataType("integer")
-	@:isVar public var lead_id(default,set):String;
+	@dataType("bigint")
+	@:isVar public var lead_id(default,set):Int;
 
-	function set_lead_id(lead_id:String):String{
+	function set_lead_id(lead_id:Int):Int{
 		if(initialized('lead_id'))
 			modified('lead_id');
 		this.lead_id = lead_id ;
@@ -409,6 +409,26 @@ class QC extends ORM
 			modified('client_status');
 		this.client_status = client_status ;
 		return client_status;
+	}	
+		
+	@dataType("bigint")
+	@:isVar public var entry_list_id(default,set):Int;
+
+	function set_entry_list_id(entry_list_id:Int):Int{
+		if(initialized('entry_list_id'))
+			modified('entry_list_id');
+		this.entry_list_id = entry_list_id ;
+		return entry_list_id;
+	}	
+		
+	@dataType("timestamp without time zone")
+	@:isVar public var entry_date(default,set):String;
+
+	function set_entry_date(entry_date:String):String{
+		if(initialized('entry_date'))
+			modified('entry_date');
+		this.entry_date = entry_date ;
+		return entry_date;
 	}	
 	
 }

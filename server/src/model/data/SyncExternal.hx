@@ -116,7 +116,7 @@ class SyncExternal extends Model
 		var sql:String = 'SELECT lead_id FROM asterisk.$table WHERE list_id=1900';
 		trace(S.syncDbh.query(sql).fetchAll(PDO.FETCH_COLUMN));
 		syncTable2dev('vicidial_list');
-		syncTable2dev('vicidial_list');
+		//syncTable2dev('vicidial_list');
 		//S.sendInfo(dbData);	
 		var stmt:PDOStatement = S.syncDbh.query('SELECT DISTINCT entry_list_id FROM dev.vicidial_list');
 		var entry_lists:NativeArray = stmt.fetchAll(PDO.FETCH_COLUMN);
@@ -190,7 +190,9 @@ class SyncExternal extends Model
 				}
 				trace('synced into $table:' + stmt.rowCount());
 				if(table == 'vicidial_list'){
-					dbData.dataInfo.set('qc_leads',stmt.rowCount());
+					
+					//dbData.dataInfo.set('qc_leads',stmt.rowCount());
+					dbData.dataInfo.set('qc_leads',S.syncDbh.query('SELECT COUNT(*) FROM dev.$table').fetchColumn());
 				}
 			}
 		};

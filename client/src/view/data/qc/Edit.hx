@@ -1,5 +1,8 @@
 package view.data.qc;
 
+import js.html.NodeList;
+import action.async.LivePBXSync;
+import js.html.ButtonElement;
 import data.DataState;
 import model.deals.DealsModel;
 import model.accounting.AccountsModel;
@@ -81,10 +84,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	public static var menuItems:Array<MItem> = [
 		{label:'Schließen',action:'close'},		
 		//{label:'Speichern + Schließen',action:'update', then:'close'},
-		{label:'Speichern',action:'update'},		
+		{label:'Speichern',action:'qc_save'},		
 		{label:'Zurücksetzen',action:'reset'},
+		{label:'Einmalspende',action:'uncheckPeriod'},
 		{label:'QC OK',action:'qc_ok'},
-		{label:'QC NEGATIV',action:'qc_notok'},
+		
+		{label:'QC NEGATIV',action:'qc_bad'},
 		{separator: true},		
 		//{label: 'ID',formField: { name: 'id'}},
 		//{label:'Spenden Bearbeiten',action:'showSelectedDeals', disabled:true, section: 'Edit', classPath:'view.data.contacts.Deals'},	
@@ -130,7 +135,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		formRef = React.createRef();
 		historyFormRef = React.createRef();
 		trace(props.match.params);
-		trace('props:' + Reflect.fields(props).join('|'));
+		//trace('props:' + Reflect.fields(props).join('|'));
 
 		if(props.match.params.id == null){
 			if(props.dataStore.qcActData != null && props.dataStore.qcActData.keys().hasNext())
@@ -139,9 +144,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			//dataRows[0].lead_id);dataRows[0].	
 		if(Reflect.fields(props).has('dataStore') && props.dataStore.qcData != null){
 			qcData = props.dataStore.qcData.get(Std.parseInt(props.match.params.id));
-			
-			//trace(qcData);
-			trace(Reflect.fields(qcData).join('|'));
+			if(qcData != null)
+				trace(qcData['lead_id']);			
+			//trace(Reflect.fields(qcData).join('|'));
 		}	
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id==null && ~/update(\/)*$/.match(props.match.params.action) )
@@ -166,7 +171,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//trace(dataAccess['open']);
 		if(props.dataStore.contactData != null)
 			trace(props.dataStore.contactData.keys().next());
-				
+		for(mI in menuItems)
+			if(~/qc_*/.match(mI.action))
+				mI.handler = doQC;
+
 		state =  App.initEState({
 			//dataTable:[],
 			actualState:null,
@@ -252,7 +260,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var p:Promise<DbData> = props.load(
 			{
 				classPath:'data.Deals',
-				action:'doQC',
+				action:'loadQC',
 				filter:{lead_id:qcData["lead_id"],entry_list_id:qcData["entry_list_id"],mandator:1},
 				resolveMessage:{
 					success:'QC ${qcData["lead_id"]} wurde geladen',
@@ -271,6 +279,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			{
 				var qcd = data.dataRows[0];
 				//trace(data);	//*
+				qcd['id'] = qcd['lead_id'];
 				trace(qcd);
 				if( data.dataInfo.exists('recordings')){
 					trace(data.dataInfo.get('recordings'));
@@ -282,7 +291,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				if(mounted)
 					setState({loading:false, actualState:qc, initialData:copy(qc)});
 				//state = copy({loading:false, actualState:qc, initialData:qc});
-				trace('$mounted ${qc.id}');
+				trace('$mounted ${qc.id} ${qc.lead_id} ${qc.entry_list_id}');
 				if(state.actualState != null){
 					trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
 				//setState({initialData:copy(state.actualState)});
@@ -320,12 +329,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(state.selectedRows.length);
 		var data = state.formApi.selectedRowsMap(state);
-	}
-
-	public function update2():Void
-	{
-		var data2save = state.actualState.allModified();
-		//{edited_by:props.userState.dbUser.id}
 	}
 
 	override function componentDidCatch(error, info) {
@@ -440,84 +443,72 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
-	function update()
-	{
-		for(k=>v in state.relDataComps.keyValueIterator()){
-			//trace('$k=>${v.props.save}');
-			trace(k);
-			//v.props.save(v);
+	public function uncheckPeriod() {
+		var ops:NodeList = Browser.document.querySelectorAll('input[name="period"]');
+		for(op in ops){
+			cast(op, InputElement).checked = false;
+			trace(op);
 		}
-		//1919621165 QCBAD 1800
-		if(state.actualState != null)
-			trace('length:' + state.actualState.fieldsModified.length + ':' + state.actualState.fieldsModified.join('|') );
-		if(state.actualState == null || state.actualState.fieldsModified.length==0)
-			return;
-		var data2save = state.actualState.allModified();
-		var doc:Document = Browser.window.document;
+	}
+	
+	public function update(){
+		trace('ok');
+	}
 
+	public function doQC(e:Event)
+	{
+		trace(Reflect.fields(e));
+		e.preventDefault();
+		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');		
+		trace(action);
+		
+		//if(state.actualState == null || state.actualState.fieldsModified.length==0)
+			//return;
+		var data2save = state.actualState.allModified();
+		/*var doc:Document = Browser.window.document;
 		var formElement:FormElement = cast(doc.querySelector('form[name="qc"]'),FormElement);
-		var elements:HTMLCollection = formElement.elements;
+		var elements:HTMLCollection = formElement.elements;*/
+		trace(data2save);
 		var aState:Dynamic = copy(state.actualState);
 		var dbQ:DBAccessProps = {
 			classPath:'data.Deals',
-			action:'saveQC',
-			actionArgs:['qcOk'=>1],
+			action: action,
 			data:data2save,
-			filter:{id:state.actualState.id,mandator:1},
+			filter:{id:state.actualState.id,mandator:1, entry_list_id: state.initialData.entry_list_id},
 			resolveMessage:{
-				success:'Kontakt ${state.actualState.id} wurde aktualisiert',
-				failure:'Kontakt ${state.actualState.id} konnte nicht aktualisiert werden'
+				success:'QC lead ${state.actualState.id} wurde aktualisiert',
+				failure:'QC lead ${state.actualState.id} konnte nicht aktualisiert werden'
 			},
-			table:'contacts',
+			viciBoxDB:true,
 			dbUser:props.userState.dbUser,
 			devIP:App.devIP
 		}
-		trace(props.match.params.action);
-		switch (props.match.params.action)
-		{
-			case 'insert':
-				for(f in fieldNames)
-				{
-					trace('$f =>${Reflect.field(aState,f)}<=');
-					if(Reflect.field(aState,f)=='')
-						Reflect.deleteField(aState,f);
-				}
-			case 'delete'|'get':
-				dbQ.dataSource = [
-					"contacts" => [
-						"filter" => {id:state.initialData.id}
-					]
-				];	
-			case 'update':
-				//Reflect.deleteField(aState,'creation_date');
-				trace('${state.initialData.id} :: creation_date: ${aState.creation_date} ${state.initialData.creation_date}');
-				//var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialData.id);
-				//trace();
-				if(state.actualState != null)
-				trace(state.actualState.modified() + ':${state.actualState.fieldsModified}');
 
-				trace(state.actualState.id);
-				if(!state.actualState.modified())
-				{
-					//TODO: NOCHANGE ACTION => Display Feedback nothing to save
-					trace('nothing modified');
-					return;
-				}
-				trace(state.actualState.allModified());
-				/*dbQ.dataSource = [
-					"contacts" => [
-						"data" => state.actualState.allModified(),
-						"filter" => {id:state.actualState.id}
-					]
-				];
-				trace(dbQ.dataSource["contacts"]["filter"]);*/
-		}
-		
+		trace('${state.initialData.id} :: creation_date: ${aState.creation_date} ${state.initialData.creation_date}');
+		//var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialData.id);
+		//trace();
+		if(state.actualState != null)
+		trace(state.actualState.modified() + ':${state.actualState.fieldsModified}');
+
+		//trace(state.actualState.lead_id);
+
+		var p:Promise<Dynamic> = LivePBXSync.query(dbQ);
 		//App.store.dispatch(CRUD.update(dbQ));	
-		var p:Promise<Dynamic> = App.store.dispatch(CRUD.update(dbQ));	
-		p.then(function(d:Dynamic){
+		p.then(function(d:DbData){
+			if(d.dataInfo != null && d.dataInfo.exists('count'))
+			{
+				trace(d.dataInfo['count']);
+				App.store.dispatch(Status(Update(
+					{
+						className:'Edit',
+						text:'QC lead gespeichert'
+					}
+				)));
+				if(action == 'qc_ok'||action == 'qc_bad')
+					close();
+			}
+		}, function(d:Dynamic) {
 			trace(d);
-			//loadQC(state.actualState.id);
 		});
 	}
 
@@ -574,46 +565,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				null;
 		}
 	}
-	
-	/*function relData():ReactFragment {
-		return [
-			for(model in ['deals','accounts']){
-				if(ormRefs.exists(model))
-				for(orm in ormRefs[model].orms.array()) {
-					${orm.formBuilder.renderForm({
-						//mHandlers:state.mHandlers,
-						fields:
-							if(model=='deals')
-								[for(k in dealDataAccess['open'].view.keys())
-									k => dealDataAccess['open'].view[k]]
-							else 
-								[for(k in accountDataAccess['open'].view.keys())
-									k => accountDataAccess['open'].view[k]]				
-						,
-						model:model,
-						ref:null,					
-						title: (model=='deals'?'Spenden':'Konten')
-					},orm)}
-				}
-				
-			}
-		];
-	}*/
-	//'Kontakt - Bearbeite ' + 
-
-	/*function relDataLists():ReactFragment {
-
-		return jsx('
-		<>
-			<$Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" key="deals" onDoubleClick=${showSelectedDeals}  filter=${{contact:props.match.params.id, mandator:'1'}}></$Deals>
-			<$Accounts formRef=${accountsFormRef} parentComponent=${this} model="accounts" key="accounts" action="get"  onDoubleClick=${showSelectedAccounts} filter=${{contact:props.match.params.id, mandator:'1'}}></$Accounts>
-		</>
-		');
-	}*/
-	/**				//${relData()} 
-	 * 	
-			isActive=${true}
-	 */
 	
 	override function render():ReactFragment
 	{

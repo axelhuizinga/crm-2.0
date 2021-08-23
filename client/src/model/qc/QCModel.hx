@@ -37,8 +37,8 @@ class QCModel
 				'mobile'=>{label:'Mobil'},
 				//'fax'=>{label:'Fax'},
 				'company_name'=>{label:'Firmenname'},	
-				'address'=>{label:'Straße'},
-				'address_2'=>{label:'Hausnummer'},
+				'address1'=>{label:'Straße'},
+				'address2'=>{label:'Hausnummer'},
 				'postal_code'=>{label:'PLZ'},
 				'city'=>{label:'Ort'},
 				//'state'=>{label:'Status',type:Select,options:['active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
@@ -82,9 +82,9 @@ class QCModel
 				'iban'=>{label:'IBAN'},
 				'bank_name'=>{label:'Bankinstitut'},
 				'mailing'=>{label:'InfoBrief',type: Radio,options: [
-					'InfoBrief schicken' => 'InfoBrief schicken',
-					'InfoMail senden' => 'InfoMail senden',
-					'Keine Info gewünscht' => 'Keine Info gewünscht'
+					'info_brief' => 'InfoBrief schicken',
+					'info_mail' => 'InfoMail senden',
+					'no_info' => 'Keine Info gewünscht'
 				]},
 				'entry_date'=>{label: 'Verkauf',cellFormat: function(v:String) {
 					//trace(v);

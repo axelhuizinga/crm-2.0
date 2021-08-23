@@ -438,11 +438,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 
 						jsx('<form key=${"bu"+(i++)} name=${item.action}>
 						${renderItemForm(item.options)}
-						<$B key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then} 					data-section=${item.section} disabled=${dis}>${item.label}</$B>
+						<$B key=${"bu"+(i++)} onClick=${item.handler==null?props.itemHandler:item.handler} data-action=${item.action} data-then=${item.then} data-section=${item.section} disabled=${dis}>${item.label}</$B>
 						</form>');
 					}
 					else
-						jsx('<$B key=${"bu"+(i++)} onClick=${props.itemHandler} data-action=${item.action} data-then=${item.then} 					data-section=${item.section} disabled=${dis} >${item.label}</$B>');
+						jsx('<$B key=${"bu"+(i++)} onClick=${item.handler==null?props.itemHandler:item.handler} data-action=${item.action} data-then=${item.then} 					data-section=${item.section} disabled=${dis} >${item.label}</$B>');
 			}
 		});
 		if(block.hasFindForm){			

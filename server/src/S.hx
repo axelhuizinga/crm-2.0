@@ -297,7 +297,13 @@ class S
 				/*if(action=='verify'){
 					User.verify();
 				}*/
-				Model.dispatch(dbQuery);		
+				if(params['classPath'] == 'data.Deals'){
+					new Deals(cast dbQuery.dbParams).go();
+				}
+				else {
+					Model.dispatch(dbQuery);		
+
+				}
 				exit({'Error':'Model.dispatch ${params.get('classPath')}.$action did not send anything'});
 			}
 

@@ -2103,6 +2103,18 @@ action_async_LivePBXSync.checkAll = function(props) {
 		});
 	}));
 };
+action_async_LivePBXSync.query = function(props) {
+	return new Promise(function(resolve,reject) {
+		haxe_Log.trace("creating BinaryLoader " + Std.string(App.config.api),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 372, className : "action.async.LivePBXSync", methodName : "query"});
+		var bl = loader_BinaryLoader.dbQuery(App.config.api,props,function(data) {
+			if(data.dataErrors != new haxe_ds_StringMap()) {
+				haxe_Log.trace(data.dataErrors == null ? "null" : haxe_ds_StringMap.stringify(data.dataErrors.h),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 380, className : "action.async.LivePBXSync", methodName : "query"});
+			}
+			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 383, className : "action.async.LivePBXSync", methodName : "query"});
+			resolve(data);
+		});
+	});
+};
 action_async_LivePBXSync.check = function(props) {
 	return new Promise(function(resolve,reject) {
 		if(!props.userState.dbUser.online) {
@@ -2111,9 +2123,9 @@ action_async_LivePBXSync.check = function(props) {
 			_g.h["LoginError"] = "Du musst dich neu anmelden!";
 			reject1(shared_DbDataTools.create(_g));
 		}
-		haxe_Log.trace("creating BinaryLoader " + Std.string(App.config.api),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 377, className : "action.async.LivePBXSync", methodName : "check"});
+		haxe_Log.trace("creating BinaryLoader " + Std.string(App.config.api),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 398, className : "action.async.LivePBXSync", methodName : "check"});
 		var bl = loader_BinaryLoader.dbQuery(App.config.api,{ dbUser : props.userState.dbUser, classPath : props.classPath, action : props.action, extDB : true, limit : props.limit, offset : props.offset, onlyNew : props.onlyNew, table : props.table, filter : props.filter, maxImport : props.maxImport == null ? 1000 : props.maxImport, devIP : App.devIP},function(data) {
-			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 395, className : "action.async.LivePBXSync", methodName : "check"});
+			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 416, className : "action.async.LivePBXSync", methodName : "check"});
 			if(Object.prototype.hasOwnProperty.call(data.dataInfo.h,"loginTask") && data.dataInfo.h["loginTask"] == "Login") {
 				reject(App.store.dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ dbUser : props.userState.dbUser, lastError : "Du musst dich neu anmelden!"})))));
 			}
@@ -2134,20 +2146,20 @@ action_async_LivePBXSync.check = function(props) {
 				_g.h[props.classPath] = err;
 				reject1(shared_DbDataTools.create(_g));
 			}
-			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 410, className : "action.async.LivePBXSync", methodName : "check"});
+			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 431, className : "action.async.LivePBXSync", methodName : "check"});
 			resolve(data);
 		});
 	});
 };
 action_async_LivePBXSync.importDeals = function(props) {
-	haxe_Log.trace("" + props.maxImport + " " + props.limit + " " + props.offset,{ fileName : "action/async/LivePBXSync.hx", lineNumber : 420, className : "action.async.LivePBXSync", methodName : "importDeals"});
+	haxe_Log.trace("" + props.maxImport + " " + props.limit + " " + props.offset,{ fileName : "action/async/LivePBXSync.hx", lineNumber : 441, className : "action.async.LivePBXSync", methodName : "importDeals"});
 	return redux_thunk_Thunk.Action(function(dispatch,getState) {
 		var aState = getState();
-		haxe_Log.trace(props,{ fileName : "action/async/LivePBXSync.hx", lineNumber : 423, className : "action.async.LivePBXSync", methodName : "importDeals"});
+		haxe_Log.trace(props,{ fileName : "action/async/LivePBXSync.hx", lineNumber : 444, className : "action.async.LivePBXSync", methodName : "importDeals"});
 		if(!props.userState.dbUser.online) {
 			return dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ dbUser : props.userState.dbUser, lastError : "Du musst dich neu anmelden!"}))));
 		}
-		haxe_Log.trace("creating BinaryLoader " + Std.string(App.config.api),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 432, className : "action.async.LivePBXSync", methodName : "importDeals"});
+		haxe_Log.trace("creating BinaryLoader " + Std.string(App.config.api),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 453, className : "action.async.LivePBXSync", methodName : "importDeals"});
 		var bl = loader_BinaryLoader.create("" + Std.string(App.config.api),{ dbUser : props.userState.dbUser, id : props.userState.dbUser.id, jwt : props.userState.dbUser.jwt, classPath : props.classPath, action : props.action, extDB : true, limit : props.limit, offset : props.offset, onlyNew : props.onlyNew, filter : props.filter, min_age : 70, maxImport : props.maxImport == null ? 1000 : props.maxImport, devIP : App.devIP},function(data) {
 			var h = data.dataErrors.h;
 			var inlStringMapKeyIterator_h = h;
@@ -2163,7 +2175,7 @@ action_async_LivePBXSync.importDeals = function(props) {
 				dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "error", text : inlStringMapValueIterator_h[inlStringMapValueIterator_keys[inlStringMapValueIterator_current++]]}))));
 				return;
 			}
-			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 464, className : "action.async.LivePBXSync", methodName : "importDeals"});
+			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 485, className : "action.async.LivePBXSync", methodName : "importDeals"});
 			if(Std.parseInt(data.dataInfo.h["missing"]) > 0 && data.dataInfo.h["got"] != data.dataInfo.h["missing"]) {
 				dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "error", text : "Fehler " + Std.string(data.dataInfo.h["got"]) + " von " + Std.string(data.dataInfo.h["missing"]) + " Aktualisiert"}))));
 				return;
@@ -2177,11 +2189,11 @@ action_async_LivePBXSync.importDeals = function(props) {
 				if(!props.onlyNew) {
 					props.offset += Std.parseInt(data.dataInfo.h["got"]);
 				}
-				haxe_Log.trace("next loop:" + Std.string(props),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 492, className : "action.async.LivePBXSync", methodName : "importDeals"});
+				haxe_Log.trace("next loop:" + Std.string(props),{ fileName : "action/async/LivePBXSync.hx", lineNumber : 513, className : "action.async.LivePBXSync", methodName : "importDeals"});
 				dispatch(action_async_LivePBXSync.importContacts(props));
 				return;
 			}
-			haxe_Log.trace(Std.parseInt(data.dataInfo.h["got"]) > 0 && data.dataInfo.h["last_import_cid"] != data.dataInfo.h["max_client_id"] ? "loop" : "no",{ fileName : "action/async/LivePBXSync.hx", lineNumber : 495, className : "action.async.LivePBXSync", methodName : "importDeals"});
+			haxe_Log.trace(Std.parseInt(data.dataInfo.h["got"]) > 0 && data.dataInfo.h["last_import_cid"] != data.dataInfo.h["max_client_id"] ? "loop" : "no",{ fileName : "action/async/LivePBXSync.hx", lineNumber : 516, className : "action.async.LivePBXSync", methodName : "importDeals"});
 		});
 		return null;
 	});
@@ -7590,26 +7602,23 @@ var model_ORM = function(data) {
 	while(_g < _g1.length) {
 		var f = _g1[_g];
 		++_g;
-		if(Object.prototype.hasOwnProperty.call(data.h,f)) {
-			var nv = data.h[f];
-			haxe_Log.trace("" + f + " => " + Std.string(nv) + " " + Reflect.field(this.fields,f).dataType[0],{ fileName : "model/ORM.hx", lineNumber : 61, className : "model.ORM", methodName : "new"});
-			var _g2 = Reflect.field(this.fields,f).dataType[0];
-			var _hx_tmp;
-			var tmp;
-			switch(_g2) {
-			case "bigint[]":
-				tmp = nv == null ? [] : nv;
-				break;
-			case "date":
-				_hx_tmp = _g2.indexOf("timestamp");
-				tmp = _hx_tmp == 0 ? nv == null ? "" : nv : nv == null ? "" : nv;
-				break;
-			default:
-				_hx_tmp = _g2.indexOf("timestamp");
-				tmp = _hx_tmp == 0 ? nv == null ? "" : nv : nv;
-			}
-			Reflect.setProperty(this,f,tmp);
+		var nv = Object.prototype.hasOwnProperty.call(data.h,f) ? data.h[f] : "";
+		var _g2 = Reflect.field(this.fields,f).dataType[0];
+		var _hx_tmp;
+		var tmp;
+		switch(_g2) {
+		case "bigint[]":
+			tmp = nv == null ? [] : nv;
+			break;
+		case "date":
+			_hx_tmp = _g2.indexOf("timestamp");
+			tmp = _hx_tmp == 0 ? nv == null ? "" : nv : nv == null ? "" : nv;
+			break;
+		default:
+			_hx_tmp = _g2.indexOf("timestamp");
+			tmp = _hx_tmp == 0 ? nv == null ? "" : nv : nv;
 		}
+		Reflect.setProperty(this,f,tmp);
 	}
 };
 $hxClasses["model.ORM"] = model_ORM;
@@ -7941,21 +7950,21 @@ model_Contact.prototype = $extend(model_ORM.prototype,{
 		this.last_name = last_name;
 		return last_name;
 	}
-	,address: null
-	,set_address: function(address) {
-		if(this.initialized("address")) {
-			this.modified("address");
+	,address1: null
+	,set_address1: function(address1) {
+		if(this.initialized("address1")) {
+			this.modified("address1");
 		}
-		this.address = address;
-		return address;
+		this.address1 = address1;
+		return address1;
 	}
-	,address_2: null
-	,set_address_2: function(address_2) {
-		if(this.initialized("address_2")) {
-			this.modified("address_2");
+	,address2: null
+	,set_address2: function(address2) {
+		if(this.initialized("address2")) {
+			this.modified("address2");
 		}
-		this.address_2 = address_2;
-		return address_2;
+		this.address2 = address2;
+		return address2;
 	}
 	,city: null
 	,set_city: function(city) {
@@ -8062,7 +8071,7 @@ model_Contact.prototype = $extend(model_ORM.prototype,{
 		return title_pro;
 	}
 	,__class__: model_Contact
-	,__properties__: {set_title_pro:"set_title_pro",set_owner:"set_owner",set_last_updated:"set_last_updated",set_merged:"set_merged",set_edited_by:"set_edited_by",set_comments:"set_comments",set_email:"set_email",set_mobile:"set_mobile",set_date_of_birth:"set_date_of_birth",set_gender:"set_gender",set_country_code:"set_country_code",set_postal_code:"set_postal_code",set_city:"set_city",set_address_2:"set_address_2",set_address:"set_address",set_last_name:"set_last_name",set_first_name:"set_first_name",set_title:"set_title",set_fax:"set_fax",set_phone_number:"set_phone_number",set_phone_code:"set_phone_code",set_care_of:"set_care_of",set_company_name:"set_company_name",set_use_email:"set_use_email",set_status:"set_status",set_creation_date:"set_creation_date",set_mandator:"set_mandator"}
+	,__properties__: {set_title_pro:"set_title_pro",set_owner:"set_owner",set_last_updated:"set_last_updated",set_merged:"set_merged",set_edited_by:"set_edited_by",set_comments:"set_comments",set_email:"set_email",set_mobile:"set_mobile",set_date_of_birth:"set_date_of_birth",set_gender:"set_gender",set_country_code:"set_country_code",set_postal_code:"set_postal_code",set_city:"set_city",set_address2:"set_address2",set_address1:"set_address1",set_last_name:"set_last_name",set_first_name:"set_first_name",set_title:"set_title",set_fax:"set_fax",set_phone_number:"set_phone_number",set_phone_code:"set_phone_code",set_care_of:"set_care_of",set_company_name:"set_company_name",set_use_email:"set_use_email",set_status:"set_status",set_creation_date:"set_creation_date",set_mandator:"set_mandator"}
 });
 var model_Deal = function(data) {
 	model_ORM.call(this,data);
@@ -8273,13 +8282,13 @@ model_QC.prototype = $extend(model_ORM.prototype,{
 		this.mandator = mandator;
 		return mandator;
 	}
-	,entry_date: null
-	,set_entry_date: function(entry_date) {
-		if(this.initialized("entry_date")) {
-			this.modified("entry_date");
+	,creation_date: null
+	,set_creation_date: function(creation_date) {
+		if(this.initialized("creation_date")) {
+			this.modified("creation_date");
 		}
-		this.entry_date = entry_date;
-		return entry_date;
+		this.creation_date = creation_date;
+		return creation_date;
 	}
 	,status: null
 	,set_status: function(status) {
@@ -8305,13 +8314,13 @@ model_QC.prototype = $extend(model_ORM.prototype,{
 		this.company_name = company_name;
 		return company_name;
 	}
-	,care_of: null
-	,set_care_of: function(care_of) {
-		if(this.initialized("care_of")) {
-			this.modified("care_of");
+	,co_field: null
+	,set_co_field: function(co_field) {
+		if(this.initialized("co_field")) {
+			this.modified("co_field");
 		}
-		this.care_of = care_of;
-		return care_of;
+		this.co_field = co_field;
+		return co_field;
 	}
 	,phone_code: null
 	,set_phone_code: function(phone_code) {
@@ -8361,21 +8370,21 @@ model_QC.prototype = $extend(model_ORM.prototype,{
 		this.last_name = last_name;
 		return last_name;
 	}
-	,address: null
-	,set_address: function(address) {
-		if(this.initialized("address")) {
-			this.modified("address");
+	,address1: null
+	,set_address1: function(address1) {
+		if(this.initialized("address1")) {
+			this.modified("address1");
 		}
-		this.address = address;
-		return address;
+		this.address1 = address1;
+		return address1;
 	}
-	,address_2: null
-	,set_address_2: function(address_2) {
-		if(this.initialized("address_2")) {
-			this.modified("address_2");
+	,address2: null
+	,set_address2: function(address2) {
+		if(this.initialized("address2")) {
+			this.modified("address2");
 		}
-		this.address_2 = address_2;
-		return address_2;
+		this.address2 = address2;
+		return address2;
 	}
 	,city: null
 	,set_city: function(city) {
@@ -8585,8 +8594,24 @@ model_QC.prototype = $extend(model_ORM.prototype,{
 		this.client_status = client_status;
 		return client_status;
 	}
+	,entry_list_id: null
+	,set_entry_list_id: function(entry_list_id) {
+		if(this.initialized("entry_list_id")) {
+			this.modified("entry_list_id");
+		}
+		this.entry_list_id = entry_list_id;
+		return entry_list_id;
+	}
+	,entry_date: null
+	,set_entry_date: function(entry_date) {
+		if(this.initialized("entry_date")) {
+			this.modified("entry_date");
+		}
+		this.entry_date = entry_date;
+		return entry_date;
+	}
 	,__class__: model_QC
-	,__properties__: {set_client_status:"set_client_status",set_mailing:"set_mailing",set_buchungs_zeitpunkt:"set_buchungs_zeitpunkt",set_buchungs_tag:"set_buchungs_tag",set_start_monat:"set_start_monat",set_spenden_hoehe:"set_spenden_hoehe",set_bank_name:"set_bank_name",set_iban:"set_iban",set_blz:"set_blz",set_account:"set_account",set_anrede:"set_anrede",set_period:"set_period",set_lead_id:"set_lead_id",set_title_pro:"set_title_pro",set_owner:"set_owner",set_last_updated:"set_last_updated",set_merged:"set_merged",set_edited_by:"set_edited_by",set_comments:"set_comments",set_email:"set_email",set_mobile:"set_mobile",set_date_of_birth:"set_date_of_birth",set_gender:"set_gender",set_country_code:"set_country_code",set_postal_code:"set_postal_code",set_city:"set_city",set_address_2:"set_address_2",set_address:"set_address",set_last_name:"set_last_name",set_first_name:"set_first_name",set_title:"set_title",set_fax:"set_fax",set_phone_number:"set_phone_number",set_phone_code:"set_phone_code",set_care_of:"set_care_of",set_company_name:"set_company_name",set_use_email:"set_use_email",set_status:"set_status",set_entry_date:"set_entry_date",set_mandator:"set_mandator"}
+	,__properties__: {set_entry_date:"set_entry_date",set_entry_list_id:"set_entry_list_id",set_client_status:"set_client_status",set_mailing:"set_mailing",set_buchungs_zeitpunkt:"set_buchungs_zeitpunkt",set_buchungs_tag:"set_buchungs_tag",set_start_monat:"set_start_monat",set_spenden_hoehe:"set_spenden_hoehe",set_bank_name:"set_bank_name",set_iban:"set_iban",set_blz:"set_blz",set_account:"set_account",set_anrede:"set_anrede",set_period:"set_period",set_lead_id:"set_lead_id",set_title_pro:"set_title_pro",set_owner:"set_owner",set_last_updated:"set_last_updated",set_merged:"set_merged",set_edited_by:"set_edited_by",set_comments:"set_comments",set_email:"set_email",set_mobile:"set_mobile",set_date_of_birth:"set_date_of_birth",set_gender:"set_gender",set_country_code:"set_country_code",set_postal_code:"set_postal_code",set_city:"set_city",set_address2:"set_address2",set_address1:"set_address1",set_last_name:"set_last_name",set_first_name:"set_first_name",set_title:"set_title",set_fax:"set_fax",set_phone_number:"set_phone_number",set_phone_code:"set_phone_code",set_co_field:"set_co_field",set_company_name:"set_company_name",set_use_email:"set_use_email",set_status:"set_status",set_creation_date:"set_creation_date",set_mandator:"set_mandator"}
 });
 var react_ReactType = {};
 react_ReactType.fromString = function(s) {
@@ -15167,8 +15192,33 @@ view_shared_io_BaseForm.addRecordings = function(state,recs) {
 		++_g;
 		recItems.push({ label : rec.h["start_time"], formField : { src : StringTools.replace(rec.h["location"],"85.25.93.167","pbx.pitverwaltung.de"), type : "Audio"}});
 	}
-	state.mHandlers = state.sideMenu.menuBlocks.h[state.sideMenu.section].items.concat(recItems);
-	haxe_Log.trace(state.mHandlers.toString(),{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 52, className : "view.shared.io.BaseForm", methodName : "addRecordings"});
+	haxe_Log.trace(state.mHandlers.length + "::" + state.sideMenu.menuBlocks.h[state.sideMenu.section].items.length,{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 51, className : "view.shared.io.BaseForm", methodName : "addRecordings"});
+	var tmp = state.sideMenu.menuBlocks.h[state.sideMenu.section].items;
+	var _g = [];
+	var _g1 = 0;
+	var _g2 = recItems;
+	while(_g1 < _g2.length) {
+		var v = _g2[_g1];
+		++_g1;
+		if((function(mi) {
+			var _g = 0;
+			var _g1 = state.sideMenu.menuBlocks.h[state.sideMenu.section].items;
+			while(_g < _g1.length) {
+				var si = _g1[_g];
+				++_g;
+				if(si.formField != null && si.formField.src.length > 0) {
+					if(mi.formField.src == si.formField.src) {
+						return false;
+					}
+				}
+			}
+			return true;
+		})(v)) {
+			_g.push(v);
+		}
+	}
+	state.mHandlers = tmp.concat(_g);
+	haxe_Log.trace(state.mHandlers.length + "::" + state.sideMenu.menuBlocks.h[state.sideMenu.section].items.length,{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 67, className : "view.shared.io.BaseForm", methodName : "addRecordings"});
 };
 view_shared_io_BaseForm.compareStates = function(comp) {
 	var dObj = js_Boot.__cast(comp.state.actualState , model_ORM);
@@ -15177,17 +15227,14 @@ view_shared_io_BaseForm.compareStates = function(comp) {
 	while(_g < _g1.length) {
 		var f = _g1[_g];
 		++_g;
-		haxe_Log.trace("" + f + ":" + Std.string(Reflect.field(comp.state.actualState,f)) + "<==>" + Std.string(Reflect.field(comp.state.initialState,f)) + "<",{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 61, className : "view.shared.io.BaseForm", methodName : "compareStates"});
+		haxe_Log.trace("" + f + ":" + Std.string(Reflect.field(comp.state.actualState,f)) + "<==>" + Std.string(Reflect.field(comp.state.initialState,f)) + "<",{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 76, className : "view.shared.io.BaseForm", methodName : "compareStates"});
 	}
 };
 view_shared_io_BaseForm.doChange = function(comp,name,value) {
-	var c = js_Boot.getClass(comp);
-	haxe_Log.trace(c.__name__,{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 67, className : "view.shared.io.BaseForm", methodName : "doChange"});
-	haxe_Log.trace("" + name + ": " + Std.string(value) + " ",{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 68, className : "view.shared.io.BaseForm", methodName : "doChange"});
 	if(name != null && name != "") {
-		haxe_Log.trace(Reflect.getProperty(comp.state.actualState,name),{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 72, className : "view.shared.io.BaseForm", methodName : "doChange"});
+		haxe_Log.trace(Reflect.getProperty(comp.state.actualState,name),{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 87, className : "view.shared.io.BaseForm", methodName : "doChange"});
 		Reflect.setProperty(comp.state.actualState,name,value);
-		haxe_Log.trace(Reflect.getProperty(comp.state.actualState,name),{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 74, className : "view.shared.io.BaseForm", methodName : "doChange"});
+		haxe_Log.trace(Reflect.getProperty(comp.state.actualState,name),{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 89, className : "view.shared.io.BaseForm", methodName : "doChange"});
 	}
 };
 view_shared_io_BaseForm.filter = function(props,param) {
@@ -15256,11 +15303,11 @@ view_shared_io_BaseForm.warn = function(text) {
 	App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "warn", text : text}))));
 };
 view_shared_io_BaseForm.renderPager = function(comp) {
-	haxe_Log.trace("pageCount=" + Std.string(comp.state.pageCount),{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 174, className : "view.shared.io.BaseForm", methodName : "renderPager"});
+	haxe_Log.trace("pageCount=" + Std.string(comp.state.pageCount),{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 189, className : "view.shared.io.BaseForm", methodName : "renderPager"});
 	var tmp = react_ReactType.fromString("div");
 	var tmp1 = react_ReactType.fromString("nav");
 	return React.createElement(tmp,{ className : "paginationContainer"},React.createElement(tmp1,{ },React.createElement(react_ReactType.fromComp(react_ReactPaginate),{ previousLabel : "<", breakLinkClassName : "pagination-link", pageLinkClassName : "pagination-link", nextLinkClassName : "pagination-next", previousLinkClassName : "pagination-previous", nextLabel : ">", breakLabel : "...", breakClassName : "break-me", pageCount : comp.state.pageCount, marginPagesDisplayed : 2, pageRangeDisplayed : 5, onPageChange : function(data) {
-		haxe_Log.trace("" + Std.string(comp.props.match.params.action) + "  " + data.selected,{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 191, className : "view.shared.io.BaseForm", methodName : "renderPager"});
+		haxe_Log.trace("" + Std.string(comp.props.match.params.action) + "  " + data.selected,{ fileName : "view/shared/io/BaseForm.hx", lineNumber : 206, className : "view.shared.io.BaseForm", methodName : "renderPager"});
 		var fun = Reflect.field(comp,comp.props.match.params.action);
 		if(Reflect.isFunction(fun)) {
 			fun.apply(comp,[{ page : data.selected}]);
@@ -16194,7 +16241,7 @@ var view_dashboard_DBSync = function(props) {
 	this.dataDisplay = view_dashboard_model_DBSyncModel.dataDisplay;
 	this.dataAccess = view_dashboard_model_DBSyncModel.dataAccess(props.match.params.action);
 	this.formFields = view_dashboard_model_DBSyncModel.formFields(props.match.params.action);
-	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 90, className : "view.dashboard.DBSync", methodName : "new"});
+	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 92, className : "view.dashboard.DBSync", methodName : "new"});
 	this.state = App.initEState({ loading : false, dataTable : [], actualState : { edited_by : props.userState.dbUser.id, mandator : props.userState.dbUser.mandator}, initialState : { edited_by : props.userState.dbUser.id, mandator : props.userState.dbUser.mandator}, values : new haxe_ds_StringMap()},this);
 };
 $hxClasses["view.dashboard.DBSync"] = view_dashboard_DBSync;
@@ -16220,10 +16267,10 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	,dbData: null
 	,dbMetaData: null
 	,createFieldList: function(ev) {
-		haxe_Log.trace("hi :)",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 119, className : "view.dashboard.DBSync", methodName : "createFieldList"});
+		haxe_Log.trace("hi :)",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 121, className : "view.dashboard.DBSync", methodName : "createFieldList"});
 	}
 	,editTableFields: function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 128, className : "view.dashboard.DBSync", methodName : "editTableFields"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 130, className : "view.dashboard.DBSync", methodName : "editTableFields"});
 	}
 	,initStateFromDataTable: function(dt) {
 		var iS = { };
@@ -16239,7 +16286,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			var k_current = 0;
 			while(k_current < k_length) {
 				var k = k_keys[k_current++];
-				haxe_Log.trace(k,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 139, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
+				haxe_Log.trace(k,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 141, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
 				if(this.dataDisplay.h["fieldsList"].columns.h[k].cellFormat == view_dashboard_model_DBSyncModel.formatBool) {
 					rS[k] = dR.h[k] == "Y";
 				} else {
@@ -16248,11 +16295,11 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			}
 			iS[dR.h["id"]] = rS;
 		}
-		haxe_Log.trace(iS,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 149, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
+		haxe_Log.trace(iS,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 151, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
 		return iS;
 	}
 	,saveTableFields: function(vA) {
-		haxe_Log.trace(vA,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 155, className : "view.dashboard.DBSync", methodName : "saveTableFields"});
+		haxe_Log.trace(vA,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 157, className : "view.dashboard.DBSync", methodName : "saveTableFields"});
 	}
 	,getMissingExternalBookings: function(cB) {
 		var _gthis = this;
@@ -16264,9 +16311,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			}
 			var offset = Std.parseInt(data.dataInfo.h["offset"]);
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "" + offset + " von " + Std.string(data.dataInfo.h["maxImport"]) + " aktualisiert"}))));
-			haxe_Log.trace("" + offset + " < " + Std.string(data.dataInfo.h["maxImport"]),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 215, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
+			haxe_Log.trace("" + offset + " < " + Std.string(data.dataInfo.h["maxImport"]),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 217, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
 			if(offset < Std.parseInt(data.dataInfo.h["maxImport"])) {
-				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 218, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
+				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 220, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
 				return _gthis.doSyncAll2(data.dataInfo);
 			} else {
 				_gthis.setState({ loading : false});
@@ -16280,7 +16327,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		return p;
 	}
 	,importAccounts2: function(_) {
-		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 241, className : "view.dashboard.DBSync", methodName : "importAccounts2"});
+		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 243, className : "view.dashboard.DBSync", methodName : "importAccounts2"});
 		this.setState({ loading : true});
 		this.doSyncAll2({ classPath : "admin.SyncExternalAccounts", action : "importContacts", extDB : true, filter : { mandator : "1"}, limit : 1000, offset : 0, table : "accounts", dbUser : this.props.userState.dbUser, devIP : App.devIP, maxImport : 4000});
 	}
@@ -16293,9 +16340,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			}
 			var offset = Std.parseInt(data.dataInfo.h["offset"]);
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "" + offset + " von " + Std.string(data.dataInfo.h["maxImport"]) + " aktualisiert"}))));
-			haxe_Log.trace("" + offset + " < " + Std.string(data.dataInfo.h["maxImport"]),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 279, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
+			haxe_Log.trace("" + offset + " < " + Std.string(data.dataInfo.h["maxImport"]),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 281, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
 			if(offset < Std.parseInt(data.dataInfo.h["maxImport"])) {
-				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 282, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
+				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 284, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
 				return _gthis.doSyncAll2(data.dataInfo);
 			} else {
 				_gthis.setState({ loading : false});
@@ -16304,12 +16351,25 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		});
 		return p;
 	}
+	,syncQC: function() {
+		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "Aktualisiere QC Test leads"}))));
+		var dbQueryParam = { classPath : "data.SyncExternal", action : "sync2dev", extDB : true, filter : { mandator : "1"}, dbUser : this.props.userState.dbUser, devIP : App.devIP};
+		var p = action_async_LivePBXSync.query(dbQueryParam);
+		p.then(function(data) {
+			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 322, className : "view.dashboard.DBSync", methodName : "syncQC"});
+			haxe_Log.trace(new haxe_ds__$StringMap_StringMapKeyIterator(data.dataInfo.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 323, className : "view.dashboard.DBSync", methodName : "syncQC"});
+			var offset = Std.parseInt(data.dataInfo.h["qc_leads"]);
+			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "" + Std.string(data.dataInfo.h["qc_leads"]) + " QC Test leads aktualisiert"}))));
+			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 332, className : "view.dashboard.DBSync", methodName : "syncQC"});
+			return p;
+		});
+	}
 	,importContacts: function() {
-		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 302, className : "view.dashboard.DBSync", methodName : "importContacts"});
+		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 340, className : "view.dashboard.DBSync", methodName : "importContacts"});
 		App.store.dispatch(action_async_LivePBXSync.importContacts({ devIP : App.devIP, limit : 4000, maxImport : 4000, userState : this.props.userState, offset : 0, classPath : "admin.SyncExternalContacts", action : "importContacts"}));
 	}
 	,importAllBookingRequests2: function(_) {
-		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 316, className : "view.dashboard.DBSync", methodName : "importAllBookingRequests2"});
+		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 354, className : "view.dashboard.DBSync", methodName : "importAllBookingRequests2"});
 		App.store.dispatch(action_async_LivePBXSync.importContacts({ limit : 50000, maxImport : 50000, userState : this.props.userState, offset : 100000, table : "booking_requests", classPath : "admin.SyncExternalBookings", action : "importContacts"}));
 	}
 	,importBookingRequests2: function() {
@@ -16318,14 +16378,14 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	,checkBookingRequests: function(fD) {
 		var _gthis = this;
 		if(fD != null) {
-			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 343, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
-			haxe_Log.trace(fD.get("sync_now"),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 348, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 381, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+			haxe_Log.trace(fD.get("sync_now"),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 386, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
 			if(fD.get("sync_now") == "on") {
 				App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Buchungsanforderungen"}))));
 				this.getMissingExternalBookings(function() {
 					_gthis.loadBookingRequestsCount();
 					window.document.querySelector("[name=\"sync_now\"]").checked = false;
-					haxe_Log.trace((js_Boot.__cast(window.document.querySelector("[name=\"sync_now\"]") , HTMLInputElement)).checked ? "Yes" : "No",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 359, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+					haxe_Log.trace((js_Boot.__cast(window.document.querySelector("[name=\"sync_now\"]") , HTMLInputElement)).checked ? "Yes" : "No",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 397, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
 				});
 			} else {
 				this.loadBookingRequestsCount();
@@ -16340,25 +16400,28 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Lade Anzahl Buchungsanforderungen"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "bookingRequestsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 388, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
-			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 389, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 426, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
+			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 427, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "bookingRequestsCount";
 			_g.h["buchungsAnforderungenCount"] = props.dataInfo.h["buchungsAnforderungenCount"];
 			_g.h["bookingRequestsCount"] = props.dataInfo.h["bookingRequestsCount"];
 			_gthis1.setState({ data : _g});
-			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 400, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
+			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 438, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 402, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 440, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
 		});
 	}
-	,checkAccounts: function() {
+	,checkAccounts: function(fD) {
 		var _gthis = this;
+		if(fD != null) {
+			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 447, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
+		}
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Konten"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "accountsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 422, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 465, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "accountsCount";
@@ -16366,21 +16429,24 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["accountsCount"] = props.dataInfo.h["accountsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 429, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 472, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
 		});
 	}
-	,checkContacts: function() {
+	,checkContacts: function(fD) {
 		var _gthis = this;
+		if(fD != null) {
+			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 480, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+		}
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Kontakte"}))));
-		var sync_now = window.document.querySelector("[name=\"sync_contacts\"]");
-		haxe_Log.trace(sync_now.checked,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 441, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+		var sync_now = { checked : false};
+		haxe_Log.trace(sync_now.checked,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 490, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 		if(sync_now.checked) {
 			this.importContacts();
 			return;
 		}
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "clientsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 455, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 504, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "contactsCount";
@@ -16388,7 +16454,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["contactsCount"] = props.dataInfo.h["contactsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 462, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 511, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 		});
 	}
 	,checkDeals: function() {
@@ -16396,7 +16462,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Spenden"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "dealsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 482, className : "view.dashboard.DBSync", methodName : "checkDeals"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 531, className : "view.dashboard.DBSync", methodName : "checkDeals"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "dealsCount";
@@ -16404,7 +16470,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["dealsCount"] = props.dataInfo.h["dealsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 489, className : "view.dashboard.DBSync", methodName : "checkDeals"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 538, className : "view.dashboard.DBSync", methodName : "checkDeals"});
 			App.store.dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ dbUser : _gthis.props.userState.dbUser, lastError : "Du musst dich neu anmelden!"}))));
 		});
 	}
@@ -16412,9 +16478,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "Synchronisiere Kontakte, Spenden + Konten"}))));
 		var pro = App.store.dispatch(action_async_LivePBXSync.checkAll({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "admin.SyncExternal", action : "checkAll"}));
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 516, className : "view.dashboard.DBSync", methodName : "checkAll"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 565, className : "view.dashboard.DBSync", methodName : "checkAll"});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 518, className : "view.dashboard.DBSync", methodName : "checkAll"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 567, className : "view.dashboard.DBSync", methodName : "checkAll"});
 		});
 	}
 	,displaySummary: function() {
@@ -16429,11 +16495,11 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,syncUserDetails2: function(_) {
 		var _gthis = this;
-		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 559, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
-		haxe_Log.trace(this.props.userState.dbUser,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 560, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 608, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+		haxe_Log.trace(this.props.userState.dbUser,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 609, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
 		loader_BinaryLoader.create("" + Std.string(App.config.api),{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, fields : "id,table_name,field_name,disabled,element,required,use_as_index", classPath : "admin.SyncExternal", action : "syncUserDetails", devIP : App.devIP, dbUser : this.props.userState.dbUser},function(data) {
-			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 576, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 578, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 625, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 627, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
 			if(data.dataRows.length > 0) {
 				_gthis.setState({ dataTable : data.dataRows});
 			}
@@ -16442,9 +16508,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,proxy_showUserList: function(_) {
 		var _gthis = this;
-		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 593, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
+		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 642, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
 		loader_BinaryLoader.create("https://pitverwaltung.de/sync/proxy.php",{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, fields : "id,table_name,field_name,disabled,element,required,use_as_index", classPath : "admin.SyncExternal", action : "syncUserDetails", target : "syncUsers.php", devIP : App.devIP},function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 611, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 660, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
 			if(data.dataRows.length > 0) {
 				_gthis.setState({ dataTable : data.dataRows});
 			}
@@ -16452,11 +16518,11 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,componentDidMount: function() {
 		if(this.props.userState != null) {
-			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 628, className : "view.dashboard.DBSync", methodName : "componentDidMount"});
+			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 677, className : "view.dashboard.DBSync", methodName : "componentDidMount"});
 		}
 	}
 	,go: function(aState) {
-		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 633, className : "view.dashboard.DBSync", methodName : "go"});
+		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 682, className : "view.dashboard.DBSync", methodName : "go"});
 		var dbaProps_action = this.props.match.params.action;
 		var dbaProps_classPath = "data.Contacts";
 		var dbaProps_dataSource = null;
@@ -16471,7 +16537,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			while(_g < _g1.length) {
 				var f = _g1[_g];
 				++_g;
-				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 647, className : "view.dashboard.DBSync", methodName : "go"});
+				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 696, className : "view.dashboard.DBSync", methodName : "go"});
 				if(Reflect.field(aState,f) == "") {
 					Reflect.deleteField(aState,f);
 				}
@@ -16489,7 +16555,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 667, className : "view.dashboard.DBSync", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 716, className : "view.dashboard.DBSync", methodName : "render"});
 		var tmp = this.state.formApi;
 		var tmp1 = react_ReactType.fromComp(React_Fragment);
 		var tmp2 = react_ReactType.fromString("form");
@@ -16499,13 +16565,13 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,renderResults: function() {
 		if(this.state.data != null) {
-			haxe_Log.trace(Std.string(this.state.data.h["action"]) + ":",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 679, className : "view.dashboard.DBSync", methodName : "renderResults"});
+			haxe_Log.trace(Std.string(this.state.data.h["action"]) + ":",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 728, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		}
-		haxe_Log.trace(this.state.loading,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 680, className : "view.dashboard.DBSync", methodName : "renderResults"});
+		haxe_Log.trace(this.state.loading,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 729, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		if(this.state.data == null) {
 			return React.createElement(react_ReactType.fromString("div"),{ className : "flex0 cCenter"},this.state.formApi.renderWait());
 		}
-		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 683, className : "view.dashboard.DBSync", methodName : "renderResults"});
+		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 732, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		var _g = this.state.data.h["action"];
 		if(_g == null) {
 			return null;
@@ -16580,7 +16646,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 				}
 				break;
 			case "importClientList":
-				haxe_Log.trace(this.state.actualState,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 687, className : "view.dashboard.DBSync", methodName : "renderResults"});
+				haxe_Log.trace(this.state.actualState,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 736, className : "view.dashboard.DBSync", methodName : "renderResults"});
 				if(this.state.actualState == null) {
 					return this.state.formApi.renderWait();
 				} else {
@@ -16594,7 +16660,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,updateMenu: function(viewClassPath) {
 		var sideMenu = this.state.sideMenu;
-		haxe_Log.trace(sideMenu.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 745, className : "view.dashboard.DBSync", methodName : "updateMenu"});
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 794, className : "view.dashboard.DBSync", methodName : "updateMenu"});
 		var _g = 0;
 		var _g1 = sideMenu.menuBlocks.h["DBSync"].items;
 		while(_g < _g1.length) {
@@ -18168,7 +18234,7 @@ var view_data_contacts_Edit = function(props) {
 		var tmp = props.dataStore.contactData.keys().next();
 		props.match.params.id = Std.string(tmp);
 	}
-	if(props.match.params.id == null && new EReg("open(/)*$","").match(props.match.params.action)) {
+	if(props.match.params.id == "null" && new EReg("open|update(/)*$","").match(props.match.params.action)) {
 		haxe_Log.trace("nothing selected - redirect",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 135, className : "view.data.contacts.Edit", methodName : "new"});
 		var baseUrl = props.match.path.split(":section")[0];
 		props.history.push("" + baseUrl + "List/get");
@@ -18184,15 +18250,24 @@ var view_data_contacts_Edit = function(props) {
 	this.accountFieldNames = view_shared_io_BaseForm.initFieldNames(new haxe_ds__$StringMap_StringMapKeyIterator(this.accountDataAccess.h["open"].view.h));
 	this.accountDataDisplay = model_accounting_AccountsModel.dataDisplay;
 	if(props.dataStore.contactData != null) {
-		haxe_Log.trace(props.dataStore.contactData.keys().next(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 153, className : "view.data.contacts.Edit", methodName : "new"});
+		haxe_Log.trace(props.dataStore.contactData.keys().next(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 154, className : "view.data.contacts.Edit", methodName : "new"});
 	}
-	this.state = App.initEState({ actualState : null, initialData : null, mHandlers : view_data_contacts_Edit.menuItems, loading : false, model : "contacts", ormRefs : new haxe_ds_StringMap(), relDataComps : new haxe_ds_StringMap(), selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "data.Contacts", label : "Bearbeiten", section : "Edit", items : view_data_contacts_Edit.menuItems},{ section : props.match.params.section == null ? "Edit" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
-	haxe_Log.trace(this.state.initialData,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 182, className : "view.data.contacts.Edit", methodName : "new"});
+	var _g = [];
+	var _g1 = 0;
+	var _g2 = view_data_contacts_Edit.menuItems;
+	while(_g1 < _g2.length) {
+		var v = _g2[_g1];
+		++_g1;
+		_g.push(Object.assign({ },v));
+	}
+	var _iMenuItems = _g;
+	this.state = App.initEState({ actualState : null, initialData : null, mHandlers : _iMenuItems, loading : false, model : "contacts", ormRefs : new haxe_ds_StringMap(), relDataComps : new haxe_ds_StringMap(), selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "data.Contacts", label : "Bearbeiten", section : "Edit", items : _iMenuItems},{ section : props.match.params.section == null ? "Edit" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
+	haxe_Log.trace(this.state.initialData,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 184, className : "view.data.contacts.Edit", methodName : "new"});
 };
 $hxClasses["view.data.contacts.Edit"] = view_data_contacts_Edit;
 view_data_contacts_Edit.__name__ = "view.data.contacts.Edit";
 view_data_contacts_Edit.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace("here we should be ready to load",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 594, className : "view.data.contacts.Edit", methodName : "mapDispatchToProps"});
+	haxe_Log.trace("here we should be ready to load",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 597, className : "view.data.contacts.Edit", methodName : "mapDispatchToProps"});
 	return { load : function(param) {
 		return dispatch(redux_Action.map(action_async_CRUD.read(param)));
 	}};
@@ -18231,7 +18306,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		this.props.history.push("" + this.props.match.path.split(":section")[0] + "List/get");
 	}
 	,showSelectedAccounts: function(ev) {
-		haxe_Log.trace("---" + Std.string(this.ormRefs.h["accounts"].compRef.state.dataGrid.state.selectedRows),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 195, className : "view.data.contacts.Edit", methodName : "showSelectedAccounts"});
+		haxe_Log.trace("---" + Std.string(this.ormRefs.h["accounts"].compRef.state.dataGrid.state.selectedRows),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 197, className : "view.data.contacts.Edit", methodName : "showSelectedAccounts"});
 		var sRows = this.ormRefs.h["accounts"].compRef.state.dataGrid.state.selectedRows;
 		var k = sRows.keys();
 		while(k.hasNext()) {
@@ -18240,53 +18315,62 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,showSelectedDeals: function(ev) {
-		haxe_Log.trace("---" + Std.string(Type.typeof(this.state.relDataComps)),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 208, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
+		haxe_Log.trace("---" + Std.string(Type.typeof(this.state.relDataComps)),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 210, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
 		var h = this.state.relDataComps.h;
 		var inlStringMapKeyIterator_h = h;
 		var inlStringMapKeyIterator_keys = Object.keys(h);
 		var inlStringMapKeyIterator_length = inlStringMapKeyIterator_keys.length;
 		var inlStringMapKeyIterator_current = 0;
-		haxe_Log.trace("---" + Std.string(inlStringMapKeyIterator_current < inlStringMapKeyIterator_length),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 210, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
+		haxe_Log.trace("---" + Std.string(inlStringMapKeyIterator_current < inlStringMapKeyIterator_length),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 212, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
 		var sRows = this.ormRefs.h["deals"].compRef.state.dataGrid.state.selectedRows;
 		var k = sRows.keys();
 		while(k.hasNext()) {
 			var k1 = k.next();
 			this.ormRefs.h["deals"].compRef.props.loadData(k1,this.ormRefs.h["deals"].compRef);
 		}
-		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 217, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
-		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef).querySelectorAll(".selected").length,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 218, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
+		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 219, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
+		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef).querySelectorAll(".selected").length,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 220, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
 		if(ev != null) {
 			var targetEl = js_Boot.__cast(ev.target , HTMLElement);
-			haxe_Log.trace(Std.string(targetEl.dataset.id),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 221, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
+			haxe_Log.trace(Std.string(targetEl.dataset.id),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 223, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
 		}
 	}
 	,loadContactData: function(id) {
 		var _gthis = this;
-		haxe_Log.trace("loading:" + id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 227, className : "view.data.contacts.Edit", methodName : "loadContactData"});
+		haxe_Log.trace("loading:" + id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 229, className : "view.data.contacts.Edit", methodName : "loadContactData"});
 		if(id == null) {
 			return;
 		}
 		var p = this.props.load({ classPath : "data.Contacts", action : "getDetails", filter : { id : id, mandator : 1}, resolveMessage : { success : "Kontakt " + id + " wurde geladen", failure : "Kontakt " + id + " konnte nicht geladen werden"}, table : "contacts", viciBoxDB : true, dbUser : this.props.userState.dbUser, devIP : App.devIP});
 		p.then(function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 247, className : "view.data.contacts.Edit", methodName : "loadContactData"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 249, className : "view.data.contacts.Edit", methodName : "loadContactData"});
 			if(data.dataRows.length == 1) {
 				var c_data = data.dataRows[0];
-				haxe_Log.trace(c_data == null ? "null" : haxe_ds_StringMap.stringify(c_data.h),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 252, className : "view.data.contacts.Edit", methodName : "loadContactData"});
-				haxe_Log.trace(haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 253, className : "view.data.contacts.Edit", methodName : "loadContactData"});
+				haxe_Log.trace(c_data == null ? "null" : haxe_ds_StringMap.stringify(c_data.h),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 254, className : "view.data.contacts.Edit", methodName : "loadContactData"});
+				haxe_Log.trace(haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 255, className : "view.data.contacts.Edit", methodName : "loadContactData"});
 				if(Object.prototype.hasOwnProperty.call(data.dataInfo.h,"recordings")) {
-					haxe_Log.trace(data.dataInfo.h["recordings"],{ fileName : "view/data/contacts/Edit.hx", lineNumber : 255, className : "view.data.contacts.Edit", methodName : "loadContactData"});
-					_gthis.state.mHandlers = view_data_contacts_Edit.menuItems;
+					haxe_Log.trace(data.dataInfo.h["recordings"],{ fileName : "view/data/contacts/Edit.hx", lineNumber : 257, className : "view.data.contacts.Edit", methodName : "loadContactData"});
+					haxe_Log.trace(view_data_contacts_Edit.menuItems.length,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 259, className : "view.data.contacts.Edit", methodName : "loadContactData"});
+					var _g = [];
+					var _g1 = 0;
+					var _g2 = view_data_contacts_Edit.menuItems;
+					while(_g1 < _g2.length) {
+						var v = _g2[_g1];
+						++_g1;
+						_g.push(Object.assign({ },v));
+					}
+					_gthis.state.mHandlers = _g;
 					view_shared_io_BaseForm.addRecordings(_gthis.state,data.dataInfo.h["recordings"]);
 				} else {
-					haxe_Log.trace(haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 262, className : "view.data.contacts.Edit", methodName : "loadContactData"});
+					haxe_Log.trace(haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 265, className : "view.data.contacts.Edit", methodName : "loadContactData"});
 				}
 				var contact = new model_Contact(c_data);
 				if(_gthis.mounted) {
 					_gthis.setState({ loading : false, actualState : contact, initialData : react_ReactUtil.copy(contact)});
 				}
-				haxe_Log.trace("" + Std.string(_gthis.mounted) + " " + contact.id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 268, className : "view.data.contacts.Edit", methodName : "loadContactData"});
-				haxe_Log.trace(_gthis.state.actualState.id + ":" + _gthis.state.actualState.fieldsInitalized.join(","),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 269, className : "view.data.contacts.Edit", methodName : "loadContactData"});
-				haxe_Log.trace(_gthis.props.location.pathname + ":" + _gthis.state.actualState.date_of_birth,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 271, className : "view.data.contacts.Edit", methodName : "loadContactData"});
+				haxe_Log.trace("" + Std.string(_gthis.mounted) + " " + contact.id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 271, className : "view.data.contacts.Edit", methodName : "loadContactData"});
+				haxe_Log.trace(_gthis.state.actualState.id + ":" + _gthis.state.actualState.fieldsInitalized.join(","),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 272, className : "view.data.contacts.Edit", methodName : "loadContactData"});
+				haxe_Log.trace(_gthis.props.location.pathname + ":" + _gthis.state.actualState.date_of_birth,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 274, className : "view.data.contacts.Edit", methodName : "loadContactData"});
 				var _gthis1 = _gthis.props.history;
 				var tmp = StringTools.replace(_gthis.props.location.pathname,"open","update");
 				_gthis1.replace(tmp);
@@ -18294,7 +18378,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		});
 	}
 	,'delete': function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 279, className : "view.data.contacts.Edit", methodName : "delete"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 282, className : "view.data.contacts.Edit", methodName : "delete"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
 	}
 	,update2: function() {
@@ -18306,23 +18390,23 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		} catch( _g ) {
 			var ex = haxe_Exception.caught(_g).unwrap();
 			if(this._trace) {
-				haxe_Log.trace(ex,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 296, className : "view.data.contacts.Edit", methodName : "componentDidCatch"});
+				haxe_Log.trace(ex,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 299, className : "view.data.contacts.Edit", methodName : "componentDidCatch"});
 			}
 		}
 		if(this._trace) {
-			haxe_Log.trace(error,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 298, className : "view.data.contacts.Edit", methodName : "componentDidCatch"});
+			haxe_Log.trace(error,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 301, className : "view.data.contacts.Edit", methodName : "componentDidCatch"});
 		}
-		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 299, className : "view.data.contacts.Edit", methodName : "componentDidCatch"});
+		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 302, className : "view.data.contacts.Edit", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
-		haxe_Log.trace("mounted:" + Std.string(this.mounted),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 304, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
+		haxe_Log.trace("mounted:" + Std.string(this.mounted),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 307, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
 		this.mounted = true;
-		haxe_Log.trace(this.props.children,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 306, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.children,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 309, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
 		if(this.props.match.params.id != null) {
-			haxe_Log.trace(this.props.match.params,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 309, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
+			haxe_Log.trace(this.props.match.params,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 312, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
 			this.loadContactData(Std.parseInt(this.props.match.params.id));
 		}
-		haxe_Log.trace(this.props.children,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 312, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.children,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 315, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
 	}
 	,componentWillUnmount: function() {
 		return;
@@ -18335,8 +18419,8 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		case 0:
 			break;
 		case 4:
-			haxe_Log.trace(Reflect.fields(ref),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 343, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
-			haxe_Log.trace(js_Boot.getClass(ref),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 344, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
+			haxe_Log.trace(Reflect.fields(ref),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 346, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
+			haxe_Log.trace(js_Boot.getClass(ref),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 347, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
 			var tmp = ref.props != null && ref.props.model != null;
 			break;
 		case 6:
@@ -18352,22 +18436,22 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 					}
 				} catch( _g ) {
 					var ex = haxe_Exception.caught(_g);
-					haxe_Log.trace(ex,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 369, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
+					haxe_Log.trace(ex,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 372, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
 				}
 			}
 			break;
 		default:
-			haxe_Log.trace(ref,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 373, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
+			haxe_Log.trace(ref,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 376, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
 		}
 	}
 	,registerORM: function(refModel,orm) {
 		if(Object.prototype.hasOwnProperty.call(this.ormRefs.h,refModel)) {
 			this.ormRefs.h[refModel].orms.h[orm.id] = orm;
-			haxe_Log.trace(refModel,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 380, className : "view.data.contacts.Edit", methodName : "registerORM"});
+			haxe_Log.trace(refModel,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 383, className : "view.data.contacts.Edit", methodName : "registerORM"});
 			this.setState({ ormRefs : this.ormRefs});
-			haxe_Log.trace(Reflect.fields(this.state),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 384, className : "view.data.contacts.Edit", methodName : "registerORM"});
+			haxe_Log.trace(Reflect.fields(this.state),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 387, className : "view.data.contacts.Edit", methodName : "registerORM"});
 		} else {
-			haxe_Log.trace("OrmRef " + refModel + " not found!",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 388, className : "view.data.contacts.Edit", methodName : "registerORM"});
+			haxe_Log.trace("OrmRef " + refModel + " not found!",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 391, className : "view.data.contacts.Edit", methodName : "registerORM"});
 		}
 	}
 	,update: function() {
@@ -18384,12 +18468,12 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 			var k = _g1_key;
 			var v = _g1_value;
 			if(Reflect.field(v,"props") != null && Reflect.field(v.props,"save") != null) {
-				haxe_Log.trace("save:" + k,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 396, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace("save:" + k,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 399, className : "view.data.contacts.Edit", methodName : "update"});
 				v.props.save(v);
 			}
 		}
 		if(this.state.actualState != null) {
-			haxe_Log.trace("length:" + this.state.actualState.fieldsModified.length + ":" + this.state.actualState.fieldsModified.join("|"),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 405, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace("length:" + this.state.actualState.fieldsModified.length + ":" + this.state.actualState.fieldsModified.join("|"),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 408, className : "view.data.contacts.Edit", methodName : "update"});
 		}
 		if(this.state.actualState == null || this.state.actualState.fieldsModified.length == 0) {
 			return;
@@ -18400,7 +18484,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		var elements = formElement.elements;
 		var aState = react_ReactUtil.copy(this.state.actualState);
 		var dbQ = { classPath : "data.Contacts", action : "update", data : data2save, filter : { id : this.state.actualState.id, mandator : 1}, resolveMessage : { success : "Kontakt " + this.state.actualState.id + " wurde aktualisiert", failure : "Kontakt " + this.state.actualState.id + " konnte nicht aktualisiert werden"}, table : "contacts", dbUser : this.props.userState.dbUser, devIP : App.devIP};
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 427, className : "view.data.contacts.Edit", methodName : "update"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 430, className : "view.data.contacts.Edit", methodName : "update"});
 		switch(this.props.match.params.action) {
 		case "delete":case "get":
 			var _g = new haxe_ds_StringMap();
@@ -18415,28 +18499,28 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 			while(_g < _g1.length) {
 				var f = _g1[_g];
 				++_g;
-				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 433, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 436, className : "view.data.contacts.Edit", methodName : "update"});
 				if(Reflect.field(aState,f) == "") {
 					Reflect.deleteField(aState,f);
 				}
 			}
 			break;
 		case "update":
-			haxe_Log.trace("" + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 445, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace("" + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 448, className : "view.data.contacts.Edit", methodName : "update"});
 			if(this.state.actualState != null) {
-				haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 449, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 452, className : "view.data.contacts.Edit", methodName : "update"});
 			}
-			haxe_Log.trace(this.state.actualState.id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 451, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace(this.state.actualState.id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 454, className : "view.data.contacts.Edit", methodName : "update"});
 			if(!this.state.actualState.modified()) {
-				haxe_Log.trace("nothing modified",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 455, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace("nothing modified",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 458, className : "view.data.contacts.Edit", methodName : "update"});
 				return;
 			}
-			haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 458, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 461, className : "view.data.contacts.Edit", methodName : "update"});
 			break;
 		}
 		var p = App.store.dispatch(redux_Action.map(action_async_CRUD.update(dbQ)));
 		p.then(function(d) {
-			haxe_Log.trace(d,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 471, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace(d,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 474, className : "view.data.contacts.Edit", methodName : "update"});
 			_gthis.loadContactData(_gthis.state.actualState.id);
 		});
 	}
@@ -18568,7 +18652,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		return React.createElement(tmp,{ },tmp1,tmp2);
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 563, className : "view.data.contacts.Edit", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 566, className : "view.data.contacts.Edit", methodName : "render"});
 		if(this.state.initialData == null) {
 			return null;
 		}
@@ -18582,7 +18666,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,select: function(id,data,match) {
-		haxe_Log.trace(id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 590, className : "view.data.contacts.Edit", methodName : "select"});
+		haxe_Log.trace(id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 593, className : "view.data.contacts.Edit", methodName : "select"});
 	}
 	,__class__: view_data_contacts_Edit
 });
@@ -19117,8 +19201,7 @@ var view_data_qc_Edit = function(props) {
 	this.dealsFormRef = React.createRef();
 	this.formRef = React.createRef();
 	this.historyFormRef = React.createRef();
-	haxe_Log.trace(props.match.params,{ fileName : "view/data/qc/Edit.hx", lineNumber : 132, className : "view.data.qc.Edit", methodName : "new"});
-	haxe_Log.trace("props:" + Reflect.fields(props).join("|"),{ fileName : "view/data/qc/Edit.hx", lineNumber : 133, className : "view.data.qc.Edit", methodName : "new"});
+	haxe_Log.trace(props.match.params,{ fileName : "view/data/qc/Edit.hx", lineNumber : 137, className : "view.data.qc.Edit", methodName : "new"});
 	if(props.match.params.id == null) {
 		if(props.dataStore.qcActData != null && props.dataStore.qcActData.keys().hasNext()) {
 			var tmp = props.dataStore.qcActData.keys().next();
@@ -19127,17 +19210,19 @@ var view_data_qc_Edit = function(props) {
 	}
 	if(Lambda.has(Reflect.fields(props),"dataStore") && props.dataStore.qcData != null) {
 		this.qcData = props.dataStore.qcData.h[Std.parseInt(props.match.params.id)];
-		haxe_Log.trace(Reflect.fields(this.qcData).join("|"),{ fileName : "view/data/qc/Edit.hx", lineNumber : 144, className : "view.data.qc.Edit", methodName : "new"});
+		if(this.qcData != null) {
+			haxe_Log.trace(this.qcData.h["lead_id"],{ fileName : "view/data/qc/Edit.hx", lineNumber : 148, className : "view.data.qc.Edit", methodName : "new"});
+		}
 	}
 	if(props.match.params.id == null && new EReg("update(/)*$","").match(props.match.params.action)) {
-		haxe_Log.trace("nothing selected - redirect",{ fileName : "view/data/qc/Edit.hx", lineNumber : 149, className : "view.data.qc.Edit", methodName : "new"});
+		haxe_Log.trace("nothing selected - redirect",{ fileName : "view/data/qc/Edit.hx", lineNumber : 154, className : "view.data.qc.Edit", methodName : "new"});
 		var baseUrl = props.match.path.split(":section")[0];
 		props.history.push("" + baseUrl + "List/get");
 		return;
 	}
 	this.dataAccess = model_qc_QCModel.dataAccess;
 	this.fieldNames = view_shared_io_BaseForm.initFieldNames(new haxe_ds__$StringMap_StringMapKeyIterator(this.dataAccess.h["open"].view.h));
-	haxe_Log.trace(this.fieldNames.join("|"),{ fileName : "view/data/qc/Edit.hx", lineNumber : 156, className : "view.data.qc.Edit", methodName : "new"});
+	haxe_Log.trace(this.fieldNames.join("|"),{ fileName : "view/data/qc/Edit.hx", lineNumber : 161, className : "view.data.qc.Edit", methodName : "new"});
 	this.dataDisplay = model_qc_QCModel.dataDisplay;
 	this.dealDataAccess = model_deals_DealsModel.dataAccess;
 	this.dealFieldNames = view_shared_io_BaseForm.initFieldNames(new haxe_ds__$StringMap_StringMapKeyIterator(this.dealDataAccess.h["open"].view.h));
@@ -19145,39 +19230,67 @@ var view_data_qc_Edit = function(props) {
 	this.accountFieldNames = view_shared_io_BaseForm.initFieldNames(new haxe_ds__$StringMap_StringMapKeyIterator(this.accountDataAccess.h["open"].view.h));
 	this.accountDataDisplay = model_accounting_AccountsModel.dataDisplay;
 	if(props.dataStore.contactData != null) {
-		haxe_Log.trace(props.dataStore.contactData.keys().next(),{ fileName : "view/data/qc/Edit.hx", lineNumber : 168, className : "view.data.qc.Edit", methodName : "new"});
+		haxe_Log.trace(props.dataStore.contactData.keys().next(),{ fileName : "view/data/qc/Edit.hx", lineNumber : 173, className : "view.data.qc.Edit", methodName : "new"});
 	}
-	this.state = App.initEState({ actualState : null, initialData : null, mHandlers : view_data_qc_Edit.menuItems, loading : false, model : "contacts", ormRefs : new haxe_ds_StringMap(), relDataComps : new haxe_ds_StringMap(), selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "data.Deals", label : "Bearbeiten", section : "Edit", items : view_data_qc_Edit.menuItems},{ section : props.match.params.section == null ? "Edit" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
+	var _g = 0;
+	var _g1 = view_data_qc_Edit.menuItems;
+	while(_g < _g1.length) {
+		var mI = _g1[_g];
+		++_g;
+		if(new EReg("qc_*","").match(mI.action)) {
+			mI.handler = $bind(this,this.doQC);
+		}
+	}
+	var _g = [];
+	var _g1 = 0;
+	var _g2 = view_data_qc_Edit.menuItems;
+	while(_g1 < _g2.length) {
+		var v = _g2[_g1];
+		++_g1;
+		_g.push(Object.assign({ },v));
+	}
+	var tmp = _g;
+	var tmp1 = new haxe_ds_StringMap();
+	var tmp2 = new haxe_ds_StringMap();
+	var _g = [];
+	var _g1 = 0;
+	var _g2 = view_data_qc_Edit.menuItems;
+	while(_g1 < _g2.length) {
+		var v = _g2[_g1];
+		++_g1;
+		_g.push(Object.assign({ },v));
+	}
+	this.state = App.initEState({ actualState : null, initialData : null, mHandlers : tmp, loading : false, model : "contacts", ormRefs : tmp1, relDataComps : tmp2, selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "data.Deals", label : "Bearbeiten", section : "Edit", items : _g},{ section : props.match.params.section == null ? "Edit" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
 	if(view_data_qc_Edit._c == null) {
 		view_data_qc_Edit._c = 1;
 	} else {
 		view_data_qc_Edit._c++;
 	}
-	haxe_Log.trace(view_data_qc_Edit._c,{ fileName : "view/data/qc/Edit.hx", lineNumber : 202, className : "view.data.qc.Edit", methodName : "new"});
-	haxe_Log.trace(this.state.initialData,{ fileName : "view/data/qc/Edit.hx", lineNumber : 204, className : "view.data.qc.Edit", methodName : "new"});
+	haxe_Log.trace(view_data_qc_Edit._c,{ fileName : "view/data/qc/Edit.hx", lineNumber : 210, className : "view.data.qc.Edit", methodName : "new"});
+	haxe_Log.trace(this.state.initialData,{ fileName : "view/data/qc/Edit.hx", lineNumber : 212, className : "view.data.qc.Edit", methodName : "new"});
 };
 $hxClasses["view.data.qc.Edit"] = view_data_qc_Edit;
 view_data_qc_Edit.__name__ = "view.data.qc.Edit";
 view_data_qc_Edit.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace("here we should be ready to load",{ fileName : "view/data/qc/Edit.hx", lineNumber : 653, className : "view.data.qc.Edit", methodName : "mapDispatchToProps"});
+	haxe_Log.trace("here we should be ready to load",{ fileName : "view/data/qc/Edit.hx", lineNumber : 606, className : "view.data.qc.Edit", methodName : "mapDispatchToProps"});
 	return { load : function(param) {
 		return dispatch(redux_Action.map(action_async_CRUD.read(param)));
 	}};
 };
 view_data_qc_Edit.mapStateToProps = function(aState) {
-	haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/data/qc/Edit.hx", lineNumber : 662, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
+	haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/data/qc/Edit.hx", lineNumber : 615, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
 	if(aState.dataStore.qcData != null) {
-		haxe_Log.trace(Std.string(aState.dataStore.qcData.keys().next()),{ fileName : "view/data/qc/Edit.hx", lineNumber : 664, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
+		haxe_Log.trace(Std.string(aState.dataStore.qcData.keys().next()),{ fileName : "view/data/qc/Edit.hx", lineNumber : 617, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
 	}
 	if(aState.dataStore.contactsDbData != null) {
 		var tmp = aState.dataStore.contactsDbData.dataRows[0];
-		haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/data/qc/Edit.hx", lineNumber : 666, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
+		haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/data/qc/Edit.hx", lineNumber : 619, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
 	} else {
-		haxe_Log.trace(Reflect.fields(aState.dataStore),{ fileName : "view/data/qc/Edit.hx", lineNumber : 670, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
+		haxe_Log.trace(Reflect.fields(aState.dataStore),{ fileName : "view/data/qc/Edit.hx", lineNumber : 623, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
 	}
-	haxe_Log.trace(App.store.getState().dataStore.contactsDbData,{ fileName : "view/data/qc/Edit.hx", lineNumber : 672, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
+	haxe_Log.trace(App.store.getState().dataStore.contactsDbData,{ fileName : "view/data/qc/Edit.hx", lineNumber : 625, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
 	var bState = { dataStore : aState.dataStore, userState : aState.userState};
-	haxe_Log.trace(bState.dataStore.contactData,{ fileName : "view/data/qc/Edit.hx", lineNumber : 679, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
+	haxe_Log.trace(bState.dataStore.contactData,{ fileName : "view/data/qc/Edit.hx", lineNumber : 632, className : "view.data.qc.Edit", methodName : "mapStateToProps"});
 	return bState;
 };
 view_data_qc_Edit.__super__ = React_Component;
@@ -19211,7 +19324,7 @@ view_data_qc_Edit.prototype = $extend(React_Component.prototype,{
 		this.props.history.push("" + this.props.match.path.split(":section")[0] + "List/get");
 	}
 	,showSelectedAccounts: function(ev) {
-		haxe_Log.trace("---" + Std.string(this.ormRefs.h["accounts"].compRef.state.dataGrid.state.selectedRows),{ fileName : "view/data/qc/Edit.hx", lineNumber : 217, className : "view.data.qc.Edit", methodName : "showSelectedAccounts"});
+		haxe_Log.trace("---" + Std.string(this.ormRefs.h["accounts"].compRef.state.dataGrid.state.selectedRows),{ fileName : "view/data/qc/Edit.hx", lineNumber : 225, className : "view.data.qc.Edit", methodName : "showSelectedAccounts"});
 		var sRows = this.ormRefs.h["accounts"].compRef.state.dataGrid.state.selectedRows;
 		var k = sRows.keys();
 		while(k.hasNext()) {
@@ -19220,24 +19333,24 @@ view_data_qc_Edit.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,showSelectedDeals: function(ev) {
-		haxe_Log.trace("---" + Std.string(Type.typeof(this.state.relDataComps)),{ fileName : "view/data/qc/Edit.hx", lineNumber : 230, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
+		haxe_Log.trace("---" + Std.string(Type.typeof(this.state.relDataComps)),{ fileName : "view/data/qc/Edit.hx", lineNumber : 238, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
 		var h = this.state.relDataComps.h;
 		var inlStringMapKeyIterator_h = h;
 		var inlStringMapKeyIterator_keys = Object.keys(h);
 		var inlStringMapKeyIterator_length = inlStringMapKeyIterator_keys.length;
 		var inlStringMapKeyIterator_current = 0;
-		haxe_Log.trace("---" + Std.string(inlStringMapKeyIterator_current < inlStringMapKeyIterator_length),{ fileName : "view/data/qc/Edit.hx", lineNumber : 232, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
+		haxe_Log.trace("---" + Std.string(inlStringMapKeyIterator_current < inlStringMapKeyIterator_length),{ fileName : "view/data/qc/Edit.hx", lineNumber : 240, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
 		var sRows = this.ormRefs.h["deals"].compRef.state.dataGrid.state.selectedRows;
 		var k = sRows.keys();
 		while(k.hasNext()) {
 			var k1 = k.next();
 			this.ormRefs.h["deals"].compRef.props.loadData(k1,this.ormRefs.h["deals"].compRef);
 		}
-		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef),{ fileName : "view/data/qc/Edit.hx", lineNumber : 239, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
-		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef).querySelectorAll(".selected").length,{ fileName : "view/data/qc/Edit.hx", lineNumber : 240, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
+		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef),{ fileName : "view/data/qc/Edit.hx", lineNumber : 247, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
+		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef).querySelectorAll(".selected").length,{ fileName : "view/data/qc/Edit.hx", lineNumber : 248, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
 		if(ev != null) {
 			var targetEl = js_Boot.__cast(ev.target , HTMLElement);
-			haxe_Log.trace(Std.string(targetEl.dataset.id),{ fileName : "view/data/qc/Edit.hx", lineNumber : 243, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
+			haxe_Log.trace(Std.string(targetEl.dataset.id),{ fileName : "view/data/qc/Edit.hx", lineNumber : 251, className : "view.data.qc.Edit", methodName : "showSelectedDeals"});
 		}
 	}
 	,loadQC: function() {
@@ -19245,33 +19358,43 @@ view_data_qc_Edit.prototype = $extend(React_Component.prototype,{
 		if(this.qcData == null) {
 			return;
 		}
-		haxe_Log.trace("loading:" + Std.string(this.qcData.h["lead_id"]),{ fileName : "view/data/qc/Edit.hx", lineNumber : 251, className : "view.data.qc.Edit", methodName : "loadQC"});
-		var p = this.props.load({ classPath : "data.Deals", action : "doQC", filter : { lead_id : this.qcData.h["lead_id"], entry_list_id : this.qcData.h["entry_list_id"], mandator : 1}, resolveMessage : { success : "QC " + Std.string(this.qcData.h["lead_id"]) + " wurde geladen", failure : "QC " + Std.string(this.qcData.h["lead_id"]) + " konnte nicht geladen werden"}, table : "contacts", viciBoxDB : true, dbUser : this.props.userState.dbUser, devIP : App.devIP});
+		haxe_Log.trace("loading:" + Std.string(this.qcData.h["lead_id"]),{ fileName : "view/data/qc/Edit.hx", lineNumber : 259, className : "view.data.qc.Edit", methodName : "loadQC"});
+		var p = this.props.load({ classPath : "data.Deals", action : "loadQC", filter : { lead_id : this.qcData.h["lead_id"], entry_list_id : this.qcData.h["entry_list_id"], mandator : 1}, resolveMessage : { success : "QC " + Std.string(this.qcData.h["lead_id"]) + " wurde geladen", failure : "QC " + Std.string(this.qcData.h["lead_id"]) + " konnte nicht geladen werden"}, table : "contacts", viciBoxDB : true, dbUser : this.props.userState.dbUser, devIP : App.devIP});
 		p.then(function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/qc/Edit.hx", lineNumber : 269, className : "view.data.qc.Edit", methodName : "loadQC"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/qc/Edit.hx", lineNumber : 277, className : "view.data.qc.Edit", methodName : "loadQC"});
 			if(data.dataRows.length == 1) {
 				var qcd = data.dataRows[0];
-				haxe_Log.trace(qcd == null ? "null" : haxe_ds_StringMap.stringify(qcd.h),{ fileName : "view/data/qc/Edit.hx", lineNumber : 274, className : "view.data.qc.Edit", methodName : "loadQC"});
+				var v = qcd.h["lead_id"];
+				qcd.h["id"] = v;
+				haxe_Log.trace(qcd == null ? "null" : haxe_ds_StringMap.stringify(qcd.h),{ fileName : "view/data/qc/Edit.hx", lineNumber : 283, className : "view.data.qc.Edit", methodName : "loadQC"});
 				if(Object.prototype.hasOwnProperty.call(data.dataInfo.h,"recordings")) {
-					haxe_Log.trace(data.dataInfo.h["recordings"],{ fileName : "view/data/qc/Edit.hx", lineNumber : 276, className : "view.data.qc.Edit", methodName : "loadQC"});
-					_gthis.state.mHandlers = view_data_qc_Edit.menuItems;
+					haxe_Log.trace(data.dataInfo.h["recordings"],{ fileName : "view/data/qc/Edit.hx", lineNumber : 285, className : "view.data.qc.Edit", methodName : "loadQC"});
+					var _g = [];
+					var _g1 = 0;
+					var _g2 = view_data_qc_Edit.menuItems;
+					while(_g1 < _g2.length) {
+						var v = _g2[_g1];
+						++_g1;
+						_g.push(Object.assign({ },v));
+					}
+					_gthis.state.mHandlers = _g;
 					view_shared_io_BaseForm.addRecordings(_gthis.state,data.dataInfo.h["recordings"]);
 				}
 				var qc = new model_QC(qcd);
 				if(_gthis.mounted) {
 					_gthis.setState({ loading : false, actualState : qc, initialData : react_ReactUtil.copy(qc)});
 				}
-				haxe_Log.trace("" + Std.string(_gthis.mounted) + " " + qc.id,{ fileName : "view/data/qc/Edit.hx", lineNumber : 285, className : "view.data.qc.Edit", methodName : "loadQC"});
+				haxe_Log.trace("" + Std.string(_gthis.mounted) + " " + qc.id + " " + qc.lead_id + " " + qc.entry_list_id,{ fileName : "view/data/qc/Edit.hx", lineNumber : 294, className : "view.data.qc.Edit", methodName : "loadQC"});
 				if(_gthis.state.actualState != null) {
-					haxe_Log.trace(_gthis.state.actualState.id + ":" + _gthis.state.actualState.fieldsInitalized.join(","),{ fileName : "view/data/qc/Edit.hx", lineNumber : 287, className : "view.data.qc.Edit", methodName : "loadQC"});
-					haxe_Log.trace(_gthis.props.location.pathname + ":" + _gthis.state.actualState.date_of_birth,{ fileName : "view/data/qc/Edit.hx", lineNumber : 289, className : "view.data.qc.Edit", methodName : "loadQC"});
+					haxe_Log.trace(_gthis.state.actualState.id + ":" + _gthis.state.actualState.fieldsInitalized.join(","),{ fileName : "view/data/qc/Edit.hx", lineNumber : 296, className : "view.data.qc.Edit", methodName : "loadQC"});
+					haxe_Log.trace(_gthis.props.location.pathname + ":" + _gthis.state.actualState.date_of_birth,{ fileName : "view/data/qc/Edit.hx", lineNumber : 298, className : "view.data.qc.Edit", methodName : "loadQC"});
 				}
 				var _gthis1 = _gthis.props.history;
 				var tmp = StringTools.replace(_gthis.props.location.pathname,"open","update");
 				_gthis1.replace(tmp);
 			}
 		},function(data) {
-			haxe_Log.trace(data,{ fileName : "view/data/qc/Edit.hx", lineNumber : 294, className : "view.data.qc.Edit", methodName : "loadQC"});
+			haxe_Log.trace(data,{ fileName : "view/data/qc/Edit.hx", lineNumber : 303, className : "view.data.qc.Edit", methodName : "loadQC"});
 		});
 	}
 	,addRecordings1: function(recs) {
@@ -19283,14 +19406,11 @@ view_data_qc_Edit.prototype = $extend(React_Component.prototype,{
 			recItems.push({ label : rec.h["start_time"], formField : { src : rec.h["location"].indexOf("85.25.93.167") != -1 ? StringTools.replace(rec.h["location"],"85.25.93.167","pbx.pitverwaltung.de") : rec.h["location"], type : "Audio"}});
 		}
 		this.state.mHandlers = view_data_qc_Edit.menuItems.concat(recItems);
-		haxe_Log.trace(this.state.mHandlers.toString(),{ fileName : "view/data/qc/Edit.hx", lineNumber : 314, className : "view.data.qc.Edit", methodName : "addRecordings1"});
+		haxe_Log.trace(this.state.mHandlers.toString(),{ fileName : "view/data/qc/Edit.hx", lineNumber : 323, className : "view.data.qc.Edit", methodName : "addRecordings1"});
 	}
 	,'delete': function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/qc/Edit.hx", lineNumber : 321, className : "view.data.qc.Edit", methodName : "delete"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/qc/Edit.hx", lineNumber : 330, className : "view.data.qc.Edit", methodName : "delete"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
-	}
-	,update2: function() {
-		var data2save = this.state.actualState.allModified();
 	}
 	,componentDidCatch: function(error,info) {
 		try {
@@ -19298,24 +19418,24 @@ view_data_qc_Edit.prototype = $extend(React_Component.prototype,{
 		} catch( _g ) {
 			var ex = haxe_Exception.caught(_g).unwrap();
 			if(this._trace) {
-				haxe_Log.trace(ex,{ fileName : "view/data/qc/Edit.hx", lineNumber : 338, className : "view.data.qc.Edit", methodName : "componentDidCatch"});
+				haxe_Log.trace(ex,{ fileName : "view/data/qc/Edit.hx", lineNumber : 341, className : "view.data.qc.Edit", methodName : "componentDidCatch"});
 			}
 		}
 		if(this._trace) {
-			haxe_Log.trace(error,{ fileName : "view/data/qc/Edit.hx", lineNumber : 340, className : "view.data.qc.Edit", methodName : "componentDidCatch"});
+			haxe_Log.trace(error,{ fileName : "view/data/qc/Edit.hx", lineNumber : 343, className : "view.data.qc.Edit", methodName : "componentDidCatch"});
 		}
-		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "view/data/qc/Edit.hx", lineNumber : 341, className : "view.data.qc.Edit", methodName : "componentDidCatch"});
+		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "view/data/qc/Edit.hx", lineNumber : 344, className : "view.data.qc.Edit", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
-		haxe_Log.trace("" + view_data_qc_Edit._c + " mounted:" + Std.string(this.mounted),{ fileName : "view/data/qc/Edit.hx", lineNumber : 346, className : "view.data.qc.Edit", methodName : "componentDidMount"});
+		haxe_Log.trace("" + view_data_qc_Edit._c + " mounted:" + Std.string(this.mounted),{ fileName : "view/data/qc/Edit.hx", lineNumber : 349, className : "view.data.qc.Edit", methodName : "componentDidMount"});
 		this.mounted = true;
 		if(this.props.match.params.id != null) {
-			haxe_Log.trace(this.props.match.params,{ fileName : "view/data/qc/Edit.hx", lineNumber : 351, className : "view.data.qc.Edit", methodName : "componentDidMount"});
+			haxe_Log.trace(this.props.match.params,{ fileName : "view/data/qc/Edit.hx", lineNumber : 354, className : "view.data.qc.Edit", methodName : "componentDidMount"});
 			this.loadQC();
 		}
 	}
 	,shouldComponentUpdate: function(nextProps,nextState) {
-		haxe_Log.trace("" + view_data_qc_Edit._c + " propsChanged:" + Std.string(nextProps != this.props) + " stateChanged:" + Std.string(nextState != this.state) + " returning:" + (nextProps != this.props || nextState != this.state ? "Y" : "N"),{ fileName : "view/data/qc/Edit.hx", lineNumber : 358, className : "view.data.qc.Edit", methodName : "shouldComponentUpdate"});
+		haxe_Log.trace("" + view_data_qc_Edit._c + " propsChanged:" + Std.string(nextProps != this.props) + " stateChanged:" + Std.string(nextState != this.state) + " returning:" + (nextProps != this.props || nextState != this.state ? "Y" : "N"),{ fileName : "view/data/qc/Edit.hx", lineNumber : 361, className : "view.data.qc.Edit", methodName : "shouldComponentUpdate"});
 		if(nextState == this.state) {
 			return nextProps != this.props;
 		} else {
@@ -19333,8 +19453,8 @@ view_data_qc_Edit.prototype = $extend(React_Component.prototype,{
 		case 0:
 			break;
 		case 4:
-			haxe_Log.trace(Reflect.fields(ref),{ fileName : "view/data/qc/Edit.hx", lineNumber : 394, className : "view.data.qc.Edit", methodName : "registerOrmRef"});
-			haxe_Log.trace(js_Boot.getClass(ref),{ fileName : "view/data/qc/Edit.hx", lineNumber : 395, className : "view.data.qc.Edit", methodName : "registerOrmRef"});
+			haxe_Log.trace(Reflect.fields(ref),{ fileName : "view/data/qc/Edit.hx", lineNumber : 397, className : "view.data.qc.Edit", methodName : "registerOrmRef"});
+			haxe_Log.trace(js_Boot.getClass(ref),{ fileName : "view/data/qc/Edit.hx", lineNumber : 398, className : "view.data.qc.Edit", methodName : "registerOrmRef"});
 			var tmp = ref.props != null && ref.props.model != null;
 			break;
 		case 6:
@@ -19350,91 +19470,66 @@ view_data_qc_Edit.prototype = $extend(React_Component.prototype,{
 					}
 				} catch( _g ) {
 					var ex = haxe_Exception.caught(_g);
-					haxe_Log.trace(ex,{ fileName : "view/data/qc/Edit.hx", lineNumber : 420, className : "view.data.qc.Edit", methodName : "registerOrmRef"});
+					haxe_Log.trace(ex,{ fileName : "view/data/qc/Edit.hx", lineNumber : 423, className : "view.data.qc.Edit", methodName : "registerOrmRef"});
 				}
 			}
 			break;
 		default:
-			haxe_Log.trace(ref,{ fileName : "view/data/qc/Edit.hx", lineNumber : 424, className : "view.data.qc.Edit", methodName : "registerOrmRef"});
+			haxe_Log.trace(ref,{ fileName : "view/data/qc/Edit.hx", lineNumber : 427, className : "view.data.qc.Edit", methodName : "registerOrmRef"});
 		}
 	}
 	,registerORM: function(refModel,orm) {
 		if(Object.prototype.hasOwnProperty.call(this.ormRefs.h,refModel)) {
 			this.ormRefs.h[refModel].orms.h[orm.id] = orm;
-			haxe_Log.trace(refModel,{ fileName : "view/data/qc/Edit.hx", lineNumber : 431, className : "view.data.qc.Edit", methodName : "registerORM"});
+			haxe_Log.trace(refModel,{ fileName : "view/data/qc/Edit.hx", lineNumber : 434, className : "view.data.qc.Edit", methodName : "registerORM"});
 			this.setState({ ormRefs : this.ormRefs});
-			haxe_Log.trace(Reflect.fields(this.state),{ fileName : "view/data/qc/Edit.hx", lineNumber : 435, className : "view.data.qc.Edit", methodName : "registerORM"});
+			haxe_Log.trace(Reflect.fields(this.state),{ fileName : "view/data/qc/Edit.hx", lineNumber : 438, className : "view.data.qc.Edit", methodName : "registerORM"});
 		} else {
-			haxe_Log.trace("OrmRef " + refModel + " not found!",{ fileName : "view/data/qc/Edit.hx", lineNumber : 439, className : "view.data.qc.Edit", methodName : "registerORM"});
+			haxe_Log.trace("OrmRef " + refModel + " not found!",{ fileName : "view/data/qc/Edit.hx", lineNumber : 442, className : "view.data.qc.Edit", methodName : "registerORM"});
+		}
+	}
+	,uncheckPeriod: function() {
+		var ops = window.document.querySelectorAll("input[name=\"period\"]");
+		var _g = 0;
+		while(_g < ops.length) {
+			var op = ops[_g];
+			++_g;
+			(js_Boot.__cast(op , HTMLInputElement)).checked = false;
+			haxe_Log.trace(op,{ fileName : "view/data/qc/Edit.hx", lineNumber : 450, className : "view.data.qc.Edit", methodName : "uncheckPeriod"});
 		}
 	}
 	,update: function() {
-		var h = this.state.relDataComps.h;
-		var _g_h = h;
-		var _g_keys = Object.keys(h);
-		var _g_length = _g_keys.length;
-		var _g_current = 0;
-		while(_g_current < _g_length) {
-			var key = _g_keys[_g_current++];
-			var _g1_key = key;
-			var _g1_value = _g_h[key];
-			var k = _g1_key;
-			var v = _g1_value;
-			haxe_Log.trace(k,{ fileName : "view/data/qc/Edit.hx", lineNumber : 447, className : "view.data.qc.Edit", methodName : "update"});
-		}
-		if(this.state.actualState != null) {
-			haxe_Log.trace("length:" + this.state.actualState.fieldsModified.length + ":" + this.state.actualState.fieldsModified.join("|"),{ fileName : "view/data/qc/Edit.hx", lineNumber : 451, className : "view.data.qc.Edit", methodName : "update"});
-		}
-		if(this.state.actualState == null || this.state.actualState.fieldsModified.length == 0) {
-			return;
-		}
+		haxe_Log.trace("ok",{ fileName : "view/data/qc/Edit.hx", lineNumber : 455, className : "view.data.qc.Edit", methodName : "update"});
+	}
+	,doQC: function(e) {
+		var _gthis = this;
+		haxe_Log.trace(Reflect.fields(e),{ fileName : "view/data/qc/Edit.hx", lineNumber : 460, className : "view.data.qc.Edit", methodName : "doQC"});
+		e.preventDefault();
+		var action = (js_Boot.__cast(e.target , HTMLButtonElement)).getAttribute("data-action");
+		haxe_Log.trace(action,{ fileName : "view/data/qc/Edit.hx", lineNumber : 463, className : "view.data.qc.Edit", methodName : "doQC"});
 		var data2save = this.state.actualState.allModified();
-		var doc = window.document;
-		var formElement = js_Boot.__cast(doc.querySelector("form[name=\"qc\"]") , HTMLFormElement);
-		var elements = formElement.elements;
+		haxe_Log.trace(data2save,{ fileName : "view/data/qc/Edit.hx", lineNumber : 471, className : "view.data.qc.Edit", methodName : "doQC"});
 		var aState = react_ReactUtil.copy(this.state.actualState);
-		var dbQ = { classPath : "data.Contacts", action : "update", data : data2save, filter : { id : this.state.actualState.id, mandator : 1}, resolveMessage : { success : "Kontakt " + this.state.actualState.id + " wurde aktualisiert", failure : "Kontakt " + this.state.actualState.id + " konnte nicht aktualisiert werden"}, table : "contacts", dbUser : this.props.userState.dbUser, devIP : App.devIP};
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/qc/Edit.hx", lineNumber : 473, className : "view.data.qc.Edit", methodName : "update"});
-		switch(this.props.match.params.action) {
-		case "delete":case "get":
-			var _g = new haxe_ds_StringMap();
-			var _g1 = new haxe_ds_StringMap();
-			_g1.h["filter"] = { id : this.state.initialData.id};
-			_g.h["contacts"] = _g1;
-			dbQ.dataSource = _g;
-			break;
-		case "insert":
-			var _g = 0;
-			var _g1 = this.fieldNames;
-			while(_g < _g1.length) {
-				var f = _g1[_g];
-				++_g;
-				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/qc/Edit.hx", lineNumber : 479, className : "view.data.qc.Edit", methodName : "update"});
-				if(Reflect.field(aState,f) == "") {
-					Reflect.deleteField(aState,f);
+		var dbQ = { classPath : "data.Deals", action : action, data : data2save, filter : { id : this.state.actualState.id, mandator : 1, entry_list_id : this.state.initialData.entry_list_id}, resolveMessage : { success : "QC lead " + this.state.actualState.id + " wurde aktualisiert", failure : "QC lead " + this.state.actualState.id + " konnte nicht aktualisiert werden"}, viciBoxDB : true, dbUser : this.props.userState.dbUser, devIP : App.devIP};
+		haxe_Log.trace("" + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/data/qc/Edit.hx", lineNumber : 487, className : "view.data.qc.Edit", methodName : "doQC"});
+		if(this.state.actualState != null) {
+			haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/data/qc/Edit.hx", lineNumber : 491, className : "view.data.qc.Edit", methodName : "doQC"});
+		}
+		var p = action_async_LivePBXSync.query(dbQ);
+		p.then(function(d) {
+			if(d.dataInfo != null && Object.prototype.hasOwnProperty.call(d.dataInfo.h,"count")) {
+				haxe_Log.trace(d.dataInfo.h["count"],{ fileName : "view/data/qc/Edit.hx", lineNumber : 500, className : "view.data.qc.Edit", methodName : "doQC"});
+				App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "Edit", text : "QC lead gespeichert"}))));
+				if(action == "qc_ok" || action == "qc_bad") {
+					_gthis.close();
 				}
 			}
-			break;
-		case "update":
-			haxe_Log.trace("" + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/data/qc/Edit.hx", lineNumber : 491, className : "view.data.qc.Edit", methodName : "update"});
-			if(this.state.actualState != null) {
-				haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/data/qc/Edit.hx", lineNumber : 495, className : "view.data.qc.Edit", methodName : "update"});
-			}
-			haxe_Log.trace(this.state.actualState.id,{ fileName : "view/data/qc/Edit.hx", lineNumber : 497, className : "view.data.qc.Edit", methodName : "update"});
-			if(!this.state.actualState.modified()) {
-				haxe_Log.trace("nothing modified",{ fileName : "view/data/qc/Edit.hx", lineNumber : 501, className : "view.data.qc.Edit", methodName : "update"});
-				return;
-			}
-			haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/data/qc/Edit.hx", lineNumber : 504, className : "view.data.qc.Edit", methodName : "update"});
-			break;
-		}
-		var p = App.store.dispatch(redux_Action.map(action_async_CRUD.update(dbQ)));
-		p.then(function(d) {
-			haxe_Log.trace(d,{ fileName : "view/data/qc/Edit.hx", lineNumber : 517, className : "view.data.qc.Edit", methodName : "update"});
+		},function(d) {
+			haxe_Log.trace(d,{ fileName : "view/data/qc/Edit.hx", lineNumber : 511, className : "view.data.qc.Edit", methodName : "doQC"});
 		});
 	}
 	,renderResults: function() {
-		haxe_Log.trace("########### action:" + this.props.match.params.action,{ fileName : "view/data/qc/Edit.hx", lineNumber : 526, className : "view.data.qc.Edit", methodName : "renderResults"});
+		haxe_Log.trace("########### action:" + this.props.match.params.action,{ fileName : "view/data/qc/Edit.hx", lineNumber : 519, className : "view.data.qc.Edit", methodName : "renderResults"});
 		switch(this.props.match.params.action) {
 		case "insert":
 			var tmp = this.state.formBuilder;
@@ -19476,9 +19571,9 @@ view_data_qc_Edit.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/qc/Edit.hx", lineNumber : 618, className : "view.data.qc.Edit", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/qc/Edit.hx", lineNumber : 571, className : "view.data.qc.Edit", methodName : "render"});
 		if(this.state == null || this.state.initialData == null) {
-			haxe_Log.trace("stateOrInitialData is null",{ fileName : "view/data/qc/Edit.hx", lineNumber : 621, className : "view.data.qc.Edit", methodName : "render"});
+			haxe_Log.trace("stateOrInitialData is null",{ fileName : "view/data/qc/Edit.hx", lineNumber : 574, className : "view.data.qc.Edit", methodName : "render"});
 			return null;
 		}
 		switch(this.props.match.params.action) {
@@ -20116,8 +20211,9 @@ view_shared_FormBuilder.prototype = {
 					tmp = React.createElement(react_ReactType.fromString("div"),{ key : this.i++, className : "g_row_2", role : "rowgroup"},React.createElement(react_ReactType.fromString("div"),{ className : "g_cell", role : "cell"},field.label),React.createElement(react_ReactType.fromString("div"),{ className : "g_cell_r", role : "cell"},React.createElement(react_ReactType.fromComp(react_NumberFormat),nfP)));
 					break;
 				case "Radio":
+					haxe_Log.trace(field.type + (" " + name + ":") + Std.string(value),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 145, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
 					var tmp7 = react_ReactType.fromString("div");
-					var tmp8 = { key : this.i++, className : "g_row_2", role : "rowgroup"};
+					var tmp8 = { key : this.i++, className : "g_row_2_radio", role : "rowgroup"};
 					var tmp9 = name + "_" + this.i;
 					var tmp10 = React.createElement(react_ReactType.fromString("div"),{ key : tmp9, className : "g_cell", role : "cell"},field.label);
 					var tmp11 = react_ReactType.fromString("div");
@@ -20125,7 +20221,6 @@ view_shared_FormBuilder.prototype = {
 					tmp = React.createElement(tmp7,tmp8,tmp10,React.createElement(tmp11,{ key : name + "_opt", className : "g_cell_r optLabel", role : "cell"},tmp12));
 					break;
 				case "Select":
-					haxe_Log.trace("" + this.i + ":: " + name + ": " + Std.string(value),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 153, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
 					tmp = this.renderElement(React.createElement(react_ReactType.fromString("select"),{ key : this.i++, name : name, onChange : $bind(this,this.onChange), className : field.className, defaultValue : value, multiple : field.multiple},this.renderSelect(name,field.options)),field.label);
 					break;
 				case "TextArea":
@@ -20165,12 +20260,13 @@ view_shared_FormBuilder.prototype = {
 		if(mItem.separator) {
 			return React.createElement(react_ReactType.fromString("hr"),{ className : "menuSeparator"});
 		}
+		haxe_Log.trace(mItem.handler,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 282, className : "view.shared.FormBuilder", methodName : "renderButton"});
 		return React.createElement(react_ReactType.fromComp(bulma_$components_Button),{ key : i++, onClick : mItem.handler, 'data-section' : mItem.section, disabled : mItem.disabled, type : "button"},mItem.label);
 	}
 	,itemHandler: function(e) {
 		e.preventDefault();
 		var action = (js_Boot.__cast(e.target , HTMLElement)).getAttribute("data-action");
-		haxe_Log.trace(action,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 292, className : "view.shared.FormBuilder", methodName : "itemHandler"});
+		haxe_Log.trace(action,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 293, className : "view.shared.FormBuilder", methodName : "itemHandler"});
 		var mP = Reflect.field(this.comp.state.formApi,"callMethod");
 		mP.apply(this.comp.state.formApi,[action,e]);
 	}
@@ -20178,10 +20274,9 @@ view_shared_FormBuilder.prototype = {
 		return React.createElement(react_ReactType.fromString("input"),{ type : "hidden", name : cm});
 	}
 	,onChange: function(ev) {
-		haxe_Log.trace(ev.target.type,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 305, className : "view.shared.FormBuilder", methodName : "onChange"});
 		switch(ev.target.type) {
 		case "checkbox":
-			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 309, className : "view.shared.FormBuilder", methodName : "onChange"});
+			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 310, className : "view.shared.FormBuilder", methodName : "onChange"});
 			var tmp;
 			switch(ev.target.checked) {
 			case "1":case "TRUE":case "on":case true:
@@ -20191,7 +20286,7 @@ view_shared_FormBuilder.prototype = {
 				tmp = 0;
 			}
 			view_shared_io_BaseForm.doChange(this.comp,ev.target.name,tmp);
-			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 319, className : "view.shared.FormBuilder", methodName : "onChange"});
+			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 320, className : "view.shared.FormBuilder", methodName : "onChange"});
 			break;
 		case "select-multiple":case "select-one":
 			view_shared_io_BaseForm.doChange(this.comp,ev.target.name,ev.target.value);
@@ -20576,7 +20671,7 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 					}
 					break;
 				default:
-					tmp = item.options != null && item.options.length > 0 ? React.createElement(react_ReactType.fromString("form"),{ key : "bu" + i++, name : item.action},_gthis.renderItemForm(item.options),React.createElement(B,{ key : "bu" + i++, onClick : _gthis.props.itemHandler, 'data-action' : item.action, 'data-then' : item.then, 'data-section' : item.section, disabled : dis},item.label)) : React.createElement(B,{ key : "bu" + i++, onClick : _gthis.props.itemHandler, 'data-action' : item.action, 'data-then' : item.then, 'data-section' : item.section, disabled : dis},item.label);
+					tmp = item.options != null && item.options.length > 0 ? React.createElement(react_ReactType.fromString("form"),{ key : "bu" + i++, name : item.action},_gthis.renderItemForm(item.options),React.createElement(B,{ key : "bu" + i++, onClick : item.handler == null ? _gthis.props.itemHandler : item.handler, 'data-action' : item.action, 'data-then' : item.then, 'data-section' : item.section, disabled : dis},item.label)) : React.createElement(B,{ key : "bu" + i++, onClick : item.handler == null ? _gthis.props.itemHandler : item.handler, 'data-action' : item.action, 'data-then' : item.then, 'data-section' : item.section, disabled : dis},item.label);
 				}
 			}
 			result[i1] = tmp;
@@ -22157,14 +22252,14 @@ model_ORM.dsep = ",";
 model_Account.__meta__ = { fields : { contact : { dataType : ["bigint"]}, bank_name : { dataType : ["character varying(64)"]}, bic : { dataType : ["character varying(11)"]}, account : { dataType : ["character varying(32)"]}, iban : { dataType : ["character varying(32)"]}, account_holder : { dataType : ["text"]}, sign_date : { dataType : ["date"]}, status : { dataType : ["accounts_state"]}, creation_date : { dataType : ["timestamp with time zone"]}, edited_by : { dataType : ["bigint"]}, last_updated : { dataType : ["timestamp with time zone"]}, mandator : { dataType : ["bigint"]}}};
 model_Account.__rtti = "<class path=\"model.Account\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<tableName public=\"1\" expr=\"&quot;accounts&quot;\" line=\"8\" static=\"1\">\n\t\t<c path=\"String\"/>\n\t\t<meta><m n=\":value\"><e>\"accounts\"</e></m></meta>\n\t</tableName>\n\t<contact public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</contact>\n\t<set_contact set=\"method\" line=\"17\"><f a=\"contact\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_contact>\n\t<bank_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</bank_name>\n\t<set_bank_name set=\"method\" line=\"27\"><f a=\"bank_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_bank_name>\n\t<bic public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(11)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</bic>\n\t<set_bic set=\"method\" line=\"37\"><f a=\"bic\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_bic>\n\t<account public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</account>\n\t<set_account set=\"method\" line=\"47\"><f a=\"account\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_account>\n\t<iban public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</iban>\n\t<set_iban set=\"method\" line=\"57\"><f a=\"iban\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_iban>\n\t<account_holder public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</account_holder>\n\t<set_account_holder set=\"method\" line=\"67\"><f a=\"account_holder\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_account_holder>\n\t<sign_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</sign_date>\n\t<set_sign_date set=\"method\" line=\"77\"><f a=\"sign_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_sign_date>\n\t<status public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"accounts_state\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</status>\n\t<set_status set=\"method\" line=\"87\"><f a=\"status\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_status>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp with time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"97\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"107\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<last_updated public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp with time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_updated>\n\t<set_last_updated set=\"method\" line=\"117\"><f a=\"last_updated\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_updated>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"127\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<new public=\"1\" set=\"method\" line=\"10\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":keep\"/>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 model_Account.tableName = "accounts";
-model_Contact.__meta__ = { fields : { mandator : { dataType : ["bigint"]}, creation_date : { dataType : ["timestamp(0) without time zone"]}, status : { dataType : ["character varying(64)"]}, use_email : { dataType : ["boolean"]}, company_name : { dataType : ["character varying(64)"]}, care_of : { dataType : ["character varying(100)"]}, phone_code : { dataType : ["character varying(10)"]}, phone_number : { dataType : ["character varying(18)"]}, fax : { dataType : ["character varying(18)"]}, title : { dataType : ["character varying(64)"]}, first_name : { dataType : ["character varying(32)"]}, last_name : { dataType : ["character varying(32)"]}, address : { dataType : ["character varying(64)"]}, address_2 : { dataType : ["character varying(64)"]}, city : { dataType : ["character varying(50)"]}, postal_code : { dataType : ["character varying(10)"]}, country_code : { dataType : ["character varying(3)"]}, gender : { dataType : ["character varying(64)"]}, date_of_birth : { dataType : ["date"]}, mobile : { dataType : ["character varying(19)"]}, email : { dataType : ["character varying(64)"]}, comments : { dataType : ["character varying(4096)"]}, edited_by : { dataType : ["bigint"]}, merged : { dataType : ["bigint[]"]}, last_updated : { dataType : ["timestamp(0) without time zone"]}, owner : { dataType : ["bigint"]}, title_pro : { dataType : ["character varying(80)"]}}};
-model_Contact.__rtti = "<class path=\"model.Contact\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<tableName public=\"1\" expr=\"&quot;contacts&quot;\" line=\"8\" static=\"1\">\n\t\t<c path=\"String\"/>\n\t\t<meta><m n=\":value\"><e>\"contacts\"</e></m></meta>\n\t</tableName>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"17\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"27\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<status public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</status>\n\t<set_status set=\"method\" line=\"37\"><f a=\"status\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_status>\n\t<use_email public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</use_email>\n\t<set_use_email set=\"method\" line=\"47\"><f a=\"use_email\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_use_email>\n\t<company_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</company_name>\n\t<set_company_name set=\"method\" line=\"57\"><f a=\"company_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_company_name>\n\t<care_of public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(100)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</care_of>\n\t<set_care_of set=\"method\" line=\"67\"><f a=\"care_of\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_care_of>\n\t<phone_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_code>\n\t<set_phone_code set=\"method\" line=\"77\"><f a=\"phone_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_code>\n\t<phone_number public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_number>\n\t<set_phone_number set=\"method\" line=\"87\"><f a=\"phone_number\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_number>\n\t<fax public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</fax>\n\t<set_fax set=\"method\" line=\"97\"><f a=\"fax\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_fax>\n\t<title public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</title>\n\t<set_title set=\"method\" line=\"107\"><f a=\"title\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_title>\n\t<first_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</first_name>\n\t<set_first_name set=\"method\" line=\"117\"><f a=\"first_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_first_name>\n\t<last_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_name>\n\t<set_last_name set=\"method\" line=\"127\"><f a=\"last_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_name>\n\t<address public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address>\n\t<set_address set=\"method\" line=\"137\"><f a=\"address\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address>\n\t<address_2 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address_2>\n\t<set_address_2 set=\"method\" line=\"147\"><f a=\"address_2\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address_2>\n\t<city public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(50)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</city>\n\t<set_city set=\"method\" line=\"157\"><f a=\"city\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_city>\n\t<postal_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</postal_code>\n\t<set_postal_code set=\"method\" line=\"167\"><f a=\"postal_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_postal_code>\n\t<country_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(3)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</country_code>\n\t<set_country_code set=\"method\" line=\"177\"><f a=\"country_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_country_code>\n\t<gender public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</gender>\n\t<set_gender set=\"method\" line=\"187\"><f a=\"gender\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_gender>\n\t<date_of_birth public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</date_of_birth>\n\t<set_date_of_birth set=\"method\" line=\"197\"><f a=\"date_of_birth\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_date_of_birth>\n\t<mobile public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(19)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mobile>\n\t<set_mobile set=\"method\" line=\"207\"><f a=\"mobile\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_mobile>\n\t<email public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</email>\n\t<set_email set=\"method\" line=\"217\"><f a=\"email\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_email>\n\t<comments public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(4096)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</comments>\n\t<set_comments set=\"method\" line=\"227\"><f a=\"comments\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_comments>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"237\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<merged public=\"1\" set=\"accessor\">\n\t\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint[]\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</merged>\n\t<set_merged set=\"method\" line=\"247\"><f a=\"merged\">\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n</f></set_merged>\n\t<last_updated public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_updated>\n\t<set_last_updated set=\"method\" line=\"257\"><f a=\"last_updated\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_updated>\n\t<owner public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</owner>\n\t<set_owner set=\"method\" line=\"267\"><f a=\"owner\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_owner>\n\t<title_pro public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(80)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</title_pro>\n\t<set_title_pro set=\"method\" line=\"277\"><f a=\"title_pro\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_title_pro>\n\t<new public=\"1\" set=\"method\" line=\"10\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":keep\"/>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+model_Contact.__meta__ = { fields : { mandator : { dataType : ["bigint"]}, creation_date : { dataType : ["timestamp(0) without time zone"]}, status : { dataType : ["character varying(64)"]}, use_email : { dataType : ["boolean"]}, company_name : { dataType : ["character varying(64)"]}, care_of : { dataType : ["character varying(100)"]}, phone_code : { dataType : ["character varying(10)"]}, phone_number : { dataType : ["character varying(18)"]}, fax : { dataType : ["character varying(18)"]}, title : { dataType : ["character varying(64)"]}, first_name : { dataType : ["character varying(32)"]}, last_name : { dataType : ["character varying(32)"]}, address1 : { dataType : ["character varying(64)"]}, address2 : { dataType : ["character varying(64)"]}, city : { dataType : ["character varying(50)"]}, postal_code : { dataType : ["character varying(10)"]}, country_code : { dataType : ["character varying(3)"]}, gender : { dataType : ["character varying(64)"]}, date_of_birth : { dataType : ["date"]}, mobile : { dataType : ["character varying(19)"]}, email : { dataType : ["character varying(64)"]}, comments : { dataType : ["character varying(4096)"]}, edited_by : { dataType : ["bigint"]}, merged : { dataType : ["bigint[]"]}, last_updated : { dataType : ["timestamp(0) without time zone"]}, owner : { dataType : ["bigint"]}, title_pro : { dataType : ["character varying(80)"]}}};
+model_Contact.__rtti = "<class path=\"model.Contact\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<tableName public=\"1\" expr=\"&quot;contacts&quot;\" line=\"8\" static=\"1\">\n\t\t<c path=\"String\"/>\n\t\t<meta><m n=\":value\"><e>\"contacts\"</e></m></meta>\n\t</tableName>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"17\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"27\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<status public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</status>\n\t<set_status set=\"method\" line=\"37\"><f a=\"status\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_status>\n\t<use_email public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</use_email>\n\t<set_use_email set=\"method\" line=\"47\"><f a=\"use_email\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_use_email>\n\t<company_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</company_name>\n\t<set_company_name set=\"method\" line=\"57\"><f a=\"company_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_company_name>\n\t<care_of public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(100)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</care_of>\n\t<set_care_of set=\"method\" line=\"67\"><f a=\"care_of\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_care_of>\n\t<phone_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_code>\n\t<set_phone_code set=\"method\" line=\"77\"><f a=\"phone_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_code>\n\t<phone_number public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_number>\n\t<set_phone_number set=\"method\" line=\"87\"><f a=\"phone_number\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_number>\n\t<fax public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</fax>\n\t<set_fax set=\"method\" line=\"97\"><f a=\"fax\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_fax>\n\t<title public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</title>\n\t<set_title set=\"method\" line=\"107\"><f a=\"title\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_title>\n\t<first_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</first_name>\n\t<set_first_name set=\"method\" line=\"117\"><f a=\"first_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_first_name>\n\t<last_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_name>\n\t<set_last_name set=\"method\" line=\"127\"><f a=\"last_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_name>\n\t<address1 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address1>\n\t<set_address1 set=\"method\" line=\"137\"><f a=\"address1\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address1>\n\t<address2 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address2>\n\t<set_address2 set=\"method\" line=\"147\"><f a=\"address2\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address2>\n\t<city public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(50)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</city>\n\t<set_city set=\"method\" line=\"157\"><f a=\"city\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_city>\n\t<postal_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</postal_code>\n\t<set_postal_code set=\"method\" line=\"167\"><f a=\"postal_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_postal_code>\n\t<country_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(3)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</country_code>\n\t<set_country_code set=\"method\" line=\"177\"><f a=\"country_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_country_code>\n\t<gender public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</gender>\n\t<set_gender set=\"method\" line=\"187\"><f a=\"gender\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_gender>\n\t<date_of_birth public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</date_of_birth>\n\t<set_date_of_birth set=\"method\" line=\"197\"><f a=\"date_of_birth\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_date_of_birth>\n\t<mobile public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(19)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mobile>\n\t<set_mobile set=\"method\" line=\"207\"><f a=\"mobile\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_mobile>\n\t<email public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</email>\n\t<set_email set=\"method\" line=\"217\"><f a=\"email\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_email>\n\t<comments public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(4096)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</comments>\n\t<set_comments set=\"method\" line=\"227\"><f a=\"comments\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_comments>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"237\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<merged public=\"1\" set=\"accessor\">\n\t\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint[]\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</merged>\n\t<set_merged set=\"method\" line=\"247\"><f a=\"merged\">\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n</f></set_merged>\n\t<last_updated public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_updated>\n\t<set_last_updated set=\"method\" line=\"257\"><f a=\"last_updated\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_updated>\n\t<owner public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</owner>\n\t<set_owner set=\"method\" line=\"267\"><f a=\"owner\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_owner>\n\t<title_pro public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(80)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</title_pro>\n\t<set_title_pro set=\"method\" line=\"277\"><f a=\"title_pro\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_title_pro>\n\t<new public=\"1\" set=\"method\" line=\"10\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":keep\"/>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 model_Contact.tableName = "contacts";
 model_Deal.__meta__ = { fields : { contact : { dataType : ["bigint"]}, creation_date : { dataType : ["timestamp(0) without time zone"]}, account : { dataType : ["bigint"]}, target_account : { dataType : ["bigint"]}, booking_run : { dataType : ["booking_runs"]}, start_date : { dataType : ["date"]}, cycle : { dataType : ["deals_cycle"]}, amount : { dataType : ["numeric(10,2)"]}, product : { dataType : ["bigint"]}, agent : { dataType : ["bigint"]}, project : { dataType : ["bigint"]}, active : { dataType : ["boolean"]}, pay_method : { dataType : ["pay_methods"]}, end_date : { dataType : ["date"]}, end_reason : { dataType : ["bigint"]}, repeat_date : { dataType : ["date"]}, edited_by : { dataType : ["bigint"]}, mandator : { dataType : ["bigint"]}, old_active : { dataType : ["boolean"]}, cycle_start_date : { dataType : ["date"]}, last_updated : { dataType : ["timestamp(0) without time zone"]}, booking_day : { dataType : ["character varying"]}, lead_id : { dataType : ["bigint"]}}};
 model_Deal.__rtti = "<class path=\"model.Deal\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<tableName public=\"1\" expr=\"&quot;deals&quot;\" line=\"8\" static=\"1\">\n\t\t<c path=\"String\"/>\n\t\t<meta><m n=\":value\"><e>\"deals\"</e></m></meta>\n\t</tableName>\n\t<contact public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</contact>\n\t<set_contact set=\"method\" line=\"17\"><f a=\"contact\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_contact>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"27\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<account public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</account>\n\t<set_account set=\"method\" line=\"37\"><f a=\"account\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_account>\n\t<target_account public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</target_account>\n\t<set_target_account set=\"method\" line=\"47\"><f a=\"target_account\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_target_account>\n\t<booking_run public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"booking_runs\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</booking_run>\n\t<set_booking_run set=\"method\" line=\"57\"><f a=\"booking_run\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_booking_run>\n\t<start_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</start_date>\n\t<set_start_date set=\"method\" line=\"67\"><f a=\"start_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_start_date>\n\t<cycle public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"deals_cycle\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</cycle>\n\t<set_cycle set=\"method\" line=\"77\"><f a=\"cycle\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_cycle>\n\t<amount public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"numeric(10,2)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</amount>\n\t<set_amount set=\"method\" line=\"87\"><f a=\"amount\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_amount>\n\t<product public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</product>\n\t<set_product set=\"method\" line=\"97\"><f a=\"product\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_product>\n\t<agent public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</agent>\n\t<set_agent set=\"method\" line=\"107\"><f a=\"agent\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_agent>\n\t<project public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</project>\n\t<set_project set=\"method\" line=\"117\"><f a=\"project\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_project>\n\t<active public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</active>\n\t<set_active set=\"method\" line=\"127\"><f a=\"active\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_active>\n\t<pay_method public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"pay_methods\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</pay_method>\n\t<set_pay_method set=\"method\" line=\"137\"><f a=\"pay_method\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_pay_method>\n\t<end_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</end_date>\n\t<set_end_date set=\"method\" line=\"147\"><f a=\"end_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_end_date>\n\t<end_reason public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</end_reason>\n\t<set_end_reason set=\"method\" line=\"157\"><f a=\"end_reason\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_end_reason>\n\t<repeat_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</repeat_date>\n\t<set_repeat_date set=\"method\" line=\"167\"><f a=\"repeat_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_repeat_date>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"177\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"187\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<old_active public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</old_active>\n\t<set_old_active set=\"method\" line=\"197\"><f a=\"old_active\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_old_active>\n\t<cycle_start_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</cycle_start_date>\n\t<set_cycle_start_date set=\"method\" line=\"207\"><f a=\"cycle_start_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_cycle_start_date>\n\t<last_updated public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_updated>\n\t<set_last_updated set=\"method\" line=\"217\"><f a=\"last_updated\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_updated>\n\t<booking_day public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</booking_day>\n\t<set_booking_day set=\"method\" line=\"227\"><f a=\"booking_day\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_booking_day>\n\t<lead_id public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</lead_id>\n\t<set_lead_id set=\"method\" line=\"237\"><f a=\"lead_id\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_lead_id>\n\t<new public=\"1\" set=\"method\" line=\"10\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":keep\"/>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 model_Deal.tableName = "deals";
-model_QC.__meta__ = { fields : { mandator : { dataType : ["bigint"]}, entry_date : { dataType : ["timestamp(0) without time zone"]}, status : { dataType : ["character varying(64)"]}, use_email : { dataType : ["boolean"]}, company_name : { dataType : ["character varying(64)"]}, care_of : { dataType : ["character varying(100)"]}, phone_code : { dataType : ["character varying(10)"]}, phone_number : { dataType : ["character varying(18)"]}, fax : { dataType : ["character varying(18)"]}, title : { dataType : ["character varying(64)"]}, first_name : { dataType : ["character varying(32)"]}, last_name : { dataType : ["character varying(32)"]}, address : { dataType : ["character varying(64)"]}, address_2 : { dataType : ["character varying(64)"]}, city : { dataType : ["character varying(50)"]}, postal_code : { dataType : ["character varying(10)"]}, country_code : { dataType : ["character varying(3)"]}, gender : { dataType : ["character varying(64)"]}, date_of_birth : { dataType : ["date"]}, mobile : { dataType : ["character varying(19)"]}, email : { dataType : ["character varying(64)"]}, comments : { dataType : ["character varying(4096)"]}, edited_by : { dataType : ["bigint"]}, merged : { dataType : ["bigint[]"]}, last_updated : { dataType : ["timestamp(0) without time zone"]}, owner : { dataType : ["bigint"]}, title_pro : { dataType : ["character varying(80)"]}, lead_id : { dataType : ["integer"]}, period : { dataType : ["text"]}, anrede : { dataType : ["text"]}, account : { dataType : ["text"]}, blz : { dataType : ["text"]}, iban : { dataType : ["character varying(32)"]}, bank_name : { dataType : ["text"]}, spenden_hoehe : { dataType : ["text"]}, start_monat : { dataType : ["text"]}, buchungs_tag : { dataType : ["text"]}, buchungs_zeitpunkt : { dataType : ["text"]}, mailing : { dataType : ["text"]}, client_status : { dataType : ["text"]}}};
-model_QC.__rtti = "<class path=\"model.QC\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<tableName public=\"1\" expr=\"&quot;qcs&quot;\" line=\"8\" static=\"1\">\n\t\t<c path=\"String\"/>\n\t\t<meta><m n=\":value\"><e>\"qcs\"</e></m></meta>\n\t</tableName>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"17\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<entry_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</entry_date>\n\t<set_entry_date set=\"method\" line=\"27\"><f a=\"entry_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_entry_date>\n\t<status public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</status>\n\t<set_status set=\"method\" line=\"37\"><f a=\"status\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_status>\n\t<use_email public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</use_email>\n\t<set_use_email set=\"method\" line=\"47\"><f a=\"use_email\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_use_email>\n\t<company_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</company_name>\n\t<set_company_name set=\"method\" line=\"57\"><f a=\"company_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_company_name>\n\t<care_of public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(100)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</care_of>\n\t<set_care_of set=\"method\" line=\"67\"><f a=\"care_of\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_care_of>\n\t<phone_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_code>\n\t<set_phone_code set=\"method\" line=\"77\"><f a=\"phone_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_code>\n\t<phone_number public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_number>\n\t<set_phone_number set=\"method\" line=\"87\"><f a=\"phone_number\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_number>\n\t<fax public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</fax>\n\t<set_fax set=\"method\" line=\"97\"><f a=\"fax\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_fax>\n\t<title public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</title>\n\t<set_title set=\"method\" line=\"107\"><f a=\"title\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_title>\n\t<first_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</first_name>\n\t<set_first_name set=\"method\" line=\"117\"><f a=\"first_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_first_name>\n\t<last_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_name>\n\t<set_last_name set=\"method\" line=\"127\"><f a=\"last_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_name>\n\t<address public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address>\n\t<set_address set=\"method\" line=\"137\"><f a=\"address\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address>\n\t<address_2 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address_2>\n\t<set_address_2 set=\"method\" line=\"147\"><f a=\"address_2\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address_2>\n\t<city public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(50)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</city>\n\t<set_city set=\"method\" line=\"157\"><f a=\"city\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_city>\n\t<postal_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</postal_code>\n\t<set_postal_code set=\"method\" line=\"167\"><f a=\"postal_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_postal_code>\n\t<country_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(3)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</country_code>\n\t<set_country_code set=\"method\" line=\"177\"><f a=\"country_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_country_code>\n\t<gender public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</gender>\n\t<set_gender set=\"method\" line=\"187\"><f a=\"gender\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_gender>\n\t<date_of_birth public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</date_of_birth>\n\t<set_date_of_birth set=\"method\" line=\"197\"><f a=\"date_of_birth\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_date_of_birth>\n\t<mobile public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(19)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mobile>\n\t<set_mobile set=\"method\" line=\"207\"><f a=\"mobile\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_mobile>\n\t<email public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</email>\n\t<set_email set=\"method\" line=\"217\"><f a=\"email\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_email>\n\t<comments public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(4096)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</comments>\n\t<set_comments set=\"method\" line=\"227\"><f a=\"comments\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_comments>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"237\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<merged public=\"1\" set=\"accessor\">\n\t\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint[]\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</merged>\n\t<set_merged set=\"method\" line=\"247\"><f a=\"merged\">\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n</f></set_merged>\n\t<last_updated public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_updated>\n\t<set_last_updated set=\"method\" line=\"257\"><f a=\"last_updated\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_updated>\n\t<owner public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</owner>\n\t<set_owner set=\"method\" line=\"267\"><f a=\"owner\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_owner>\n\t<title_pro public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(80)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</title_pro>\n\t<set_title_pro set=\"method\" line=\"277\"><f a=\"title_pro\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_title_pro>\n\t<lead_id public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"integer\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</lead_id>\n\t<set_lead_id set=\"method\" line=\"287\"><f a=\"lead_id\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_lead_id>\n\t<period public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</period>\n\t<set_period set=\"method\" line=\"297\"><f a=\"period\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_period>\n\t<anrede public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</anrede>\n\t<set_anrede set=\"method\" line=\"307\"><f a=\"anrede\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_anrede>\n\t<account public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</account>\n\t<set_account set=\"method\" line=\"317\"><f a=\"account\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_account>\n\t<blz public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</blz>\n\t<set_blz set=\"method\" line=\"327\"><f a=\"blz\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_blz>\n\t<iban public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</iban>\n\t<set_iban set=\"method\" line=\"337\"><f a=\"iban\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_iban>\n\t<bank_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</bank_name>\n\t<set_bank_name set=\"method\" line=\"347\"><f a=\"bank_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_bank_name>\n\t<spenden_hoehe public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</spenden_hoehe>\n\t<set_spenden_hoehe set=\"method\" line=\"357\"><f a=\"spenden_hoehe\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_spenden_hoehe>\n\t<start_monat public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</start_monat>\n\t<set_start_monat set=\"method\" line=\"367\"><f a=\"start_monat\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_start_monat>\n\t<buchungs_tag public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</buchungs_tag>\n\t<set_buchungs_tag set=\"method\" line=\"377\"><f a=\"buchungs_tag\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_buchungs_tag>\n\t<buchungs_zeitpunkt public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</buchungs_zeitpunkt>\n\t<set_buchungs_zeitpunkt set=\"method\" line=\"387\"><f a=\"buchungs_zeitpunkt\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_buchungs_zeitpunkt>\n\t<mailing public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mailing>\n\t<set_mailing set=\"method\" line=\"397\"><f a=\"mailing\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_mailing>\n\t<client_status public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</client_status>\n\t<set_client_status set=\"method\" line=\"407\"><f a=\"client_status\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_client_status>\n\t<new public=\"1\" set=\"method\" line=\"10\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":keep\"/>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
+model_QC.__meta__ = { fields : { mandator : { dataType : ["bigint"]}, creation_date : { dataType : ["timestamp(0) without time zone"]}, status : { dataType : ["character varying(64)"]}, use_email : { dataType : ["boolean"]}, company_name : { dataType : ["character varying(64)"]}, co_field : { dataType : ["character varying(100)"]}, phone_code : { dataType : ["character varying(10)"]}, phone_number : { dataType : ["character varying(18)"]}, fax : { dataType : ["character varying(18)"]}, title : { dataType : ["character varying(64)"]}, first_name : { dataType : ["character varying(32)"]}, last_name : { dataType : ["character varying(32)"]}, address1 : { dataType : ["character varying(64)"]}, address2 : { dataType : ["character varying(64)"]}, city : { dataType : ["character varying(50)"]}, postal_code : { dataType : ["character varying(10)"]}, country_code : { dataType : ["character varying(3)"]}, gender : { dataType : ["character varying(64)"]}, date_of_birth : { dataType : ["date"]}, mobile : { dataType : ["character varying(19)"]}, email : { dataType : ["character varying(64)"]}, comments : { dataType : ["character varying(4096)"]}, edited_by : { dataType : ["bigint"]}, merged : { dataType : ["bigint[]"]}, last_updated : { dataType : ["timestamp(0) without time zone"]}, owner : { dataType : ["bigint"]}, title_pro : { dataType : ["character varying(80)"]}, lead_id : { dataType : ["bigint"]}, period : { dataType : ["text"]}, anrede : { dataType : ["text"]}, account : { dataType : ["text"]}, blz : { dataType : ["text"]}, iban : { dataType : ["character varying(32)"]}, bank_name : { dataType : ["text"]}, spenden_hoehe : { dataType : ["text"]}, start_monat : { dataType : ["text"]}, buchungs_tag : { dataType : ["text"]}, buchungs_zeitpunkt : { dataType : ["text"]}, mailing : { dataType : ["text"]}, client_status : { dataType : ["text"]}, entry_list_id : { dataType : ["bigint"]}, entry_date : { dataType : ["timestamp without time zone"]}}};
+model_QC.__rtti = "<class path=\"model.QC\" params=\"\">\n\t<extends path=\"model.ORM\"/>\n\t<tableName public=\"1\" expr=\"&quot;qcs&quot;\" line=\"8\" static=\"1\">\n\t\t<c path=\"String\"/>\n\t\t<meta><m n=\":value\"><e>\"qcs\"</e></m></meta>\n\t</tableName>\n\t<mandator public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mandator>\n\t<set_mandator set=\"method\" line=\"17\"><f a=\"mandator\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_mandator>\n\t<creation_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</creation_date>\n\t<set_creation_date set=\"method\" line=\"27\"><f a=\"creation_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_creation_date>\n\t<status public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</status>\n\t<set_status set=\"method\" line=\"37\"><f a=\"status\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_status>\n\t<use_email public=\"1\" set=\"accessor\">\n\t\t<x path=\"Bool\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"boolean\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</use_email>\n\t<set_use_email set=\"method\" line=\"47\"><f a=\"use_email\">\n\t<x path=\"Bool\"/>\n\t<x path=\"Bool\"/>\n</f></set_use_email>\n\t<company_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</company_name>\n\t<set_company_name set=\"method\" line=\"57\"><f a=\"company_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_company_name>\n\t<co_field public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(100)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</co_field>\n\t<set_co_field set=\"method\" line=\"67\"><f a=\"co_field\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_co_field>\n\t<phone_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_code>\n\t<set_phone_code set=\"method\" line=\"77\"><f a=\"phone_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_code>\n\t<phone_number public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</phone_number>\n\t<set_phone_number set=\"method\" line=\"87\"><f a=\"phone_number\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_phone_number>\n\t<fax public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(18)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</fax>\n\t<set_fax set=\"method\" line=\"97\"><f a=\"fax\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_fax>\n\t<title public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</title>\n\t<set_title set=\"method\" line=\"107\"><f a=\"title\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_title>\n\t<first_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</first_name>\n\t<set_first_name set=\"method\" line=\"117\"><f a=\"first_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_first_name>\n\t<last_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_name>\n\t<set_last_name set=\"method\" line=\"127\"><f a=\"last_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_name>\n\t<address1 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address1>\n\t<set_address1 set=\"method\" line=\"137\"><f a=\"address1\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address1>\n\t<address2 public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</address2>\n\t<set_address2 set=\"method\" line=\"147\"><f a=\"address2\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_address2>\n\t<city public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(50)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</city>\n\t<set_city set=\"method\" line=\"157\"><f a=\"city\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_city>\n\t<postal_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(10)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</postal_code>\n\t<set_postal_code set=\"method\" line=\"167\"><f a=\"postal_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_postal_code>\n\t<country_code public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(3)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</country_code>\n\t<set_country_code set=\"method\" line=\"177\"><f a=\"country_code\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_country_code>\n\t<gender public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</gender>\n\t<set_gender set=\"method\" line=\"187\"><f a=\"gender\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_gender>\n\t<date_of_birth public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"date\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</date_of_birth>\n\t<set_date_of_birth set=\"method\" line=\"197\"><f a=\"date_of_birth\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_date_of_birth>\n\t<mobile public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(19)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mobile>\n\t<set_mobile set=\"method\" line=\"207\"><f a=\"mobile\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_mobile>\n\t<email public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(64)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</email>\n\t<set_email set=\"method\" line=\"217\"><f a=\"email\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_email>\n\t<comments public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(4096)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</comments>\n\t<set_comments set=\"method\" line=\"227\"><f a=\"comments\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_comments>\n\t<edited_by public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</edited_by>\n\t<set_edited_by set=\"method\" line=\"237\"><f a=\"edited_by\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_edited_by>\n\t<merged public=\"1\" set=\"accessor\">\n\t\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint[]\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</merged>\n\t<set_merged set=\"method\" line=\"247\"><f a=\"merged\">\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n\t<c path=\"Array\"><x path=\"Int\"/></c>\n</f></set_merged>\n\t<last_updated public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp(0) without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</last_updated>\n\t<set_last_updated set=\"method\" line=\"257\"><f a=\"last_updated\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_last_updated>\n\t<owner public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</owner>\n\t<set_owner set=\"method\" line=\"267\"><f a=\"owner\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_owner>\n\t<title_pro public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(80)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</title_pro>\n\t<set_title_pro set=\"method\" line=\"277\"><f a=\"title_pro\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_title_pro>\n\t<lead_id public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</lead_id>\n\t<set_lead_id set=\"method\" line=\"287\"><f a=\"lead_id\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_lead_id>\n\t<period public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</period>\n\t<set_period set=\"method\" line=\"297\"><f a=\"period\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_period>\n\t<anrede public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</anrede>\n\t<set_anrede set=\"method\" line=\"307\"><f a=\"anrede\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_anrede>\n\t<account public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</account>\n\t<set_account set=\"method\" line=\"317\"><f a=\"account\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_account>\n\t<blz public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</blz>\n\t<set_blz set=\"method\" line=\"327\"><f a=\"blz\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_blz>\n\t<iban public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"character varying(32)\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</iban>\n\t<set_iban set=\"method\" line=\"337\"><f a=\"iban\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_iban>\n\t<bank_name public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</bank_name>\n\t<set_bank_name set=\"method\" line=\"347\"><f a=\"bank_name\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_bank_name>\n\t<spenden_hoehe public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</spenden_hoehe>\n\t<set_spenden_hoehe set=\"method\" line=\"357\"><f a=\"spenden_hoehe\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_spenden_hoehe>\n\t<start_monat public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</start_monat>\n\t<set_start_monat set=\"method\" line=\"367\"><f a=\"start_monat\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_start_monat>\n\t<buchungs_tag public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</buchungs_tag>\n\t<set_buchungs_tag set=\"method\" line=\"377\"><f a=\"buchungs_tag\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_buchungs_tag>\n\t<buchungs_zeitpunkt public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</buchungs_zeitpunkt>\n\t<set_buchungs_zeitpunkt set=\"method\" line=\"387\"><f a=\"buchungs_zeitpunkt\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_buchungs_zeitpunkt>\n\t<mailing public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</mailing>\n\t<set_mailing set=\"method\" line=\"397\"><f a=\"mailing\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_mailing>\n\t<client_status public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"text\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</client_status>\n\t<set_client_status set=\"method\" line=\"407\"><f a=\"client_status\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_client_status>\n\t<entry_list_id public=\"1\" set=\"accessor\">\n\t\t<x path=\"Int\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"bigint\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</entry_list_id>\n\t<set_entry_list_id set=\"method\" line=\"417\"><f a=\"entry_list_id\">\n\t<x path=\"Int\"/>\n\t<x path=\"Int\"/>\n</f></set_entry_list_id>\n\t<entry_date public=\"1\" set=\"accessor\">\n\t\t<c path=\"String\"/>\n\t\t<meta>\n\t\t\t<m n=\"dataType\"><e>\"timestamp without time zone\"</e></m>\n\t\t\t<m n=\":isVar\"/>\n\t\t</meta>\n\t</entry_date>\n\t<set_entry_date set=\"method\" line=\"427\"><f a=\"entry_date\">\n\t<c path=\"String\"/>\n\t<c path=\"String\"/>\n</f></set_entry_date>\n\t<new public=\"1\" set=\"method\" line=\"10\"><f a=\"data\">\n\t<t path=\"Map\">\n\t\t<c path=\"String\"/>\n\t\t<c path=\"String\"/>\n\t</t>\n\t<x path=\"Void\"/>\n</f></new>\n\t<meta>\n\t\t<m n=\":directlyUsed\"/>\n\t\t<m n=\":build\"><e>react.jsx.JsxStaticMacro.build()</e></m>\n\t\t<m n=\":keep\"/>\n\t\t<m n=\":rtti\"/>\n\t</meta>\n</class>";
 model_QC.tableName = "qcs";
 model_accounting_AccountsModel.dataAccess = (function($this) {
 	var $r;
@@ -22699,8 +22794,8 @@ model_qc_QCModel.dataAccess = (function($this) {
 		_g2.h["phone_number"] = { label : "Telefon"};
 		_g2.h["mobile"] = { label : "Mobil"};
 		_g2.h["company_name"] = { label : "Firmenname"};
-		_g2.h["address"] = { label : "Straße"};
-		_g2.h["address_2"] = { label : "Hausnummer"};
+		_g2.h["address1"] = { label : "Straße"};
+		_g2.h["address2"] = { label : "Hausnummer"};
 		_g2.h["postal_code"] = { label : "PLZ"};
 		_g2.h["city"] = { label : "Ort"};
 		_g2.h["co_field"] = { label : "Adresszusatz"};
@@ -22741,9 +22836,9 @@ model_qc_QCModel.dataAccess = (function($this) {
 		_g2.h["iban"] = { label : "IBAN"};
 		_g2.h["bank_name"] = { label : "Bankinstitut"};
 		var _g3 = new haxe_ds_StringMap();
-		_g3.h["InfoBrief schicken"] = "InfoBrief schicken";
-		_g3.h["InfoMail senden"] = "InfoMail senden";
-		_g3.h["Keine Info gewünscht"] = "Keine Info gewünscht";
+		_g3.h["info_brief"] = "InfoBrief schicken";
+		_g3.h["info_mail"] = "InfoMail senden";
+		_g3.h["no_info"] = "Keine Info gewünscht";
 		_g2.h["mailing"] = { label : "InfoBrief", type : "Radio", options : _g3};
 		_g2.h["entry_date"] = { label : "Verkauf", cellFormat : function(v) {
 			if(v != null) {
@@ -23053,7 +23148,7 @@ view_dashboard_DB.menuItems = [{ label : "getView", action : "getView"},{ label 
 view_dashboard_DB.displayName = "DB";
 view_dashboard_DB._renderWrapper = (redux_react_ReactRedux.connect(view_dashboard_DB.mapStateToProps))(react_ReactTypeOf.fromComp(view_dashboard_DB));
 view_dashboard_DB.__jsxStatic = view_dashboard_DB._renderWrapper;
-view_dashboard_DBSync.menuItems = [{ label : "BuchungsAnforderungen ", action : "checkBookingRequests", options : [{ label : "Update", name : "sync_now", type : "Checkbox"}]},{ label : "Kontakt Daten ", action : "checkContacts", options : [{ label : "Update", name : "sync_contacts", type : "Checkbox"}]},{ label : "Spenden Daten ", action : "checkDeals"},{ label : "Konto Daten ", action : "checkAccounts"}];
+view_dashboard_DBSync.menuItems = [{ label : "BuchungsAnforderungen ", action : "checkBookingRequests"},{ label : "Kontakt Daten ", action : "checkContacts"},{ label : "Spenden Daten ", action : "checkDeals"},{ label : "Konto Daten ", action : "checkAccounts"},{ label : "Reset QC Test Daten ", action : "syncQC"}];
 view_dashboard_DBSync.displayName = "DBSync";
 view_dashboard_DBSync._renderWrapper = (redux_react_ReactRedux.connect(view_dashboard_DBSync.mapStateToProps,view_dashboard_DBSync.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_dashboard_DBSync));
 view_dashboard_DBSync.__jsxStatic = view_dashboard_DBSync._renderWrapper;
@@ -23201,7 +23296,7 @@ view_data_deals_List.menuItems = [{ label : "Bearbeiten", action : "open", secti
 view_data_deals_List.displayName = "List";
 view_data_deals_List._renderWrapper = (redux_react_ReactRedux.connect(view_data_deals_List.mapStateToProps,view_data_deals_List.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_data_deals_List));
 view_data_deals_List.__jsxStatic = view_data_deals_List._renderWrapper;
-view_data_qc_Edit.menuItems = [{ label : "Schließen", action : "close"},{ label : "Speichern", action : "update"},{ label : "Zurücksetzen", action : "reset"},{ label : "QC OK", action : "qcok"},{ label : "QC NEGATIV", action : "qcneg"},{ separator : true}];
+view_data_qc_Edit.menuItems = [{ label : "Schließen", action : "close"},{ label : "Speichern", action : "qc_save"},{ label : "Zurücksetzen", action : "reset"},{ label : "Einmalspende", action : "uncheckPeriod"},{ label : "QC OK", action : "qc_ok"},{ label : "QC NEGATIV", action : "qc_bad"},{ separator : true}];
 view_data_qc_Edit.classPath = view_data_qc_Edit.__name__;
 view_data_qc_Edit.displayName = "Edit";
 view_data_qc_Edit._renderWrapper = (redux_react_ReactRedux.connect(view_data_qc_Edit.mapStateToProps,view_data_qc_Edit.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_data_qc_Edit));

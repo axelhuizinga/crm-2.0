@@ -60,8 +60,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			return v;
 		}}},
 		{label: 'Ort',formField: { name: 'city'}},
-	//	{label:'Auswahl umkehren',action:'selectionInvert'},
-	//	{label:'Auswahl alle',action:'selectionAll'},
+	];
+	static var printItems:Array<MItem> = [
+		{className:'formNoLabel', formField: {name:'product', type: Radio, options: ['2'=>'Kinderhilfe','3'=>'Tierhilfe']}},
+		{className:'cblock',label:'Mitgliedsnummern (Leerzeichen getrennt)',disabled:false, formField: { name: 'printList'}	},
+		{label:'Drucken', action:'printList', disabled:false},		
+		{label:'Alle neuen Anschreiben Drucken',action:'printNew'}
 	];
 	var dataAccess:DataAccess;	
 	var dataDisplay:Map<String,DataState>;
@@ -85,19 +89,29 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			loading:true,
 			contactData:new IntMap(),			
 			selectedRows:[],
-			sideMenu:FormApi.initSideMenu( this,
-				{
-					dataClassPath:'data.Contacts',
-					hasFindForm:true,
-					label:'Liste',
-					section: 'List',
-					//items: Utils.copyObjectArray(menuItems)
-					items: [for(v in menuItems) js.lib.Object.assign({},v)]
+			sideMenu:FormApi.initSideMenuMulti( this,
+					[{
+						dataClassPath:'data.Contacts',						
+						hasFindForm:true,
+						isActive:true,
+						label:'Liste',
+						section: 'List',
+						//items: Utils.copyObjectArray(menuItems)
+						items: [for(v in menuItems) js.lib.Object.assign({},v)]
 
-				}					
+					},
+					{
+						hasFindForm:true,
+						label:'Anschreiben',
+						section: 'List_',
+						//items: Utils.copyObjectArray(menuItems)
+						items: [for(v in printItems) js.lib.Object.assign({},v)]
+					}
+				]				
 				,{
 					orm:cast Contact,
 					section: props.match.params.section==null? 'List':props.match.params.section, 
+					mBshowActive: true,
 					sameWidth: true
 				}),
 			values:new Map<String,Dynamic>()

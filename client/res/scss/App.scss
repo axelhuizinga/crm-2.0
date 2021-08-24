@@ -820,6 +820,29 @@ label.panel-heading {
 .formRow2{
 	margin-left: 0.8rem;
 }
+.formNoLabel div{
+	margin: 0.37rem auto;
+	width:min-content;
+	white-space: nowrap;
+}
+.formNoLabel span{
+	
+	padding: 0.3rem 0.5rem;
+	vertical-align: middle;
+}
+.ablock{
+	display: block;
+}
+.cblock{
+	display: block;
+	text-align: center;
+	padding: 0.3rem;
+}
+.cblock label{
+	padding-bottom: 0.3rem;
+	display: block;
+}
+
 /*tables*/
 .table{
 	border-spacing: 1px;

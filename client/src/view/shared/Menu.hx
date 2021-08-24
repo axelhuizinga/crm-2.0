@@ -2,6 +2,7 @@ package view.shared;
 
 //import js.lib.Reflect;
 //import model.FormInputElement;
+import js.html.Window;
 import haxe.rtti.Meta;
 import shared.Utils;
 import js.html.FormElement;
@@ -100,7 +101,9 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		trace(Reflect.fields(props));		
 		//trace(Reflect.fields(props.menuBlocks.iterator().next()));
 		trace(Reflect.fields(props.menuBlocks.iterator().next()));
-		
+		var mbs:Iterator<MenuBlock> = props.menuBlocks.iterator();
+		while(mbs.hasNext())
+			trace(mbs.next().label);
 		//var items:Array<MItem> = props.menuBlocks.iterator().next().items;
 		var items:Array<MItem> = props.menuBlocks[props.section].items;
 		//trace(props.section + ':' + (items==null?'nulll':Std.string(items[0])));
@@ -266,9 +269,10 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			return null;
 		var header:Array<ReactFragment> = new Array();
 		var i:Int = 1;		
-
+		trace(props.section);
 		props.menuBlocks.iter(function(block:MenuBlock) {
-			var check:Bool = props.section==block.section;
+			var check:Bool =  props.mBshowActive ? block.isActive : props.section==block.section;
+			trace(block.section +':' + block.isActive + '=' + check);
 			if(props.section==null && i==1)
 			{
 				check=true;
@@ -387,9 +391,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					for(k=>v in item.formField.options.keyValueIterator()){
 						jsx('<span key=${"o_"+(o++)Y}>${v} <input type="radio" name=${item.formField.name} value=${v} /></span>');
 					}];
+					(item.className=="formNoLabel"?
+					jsx('<div className="formNoLabel" key=${"fr_"+(i++)} ><div>$options</div></div> '):
 					jsx('<div className="formRow" key=${"fr_"+(i++)} >
 					<label key=${"l_"+i}>${item.label}</label><div  key=${"opt_"+i} className="formRow2">$options</div>
-					</div>');	
+					</div>'));	
 				/*case File:
 					jsx('<div key=${"uf"+(i++)}  id="uploadForm"   className="uploadBox" >
 					<input  id=${item.formField.name} type="file" name=${item.formField.name} onChange=${item.formField.handleChange} className="fileinput"  />
@@ -408,8 +414,8 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					</div>');
 
 				case Text:
-					jsx('<div key=${"uf"+(i++)}  id="findForm_${i}"   className="formRow" >
-					<label htmlFor=${item.formField.name} className=""  key=${"l_"+i}>${item.label}</label>
+					jsx('<div key=${"uf"+(i++)}  id="findForm_${i}"   className=${item.className==null?"formRow":item.className} >
+					<label htmlFor=${item.formField.name}  key=${"l_"+i}>${item.label}</label>
 					<input  id=${item.formField.name} type="text" name=${item.formField.name} onChange=${item.formField.handleChange} className="input"  key=${"i_"+i} />
 				</div>');
 				case Upload:
@@ -489,18 +495,50 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	{
 		//var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
 		var section:String = reactEventSource.target.getAttribute('data-section');
+		var sPat:EReg = new EReg('(${props.section}_*)$','');
 		//trace( 'state.viewClassPath:${state.viewClassPath} viewClassPath:$viewClassPath');
 		//trace( 'state.section:${state.section} section:$section');
+		//if (section != props.section)
+		if (!sPat.match(section))
 		//if (state.viewClassPath != viewClassPath)
-		if (section != props.section)
 		{
 			//var menuBlocks:
 			var basePath:String = props.match.path.split('/:')[0];
 			//trace(props.location.pathname);
 			props.history.push('$basePath/$section');
+		
 			//props.switchSection('$basePath/$section');
 			//trace(props.history.location.pathname);
 			//props.history.push(props.match.url + '/' + viewClassPath);
+		}
+		else{
+			var mP:MenuProps = cast props.parentComponent.state.sideMenu;//, MenuProps.menuBlocks[]
+			for(k=>v in mP.menuBlocks.keyValueIterator()){
+				if(k==sPat.matched(0))
+					v.isActive = true;
+				else
+					v.isActive = false;
+			}
+			props.parentComponent.setState({});
+			trace(mP.menuBlocks[sPat.matched(0)].isActive);
+			//trace(props.parentComponent.state.sideMenu.menuBlocks[sPat.matched(0)]);
+			trace(sPat.matched(0) );
+			mP.menuBlocks[sPat.matched(0)].isActive = true;
+			//props.parentComponent.state.sideMenu.menuBlocks[sPat.matched(0)].isActive = true;
+			/*var ops:NodeList = Browser.document.querySelectorAll('.sidebar .menu input[name="accordion-select"]');
+			trace(ops.length);
+			var l:Int = ops.length;
+			for(op in 0...l){
+				trace(op);
+				cast(ops.item(op), InputElement).removeAttribute('checked');// = false;
+				cast(ops.item(op), InputElement).checked = false;
+				trace(ops.item(op));
+			}
+			var blockSel:NodeList = Browser.document.querySelectorAll('.sidebar .menu input[data-section="${sPat.matched(0)}"]');
+			var bS:InputElement = cast(blockSel[0], InputElement);
+			bS.setAttribute('checked', '');
+			bS.checked = true;
+			trace(bS.outerHTML);**/
 		}
 	}
 
@@ -509,7 +547,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		var i:Int = 0;
 		var activePanel:Int = null;
 		aW = menuRef.current.getElementsByClassName('panel').item(0).offsetWidth;
-		//trace(aW);//
+		trace(aW);//
 		/*if(state.sameWidth==null)
 		this.setState({sameWidth:aW},function (){
 			trace("what's up?");

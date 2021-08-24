@@ -1,4 +1,5 @@
 package view.data.qc;
+import js.html.IterationCompositeOperation;
 import js.html.DivElement;
 import js.lib.Promise;
 import shared.Utils;
@@ -102,6 +103,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		
 		//trace ('never');
 		trace (aState.dataStore.qcData.keys().next());
+		var ks:Iterator<Int> = aState.dataStore.qcData.keys();
+		trace ('aState.dataStore.qcData.keys:' + 
+		[ while(ks.hasNext())
+			ks.next()
+		].join('|')
+		);
 		//trace ('never');
 		return {
 			dataStore:aState.dataStore,

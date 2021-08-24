@@ -85,7 +85,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Schließen',action:'close'},		
 		//{label:'Speichern + Schließen',action:'update', then:'close'},
 		{label:'Speichern',action:'qc_save'},		
-		{label:'Zurücksetzen',action:'reset'},
+		{label:'Zurücksetzen',action:'loadQC'},
 		{label:'Einmalspende',action:'uncheckPeriod'},
 		{label:'QC OK',action:'qc_ok'},
 		

@@ -262,10 +262,12 @@ class UserAccess {
 	public static function logOut() 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
-			Out.dumpObject(getState().userState);
+			//Out.dumpObject(getState().userState);
+			trace('...');
 			var userState:UserState = getState().userState;
 			if (userState.dbUser.id == null) 
 				return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:'UserId fehlt!'})));
+			trace(userState.dbUser.id + ':' + userState.dbUser.first_name);
 			var bL:XMLHttpRequest = null;
 			bL = BinaryLoader.dbQuery(
 			'${App.config.api}', 
@@ -287,12 +289,12 @@ class UserAccess {
 					//Cookie.set('userState.dbUser.id', Std.string(userState.dbUser.id));
 					return null;
 				} else {
-					userState.dbUser.online = false;
+					userState.dbUser.online = false; 
 					//var d:Date = Date.now().delta(31556926000);//ADD one year				
 					//Cookie.set('userState.dbUser.jwt', '', 31556926);
-					Cookie.set('userState.dbUser.id', null, null, '/');					
+					//Cookie.set('userState.dbUser.id', null, null, '/');					
 					trace(Cookie.get('userState.dbUserState.dbUser.jwt'));
-					return dispatch(User(LogOutComplete({dbUser: null, waiting: false})));
+					return dispatch(User(LogOutComplete({dbUser: userState.dbUser, waiting: false})));
 				}
 			});
 			return null;

@@ -20,13 +20,9 @@ class ContactsModel
 					]
 				],
 			view:[
-				'title'=>{label:'Anrede',type:Select,options:[
-						''=>'?',
-						'Herr'=>'Herr',
-						'Frau'=>'Frau',
-						'Familie'=>'Familie',
-						'Firma'=>'Firma'
-					]},
+				'status'=>{label:'Status',type:Select,options:[
+					'active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
+				
 				'title_pro'=>{label:'Titel'},
 				'first_name'=>{label:'Vorname'},
 				'last_name'=>{label:'Name'},
@@ -40,7 +36,13 @@ class ContactsModel
 				'address_2'=>{label:'Hausnummer'},
 				'postal_code'=>{label:'PLZ'},
 				'city'=>{label:'Ort'},
-				'state'=>{label:'Status',type:Select,options:['active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
+				'title'=>{label:'Anrede',type:Select,options:[
+					''=>'?',
+					'Herr'=>'Herr',
+					'Frau'=>'Frau',
+					'Familie'=>'Familie',
+					'Firma'=>'Firma'
+				]},
 				'country_code'=>{label:'Land'},
 				'care_of'=>{label: 'Adresszusatz'},
 				'creation_date'=>{label: 'Hinzugefügt', type:DateTimePicker, disabled: true, 
@@ -52,7 +54,7 @@ class ContactsModel
 						'F'=>'Weiblich'
 					]
 				},
-				'comments'=>{label:'Kommentar', type:TextArea},
+				//'comments'=>{label:'Kommentar', type:TextArea},
 				'use_email'=>{label:'Post per Email',type: Checkbox},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},				

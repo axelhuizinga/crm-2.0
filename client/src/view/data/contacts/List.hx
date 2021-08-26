@@ -21,13 +21,14 @@ import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil.copy;
-import shared.DbData;
 import shared.DBMetaData;
+import shared.DbData;
+import shared.FindFields;
 import view.shared.FormBuilder;
 import view.shared.FormField;
 import state.FormState;
 import model.contacts.ContactsModel;
-import view.shared.MItem;
+import view.shared.MItem; 
 import view.shared.MenuProps;
 import view.shared.io.BaseForm;
 import view.shared.io.FormApi;
@@ -52,14 +53,14 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			trace(v);
 			return v;
 		}}},
-		{label: 'Vorname',formField: { name: 'first_name'}},
-		{label: 'Nachname',formField: { name: 'last_name'}},
+		{label: 'Vorname',formField: { name: 'first_name', matchFormat: FindFields.iLike}},
+		{label: 'Nachname',formField: { name: 'last_name', matchFormat: FindFields.iLike}},
 		{label: 'Telefon',formField: { name: 'phone_number', findFormat: function(v:String) {
 			v =  ~/^0+/.replace(v, '');
 			trace(v);
 			return v;
 		}}},
-		{label: 'Ort',formField: { name: 'city'}},
+		{label: 'Ort',formField: { name: 'city', matchFormat: FindFields.iLike}},
 	];
 	static var printItems:Array<MItem> = [
 		{className:'formNoLabel', formField: {name:'product', type: Radio, options: ['2'=>'Kinderhilfe','3'=>'Tierhilfe']}},
@@ -101,7 +102,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 					},
 					{
-						hasFindForm:true,
+						hasFindForm:false,
 						label:'Anschreiben',
 						section: 'List_',
 						//items: Utils.copyObjectArray(menuItems)

@@ -64,7 +64,21 @@ class QCModel
 					disabled: true
 				},
 				'comments'=>{label:'Kommentar', type:TextArea},				
-				'start_monat'=>{label:'Ab'},
+				'start_monat'=>{label:'Ab', type:Select,options:[
+					'Januar' => 'Januar',
+					'Februar' => 'Februar',
+					'März' => 'März',
+					'April' => 'April',
+					'Mai' => 'Mai',
+					'Juni' => 'Juni',
+
+						'Juli' => 'Juli',
+					'August' => 'August',
+					'September' => 'September',
+					'Oktober' => 'Oktober',
+					'November' => 'November',
+					'Dezember' => 'Dezember'
+				]},
 				'period'=>{label:'Zahlweise',type:Radio,options:[
 					'Monatlich' => 'Monatlich', 
 					'Vierteljährlich' => 'Vierteljährlich', 

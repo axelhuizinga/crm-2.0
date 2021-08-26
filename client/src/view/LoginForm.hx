@@ -1,5 +1,8 @@
 package view;
 
+import redux.Store;
+import db.DbUser;
+import haxe.Exception;
 import me.cunity.debug.Out;
 import js.html.HTMLDocument;
 import js.Browser;
@@ -59,6 +62,9 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		trace(props.submitLogin);
 		super(props);
 		submitValue = '';
+		if(props.userState.dbUser == null ){
+			trace(App.store.getState().userState);
+		}
 		state = copy(props.userState,{waiting:false});//{user_name:'',pass:'',new_pass_confirm: '', new_pass: '',waiting:true};
 	}
 
@@ -121,7 +127,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		{
 			var uState = aState.userState;
 			trace(aState.locationStore.redirectAfterLogin);
-			Out.dumpObject(uState);		
+			//Out.dumpObject(uState);		
 			if(uState.loginTask == LoginTask.ChangePassword)
 			{
 				var rAL:String = aState.locationStore.redirectAfterLogin;
@@ -148,20 +154,26 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		var s:Dynamic = {dbUser:props.userState.dbUser};
 		var t:InputElement = cast e.target;
 		trace(t.name);
+		if(t.name!='password' && t.name!='new_pass')
 		trace(t.value);
-		if(t.name == 'new_pass' && t.value==props.userState.dbUser.password)
-		{
-			//password not changed
-			t.value='';
+		try{
+			if(t.name == 'new_pass' && t.value==props.userState.dbUser.password)
+			{
+				//password not changed
+				t.value='';
+			}
+			//TODO: HANDLE CHANGE
+			Reflect.setField((t.name.indexOf('new_pass')==-1? s.dbUser:s), t.name, t.value);
+			props.stateChange(copy(props.userState,s));
+			//trace(props.dispatch + '==' + App.store.dispatch);
+			//App.store.dispatch(UserAction.LoginChange(s));
+			//TODO: PUT INTO Global State to avoid rerender
+			//this.setState(s);
+			trace(this.state);
 		}
-		//TODO: HANDLE CHANGE
-		Reflect.setField((t.name.indexOf('new_pass')==-1? s.dbUser:s), t.name, t.value);
-		props.stateChange(copy(props.userState,s));
-		//trace(props.dispatch + '==' + App.store.dispatch);
-		//App.store.dispatch(UserAction.LoginChange(s));
-		//TODO: PUT INTO Global State to avoid rerender
-		//this.setState(s);
-		trace(this.state);
+		catch(ex:Exception){
+			trace(ex.details);
+		}
 	}
 	
 	function handleSubmit(e:InputEvent)
@@ -174,8 +186,16 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 		{
 			//props.userState.dbUser.updateDyn(
 				//{user_name:props.userState.dbUser.user_name, password:props.userState.dbUser.password, jwt:''});
+			if(props.userState.dbUser==null){
+				var appStore:Store<AppState> = App.store;//.getState();
+				//trace(appStore);
+				// CREATE USER INSTANCE
+				//appStore.dispatch({});
+				return;
+				//props.userState.dbUser = new DbUser();
+			}
 			props.submitLogin(props.userState);		
-			return true;	
+			return;	
 		}
 		switch (props.userState.loginTask)
 		{
@@ -183,7 +203,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 				trace('Reset Password requested');
 				trace(props);
 				props.resetPassword(props.userState);
-				return false;
+				return;
 			case LoginTask.ChangePassword:
 				
 				props.submitLogin({ new_pass:props.userState.new_pass, dbUser: props.userState.dbUser.updateDyn({
@@ -202,14 +222,13 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 					{ new_pass:props.userState.new_pass,dbUser: dbUserProps}:
 					{ dbUser: dbUserProps});			 	
 		} 
-		return true;
+		return;
 	}	
 
 	public function  renderForm():ReactFragment
-	{		
-		
+	{				
 		trace(props.redirectAfterLogin);
-		Out.dumpObject(props.userState.dbUser);
+		//Out.dumpObject(props.userState.dbUser);
 		trace('error_style password:'+errorStyle("password"));
 		//if(props.redirectAfterLogin != null && props.redirectAfterLogin.startsWith('/ResetPassword'))
 		
@@ -259,7 +278,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 				);
 		}
 
-		if(props.userState.dbUser.change_pass_required)
+		if(props.userState.dbUser != null && props.userState.dbUser.change_pass_required)
 		{trace('props.userState.dbUser.change_pass_required:'+props.userState.dbUser.change_pass_required);
 			return jsx('
 					<form name="form" onSubmit={handleSubmit} className="login" >
@@ -293,7 +312,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 					</form>'
 				);
 		}		
-		trace(props.userState.loginTask);
+		//trace(props.userState.loginTask);value=${props.userState.dbUser == null?'':props.userState.dbUser.user_name} 
 		return jsx('
 				  	<form name="form" onSubmit={handleSubmit} className="login" >
 						<div className="formField">
@@ -302,7 +321,7 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 								</label>
 								<input id="login_user_name" name="user_name"  autoComplete="username"
 								className=${errorStyle("user_name") + " form-input"}  
-								placeholder="User ID" value=${props.userState.dbUser.user_name} onChange=${handleChange} />
+								placeholder="User ID" onChange=${handleChange} />
 						</div>
 						<div className="formField">
 								<label className="fa lockIcon" forhtml="pw">
@@ -326,9 +345,9 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 
 	override public function render()
 	{
-		trace(Reflect.fields(props));
-		trace(props.userState.lastError);
-		trace(state.waiting);
+		//trace(Reflect.fields(props));
+		//trace(props.userState.lastError);
+		//trace(state.waiting);
 		var style = 
 		{
 			maxWidth:'32rem'
@@ -385,8 +404,8 @@ class LoginForm extends ReactComponentOf<LoginProps, UserState>
 			default:
 				"";
 		}
-		Out.dumpObject(props.userState);
-		trace(eStyle);
+		//Out.dumpObject(props.userState);
+		//trace(eStyle);
 		return eStyle;
 	}
 	

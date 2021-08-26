@@ -27,10 +27,12 @@ typedef BaseField =
 }
 
 typedef FormField = {
-	>BaseField,
+	>BaseField,	
 	?handleChange:Function,
+	?handleKeyUp:Function,
 	?cellFormat:Function,
 	?findFormat:Function,
+	?matchFormat:Function,
 	?displayFormat:String,	
 	?id:Int,
 	?jwt:String,

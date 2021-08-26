@@ -73,6 +73,10 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		browserHistory = App.store.getState().locationStore.history;// BrowserHistory.create({basename:"/"});
 		//ApplicationStore.historyListener(App.store, browserHistory);
 		//trace(this.props.userState.state.last_name);
+		if (props.userState.dbUser == null) {			
+			//browserHistory.push('/');
+			browserHistory.replace('/');
+		}
 		mounted = false;
 		//_me = this;
 		App.modalBox = React.createRef();
@@ -93,15 +97,14 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 
 	override function render()
 	{
-		//if(props.userState.dbUser !=null)trace(props.userState.dbUser.id);
+
 		//TODO: USEFUL ERROR MESSAGE!
-		if (state.hasError || props.userState.dbUser == null) {
+		if (state.hasError ) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
 		if (props.userState.waiting)
-		{
-			
-			trace('waiting hero');
+		{			
+			//trace('waiting hero');
 			trace(props.userState);
 			return jsx('
 			<section className="hero is-alt is-fullheight">
@@ -113,11 +116,16 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 		}
 		
 		//trace('${props.userState.dbUser.jwt} ${props.userState.dbUser.online}');
-		if(props.userState.dbUser.jwt == null || props.userState.dbUser.jwt == '' || !props.userState.dbUser.online || props.userState.dbUser.change_pass_required)//
+		if(props.userState.dbUser == null || props.userState.dbUser.jwt == null || props.userState.dbUser.jwt == '' || !props.userState.dbUser.online || props.userState.dbUser.change_pass_required)//
 		{
 			// WE NEED TO LOGIN FIRST
-			//Out.dumpObject(props.userState.dbUser);
 			//return null;
+			//trace(props.userState);
+			//trace(App.store.getState().userState);
+			if(App.store.getState().userState.dbUser==null){
+				trace(App.store.getState().userState);
+			}
+			//Out.dumpObject(props.userState.dbUser);
 			return jsx('<$LoginForm userState=${props.userState}/>');
 		}
 		else
@@ -126,16 +134,7 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 			//trace('render Router ' + App.store.getState().locationStore.history.location.pathname);
 			//trace(App.store.getState());
 			//trace(App.store.getState().locationStore.history == browserHistory);//TRUE
-			if(browserHistory.location.pathname!=App.store.getState().locationStore.redirectAfterLogin)
-			{
-				trace('Redirect to: ${App.store.getState().locationStore.redirectAfterLogin}');
-				 browserHistory.push(App.store.getState().locationStore.redirectAfterLogin);
-				 //setState({rFlag:state.rFlag+1});
-			/*	return jsx('<$Router history=${browserHistory} >
-					<Redirect to=${App.store.getState().locationStore.redirectAfterLogin}/>
-				</$Router>'
-				); */
-			}
+
 			return
 			#if debug 
 				jsx('
@@ -195,6 +194,9 @@ class UiView extends ReactComponentOf<UIProps, UIState>
 	{
 		trace(App.store.getState().locationStore.redirectAfterLogin);
 		//return null;
+		trace(p);
+		if(p!=null&&p.to==null)
+			p=null;
 		return jsx('<RedirectBox to=${p==null?App.store.getState().locationStore.redirectAfterLogin:p.to}/>');
 	}
 }

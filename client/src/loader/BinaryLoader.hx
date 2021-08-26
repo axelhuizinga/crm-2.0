@@ -35,7 +35,7 @@ class BinaryLoader {
 		//var s = new json2object.JsonWriter<DbQuery>();
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbAP);//.toHex();
-		trace(dbQuery.dbParams);
+		//trace(dbQuery.dbParams);
 		//Out.dumpObject(dbQuery);
 		//var b:Bytes = s.serialize(dbQuery);
 		s.serialize(dbQuery);
@@ -110,6 +110,7 @@ class BinaryLoader {
 	 * @param max 
 	 */
 	public dynamic function onProgress( cur : Int, max : Int ) {
+		trace('$cur of $max');
 	}
 
 	public dynamic function onError( msg : String ) {

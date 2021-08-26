@@ -1,5 +1,8 @@
 package view.grid;
 
+import react.router.RouterLocation;
+import react.router.RouterHistory;
+import react.router.RouterMatch;
 import js.html.Element;
 import haxe.Timer;
 import haxe.ds.IntMap;
@@ -52,6 +55,9 @@ typedef GridProps =
 	?filterable:Dynamic,
 	?itemsPerPage:Int,
 	?id:String,
+	?location:RouterLocation,
+	?match:RouterMatch,
+	?history:RouterHistory,
 	?findBy:String,
 	?onFilter:String->Void,
 	?onPageChange:SortProps->Void,	

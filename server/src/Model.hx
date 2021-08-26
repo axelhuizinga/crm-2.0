@@ -286,7 +286,7 @@ class Model
 		//return execute(sqlBf.toString(), q,filterValuess);
 	}
 	
-	public function fieldFormat(fields:String):String
+	/*public function fieldFormat(fields:String):String
 	{
 		var fieldsWithFormat:Array<String> = new Array();
 		var sF:Array<String> = fields.split(',');
@@ -316,7 +316,7 @@ class Model
 		}
 		//trace(fieldsWithFormat);
 		return fieldsWithFormat.join(',');
-	}
+	}*/
 	
 	public function get():Void
 	{	
@@ -332,12 +332,6 @@ class Model
 		):NativeArray
 	{
 		trace(sql);	
-		//if(setValues.length>0)trace(setValues.length);
-		/**
-		 * 
-		 */
-		
-		//if(filterValues.length>0)	trace(filterValues.toString());
 		var stmt:PDOStatement =  S.dbh.prepare(sql,Syntax.array(null));
 		if (S.dbh.errorCode()!='00000')
 		{
@@ -348,9 +342,7 @@ class Model
 		}		
 		var bindTypes:String = '';
 		var values2bind:NativeArray = null;
-		//var dbFieldTypes:Map<String,String> =  Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(S.conf.get('dbFieldTypes')));
-		//trace(dbFieldTypes.toString());
-		//trace(filterValues);
+		//trace(Std.string(filterValues));
 		var data:NativeArray = null;
 		var success: Bool;
 		var i:Int = 0;
@@ -376,13 +368,14 @@ class Model
 				}
 			}	
 		}
-		if(filterValues.length>0)
+		//trace(filterValues.length);
+		if(filterValues.length>0)		
 		{
 			for (fV in filterValues)
 			{
 				var type:Int = PDO.PARAM_STR; //dbFieldTypes.get(fV[0]);
 				values2bind[i++] = fV[1];
-				//if (!stmt.bindParam(i, fV[1], type))//TODO: CHECK POSTGRES DRIVER OPTIONS
+				//trace(i+':'+Std.string(fV));
 				if (!stmt.bindValue(i, fV[1], type))//TODO: CHECK POSTGRES DRIVER OPTIONS
 				{
 					trace('ooops:' + stmt.errorInfo());
@@ -752,6 +745,10 @@ class Model
 					fBuf.add(')');
 				case 'LIKE':					
 					fBuf.add(' LIKE ?');
+					filterValues.push([keys[0], values[0]]);
+				case 'ILIKE':			
+					//trace(keys[0] + ':' + values.join('|'))	;
+					fBuf.add(' ILIKE ?');
 					filterValues.push([keys[0], values[0]]);
 				case _:
 					if (~/^(<|>)/.match(values[0]))

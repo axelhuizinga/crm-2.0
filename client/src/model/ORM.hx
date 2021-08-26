@@ -50,7 +50,7 @@ class ORM {
 		//trace(Std.string(fields));
 		fieldsInitalized = new Array();
 		fieldsModified = new Array();
-		//formBuilder = new FormBuilder(this);
+		formBuilder = new FormBuilder(this);
 		propertyNames = Reflect.fields(fields);
 		state = {};
 

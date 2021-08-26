@@ -2,6 +2,8 @@ package view.shared;
 
 //import js.lib.Reflect;
 //import model.FormInputElement;
+import js.html.KeyboardEvent;
+import shared.FindFields;
 import js.html.Window;
 import haxe.rtti.Meta;
 import shared.Utils;
@@ -91,7 +93,22 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	
 	static function mapStateToProps(state:MenuState) {
 		trace(Reflect.fields(state).join('|'));
+		/*return {
+			userState:aState.userState
+		};*/
 		return {};
+	}
+
+	function getMBA(mbs:Iterator<MenuBlock>):String{
+		var mB:MenuBlock = null;
+		while(mbs.hasNext()){
+			mB = mbs.next();
+			if(mB.isActive){
+				return mB.label;
+				break;
+			}
+		}
+		return props.section;
 	}
 
 	public function new(props:MenuProps) 
@@ -109,12 +126,25 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		//trace(props.section + ':' + (items==null?'nulll':Std.string(items[0])));
 		props.parentComponent.state.sideMenuInstance = this;
 		//trace(props.parentComponent.state.mHandlers);
-
+		//var mBA:String = function() return 'x';
+		/*var mBA:String = function():Null<String> {
+		
+				var mB:MenuBlock = null;
+				while(mbs.hasNext()){
+					mB = mbs.next();
+					if(mB.isActive){
+						return mB.label;
+						break;
+					}
+				}
+				return props.section;
+			};*/
+		menuRef = React.createRef();
 		hasFindForm = false;
 		state = {
 			hidden:props.hidden||false,
-			items: new StringMap()
-			//interactionStates: new StringMap()
+			items: new StringMap(),
+			menuBlockActive:getMBA(mbs)			//interactionStates: new StringMap()
 		};
 		//Out.dumpStack(CallStack.callStack());
 		//trace('OK');
@@ -213,11 +243,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		//trace(untyped evt.target.form);
 		//trace(Reflect.fields(props.menuBlocks[props.section].items[0]).join('|'));
 		trace(props.menuBlocks[props.section].dataClassPath);
-		trace(Reflect.fields(props.menuBlocks[props.section]).join('|'));
+		//trace(Reflect.fields(props.menuBlocks[props.section]).join('|'));
 		//return;
-		trace(Reflect.fields(props.parentComponent.props).join('|'));
-		trace(Reflect.fields(props.parentComponent.state.sideMenu).join('|'));
-		trace(Reflect.fields(Meta.getFields(props.parentComponent.state.sideMenu.orm)).join('|'));
+		//trace(Reflect.fields(props.parentComponent.props).join('|'));
+		//trace(Reflect.fields(props.parentComponent.state.sideMenu).join('|'));
+		//trace(Reflect.fields(Meta.getFields(props.parentComponent.state.sideMenu.orm)).join('|'));
 		//trace(props.parentComponent.state.sideMenu.orm._meta_fields);
 		var form:FormElement = untyped evt.target.form;
 		var fD:FormData = new FormData(form);
@@ -238,9 +268,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		for(i in 0...inputs.length){
 			el = cast( inputs[i], InputElement);
 			trace(i+':'+ el.name + '::' + el.value);
+			if(el.value!='')
 			el.value = findFormat(el.name, el.value);
 			if(StringTools.trim(el.value)!='')
-				Reflect.setField(param, el.name,el.value);
+				Reflect.setField(param, el.name,
+					matchFormat(el.name,el.value));
 		}
 		return props.parentComponent.get(BaseForm.filter(props.parentComponent.props,param));
 	}	
@@ -263,6 +295,24 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		return v;
 	}
 
+	function matchFormat(name:String, v:String):String {
+		var items:Array<MItem> = props.menuBlocks[props.section].items;//cast props.parentComponent.state.sideMenu.orm.menuItems;
+		if(items==null){
+			trace(name);
+			return v;
+		}
+		for(item in items){
+			if(item.formField!=null && item.formField.matchFormat != null && item.formField.name == name)
+			{
+				trace('$name.matchFormat returned:' + item.formField.matchFormat(v));
+				//trace('$name.matchFormat returned:' + Reflect.callMethod(item.formField,item.formField.matchFormat,[v]));
+
+				return item.formField.matchFormat(v);
+			}
+		}
+		return v;
+	}
+
 	function renderHeader():ReactFragment
 	{
 		if (props.menuBlocks.empty())
@@ -271,16 +321,10 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		var i:Int = 1;		
 		trace(props.section);
 		props.menuBlocks.iter(function(block:MenuBlock) {
-			var check:Bool =  props.mBshowActive ? block.isActive : props.section==block.section;
-			trace(block.section +':' + block.isActive + '=' + check);
-			if(props.section==null && i==1)
-			{
-				check=true;
-			}
 			//trace(block.label + '::' + block.onActivate + ':' +check);
 			//trace(props.section + '::' + block.section + ':' +check);//data-classpath=${block.viewClassPath}
 			header.push( jsx('
-			<input type="radio" key=${i} id=${"sMenuPanel-"+(i++)} name="accordion-select" checked=${check}  
+			<input type="radio" key=${i}  value=${block.section} id=${"sMenuPanel-"+(i++)} name="accordion-select" checked=${state.menuBlockActive==block.section}  
 				onChange=${switchContent} data-section=${block.section} />
 			'));
 		});
@@ -416,7 +460,10 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				case Text:
 					jsx('<div key=${"uf"+(i++)}  id="findForm_${i}"   className=${item.className==null?"formRow":item.className} >
 					<label htmlFor=${item.formField.name}  key=${"l_"+i}>${item.label}</label>
-					<input  id=${item.formField.name} type="text" name=${item.formField.name} onChange=${item.formField.handleChange} className="input"  key=${"i_"+i} />
+					<input  id=${item.formField.name} type="text" name=${item.formField.name} onChange=${item.formField.handleChange} onKeyPress=${function(e:KeyboardEvent){
+						trace(e.charCode);
+						if(e.charCode==13) find(e);
+					} } className="input"  key=${"i_"+i} />
 				</div>');
 				case Upload:
 					//trace(item.formField.handleChange);		
@@ -455,7 +502,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			rItems.push(jsx('<$B key=${"bu"+(i++)} onClick=${find} data-action="find" data-then=${null}>Finden</$B>'));
 			rItems.push(jsx('<$B key=${"bu"+(i++)} onClick=${clear} data-action="clear" data-then=${null}>Zurücksetzen</$B>'));
 		}
-		trace(state.items.keyNames());
+		//trace(state.items.keyNames());
 		return rItems;
 	}
 	
@@ -469,7 +516,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		//trace(props.menuBlocks.get('Edit'));
 			//trace(Type.getClassName(Type.getClass(props.parentComponent)));
 		//trace(props.basePath);
-		menuRef = React.createRef();
+		//menuRef = React.createRef();
 		var style:Dynamic = null;
 		if(true&&props.sameWidth && state.sameWidth == null)//sameWidth
 		{
@@ -494,51 +541,42 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	public function switchContent(reactEventSource:Dynamic)
 	{
 		//var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
-		var section:String = reactEventSource.target.getAttribute('data-section');
+		var switchSection:String = reactEventSource.target.getAttribute('data-section');
 		var sPat:EReg = new EReg('(${props.section}_*)$','');
 		//trace( 'state.viewClassPath:${state.viewClassPath} viewClassPath:$viewClassPath');
 		//trace( 'state.section:${state.section} section:$section');
+		//trace(menuRef.get_current().outerHTML);
 		//if (section != props.section)
-		if (!sPat.match(section))
+		if (!sPat.match(switchSection))
 		//if (state.viewClassPath != viewClassPath)
 		{
 			//var menuBlocks:
 			var basePath:String = props.match.path.split('/:')[0];
 			//trace(props.location.pathname);
-			props.history.push('$basePath/$section');
+			props.history.push('$basePath/$switchSection');
 		
-			//props.switchSection('$basePath/$section');
+			//props.switchSection('$basePath/$switchSection');
 			//trace(props.history.location.pathname);
 			//props.history.push(props.match.url + '/' + viewClassPath);
 		}
 		else{
 			var mP:MenuProps = cast props.parentComponent.state.sideMenu;//, MenuProps.menuBlocks[]
-			for(k=>v in mP.menuBlocks.keyValueIterator()){
+			/*for(k=>v in mP.menuBlocks.keyValueIterator()){
 				if(k==sPat.matched(0))
 					v.isActive = true;
 				else
 					v.isActive = false;
-			}
-			props.parentComponent.setState({});
+			}*/
+			//props.parentComponent.setState({});
 			trace(mP.menuBlocks[sPat.matched(0)].isActive);
 			//trace(props.parentComponent.state.sideMenu.menuBlocks[sPat.matched(0)]);
 			trace(sPat.matched(0) );
 			mP.menuBlocks[sPat.matched(0)].isActive = true;
-			//props.parentComponent.state.sideMenu.menuBlocks[sPat.matched(0)].isActive = true;
-			/*var ops:NodeList = Browser.document.querySelectorAll('.sidebar .menu input[name="accordion-select"]');
-			trace(ops.length);
-			var l:Int = ops.length;
-			for(op in 0...l){
-				trace(op);
-				cast(ops.item(op), InputElement).removeAttribute('checked');// = false;
-				cast(ops.item(op), InputElement).checked = false;
-				trace(ops.item(op));
-			}
-			var blockSel:NodeList = Browser.document.querySelectorAll('.sidebar .menu input[data-section="${sPat.matched(0)}"]');
-			var bS:InputElement = cast(blockSel[0], InputElement);
-			bS.setAttribute('checked', '');
-			bS.checked = true;
-			trace(bS.outerHTML);**/
+			setState({
+				menuBlockActive: switchSection
+			});
+			//var check:Bool =  props.mBshowActive ? block.isActive : props.section==block.section;
+			/*block.section**/
 		}
 	}
 

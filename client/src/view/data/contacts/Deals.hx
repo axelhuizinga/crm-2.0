@@ -1,5 +1,6 @@
 package view.data.contacts;
 
+import react.router.ReactRouter;
 import model.ORM;
 import haxe.Exception;
 import action.AppAction;
@@ -196,7 +197,10 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.action);
 		if(props.userState.dbUser != null)
 		trace('yeah: ${props.userState.dbUser.first_name}');
+		trace(Type.getClassName(Type.getClass(props.parentComponent)));
 		//dbData = FormApi.init(this, props);
+		trace(props.parentComponent.props.match);
+		trace(props.match);
 		props.parentComponent.registerOrmRef(this);
 		get();
 		if(parentState.relDataComps!=null){

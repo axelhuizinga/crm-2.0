@@ -48,7 +48,7 @@ class BaseForm
 				type:Audio
 			}
 		});
-		trace(state.mHandlers.length + '::' + state.sideMenu.menuBlocks[state.sideMenu.section].items.length);
+		//trace(state.mHandlers.length + '::' + state.sideMenu.menuBlocks[state.sideMenu.section].items.length);
 		state.mHandlers = state.sideMenu.menuBlocks[state.sideMenu.section].items.concat(recItems.filter(function(mi:MItem) {
 			//	TODO: WHY DO WE NEED THIS FILTER?
 			//for(si in state.mHandlers){
@@ -64,7 +64,7 @@ class BaseForm
 			return true;
 		}));
 		//{separator: true},		
-		trace(state.mHandlers.length + '::' + state.sideMenu.menuBlocks[state.sideMenu.section].items.length);
+		//trace(state.mHandlers.length + '::' + state.sideMenu.menuBlocks[state.sideMenu.section].items.length);
 		//trace(state.mHandlers.toString());
 		//{label: 'ID',formField: { name: 'id'}},
 	}

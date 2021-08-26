@@ -288,16 +288,13 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		Timer.delay(function() {
 			state._prevent = false;
 		},clickDelay*2);
-		trace(props.onDoubleClick);
 		trace('here we go :) '+ getUrl(el.dataset.action,'Edit'));
 		//props.parentComponent.props.history.push(getUrl(el.dataset.action,'Edit'),props.parentComponent.props.location.state);
-		
+		props.history.push(getUrl(el.dataset.action,'Edit'),props.parentComponent.props.location.state);
 		
 		if(props.onDoubleClick != null){
 			props.onDoubleClick(ev);
 		}
-		else 
-			props.history.push(getUrl(el.dataset.action,'Edit'),props.location.state);
 	}
 
 	public function getUrl(?action:String,?targetSection:String):String
@@ -319,9 +316,6 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 			trace(props.parentComponent.state.selectedData.toString());
 		//var id:String = (match.params.id==null||action=='insert'?'':'/${match.params.id}');
 		var id:String = (props.parentComponent.state.selectedData ==null||action=='insert'?'':'/${Utils.keysList(props.parentComponent.state.selectedData.keys())[0]}');
-		trace('>>$id<<');
-		if(id=='/undefined')
-			id='';
 		return '${baseUrl}${targetSection==null?section:targetSection}/${action}${id}';
 	}
 		

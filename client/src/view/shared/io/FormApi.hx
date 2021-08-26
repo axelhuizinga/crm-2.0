@@ -305,7 +305,7 @@ class FormApi
 				mB.items = comp.state.mHandlers;
 				sM.menuBlocks.set(sM.section, mB);				
 			}
-			trace(sM.menuBlocks.get(sM.section).items[0]);
+			//trace(sM.menuBlocks.get(sM.section).items[0]);
 		}
 					
 		if(sM.section != null)//TODO: MONITOR PERFORMANCE + INTEGRITY SETTING SUBMENU SECTION HERE

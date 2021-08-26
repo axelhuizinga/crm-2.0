@@ -10,6 +10,7 @@ typedef MenuState =
 	?hidden:Bool,
 	?disabled:Bool,
 	?sameWidth:Int,
+	?menuBlockActive:String,
 	?section:String,
 	?interactionStates:InteractionStates,
 	?items:StringMap<MItem>

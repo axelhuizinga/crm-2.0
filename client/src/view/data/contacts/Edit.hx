@@ -125,7 +125,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		dealsFormRef = React.createRef();
 		formRef = React.createRef();
 		historyFormRef = React.createRef();
-		trace(props.match.params);
+		trace(props.match.params);		
+		//TODO: ADD USER FILTER TO DATASTORE
 		//TODO: EDIT MULTIPLE CONTACTS
 		if(props.dataStore.contactData != null && props.match.params.id == null)
 			props.match.params.id = Std.string(props.dataStore.contactData.keys().next());		
@@ -213,7 +214,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//trace('---' + props.children);
 		var sRows:IntMap<Bool> = ormRefs['deals'].compRef.state.dataGrid.state.selectedRows;
 		for(k in sRows.keys()){
+			//trace(k);
 			ormRefs['deals'].compRef.props.loadData(k,ormRefs['deals'].compRef);
+			//ormRefs['deals'].compRef.props.loadData(k);
 		}
 		//dealsFormRef.current.scrollIntoView();
 		trace(dealsFormRef.current);
@@ -251,12 +254,12 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			{
 				var c_data = data.dataRows[0];
 				
-				trace(c_data);
-				trace(data.dataInfo.toString());
+				//trace(c_data);
+				//trace(data.dataInfo.toString());
 				if( data.dataInfo.exists('recordings')){
-					trace(data.dataInfo.get('recordings'));
+					//trace(data.dataInfo.get('recordings'));
 					//RESET MENU ITEMS
-					trace(menuItems.length);
+					//trace(menuItems.length);
 					state.mHandlers = [for(v in menuItems) js.lib.Object.assign({},v)];
 					//state.sideMenuInstance.enableItems('List',['edit','delete','selectionClear'],false);
 					BaseForm.addRecordings(state,data.dataInfo.get('recordings'));
@@ -268,10 +271,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				if(mounted)
 					setState({loading:false, actualState:contact, initialData:copy(contact)});
 				//state = copy({loading:false, actualState:contact, initialData:contact});
-				trace('$mounted ${contact.id}');
-				trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
+				//trace('$mounted ${contact.id}');
+				//trace(untyped state.actualState.id + ':' + state.actualState.fieldsInitalized.join(','));
 				//setState({initialData:copy(state.actualState)});
-				trace(props.location.pathname + ':' + untyped state.actualState.date_of_birth);
+				//trace(props.location.pathname + ':' + untyped state.actualState.date_of_birth);
 				props.history.replace(props.location.pathname.replace('open','update'));
 			}
 		});
@@ -526,7 +529,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		return [
 			for(model in ['deals','accounts']){
 				if(ormRefs.exists(model))
-				for(orm in ormRefs[model].orms.array()) {
+				for(orm in ormRefs[model].orms.array()) {					
+					//trace(orm.formBuilder);
+					//trace(Type.getClassName(Type.getClass(orm)));
+					//trace(Type.typeof(orm));
+					//return null;
 					${orm.formBuilder.renderForm({
 						//mHandlers:state.mHandlers,
 						fields:

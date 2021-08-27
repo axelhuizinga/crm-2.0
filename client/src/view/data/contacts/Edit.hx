@@ -72,6 +72,7 @@ using  shared.Utils;
 using Lambda;
 using StringTools;
 
+typedef BookingHistory = view.accounting.directdebit.List;
 /**
  * 
  */
@@ -226,6 +227,11 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			trace(Std.string(targetEl.dataset.id));
 		}
 	}
+	function loadBookingHistory(id:Int):Void
+	{		
+		//
+	}
+
 
 	function loadContactData(id:Int):Void
 	{
@@ -493,8 +499,25 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 				];*/
-				(state.actualState==null ? state.formApi.renderWait():
-				jsx('<>
+				state.actualState==null ? state.formApi.renderWait():
+				jsx('
+				<>
+				<form name=${props.model} key=${props.model} className="tabComponentForm formField" ref=${props.formRef}>
+					<div className="grid_box" role="table" aria-label="Destinations" key=${props.model+"_grid_box"} >
+						<div className="g_caption" key=${props.model+"caption"}>${state.title}</div>			
+						${state.formBuilder.renderFormInputElements(
+							[
+								for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
+							],								
+						state.actualState)}					
+					</div>			
+					<$BookingHistory ${...props} id=${props.id} limit=${100} fullWidth={true} sideMenu=${{}}/>
+				</form>
+				${relData()}
+				${relDataLists()}
+				</>
+				');	
+				/*jsx('<>
 				${state.formBuilder.renderForm({
 					mHandlers:state.mHandlers,
 					fields:[
@@ -507,7 +530,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				${relData()}
 				${relDataLists()}
 				</>
-				'));
+				'));*/
 				//null;
 			case 'insert':
 				//trace(state.actualState);
@@ -571,7 +594,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	override function render():ReactFragment
 	{
 		trace(props.match.params.action);		
-		if(state.initialData==null)
+
+		//if(state.initialData==null)
+		if(state==null||state.initialData==null)
 			return null;
 		//trace(state.modals);
 		//trace('state.loading: ${state.loading}');	

@@ -440,9 +440,9 @@ input::-moz-focus-inner {
 }
 .tabComponentForm
 {
-	/*width: min-content;*/
+	/*width: min-content;flex-direction: column;*/
 	display:flex;	
-	flex-direction: column;
+	
 	flex-grow:1;
 	margin:0.3rem auto;	
 	min-width: 100%;

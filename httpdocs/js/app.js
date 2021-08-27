@@ -22939,13 +22939,7 @@ model_qc_QCModel.dataAccess = (function($this) {
 		_g3.h["info_mail"] = "InfoMail senden";
 		_g3.h["no_info"] = "Keine Info gewünscht";
 		_g2.h["mailing"] = { label : "InfoBrief", type : "Radio", options : _g3};
-		_g2.h["entry_date"] = { label : "Verkauf", cellFormat : function(v) {
-			if(v != null) {
-				return DateTools.format(HxOverrides.strDate(v),"%d.%m.%Y");
-			} else {
-				return "";
-			}
-		}};
+		_g2.h["entry_date"] = { label : "Verkauf", type : "DatePicker", displayFormat : "d.m.Y"};
 		_g2.h["edited_by"] = { type : "Hidden"};
 		_g2.h["id"] = { type : "Hidden"};
 		_g2.h["mandator"] = { type : "Hidden"};
@@ -22970,7 +22964,7 @@ model_qc_QCModel.qcColumns = (function($this) {
 	_g.h["entry_list_id"] = { show : false};
 	_g.h["lead_id"] = { show : false};
 	_g.h["last_local_call_time"] = { label : "Datum", cellFormat : function(v) {
-		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 134, className : "model.qc.QCModel", methodName : "qcColumns"});
+		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 132, className : "model.qc.QCModel", methodName : "qcColumns"});
 		if(v != null) {
 			return DateTools.format(HxOverrides.strDate(v),"%d.%m.%Y");
 		} else {
@@ -23012,7 +23006,7 @@ model_qc_QCModel.listColumns = (function($this) {
 	_g.h["city"] = { label : "Ort"};
 	_g.h["state"] = { label : "Status", className : "tCenter", cellFormat : function(v) {
 		var uState = v == "active" ? "user" : "user-slash";
-		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 174, className : "model.qc.QCModel", methodName : "listColumns"});
+		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 172, className : "model.qc.QCModel", methodName : "listColumns"});
 		return React.createElement(react_ReactType.fromString("span"),{ className : "fa fa-" + uState});
 	}};
 	_g.h["id"] = { show : false};

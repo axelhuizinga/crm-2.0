@@ -111,7 +111,7 @@ class FormBuilder {
 		}];
 	}
 
-	function renderFormInputElements(fields:Map<String, FormField>, initialData:Dynamic, ?compOnChange:Function):ReactFragment
+	public function renderFormInputElements(fields:Map<String, FormField>, initialData:Dynamic, ?compOnChange:Function):ReactFragment
 	{
 		return [for(name => field in fields)
 		{

@@ -82,7 +82,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				}),
 			values:new Map<String,Dynamic>()
 		},this);
-		if(props.match.params.section==null||props.match.params.action==null)
+		if(props.match.params.action==null)
 		{
 			//var sData = App.store.getState().dataStore.contactData;			
 			var baseUrl:String = props.match.path.split(':section')[0];
@@ -130,7 +130,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			trace(filter);
 			offset = Std.int(props.limit * filter.page);
 			Reflect.deleteField(filter,'page');
-		}		
+		}
 		//if(filter == null)
 		filter = Utils.extend(filter, (props.match.params.id!=null?
 			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
@@ -246,11 +246,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			},
 		];			
 		//
-		if(props.userState.dbUser != null)
-		trace('yeah: ${props.userState.dbUser.first_name}');
-		//trace(props.match.params.action);
+		//if(props.userState.dbUser != null)
+			//trace('yeah: ${props.userState.dbUser.first_name}');
+		get();
+		//get({id:props.match.params.id});
 		trace(state.uid);
-		state.formApi.doAction();
+		//state.formApi.doAction();
 /*		if(props.match.params.action != null)
 		//dbData = FormApi.init(this, props);
 		{

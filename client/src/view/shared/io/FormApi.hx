@@ -82,7 +82,7 @@ class FormApi
 		//requests = [];
 		if(comp.props.match != null){
 			trace(comp.props.match.path);
-			trace(comp.props.match.params.section);
+			//trace(comp.props.match.params.section);
 		}
 
 		if(rc.props != null)
@@ -97,7 +97,7 @@ class FormApi
 		//trace(Reflect.fields(sM));
 		//if(rc.props.sideMenu != null)		trace(Utils.arrayKeysList(rc.props.sideMenu.items,'id'));
 		//if(sM != null)		trace(Utils.arrayKeysList(sM.items,'id'));
-		if(this.sM != null && comp.props.match != null){
+		if(this.sM != null && this.sM.menuBlocks!= null && comp.props.match != null){
 			
 			//trace(Reflect.fields(this.sM).join('|'));
 			if(comp.props.match.params.section != null && this.sM.menuBlocks.exists(comp.props.match.params.section)){
@@ -295,8 +295,16 @@ class FormApi
 	
 	public function render(content:ReactFragment, err:ReactFragment = null)
 	{
-		if(sM==null){
+		if(sM==null || sM.menuBlocks == null){
 			trace(Type.typeof(content));
+			return jsx('
+				<div className="columns">
+					<div className="formsContainer">
+					${content}
+					</div>
+					${err}
+				</div>			
+			');
 			return null;
 		}
 		if(sM.menuBlocks.exists(sM.section)){

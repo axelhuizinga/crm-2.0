@@ -100,14 +100,12 @@ class QCModel
 					'info_mail' => 'InfoMail senden',
 					'no_info' => 'Keine Info gewünscht'
 				]},
-				'entry_date'=>{label: 'Verkauf',cellFormat: function(v:String) {
+				'entry_date'=>{label: 'Verkauf', type:DatePicker, displayFormat: "d.m.Y"/*cellFormat: function(v:String) {
 					//trace(v);
 					return v!=null? DateTools.format(Date.fromString(v), "%d.%m.%Y"):'';
 					//return v;
-				}
-			},
-			//	'address'=>{label:'Straße'},
-			//	'address'=>{label:'Straße'},
+					}*/
+				},
 				'edited_by' => {type:Hidden},				
 				'id' => {type:Hidden},
 				'mandator'=>{type:Hidden},

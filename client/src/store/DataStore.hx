@@ -32,7 +32,8 @@ class DataStore
 			dealData: new IntMap(),			
 			accountData: new IntMap(),
 			qcData: new IntMap(),
-			returnDebitsData: new IntMap()
+			returnDebitsData: new IntMap(),
+			page:0
 		};
 		trace('ok');
 	}

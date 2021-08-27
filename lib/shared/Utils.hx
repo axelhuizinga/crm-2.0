@@ -110,6 +110,8 @@ class Utils
 	public static function extend(obj1: Dynamic, obj2: Dynamic): Dynamic {
 		
 		var keys = Reflect.fields(obj2);
+		//trace(keys.join('|'));
+		//trace(obj1);
 		if(obj1 == null)
 			obj1 = {};
 		for (k in keys) {

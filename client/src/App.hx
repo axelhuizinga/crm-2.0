@@ -401,20 +401,11 @@ class App  extends ReactComponentOf<AppProps, AppState>
 			trace(comp.props.sideMenu.items[0]);
 		if(fS.formApi.sM != null && fS.formApi.sM.items!=null)
 		trace(fS.formApi.sM.items[0]);
-		if(comp.props.match != null && comp.props.match.params.section != null && fS.formApi.sM != null && fS.formApi.sM.menuBlocks.exists(comp.props.match.params.section)){
+		if(comp.props.match != null && comp.props.match.params.section != null && fS.formApi.sM != null 
+			&& fS.formApi.sM.menuBlocks != null && fS.formApi.sM.menuBlocks.exists(comp.props.match.params.section)){
 			trace(fS.formApi.sM.menuBlocks[comp.props.match.params.section].items[0]);
 			//trace(Utils.arrayKeysList(this.sM.menuBlocks[comp.props.match.params.section].items, 'id'));
 		}
-		/**
-		 * 		if(this.sM != null && comp.props.match != null){
-			
-			//trace(Reflect.fields(this.sM).join('|'));
-			if(comp.props.match.params.section != null && this.sM.menuBlocks.exists(comp.props.match.params.section)){
-				trace(this.sM.menuBlocks[comp.props.match.params.section].items);
-				trace(Utils.arrayKeysList(this.sM.menuBlocks[comp.props.match.params.section].items, 'id'));
-			}
-		}
-		 */
 		if(comp!=null){		
 			fS.uid = Uuid.nanoId();
 			fS.relDataComps = [fS.uid => comp];

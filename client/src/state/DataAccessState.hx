@@ -1,7 +1,7 @@
 package state;
 import haxe.ds.IntMap;
 import shared.DbData;
-import state.UserState;
+//import state.UserState;
 
 typedef DBsource =
 {
@@ -28,6 +28,7 @@ typedef DataAccessState =
 	?qcData:IntMap<Map<String,Dynamic>>,	
 	?returnDebitsData:IntMap<Map<String,Dynamic>>,	
 	?dealsDbData:DbData,
+	?page:Int,
     ?source:DBsource,
     ?waiting:Bool
 }

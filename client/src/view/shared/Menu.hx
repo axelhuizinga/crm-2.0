@@ -605,7 +605,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		{
 			//Timer.delay(layout,800);
 			//trace(menuRef.current.offsetWidth);
-			layout();
+			//layout();
 			//trace(menuRef.current.offsetWidth);
 		}
 	}

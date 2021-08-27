@@ -54,7 +54,7 @@ using Lambda;
  * @author axel@cunity.me
  */
 
-@:connect
+//@:connect
 class List extends ReactComponentOf<DataFormProps,FormState>
 {
 
@@ -85,11 +85,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		state =  App.initEState({
 			action:(props.match.params.action==null?'get':props.match.params.action),
 			loading:true,
-			sideMenu:FormApi.initSideMenuMulti( this,			
+			sideMenu:props.sideMenu/*FormApi.initSideMenuMulti( this,			
 				[
 					{
 						dataClassPath:'admin.Debit',//Rücklastschriften (admin.ImportCamt)
-						label:"Gesamtliste",
+						label:"Gesamtliste2",
 						section: 'List',
 						items: List.menuItems
 					},
@@ -105,7 +105,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 					section: props.match.params.section==null? 'List':props.match.params.section, 
 					sameWidth: true					
 				}
-			)
+			)*/
 		},this);
 		if(props.match.params.action==null)
 		{
@@ -113,7 +113,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			var baseUrl:String = props.match.path.split(':section')[0];
 			trace('redirecting to ${baseUrl}List/get');
 			props.history.push('${baseUrl}List/get');
-			get(null);
+			//get(null);
 		}
 		trace(props.match.path);
 	}
@@ -148,24 +148,37 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		dataAccess = DebitModel.dataAccess;
 		trace(props.match.params.action);
 		//state.formApi.doAction('get');
-		if(props.match.params.action=='get')
+		//if(props.match.params.action=='get')
 			get();
 	}
 
-	public function get(?ev:Dynamic):Void
+	public function get(?filter:Dynamic):Void
 	{
-		trace('hi $ev');
+		var offset:Int = 0;
+		if(filter != null && filter.page!=null)
+		{
+			trace(filter);
+			offset = Std.int(props.limit * filter.page);
+			Reflect.deleteField(filter,'page');
+		}
+		//if(filter == null)
+		filter = Utils.extend(filter, (props.match.params.id!=null?
+			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
+			{mandator:props.userState.dbUser.mandator })
+		);
+		trace('hi $filter');
+		/*trace('hi $ev');
 		var offset:Int = 0;
 		if(ev != null && ev.page!=null)
 		{
 			offset = Std.int(props.limit * ev.page);
 		}
-		trace(props.match.params);
-		var p:Promise<DbData> = props.load(
+		trace(props.match.params);*/
+		var p:Promise<DbData> = cast App.store.dispatch(CRUD.read(
 			{
 				classPath:'data.DirectDebits',
 				action:'get',
-				filter:(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
+				filter:filter,//(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
 				table:'booking_requests',
 				limit:props.limit,
 				offset:offset>0?offset:0,
@@ -176,7 +189,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				dbUser:props.userState.dbUser,
 				devIP: App.devIP
 			}
-		);
+		));
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
 			//setState({loading:false, dataTable:data.dataRows});
@@ -236,7 +249,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	override function render():ReactFragment
 	{
 		//if(state.dataTable != null)	trace(state.dataTable[0]);
-		trace(props.match.params.section);		
+		trace(props.match.params.section);	
+		if(state.sideMenu.menuBlocks == null)	{
+			return renderResults();
+		}
+
 		return state.formApi.render(jsx('
 		<>
 			<form className="tabComponentForm"  >

@@ -10,5 +10,7 @@ typedef LocationState =
 {
 	history:History,
 	?lastModified:Date,
+	?location:Location,
+	?page:Int,
 	?redirectAfterLogin:String
 }

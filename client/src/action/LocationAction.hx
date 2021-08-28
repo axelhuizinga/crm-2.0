@@ -16,7 +16,8 @@ enum LocationAction
 	Go(to:Int);
 	Back;
 	Forward;	
-	//InitHistory(history:History,location:Location);
 	InitHistory(history:History);
 	LocationChange(location:Location);
+	SelectPage(page:Int);
+
 }

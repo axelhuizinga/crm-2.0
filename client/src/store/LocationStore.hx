@@ -28,6 +28,7 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 		initState = {
 			history:history,
 			lastModified:Date.now(),
+			page:0,
 			redirectAfterLogin: switch(Browser.location.pathname.startsWith('/ChangePassword'))
 			{
 				default:
@@ -56,7 +57,10 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 				});
 			case LocationChange(location):
 				trace(location.pathname);
-				copy(state, location);				
+				copy(state, {location:location});	
+			case SelectPage(page):
+				trace(page);
+				copy(state,{page:page});
 			default:
 				state;
 		}
@@ -93,6 +97,9 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 			case Forward:
 				history.goForward();
 				{};*/
+			case SelectPage(page):
+				trace(page);
+				next();
 			default:
 				next();
 		}

@@ -129,8 +129,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params);		
 		//TODO: ADD USER FILTER TO DATASTORE
 		//TODO: EDIT MULTIPLE CONTACTS
-		if(props.dataStore.contactData != null && props.match.params.id == null)
-			props.match.params.id = Std.string(props.dataStore.contactData.keys().next());		
+		if(props.dataStore.contactsData != null && props.match.params.id == null)
+			props.match.params.id = Std.string(props.dataStore.contactsData.keys().next());		
 		//REDIRECT WITHOUT ID OR edit action
 		if(props.match.params.id=='null' && ~/open|update(\/)*$/.match(props.match.params.action) )
 		{
@@ -152,8 +152,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		accountFieldNames = BaseForm.initFieldNames(accountDataAccess['open'].view.keys());
 		accountDataDisplay = AccountsModel.dataDisplay;
 
-		if(props.dataStore.contactData != null)
-			trace(props.dataStore.contactData.keys().next());
+		if(props.dataStore.contactsData != null)
+			trace(props.dataStore.contactsData.keys().next());
 				
 		var _iMenuItems:Array<MItem> = [for(v in menuItems) js.lib.Object.assign({},v)];
 		state =  App.initEState({
@@ -455,7 +455,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			case 'update':
 				//Reflect.deleteField(aState,'creation_date');
 				trace('${state.initialData.id} :: creation_date: ${aState.creation_date} ${state.initialData.creation_date}');
-				//var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialData.id);
+				//var initiallyLoaded = App.store.getState().dataStore.contactsData.get(state.initialData.id);
 				//trace();
 				if(state.actualState != null)
 				trace(state.actualState.modified() + ':${state.actualState.fieldsModified}');
@@ -504,7 +504,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				<>
 				<form name=${props.model} key=${props.model} className="tabComponentForm formField" ref=${props.formRef}>
 					<div className="grid_box" role="table" aria-label="Destinations" key=${props.model+"_grid_box"} >
-						<div className="g_caption" key=${props.model+"caption"}>${state.title}</div>			
+						<div className="g_caption" key=${props.model+"caption"}>Stammdaten</div>			
 						${state.formBuilder.renderFormInputElements(
 							[
 								for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]

@@ -36,6 +36,7 @@ typedef DataFormProps =
 	?loadData:Int->ReactComponentOf<DataFormProps,FormState>->Void,
 	?model:String,
 	?formRef:ReactRef<FormElement>,
+	?page:Int,
 	?parentComponent:Dynamic,
 	?select:Function, // Int->IntMap<Map<String,Dynamic>>->RouterMatch->SelectType,
 	?setStateFromChild:FormState->Void,

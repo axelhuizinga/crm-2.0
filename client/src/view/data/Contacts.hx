@@ -74,20 +74,19 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		if(_trace) trace('...' + Reflect.fields(props));
 		if(_trace) trace(props.match.params);
 		state =  App.initEState({
-			dataTable:[],loading:false,contactData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
+			dataTable:[],loading:false,contactData:new IntMap(), page:0, selectedRows:[],values:new Map<String,Dynamic>(),
 		},this);		
 		if(props.match.params.section==null)
 		{
 			//SET DEFAULT SECTION
 			if(_trace) trace('reme');
 			var baseUrl:String = props.match.path.split(':section')[0];
-			if(props.dataStore.contactData.iterator().hasNext())
+			if(props.dataStore.contactsData.iterator().hasNext())
 			{
-				if(_trace) trace(props.dataStore.contactData.keys().keysList());
-			}
-			
+				if(_trace) trace(props.dataStore.contactsData.keys().keysList());
+			}			
 			props.history.push('${baseUrl}List');
-			//props.history.push('${baseUrl}List/get${props.dataStore.contactData.iterator().hasNext()?'/'+props.dataStore.contactData.keys().keysList():''}');
+			
 		}		
 		
 
@@ -128,20 +127,20 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	
 	static function mapStateToProps(aState:AppState) 
 	{
-		//if(_strace) trace(aState.dataStore.contactData);
+		//if(_strace) trace(aState.dataStore.contactsData);
 		if(_strace) trace(Reflect.fields(aState));
-		//if(aState.dataStore.contactData != null)
-		//if(_strace) trace(aState.dataStore.contactData.keys().next());
+		//if(aState.dataStore.contactsData != null)
+		//if(_strace) trace(aState.dataStore.contactsData.keys().next());
 		/*if(aState.dataStore.contactsDbData != null)
 		if(_strace) trace(aState.dataStore.contactsDbData.dataRows[0]);
 		if(_strace) trace(App.store.getState().dataStore.contactsDbData);*/
 		var bState =  {
 			dataStore:aState.dataStore,
 			userState:aState.userState,
-			//idLoaded:aState.dataStore.contactData.keys().next()
+			//idLoaded:aState.dataStore.contactsData.keys().next()
 		};
 		//if(_strace) trace(bState);
-		//if(_strace) trace(bState.dataStore.contactData.keys().hasNext()?bState.dataStore.contactData.keys().next():null);
+		//if(_strace) trace(bState.dataStore.contactsData.keys().hasNext()?bState.dataStore.contactsData.keys().next():null);
 		return bState;
 	}
 		
@@ -164,7 +163,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case "List":
 				jsx('
-					<$List ${...props} limit=${100} parentComponent=${this} formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
+					<$List ${...props} limit=${100} page=${state.page} parentComponent=${this} formApi=${state.formApi} fullWidth={true} sideMenu=${state.sideMenu}/>
 					');					
 			case "Edit":
 				jsx('

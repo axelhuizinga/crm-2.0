@@ -60,7 +60,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				}
 				
 				props.history.push('${baseUrl}List/');
-				//props.history.push('${baseUrl}List/get${props.dataStore.contactData.iterator().hasNext()?'/'+props.dataStore.contactData.keys().keysList():''}');
+
 			}				
 		state = {
 			clean:true,
@@ -95,7 +95,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		var bState =  {
 			dataStore:aState.dataStore,
 			userState:aState.userState,
-			//idLoaded:aState.dataStore.contactData.keys().next()
+			//idLoaded:aState.dataStore.contactsData.keys().next()
 		};
 		//if(_strace) trace(bState);
 		if(_trace) trace(bState.dataStore.dealData);

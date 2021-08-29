@@ -58,9 +58,7 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 			case LocationChange(location):
 				trace(location.pathname);
 				copy(state, {location:location});	
-			case SelectPage(page):
-				trace(page);
-				copy(state,{page:page});
+
 			default:
 				state;
 		}
@@ -97,9 +95,7 @@ class LocationStore implements IReducer<LocationAction,LocationState>
 			case Forward:
 				history.goForward();
 				{};*/
-			case SelectPage(page):
-				trace(page);
-				next();
+
 			default:
 				next();
 		}

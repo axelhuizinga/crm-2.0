@@ -151,7 +151,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 		},this);
 		if(props.match.params.section==null||props.match.params.action==null)
 		{
-			//var sData = App.store.getState().dataStore.contactData;			
+			//var sData = App.store.getState().dataStore.contactsData;			
 			var baseUrl:String = props.match.path.split(':section')[0];
 			trace('redirecting to ${baseUrl}Charts/get');
 			props.history.push('${baseUrl}Charts/get');

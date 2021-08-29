@@ -5,9 +5,8 @@ import db.DbRelation;
 import db.DbUser;
 import state.UserState;
 
-typedef DBAccessAction = {
-	action:String,
-	?actionArgs:Map<String,Dynamic>,
+/*typedef DBAccessAction = {
+	//action:String,
 	?classPath:String,
 	?id:Int,
 	?offset:Int,
@@ -15,7 +14,7 @@ typedef DBAccessAction = {
 	?limit:Int,	
 	?maxImport:Int,
 	?totalRecords:Int
-}
+}*/
 
 typedef DBAccessResolveMessage = {
 	?success:String,
@@ -27,8 +26,16 @@ typedef DBAccessJsonResponse = {
 	?message:DBAccessResolveMessage
 }
 
-typedef DBAccessProps = {	
-	>DBAccessAction,	
+typedef  DBAccessProps = {	
+	?action:String,	
+	?classPath:String,
+	?componentPath:String,
+	?id:Int,
+	?offset:Int,
+	?onlyNew:Bool,
+	?limit:Int,	
+	?maxImport:Int,
+	?totalRecords:Int,
 	?relations:Map<String,DbRelation>,
 	?dataSource:DataSource,//Map<String,Map<String,Dynamic>>,	
 	?dbUser:DbUser,
@@ -40,7 +47,7 @@ typedef DBAccessProps = {
 	?order:Dynamic,
 	?jThen:DBAccessJsonResponse->Void,
 	?mandator:Int,
-	?pages:Int,
+	?page:Int,
 	?resolveMessage:DBAccessResolveMessage,
 	?table:String,
 	?then:DbData->Void,

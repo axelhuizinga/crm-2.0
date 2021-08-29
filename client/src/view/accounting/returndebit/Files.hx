@@ -189,7 +189,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.path);
 		if(props.match.params.action==null)
 		{
-			//var sData = App.store.getState().dataStore.contactData;	props.match.params.section==null||		
+			//var sData = App.store.getState().dataStore.contactsData;	props.match.params.section==null||		
 			var baseUrl:String = props.match.path.split(':section')[0];
 			trace('redirecting to ${baseUrl}Files/importReturnDebitFile');
 			props.history.push('${baseUrl}Files/importReturnDebitFile');

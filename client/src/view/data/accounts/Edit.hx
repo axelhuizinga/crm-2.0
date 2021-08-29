@@ -125,7 +125,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		/*if(id == null)
 			return null;
 		var c:Contact = new Contact({edited_by: props.userState.dbUser.id,mandator: 0}, dataAccess['update'].view);
-		var data = props.dataStore.contactData.get(id);
+		var data = props.dataStore.contactsData.get(id);
 		trace(data);
 		for(k=>v in data.keyValueIterator())
 		{
@@ -204,7 +204,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			case 'update':
 				//Reflect.deleteField(aState,'creation_date');
 				trace('${state.initialData.id} :: creation_date: ${aState.creation_date} ${state.initialData.creation_date}');
-				//var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialData.id);
+				//var initiallyLoaded = App.store.getState().dataStore.contactsData.get(state.initialData.id);
 				//trace();
 				if(state.actualState != null)
 				trace(state.actualState.modified() + ':${state.actualState.fieldsModified}');
@@ -266,7 +266,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			trace(actualState);
 			forceUpdate();
 		}
-		/*else if((initialState.id!=null && !App.store.getState().dataStore.contactData.exists(initialState.id)))
+		/*else if((initialState.id!=null && !App.store.getState().dataStore.contactsData.exists(initialState.id)))
 		{
 			//DATA NOT IN STORE - LOAD IT
 			App.store.dispatch(DBAccess.get({

@@ -1,8 +1,9 @@
 package view.data.contacts;
 
+import loader.ListLoader;
 import shared.Utils;
 import js.html.DivElement;
-import action.async.CRUD;
+import action.AppAction.*;
 import data.DataState;
 import db.DBAccessProps;
 import redux.Redux.Dispatch;
@@ -120,7 +121,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(Utils.sKeysList(state.relDataComps.keys()));
 		if(props.match.params.section==null||props.match.params.action==null)
 		{
-			//var sData = App.store.getState().dataStore.contactData;			
+			//var sData = App.store.getState().dataStore.contactsData;			
 			var baseUrl:String = props.match.path.split(':section')[0];
 			trace('redirecting to ${baseUrl}List/get');
 			props.history.push('${baseUrl}List/get');
@@ -155,6 +156,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			trace(filter);
 			offset = Std.int(props.limit * filter.page);
 			Reflect.deleteField(filter,'page');
+			props.parentComponent.setState({page: filter.page});
 		}		
 		//if(filter == null)
 		filter = Utils.extend(filter, (props.match.params.id!=null?
@@ -367,8 +369,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
         return {
-            load: function(param:DBAccessProps) return dispatch(CRUD.read(param)),
-			loaded: function (data:DbData) return dispatch(DataAction.ContactsLoaded(data))
+            load: function(param:DBAccessProps) return dispatch(ListLoader.load(param)),
+			//loaded: function (data:DbData) return dispatch(DataAction.ContactsLoaded(data))
         };
 	}
 

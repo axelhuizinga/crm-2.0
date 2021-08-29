@@ -62,7 +62,6 @@ typedef FormState =
 	?formBuilder:FormBuilder,
 //	?formStateKey:String,
 	?formRef:ReactRef<FormElement>,
-	?pageCount:Int,
 	?ref:Function,//,	
 	?initialData:Dynamic,//IntMap<Map<String,Dynamic>>,
 	?selectedData:IntMap<Map<String,Dynamic>>,
@@ -81,6 +80,8 @@ typedef FormState =
 	?valuesArray:Array<Map<String,Dynamic>>,//FORMATTED DISPLAY VALUES
 	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES
 	?forms:Map<String,FormView>,
+	?page:Int,
+	?pageCount:Int,
 	?rows:Array<Dynamic>,
 	?section:String,	
 	?sideMenu:MenuProps,

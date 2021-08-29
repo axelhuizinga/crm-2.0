@@ -1,4 +1,5 @@
 package state;
+import db.DBAccessProps;
 import haxe.ds.IntMap;
 import shared.DbData;
 //import state.UserState;
@@ -18,7 +19,8 @@ typedef DataAccessState =
 {
 	?contactsDbData:DbData,
 	?contactActData:IntMap<Map<String,Dynamic>>,
-	?contactData:IntMap<Map<String,Dynamic>>,
+	?contactsData:IntMap<Map<String,Dynamic>>,
+	?contactsListParam:DBAccessProps,
 	?dealActData:IntMap<Map<String,Dynamic>>,
 	?dealData:IntMap<Map<String,Dynamic>>,
 	?accountActData:IntMap<Map<String,Dynamic>>,

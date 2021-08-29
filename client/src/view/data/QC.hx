@@ -149,10 +149,10 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 	
 	static function mapStateToProps(aState:AppState) 
 	{
-		//trace(aState.dataStore.contactData);
+		//trace(aState.dataStore.contactsData);
 		//trace(Reflect.fields(aState));
-		if(aState.dataStore.contactData != null && aState.dataStore.contactData.keys().hasNext())
-			trace(aState.dataStore.contactData.keys().next());
+		if(aState.dataStore.contactsData != null && aState.dataStore.contactsData.keys().hasNext())
+			trace(aState.dataStore.contactsData.keys().next());
 		if(aState.dataStore.contactsDbData != null)
 			trace(aState.dataStore.contactsDbData.dataRows[0]);
 		else 
@@ -168,10 +168,10 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 			dataStore:aState.dataStore,
 			userState:aState.userState,
 			findBy:"lead_id"
-			//idLoaded:aState.dataStore.contactData.keys().next()
+			//idLoaded:aState.dataStore.contactsData.keys().next()
 		};
 		//trace(bState);
-		//trace(bState.dataStore.contactData);
+		//trace(bState.dataStore.contactsData);
 		return bState;
 	}
 		

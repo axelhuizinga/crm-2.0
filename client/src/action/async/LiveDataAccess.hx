@@ -48,7 +48,7 @@ class LiveDataAccess
 			if(id == null)
 				return null;
 			var aState:AppState = getState();
-			trace(aState.dataStore.contactData);
+			trace(aState.dataStore.contactsData);
 			switch (id)
 			{
 				case 'Contacts':
@@ -90,7 +90,7 @@ class LiveDataAccess
 					aState.locationStore.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
 					return dispatch(DataAction.SelectAccounts(props.data));				
 				case 'Contacts':
-					sData = aState.dataStore.contactData;
+					sData = aState.dataStore.contactsData;
 					//trace(sData);
 					//trace(Type.getInstanceFields(Type.getClass(sData)));
 					sData = selectType(props.id, props.data, sData, props.selectType);
@@ -178,7 +178,7 @@ class LiveDataAccess
 						aState.locationStore.history.push('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');
 						return dispatch(DataAction.SelectAccounts(props.data));				
 					case 'Contacts':
-						sData = aState.dataStore.contactData;
+						sData = aState.dataStore.contactsData;
 						//trace(sData);
 						sData = selectType(props.id, props.data, sData, props.selectType);
 						trace('${tableRoot[2]}/${FormApi.params(sData.keys().keysList())}');

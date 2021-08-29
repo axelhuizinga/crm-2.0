@@ -275,10 +275,10 @@ class UserAccess {
 				classPath:'auth.User',
 				action:'logout',
 				dbUser: userState.dbUser,
-				relations: ["users" => new DbRelation({
+				/*relations: ["users" => new DbRelation({
 					filter:{id:userState.dbUser.id}
 					}),
-				],
+				],*/
 				devIP:App.devIP
 			},
 			function(data:DbData)

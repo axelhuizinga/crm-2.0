@@ -27,8 +27,8 @@ typedef AsyncDataLoader =
 		{
 			req.addParameter(k, Reflect.field(params, k));
 		}		
-		req.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
-		req.addHeader('Access-Control-Allow-Origin', '*');
+		//req.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
+		//req.addHeader('Access-Control-Allow-Origin', '*');
 		var loader:AjaxLoader = new AjaxLoader(cB);
 		req.onData = loader._onData;
 		req.onError = function(err:String) trace(err);
@@ -45,8 +45,8 @@ typedef AsyncDataLoader =
 		{
 			req.addParameter(k, Reflect.field(params, k));
 		}		
-		req.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
-		req.addHeader('Access-Control-Allow-Origin', '*');
+		//req.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
+		//req.addHeader('Access-Control-Allow-Origin', '*');
 		var loader:AjaxLoader = new AjaxLoader(cB);
 		req.onData = loader._onData;
 		req.onError = function(err:String) trace(err);
@@ -130,8 +130,8 @@ typedef AsyncDataLoader =
 		{
 			req.addParameter(k, Reflect.field(params, k));
 		}		
-		req.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
-		req.addHeader('Access-Control-Allow-Origin', '*');
+		//req.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
+		//req.addHeader('Access-Control-Allow-Origin', '*');
 		var loader:AjaxLoader = new AjaxLoader(cB, params, req);
 		loader.url = url;
 		req.onData = loader._onQueueData;

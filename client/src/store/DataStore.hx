@@ -1,5 +1,6 @@
 package store;
 
+import loader.ListLoader;
 import action.AppAction;
 import action.async.LivePBXSync;
 import haxe.ds.IntMap;
@@ -28,7 +29,7 @@ class DataStore
 	{ 
 		initState = {
 			//dbData:new DbData(),			
-			contactData: new IntMap(),
+			contactsData: new IntMap(),
 			dealData: new IntMap(),			
 			accountData: new IntMap(),
 			qcData: new IntMap(),
@@ -57,6 +58,9 @@ class DataStore
 				copy(state, {
 					contactsDbData:data,
 				});
+			/*case ListLoader(param):
+				trace(param);
+				copy(state,{page:page});			*/	
 			case QCsLoaded(data):				
 				//trace(data.keys().keysList());
 				trace(Reflect.fields(data).join('|'));
@@ -75,7 +79,7 @@ class DataStore
 			case SelectAccounts(sData):
 				//trace(sData.keys().keysList());
 				copy(state,{
-					contactData:sData
+					contactsData:sData
 				});
 			case SelectActContacts(sData):
 				//trace(sData.keys().keysList());
@@ -87,9 +91,9 @@ class DataStore
 			case SelectContacts(sData):				
 				trace(sData);
 				//trace(sData.keys().keysList());
-				trace(state.contactData.keys().keysList());
+				trace(state.contactsData.keys().keysList());
 				copy(state,{
-					contactData:sData
+					contactsData:sData
 				});
 			case SelectDeals(sData):
 				trace(sData.keys().keysList());
@@ -103,7 +107,7 @@ class DataStore
 				});				
 			case Update(uData):
 				trace(uData);
-				var cData = state.contactData;
+				var cData = state.contactsData;
 				var uDataIt = uData.iterator();
 				var row:Map<String,Dynamic> = null;
 				for (i => row in uData.keyValueIterator())
@@ -111,7 +115,7 @@ class DataStore
 					cData.set(i, row);
 				}
 				copy(state,{
-					contactData:cData
+					contactsData:cData
 				});
 			default:
 				state;
@@ -130,6 +134,9 @@ class DataStore
 			case ContactsLoaded(data):
 				store.dispatch(Data(action));
 				next();
+		/*	case LoadList(page):
+				trace(page);
+				next();		*/		
 			case SelectContacts(sData):	
 				trace('SelectContacts');
 				//store.dispatch(Data(action));

@@ -84,7 +84,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		},this);
 		if(props.match.params.action==null)
 		{
-			//var sData = App.store.getState().dataStore.contactData;			
+			//var sData = App.store.getState().dataStore.contactsData;			
 			var baseUrl:String = props.match.path.split(':section')[0];
 			trace('redirecting to ${baseUrl}List/get');
 			props.history.push('${baseUrl}List/get');

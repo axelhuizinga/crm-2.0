@@ -262,7 +262,8 @@ class FormApi
 		var tR:Array<String> = Browser.location.pathname.split('/');
 		//remove leading empty el
 		tR.shift();
-		trace(tR.toString());
+		trace(tR.toString());		
+		//return tR.push(Browser.location.pathname);
 		return tR.concat([Browser.location.pathname]);
 		/*trace(Reflect.fields(match).join('|'));
 		var baseUrl:String = match.path.split('/:section')[0];

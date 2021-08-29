@@ -169,8 +169,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		accountFieldNames = BaseForm.initFieldNames(accountDataAccess['open'].view.keys());
 		accountDataDisplay = AccountsModel.dataDisplay;
 		//trace(dataAccess['open']);
-		if(props.dataStore.contactData != null)
-			trace(props.dataStore.contactData.keys().next());
+		if(props.dataStore.contactsData != null)
+			trace(props.dataStore.contactsData.keys().next());
 		for(mI in menuItems)
 			if(~/qc_*/.match(mI.action))
 				mI.handler = doQC;
@@ -485,7 +485,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 
 		trace('${state.initialData.id} :: creation_date: ${aState.creation_date} ${state.initialData.creation_date}');
-		//var initiallyLoaded = App.store.getState().dataStore.contactData.get(state.initialData.id);
+		//var initiallyLoaded = App.store.getState().dataStore.contactsData.get(state.initialData.id);
 		//trace();
 		if(state.actualState != null)
 		trace(state.actualState.modified() + ':${state.actualState.fieldsModified}');
@@ -611,7 +611,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		
 	static function mapStateToProps(aState:AppState) 
 	{
-		//trace(aState.dataStore.contactData);
+		//trace(aState.dataStore.contactsData);
 		trace(Reflect.fields(aState));
 		if(aState.dataStore.qcData != null)
 		trace(Std.string(aState.dataStore.qcData.keys().next()));
@@ -626,10 +626,10 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		var bState =  {
 			dataStore:aState.dataStore,
 			userState:aState.userState,
-			//idLoaded:aState.dataStore.contactData.keys().next()
+			//idLoaded:aState.dataStore.contactsData.keys().next()
 		};
 		//trace(bState);
-		trace(bState.dataStore.contactData);
+		trace(bState.dataStore.contactsData);
 		return bState;
 	}
 	/*static function mapStateToProps(aState:AppState) 

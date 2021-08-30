@@ -1,6 +1,8 @@
 package view.accounting.directdebit;
 
 //import view.accounting.returndebit.Files;
+import shared.FindFields;
+import view.shared.Menu.Filter;
 import haxe.Serializer;
 import js.html.Event;
 import action.DataAction;
@@ -83,7 +85,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		//baseForm =new BaseForm(this);
 		
 		state =  App.initEState({
-			action:(props.match.params.action==null?'get':props.match.params.action),
+			
+			action:(props.action==null?(props.match.params.action==null?'get':props.match.params.action):props.action),
+			//action:(props.match.params.action==null?'get':props.match.params.action),
 			loading:true,
 			sideMenu:props.sideMenu/*FormApi.initSideMenuMulti( this,			
 				[
@@ -107,7 +111,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				}
 			)*/
 		},this);
-		if(props.match.params.action==null)
+		if(state.action==null&&props.match.params.action==null)
 		{
 			//var sData = App.store.getState().dataStore.contactsData;			
 			var baseUrl:String = props.match.path.split(':section')[0];
@@ -149,7 +153,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params.action);
 		//state.formApi.doAction('get');
 		//if(props.match.params.action=='get')
+		if(state.action == 'get')
 			get();
+		else if(Reflect.isFunction(Reflect.field(this,state.action)))
+			Reflect.callMethod(this,Reflect.field(this,state.action),[]);
 	}
 
 	public function get(?filter:Dynamic):Void
@@ -163,7 +170,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		}
 		//if(filter == null)
 		filter = Utils.extend(filter, (props.match.params.id!=null?
-			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
+			{mandat_id:FindFields.iLike(props.match.params.id), mandator:props.userState.dbUser.mandator}:
 			{mandator:props.userState.dbUser.mandator })
 		);
 		trace('hi $filter');
@@ -178,6 +185,57 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{
 				classPath:'data.DirectDebits',
 				action:'get',
+				filter:filter,//(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
+				table:'booking_requests',
+				limit:props.limit,
+				offset:offset>0?offset:0,
+				resolveMessage:{					
+					success:'Bankeinzug wurden geladen',
+					failure:'Bankeinzug konnte nicht geladen werden'
+				},
+				dbUser:props.userState.dbUser,
+				devIP: App.devIP
+			}
+		));
+		p.then(function(data:DbData){
+			trace(data.dataRows.length); 
+			//setState({loading:false, dataTable:data.dataRows});
+			setState({
+				loading:false,
+				dataTable:data.dataRows,
+				dataCount:Std.parseInt(data.dataInfo['count']),
+				pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
+			});			
+		});
+	}
+
+	public function getHistory(?filter:Dynamic):Void
+	{
+		var offset:Int = 0;
+		if(filter != null && filter.page!=null)
+		{
+			trace(filter);
+			offset = Std.int(props.limit * filter.page);
+			Reflect.deleteField(filter,'page');
+		}
+		//if(filter == null)
+		filter = Utils.extend(filter, (props.match.params.id!=null?
+			{mandat_id:FindFields.iLike(props.match.params.id), mandator:props.userState.dbUser.mandator}:
+			{mandator:props.userState.dbUser.mandator })
+		);
+		trace('hi $filter');
+		/*trace('hi $ev');
+		var offset:Int = 0;
+		if(ev != null && ev.page!=null)
+		{
+			offset = Std.int(props.limit * ev.page);
+		}
+		trace(props.match.params);*/
+		var p:Promise<DbData> = cast App.store.dispatch(CRUD.read(
+			{
+				classPath:'data.DirectDebits',
+				action:'getHistory',
+				fields:'anforderungs_datum,id,betrag',
 				filter:filter,//(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
 				table:'booking_requests',
 				limit:props.limit,
@@ -270,13 +328,18 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading +' state.action:' + state.action);
 		return switch(state.action)
 		{
-			case 'get':				
+			case 'get' :				
 				jsx('				
 				<Grid id="rDebitList" data=${state.dataTable}
 				${...props} dataState = ${dataDisplay["rDebitList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
 				');		
-				
+			case 'getHistory':				
+				jsx('				
+				<Grid id="rDebitList" data=${state.dataTable} title="Verlauf" 
+				${...props} dataState = ${dataDisplay["historyList"]} 
+				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>		
+				');						
 			default:
 				state.data==null?null:
 				jsx('<div className="hint">${state.data.get('hint')}</div>');				

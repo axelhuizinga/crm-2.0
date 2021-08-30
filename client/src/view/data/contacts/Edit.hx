@@ -511,7 +511,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 							],								
 						state.actualState)}					
 					</div>			
-					<$BookingHistory ${...props} id=${props.id} limit=${100} fullWidth={true} sideMenu=${{}}/>
+					<$BookingHistory ${...props} id=${props.id} action="getHistory" limit=${100} fullWidth={true} sideMenu=${{}}/>
 				</form>
 				${relData()}
 				${relDataLists()}
@@ -549,6 +549,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 	function relData():ReactFragment {
+		//return null;
 		return [
 			for(model in ['deals','accounts']){
 				if(ormRefs.exists(model))
@@ -578,7 +579,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	}//'Kontakt - Bearbeite ' + 
 
 	function relDataLists():ReactFragment {
-
+		//return null;
 		return jsx('
 		<>
 			<$Deals formRef=${dealsFormRef} parentComponent=${this} model="deals" action="get" key="deals" onDoubleClick=${showSelectedDeals}  filter=${{contact:props.match.params.id, mandator:'1'}}></$Deals>

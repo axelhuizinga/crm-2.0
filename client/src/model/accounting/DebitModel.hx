@@ -46,20 +46,18 @@ class DebitModel
 		//'processed'=>{label: 'Verarbeitet'},headerClassName: 'tRight'}
 	];	
 
-	/*public static var listColumns:Map<String,DataColumn> = [
-		'id'=>{label:'VertragsID', flexGrow:0, className: 'tableNums'},
-		'sepa_code'=>{label:'Sepa Code', flexGrow:0, className: 'tRight'},
-		'iban'=>{label:'Iban',className: 'tableNums'},				
-		'id'=>{label: 'Buchungsanforderung ID', flexGrow:1},		
-		'amount'=>{label: 'Betrag', className: 'euro', headerClassName: 'tRight'},
-		//'processed'=>{label: 'Verarbeitet'}
+	public static var historyColumns:Map<String,DataColumn> = [
+		'anforderungs_datum'=>{label:'Datum',cellFormat:function(v:String){
+			if(v==null)
+				return null;
+			 return DateTools.format(Date.fromString(v), "%d.%m.%Y");
+			}},
+		'betrag'=>{label: 'Betrag', cellFormat: function(v=0) {
+			return App.sprintf('%01.2f €',v).replace('.',',');
+		},className: 'tableNums'}
 	];	
-
-	public static var dataDisplay:Map<String,DataState> = [
-		'rDebitList' => {columns:listColumns}
-	];	*/
-	
 	public static var dataGridDisplay:Map<String,data.DataState> = [
-		'rDebitList' => {columns:gridColumns}
+		'rDebitList' => {columns:gridColumns},
+		'historyList' => {columns:historyColumns}
 	];
 }

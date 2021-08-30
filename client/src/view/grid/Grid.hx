@@ -102,6 +102,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		<div className="grid_container">
 			
 				<div className="grid_box grid${visibleColumns}c" ref=${gridRef} id=${props.id} key=${"grid_list"+props.id}>		
+					${renderTitle()}
 					${headerRows}				
 					${renderRows()}
 					
@@ -144,7 +145,14 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		</div>		
 		');
 	}	
-
+	
+	function renderTitle():ReactFragment
+	{
+		if(props.title==null)
+			return null;
+		return jsx('<div className="g_caption" key=${"caption"}>${props.title}</div>');
+	}
+	
 	function renderHeaderDisplay():ReactFragment
 	{
 		if(props.dataState==null)

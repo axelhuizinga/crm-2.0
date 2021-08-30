@@ -30,6 +30,7 @@ typedef  DBAccessProps = {
 	?action:String,	
 	?classPath:String,
 	?componentPath:String,
+	?fields:String,
 	?id:Int,
 	?offset:Int,
 	?onlyNew:Bool,

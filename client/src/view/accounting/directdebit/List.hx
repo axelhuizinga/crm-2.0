@@ -224,7 +224,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{mandator:props.userState.dbUser.mandator })
 		);
 		trace('hi $filter');
-		/*trace('hi $ev');
+		/*trace('hi $ev');mandat_id:FindFields.iLike(props.match.params.id)
 		var offset:Int = 0;
 		if(ev != null && ev.page!=null)
 		{
@@ -241,8 +241,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				resolveMessage:{					
-					success:'Bankeinzug wurden geladen',
-					failure:'Bankeinzug konnte nicht geladen werden'
+					success:'Liste Bankeinzug wurden geladen',
+					failure:'Liste Bankeinzug konnte nicht geladen werden'
 				},
 				dbUser:props.userState.dbUser,
 				devIP: App.devIP

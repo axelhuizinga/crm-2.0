@@ -1021,7 +1021,7 @@ form td, form caption
 	margin: 0;
 	white-space: nowrap;
 	width: min-content;
-	margin: auto;
+	margin: 1rem auto;
 }
 .grid_border_box{
 	border: thin solid #aaa;
@@ -1058,7 +1058,7 @@ form td, form caption
 .grid_container{
 	padding-right: 1px;
 	overflow-x: hidden;
-	margin: 1rem auto;
+	margin: 0 auto;
 }
 /*.item--contained {
     grid-column: container;

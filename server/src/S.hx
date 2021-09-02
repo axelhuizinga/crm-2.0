@@ -796,8 +796,10 @@ class S
 		home = haxe.io.Path.directory(_SERVER['SCRIPT_FILENAME']);
 		//home = Syntax.code("dirname($_SERVER['SCRIPT_FILENAME'])");
 		Global.require_once('$home/../.crm/functions.php');
-		Global.require_once('$home/../.crm/db.php');		
+		Global.require_once('$home/../.crm/db.php');	
+		Syntax.code("error_log({0})","appLog:" + Syntax.code("$appLog"));
 		Debug.logFile = Syntax.code("$appLog");
+		//trace('appLog:${Debug.logFile}');
 		haxe.Log.trace = Debug._trace;		
 		if(Lib.isCli()){
 			//Cli.process(Sys.args(), new CliService()).handle(Cli.exit);
@@ -807,7 +809,7 @@ class S
 			trace(Sys.args());
 		}		
 		else{
-			haxe.Log.trace = Debug._trace;
+			//haxe.Log.trace = Debug._trace;
 			Out.skipFields = ['admin','keyPhrase','pass','password'];			
 		}
 		trace('Loaded config@${home}');

@@ -24,6 +24,8 @@ class Deals extends Model
 	public function go():Void {
 		trace(action);
 		switch(action){
+			case 'getAll4Contact':
+				getAll4Contact();
 			case 'getQC':
 				getQC();
 			case 'loadQC':
@@ -34,6 +36,13 @@ class Deals extends Model
 				run();
 		}		
 	}	
+
+	function getAll4Contact(){
+		param['filter'] = Util.copy({mandator:param['filter'].mandator, contact:param['filter'].id});
+		//param['id'] = null;
+		trace(param);
+		run();
+	}
 
 	/**
 	 * End QC with status

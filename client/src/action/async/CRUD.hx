@@ -94,7 +94,7 @@ class CRUD
 							}				
 						}
 						else{
-							//trace(param);
+							trace(data);
 							dispatch(Status(Update(
 							{
 								className: 'warn',

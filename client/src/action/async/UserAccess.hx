@@ -158,7 +158,7 @@ class UserAccess {
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			if(userState.dbUser.mandator==null)
 				userState.dbUser.mandator=1;
-			Out.dumpObject(userState);
+			trace(userState.dbUser);
 			//trace(getState());
 			if (userState.dbUser.password == '' && userState.dbUser.new_pass == '' || userState.dbUser.user_name == '') 
 				return dispatch(User(LoginError({dbUser:userState.dbUser, lastError:'Passwort und user_name eintragen!'})));

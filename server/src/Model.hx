@@ -184,6 +184,7 @@ class Model
 		}
 		trace(sqlBf.toString());
 		var res:NativeArray = execute(sqlBf.toString());
+		//trace(Lib.hashOfAssociativeArray(res[0]).get('count'));
 		return Lib.hashOfAssociativeArray(res[0]).get('count');
 	}
 	
@@ -1125,14 +1126,20 @@ class Model
 		return Serializer.run(dbData);
 	}
 	
-	function sendRows(rows:NativeArray):Bool
+	function sendRows(rows:NativeArray = null):Bool
 	{
-		trace(Global.count(rows));
+		if (rows==null){
+			//rows = Syntax.array(null);
+			trace(rows);
+		}
+		else 
+			trace(Global.count(rows));
 		
-		Syntax.foreach(rows, function(k:Int, v:Dynamic)
-		{
-			dbData.dataRows.push(Lib.hashOfAssociativeArray(v));			
-		});
+		if (rows!=null)
+			Syntax.foreach(rows, function(k:Int, v:Dynamic)
+			{
+				dbData.dataRows.push(Lib.hashOfAssociativeArray(v));			
+			});
 		Web.setHeader('Content-Type', 'text/html charset=utf-8');
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 		Web.setHeader("Access-Control-Allow-Credentials", "true");

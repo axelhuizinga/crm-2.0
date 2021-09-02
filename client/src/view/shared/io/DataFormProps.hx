@@ -25,6 +25,7 @@ typedef DataFormProps =
 	>ReactComponentProps,
 	?action:String,
 	?dataStore:state.DataAccessState,
+	?contact:Int,
     ?formApi:FormApi,
 	?filter:Dynamic,
 	?fullWidth:Bool,	

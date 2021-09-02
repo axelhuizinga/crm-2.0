@@ -73,6 +73,7 @@ using Lambda;
 using StringTools;
 
 typedef BookingHistory = view.accounting.directdebit.List;
+
 /**
  * 
  */
@@ -511,7 +512,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 							],								
 						state.actualState)}					
 					</div>			
-					<$BookingHistory ${...props} id=${props.id} action="getHistory" limit=${100} fullWidth={true} sideMenu=${{}}/>
+					<$BookingHistory ${...props} contact=${props.id} action="getHistory" limit=${100} fullWidth={true} sideMenu=${{}}/>
 				</form>
 				${relData()}
 				${relDataLists()}

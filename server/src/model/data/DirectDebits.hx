@@ -12,8 +12,8 @@ class DirectDebits extends Model
 	function go():Void {
 		trace(action);
 		switch(action){
-			/*case 'getHistory':
-				getHistory();*/
+			case 'getHistory':
+				getHistory();/**/
 			case _:
 				run();
 		}		
@@ -51,7 +51,9 @@ class DirectDebits extends Model
 		if(offset.int>0)
 			buildOffset(sqlBf);
 		trace(sqlBf.toString());
-		return execute(sqlBf.toString());		
+		sendRows(execute(sqlBf.toString()));	
+		//return execute(sqlBf.toString());	
+		
 	}
 	
 }

@@ -281,14 +281,14 @@ class BookingRequest extends ORM
 		return ref_id;
 	}	
 		
-	@dataType("character varying(11)")
-	@:isVar public var mandat_id(default,set):String;
+	@dataType("bigint")
+	@:isVar public var deal_id(default,set):Int;
 
-	function set_mandat_id(mandat_id:String):String{
-		if(initialized('mandat_id'))
-			modified('mandat_id');
-		this.mandat_id = mandat_id ;
-		return mandat_id;
+	function set_mandat_id(deal_id:Int):Int{
+		if(initialized('deal_id'))
+			modified('deal_id');
+		this.deal_id = deal_id ;
+		return deal_id;
 	}	
 		
 	@dataType("date")

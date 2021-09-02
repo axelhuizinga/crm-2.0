@@ -24,7 +24,7 @@ class Debug
 		var out:FileOutput = File.append( logFile);
 		out.writeString(
 			info + ':' + ( Std.is(v, String) || Std.is(v, Int) || Std.is(v, Float)  ? Std.string(v) + "\n" : 
-				Syntax.code("print_r({0},{1})", v, 1)) );
+				Syntax.code("print_r({0},{1})", v, 1)));
 		//untyped __call__('trace', v, info);
 	}
 	

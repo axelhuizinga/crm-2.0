@@ -120,6 +120,7 @@ class Model
 		var param:Map<String,Dynamic> = dbQuery.dbParams;
 		//param.set('dbUser',dbQuery.dbUser);
 		trace(param);
+		
 		var cl:Class<Dynamic> = Type.resolveClass('model.' + param.get('classPath'));
 		//trace(cl);
 		if (cl == null)
@@ -461,7 +462,7 @@ class Model
 			trace(stm.errorInfo());
 			Sys.exit(0);
 		}
-		trace(stm);
+		//trace(stm);
 		var res:NativeArray = stm.fetchAll(resultType);
 		/*Syntax.foreach(res, function(key:String, value:Dynamic){
 			trace('$key => $value'); 
@@ -971,8 +972,9 @@ class Model
 		//Sys.exit(333);
 		//trace('exists dbData:' + (param.exists('dbData')?'Y':'N'));
 	}
+	
+	function parseTable(){
 
-	function run(){
 		if(param.exists('table'))
 			table = param.get('table');
 		if(table != null)
@@ -1043,6 +1045,10 @@ class Model
 			queryFields += fields.length > 0 ? fields.join(','):'';			
 		}
 		trace('${action}:' + tableNames.toString());
+	}
+	
+	function run(){
+		parseTable();
 		trace(queryFields);
 		trace(setSql);
 		if (tableNames.length>1)

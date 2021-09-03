@@ -37,6 +37,7 @@ import model.admin.SyncExternalAccounts;
 import model.admin.SyncExternalBookings;
 import model.admin.SyncExternalContacts;
 import model.admin.SyncExternalDeals;
+import model.admin.SyncExternalDebitReturnBookings;
 import model.roles.Users;
 import model.stats.History;
 import model.tools.DB;

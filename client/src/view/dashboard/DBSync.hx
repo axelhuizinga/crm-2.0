@@ -59,7 +59,9 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			, options:[
 			{label: 'Update', name: 'sync_contacts', type:Checkbox}]
 			*/
-		//{label:'Stammdaten Import ',action:'importContacts'},
+			
+		{label:'Import Alle Rücklastschriften',action:'getAllExternalDebitReturnBookings'},
+		{label:'Import Neue Rücklastschriften',action:'getMissingExternalDebitReturnBookings'},
 		{label:'BuchungsAnforderungen ',action:'checkBookingRequests'},
 		{label:'Kontakt Daten ',action:'checkContacts'},		
 		{label:'Spenden Daten ',action:'checkDeals'},		
@@ -180,7 +182,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			}
 		)*/null);
 	}
-	
+
 	public function getMissingExternalBookings(?cB:Function) {
 		setState({loading:true});
 		var p:Promise<DbData> = props.load(			
@@ -231,6 +233,63 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				if(cB != null ){
 					cB();					
 				}
+				return p;
+			}
+
+		});//*/
+		return p;
+	}
+
+	
+	public function getAllExternalDebitReturnBookings() {
+		getMissingExternalDebitReturnBookings(true);
+	}
+
+	public function getMissingExternalDebitReturnBookings(all:Bool = false) {
+		setState({loading:true});
+		var p:Promise<DbData> = props.load(			
+		{
+			classPath:'admin.SyncExternalDebitReturnBookings',
+			action:all?'importAll':'getMissing',
+			extDB: true,
+			filter:{mandator:'1'},
+			table:'debit_return_statements',
+			dbUser:props.userState.dbUser,
+			devIP:App.devIP,
+			//maxImport:4000,
+			//relations:new Map()
+		});
+		p.then(function(data:DbData){
+			if(data.dataInfo['offset']==null)
+			{
+				return App.store.dispatch(Status(Update(
+				{
+					className:'error',
+					text:'Fehler 0  Aktualisiert'}
+				)));//${data.dataInfo['classPath']}
+			}					
+			var offset = Std.parseInt(data.dataInfo['offset']);
+			App.store.dispatch(Status(Update(
+				{
+					className:' ',
+					text:'${offset} von ${data.dataInfo['maxImport']} aktualisiert'
+				}
+			)));
+
+			trace('${offset} < ${data.dataInfo['maxImport']}');
+			if(offset < Std.parseInt(data.dataInfo['maxImport'])){
+				//LOOP UNTIL LIMIT
+				trace('next loop:${data.dataInfo}');
+				return getMissingExternalDebitReturnBookings();
+			}					
+			else{
+				setState({loading:false});
+				App.store.dispatch(Status(Update(
+					{
+						className:' ',
+						text:'${offset} von ${data.dataInfo['maxImport']} aktualisiert'
+					}
+				)));
 				return p;
 			}
 

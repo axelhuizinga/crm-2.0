@@ -21,7 +21,7 @@ class DirectDebits extends Model
 
 	function getHistory() {
 		var sqlBf:StringBuf = new StringBuf();
-
+		parseTable();
 		sqlBf.add('SELECT $queryFields FROM ');
 		if (tableNames.length>1)
 		{
@@ -31,8 +31,12 @@ class DirectDebits extends Model
 		{
 			sqlBf.add('${tableNames[0]} ');
 		}
+		if(param.exists('filter')&&param.get('filter')!=''){
+			filterSql += buildCond(param.get('filter'));
+			//buildValues
+		/*}		
 		if (filterSql != null)
-		{
+		{*/
 			sqlBf.add(filterSql);
 		}		
 		var groupParam:String = param.get('group');

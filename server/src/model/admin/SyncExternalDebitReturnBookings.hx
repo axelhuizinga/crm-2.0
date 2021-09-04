@@ -89,54 +89,92 @@ class SyncExternalDebitReturnBookings extends Model{
 	public function getMissing(?lastKid:Int):Void 
 	{		
 		if(lastKid==null){
-			lastKid = Std.parseInt(
-				S.syncDbh.query('SELECT MAX(kid) FROM konto_auszug',PDO.FETCH_COLUMN).fetchColumn()) + 1;
+			var stmt:PDOStatement = S.syncDbh.query('SELECT MAX(kid) FROM konto_auszug');
+			stmt.setFetchMode(PDO.FETCH_COLUMN,0);//.fetchColumn(0)) + 1;
+			lastKid = Std.parseInt(stmt.fetchColumn(0)) + 1;
 		}
 		var bookings:NativeArray = null;
 
 		var sql:String = comment(unindent, format) /*
-		SELECT d value_date,e amount,j,k,l,q FROM `konto_auszug` 
-		WHERE k LIKE 'Mandatsref%' OR j LIKE 'Mandatsref%'
-		AND e<0 AND kid>$lastKid;				
+		SELECT d value_date,e amount,i,j,k,l,n,kid,z iban FROM `konto_auszug` 
+		WHERE e<0 AND (k LIKE 'Mandatsref%' OR j LIKE 'Mandatsref%')
+		AND kid>$lastKid;				
 		*/;
 		trace(sql);		
 		bookings = query(sql,null,S.syncDbh);
 		totalCount = Global.count(bookings);
 		trace(totalCount);
-		/*while(synced<totalCount){
-			//	LOAD LIVE PBX DATA
-			bookings = getCrmData(ids);
-			var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
-			//trace('totalRecords:' + dbData.dataInfo['totalRecords']);
-			for(row in bookings.iterator())
-			{
-				//trace(synced);
-				//trace(row);
-				//trace(Std.string(row));
-				row = Util.bindClientDataNum(table,stmt,row,dbData);		
-				//trace(Std.string(row[25]));	
-				if(!stmt.execute(row)){
-					trace(row);
-					trace(stmt.errorInfo());
-					S.sendErrors(dbData, ['execute'=>Lib.hashOfAssociativeArray(stmt.errorInfo()),
-					'sql'=>sql,
-					'id'=>Std.string(Syntax.code("{0}['id']",row))]);
+		var sepaMap:Map<String,String> = [
+			
+			'KONTO AUFGELÖST' => 'AC04',
+			'Konto aufgeloes' => 'AC04',
+			'KONTO AUFGELOEST' => 'AC04',
+			'KONTO GESPERRT' => 'AC06',			
+			'KEIN GUELTIGES MANDAT' => 'MD01',			
+			'WIDERSPRUCH DURCH ZAHLER' => 'MD06',
+			'WIDERSPRUCH DURCH ZPFL' => 'MD06',			
+			'SONSTIGE GRÜNDE' => 'MS03',
+			'SONSTIGE GRUENDE' => 'MS03',
+			'IBAN FEHLERHAFT' => 'AC01',
+		];		
+		var sepa:String = '';
+		var id:Int = 0;
+		for(row in bookings.iterator())
+		{
+			var rowMap:Map<String,String> = Lib.hashOfAssociativeArray(row);
+			//trace(rowMap);
+			//Sys.exit(S.sendInfo(dbData, ['SyncExternalDebitReturnBookings'=>'OK'])?1:0);
+			try{
+				id = Std.parseInt(new EReg('Mandatsreferenz.','g').split(rowMap['j']+rowMap['k'])[1]);
+				if(id<12001){
+					
+					//trace(id);
+					
+					//trace(new EReg(rowMap['j']+rowMap['k'],'g').split('Mandatsreferenz'));
+					//trace(new EReg('Mandatsreferenz.','g').split(rowMap['k']));
+					//trace(rowMap);
+					//Sys.exit(S.sendInfo(dbData, ['SyncExternalDebitReturnBookings'=>'OK'])?1:0);
+					continue;
 				}
+				// GET MATCHING SEPA CODE + BOOKING REQUEST
+				var eR:EReg = ~/(AC04|AC01|AC06|MD01|MD06|MS02|MS03|SL01|AM04|AG01)/;
+				sepa = eR.match(rowMap['i']+rowMap['j'])?eR.matched(0):'';
+				if(sepa==''){
+					for(k => v in sepaMap)
+					{
+						var meR:EReg = new EReg('($k)','m');
+						if(meR.match(rowMap['i'])||meR.match(rowMap['l'])||meR.match(rowMap['n'])){
+							sepa = v;							
+							//trace(rowMap);
+							//trace(meR.matched(0));
+							break;
+						}
+						//trace('$sepa >$k< $v l:'  + meR.match(rowMap['l']) + ' n:'   + meR.match(rowMap['n']));
+					}
+					//if(sepa=='' && ! ~/RUECKRUF/.match(rowMap['h']))
+						//trace(rowMap);
+				}
+			}
+			catch(ex:Exception){
+				
+				trace(ex.message);
+				//Sys.exit(S.sendInfo(dbData, ['SyncExternalDebitReturnBookings'=>ex.message])?1:0);
+			}
+			//trace(Std.string(row));
+			if(sepa!=''){
+				sql = comment(unindent, format) /*
+				INSERT INTO debit_return_statements(deal_id,sepa_code,iban,amount,value_date,kid)
+				VALUES(${id},'$sepa','${rowMap["iban"]}',${rowMap["amount"]},'${rowMap["value_date"]}',${rowMap["kid"]})
+				ON CONFLICT DO NOTHING
+				*/;
+				query(sql);
+				//trace(sql);		
 				synced++;
 			}
-			// GOT LIVE PBX DATA
-
-			//trace('totalCount:${totalCount} offset:${offset.int} + synced:${synced}');
-			offset = Util.offset(synced);
-			if(offset.int+limit.int>totalCount)
-			{
-				limit = Util.limit(totalCount - offset.int);
-			}										
-			//trace('offset:'+ offset.int);
-			//trace(param);
-		}*/
-		trace('done');
-		Sys.exit(S.sendInfo(dbData, ['SyncExternalDebitReturnBookings'=>'OK'])?1:0);
+			//Sys.exit(S.sendInfo(dbData, ['SyncExternalDebitReturnBookings'=>'OK'])?1:0);
+		}
+		trace('done: $synced of $totalCount');
+		S.sendInfo(dbData, ['SyncExternalDebitReturnBookings'=>'$synced', 'total'=>'$totalCount']);
 	}
 	
 	//public function getCrmData(maxImported:Int=0):NativeArray

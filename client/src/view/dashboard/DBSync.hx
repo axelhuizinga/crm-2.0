@@ -60,7 +60,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			{label: 'Update', name: 'sync_contacts', type:Checkbox}]
 			*/
 			
-		{label:'Import Alle Rücklastschriften',action:'getAllExternalDebitReturnBookings'},
+		{label:'Import Alle Rücklastschriften',action:'getAllExternalDebitReturnBookings',disabled: true},
 		{label:'Import Neue Rücklastschriften',action:'getMissingExternalDebitReturnBookings'},
 		{label:'BuchungsAnforderungen ',action:'checkBookingRequests'},
 		{label:'Kontakt Daten ',action:'checkContacts'},		
@@ -260,41 +260,24 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			//relations:new Map()
 		});
 		p.then(function(data:DbData){
-			if(data.dataInfo['offset']==null)
+			if(data.dataInfo['SyncExternalDebitReturnBookings']==null)
 			{
 				return App.store.dispatch(Status(Update(
 				{
 					className:'error',
 					text:'Fehler 0  Aktualisiert'}
-				)));//${data.dataInfo['classPath']}
+				)));//${data.dataInfo['classPath']}von ${data.dataInfo["total"]} 
 			}					
-			var offset = Std.parseInt(data.dataInfo['offset']);
+			var offset = Std.parseInt(data.dataInfo['SyncExternalDebitReturnBookings']);
 			App.store.dispatch(Status(Update(
 				{
 					className:' ',
-					text:'${offset} von ${data.dataInfo['maxImport']} aktualisiert'
+					text:'${offset} Datensätze aktualisiert'
 				}
 			)));
-
-			trace('${offset} < ${data.dataInfo['maxImport']}');
-			if(offset < Std.parseInt(data.dataInfo['maxImport'])){
-				//LOOP UNTIL LIMIT
-				trace('next loop:${data.dataInfo}');
-				return getMissingExternalDebitReturnBookings();
-			}					
-			else{
-				setState({loading:false});
-				App.store.dispatch(Status(Update(
-					{
-						className:' ',
-						text:'${offset} von ${data.dataInfo['maxImport']} aktualisiert'
-					}
-				)));
-				return p;
-			}
-
+			return p;
 		});//*/
-		return p;
+		
 	}
 
 	public function importAccounts2(_):Void

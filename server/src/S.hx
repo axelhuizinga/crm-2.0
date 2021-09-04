@@ -445,14 +445,14 @@ class S
 		//var writer = new json2object.JsonWriter<DbData>();
 		if (info != null)
 		{
-			for (k in info.keys())
+			for (k => v in info)
 			{
-				dbData.dataInfo[k] = info[k];
+				dbData.dataInfo[k] = v;
 			}
 		}
 		//trace('done at ${Sys.time()-ts} ms');
 		//trace(dbData.dataErrors);
-		//trace(dbData);
+		trace(dbData.dataInfo);
 		//return send(writer.write(dbData));
 		return send(Serializer.run(dbData));
 	}

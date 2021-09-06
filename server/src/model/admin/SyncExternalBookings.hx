@@ -20,7 +20,7 @@ class SyncExternalBookings extends Model{
 
 		table = tableNames[0] = 'booking_requests';
 		keys = S.tableFields(table);
-		totalCount = count();
+		//totalCount = 0;//count();
 		trace(totalCount);
 		if(param.exists('synced'))
 		{
@@ -54,6 +54,10 @@ class SyncExternalBookings extends Model{
 
 	override public function count():Int
 	{
+		var stmt:PDOStatement = S.syncDbh.query('SELECT * FROM buchungs_anforderungen');
+		S.checkStmt(S.syncDbh, stmt, 'buchungsAnforderungenCount:'+Std.string(S.syncDbh.errorInfo()));
+		dbData.dataInfo.set('buchungsAnforderungenCount',(stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null));
+		return dbData.dataInfo.get('buchungsAnforderungenCount');
 		var sqlBf:StringBuf = new StringBuf();
 		sqlBf.add('SELECT COUNT(*) AS count FROM ');
 
@@ -127,7 +131,10 @@ class SyncExternalBookings extends Model{
 
 	function importAll() {
 		trace(param);
-		//getMissing();
+		//empty table
+	/*	if(!S.dbh.query('TRUNCATE TABLE booking_requests').execute()){
+			S.sendErrors(dbData,['TRUNCATE TABLE booking_requests'=>'NOTOK']);
+		};*/
 		syncBookingRequests(S.dbh);
 		// above exits on success
 		S.sendErrors(dbData,['importAll'=>'NOTOK']);
@@ -151,18 +158,25 @@ class SyncExternalBookings extends Model{
 		*/;
 		trace(sql);		
 		//while(synced<totalCount){
-		while(synced<totalCount){
 			//	LOAD LIVE PBX DATA
 			bookings = getCrmData(ids);
-			var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
+			while(synced<totalCount){
+				var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 			//trace('totalRecords:' + dbData.dataInfo['totalRecords']);
 			for(row in bookings.iterator())
 			{
 				//trace(synced);
 				//trace(row);
 				//trace(Std.string(row));
+				var rVal:Map<String,Dynamic> = Lib.hashOfAssociativeArray(row);
+				//trace(Std.string(rVal));	
+				rVal['28'] = Std.string(Std.parseInt(rVal['28']));
+				//trace(Std.string(rVal['28']));	
+				//Syntax.code('$row[28]=${0}',rVal.28);*/
+				row = Lib.associativeArrayOfHash(rVal);
+				//trace(Std.string(row));
 				row = Util.bindClientDataNum(table,stmt,row,dbData);		
-				//trace(Std.string(row[25]));	
+				//
 				if(!stmt.execute(row)){
 					trace(row);
 					trace(stmt.errorInfo());
@@ -174,7 +188,7 @@ class SyncExternalBookings extends Model{
 			}
 			// GOT LIVE PBX DATA
 
-			//trace('totalCount:${totalCount} offset:${offset.int} + synced:${synced}');
+			trace('totalCount:${totalCount} offset:${offset.int} + synced:${synced}');
 			offset = Util.offset(synced);
 			if(offset.int+limit.int>totalCount)
 			{
@@ -190,11 +204,11 @@ class SyncExternalBookings extends Model{
 	//public function getCrmData(maxImported:Int=0):NativeArray
 	public function getCrmData(ids:String = ''):NativeArray	
 	{		        
-		//`buchungsanforderungID`>$maxImported 
+		//`buchungsanforderungID`>$maxImported WHERE  Termin>'2021-01-01'
 		
         var sql = (ids==''? 
 			comment(unindent,format)/*
-				SELECT *, 1 AS 'mandator' FROM buchungs_anforderungen WHERE  Termin>'2021-01-01'
+				SELECT *, 1 AS 'mandator' FROM buchungs_anforderungen 
 			ORDER BY buchungsanforderungID 
 			*/
 			:comment(unindent,format)/*

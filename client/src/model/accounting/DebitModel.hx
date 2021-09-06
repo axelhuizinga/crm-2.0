@@ -47,14 +47,19 @@ class DebitModel
 	];	
 
 	public static var historyColumns:Map<String,DataColumn> = [
-		'anforderungs_datum'=>{label:'Datum',cellFormat:function(v:String){
+		'termin'=>{label:'Datum',cellFormat:function(v:String){
 			if(v==null)
 				return null;
 			 return DateTools.format(Date.fromString(v), "%d.%m.%Y");
 			}},
-		'betrag'=>{label: 'Betrag', cellFormat: function(v=0) {
+		'amount'=>{label: 'Betrag', cellFormat: function(v=0) {
 			return App.sprintf('%01.2f €',v).replace('.',',');
-		},className: 'tableNums'}
+		},className: 'tableNums'},
+		'info'=>{label: 'Info',cellFormat: function(v='') {
+			if(v=='')
+				return '';
+			return v;
+		}}
 	];	
 	public static var dataGridDisplay:Map<String,data.DataState> = [
 		'rDebitList' => {columns:gridColumns},

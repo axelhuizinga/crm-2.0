@@ -5,17 +5,6 @@ import db.DbRelation;
 import db.DbUser;
 import state.UserState;
 
-/*typedef DBAccessAction = {
-	//action:String,
-	?classPath:String,
-	?id:Int,
-	?offset:Int,
-	?onlyNew:Bool,
-	?limit:Int,	
-	?maxImport:Int,
-	?totalRecords:Int
-}*/
-
 typedef DBAccessResolveMessage = {
 	?success:String,
 	?failure:String

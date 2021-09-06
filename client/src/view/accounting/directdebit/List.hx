@@ -1,6 +1,7 @@
 package view.accounting.directdebit;
 
 //import view.accounting.returndebit.Files;
+import comments.CommentString.*;
 import shared.FindFields;
 import view.shared.Menu.Filter;
 import haxe.Serializer;
@@ -218,31 +219,47 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			offset = Std.int(props.limit * filter.page);
 			Reflect.deleteField(filter,'page');
 		}
-		//if(filter == null)
+		//TODO: LIST ALL PRODUCTS FOR CLIENT ID
 		filter = Utils.extend(filter, (props.match.params.id!=null?
-			{mandat_id:FindFields.iLike(props.match.params.id), mandator:props.userState.dbUser.mandator}:
+			{deal_id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
 			{mandator:props.userState.dbUser.mandator })
 		);
 		trace('hi $filter');
-		/*trace('hi $ev');mandat_id:FindFields.iLike(props.match.params.id)
-		var offset:Int = 0;
-		if(ev != null && ev.page!=null)
-		{
-			offset = Std.int(props.limit * ev.page);
-		}
-		trace(props.match.params);*/
+		/*trace('hi $ev');mandat_id:FindFields.iLike(props.match.params.id)*///'join'=>'INNER JOIN debit_return_statements drs ON  bor.mandat_id = drs.deal_id' 
+		trace(props.match.params);
+		var dS:DataSource = [					
+			'booking_requests'=> [
+				'alias' => 'bor',
+				'fields'=>'termin,id,mandat_id deal_id,betrag amount,info'				
+			],
+			'debit_return_statements' =>[
+				'alias'=>'drs',
+				'fields'=>'value_date termin,deal_id,kid id,amount,sepa_code info',
+			] 
+		];
 		var p:Promise<DbData> = cast App.store.dispatch(CRUD.read(
 			{
 				classPath:'data.DirectDebits',
 				action:'getHistory',
-				fields:'anforderungs_datum,id,betrag',
-				filter:filter,//(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
-				table:'booking_requests',
+				dataSource: [					
+					'booking_requests'=> [
+						'alias' => 'bor',
+						'fields'=>'termin,id,mandat_id deal_id,betrag amount,sequenz info,mandator'				
+					],
+					'debit_return_statements' =>[
+						'alias'=>'drs',
+						'fields'=>'value_date termin,kid id,deal_id,amount,sepa_code info,mandator',
+					]
+				],
+				//fields:'',
+				filter:filter,//(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),				
+				//table:'booking_requests',
 				limit:props.limit,
 				offset:offset>0?offset:0,
+				order: 'termin| ASC',
 				resolveMessage:{					
-					success:'Liste Bankeinzug wurden geladen',
-					failure:'Liste Bankeinzug konnte nicht geladen werden'
+					success:'Buchungen wurden geladen',
+					failure:'Buchungen konnten nicht geladen werden'
 				},
 				dbUser:props.userState.dbUser,
 				devIP: App.devIP
@@ -250,6 +267,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		));
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
+			trace(data.dataRows); 
 			//setState({loading:false, dataTable:data.dataRows});
 			setState({
 				loading:false,

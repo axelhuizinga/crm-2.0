@@ -1518,6 +1518,7 @@ action_async_CRUD.read = function(param) {
 						reject(data);
 					}
 				} else {
+					haxe_Log.trace(data,{ fileName : "action/async/CRUD.hx", lineNumber : 97, className : "action.async.CRUD", methodName : "read"});
 					dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "warn", text : "Keine Daten für " + JSON.stringify(param.filter) + " gefunden"}))));
 				}
 			});
@@ -2352,7 +2353,7 @@ action_async_UserAccess.doLogin = function(userState,requests) {
 		if(userState.dbUser.mandator == null) {
 			userState.dbUser.mandator = 1;
 		}
-		me_cunity_debug_Out.dumpObject(userState,{ fileName : "action/async/UserAccess.hx", lineNumber : 161, className : "action.async.UserAccess", methodName : "doLogin"});
+		haxe_Log.trace(userState.dbUser,{ fileName : "action/async/UserAccess.hx", lineNumber : 161, className : "action.async.UserAccess", methodName : "doLogin"});
 		if(userState.dbUser.password == "" && userState.dbUser.new_pass == "" || userState.dbUser.user_name == "") {
 			return dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ dbUser : userState.dbUser, lastError : "Passwort und user_name eintragen!"}))));
 		}
@@ -2560,6 +2561,9 @@ bulma_$components_Footer.prototype = $extend(React_Component.prototype,{
 	,__class__: bulma_$components_Footer
 });
 var bulma_$components_Tabs = __webpack_require__("./node_modules/react-bulma-components/dist/index.js").Tabs;
+var comments_CommentString = function() { };
+$hxClasses["comments.CommentString"] = comments_CommentString;
+comments_CommentString.__name__ = "comments.CommentString";
 var comments_StringTransform = function() { };
 $hxClasses["comments.StringTransform"] = comments_StringTransform;
 comments_StringTransform.__name__ = "comments.StringTransform";
@@ -14080,14 +14084,14 @@ var view_accounting_directdebit_List = function(props) {
 	React_Component.call(this,props);
 	view_accounting_directdebit_List._instance = this;
 	this.dataDisplay = model_accounting_DebitModel.dataGridDisplay;
-	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 84, className : "view.accounting.directdebit.List", methodName : "new"});
+	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 85, className : "view.accounting.directdebit.List", methodName : "new"});
 	this.state = App.initEState({ action : props.action == null ? props.match.params.action == null ? "get" : props.match.params.action : props.action, loading : true, sideMenu : props.sideMenu},this);
-	if(props.match.params.action == null) {
+	if(this.state.action == null && props.match.params.action == null) {
 		var baseUrl = props.match.path.split(":section")[0];
-		haxe_Log.trace("redirecting to " + baseUrl + "List/get",{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 118, className : "view.accounting.directdebit.List", methodName : "new"});
+		haxe_Log.trace("redirecting to " + baseUrl + "List/get",{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 119, className : "view.accounting.directdebit.List", methodName : "new"});
 		props.history.push("" + baseUrl + "List/get");
 	}
-	haxe_Log.trace(props.match.path,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 122, className : "view.accounting.directdebit.List", methodName : "new"});
+	haxe_Log.trace(props.match.path,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 123, className : "view.accounting.directdebit.List", methodName : "new"});
 };
 $hxClasses["view.accounting.directdebit.List"] = view_accounting_directdebit_List;
 view_accounting_directdebit_List.__name__ = "view.accounting.directdebit.List";
@@ -14103,8 +14107,8 @@ view_accounting_directdebit_List.mapDispatchToProps = function(dispatch) {
 		if(id == null) {
 			id = -1;
 		}
-		haxe_Log.trace(data,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 141, className : "view.accounting.directdebit.List", methodName : "mapDispatchToProps"});
-		haxe_Log.trace("select:" + id + " selectType:" + selectType,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 142, className : "view.accounting.directdebit.List", methodName : "mapDispatchToProps"});
+		haxe_Log.trace(data,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 142, className : "view.accounting.directdebit.List", methodName : "mapDispatchToProps"});
+		haxe_Log.trace("select:" + id + " selectType:" + selectType,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 143, className : "view.accounting.directdebit.List", methodName : "mapDispatchToProps"});
 		dispatch(redux_Action.map(action_async_LiveDataAccess.sSelect({ id : id, data : data, match : me.props.match, selectType : selectType})));
 	}, update : function(param) {
 		return dispatch(redux_Action.map(action_async_CRUD.update(param)));
@@ -14124,7 +14128,7 @@ view_accounting_directdebit_List.prototype = $extend(React_Component.prototype,{
 	,dbMetaData: null
 	,componentDidMount: function() {
 		this.dataAccess = model_accounting_DebitModel.dataAccess;
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 153, className : "view.accounting.directdebit.List", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 154, className : "view.accounting.directdebit.List", methodName : "componentDidMount"});
 		if(this.state.action == "get") {
 			this.get();
 		} else if(Reflect.isFunction(Reflect.field(this,this.state.action))) {
@@ -14135,15 +14139,15 @@ view_accounting_directdebit_List.prototype = $extend(React_Component.prototype,{
 		var _gthis = this;
 		var offset = 0;
 		if(filter != null && filter.page != null) {
-			haxe_Log.trace(filter,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 167, className : "view.accounting.directdebit.List", methodName : "get"});
+			haxe_Log.trace(filter,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 168, className : "view.accounting.directdebit.List", methodName : "get"});
 			offset = this.props.limit * filter.page | 0;
 			Reflect.deleteField(filter,"page");
 		}
 		filter = shared_Utils.extend(filter,this.props.match.params.id != null ? { mandat_id : shared_FindFields.iLike(this.props.match.params.id), mandator : this.props.userState.dbUser.mandator} : { mandator : this.props.userState.dbUser.mandator});
-		haxe_Log.trace("hi " + Std.string(filter),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 176, className : "view.accounting.directdebit.List", methodName : "get"});
+		haxe_Log.trace("hi " + Std.string(filter),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 177, className : "view.accounting.directdebit.List", methodName : "get"});
 		var p = App.store.dispatch(redux_Action.map(action_async_CRUD.read({ classPath : "data.DirectDebits", action : "get", filter : filter, table : "booking_requests", limit : this.props.limit, offset : offset > 0 ? offset : 0, resolveMessage : { success : "Bankeinzug wurden geladen", failure : "Bankeinzug konnte nicht geladen werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP})));
 		p.then(function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 201, className : "view.accounting.directdebit.List", methodName : "get"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 202, className : "view.accounting.directdebit.List", methodName : "get"});
 			_gthis.setState({ loading : false, dataTable : data.dataRows, dataCount : Std.parseInt(data.dataInfo.h["count"]), pageCount : Math.ceil(Std.parseInt(data.dataInfo.h["count"]) / _gthis.props.limit)});
 		});
 	}
@@ -14151,40 +14155,61 @@ view_accounting_directdebit_List.prototype = $extend(React_Component.prototype,{
 		var _gthis = this;
 		var offset = 0;
 		if(filter != null && filter.page != null) {
-			haxe_Log.trace(filter,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 217, className : "view.accounting.directdebit.List", methodName : "getHistory"});
+			haxe_Log.trace(filter,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 218, className : "view.accounting.directdebit.List", methodName : "getHistory"});
 			offset = this.props.limit * filter.page | 0;
 			Reflect.deleteField(filter,"page");
 		}
-		filter = shared_Utils.extend(filter,this.props.match.params.id != null ? { mandat_id : shared_FindFields.iLike(this.props.match.params.id), mandator : this.props.userState.dbUser.mandator} : { mandator : this.props.userState.dbUser.mandator});
-		haxe_Log.trace("hi " + Std.string(filter),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 226, className : "view.accounting.directdebit.List", methodName : "getHistory"});
-		var p = App.store.dispatch(redux_Action.map(action_async_CRUD.read({ classPath : "data.DirectDebits", action : "get", fields : "anforderungs_datum,id,betrag", filter : filter, table : "booking_requests", limit : this.props.limit, offset : offset > 0 ? offset : 0, resolveMessage : { success : "Bankeinzug wurden geladen", failure : "Bankeinzug konnte nicht geladen werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP})));
-		p.then(function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 252, className : "view.accounting.directdebit.List", methodName : "getHistory"});
+		filter = shared_Utils.extend(filter,this.props.match.params.id != null ? { deal_id : this.props.match.params.id, mandator : this.props.userState.dbUser.mandator} : { mandator : this.props.userState.dbUser.mandator});
+		haxe_Log.trace("hi " + Std.string(filter),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 227, className : "view.accounting.directdebit.List", methodName : "getHistory"});
+		haxe_Log.trace(this.props.match.params,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 229, className : "view.accounting.directdebit.List", methodName : "getHistory"});
+		var dS_h = Object.create(null);
+		var _g = new haxe_ds_StringMap();
+		_g.h["alias"] = "bor";
+		_g.h["fields"] = "termin,id,mandat_id deal_id,betrag amount,info";
+		dS_h["booking_requests"] = _g;
+		var _g = new haxe_ds_StringMap();
+		_g.h["alias"] = "drs";
+		_g.h["fields"] = "value_date termin,deal_id,kid id,amount,sepa_code info";
+		dS_h["debit_return_statements"] = _g;
+		var p = App.store;
+		var _g = new haxe_ds_StringMap();
+		var _g1 = new haxe_ds_StringMap();
+		_g1.h["alias"] = "bor";
+		_g1.h["fields"] = "termin,id,mandat_id deal_id,betrag amount,sequenz info,mandator";
+		_g.h["booking_requests"] = _g1;
+		var _g1 = new haxe_ds_StringMap();
+		_g1.h["alias"] = "drs";
+		_g1.h["fields"] = "value_date termin,kid id,deal_id,amount,sepa_code info,mandator";
+		_g.h["debit_return_statements"] = _g1;
+		var p1 = p.dispatch(redux_Action.map(action_async_CRUD.read({ classPath : "data.DirectDebits", action : "getHistory", dataSource : _g, filter : filter, limit : this.props.limit, offset : offset > 0 ? offset : 0, order : "termin| ASC", resolveMessage : { success : "Buchungen wurden geladen", failure : "Buchungen konnten nicht geladen werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP})));
+		p1.then(function(data) {
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 269, className : "view.accounting.directdebit.List", methodName : "getHistory"});
+			haxe_Log.trace(data.dataRows,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 270, className : "view.accounting.directdebit.List", methodName : "getHistory"});
 			_gthis.setState({ loading : false, dataTable : data.dataRows, dataCount : Std.parseInt(data.dataInfo.h["count"]), pageCount : Math.ceil(Std.parseInt(data.dataInfo.h["count"]) / _gthis.props.limit)});
 		});
 	}
 	,'delete': function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 265, className : "view.accounting.directdebit.List", methodName : "delete"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 283, className : "view.accounting.directdebit.List", methodName : "delete"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
-		haxe_Log.trace(data,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 267, className : "view.accounting.directdebit.List", methodName : "delete"});
+		haxe_Log.trace(data,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 285, className : "view.accounting.directdebit.List", methodName : "delete"});
 	}
 	,processReturnDebitStatements: function(_) {
-		haxe_Log.trace(this.state.dataTable,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 272, className : "view.accounting.directdebit.List", methodName : "processReturnDebitStatements"});
+		haxe_Log.trace(this.state.dataTable,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 290, className : "view.accounting.directdebit.List", methodName : "processReturnDebitStatements"});
 		var p = this.props.update({ classPath : "data.DebitReturnStatements", action : "insert", mandator : 1, data : haxe_Serializer.run(this.state.dataTable), table : "debit_return_statements", resolveMessage : { success : "Rücklastschriften wurden verarbeitet", failure : "Rücklastschriften konnten nicht verarbeitet werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
 		p.then(function(data) {
-			haxe_Log.trace(haxe_Unserializer.run(data.dataInfo.h["data"]),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 291, className : "view.accounting.directdebit.List", methodName : "processReturnDebitStatements"});
-			haxe_Log.trace(shared_Utils.getAllByKey(haxe_Unserializer.run(data.dataInfo.h["data"]),"id"),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 292, className : "view.accounting.directdebit.List", methodName : "processReturnDebitStatements"});
+			haxe_Log.trace(haxe_Unserializer.run(data.dataInfo.h["data"]),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 309, className : "view.accounting.directdebit.List", methodName : "processReturnDebitStatements"});
+			haxe_Log.trace(shared_Utils.getAllByKey(haxe_Unserializer.run(data.dataInfo.h["data"]),"id"),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 310, className : "view.accounting.directdebit.List", methodName : "processReturnDebitStatements"});
 		});
 	}
 	,loadLocal: function() {
 		var finput = window.document.getElementById("returnDebitFile");
-		haxe_Log.trace(finput.files,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 301, className : "view.accounting.directdebit.List", methodName : "loadLocal"});
-		haxe_Log.trace(Reflect.fields(finput),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 302, className : "view.accounting.directdebit.List", methodName : "loadLocal"});
+		haxe_Log.trace(finput.files,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 319, className : "view.accounting.directdebit.List", methodName : "loadLocal"});
+		haxe_Log.trace(Reflect.fields(finput),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 320, className : "view.accounting.directdebit.List", methodName : "loadLocal"});
 		console.log(finput.files);
-		haxe_Log.trace(finput.value,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 304, className : "view.accounting.directdebit.List", methodName : "loadLocal"});
+		haxe_Log.trace(finput.value,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 322, className : "view.accounting.directdebit.List", methodName : "loadLocal"});
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 310, className : "view.accounting.directdebit.List", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 328, className : "view.accounting.directdebit.List", methodName : "render"});
 		if(this.state.sideMenu.menuBlocks == null) {
 			return this.renderResults();
 		}
@@ -14196,11 +14221,11 @@ view_accounting_directdebit_List.prototype = $extend(React_Component.prototype,{
 		return tmp.render(React.createElement(tmp1,{ },tmp4));
 	}
 	,renderResults: function() {
-		haxe_Log.trace(this.props.match.params.action + ":" + Std.string(this.state.dataTable != null),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 325, className : "view.accounting.directdebit.List", methodName : "renderResults"});
+		haxe_Log.trace(this.props.match.params.action + ":" + Std.string(this.state.dataTable != null),{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 343, className : "view.accounting.directdebit.List", methodName : "renderResults"});
 		if(this.state.loading) {
 			return this.state.formApi.renderWait();
 		}
-		haxe_Log.trace("###########loading:" + Std.string(this.state.loading) + " state.action:" + this.state.action,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 328, className : "view.accounting.directdebit.List", methodName : "renderResults"});
+		haxe_Log.trace("###########loading:" + Std.string(this.state.loading) + " state.action:" + this.state.action,{ fileName : "view/accounting/directdebit/List.hx", lineNumber : 346, className : "view.accounting.directdebit.List", methodName : "renderResults"});
 		var _g = this.state.action;
 		if(_g == null) {
 			if(this.state.data == null) {
@@ -16566,7 +16591,7 @@ var view_dashboard_DBSync = function(props) {
 	this.dataDisplay = view_dashboard_model_DBSyncModel.dataDisplay;
 	this.dataAccess = view_dashboard_model_DBSyncModel.dataAccess(props.match.params.action);
 	this.formFields = view_dashboard_model_DBSyncModel.formFields(props.match.params.action);
-	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 92, className : "view.dashboard.DBSync", methodName : "new"});
+	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 94, className : "view.dashboard.DBSync", methodName : "new"});
 	this.state = App.initEState({ loading : false, dataTable : [], actualState : { edited_by : props.userState.dbUser.id, mandator : props.userState.dbUser.mandator}, initialState : { edited_by : props.userState.dbUser.id, mandator : props.userState.dbUser.mandator}, values : new haxe_ds_StringMap()},this);
 };
 $hxClasses["view.dashboard.DBSync"] = view_dashboard_DBSync;
@@ -16592,10 +16617,10 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	,dbData: null
 	,dbMetaData: null
 	,createFieldList: function(ev) {
-		haxe_Log.trace("hi :)",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 121, className : "view.dashboard.DBSync", methodName : "createFieldList"});
+		haxe_Log.trace("hi :)",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 123, className : "view.dashboard.DBSync", methodName : "createFieldList"});
 	}
 	,editTableFields: function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 130, className : "view.dashboard.DBSync", methodName : "editTableFields"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 132, className : "view.dashboard.DBSync", methodName : "editTableFields"});
 	}
 	,initStateFromDataTable: function(dt) {
 		var iS = { };
@@ -16611,7 +16636,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			var k_current = 0;
 			while(k_current < k_length) {
 				var k = k_keys[k_current++];
-				haxe_Log.trace(k,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 141, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
+				haxe_Log.trace(k,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 143, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
 				if(this.dataDisplay.h["fieldsList"].columns.h[k].cellFormat == view_dashboard_model_DBSyncModel.formatBool) {
 					rS[k] = dR.h[k] == "Y";
 				} else {
@@ -16620,11 +16645,11 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			}
 			iS[dR.h["id"]] = rS;
 		}
-		haxe_Log.trace(iS,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 151, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
+		haxe_Log.trace(iS,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 153, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
 		return iS;
 	}
 	,saveTableFields: function(vA) {
-		haxe_Log.trace(vA,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 157, className : "view.dashboard.DBSync", methodName : "saveTableFields"});
+		haxe_Log.trace(vA,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 159, className : "view.dashboard.DBSync", methodName : "saveTableFields"});
 	}
 	,getMissingExternalBookings: function(cB) {
 		var _gthis = this;
@@ -16636,9 +16661,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			}
 			var offset = Std.parseInt(data.dataInfo.h["offset"]);
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "" + offset + " von " + Std.string(data.dataInfo.h["maxImport"]) + " aktualisiert"}))));
-			haxe_Log.trace("" + offset + " < " + Std.string(data.dataInfo.h["maxImport"]),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 217, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
+			haxe_Log.trace("" + offset + " < " + Std.string(data.dataInfo.h["maxImport"]),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 219, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
 			if(offset < Std.parseInt(data.dataInfo.h["maxImport"])) {
-				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 220, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
+				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 222, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
 				return _gthis.doSyncAll2(data.dataInfo);
 			} else {
 				_gthis.setState({ loading : false});
@@ -16651,8 +16676,26 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		});
 		return p;
 	}
+	,getAllExternalDebitReturnBookings: function() {
+		this.getMissingExternalDebitReturnBookings(true);
+	}
+	,getMissingExternalDebitReturnBookings: function(all) {
+		if(all == null) {
+			all = false;
+		}
+		this.setState({ loading : true});
+		var p = this.props.load({ classPath : "admin.SyncExternalDebitReturnBookings", action : all ? "importAll" : "getMissing", extDB : true, filter : { mandator : "1"}, table : "debit_return_statements", dbUser : this.props.userState.dbUser, devIP : App.devIP});
+		p.then(function(data) {
+			if(data.dataInfo.h["SyncExternalDebitReturnBookings"] == null) {
+				return App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "error", text : "Fehler 0  Aktualisiert"}))));
+			}
+			var offset = Std.parseInt(data.dataInfo.h["SyncExternalDebitReturnBookings"]);
+			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "" + offset + " Datensätze aktualisiert"}))));
+			return p;
+		});
+	}
 	,importAccounts2: function(_) {
-		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 243, className : "view.dashboard.DBSync", methodName : "importAccounts2"});
+		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 285, className : "view.dashboard.DBSync", methodName : "importAccounts2"});
 		this.setState({ loading : true});
 		this.doSyncAll2({ classPath : "admin.SyncExternalAccounts", action : "importContacts", extDB : true, filter : { mandator : "1"}, limit : 1000, offset : 0, table : "accounts", dbUser : this.props.userState.dbUser, devIP : App.devIP, maxImport : 4000});
 	}
@@ -16665,9 +16708,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			}
 			var offset = Std.parseInt(data.dataInfo.h["offset"]);
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "" + offset + " von " + Std.string(data.dataInfo.h["maxImport"]) + " aktualisiert"}))));
-			haxe_Log.trace("" + offset + " < " + Std.string(data.dataInfo.h["maxImport"]),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 281, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
+			haxe_Log.trace("" + offset + " < " + Std.string(data.dataInfo.h["maxImport"]),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 323, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
 			if(offset < Std.parseInt(data.dataInfo.h["maxImport"])) {
-				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 284, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
+				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 326, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
 				return _gthis.doSyncAll2(data.dataInfo);
 			} else {
 				_gthis.setState({ loading : false});
@@ -16681,20 +16724,20 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		var dbQueryParam = { classPath : "data.SyncExternal", action : "sync2dev", extDB : true, filter : { mandator : "1"}, dbUser : this.props.userState.dbUser, devIP : App.devIP};
 		var p = action_async_LivePBXSync.query(dbQueryParam);
 		p.then(function(data) {
-			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 322, className : "view.dashboard.DBSync", methodName : "syncQC"});
-			haxe_Log.trace(new haxe_ds__$StringMap_StringMapKeyIterator(data.dataInfo.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 323, className : "view.dashboard.DBSync", methodName : "syncQC"});
+			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 364, className : "view.dashboard.DBSync", methodName : "syncQC"});
+			haxe_Log.trace(new haxe_ds__$StringMap_StringMapKeyIterator(data.dataInfo.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 365, className : "view.dashboard.DBSync", methodName : "syncQC"});
 			var offset = Std.parseInt(data.dataInfo.h["qc_leads"]);
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "" + Std.string(data.dataInfo.h["qc_leads"]) + " QC Test leads aktualisiert"}))));
-			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 332, className : "view.dashboard.DBSync", methodName : "syncQC"});
+			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 374, className : "view.dashboard.DBSync", methodName : "syncQC"});
 			return p;
 		});
 	}
 	,importContacts: function() {
-		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 340, className : "view.dashboard.DBSync", methodName : "importContacts"});
+		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 382, className : "view.dashboard.DBSync", methodName : "importContacts"});
 		App.store.dispatch(action_async_LivePBXSync.importContacts({ devIP : App.devIP, limit : 4000, maxImport : 4000, userState : this.props.userState, offset : 0, classPath : "admin.SyncExternalContacts", action : "importContacts"}));
 	}
 	,importAllBookingRequests2: function(_) {
-		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 354, className : "view.dashboard.DBSync", methodName : "importAllBookingRequests2"});
+		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 396, className : "view.dashboard.DBSync", methodName : "importAllBookingRequests2"});
 		App.store.dispatch(action_async_LivePBXSync.importContacts({ limit : 50000, maxImport : 50000, userState : this.props.userState, offset : 100000, table : "booking_requests", classPath : "admin.SyncExternalBookings", action : "importContacts"}));
 	}
 	,importBookingRequests2: function() {
@@ -16703,14 +16746,14 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	,checkBookingRequests: function(fD) {
 		var _gthis = this;
 		if(fD != null) {
-			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 381, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
-			haxe_Log.trace(fD.get("sync_now"),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 386, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 423, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+			haxe_Log.trace(fD.get("sync_now"),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 428, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
 			if(fD.get("sync_now") == "on") {
 				App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Buchungsanforderungen"}))));
 				this.getMissingExternalBookings(function() {
 					_gthis.loadBookingRequestsCount();
 					window.document.querySelector("[name=\"sync_now\"]").checked = false;
-					haxe_Log.trace((js_Boot.__cast(window.document.querySelector("[name=\"sync_now\"]") , HTMLInputElement)).checked ? "Yes" : "No",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 397, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+					haxe_Log.trace((js_Boot.__cast(window.document.querySelector("[name=\"sync_now\"]") , HTMLInputElement)).checked ? "Yes" : "No",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 439, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
 				});
 			} else {
 				this.loadBookingRequestsCount();
@@ -16725,28 +16768,28 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Lade Anzahl Buchungsanforderungen"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "bookingRequestsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 426, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
-			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 427, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 468, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
+			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 469, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "bookingRequestsCount";
 			_g.h["buchungsAnforderungenCount"] = props.dataInfo.h["buchungsAnforderungenCount"];
 			_g.h["bookingRequestsCount"] = props.dataInfo.h["bookingRequestsCount"];
 			_gthis1.setState({ data : _g});
-			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 438, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
+			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 480, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 440, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 482, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
 		});
 	}
 	,checkAccounts: function(fD) {
 		var _gthis = this;
 		if(fD != null) {
-			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 447, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
+			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 489, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
 		}
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Konten"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "accountsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 465, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 507, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "accountsCount";
@@ -16754,24 +16797,24 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["accountsCount"] = props.dataInfo.h["accountsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 472, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 514, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
 		});
 	}
 	,checkContacts: function(fD) {
 		var _gthis = this;
 		if(fD != null) {
-			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 480, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 522, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 		}
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Kontakte"}))));
 		var sync_now = { checked : false};
-		haxe_Log.trace(sync_now.checked,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 490, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+		haxe_Log.trace(sync_now.checked,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 532, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 		if(sync_now.checked) {
 			this.importContacts();
 			return;
 		}
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "clientsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 504, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 546, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "contactsCount";
@@ -16779,7 +16822,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["contactsCount"] = props.dataInfo.h["contactsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 511, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 553, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 		});
 	}
 	,checkDeals: function() {
@@ -16787,7 +16830,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Spenden"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "dealsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 531, className : "view.dashboard.DBSync", methodName : "checkDeals"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 573, className : "view.dashboard.DBSync", methodName : "checkDeals"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "dealsCount";
@@ -16795,7 +16838,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["dealsCount"] = props.dataInfo.h["dealsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 538, className : "view.dashboard.DBSync", methodName : "checkDeals"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 580, className : "view.dashboard.DBSync", methodName : "checkDeals"});
 			App.store.dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ dbUser : _gthis.props.userState.dbUser, lastError : "Du musst dich neu anmelden!"}))));
 		});
 	}
@@ -16803,9 +16846,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "Synchronisiere Kontakte, Spenden + Konten"}))));
 		var pro = App.store.dispatch(action_async_LivePBXSync.checkAll({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "admin.SyncExternal", action : "checkAll"}));
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 565, className : "view.dashboard.DBSync", methodName : "checkAll"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 607, className : "view.dashboard.DBSync", methodName : "checkAll"});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 567, className : "view.dashboard.DBSync", methodName : "checkAll"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 609, className : "view.dashboard.DBSync", methodName : "checkAll"});
 		});
 	}
 	,displaySummary: function() {
@@ -16820,11 +16863,11 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,syncUserDetails2: function(_) {
 		var _gthis = this;
-		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 608, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
-		haxe_Log.trace(this.props.userState.dbUser,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 609, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 650, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+		haxe_Log.trace(this.props.userState.dbUser,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 651, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
 		loader_BinaryLoader.create("" + Std.string(App.config.api),{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, fields : "id,table_name,field_name,disabled,element,required,use_as_index", classPath : "admin.SyncExternal", action : "syncUserDetails", devIP : App.devIP, dbUser : this.props.userState.dbUser},function(data) {
-			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 625, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 627, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 667, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 669, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
 			if(data.dataRows.length > 0) {
 				_gthis.setState({ dataTable : data.dataRows});
 			}
@@ -16833,9 +16876,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,proxy_showUserList: function(_) {
 		var _gthis = this;
-		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 642, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
+		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 684, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
 		loader_BinaryLoader.create("https://pitverwaltung.de/sync/proxy.php",{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, fields : "id,table_name,field_name,disabled,element,required,use_as_index", classPath : "admin.SyncExternal", action : "syncUserDetails", target : "syncUsers.php", devIP : App.devIP},function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 660, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 702, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
 			if(data.dataRows.length > 0) {
 				_gthis.setState({ dataTable : data.dataRows});
 			}
@@ -16843,11 +16886,11 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,componentDidMount: function() {
 		if(this.props.userState != null) {
-			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 677, className : "view.dashboard.DBSync", methodName : "componentDidMount"});
+			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 719, className : "view.dashboard.DBSync", methodName : "componentDidMount"});
 		}
 	}
 	,go: function(aState) {
-		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 682, className : "view.dashboard.DBSync", methodName : "go"});
+		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 724, className : "view.dashboard.DBSync", methodName : "go"});
 		var dbaProps_action = this.props.match.params.action;
 		var dbaProps_classPath = "data.Contacts";
 		var dbaProps_dataSource = null;
@@ -16862,7 +16905,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			while(_g < _g1.length) {
 				var f = _g1[_g];
 				++_g;
-				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 696, className : "view.dashboard.DBSync", methodName : "go"});
+				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 738, className : "view.dashboard.DBSync", methodName : "go"});
 				if(Reflect.field(aState,f) == "") {
 					Reflect.deleteField(aState,f);
 				}
@@ -16880,7 +16923,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 716, className : "view.dashboard.DBSync", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 758, className : "view.dashboard.DBSync", methodName : "render"});
 		var tmp = this.state.formApi;
 		var tmp1 = react_ReactType.fromComp(React_Fragment);
 		var tmp2 = react_ReactType.fromString("form");
@@ -16890,13 +16933,13 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,renderResults: function() {
 		if(this.state.data != null) {
-			haxe_Log.trace(Std.string(this.state.data.h["action"]) + ":",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 728, className : "view.dashboard.DBSync", methodName : "renderResults"});
+			haxe_Log.trace(Std.string(this.state.data.h["action"]) + ":",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 770, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		}
-		haxe_Log.trace(this.state.loading,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 729, className : "view.dashboard.DBSync", methodName : "renderResults"});
+		haxe_Log.trace(this.state.loading,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 771, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		if(this.state.data == null) {
 			return React.createElement(react_ReactType.fromString("div"),{ className : "flex0 cCenter"},this.state.formApi.renderWait());
 		}
-		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 732, className : "view.dashboard.DBSync", methodName : "renderResults"});
+		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 774, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		var _g = this.state.data.h["action"];
 		if(_g == null) {
 			return null;
@@ -16971,7 +17014,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 				}
 				break;
 			case "importClientList":
-				haxe_Log.trace(this.state.actualState,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 736, className : "view.dashboard.DBSync", methodName : "renderResults"});
+				haxe_Log.trace(this.state.actualState,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 778, className : "view.dashboard.DBSync", methodName : "renderResults"});
 				if(this.state.actualState == null) {
 					return this.state.formApi.renderWait();
 				} else {
@@ -16985,7 +17028,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,updateMenu: function(viewClassPath) {
 		var sideMenu = this.state.sideMenu;
-		haxe_Log.trace(sideMenu.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 794, className : "view.dashboard.DBSync", methodName : "updateMenu"});
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 836, className : "view.dashboard.DBSync", methodName : "updateMenu"});
 		var _g = 0;
 		var _g1 = sideMenu.menuBlocks.h["DBSync"].items;
 		while(_g < _g1.length) {
@@ -18549,13 +18592,13 @@ var view_data_contacts_Edit = function(props) {
 	this.dealsFormRef = React.createRef();
 	this.formRef = React.createRef();
 	this.historyFormRef = React.createRef();
-	haxe_Log.trace(props.match.params,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 129, className : "view.data.contacts.Edit", methodName : "new"});
+	haxe_Log.trace(props.match.params,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 130, className : "view.data.contacts.Edit", methodName : "new"});
 	if(props.dataStore.contactsData != null && props.match.params.id == null) {
 		var tmp = props.dataStore.contactsData.keys().next();
 		props.match.params.id = Std.string(tmp);
 	}
 	if(props.match.params.id == "null" && new EReg("open|update(/)*$","").match(props.match.params.action)) {
-		haxe_Log.trace("nothing selected - redirect",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 137, className : "view.data.contacts.Edit", methodName : "new"});
+		haxe_Log.trace("nothing selected - redirect",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 138, className : "view.data.contacts.Edit", methodName : "new"});
 		var baseUrl = props.match.path.split(":section")[0];
 		props.history.push("" + baseUrl + "List/get");
 		return;
@@ -18570,7 +18613,7 @@ var view_data_contacts_Edit = function(props) {
 	this.accountFieldNames = view_shared_io_BaseForm.initFieldNames(new haxe_ds__$StringMap_StringMapKeyIterator(this.accountDataAccess.h["open"].view.h));
 	this.accountDataDisplay = model_accounting_AccountsModel.dataDisplay;
 	if(props.dataStore.contactsData != null) {
-		haxe_Log.trace(props.dataStore.contactsData.keys().next(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 156, className : "view.data.contacts.Edit", methodName : "new"});
+		haxe_Log.trace(props.dataStore.contactsData.keys().next(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 157, className : "view.data.contacts.Edit", methodName : "new"});
 	}
 	var _g = [];
 	var _g1 = 0;
@@ -18582,12 +18625,12 @@ var view_data_contacts_Edit = function(props) {
 	}
 	var _iMenuItems = _g;
 	this.state = App.initEState({ actualState : null, initialData : null, mHandlers : _iMenuItems, loading : false, model : "contacts", ormRefs : new haxe_ds_StringMap(), relDataComps : new haxe_ds_StringMap(), selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenu(this,{ dataClassPath : "data.Contacts", label : "Bearbeiten", section : "Edit", items : _iMenuItems},{ section : props.match.params.section == null ? "Edit" : props.match.params.section, sameWidth : true}), values : new haxe_ds_StringMap()},this);
-	haxe_Log.trace(this.state.initialData,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 186, className : "view.data.contacts.Edit", methodName : "new"});
+	haxe_Log.trace(this.state.initialData,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 187, className : "view.data.contacts.Edit", methodName : "new"});
 };
 $hxClasses["view.data.contacts.Edit"] = view_data_contacts_Edit;
 view_data_contacts_Edit.__name__ = "view.data.contacts.Edit";
 view_data_contacts_Edit.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace("here we should be ready to load",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 630, className : "view.data.contacts.Edit", methodName : "mapDispatchToProps"});
+	haxe_Log.trace("here we should be ready to load",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 631, className : "view.data.contacts.Edit", methodName : "mapDispatchToProps"});
 	return { load : function(param) {
 		return dispatch(redux_Action.map(action_async_CRUD.read(param)));
 	}};
@@ -18626,7 +18669,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		this.props.history.push("" + this.props.match.path.split(":section")[0] + "List/get");
 	}
 	,showSelectedAccounts: function(ev) {
-		haxe_Log.trace("---" + Std.string(this.ormRefs.h["accounts"].compRef.state.dataGrid.state.selectedRows),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 199, className : "view.data.contacts.Edit", methodName : "showSelectedAccounts"});
+		haxe_Log.trace("---" + Std.string(this.ormRefs.h["accounts"].compRef.state.dataGrid.state.selectedRows),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 200, className : "view.data.contacts.Edit", methodName : "showSelectedAccounts"});
 		var sRows = this.ormRefs.h["accounts"].compRef.state.dataGrid.state.selectedRows;
 		var k = sRows.keys();
 		while(k.hasNext()) {
@@ -18635,37 +18678,37 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,showSelectedDeals: function(ev) {
-		haxe_Log.trace("---" + Std.string(Type.typeof(this.state.relDataComps)),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 212, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
+		haxe_Log.trace("---" + Std.string(Type.typeof(this.state.relDataComps)),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 213, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
 		var h = this.state.relDataComps.h;
 		var inlStringMapKeyIterator_h = h;
 		var inlStringMapKeyIterator_keys = Object.keys(h);
 		var inlStringMapKeyIterator_length = inlStringMapKeyIterator_keys.length;
 		var inlStringMapKeyIterator_current = 0;
-		haxe_Log.trace("---" + Std.string(inlStringMapKeyIterator_current < inlStringMapKeyIterator_length),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 214, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
+		haxe_Log.trace("---" + Std.string(inlStringMapKeyIterator_current < inlStringMapKeyIterator_length),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 215, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
 		var sRows = this.ormRefs.h["deals"].compRef.state.dataGrid.state.selectedRows;
 		var k = sRows.keys();
 		while(k.hasNext()) {
 			var k1 = k.next();
 			this.ormRefs.h["deals"].compRef.props.loadData(k1,this.ormRefs.h["deals"].compRef);
 		}
-		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 223, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
-		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef).querySelectorAll(".selected").length,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 224, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
+		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 224, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
+		haxe_Log.trace(react_ReactRef.get_current(this.dealsFormRef).querySelectorAll(".selected").length,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 225, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
 		if(ev != null) {
 			var targetEl = js_Boot.__cast(ev.target , HTMLElement);
-			haxe_Log.trace(Std.string(targetEl.dataset.id),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 227, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
+			haxe_Log.trace(Std.string(targetEl.dataset.id),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 228, className : "view.data.contacts.Edit", methodName : "showSelectedDeals"});
 		}
 	}
 	,loadBookingHistory: function(id) {
 	}
 	,loadContactData: function(id) {
 		var _gthis = this;
-		haxe_Log.trace("loading:" + id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 238, className : "view.data.contacts.Edit", methodName : "loadContactData"});
+		haxe_Log.trace("loading:" + id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 239, className : "view.data.contacts.Edit", methodName : "loadContactData"});
 		if(id == null) {
 			return;
 		}
 		var p = this.props.load({ classPath : "data.Contacts", action : "getDetails", filter : { id : id, mandator : 1}, resolveMessage : { success : "Kontakt " + id + " wurde geladen", failure : "Kontakt " + id + " konnte nicht geladen werden"}, table : "contacts", viciBoxDB : true, dbUser : this.props.userState.dbUser, devIP : App.devIP});
 		p.then(function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 258, className : "view.data.contacts.Edit", methodName : "loadContactData"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 259, className : "view.data.contacts.Edit", methodName : "loadContactData"});
 			if(data.dataRows.length == 1) {
 				var c_data = data.dataRows[0];
 				if(Object.prototype.hasOwnProperty.call(data.dataInfo.h,"recordings")) {
@@ -18680,7 +18723,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 					_gthis.state.mHandlers = _g;
 					view_shared_io_BaseForm.addRecordings(_gthis.state,data.dataInfo.h["recordings"]);
 				} else {
-					haxe_Log.trace(haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 274, className : "view.data.contacts.Edit", methodName : "loadContactData"});
+					haxe_Log.trace(haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 275, className : "view.data.contacts.Edit", methodName : "loadContactData"});
 				}
 				var contact = new model_Contact(c_data);
 				if(_gthis.mounted) {
@@ -18693,7 +18736,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		});
 	}
 	,'delete': function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 291, className : "view.data.contacts.Edit", methodName : "delete"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 292, className : "view.data.contacts.Edit", methodName : "delete"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
 	}
 	,update2: function() {
@@ -18705,23 +18748,23 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		} catch( _g ) {
 			var ex = haxe_Exception.caught(_g).unwrap();
 			if(this._trace) {
-				haxe_Log.trace(ex,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 308, className : "view.data.contacts.Edit", methodName : "componentDidCatch"});
+				haxe_Log.trace(ex,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 309, className : "view.data.contacts.Edit", methodName : "componentDidCatch"});
 			}
 		}
 		if(this._trace) {
-			haxe_Log.trace(error,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 310, className : "view.data.contacts.Edit", methodName : "componentDidCatch"});
+			haxe_Log.trace(error,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 311, className : "view.data.contacts.Edit", methodName : "componentDidCatch"});
 		}
-		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 311, className : "view.data.contacts.Edit", methodName : "componentDidCatch"});
+		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 312, className : "view.data.contacts.Edit", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
-		haxe_Log.trace("mounted:" + Std.string(this.mounted),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 316, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
+		haxe_Log.trace("mounted:" + Std.string(this.mounted),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 317, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
 		this.mounted = true;
-		haxe_Log.trace(this.props.children,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 318, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.children,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 319, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
 		if(this.props.match.params.id != null) {
-			haxe_Log.trace(this.props.match.params,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 321, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
+			haxe_Log.trace(this.props.match.params,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 322, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
 			this.loadContactData(Std.parseInt(this.props.match.params.id));
 		}
-		haxe_Log.trace(this.props.children,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 324, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.children,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 325, className : "view.data.contacts.Edit", methodName : "componentDidMount"});
 	}
 	,componentWillUnmount: function() {
 		return;
@@ -18734,8 +18777,8 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		case 0:
 			break;
 		case 4:
-			haxe_Log.trace(Reflect.fields(ref),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 355, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
-			haxe_Log.trace(js_Boot.getClass(ref),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 356, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
+			haxe_Log.trace(Reflect.fields(ref),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 356, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
+			haxe_Log.trace(js_Boot.getClass(ref),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 357, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
 			var tmp = ref.props != null && ref.props.model != null;
 			break;
 		case 6:
@@ -18751,22 +18794,22 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 					}
 				} catch( _g ) {
 					var ex = haxe_Exception.caught(_g);
-					haxe_Log.trace(ex,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 381, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
+					haxe_Log.trace(ex,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 382, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
 				}
 			}
 			break;
 		default:
-			haxe_Log.trace(ref,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 385, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
+			haxe_Log.trace(ref,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 386, className : "view.data.contacts.Edit", methodName : "registerOrmRef"});
 		}
 	}
 	,registerORM: function(refModel,orm) {
 		if(Object.prototype.hasOwnProperty.call(this.ormRefs.h,refModel)) {
 			this.ormRefs.h[refModel].orms.h[orm.id] = orm;
-			haxe_Log.trace(refModel,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 392, className : "view.data.contacts.Edit", methodName : "registerORM"});
+			haxe_Log.trace(refModel,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 393, className : "view.data.contacts.Edit", methodName : "registerORM"});
 			this.setState({ ormRefs : this.ormRefs});
-			haxe_Log.trace(Reflect.fields(this.state),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 396, className : "view.data.contacts.Edit", methodName : "registerORM"});
+			haxe_Log.trace(Reflect.fields(this.state),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 397, className : "view.data.contacts.Edit", methodName : "registerORM"});
 		} else {
-			haxe_Log.trace("OrmRef " + refModel + " not found!",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 400, className : "view.data.contacts.Edit", methodName : "registerORM"});
+			haxe_Log.trace("OrmRef " + refModel + " not found!",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 401, className : "view.data.contacts.Edit", methodName : "registerORM"});
 		}
 	}
 	,update: function() {
@@ -18783,12 +18826,12 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 			var k = _g1_key;
 			var v = _g1_value;
 			if(Reflect.field(v,"props") != null && Reflect.field(v.props,"save") != null) {
-				haxe_Log.trace("save:" + k,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 408, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace("save:" + k,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 409, className : "view.data.contacts.Edit", methodName : "update"});
 				v.props.save(v);
 			}
 		}
 		if(this.state.actualState != null) {
-			haxe_Log.trace("length:" + this.state.actualState.fieldsModified.length + ":" + this.state.actualState.fieldsModified.join("|"),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 417, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace("length:" + this.state.actualState.fieldsModified.length + ":" + this.state.actualState.fieldsModified.join("|"),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 418, className : "view.data.contacts.Edit", methodName : "update"});
 		}
 		if(this.state.actualState == null || this.state.actualState.fieldsModified.length == 0) {
 			return;
@@ -18799,7 +18842,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		var elements = formElement.elements;
 		var aState = react_ReactUtil.copy(this.state.actualState);
 		var dbQ = { classPath : "data.Contacts", action : "update", data : data2save, filter : { id : this.state.actualState.id, mandator : 1}, resolveMessage : { success : "Kontakt " + this.state.actualState.id + " wurde aktualisiert", failure : "Kontakt " + this.state.actualState.id + " konnte nicht aktualisiert werden"}, table : "contacts", dbUser : this.props.userState.dbUser, devIP : App.devIP};
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 439, className : "view.data.contacts.Edit", methodName : "update"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 440, className : "view.data.contacts.Edit", methodName : "update"});
 		switch(this.props.match.params.action) {
 		case "delete":case "get":
 			var _g = new haxe_ds_StringMap();
@@ -18814,28 +18857,28 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 			while(_g < _g1.length) {
 				var f = _g1[_g];
 				++_g;
-				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 445, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 446, className : "view.data.contacts.Edit", methodName : "update"});
 				if(Reflect.field(aState,f) == "") {
 					Reflect.deleteField(aState,f);
 				}
 			}
 			break;
 		case "update":
-			haxe_Log.trace("" + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 457, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace("" + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 458, className : "view.data.contacts.Edit", methodName : "update"});
 			if(this.state.actualState != null) {
-				haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 461, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 462, className : "view.data.contacts.Edit", methodName : "update"});
 			}
-			haxe_Log.trace(this.state.actualState.id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 463, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace(this.state.actualState.id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 464, className : "view.data.contacts.Edit", methodName : "update"});
 			if(!this.state.actualState.modified()) {
-				haxe_Log.trace("nothing modified",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 467, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace("nothing modified",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 468, className : "view.data.contacts.Edit", methodName : "update"});
 				return;
 			}
-			haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 470, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 471, className : "view.data.contacts.Edit", methodName : "update"});
 			break;
 		}
 		var p = App.store.dispatch(redux_Action.map(action_async_CRUD.update(dbQ)));
 		p.then(function(d) {
-			haxe_Log.trace(d,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 483, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace(d,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 484, className : "view.data.contacts.Edit", methodName : "update"});
 			_gthis.loadContactData(_gthis.state.actualState.id);
 		});
 	}
@@ -18877,7 +18920,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 					var k = k_keys[k_current++];
 					_g.h[k] = this.dataAccess.h["open"].view.h[k];
 				}
-				var tmp7 = React.createElement(tmp1,tmp2,React.createElement(tmp3,tmp4,tmp6,tmp5.renderFormInputElements(_g,this.state.actualState)),React.createElement(react_ReactType.fromComp(view_accounting_directdebit_List),Object.assign({ },this.props,{ id : this.props.id, action : "getHistory", limit : 100, fullWidth : true, sideMenu : { }})));
+				var tmp7 = React.createElement(tmp1,tmp2,React.createElement(tmp3,tmp4,tmp6,tmp5.renderFormInputElements(_g,this.state.actualState)),React.createElement(react_ReactType.fromComp(view_accounting_directdebit_List),Object.assign({ },this.props,{ contact : this.props.id, action : "getHistory", limit : 100, fullWidth : true, sideMenu : { }})));
 				var tmp1 = this.relData();
 				var tmp2 = this.relDataLists();
 				return React.createElement(tmp,{ },tmp7,tmp1,tmp2);
@@ -18972,7 +19015,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		return React.createElement(tmp,{ },tmp1,tmp2);
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 597, className : "view.data.contacts.Edit", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 598, className : "view.data.contacts.Edit", methodName : "render"});
 		if(this.state == null || this.state.initialData == null) {
 			return null;
 		}
@@ -18986,7 +19029,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,select: function(id,data,match) {
-		haxe_Log.trace(id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 626, className : "view.data.contacts.Edit", methodName : "select"});
+		haxe_Log.trace(id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 627, className : "view.data.contacts.Edit", methodName : "select"});
 	}
 	,__class__: view_data_contacts_Edit
 });
@@ -19388,7 +19431,6 @@ var view_data_deals_List = function(props) {
 		var baseUrl = props.match.path.split(":section")[0];
 		haxe_Log.trace("redirecting to " + baseUrl + "List/get",{ fileName : "view/data/deals/List.hx", lineNumber : 84, className : "view.data.deals.List", methodName : "new"});
 		props.history.push("" + baseUrl + "List/get");
-		this.get(null);
 	} else {
 		haxe_Log.trace(props.match.params,{ fileName : "view/data/deals/List.hx", lineNumber : 91, className : "view.data.deals.List", methodName : "new"});
 	}
@@ -20124,7 +20166,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		}
 		var headerRows = this.renderHeaderDisplay();
 		var tmp = react_ReactType.fromString("div");
-		var tmp1 = React.createElement(react_ReactType.fromString("div"),{ key : "grid_list" + this.props.id, ref : this.gridRef, className : "grid_box grid" + this.visibleColumns + "c", id : this.props.id},this.renderTitle(),headerRows,this.renderRows());
+		var tmp1 = React.createElement(react_ReactType.fromString("div"),{ key : "grid_list" + this.props.id, ref : this.gridRef, className : "grid_box grid" + this.visibleColumns + "c", id : this.props.id},this.renderTitle(this.visibleColumns),headerRows,this.renderRows());
 		var tmp2 = this.renderPager(this.props.parentComponent);
 		return React.createElement(tmp,{ className : "grid_container"},tmp1,tmp2);
 	}
@@ -20143,11 +20185,15 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 			}
 		}, containerClassName : "pagination is-small", subContainerClassName : "pages pagination", activeLinkClassName : "is-current"})));
 	}
-	,renderTitle: function() {
+	,renderTitle: function(vcol) {
+		if(vcol == null) {
+			vcol = 2;
+		}
 		if(this.props.title == null) {
 			return null;
 		}
-		return React.createElement(react_ReactType.fromString("div"),{ key : "caption", className : "g_caption"},this.props.title);
+		++vcol;
+		return React.createElement(react_ReactType.fromString("div"),{ key : "caption", className : "g_caption", style : { gridColumn : "1/" + vcol}},this.props.title);
 	}
 	,renderHeaderDisplay: function() {
 		if(this.props.dataState == null) {
@@ -20171,7 +20217,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 			this.gridStyle += hC.flexGrow != null ? " " + hC.flexGrow + "fr" : " max-content";
 			headerRow.push(React.createElement(react_ReactType.fromString("span"),{ key : field + "header", className : "gridHeadItem " + (hC.headerClassName != null ? hC.headerClassName : hC.className != null ? hC.className : "")},hC.label != null ? hC.label : hC.name,React.createElement(react_ReactType.fromString("span"),{ className : "sort-box fa fa-sort"})));
 		}
-		haxe_Log.trace("" + this.visibleColumns + " " + this.gridStyle,{ fileName : "view/grid/Grid.hx", lineNumber : 179, className : "view.grid.Grid", methodName : "renderHeaderDisplay"});
+		haxe_Log.trace("" + this.visibleColumns + " " + this.gridStyle,{ fileName : "view/grid/Grid.hx", lineNumber : 180, className : "view.grid.Grid", methodName : "renderHeaderDisplay"});
 		return headerRow;
 	}
 	,map2DataCell: function(rdMap,fN,column,row,rowClass) {
@@ -20249,7 +20295,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 	,componentDidMount: function() {
 		if(this.gridRef == null || react_ReactRef.get_current(this.gridRef) == null) {
 			var c = js_Boot.getClass(this.props.parentComponent);
-			haxe_Log.trace(c.__name__,{ fileName : "view/grid/Grid.hx", lineNumber : 275, className : "view.grid.Grid", methodName : "componentDidMount"});
+			haxe_Log.trace(c.__name__,{ fileName : "view/grid/Grid.hx", lineNumber : 276, className : "view.grid.Grid", methodName : "componentDidMount"});
 			return;
 		}
 		this.props.parentComponent.state.dataGrid = this;
@@ -20257,11 +20303,11 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		grid.style.setProperty("grid-template-columns",this.gridStyle);
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace(Std.string(this.headerUpdated) + ":" + Std.string(this.headerRef) + " cmp state:" + (prevState == this.state ? "Y" : "N"),{ fileName : "view/grid/Grid.hx", lineNumber : 286, className : "view.grid.Grid", methodName : "componentDidUpdate"});
+		haxe_Log.trace(Std.string(this.headerUpdated) + ":" + Std.string(this.headerRef) + " cmp state:" + (prevState == this.state ? "Y" : "N"),{ fileName : "view/grid/Grid.hx", lineNumber : 287, className : "view.grid.Grid", methodName : "componentDidUpdate"});
 	}
 	,editRow: function(ev) {
 		var _gthis = this;
-		haxe_Log.trace(ev.target.nodeName,{ fileName : "view/grid/Grid.hx", lineNumber : 290, className : "view.grid.Grid", methodName : "editRow"});
+		haxe_Log.trace(ev.target.nodeName,{ fileName : "view/grid/Grid.hx", lineNumber : 291, className : "view.grid.Grid", methodName : "editRow"});
 		this.state.selectTimer.stop();
 		this.state._prevent = true;
 		var el = js_Boot.__cast(ev.target , HTMLElement);
@@ -20271,8 +20317,8 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		haxe_Timer.delay(function() {
 			_gthis.state._prevent = false;
 		},view_grid_Grid.clickDelay * 2);
-		haxe_Log.trace(this.props.onDoubleClick,{ fileName : "view/grid/Grid.hx", lineNumber : 299, className : "view.grid.Grid", methodName : "editRow"});
-		haxe_Log.trace("here we go :) " + this.getUrl(el.dataset.action,"Edit"),{ fileName : "view/grid/Grid.hx", lineNumber : 300, className : "view.grid.Grid", methodName : "editRow"});
+		haxe_Log.trace(this.props.onDoubleClick,{ fileName : "view/grid/Grid.hx", lineNumber : 300, className : "view.grid.Grid", methodName : "editRow"});
+		haxe_Log.trace("here we go :) " + this.getUrl(el.dataset.action,"Edit"),{ fileName : "view/grid/Grid.hx", lineNumber : 301, className : "view.grid.Grid", methodName : "editRow"});
 		if(this.props.onDoubleClick != null) {
 			this.props.onDoubleClick(ev);
 		} else {
@@ -20283,19 +20329,19 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 	}
 	,getUrl: function(action,targetSection) {
 		var match = this.props.match;
-		haxe_Log.trace(match,{ fileName : "view/grid/Grid.hx", lineNumber : 316, className : "view.grid.Grid", methodName : "getUrl"});
+		haxe_Log.trace(match,{ fileName : "view/grid/Grid.hx", lineNumber : 317, className : "view.grid.Grid", methodName : "getUrl"});
 		var c = js_Boot.getClass(this.props.parentComponent);
-		haxe_Log.trace(c.__name__,{ fileName : "view/grid/Grid.hx", lineNumber : 319, className : "view.grid.Grid", methodName : "getUrl"});
+		haxe_Log.trace(c.__name__,{ fileName : "view/grid/Grid.hx", lineNumber : 320, className : "view.grid.Grid", methodName : "getUrl"});
 		var baseUrl = match.path.split(":section")[0];
 		var section = match.params.section;
 		if(action == null || action == "") {
 			action = this.props.doubleClickAction;
 		}
 		if(this.props.parentComponent.state.selectedData != null) {
-			haxe_Log.trace(this.props.parentComponent.state.selectedData.toString(),{ fileName : "view/grid/Grid.hx", lineNumber : 327, className : "view.grid.Grid", methodName : "getUrl"});
+			haxe_Log.trace(this.props.parentComponent.state.selectedData.toString(),{ fileName : "view/grid/Grid.hx", lineNumber : 328, className : "view.grid.Grid", methodName : "getUrl"});
 		}
 		var id = this.props.parentComponent.state.selectedData == null || action == "insert" ? "" : "/" + shared_Utils.keysList(this.props.parentComponent.state.selectedData.keys())[0];
-		haxe_Log.trace(">>" + id + "<<",{ fileName : "view/grid/Grid.hx", lineNumber : 330, className : "view.grid.Grid", methodName : "getUrl"});
+		haxe_Log.trace(">>" + id + "<<",{ fileName : "view/grid/Grid.hx", lineNumber : 331, className : "view.grid.Grid", methodName : "getUrl"});
 		if(id == "/undefined") {
 			id = "";
 		}
@@ -20303,7 +20349,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 	}
 	,select: function(e) {
 		var _gthis = this;
-		haxe_Log.trace(e.target.nodeName + ":" + Std.string(this.state._prevent),{ fileName : "view/grid/Grid.hx", lineNumber : 338, className : "view.grid.Grid", methodName : "select"});
+		haxe_Log.trace(e.target.nodeName + ":" + Std.string(this.state._prevent),{ fileName : "view/grid/Grid.hx", lineNumber : 339, className : "view.grid.Grid", methodName : "select"});
 		e.persist();
 		this.state.selectTimer = haxe_Timer.delay(function() {
 			if(!_gthis.state._prevent) {
@@ -20312,7 +20358,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		},view_grid_Grid.clickDelay);
 	}
 	,highLightRow: function(evtOrId) {
-		haxe_Log.trace("evtOrId",{ fileName : "view/grid/Grid.hx", lineNumber : 348, className : "view.grid.Grid", methodName : "highLightRow"});
+		haxe_Log.trace("evtOrId",{ fileName : "view/grid/Grid.hx", lineNumber : 349, className : "view.grid.Grid", methodName : "highLightRow"});
 		if(this.state._selecting) {
 			return;
 		}
@@ -20322,7 +20368,7 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		var rowCells = window.document.querySelectorAll(".gridItem[data-id=\"" + el.dataset.id + "\"]");
 		var rowEls = Array.from(rowCells);
 		var selectedNow = this.state.selectedRows.copy();
-		haxe_Log.trace(el.dataset.id + ":" + Std.string(this.state._selecting) + " ctrlKey:" + Std.string(evtOrId.ctrlKey),{ fileName : "view/grid/Grid.hx", lineNumber : 360, className : "view.grid.Grid", methodName : "highLightRow"});
+		haxe_Log.trace(el.dataset.id + ":" + Std.string(this.state._selecting) + " ctrlKey:" + Std.string(evtOrId.ctrlKey),{ fileName : "view/grid/Grid.hx", lineNumber : 361, className : "view.grid.Grid", methodName : "highLightRow"});
 		if(!evtOrId.ctrlKey && !evtOrId.shiftKey) {
 			if(selectedNow.h.hasOwnProperty(rN)) {
 				this.setState({ selectedRows : new haxe_ds_IntMap()});
@@ -20339,14 +20385,14 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 				var _g = new haxe_ds_IntMap();
 				_g.h[rN] = true;
 				selectedNow = _g;
-				haxe_Log.trace(selectedNow,{ fileName : "view/grid/Grid.hx", lineNumber : 374, className : "view.grid.Grid", methodName : "highLightRow"});
+				haxe_Log.trace(selectedNow,{ fileName : "view/grid/Grid.hx", lineNumber : 375, className : "view.grid.Grid", methodName : "highLightRow"});
 			}
 		}
 		this.setState({ selectedRows : selectedNow});
-		haxe_Log.trace(this.props.parentComponent.state.uid,{ fileName : "view/grid/Grid.hx", lineNumber : 382, className : "view.grid.Grid", methodName : "highLightRow"});
+		haxe_Log.trace(this.props.parentComponent.state.uid,{ fileName : "view/grid/Grid.hx", lineNumber : 383, className : "view.grid.Grid", methodName : "highLightRow"});
 		var match = react_router_ReactRouter.matchPath($global.location.pathname,{ });
 		var c = js_Boot.getClass(this.props.parentComponent);
-		haxe_Log.trace(c.__name__,{ fileName : "view/grid/Grid.hx", lineNumber : 385, className : "view.grid.Grid", methodName : "highLightRow"});
+		haxe_Log.trace(c.__name__,{ fileName : "view/grid/Grid.hx", lineNumber : 386, className : "view.grid.Grid", methodName : "highLightRow"});
 		var tmp = this.props.parentComponent.props.select;
 		var el1 = el.dataset.id;
 		var _g = new haxe_ds_StringMap();
@@ -20364,10 +20410,10 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 		while(_g < cells.length) {
 			var cell = cells[_g];
 			++_g;
-			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "view/grid/Grid.hx", lineNumber : 399, className : "view.grid.Grid", methodName : "showDims"});
+			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "view/grid/Grid.hx", lineNumber : 400, className : "view.grid.Grid", methodName : "showDims"});
 			s += cell.getBoundingClientRect().width;
 		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "view/grid/Grid.hx", lineNumber : 402, className : "view.grid.Grid", methodName : "showDims"});
+		haxe_Log.trace(" sum:" + s,{ fileName : "view/grid/Grid.hx", lineNumber : 403, className : "view.grid.Grid", methodName : "showDims"});
 	}
 	,nodeDims: function(n) {
 		var i = 0;
@@ -20378,10 +20424,10 @@ view_grid_Grid.prototype = $extend(React_Component.prototype,{
 			var cell = cells[_g];
 			++_g;
 			var dRect = (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().toJSON();
-			haxe_Log.trace(dRect,{ fileName : "view/grid/Grid.hx", lineNumber : 413, className : "view.grid.Grid", methodName : "nodeDims"});
+			haxe_Log.trace(dRect,{ fileName : "view/grid/Grid.hx", lineNumber : 414, className : "view.grid.Grid", methodName : "nodeDims"});
 			s += (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().width;
 		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "view/grid/Grid.hx", lineNumber : 417, className : "view.grid.Grid", methodName : "nodeDims"});
+		haxe_Log.trace(" sum:" + s,{ fileName : "view/grid/Grid.hx", lineNumber : 418, className : "view.grid.Grid", methodName : "nodeDims"});
 	}
 	,getRowData: function(rCs) {
 		if(rCs.length == 0) {
@@ -22468,7 +22514,7 @@ model_accounting_AccountsModel.gridColumns = (function($this) {
 	}};
 	_g.h["iban"] = { label : "IBAN", className : "tableNums"};
 	_g.h["status"] = { label : "Status", className : "tCenter", cellFormat : function(v) {
-		var className = v == "active" ? "active fas fa-heart" : "passive far fa-heart";
+		var className = v == "active" ? "active fas fa-user" : "passive far fa-user";
 		return React.createElement(react_ReactType.fromString("span"),{ className : className});
 	}};
 	$r = _g;
@@ -22482,7 +22528,7 @@ model_accounting_AccountsModel.listColumns = (function($this) {
 	_g.h["bank_name"] = { label : "Bankname"};
 	_g.h["iban"] = { label : "IBAN"};
 	_g.h["status"] = { label : "Aktiv", className : "tCenter", cellFormat : function(v) {
-		var className = v == "active" ? "active fas fa-heart" : "passive far fa-heart";
+		var className = v == "active" ? "active fas fa-user" : "passive far fa-user";
 		return React.createElement(react_ReactType.fromString("span"),{ className : className});
 	}};
 	$r = _g;
@@ -22548,18 +22594,27 @@ model_accounting_DebitModel.gridColumns = (function($this) {
 model_accounting_DebitModel.historyColumns = (function($this) {
 	var $r;
 	var _g = new haxe_ds_StringMap();
-	_g.h["anforderungs_datum"] = { label : "Datum", cellFormat : function(v) {
+	_g.h["termin"] = { label : "Datum", cellFormat : function(v) {
 		if(v == null) {
 			return null;
 		}
 		return DateTools.format(HxOverrides.strDate(v),"%d.%m.%Y");
 	}};
-	_g.h["betrag"] = { label : "Betrag", cellFormat : function(v) {
+	_g.h["amount"] = { label : "Betrag", cellFormat : function(v) {
 		if(v == null) {
 			v = 0;
 		}
 		return App.sprintf("%01.2f €",v).replace(".",",");
 	}, className : "tableNums"};
+	_g.h["info"] = { label : "Info", cellFormat : function(v) {
+		if(v == null) {
+			v = "";
+		}
+		if(v == "") {
+			return "";
+		}
+		return v;
+	}};
 	$r = _g;
 	return $r;
 }(this));
@@ -22908,7 +22963,7 @@ model_deals_DealsModel.gridColumns = (function($this) {
 		return App.sprintf("%01.2f €",v).replace(".",",");
 	}, className : "tRight tableNums"};
 	_g.h["active"] = { label : "Status", className : "tCenter", cellFormat : function(v) {
-		var className = v ? "active fas fa-heart" : "passive far fa-heart";
+		var className = v ? "active fas fa-user" : "passive far fa-user";
 		return React.createElement(react_ReactType.fromString("span"),{ className : className});
 	}};
 	$r = _g;
@@ -22925,7 +22980,7 @@ model_deals_DealsModel.listColumns = (function($this) {
 		return DateTools.format(HxOverrides.strDate(v),"%d.%m.%Y");
 	}};
 	_g.h["active"] = { label : "Aktiv", className : "tCenter", cellFormat : function(v) {
-		var className = v ? "active fas fa-heart" : "passive far fa-heart";
+		var className = v ? "active fas fa-user" : "passive far fa-user";
 		return React.createElement(react_ReactType.fromString("span"),{ className : className});
 	}};
 	_g.h["cycle"] = { label : "Turnus"};
@@ -23012,10 +23067,11 @@ model_qc_QCModel.dataAccess = (function($this) {
 		_g3.h["Dezember"] = "Dezember";
 		_g2.h["start_monat"] = { label : "Ab", type : "Select", options : _g3};
 		var _g3 = new haxe_ds_StringMap();
-		_g3.h["Monatlich"] = "Monatlich";
-		_g3.h["Vierteljährlich"] = "Vierteljährlich";
-		_g3.h["Halbjährlich"] = "Halbjährlich";
-		_g3.h["Jährlich"] = "Jährlich";
+		_g3.h["Monatlich"] = "Mtl.";
+		_g3.h["Vierteljährlich"] = "Vtl.";
+		_g3.h["Halbjährlich"] = "Halbj.";
+		_g3.h["Jährlich"] = "Jährl.";
+		_g3.h["Einmalspende"] = "1x";
 		_g2.h["period"] = { label : "Zahlweise", type : "Radio", options : _g3};
 		_g2.h["spenden_hoehe"] = { label : "Betrag"};
 		_g2.h["buchungs_tag"] = { label : "Buchungstag"};
@@ -23057,7 +23113,7 @@ model_qc_QCModel.qcColumns = (function($this) {
 	_g.h["entry_list_id"] = { show : false};
 	_g.h["lead_id"] = { show : false};
 	_g.h["last_local_call_time"] = { label : "Datum", cellFormat : function(v) {
-		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 132, className : "model.qc.QCModel", methodName : "qcColumns"});
+		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 133, className : "model.qc.QCModel", methodName : "qcColumns"});
 		if(v != null) {
 			return DateTools.format(HxOverrides.strDate(v),"%d.%m.%Y");
 		} else {
@@ -23099,7 +23155,7 @@ model_qc_QCModel.listColumns = (function($this) {
 	_g.h["city"] = { label : "Ort"};
 	_g.h["state"] = { label : "Status", className : "tCenter", cellFormat : function(v) {
 		var uState = v == "active" ? "user" : "user-slash";
-		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 172, className : "model.qc.QCModel", methodName : "listColumns"});
+		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 173, className : "model.qc.QCModel", methodName : "listColumns"});
 		return React.createElement(react_ReactType.fromString("span"),{ className : "fa fa-" + uState});
 	}};
 	_g.h["id"] = { show : false};
@@ -23332,7 +23388,7 @@ view_dashboard_DB.menuItems = [{ label : "getView", action : "getView"},{ label 
 view_dashboard_DB.displayName = "DB";
 view_dashboard_DB._renderWrapper = (redux_react_ReactRedux.connect(view_dashboard_DB.mapStateToProps))(react_ReactTypeOf.fromComp(view_dashboard_DB));
 view_dashboard_DB.__jsxStatic = view_dashboard_DB._renderWrapper;
-view_dashboard_DBSync.menuItems = [{ label : "BuchungsAnforderungen ", action : "checkBookingRequests"},{ label : "Kontakt Daten ", action : "checkContacts"},{ label : "Spenden Daten ", action : "checkDeals"},{ label : "Konto Daten ", action : "checkAccounts"},{ label : "Reset QC Test Daten ", action : "syncQC"}];
+view_dashboard_DBSync.menuItems = [{ label : "Import Alle Rücklastschriften", action : "getAllExternalDebitReturnBookings", disabled : true},{ label : "Import Neue Rücklastschriften", action : "getMissingExternalDebitReturnBookings"},{ label : "BuchungsAnforderungen ", action : "checkBookingRequests"},{ label : "Kontakt Daten ", action : "checkContacts"},{ label : "Spenden Daten ", action : "checkDeals"},{ label : "Konto Daten ", action : "checkAccounts"},{ label : "Reset QC Test Daten ", action : "syncQC"}];
 view_dashboard_DBSync.displayName = "DBSync";
 view_dashboard_DBSync._renderWrapper = (redux_react_ReactRedux.connect(view_dashboard_DBSync.mapStateToProps,view_dashboard_DBSync.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_dashboard_DBSync));
 view_dashboard_DBSync.__jsxStatic = view_dashboard_DBSync._renderWrapper;
@@ -23433,7 +23489,7 @@ view_data_accounts_model_Accounts.listColumns = (function($this) {
 	_g.h["iban"] = { label : "IBAN"};
 	_g.h["sign_date"] = { label : "Erteilt am", className : "tCenter"};
 	_g.h["status"] = { label : "Aktiv", className : "tCenter", cellFormat : function(v) {
-		var aState = v == "active" ? "fa-heart" : "passive fa-heart";
+		var aState = v == "active" ? "fa-user" : "passive fa-user";
 		return React.createElement(react_ReactType.fromString("span"),{ className : "fa " + aState});
 	}};
 	_g.h["id"] = { show : false};

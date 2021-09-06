@@ -80,10 +80,11 @@ class QCModel
 					'Dezember' => 'Dezember'
 				]},
 				'period'=>{label:'Zahlweise',type:Radio,options:[
-					'Monatlich' => 'Monatlich', 
-					'Vierteljährlich' => 'Vierteljährlich', 
-					'Halbjährlich' => 'Halbjährlich', 
-					'Jährlich' => 'Jährlich'
+					'Monatlich' => 'Mtl.', 
+					'Vierteljährlich' => 'Vtl.',
+					'Halbjährlich' => 'Halbj.', 
+					'Jährlich' => 'Jährl.',
+					'Einmalspende' => '1x'
 				]},
 				'spenden_hoehe'=>{label:'Betrag'},
 				'buchungs_tag'=>{label:'Buchungstag'},

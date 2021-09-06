@@ -74,7 +74,7 @@ class DebitReturnStatements extends Model
 			{
 				var tableName = tKeys.next();
 				tableNames.push(tableName);
-				var tableProps:DataSource = dataSource.get(tableName);
+				var tableProps:Map<String,Dynamic> = dataSource.get(tableName);
 				trace(Std.string(tableProps));
 
 				fields = fields.concat(buildFieldsSql(tableName, tableProps));
@@ -210,20 +210,6 @@ class DebitReturnStatements extends Model
 			}
 		}
 	}
-
-	/*function getReturnStatementData(ba_ID:String):Map<String,Dynamic> {
-		var sth:PDOStatement = S.dbh.query(Global.sprintf(
-		"SELECT id,sepa_code,DATE(created_at) FROM debit_return_statements WHERE ba_id='%s'"
-		,ba_ID));
-		if(sth.errorCode() != '00000'){
-			dbData.dataErrors[ba_ID] = sth.errorInfo()[2] + ':' + sth.errorCode();
-			trace(ba_ID + ':' + Global.sprintf(
-				"SELECT id,sepa_code,DATE(created_at) FROM debit_return_statements WHERE ba_id='%s'"
-				,ba_ID));//dbData.dataErrors[ba_ID]);
-			return null;
-		}		
-		return Lib.hashOfAssociativeArray(sth.fetchAll(PDO.FETCH_ASSOC)[0]);
-	}*/
 
 	function deactivateCancelledAccount(drs:Map<String,Dynamic>) {	}
 	function deactivateObjection(drs:Map<String,Dynamic>) {

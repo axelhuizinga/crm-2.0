@@ -91,7 +91,7 @@ class DealsModel
 		'active' => {label:'Status', className: 'tCenter',
 			cellFormat:function(v:Bool) 
 			{
-				var className = (v?'active fas fa-heart':'passive far fa-heart');
+				var className = (v?'active fas fa-user':'passive far fa-user');
 				//trace('>>>$v<<<');
 				return jsx('<span className=${className}></span>');
 			}},		
@@ -104,7 +104,7 @@ class DealsModel
 		'active' => {label:'Aktiv', className: 'tCenter',
 			cellFormat:function(v:Bool) 
 			{
-				var className = (v?'active fas fa-heart':'passive far fa-heart');
+				var className = (v?'active fas fa-user':'passive far fa-user');
 				//trace('>>>$v<<<');
 				return jsx('<span className=${className}></span>');
 			}},

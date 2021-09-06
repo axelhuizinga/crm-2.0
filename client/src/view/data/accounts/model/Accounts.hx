@@ -21,7 +21,7 @@ class Accounts
 		'status' => {label:'Aktiv', className: 'tCenter',		
 			cellFormat:function(v:String) 
 			{
-				var aState = (v=='active'?'fa-heart':'passive fa-heart');
+				var aState = (v=='active'?'fa-user':'passive fa-user');
 				//trace(uState);
 				return jsx('<span className="fa $aState"></span>');
 			}},

@@ -1,4 +1,5 @@
 package model.data;
+import haxe.Unserializer;
 import Model;
 
 class DirectDebits extends Model
@@ -21,22 +22,34 @@ class DirectDebits extends Model
 
 	function getHistory() {
 		var sqlBf:StringBuf = new StringBuf();
-		parseTable();
-		sqlBf.add('SELECT $queryFields FROM ');
-		if (tableNames.length>1)
+		//trace(param.get('dataSource'));
+		//parseTable();
+		dataSource = param.get('dataSource');
+		trace(dataSource);
+  		queryFields = param.get('fields');
+		
+		for (table=>tRel in dataSource.keyValueIterator())
 		{
-			sqlBf.add(joinSql);
-		}		
-		else
-		{
-			sqlBf.add('${tableNames[0]} ');
+			//var tRel:Map<String,Dynamic> = dataSource.get(table);
+			queryFields = tRel['fields'].split(',').map(function(f:String) {
+				return '${tRel["alias"]}.$f';
+			}).join(',');
 		}
+		for (table=>tRel in dataSource.keyValueIterator())
+		{		
+			queryFields = tRel['fields'];
+			if(sqlBf.length==0){
+				sqlBf.add('
+				SELECT * FROM
+				(SELECT $queryFields FROM ${table}  ');
+			}
+			else{
+				sqlBf.add('UNION SELECT $queryFields FROM ${table} )hun ');
+			}
+		}
+
 		if(param.exists('filter')&&param.get('filter')!=''){
 			filterSql += buildCond(param.get('filter'));
-			//buildValues
-		/*}		
-		if (filterSql != null)
-		{*/
 			sqlBf.add(filterSql);
 		}		
 		var groupParam:String = param.get('group');

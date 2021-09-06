@@ -51,7 +51,7 @@ class AccountsModel
 		'status' => {label:'Status', className: 'tCenter',
 			cellFormat:function(v:String) 
 			{
-				var className = (v=='active'?'active fas fa-heart':'passive far fa-heart');
+				var className = (v=='active'?'active fas fa-user':'passive far fa-user');
 				//trace(uState);
 				return jsx('<span className=${className}></span>');
 			}}
@@ -65,7 +65,7 @@ class AccountsModel
 		'status' => {label:'Aktiv', className: 'tCenter',
 			cellFormat:function(v:String) 
 			{
-				var className = (v=='active'?'active fas fa-heart':'passive far fa-heart');
+				var className = (v=='active'?'active fas fa-user':'passive far fa-user');
 				//trace(uState);
 				return jsx('<span className=${className}></span>');
 			}}

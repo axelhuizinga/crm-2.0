@@ -86,7 +86,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//{label:'Speichern + Schließen',action:'update', then:'close'},
 		{label:'Speichern',action:'qc_save'},		
 		{label:'Zurücksetzen',action:'loadQC'},
-		{label:'Einmalspende',action:'uncheckPeriod'},
+		//{label:'Einmalspende',action:'uncheckPeriod'},
 		{label:'QC OK',action:'qc_ok'},
 		
 		{label:'QC NEGATIV',action:'qc_bad'},
@@ -288,6 +288,8 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					BaseForm.addRecordings(state,data.dataInfo.get('recordings'));
 				}
 				var qc:model.QC = new model.QC(qcd);
+				trace(qcd);
+				trace(qc.period);
 				if(mounted)
 					setState({loading:false, actualState:qc, initialData:copy(qc)});
 				//state = copy({loading:false, actualState:qc, initialData:qc});
@@ -443,13 +445,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
-	public function uncheckPeriod() {
+	/*public function uncheckPeriod() {
 		var ops:NodeList = Browser.document.querySelectorAll('input[name="period"]');
 		for(op in ops){
 			cast(op, InputElement).checked = false;
 			trace(op);
 		}
-	}
+	}*/
 	
 	public function update(){
 		trace('ok');

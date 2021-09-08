@@ -1,5 +1,8 @@
 package view.data.contacts;
 
+import js.html.XMLHttpRequest;
+import action.async.LivePBXSync;
+import js.html.InputElement;
 import loader.ListLoader;
 import shared.Utils;
 import js.html.DivElement;
@@ -39,6 +42,7 @@ import view.grid.Grid;
 //import view.table.Table;
 import loader.BinaryLoader;
 import model.Contact;
+using StringTools;
 
 @:connect
 class List extends ReactComponentOf<DataFormProps,FormState>
@@ -347,8 +351,75 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		'));		
 	}
 
-	override public function componentWillUnmount() {
-		trace('...');
+	function printList() {
+		//TODO:MANDATORS HANDLING
+		var inputs:NodeList = Browser.document.querySelectorAll('#printList');				
+		trace(inputs.length);
+		var inp:InputElement = cast(inputs.item(0), InputElement);
+		
+		//trace(inp.value);
+		trace(App.config.api);
+		if(inp.value==''){
+			//TODO: SHOW HINT
+			return;
+		}
+		var list:String = inp.value;
+		var filter:Dynamic = Utils.extend({}, (props.match.params.id!=null?
+			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
+			{mandator:props.userState.dbUser.mandator})
+		);
+		//{mandator:props.userState.dbUser.mandator}
+		trace('hi $filter');
+
+		var dbQueryParam:DBAccessProps = {
+			classPath:'data.SyncExternal',
+			action:'PRINTLIST',
+			extDB: true,
+			filter:{mandator:props.userState.dbUser.mandator},
+			//limit:1000,
+			//offset:0, 
+			dbUser:props.userState.dbUser,
+			devIP:App.devIP,
+			resolveMessage:{					
+				success:'Anschreiben wurde erstellt',
+				failure:'Anschreiben konnte(n) nicht erstellt werden'
+			}
+			//maxImport:4000,
+			//relations:new Map()
+		}
+		var p:Promise<DbData> = new Promise<DbData>(function(resolve, reject){			
+			trace('creating BinaryLoader ${App.config.api.replace("/server.php","")}');
+			var bl:XMLHttpRequest = BinaryLoader.dbQuery(
+				App.config.api.replace('/server.php','') + '/mailing.pl?action=PRINTLIST&list=' + list.urlEncode(),
+				dbQueryParam,
+				function(data:DbData)
+				{			
+					if(data.dataErrors != [])
+					{
+						trace(data.dataErrors);
+						//reject(data.dataErrors);						
+					}
+					trace(data.dataInfo);
+					resolve(data);
+				}
+			);
+			return null;
+		});
+		p.then(function(data:DbData){
+			trace(data.dataRows.length); 
+			if(true)
+			{
+				trace(data);
+			}
+			//setState({loading:false, dataTable:data.dataRows});
+			setState({
+				loading:false,
+				dataTable:data.dataRows,
+				dataCount:Std.parseInt(data.dataInfo['count']),
+				pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
+			});	
+			//props.loaded(null);
+		});		
 	}
 
 	function updateMenu(?viewClassPath:String):MenuProps

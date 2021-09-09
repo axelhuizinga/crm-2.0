@@ -387,6 +387,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			//maxImport:4000,
 			//relations:new Map()
 		}
+		//TODO: CREATE AJAX LOADER
 		var p:Promise<DbData> = new Promise<DbData>(function(resolve, reject){			
 			trace('creating BinaryLoader ${App.config.api.replace("/server.php","")}');
 			var bl:XMLHttpRequest = BinaryLoader.dbQuery(

@@ -180,29 +180,11 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
 		var ti:Timer = null;
-		
+		App.config.baseUrl = App.config.api.replace('/server.php','');
 		trace(props.load);
 		trace(store);
 		if(store==null){
 			store = initStore(BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}));
-			/*var p:Promise<DbData> = untyped store.dispatch(CRUD.read({//props.load({		
-				classPath:'auth.User',
-				action:'getPbxUserData',
-				dbUser: state.userState.dbUser,
-				devIP:App.devIP,
-				extDB:true,	
-				viciBoxDB:true,
-			}));//untyped UserAccess.userList();
-			p.then(function(dbData:DbData){
-					trace(dbData.dataRows[0]);
-					pbxUserData =  [
-						for(row in dbData.dataRows) row.get('user') => row
-					];
-				}
-				,function(dbData:DbData){
-					trace(dbData);
-				}
-			);*/
 		}
 		state = store.getState();
 		//trace(Reflect.fields(state));

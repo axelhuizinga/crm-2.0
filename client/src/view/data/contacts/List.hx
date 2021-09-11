@@ -1,5 +1,15 @@
 package view.data.contacts;
 
+import haxe.Json;
+import js.Cookie;
+import js.html.HeadersIterator;
+import js.html.Blob;
+import js.html.AnchorElement;
+import js.html.Window;
+import js.html.Element;
+import js.html.URL;
+import js.html.RequestInit;
+import js.html.Response;
 import js.html.XMLHttpRequest;
 import action.async.LivePBXSync;
 import js.html.InputElement;
@@ -356,70 +366,136 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var inputs:NodeList = Browser.document.querySelectorAll('#printList');				
 		trace(inputs.length);
 		var inp:InputElement = cast(inputs.item(0), InputElement);
-		
-		//trace(inp.value);
+		var prods:NodeList = Browser.document.querySelectorAll('[name=product]:checked');
+		if(prods.length==0){
+			App.store.dispatch(Status(Update(
+			{
+				text:'Bitte Produkt auswählen!',
+			})));
+			return;
+		}			
+		var productOpt:InputElement = cast(prods.item(0), InputElement);
+		trace(productOpt.value);
 		trace(App.config.api);
 		if(inp.value==''){
 			//TODO: SHOW HINT
 			return;
 		}
 		var list:String = inp.value;
-		var filter:Dynamic = Utils.extend({}, (props.match.params.id!=null?
-			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
-			{mandator:props.userState.dbUser.mandator})
+		App.store.dispatch(Status(Update(
+		{
+			text:'Erzeugung der Daten zum Download gestarted',
+		})));
+		//TODO: CREATE GENERIC AJAX LOADER FOR FILES UP+DOWNLOAD
+		var api:String = App.config.baseUrl + '/mailing.pl?action=PRINTLIST&list=' + list.urlEncode()
+			+ '&product=${productOpt.value}';
+		trace(api);
+		var reqInit:RequestInit = {credentials: INCLUDE, mode: CORS};
+		var p:Promise<Response> = Browser.window.fetch(
+			api,reqInit
 		);
-		//{mandator:props.userState.dbUser.mandator}
-		trace('hi $filter');
-
-		var dbQueryParam:DBAccessProps = {
-			classPath:'data.SyncExternal',
-			action:'PRINTLIST',
-			extDB: true,
-			filter:{mandator:props.userState.dbUser.mandator},
-			//limit:1000,
-			//offset:0, 
-			dbUser:props.userState.dbUser,
-			devIP:App.devIP,
-			resolveMessage:{					
-				success:'Anschreiben wurde erstellt',
-				failure:'Anschreiben konnte(n) nicht erstellt werden'
-			}
-			//maxImport:4000,
-			//relations:new Map()
-		}
-		//TODO: CREATE AJAX LOADER
-		var p:Promise<DbData> = new Promise<DbData>(function(resolve, reject){			
-			trace('creating BinaryLoader ${App.config.api.replace("/server.php","")}');
-			var bl:XMLHttpRequest = BinaryLoader.dbQuery(
-				App.config.api.replace('/server.php','') + '/mailing.pl?action=PRINTLIST&list=' + list.urlEncode(),
-				dbQueryParam,
-				function(data:DbData)
-				{			
-					if(data.dataErrors != [])
-					{
-						trace(data.dataErrors);
-						//reject(data.dataErrors);						
-					}
-					trace(data.dataInfo);
-					resolve(data);
-				}
-			);
-			return null;
-		});
-		p.then(function(data:DbData){
-			trace(data.dataRows.length); 
+		
+		p.then(function(res:Response){
+			//trace(data.dataRows.length); 
 			if(true)
 			{
-				trace(data);
+				trace(Std.string(res.headers.keys()));
+
+				var entry:Dynamic;
+				var headers:HeadersIterator = res.headers.keys();
+				var hLoop:Bool = true;
+				while (hLoop){
+					entry = headers.next();
+					if(entry.done){
+						trace('done');
+						break;
+					}
+					trace(Std.string(entry));
+				}
 			}
-			//setState({loading:false, dataTable:data.dataRows});
-			setState({
-				loading:false,
-				dataTable:data.dataRows,
-				dataCount:Std.parseInt(data.dataInfo['count']),
-				pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
-			});	
-			//props.loaded(null);
+			res.blob().then(function(bl:Blob){
+				var url:String = URL.createObjectURL(bl);
+				var a:AnchorElement = Browser.window.document.createAnchorElement();
+				a.href = url;
+				var fName:String = Cookie.get('fileDownload');
+				if(fName!=null)
+					a.download = fName;
+				else 
+					a.download = 'Liste-Anschreiben-' + productOpt.value.replace(' ','_').substr(50) + '.pdf';
+				trace(Cookie.get('fileDownload'));
+				///trace(Cookie.all().toString());
+				a.click();
+				App.store.dispatch(Status(Update(
+					{
+						text:'Download abgeschlossen',
+					})));
+			});
+		});		
+	}
+
+	public function printNew() {
+		//TODO:MANDATORS HANDLING
+		var prods:NodeList = Browser.document.querySelectorAll('[name=product]:checked');
+		if(prods.length==0){
+			App.store.dispatch(Status(Update(
+			{
+				text:'Bitte Produkt auswählen!',
+			})));
+			return;
+		}		
+		var productOpt:InputElement = cast(prods.item(0), InputElement);
+		trace(productOpt.value);
+		
+		App.store.dispatch(Status(Update(
+		{
+			text:'Erzeugung der Daten zum Download gestarted',
+		})));
+		
+		var api:String = App.config.baseUrl + '/mailing.pl?action=PRINTNEW' + '&product=${productOpt.value}';
+		trace(api);
+		var reqInit:RequestInit = {credentials: INCLUDE, mode: CORS};
+		var p:Promise<Response> = Browser.window.fetch(
+			api,reqInit
+		);
+		
+		p.then(function(res:Response){
+			trace(res.status);
+			if(res.status == 206){
+				trace(res.statusText);
+				res.text().then(function(t:Dynamic){
+					trace(Reflect.fields(Json.parse(t)).join('|'));
+					trace(Json.parse(t));
+
+				});
+				App.store.dispatch(Status(Update(
+				{
+					text:'Keine Neuen Anschreiben!',
+				})));				
+			}
+			else
+			res.blob().then(function(bl:Blob){
+				var url:String = URL.createObjectURL(bl);
+				var a:AnchorElement = Browser.window.document.createAnchorElement();
+				a.href = url;
+				var fName:String = Cookie.get('fileDownload');
+				if(fName!=null)
+					a.download = fName;
+				else 
+					a.download = 'Neue-Anschreiben-' + Date.now().toString().replace(' ','_').replace(':','-') + '.pdf';
+				trace(Cookie.get('fileDownload'));
+				//trace(Cookie.all().toString());
+				a.click();
+				App.store.dispatch(Status(Update(
+				{
+					text:'Download abgeschlossen',
+				})));
+			});
+		},function(error:Dynamic) {
+			trace(error);
+			App.store.dispatch(Status(Update(
+			{
+				text:'...'
+			})));			
 		});		
 	}
 

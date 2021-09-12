@@ -200,10 +200,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		));
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
-			//setState({loading:false, dataTable:data.dataRows});
+			//setState({loading:false, dbTable:data.dataRows});
 			setState({
 				loading:false,
-				dataTable:data.dataRows,
+				dbTable:data.dataRows,
 				dataCount:Std.parseInt(data.dataInfo['count']),
 				pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
 			});			
@@ -268,10 +268,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
 			trace(data.dataRows); 
-			//setState({loading:false, dataTable:data.dataRows});
+			//setState({loading:false, dbTable:data.dataRows});
 			setState({
 				loading:false,
-				dataTable:data.dataRows,
+				dbTable:data.dataRows,
 				dataCount:Std.parseInt(data.dataInfo['count']),
 				pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
 			});			
@@ -287,14 +287,14 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 	public function processReturnDebitStatements(_):Void
 	{
-		trace(state.dataTable);
+		trace(state.dbTable);
 		var p:Promise<DbData> = props.update(
 			{
 				classPath:'data.DebitReturnStatements',
 				action:'insert',
 				mandator:1,
-				//data: state.dataTable,//Serializer.run(state.dataTable),
-				data: Serializer.run(state.dataTable),
+				//data: state.dbTable,//Serializer.run(state.dbTable),
+				data: Serializer.run(state.dbTable),
 				table:'debit_return_statements',
 				resolveMessage:{					
 					success:'Rücklastschriften wurden verarbeitet',
@@ -308,7 +308,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{			
 			trace(Unserializer.run(data.dataInfo['data'])); 
 			trace(Utils.getAllByKey(Unserializer.run(data.dataInfo['data']),'id')); 
-			//setState({loading:false, dataTable:data.dataRows});
+			//setState({loading:false, dbTable:data.dataRows});
 		});
 	}	
 
@@ -324,7 +324,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		//if(state.dbTable != null)	trace(state.dbTable[0]);
 		trace(props.match.params.section);	
 		if(state.sideMenu.menuBlocks == null)	{
 			return renderResults();
@@ -340,7 +340,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.action + ':' + Std.string(state.dataTable != null));
+		trace(props.match.params.action + ':' + Std.string(state.dbTable != null));
 		if(state.loading)
 			return state.formApi.renderWait();
 		trace('###########loading:' + state.loading +' state.action:' + state.action);
@@ -348,13 +348,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'get' :				
 				jsx('				
-				<Grid id="rDebitList" data=${state.dataTable}
+				<Grid id="rDebitList" data=${state.dbTable}
 				${...props} dataState = ${dataDisplay["rDebitList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
 				');		
 			case 'getHistory':				
 				jsx('				
-				<Grid id="rDebitList" data=${state.dataTable} title="Verlauf" 
+				<Grid id="rDebitList" data=${state.dbTable} title="Verlauf" 
 				${...props} dataState = ${dataDisplay["historyList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>		
 				');						

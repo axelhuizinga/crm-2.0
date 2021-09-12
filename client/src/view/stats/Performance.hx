@@ -21,7 +21,7 @@ class Performance  extends ReactComponentOf<DataFormProps,FormState>
 {
 	override function render()
 		{
-			//if(state.dataTable != null)	trace(state.dataTable[0]);
+			//if(state.dbTable != null)	trace(state.dbTable[0]);
 			//trace(props.match.params.section);					
 			trace(props.match.params.action);	
 			//trace(props.storeContactsList);	

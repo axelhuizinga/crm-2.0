@@ -345,7 +345,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			var dT:Array<Map<String, Dynamic>> = new Array();			
 			for(dR in rD.rlData)
 				dT.push(Utils.dynToMap(dR));
-			setState({action:'showLoadedReturnDebit',dataTable:dT,loading:false});
+			setState({action:'showLoadedReturnDebit',dbTable:dT,loading:false});
 			trace(dT.length);
 			//state.loading = false;
 			var baseUrl:String = props.match.path.split(':section')[0];			
@@ -380,7 +380,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 		//trace(ev);
 
 
-		if(state.dataTable.length<1){
+		if(state.dbTable.length<1){
 			trace({error:new Error('Keine Daten')});
 		}
 		trace('go on');
@@ -390,7 +390,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			{
 				classPath:'data.DebitReturnStatements',
 				action:'insert',
-				data: Serializer.run(state.dataTable),
+				data: Serializer.run(state.dbTable),
 				mandator:1,
 				table:'debit_return_statements',
 				resolveMessage:{					
@@ -406,7 +406,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			trace(data);
 			//trace(Unserializer.run(data.dataInfo['data'])); 
 			//trace(Utils.getAllByKey(Unserializer.run(data.dataInfo['data']),'id')); 
-			//setState({loading:false, dataTable:data.dataRows});
+			//setState({loading:false, dbTable:data.dataRows});
 		});
 		
 	}
@@ -449,7 +449,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 					setState({data:['hint'=>'Keine Rücklastschriften gefunden']});
 				}
 				else
-				setState({action:'showLoadedReturnDebit',dataTable:dT,loading:false});
+				setState({action:'showLoadedReturnDebit',dbTable:dT,loading:false});
 				trace(dT.length);
 				if(dT.length>0){
 					trace(Files._instance.state.sideMenu.instance.enableItem('returnDebitFile',true));
@@ -458,7 +458,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			reader.readAsText(file);						
 		}		
 
-		//setState({action:'showImportedReturnDebit',dataTable:dT,loading:false});		
+		//setState({action:'showImportedReturnDebit',dbTable:dT,loading:false});		
 	}
 
 	function showSelectedAccounts(?ev:Event) {
@@ -535,16 +535,16 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 	override function render():ReactFragment
 	{
 		//trace(props.match.params.section + '/' + props.match.params.action);		
-		//trace(state.action + ':' + Std.string(state.dataTable != null));
+		//trace(state.action + ':' + Std.string(state.dbTable != null));
 		//trace('${state.action} ###########loading:' + state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
 		return state.formApi.render(switch(state.action)
 		{
-			//(state.dataTable == null? state.formApi.renderWait():
+			//(state.dbTable == null? state.formApi.renderWait():
 			//case 'showImportedReturnDebit':
 			case 'showLoadedReturnDebit':
-				jsx('<Grid id="loadedReturnDebit" data=${state.dataTable} readOnly=${true} 
+				jsx('<Grid id="loadedReturnDebit" data=${state.dbTable} readOnly=${true} 
 				${...props} dataState=${dataDisplay["rDebitList"]} key="importedReturnDebitList" 
 				parentComponent=${this} className="is-striped is-hoverable" />			
 				');			

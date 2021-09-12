@@ -317,7 +317,7 @@ class FormApi
 			//trace(sM.menuBlocks.get(sM.section).items[0]);
 		}
 					
-		if(sM.section != null)//TODO: MONITOR PERFORMANCE + INTEGRITY SETTING SUBMENU SECTION HERE
+		if(sM.section != null)//TODO: TEST PERFORMANCE + INTEGRITY SETTING SUBMENU SECTION HERE
 		{
 			trace(sM.section +':'+ comp.props.match.params.section);
 			if(sM.section != comp.props.match.params.section && comp.props.match.params.section != null)
@@ -371,7 +371,7 @@ class FormApi
 
 	public function createElementsArray():ReactFragment
 	{
-		if(_fstate.dataTable.empty())
+		if(_fstate.dbTable.empty())
 			return null;
 		formColElements = new StringMap();
 		addFormColumns();
@@ -386,7 +386,7 @@ class FormApi
 			}
 		}
 
-		for (dR in _fstate.dataTable)
+		for (dR in _fstate.dbTable)
 		{
 			fields = _fstate.fields.keys();
 			//trace('>>>${dR['id']}<<<');
@@ -408,7 +408,7 @@ class FormApi
 					value: Std.string(dR[name]),
 					//value:fF.displayFormat == null?dR[name]: fF.displayFormat(dR[name]),
 					//?dataBase:String, 
-					//?dataTable:String,
+					//?dbTable:String,
 					//?dataField:String,c
 					displayFormat:fF.displayFormat,
 					type:fF.type,
@@ -531,7 +531,7 @@ class FormApi
 	public function renderModalFormBodyHeader():ReactFragment
 	{
 		modalFormTableHeader = React.createRef();
-		if (_fstate.dataTable == null || _fstate.dataTable.length == 0)
+		if (_fstate.dbTable == null || _fstate.dbTable.length == 0)
 			return null;
 		return jsx('
 		<section className="modal-card-body header" ref=${modalFormTableHeader}>

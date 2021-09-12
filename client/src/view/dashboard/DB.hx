@@ -141,7 +141,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 
 		pro.then(function(viewData:DataDisplay) {
 			trace(viewData);
-			setState({action:'getView', dataTable: [['row'=>1]],data: ['view'=>viewData]});
+			setState({action:'getView', dbTable: [['row'=>1]],data: ['view'=>viewData]});
 		},function(whatever:Dynamic) {
 			trace(whatever);
 		});
@@ -187,7 +187,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		pro.then(function(dbData:DbData) {
 			var info:Map<String,Dynamic> = dbData.dataInfo;
 			trace(info);
-			setState({action:'setView', dataTable: [['row'=>1]],data: ['SetView'=>info['setView'],'Zeilen geändert:'=>info['updatedRows']]});
+			setState({action:'setView', dbTable: [['row'=>1]],data: ['SetView'=>info['setView'],'Zeilen geändert:'=>info['updatedRows']]});
 		},function(whatever:DbData) {
 			trace(whatever);
 			if(whatever.dataInfo.exists('loginTask')){
@@ -218,7 +218,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		trace(data[0]['id']+'<');
 	/*	state.formApi.renderModalForm({
 			data:new Map(),
-			dataTable:data,
+			dbTable:data,
 			mHandlers: saveTableFields,
 			hasError:false,
 			isConnected:true,
@@ -317,8 +317,8 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 				}		
 				trace(data.dataRows);
 				//trace(data.dataRows[29]['id'] + '<<<');
-				//setState({dataTable:data.dataRows, viewClassPath:'shared.io.DB.showFieldList'});
-				setState({dataTable:data.dataRows});
+				//setState({dbTable:data.dataRows, viewClassPath:'shared.io.DB.showFieldList'});
+				setState({dbTable:data.dataRows});
 			}
 		)*/null);
 		//setState({viewClassPath:'shared.io.DB.showFieldList'});
@@ -361,7 +361,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	function renderResults():ReactFragment
 	{
 		trace(state.action);
-		if (state.dataTable != null)
+		if (state.dbTable != null)
 		return switch(state.action)
 		//return switch(props.match.params.action)			
 		{
@@ -369,9 +369,9 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 				jsx('<div className=""><pre className="pwrap">${Std.string(state.data)}</pre></div>');
 			case 'showFieldList':
 				//trace(dataDisplay["fieldsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
+				trace(state.dbTable[29]['id']+'<<<');
 				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
+					<Table id="fieldsList" data=${state.dbTable}
 					${...props} dataState = ${dataDisplay["fieldsList"]}
 					className = "is-striped is-hoverable" fullWidth=${true}/>				
 				');	

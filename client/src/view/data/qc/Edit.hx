@@ -176,7 +176,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				mI.handler = doQC;
 
 		state =  App.initEState({
-			//dataTable:[],
+			//dbTable:[],
 			actualState:null,
 			initialData:null,
 			mHandlers:[for(v in menuItems) js.lib.Object.assign({},v)],
@@ -516,7 +516,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function renderResults():ReactFragment
 	{
-		//trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.actualState != null));
+		//trace(props.match.params.section + '/' + props.match.params.action + ' state.dbTable:' + Std.string(state.actualState != null));
 		//trace('###########loading:' + state.loading);
 		trace('########### action:' + props.match.params.action);
 

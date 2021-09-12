@@ -94,7 +94,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			loading:false,
-			dataTable:[],
+			dbTable:[],
 			//formBuilder:new FormBuilder(this),
 			actualState:{
 				edited_by: props.userState.dbUser.id,
@@ -668,7 +668,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				trace(data.dataRows.length);
 				if(data.dataRows.length>0)
-				setState({dataTable:data.dataRows});
+				setState({dbTable:data.dataRows});
 				App.store.dispatch(Status(Update( 
 					{	className:'',
 						text:'aktualisiert: '+ data.dataInfo.get('updated') + ' Benutzer'
@@ -701,7 +701,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				//trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				trace(data.dataRows.length);
 				if(data.dataRows.length>0)
-				setState({dataTable:data.dataRows});
+				setState({dbTable:data.dataRows});
 			}
 		);
 	}
@@ -754,7 +754,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		//if(state.dbTable != null)	trace(state.dbTable[0]);
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
 		<>

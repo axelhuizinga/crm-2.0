@@ -74,7 +74,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 		if(_trace) trace('...' + Reflect.fields(props));
 		if(_trace) trace(props.match.params);
 		state =  App.initEState({
-			dataTable:[],loading:false,contactData:new IntMap(), page:0, selectedRows:[],values:new Map<String,Dynamic>(),
+			dbTable:[],loading:false,contactData:new IntMap(), page:0, selectedRows:[],values:new Map<String,Dynamic>(),
 		},this);		
 		if(props.match.params.section==null)
 		{
@@ -155,7 +155,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	
+		//if(state.dbTable != null)	
 		//if(_trace) trace(state.sideMenu);
 		//if(_trace) trace(props.match.params.section);					
 		//if(_trace) trace(props.match.params.action);	

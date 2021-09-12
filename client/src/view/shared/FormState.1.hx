@@ -27,7 +27,7 @@ typedef FormState =
 	?actualState:Dynamic,
 	?dataClassPath:String,
 	?data:Map<String,Dynamic>,
-	?dataTable:Array<Map<String,Dynamic>>,
+	?dbTable:Array<Map<String,Dynamic>>,
 	?formApi:FormApi,
 	?formBuilder:FormBuilder,
 	?formStateKey:String,

@@ -51,7 +51,7 @@ typedef FormState =
 	?dataGrid:Grid,
 	?classPath:String,
 	?dataClassPath:String,
-	?dataTable:Array<Map<String,Dynamic>>,
+	?dbTable:Array<Map<String,Dynamic>>,
 	?dataCount:Int,
 	?dbQueryParam:DBAccessProps,
 	?errors:Map<String,String>,

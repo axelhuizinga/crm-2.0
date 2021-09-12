@@ -19254,9 +19254,12 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 		var p = window.fetch(api,reqInit);
 		p.then(function(res) {
 			haxe_Log.trace(res.status,{ fileName : "view/data/contacts/List.hx", lineNumber : 462, className : "view.data.contacts.List", methodName : "printNew"});
-			if(res.status == 204) {
+			if(res.status == 206) {
 				haxe_Log.trace(res.statusText,{ fileName : "view/data/contacts/List.hx", lineNumber : 464, className : "view.data.contacts.List", methodName : "printNew"});
-				haxe_Log.trace($bind(res,res.text),{ fileName : "view/data/contacts/List.hx", lineNumber : 465, className : "view.data.contacts.List", methodName : "printNew"});
+				res.text().then(function(t) {
+					haxe_Log.trace(Reflect.fields(JSON.parse(t)).join("|"),{ fileName : "view/data/contacts/List.hx", lineNumber : 466, className : "view.data.contacts.List", methodName : "printNew"});
+					haxe_Log.trace(JSON.parse(t),{ fileName : "view/data/contacts/List.hx", lineNumber : 467, className : "view.data.contacts.List", methodName : "printNew"});
+				});
 				App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ text : "Keine Neuen Anschreiben!"}))));
 			} else {
 				res.blob().then(function(bl) {
@@ -19269,19 +19272,19 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 					} else {
 						a.download = "Neue-Anschreiben-" + StringTools.replace(StringTools.replace(HxOverrides.dateStr(new Date())," ","_"),":","-") + ".pdf";
 					}
-					haxe_Log.trace(js_Cookie.get("fileDownload"),{ fileName : "view/data/contacts/List.hx", lineNumber : 481, className : "view.data.contacts.List", methodName : "printNew"});
+					haxe_Log.trace(js_Cookie.get("fileDownload"),{ fileName : "view/data/contacts/List.hx", lineNumber : 485, className : "view.data.contacts.List", methodName : "printNew"});
 					a.click();
 					App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ text : "Download abgeschlossen"}))));
 				});
 			}
 		},function(error) {
-			haxe_Log.trace(error,{ fileName : "view/data/contacts/List.hx", lineNumber : 490, className : "view.data.contacts.List", methodName : "printNew"});
+			haxe_Log.trace(error,{ fileName : "view/data/contacts/List.hx", lineNumber : 494, className : "view.data.contacts.List", methodName : "printNew"});
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ text : "..."}))));
 		});
 	}
 	,updateMenu: function(viewClassPath) {
 		var sideMenu = this.state.sideMenu;
-		haxe_Log.trace(sideMenu.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 501, className : "view.data.contacts.List", methodName : "updateMenu"});
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 505, className : "view.data.contacts.List", methodName : "updateMenu"});
 		var _g = 0;
 		var _g1 = sideMenu.menuBlocks.h["List"].items;
 		while(_g < _g1.length) {

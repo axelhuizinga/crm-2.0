@@ -50,7 +50,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = AccountsModel.dataGridDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
-			dataTable:[],
+			dbTable:[],
 			loading:false,
 			accountsData:new IntMap(),			
 			selectedRows:[],
@@ -133,7 +133,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
 			if(data.dataRows != null && data.dataRows.length > 0)
-			setState({loading:false, dataTable:data.dataRows, pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)});
+			setState({loading:false, dbTable:data.dataRows, pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)});
 		});
 	}
 	
@@ -174,37 +174,37 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
+		trace(props.match.params.section + ':' + Std.string(state.dbTable != null));
 		//trace(dataDisplay["userList"]);
 		trace(state.loading);
-		if(state.loading || state.dataTable == null || state.dataTable.length == 0)
+		if(state.loading || state.dbTable == null || state.dbTable.length == 0)
 			return state.formApi.renderWait();
 		trace('###########loading:' + state.loading);
-		trace(state.dataTable[0]);
+		trace(state.dbTable[0]);
 		return switch(props.match.params.action)
 		{
 			case 'get':
 				jsx('				
-				<Grid id="accountsList" data=${state.dataTable}
+				<Grid id="accountsList" data=${state.dbTable}
 				${...props} dataState = ${dataDisplay["accountsList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 				/*jsx('
-					<Table id="accountsList" data=${state.dataTable}
+					<Table id="accountsList" data=${state.dbTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} renderPager=${function()BaseForm.renderPager(this)}
 					parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
 				');*/
 			/*case 'update':
 				jsx('
-					<Table id="accountsList" data=${state.dataTable}
+					<Table id="accountsList" data=${state.dbTable}
 					${...props} dataState = ${dataDisplay["clientList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');			
 			case 'insert':
 				trace(dataDisplay["accountsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
+				trace(state.dbTable[29]['id']+'<<<');
 				jsx('
-					<Table id="accountsList" data=${state.dataTable}
+					<Table id="accountsList" data=${state.dbTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>				
 				');	*/
@@ -218,7 +218,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		//if(state.dbTable != null)	trace(state.dbTable[0]);
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
 		<>

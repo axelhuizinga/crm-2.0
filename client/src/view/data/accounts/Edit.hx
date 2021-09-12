@@ -92,7 +92,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		trace('...' + Reflect.fields(props));
 		formRef = React.createRef();
 		state =  App.initEState({
-			dataTable:[],
+			dbTable:[],
 			//formBuilder:new FormBuilder(this),
 			initialState:initialState,
 			loading:false,
@@ -470,7 +470,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function renderResults():ReactFragment
 	{
-		//trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.dataTable != null));
+		//trace(props.match.params.section + '/' + props.match.params.action + ' state.dbTable:' + Std.string(state.dbTable != null));
 		//trace('###########loading:' + state.loading);
 		//trace('########### action:' + props.match.params.action);
 

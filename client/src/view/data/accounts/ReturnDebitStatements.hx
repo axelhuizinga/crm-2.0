@@ -194,7 +194,7 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 			var dT:Array<Map<String, Dynamic>> = new Array();
 			for(dR in dd.rlData)
 				dT.push(Utils.dynToMap(dR));
-			setState({dataTable:dT,loading:false});
+			setState({dbTable:dT,loading:false});
 			App.store.dispatch(Status(Update( 
 				{	
 					text:dT.count() + ' Rücklastschriften Importiert'
@@ -264,7 +264,7 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		//if(state.dbTable != null)	trace(state.dbTable[0]);
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
 		<>
@@ -276,7 +276,7 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.action + ':' + Std.string(state.dataTable != null));
+		trace(props.match.params.action + ':' + Std.string(state.dbTable != null));
 		trace(state.loading);
 		if(state.loading)
 			return state.formApi.renderWait();
@@ -285,7 +285,7 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 		{
 			case 'importReturnDebit':
 				jsx('
-					<Table id="importedReturnDebit" data=${state.dataTable}
+					<Table id="importedReturnDebit" data=${state.dbTable}
 					${...props} dataState=${dataDisplay["rDebitList"]} renderPager=${function()BaseForm.renderPager(this)} 
 					className="is-striped is-hoverable"  parentComponent=${this} fullWidth=${true}/>
 				');
@@ -307,9 +307,9 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 				},state.actualState));	
 			/*case 'showFieldList2':
 				trace(dataDisplay["fieldsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
+				trace(state.dbTable[29]['id']+'<<<');
 				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
+					<Table id="fieldsList" data=${state.dbTable}
 					${...props} dataState = ${dataDisplay["fieldsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>				
 				');	*/

@@ -49,7 +49,7 @@ class AccountForm extends ReactComponentOf<DataFormProps,FormState>
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			actualStates:new IntMap<ORM>(),
-			dataTable:[],
+			dbTable:[],
 			loading:true,
 			model:'accounts',
 			accountsData:new IntMap(),			
@@ -117,7 +117,7 @@ class AccountForm extends ReactComponentOf<DataFormProps,FormState>
 		);
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
-			setState({loading:false, dataTable:data.dataRows});
+			setState({loading:false, dbTable:data.dataRows});
 		});
 	}
 	
@@ -185,30 +185,30 @@ class AccountForm extends ReactComponentOf<DataFormProps,FormState>
 	function renderResults():ReactFragment
 	{
 		trace(state.loading + ':' + props.action);
-		if(state.loading || state.dataTable == null || state.dataTable.length == 0)
+		if(state.loading || state.dbTable == null || state.dbTable.length == 0)
 			return state.formApi.renderWait();
 		trace('###########loading:' + props.action);
 		return switch(props.action)
 		{
 			case 'get':
-				trace(state.dataTable);
+				trace(state.dbTable);
 				//jsx('<div>dummy</div>');
 				jsx('
-					<Grid id="accountsList" data=${state.dataTable}
+					<Grid id="accountsList" data=${state.dbTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} 
 					parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'update':
 				jsx('
-					<Grid id="accountsList" data=${state.dataTable}
+					<Grid id="accountsList" data=${state.dbTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');			
 			case 'insert':
 				trace(dataDisplay["accountsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
+				trace(state.dbTable[29]['id']+'<<<');
 				jsx('
-					<Grid id="accountsList" data=${state.dataTable}
+					<Grid id="accountsList" data=${state.dbTable}
 					${...props} dataState = ${dataDisplay["accountsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>				
 				');	
@@ -222,7 +222,7 @@ class AccountForm extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		//if(state.dbTable != null)	trace(state.dbTable[0]);
 		trace(props.action);				
 		//return state.formApi.render(jsx('
 		return jsx('

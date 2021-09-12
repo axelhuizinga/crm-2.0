@@ -81,7 +81,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = ContactsModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
-			dataTable:[],loading:false,contactData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
+			dbTable:[],loading:false,contactData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
 		},this);
 		trace(state.uid);	
 		trace(props.match.params);
@@ -182,7 +182,7 @@ class QC extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		//if(state.dbTable != null)	trace(state.dbTable[0]);
 		trace(props.match.params.section + ':' +props.match.params.action);	
 		if(state==null)
 			return null;

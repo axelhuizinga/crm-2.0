@@ -49,7 +49,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			mounted:false,
 			loading:true,*/
 		App.initEState({
-			//dataTable:[],loading:false,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
+			//dbTable:[],loading:false,selectedData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>(),
 			sideMenu:FormApi.initSideMenuMulti( this,
 				[
 					{

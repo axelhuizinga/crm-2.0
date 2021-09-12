@@ -68,7 +68,7 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			actualStates:new IntMap<ORM>(),
-			dataTable:[],
+			dbTable:[],
 			loading:false,
 			dealsData:new IntMap(),	
 			model:'contacts',
@@ -198,19 +198,19 @@ class ContactForm extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//trace(props.action);
 		//trace(dataDisplay["userList"]);
-		trace(state.loading || state.dataTable == null || state.dataTable.length == 0);
-		if(state.loading || state.dataTable == null || state.dataTable.length == 0)
-			//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}		${renderForm()}	
+		trace(state.loading || state.dbTable == null || state.dbTable.length == 0);
+		if(state.loading || state.dbTable == null || state.dbTable.length == 0)
+			//trace('###########loading:' + state.dbTable);renderPager=${{function()BaseForm.renderPager(this);}}		${renderForm()}	
 		return null;
 		return state.formApi.renderWait();
 		trace(props.action);
 		return switch(props.action)
 		{
 			case 'importReturnDebitFile':
-			//trace(state.dataTable);
+			//trace(state.dbTable);
 			jsx('
 			<>
-			<Grid id="contact" data=${state.dataTable}
+			<Grid id="contact" data=${state.dbTable}
 			${...props} dataState = ${dataDisplay["contactsList"]} 
 			parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
 				

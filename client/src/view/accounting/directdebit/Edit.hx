@@ -111,7 +111,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//dataDisplay = DebitModel.dataDisplay;
 
 		state =  App.initSectionState({
-			//dataTable:[],
+			//dbTable:[],
 			actualState:null,
 			initialData:null,
 			loading:false,
@@ -258,7 +258,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			var dT:Array<Map<String, Dynamic>> = new Array();
 			for(dR in dd.rlData)
 				dT.push(Utils.dynToMap(dR));
-			setState({dataTable:dT,loading:false});
+			setState({dbTable:dT,loading:false});
 			App.store.dispatch(Status(Update( 
 				{	
 					text:dT.count() + ' Buchungsanforderungen erstellt'
@@ -307,7 +307,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		);
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
-			setState({loading:false, dataTable:data.dataRows});
+			setState({loading:false, dbTable:data.dataRows});
 		});
 	}
 	
@@ -434,7 +434,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
+		trace(props.match.params.section + ':' + Std.string(state.dbTable != null));
 		//trace(dataDisplay["userList"]);
 		trace(state.loading + ':' + props.match.params.action);
 		if(state.loading)
@@ -444,7 +444,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{
 			/*case 'get':
 				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
+					<Table id="fieldsList" data=${state.dbTable}
 					${...props} dataState = ${dataDisplay["dealsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');*/
@@ -466,9 +466,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		
 			/*case 'insert':
 				trace(dataDisplay["fieldsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
+				trace(state.dbTable[29]['id']+'<<<');
 				jsx('
-					<Table id="fieldsList" data=${state.dataTable}
+					<Table id="fieldsList" data=${state.dbTable}
 					${...props} dataState = ${dataDisplay["fieldsList"]} 
 					className="is-striped is-hoverable" fullWidth=${true}/>				
 				');	*/
@@ -482,7 +482,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		//if(state.dbTable != null)	trace(state.dbTable[0]);
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
 			<form className="tabComponentForm"  >

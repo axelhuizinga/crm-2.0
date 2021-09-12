@@ -209,8 +209,8 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 			{
 				trace(data);
 				//TODO: ADD SAVED ACTION
-				//props.parentForm.setStateFromChild({dataTable:data, loading:false});
-				//setState({dataTable:[data], loading:false});					
+				//props.parentForm.setStateFromChild({dbTable:data, loading:false});
+				//setState({dbTable:[data], loading:false});					
 			}
 		));
 	}

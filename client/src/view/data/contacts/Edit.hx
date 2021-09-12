@@ -158,7 +158,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				
 		var _iMenuItems:Array<MItem> = [for(v in menuItems) js.lib.Object.assign({},v)];
 		state =  App.initEState({
-			//dataTable:[],
+			//dbTable:[],
 			actualState:null,
 			initialData:null,
 			mHandlers:_iMenuItems,
@@ -488,7 +488,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	function renderResults():ReactFragment
 	{
-		//trace(props.match.params.section + '/' + props.match.params.action + ' state.dataTable:' + Std.string(state.actualState != null));
+		//trace(props.match.params.section + '/' + props.match.params.action + ' state.dbTable:' + Std.string(state.actualState != null));
 		//trace('###########loading:' + state.loading);
 		//trace('########### action:' + props.match.params.action);
 

@@ -132,7 +132,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = HistoryModel.dataDisplay;
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
-			dataTable:[],
+			dbTable:[],
 			loading:false,
 			//contactData:new IntMap(),			
 			selectedRows:[],
@@ -207,7 +207,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 						setState({
 						//props.parentComponent.setStateFromChild({
 							//rows:dRows,
-							dataTable:data.dataRows,
+							dbTable:data.dataRows,
 							dataCount:Std.parseInt(data.dataInfo['count'])
 						});
 						
@@ -248,12 +248,12 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	function draw() {
-		if(state.dataTable != null && state.dataTable.length>0)
+		if(state.dbTable != null && state.dbTable.length>0)
 			{		
 		trace(chartBox.outerHTML);	
 		var cW:Int = chartBox.offsetWidth;
-		var iX:Int = Math.floor(cW/state.dataTable.length);		
-		cW = iX * state.dataTable.length;
+		var iX:Int = Math.floor(cW/state.dbTable.length);		
+		cW = iX * state.dbTable.length;
 		chartBox.style.width = cW + 'px';
 		var cH:Int = chartBox.offsetHeight-1;
 		var lH:Int = cH*0.064>24?Math.round(cH*0.064):24;
@@ -271,14 +271,14 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 			return '${months[Std.parseInt(d[1])-1]} ${d[0]}';
 			//return '${months[dd.getUTCMonth()]} ${DateTools.format(dd, '%Y')}';
 		};
-		var maxSum:Float = Utils.keyMax(state.dataTable,'sum');
-		var maxCount:Int = Math.round(Utils.keyMax(state.dataTable, 'count'));
+		var maxSum:Float = Utils.keyMax(state.dbTable,'sum');
+		var maxCount:Int = Math.round(Utils.keyMax(state.dbTable, 'count'));
 		var cRatio:Float = cH/maxCount;
 		var sRatio:Float = cH/maxSum;
-		trace('$maxCount => $maxSum $cW / ${cH+lH}: $cRatio $sRatio ${state.dataTable.length} svg: ${svg!=null?svg:null}');
-		trace(state.dataTable[0]);
+		trace('$maxCount => $maxSum $cW / ${cH+lH}: $cRatio $sRatio ${state.dbTable.length} svg: ${svg!=null?svg:null}');
+		trace(state.dbTable[0]);
 		
-		//var iW:Int = Math.floor(cW/state.dataTable.length)-2;
+		//var iW:Int = Math.floor(cW/state.dbTable.length)-2;
 		var iW:Int = iX-2;
 		if(svg!=null)
 			return;
@@ -311,13 +311,13 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 		trace(stop1.nextElementSibling.classList.value);
 		//.attr("gradientTransform", "rotate(270)");
 		//{var h = Std.parseFloat(d.get('sum'))*sRatio;trace(h);return h;}.attr("gradientTransform", "rotate(" + d3.select("#range1").property("value")+")");
-		//if(state.dataTable != null && state.dataTable.length>0)
+		//if(state.dbTable != null && state.dbTable.length>0)
 	/*	{
-			trace(state.dataTable[0]);
-			var iW:Int = Math.floor(cW/state.dataTable.length)-2;
-			var iX:Float = cW/state.dataTable.length;*/
+			trace(state.dbTable[0]);
+			var iW:Int = Math.floor(cW/state.dbTable.length)-2;
+			var iX:Float = cW/state.dbTable.length;*/
 			trace(svg);
-			svg.selectAll(null).data(state.dataTable).enter().append("rect")
+			svg.selectAll(null).data(state.dbTable).enter().append("rect")
 				.attr('x', function(d:Dynamic,i:Int)return i*(iX))
 			.attr('y',function(d:Dynamic,i:Int)return Math.floor(cH - sRatio * Std.parseFloat(d.get('sum')))).attr('width',iW)
 			.attr('height',function(d:Dynamic,i:Int)return Math.ceil(Std.parseFloat(d.get('sum'))*sRatio)).attr("class", "gblue")
@@ -350,7 +350,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 	}
 
 	function drawLegend(top:Int,h:Int,lW:Int, iW:Int, iX:Float) {
-		trace(svg);//data(state.dataTable).enter().
+		trace(svg);//data(state.dbTable).enter().
 		trace('top:$top height:$h width:$lW');
 		var legend:Selection = svg.append("g").attr('x', 0)
 		.attr('transform','translate(0 '+top+')')
@@ -358,7 +358,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 		.attr('width',lW)
 		.attr('height',h)
 		.style("fill", 'rgba(0,0,0,0)');
-		var years:Array<String> = state.dataTable.map(function (d) return d.get('date').split('-')[0]);
+		var years:Array<String> = state.dbTable.map(function (d) return d.get('date').split('-')[0]);
 		//trace(years);
 		var actYear:String = years[0];
 		var yearX:Float = 0.0;
@@ -422,13 +422,13 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.section + ':${props.match.params.action}::' + Std.string(state.dataTable != null));
+		trace(props.match.params.section + ':${props.match.params.action}::' + Std.string(state.dbTable != null));
 		//trace(dataDisplay["userList"]);
-		if(state.dataTable.length==0)
+		if(state.dbTable.length==0)
 			return state.formApi.renderWait();
 		//trace('###########loading:' + state.rows[0]);
 		return switch(props.match.params.action)
-		{//  ${...props}<pre>${Std.string(state.dataTable)}</pre>
+		{//  ${...props}<pre>${Std.string(state.dbTable)}</pre>
 			case 'get':
 				jsx('
 					<form className="tabComponentForm" >
@@ -448,7 +448,7 @@ class Charts extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		//if(state.dbTable != null)	trace(state.dbTable[0]);
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
 				${renderResults()}

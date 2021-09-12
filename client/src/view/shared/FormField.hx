@@ -5,7 +5,8 @@ import js.html.InputEvent;
 import view.shared.FormInputElement;
 
 typedef BaseField =
-{
+{	
+	?alias:String,
 	?className:String,
 	?classPath:String,
 	?disabled:Bool,
@@ -14,7 +15,7 @@ typedef BaseField =
 	?dataBase:String, 
 	?options:Map<String,String>,
 	?value:String,
-	?dataTable:String,
+	?dbTableName:String,
 	?dataField:String,
 	?preset:Bool,
 	?primary:Bool,

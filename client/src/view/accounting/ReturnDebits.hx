@@ -80,7 +80,7 @@ class ReturnDebits extends ReactComponentOf<DataFormProps,FormState>
 		_trace = true;
 		//if(_trace) trace('...' + Reflect.fields(props));
 		state =  App.initEState({
-			dataTable:[],loading:false,importData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>()
+			dbTable:[],loading:false,importData:new IntMap(), selectedRows:[],values:new Map<String,Dynamic>()
 		},this);
 		if(props.match.params.section==null)
 		{

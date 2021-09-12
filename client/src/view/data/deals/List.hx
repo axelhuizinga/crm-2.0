@@ -60,7 +60,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace('...' + Reflect.fields(props));
 
 		state = App.initEState({
-			dataTable:[],
+			dbTable:[],
 			loading:true,
 			dealsData:new IntMap(),			
 			selectedRows:[],
@@ -139,10 +139,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		);
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
-			//setState({loading:false, dataTable:data.dataRows});
+			//setState({loading:false, dbTable:data.dataRows});
 			setState({
 				loading:false,
-				dataTable:data.dataRows,
+				dbTable:data.dataRows,
 				dataCount:Std.parseInt(data.dataInfo['count']),
 				pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
 			});
@@ -157,7 +157,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	public function selectionClear() {
 		var match:RouterMatch = ReactUtil.copy(props.match);
 		match.params.action = 'get';
-		trace(state.dataTable.length);
+		trace(state.dbTable.length);
 		props.select(1, null,match, UnselectAll);	
 		//trace(formRef !=null);
 
@@ -196,17 +196,17 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
+		trace(props.match.params.section + ':' + Std.string(state.dbTable != null));
 		trace(dataDisplay["dealsList"]);
 		trace(state.loading);
-		if(state.loading || state.dataTable == null || state.dataTable.length == 0)
+		if(state.loading || state.dbTable == null || state.dbTable.length == 0)
 			return state.formApi.renderWait();
-		trace('###########loading:' + state.dataTable.length);
+		trace('###########loading:' + state.dbTable.length);
 		return switch(props.match.params.action)
 		{
 			case 'get':
 				jsx('				
-				<Grid id="dealsList" data=${state.dataTable}
+				<Grid id="dealsList" data=${state.dbTable}
 				${...props} dataState = ${dataDisplay["dealsList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
 				');	
@@ -220,7 +220,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		//if(state.dbTable != null)	trace(state.dbTable[0]);
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
 		<>

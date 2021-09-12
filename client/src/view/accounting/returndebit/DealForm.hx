@@ -66,7 +66,7 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 		trace('...' + Reflect.fields(props));
 		state =  App.initEState({
 			actualStates:new IntMap<ORM>(),
-			dataTable:[],
+			dbTable:[],
 			loading:false,
 			dealsData:new IntMap(),	
 			model:'deals',
@@ -144,10 +144,10 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 			trace(data.dataRows.length); 
 			if(data.dataRows.length>0)
 				trace(data.dataRows[0]);
-			//setState({loading:false, dataTable:data.dataRows});
+			//setState({loading:false, dbTable:data.dataRows});
 			setState({
 				loading:false,
-				dataTable:data.dataRows,
+				dbTable:data.dataRows,
 				dataCount:Std.parseInt(data.dataInfo['count']),
 				pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
 			});			
@@ -243,17 +243,17 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 		//trace(props.action);
 		//trace(dataDisplay["userList"]);
 		//trace(state.loading);
-		if(state.loading || state.dataTable == null || state.dataTable.length == 0)
+		if(state.loading || state.dbTable == null || state.dbTable.length == 0)
 			return state.formApi.renderWait();
-		//trace('###########loading:' + state.dataTable);renderPager=${{function()BaseForm.renderPager(this);}}		
+		//trace('###########loading:' + state.dbTable);renderPager=${{function()BaseForm.renderPager(this);}}		
 		trace(props.action);
 		return switch(props.action)
 		{
 			case 'get':
-			//trace(state.dataTable);<Fragment key=${i++}>
+			//trace(state.dbTable);<Fragment key=${i++}>
 			jsx('
 			<>
-			<Grid id="dealsList" data=${state.dataTable}
+			<Grid id="dealsList" data=${state.dbTable}
 			${...props} dataState = ${dataDisplay["dealsList"]} 
 			parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>
 			${renderForm()}		
@@ -269,7 +269,7 @@ class DealForm extends ReactComponentOf<DataFormProps,FormState>
 
 	override public function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		//if(state.dbTable != null)	trace(state.dbTable[0]);
 		return null;
 	}
 

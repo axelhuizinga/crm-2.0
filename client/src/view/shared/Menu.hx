@@ -242,14 +242,18 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		evt.preventDefault();
 		//trace(untyped evt.target.form);
 		//trace(Reflect.fields(props.menuBlocks[props.section].items[0]).join('|'));
-		trace(props.menuBlocks[props.section].dataClassPath);
 		//trace(Reflect.fields(props.menuBlocks[props.section]).join('|'));
+		trace(props.menuBlocks[props.section].dataClassPath);
+		trace(props.menuBlocks[props.section]);
 		//return;
 		//trace(Reflect.fields(props.parentComponent.props).join('|'));
 		//trace(Reflect.fields(props.parentComponent.state.sideMenu).join('|'));
 		//trace(Reflect.fields(Meta.getFields(props.parentComponent.state.sideMenu.orm)).join('|'));
 		//trace(props.parentComponent.state.sideMenu.orm._meta_fields);
 		var form:FormElement = untyped evt.target.form;
+		
+		trace(form.dataset);
+		trace(Reflect.fields(form.dataset).join('|'));
 		var fD:FormData = new FormData(form);
 		if(Reflect.isFunction(Reflect.field(props.parentComponent, 'find'))){
 			return props.parentComponent.find(fD);
@@ -368,7 +372,16 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 	{
 		//trace(block);
 		var items:ReactFragment = renderItems(block);
-		return block.hasFindForm ? jsx('<form name=${block.dataClassPath} key=${"f_"+i}>$items</form>'):jsx('<>${items}</>');
+		if(block.hasFindForm){
+			var blockData:String = '';
+			if(block.dbTableName != null){
+				blockData = 'data-tableName=${block.dbTableName} data-alias=${block.alias}';
+			}
+			return jsx('<form data-db-table-name=${block.dbTableName} data-alias=${block.alias} name=${block.dataClassPath} key=${"f_"+i}>$items</form>');
+		}
+		else{
+			return jsx('<>${items}</>');
+		}
 	}
 
 	function renderItemForm(formFields:Array<FormField>):ReactFragment{
@@ -427,13 +440,19 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				trace(item);
 			//if(type!=Button)
 				//block.hasFindForm = true;
+			var itemData:String = '';
+			var itemFormField:FormField = item.formField;
+			if(itemFormField != null && itemFormField.dbTableName != null){
+				itemData = 'data-tableName=${itemFormField.dbTableName} data-alias=${itemFormField.alias}';
+				trace(itemFormField);
+			}
 			return switch(type)
 			{
 				case Radio: 
 					var o:Int = 0;
 					var options:ReactFragment = [
 					for(k=>v in item.formField.options.keyValueIterator()){
-						jsx('<span key=${"o_"+(o++)Y}>${v} <input type="radio" name=${item.formField.name} value=${v} /></span>');
+						jsx('<span key=${"o_"+(o++)Y}>${v} <input type="radio"  name=${item.formField.name} value=${v} /></span>');
 					}];
 					(item.className=="formNoLabel"?
 					jsx('<div className="formNoLabel" key=${"fr_"+(i++)} ><div>$options</div></div> '):
@@ -449,7 +468,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				</div>');<div class="recordings">         <span class="label">2021-08-03 09:24:52 </span><br>     <audio controls="" preload="metadata">      <source src="https://pbx.pitverwaltung.de/RECORDINGS/MP3/2021-08-03/20210803-092450_306636275_POSTSTATUS-all.mp3" type="audio/mpeg">     </audio><br>        </div>*/
 				
 				case Audio:
-					// htmlFor=${item.formField.name}
+					// htmlFor=${item.formField.name} ${itemData}
 					jsx('<div  key=${"uf"+(i++)}  id="findForm_${i}"   className="formRow1" >         
 					<div key=${"l_"+i}>${item.label}</div> 
 					<audio  key=${"a_"+i} id="aud_${i}" controls="1" preload="metadata" >
@@ -460,8 +479,8 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				case Text:
 					jsx('<div key=${"uf"+(i++)}  id="findForm_${i}"   className=${item.className==null?"formRow":item.className} >
 					<label htmlFor=${item.formField.name}  key=${"l_"+i}>${item.label}</label>
-					<input  id=${item.formField.name} type="text" name=${item.formField.name} onChange=${item.formField.handleChange} onKeyPress=${function(e:KeyboardEvent){
-						trace(e.charCode);
+					<input data-alias=${itemFormField.alias} data-db-table-name=${itemFormField.dbTableName} id=${item.formField.name} type="text" name=${item.formField.name} onChange=${item.formField.handleChange} onKeyPress=${function(e:KeyboardEvent){
+						//trace(e.charCode);
 						if(e.charCode==13) find(e);
 					} } className="input"  key=${"i_"+i} />
 				</div>');

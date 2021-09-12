@@ -54,12 +54,12 @@ class Users extends ReactComponentOf<DataFormProps,FormState>
 
 	function renderResults()
 	{
-		if (state.dataTable != null)
+		if (state.dbTable != null)
 		return switch(props.match.params.action)
 		{
 			case "userList":
 				jsx('
-					<$Table id="userList" data=${state.dataTable == null? null:state.dataTable}
+					<$Table id="userList" data=${state.dbTable == null? null:state.dbTable}
 					${...props} dataState = ${dataDisplay["userList"]} 
 					className = "is-striped is-hoverable" fullWidth={true}/>				
 				');	

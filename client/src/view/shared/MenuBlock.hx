@@ -4,7 +4,10 @@ import view.shared.MItem;
 
 typedef MenuBlock =
 {
-	?dataClassPath:String,
+	?alias:String,	
+	?dataClassPath:String,	
+	?dbTableJoins:Map<String,String>,
+	?dbTableName:String,
 	?disabled:Bool,
 	?className:String,
 	?hasFindForm:Bool,
@@ -14,5 +17,6 @@ typedef MenuBlock =
 	?items:Array<MItem>,
 	?label:String,	
 	?onActivate:Function,
-	?section:String
+	?section:String,
+	//?tableName:String,
 }

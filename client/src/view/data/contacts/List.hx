@@ -74,8 +74,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			v =  ~/^0+/.replace(v, '');
 			trace(v);
 			return v;
-		}}},
+		}}},		
 		{label: 'Ort',formField: { name: 'city', matchFormat: FindFields.iLike}},
+		{label: 'Straße',formField: { name: 'address1', matchFormat: FindFields.iLike}},
+		{label: 'IBAN',formField: { name: 'iban', matchFormat: FindFields.iLike, dbTableName: 'accounts', alias:'ac'}},
 	];
 	static var printItems:Array<MItem> = [
 		{className:'formNoLabel', formField: {name:'product', type: Radio, options: ['2'=>'Kinderhilfe','3'=>'Tierhilfe']}},
@@ -101,35 +103,39 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		dataDisplay = ContactsModel.dataGridDisplay;
 		//trace('...' + Reflect.fields(props) + ':' + Std.string(menuItems));
 		state =  App.initEState({
-			dataTable:[],
+			dbTable:[],
 			loading:true,
 			contactData:new IntMap(),			
 			selectedRows:[],
 			sideMenu:FormApi.initSideMenuMulti( this,
-					[{
-						dataClassPath:'data.Contacts',						
-						hasFindForm:true,
-						isActive:true,
-						label:'Liste',
-						section: 'List',
-						//items: Utils.copyObjectArray(menuItems)
-						items: [for(v in menuItems) js.lib.Object.assign({},v)]
+			[
+				{
+					alias:'co',
+					dataClassPath:'data.Contacts',						
+					hasFindForm:true,
+					isActive:true,
+					label:'Liste',
+					section: 'List',
+					//items: Utils.copyObjectArray(menuItems)
+					items: [for(v in menuItems) js.lib.Object.assign({},v)],
+					dbTableName:'contacts',
+					dbTableJoins:['ac'=>'ac.contact=co.id']
 
-					},
-					{
-						hasFindForm:false,
-						label:'Anschreiben',
-						section: 'List_',
-						//items: Utils.copyObjectArray(menuItems)
-						items: [for(v in printItems) js.lib.Object.assign({},v)]
-					}
-				]				
-				,{
-					orm:cast Contact,
-					section: props.match.params.section==null? 'List':props.match.params.section, 
-					mBshowActive: true,
-					sameWidth: true
-				}),
+				},
+				{
+					hasFindForm:false,
+					label:'Anschreiben',
+					section: 'List_',
+					//items: Utils.copyObjectArray(menuItems)
+					items: [for(v in printItems) js.lib.Object.assign({},v)]
+				}
+			]				
+			,{
+				orm:cast Contact,
+				section: props.match.params.section==null? 'List':props.match.params.section, 
+				mBshowActive: true,
+				sameWidth: true
+			}),
 			values:new Map<String,Dynamic>()
 		},this);
 		trace(Utils.sKeysList(state.relDataComps.keys()));
@@ -203,10 +209,10 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{
 				trace(data.dataRows);
 			}
-			//setState({loading:false, dataTable:data.dataRows});
+			//setState({loading:false, dbTable:data.dataRows});
 			setState({
 				loading:false,
-				dataTable:data.dataRows,
+				dbTable:data.dataRows,
 				dataCount:Std.parseInt(data.dataInfo['count']),
 				pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
 			});	
@@ -227,11 +233,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			setState({
 			//props.parentComponent.setStateFromChild({props.match.params.id!=null?'id|${props.match.params.id}'
 				//rows:dRows,
-				dataTable:props.dataStore.contactsDbData.dataRows,
+				dbTable:props.dataStore.contactsDbData.dataRows,
 				dataCount:Std.parseInt(props.dataStore.contactsDbData.dataInfo['count']),
 				pageCount: Math.ceil(Std.parseInt(props.dataStore.contactsDbData.dataInfo['count']) / props.limit)
 			}, function (){
-				trace(state.dataTable);
+				trace(state.dbTable);
 				props.history.push(
 					'${props.match.path.split(':section')[0]}List/get/${props.match.params.id!=null?props.match.params.id:''}'
 				);
@@ -250,7 +256,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	public function selectionClear() {
 		var match:RouterMatch = copy(props.match);
 		match.params.action = 'get';
-		trace(state.dataTable.length);
+		trace(state.dbTable.length);
 		props.parentComponent.props.select(null, null,this, UnselectAll);	
 		//this.props.select(this, null,props.parentComponent, UnselectAll);	
 		//trace(formRef !=null);
@@ -267,7 +273,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		Browser.document.querySelector('[class="formsContainer"]').scrollTop = 0;
 		// 	RESET MENU
 		/*setState(  App.initEState({
-			dataTable:[],
+			dbTable:[],
 			loading:false,
 			contactData:new IntMap(),			
 			selectedRows:[],
@@ -310,29 +316,29 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	function renderResults():ReactFragment
 	{
-		//trace(props.match.params.section + ':${props.match.params.action}::' + Std.string(state.dataTable != null));
+		//trace(props.match.params.section + ':${props.match.params.action}::' + Std.string(state.dbTable != null));
 		//trace(dataDisplay["userList"]);
 		var pState:FormState = props.parentComponent.state;
-		trace(state.dataTable.length);
+		trace(state.dbTable.length);
 		if(props.dataStore.contactsDbData != null)
 		trace(props.dataStore.contactsDbData.dataRows[0]);
 		else trace(props.dataStore.contactsDbData);
 		//trace(state.loading);
-		if( state.dataTable.length==0)
+		if( state.dbTable.length==0)
 			return state.formApi.renderWait();
 		//trace('###########loading:' + state.rows[0]);
 		return switch(props.match.params.action)
 		{//  ${...props}
 			case 'get':
 				jsx('				
-				<Grid id="contactList" data=${state.dataTable} doubleClickAction="update" 
+				<Grid id="contactList" data=${state.dbTable} doubleClickAction="update" 
 				${...props} dataState = ${dataDisplay["contactList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
 				');			
 				/*				
 				jsx('
 					<form className="tabComponentForm" >
-						<$Table id="contactsList" data=${state.dataTable}  parentComponent=${this}
+						<$Table id="contactsList" data=${state.dbTable}  parentComponent=${this}
 						${...props} dataState=${dataDisplay["contactList"]} renderPager=${{function()trace(Reflect.fields(props));}}
 						className="is-striped is-hoverable" fullWidth=${true}/>
 					</form>
@@ -350,7 +356,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render():ReactFragment
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		//if(state.dbTable != null)	trace(state.dbTable[0]);
 		trace(props.match.params.section);		
 		return state.formApi.render(jsx('
 		<>

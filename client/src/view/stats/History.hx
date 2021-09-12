@@ -69,7 +69,7 @@ class History extends ReactComponentOf<DataFormProps,FormState>
 		}		
 		
 		state =  App.initEState({
-			dataTable:[],loading:false,values:new Map<String,Dynamic>(),
+			dbTable:[],loading:false,values:new Map<String,Dynamic>(),
 		},this);
 		//trace(state.contactData);
 		//trace(state.loading);		
@@ -139,7 +139,7 @@ class History extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render()
 	{
-		//if(state.dataTable != null)	trace(state.dataTable[0]);
+		//if(state.dbTable != null)	trace(state.dbTable[0]);
 		//trace(props.match.params.section);					
 		trace(props.match.params.action);	
 		//trace(props.storeContactsList);	

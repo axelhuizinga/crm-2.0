@@ -94,12 +94,14 @@ class CRUD
 							}				
 						}
 						else{
+							//NO ROWS FOUND
 							trace(data);
 							dispatch(Status(Update(
 							{
-								className: 'warn',
-								text: 'Keine Daten für ${Json.stringify(param.filter)} gefunden'
+								className: param.resolveMessage!=null && param.resolveMessage.failureClass != null?param.resolveMessage.failureClass:'warn',
+								text: param.resolveMessage==null?'Keine Daten für ${Json.stringify(param.filter)} gefunden':param.resolveMessage.failure
 							}))); 
+							resolve(data);
 						}
 					}
 				);

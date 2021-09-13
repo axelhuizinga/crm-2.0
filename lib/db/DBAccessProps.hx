@@ -7,7 +7,8 @@ import state.UserState;
 
 typedef DBAccessResolveMessage = {
 	?success:String,
-	?failure:String
+	?failure:String,
+	?failureClass:String
 }
 
 typedef DBAccessJsonResponse = {

@@ -88,7 +88,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{separator:true},
 		//{label:'Spenden Bearbeiten',action:'showSelectedDeals', disabled:true, section: 'Edit', classPath:'view.data.contacts.Deals'},	
 		//{label:'Konten Bearbeiten',action:'listAccounts', disabled:true, section: 'Edit', classPath:'view.data.contacts.Accounts'},
-		{label:'Verlauf',action:'listHistory', section: 'Edit', classPath:'view.data.contacts.History'}
+		//{label:'Verlauf',action:'listHistory', section: 'Edit', classPath:'view.data.contacts.History'}
 	];	
 	public static var classPath = Type.getClassName(Edit);
 
@@ -129,7 +129,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		historyFormRef = React.createRef();
 		trace(props.match.params);		
 		//TODO: ADD USER FILTER TO DATASTORE
-		//TODO: EDIT MULTIPLE CONTACTS
 		if(props.dataStore.contactsData != null && props.match.params.id == null)
 			props.match.params.id = Std.string(props.dataStore.contactsData.keys().next());		
 		//REDIRECT WITHOUT ID OR edit action
@@ -140,7 +139,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			props.history.push('${baseUrl}List/get');
 			return;
 		}		
-		//trace(props.match.params.id + ':' + props.match.params.id==null && ~/open|update(\/)*$/.match(props.match.params.action));
+		trace(props.match.params.id + ':' + props.match.params.id==null && ~/open|update(\/)*$/.match(props.match.params.action));
 		dataAccess = ContactsModel.dataAccess;
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
 		dataDisplay = ContactsModel.dataDisplay;
@@ -495,7 +494,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{
 			case 'open'|'update':
-				//trace(state.mHandlers);
+				//trace(state.mHandlers);		
+				//if(aState.dataStore.contactsData != null && aState.dataStore.contactsData.keys().hasNext())
+			//trace(aState.dataStore.contactsData.keys().next());
 				//trace(state.actualState.id);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
@@ -505,7 +506,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				<>
 				<form name=${props.model} key=${props.model} className="tabComponentForm formField" ref=${props.formRef}>
 					<div className="grid_box" role="table" aria-label="Destinations" key=${props.model+"_grid_box"} >
-						<div className="g_caption" key=${props.model+"caption"}>Stammdaten</div>			
+						<div className="g_caption" key=${props.model+"caption"}>Stammdaten - ${App.store.getState().dataStore.contactsData.keys().next()}</div>			
 						${state.formBuilder.renderFormInputElements(
 							[
 								for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
@@ -517,22 +518,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				${relData()}
 				${relDataLists()}
 				</>
-				');	
-				/*jsx('<>
-				${state.formBuilder.renderForm({
-					mHandlers:state.mHandlers,
-					fields:[
-						for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
-					],
-					model:'contact',
-					ref:null,					
-					title: 'Stammdaten' 
-				},state.actualState)}
-				${relData()}
-				${relDataLists()}
-				</>
-				'));*/
-				//null;
+				');				
 			case 'insert':
 				//trace(state.actualState);
 				state.formBuilder.renderForm({

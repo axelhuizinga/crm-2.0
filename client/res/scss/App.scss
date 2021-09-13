@@ -32,7 +32,7 @@ $borderCol:$borderSmallWidth dotted #eee;
 $buttonSun:#ffdd57;
 $cell-border: 1px solid #ccc;
 $cellPadding: 0px 0.75rem;
-$gridPadding: 0.1rem 0.8rem 0.2rem 0.8rem;
+$gridPadding: 0.22rem;/*0.1rem 0.8rem 0.2rem 0.8rem;*/
 $gridHeadPadding: 0.2rem 0.8rem 0.2rem 0.8rem;
 $headPadding: 0.75rem 0.75rem 0.25rem 0.75rem;
 $ePad:0.3rem 0.64rem;
@@ -1005,6 +1005,14 @@ form td, form caption
 	height: 6rem;
 	text-align: center;
 }
+
+.rounded_box{
+	margin: 1rem auto;
+	padding:0.5rem;
+	border: thin solid #aaa;
+	border-radius: 0.2rem 0.2rem 0 0;	
+	overflow: hidden;
+}
 /*	GRID TABLES	*/
 
 .grid_box
@@ -1035,7 +1043,7 @@ form td, form caption
 
 .gridItem{
 	
-	padding: $gridPadding!important;
+	padding: $gridPadding;
 	display: inline-block;
 	/*border:1px solid red;*/
 	text-align: right;
@@ -1062,18 +1070,14 @@ form td, form caption
 	overflow-x: hidden;
 	margin: 0 auto;
 }
-/*.item--contained {
-    grid-column: container;
-}.item--full { 
-    grid-column: viewport; 
-    display: inherit;
-    grid-template-columns: inherit;
-}.item--full > * {
-    grid-column: container;
+.grid_scroll_box{
+	display: grid;
+	height: 24rem;
+	border: none;
+	margin-top: 0.22rem;
+	padding: 0 1rem 0 0;
+	overflow: auto;
 }
-.sub-item{
-	width:50%;
-}*/
 .g_block, .g_caption
 {
 	

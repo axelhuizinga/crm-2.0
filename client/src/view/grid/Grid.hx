@@ -96,18 +96,33 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		}		
 	
 		var headerRows:ReactFragment = renderHeaderDisplay();
-		//trace('pageCount=${props.parentComponent.state.pageCount} dataCount=${props.parentComponent.state.dataCount} limit=${props.parentComponent.props.limit}');	<div className="grid_border_box"></div>	
-
-		return jsx('		
+		/**
+		 * style=${{margin: "1rem auto",padding:"0.5rem",border: "thin solid #aaa",
+			borderRadius: "0.2rem 0.2rem 0 0"}}
+		 */
+		if(true&&props.scrollHeight>0)
+			return jsx('
+		<div className="grid_container">			
+			<div className="rounded_box">	
+				<div className="g_caption" key=${"caption"} style=${null}>${props.title}</div>
+				
+				<div className="grid_scroll_box grid${visibleColumns}c" ref=${gridRef} id=${props.id} key=${"grid_list"+props.id} 
+				>	
+					${headerRows}				
+					${renderRows()}					
+				</div>
+			</div>				
+			${renderPager(props.parentComponent)}
+		</div>');
+		else 
+			return jsx('		
 		<div className="grid_container">
 			
 				<div className="grid_box grid${visibleColumns}c" ref=${gridRef} id=${props.id} key=${"grid_list"+props.id}>		
 					${renderTitle(visibleColumns)}
 					${headerRows}				
-					${renderRows()}
-					
-				</div>	
-			
+					${renderRows()}					
+				</div>				
 			${renderPager(props.parentComponent)}
 		</div>');		
 	}

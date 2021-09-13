@@ -90,27 +90,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			action:(props.action==null?(props.match.params.action==null?'get':props.match.params.action):props.action),
 			//action:(props.match.params.action==null?'get':props.match.params.action),
 			loading:true,
-			sideMenu:props.sideMenu/*FormApi.initSideMenuMulti( this,			
-				[
-					{
-						dataClassPath:'admin.Debit',//Rücklastschriften (admin.ImportCamt)
-						label:"Gesamtliste2",
-						section: 'List',
-						items: List.menuItems
-					},
-					{
-						dataClassPath:'admin.Debit',//admin.ImportCamt
-						label:"Bearbeiten",
-						section: 'Edit',
-						items: Edit.menuItems
-					}
-
-				],
-				{	
-					section: props.match.params.section==null? 'List':props.match.params.section, 
-					sameWidth: true					
-				}
-			)*/
+			sideMenu:props.sideMenu
 		},this);
 		if(state.action==null&&props.match.params.action==null)
 		{
@@ -259,7 +239,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				order: 'termin| ASC',
 				resolveMessage:{					
 					success:'Buchungen wurden geladen',
-					failure:'Buchungen konnten nicht geladen werden'
+					failure:'Keine Buchungen',
+					failureClass:''
 				},
 				dbUser:props.userState.dbUser,
 				devIP: App.devIP
@@ -267,7 +248,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		));
 		p.then(function(data:DbData){
 			trace(data.dataRows.length); 
-			trace(data.dataRows); 
+			if(data.dataRows.length>0)
+			trace(data.dataRows[data.dataRows.length-1]); 
 			//setState({loading:false, dbTable:data.dataRows});
 			setState({
 				loading:false,
@@ -275,6 +257,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				dataCount:Std.parseInt(data.dataInfo['count']),
 				pageCount: Math.ceil(Std.parseInt(data.dataInfo['count']) / props.limit)
 			});			
+		},function(data:Dynamic) {
+			trace(data);
+			setState({
+				loading:false
+			});
 		});
 	}
 
@@ -346,15 +333,21 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace('###########loading:' + state.loading +' state.action:' + state.action);
 		return switch(state.action)
 		{
-			case 'get' :				
+			case 'get' :		
+				if(state.dbTable.length==0)	
+					null;
+				else 
 				jsx('				
 				<Grid id="rDebitList" data=${state.dbTable}
 				${...props} dataState = ${dataDisplay["rDebitList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
 				');		
-			case 'getHistory':				
+			case 'getHistory':	
+				if(state.dbTable.length==0)	
+					null;
+				else 			
 				jsx('				
-				<Grid id="rDebitList" data=${state.dbTable} title="Verlauf" 
+				<Grid id="rDebitList" data=${state.dbTable} title="Verlauf" scrollHeight="15"
 				${...props} dataState = ${dataDisplay["historyList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>		
 				');						

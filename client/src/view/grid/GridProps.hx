@@ -1,5 +1,7 @@
 package view.grid;
 
+import history.History;
+import history.Location;
 import react.router.RouterLocation;
 import react.router.RouterHistory;
 import react.router.RouterMatch;
@@ -55,9 +57,9 @@ typedef GridProps =
 	?filterable:Dynamic,
 	?itemsPerPage:Int,
 	?id:String,
-	?location:RouterLocation,
+	?location:Location,
 	?match:RouterMatch,
-	?history:RouterHistory,	
+	?history:History,	
 	?findBy:String,
 	?title:String,
 	?onFilter:String->Void,
@@ -66,6 +68,7 @@ typedef GridProps =
 	?onSort:Int->Void,
 	?parentComponent:Dynamic,
 	?readOnly:Bool,
+	?scrollHeight:Int,
 	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>
 }
 

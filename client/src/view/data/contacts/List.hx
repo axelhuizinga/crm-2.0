@@ -335,24 +335,11 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				${...props} dataState = ${dataDisplay["contactList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
 				');			
-				/*				
-				jsx('
-					<form className="tabComponentForm" >
-						<$Table id="contactsList" data=${state.dbTable}  parentComponent=${this}
-						${...props} dataState=${dataDisplay["contactList"]} renderPager=${{function()trace(Reflect.fields(props));}}
-						className="is-striped is-hoverable" fullWidth=${true}/>
-					</form>
-				');*/
 			default:
 				null;
 		}
 		return null;
 	}
-
-	/*function getCellData(cP:Dynamic) {
-		trace(cP);
-	}*/
-//cellDataGetter=${getCellData}
 	
 	override function render():ReactFragment
 	{

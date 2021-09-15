@@ -18,7 +18,8 @@ import state.AppState;
 
 class ListLoader 
 {
-	public static function load(param:DBAccessProps) 
+	//public static function load(param:DBAccessProps) 
+	public static function load(param:Dynamic) 
 	{
 
 		return Thunk.Action(function (dispatch:Dispatch, getState:Void->DataState)
@@ -26,7 +27,7 @@ class ListLoader
 			if(param.page==null)
 				param.page=0;
 			trace('Loading ${param.page+1}');
-			//return dispatch(LoadList(param));
+			trace(param.dataSource);
 			return new Promise(function(resolve, reject){
 				if (!param.dbUser.online)
 				{

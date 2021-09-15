@@ -1,5 +1,6 @@
 package action.async;
 
+import haxe.Serializer;
 import db.DBAccessProps;
 import haxe.Json;
 import js.lib.Promise;
@@ -9,7 +10,7 @@ import action.StatusAction;
 import js.html.Blob;
 import state.UserState;
 import state.AppState;
-import haxe.Serializer;
+
 import haxe.http.HttpJs;
 import state.DataAccessState;
 
@@ -147,8 +148,9 @@ class DBAccess
 				//trace(data);
 				if(data.dataErrors != null)
 					trace(data.dataErrors);
-				if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
-					trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
+				if(data.dataInfo != null && data.dataInfo.exists('dataSource'))				
+					trace(data.dataInfo.get('dataSource'));
+					//trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
 
 				if(data.dataErrors.exists('lastError'))
 				{

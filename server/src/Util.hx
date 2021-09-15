@@ -219,6 +219,26 @@ class Util
 		return b.toString();
 	}*/
 
+
+	/**
+	 * Convert Object to Map
+	 * @param obj Dynamic<T> 
+	 * @return  Map<T>	 
+	 */
+
+	 public static function dyn2map(obj: Dynamic):Map<String,Map<String,Dynamic>> {
+		var map:Map<String,Map<String,Dynamic>> = [];
+		return [
+			for(f in Reflect.fields(obj))
+			{
+				var iMap:Map<String,Dynamic> = [];
+				copy2map(iMap, Reflect.field(obj,f));
+				f => iMap;
+			}
+		];
+		return map;
+	}
+
 	/**
 	 * Convert Map to Object
 	 * @param map Map<T>

@@ -1,7 +1,7 @@
 package loader;
 
-import haxe.Unserializer;
-import haxe.Serializer;
+import haxe.Exception;
+import hxbit.Serializer;
 import db.DBAccessProps;
 import db.DbQuery;
 import haxe.Json;
@@ -26,62 +26,38 @@ class BinaryLoader {
 		return dbQuery(url, p, onLoaded);
 	}
 
-	public static function dbQuery(url:String,dbAP:DBAccessProps, onLoaded:DbData->Void) {
+	public static function dbQuery(url:String,dbAP:DBAccessProps, onLoaded:DbData->Void):XMLHttpRequest {
 		//trace(url);
 		//trace(dbAP.relations);
 		//trace(dbAP);
+		if(s==null)
+			s = new Serializer();
+		//var s = new Serializer();
 		//trace('${dbAP.classPath}.${dbAP.action} filter:${dbAP.filter} table:${dbAP.table}');
-		var s = new Serializer();
 		//var s = new json2object.JsonWriter<DbQuery>();
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbAP);//.toHex();
-		//trace(dbQuery.dbParams);
+		trace(dbQuery.dbParams);
 		//Out.dumpObject(dbQuery);
-		//var b:Bytes = s.serialize(dbQuery);
-		s.serialize(dbQuery);
-		bl.param = s.toString();
+		var b:Bytes = s.serialize(dbQuery);
+		trace(b.length);
+		trace(b.toHex());
+		//s.serialize(dbQuery);
+		bl.param = b.getData();//s.toString();
+		//trace(bl.param.byteLength);
+		//trace(Unserializer.run(bl.param));
 		bl.cB = onLoaded;
 		bl.load();
 		return bl.xhr;
 	}
 
-	/*public static function jsonQuery(url:String,dbAP:DBAccessProps, onLoaded:DbData->Void) {
-		//trace(url);
-		//trace(dbAP.relations);
-		//trace(dbAP);
-		//trace('${dbAP.classPath}.${dbAP.action} filter:${dbAP.filter} table:${dbAP.table}');
-		var s = new json2object.JsonWriter<DbQuery>();
-		var bl:BinaryLoader = new BinaryLoader(url);
-		var dbQuery = new DbQuery(dbAP);//.toHex();
-		trace(dbQuery);
-		//Out.dumpObject(dbQuery);
-		//var b:Bytes = s.serialize(dbQuery);
-		bl.param = s.write(dbQuery);
-		bl.cB = onLoaded;
-		bl.load();
-		return bl.xhr;
-	}	*/
-
-	/*public static function go(url:String, dbAP:DBAccessProps, onLoaded:DBAccessJsonResponse->Void){
-		//trace(dbAP);
-		var s:Serializer = new Serializer();
-		var bl:BinaryLoader = new BinaryLoader(url);
-		var dbQuery = new DbQuery(dbAP);//.toHex();
-		//trace(dbQuery);
-		var b:Bytes = s.serialize(dbQuery);
-		bl.param = b.getData();
-		bl.dBa = onLoaded;
-		bl.loadJson();
-		return bl.xhr;
-	}*/
-
-
 	var cB:DbData->Void;	
 	var dBa:DBAccessJsonResponse->Void;
 	var param:Dynamic;
-	//var param:String;
+	public static var qi:Int = 0;
 	public var xhr:XMLHttpRequest;
-	
+	static var s:Serializer;
+	static var u:Serializer;
 	public var url(default, null) : String;
 
 	public function new( url : String ) {
@@ -89,14 +65,18 @@ class BinaryLoader {
 		xhr = new js.html.XMLHttpRequest();
 	}
 
-	public function onLoaded( bytes : String ) {
-		//trace(bytes);
+	public function onLoaded( bytes : Bytes ) {
 		if(bytes!=null && bytes.length>0){
+			//trace(bytes.toString());
 			//var u = new Unserializer();
 			/*var something = Unserializer.run(bytes);
 			trace(something);*/
-			var data:DbData = Unserializer.run(bytes);
-			//trace(data);
+			//var u:Serializer = new Serializer();
+			//if(u==null)
+				u = new Serializer();
+
+			var data:DbData = u.unserialize(bytes, DbData);//Unserializer.run(bytes);
+			trace(data);
 			cB(data);			
 		}
 		else 
@@ -136,14 +116,26 @@ class BinaryLoader {
 		xhr.withCredentials = true;
 		//xhr.withCredentials = false;
 		xhr.onload = function(e) {
-			//trace(xhr.status);
+			trace(xhr.status);
 			if (xhr.status != 200) {
 				onError(xhr.statusText);
 				return;
 			}
-			//trace(xhr.response.length);
-			onLoaded(xhr.response);
-			//onLoaded(haxe.io.Bytes.ofData(xhr.response));
+			//onLoaded(haxe.io.Bytes.ofString(xhr.response));
+			try{
+				trace(Type.typeof(xhr.response));
+				trace(Std.isOfType(xhr.response, String));
+				if(Std.isOfType(xhr.response, String)){
+					onLoaded(haxe.io.Bytes.ofString(xhr.response));
+				}
+				//onLoaded(haxe.io.Bytes.ofData(xhr.response));
+				else			
+					onLoaded(xhr.response);
+			}
+			catch(ex:Exception){
+				trace(ex.details());
+			}
+			
 		}
 		
 	/*	xhr.onprogress = function(e) {

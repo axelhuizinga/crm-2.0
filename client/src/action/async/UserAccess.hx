@@ -9,7 +9,7 @@ import action.AppAction;
 import action.UserAction;
 import haxe.http.HttpJs;
 import haxe.Json;
-import haxe.Serializer;
+
 import loader.BinaryLoader;
 import react.ReactUtil.copy;
 import redux.Redux;

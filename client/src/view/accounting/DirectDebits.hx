@@ -4,7 +4,7 @@ import view.shared.MItem;
 import model.accounting.DebitModel;
 import loader.AjaxLoader;
 import action.async.UserAccess;
-import haxe.Serializer;
+
 import haxe.ds.StringMap;
 import state.AppState;
 import react.ReactComponent.ReactFragment;

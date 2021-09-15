@@ -4,7 +4,7 @@ package view.accounting.directdebit;
 import comments.CommentString.*;
 import shared.FindFields;
 import view.shared.Menu.Filter;
-import haxe.Serializer;
+
 import js.html.Event;
 import action.DataAction;
 import action.DataAction.SelectType;
@@ -19,8 +19,9 @@ import js.html.FormData;
 import view.shared.FormInputElement;
 import js.Browser;
 import js.html.FileReader;
-import haxe.Unserializer;
 import js.html.XMLHttpRequest;
+import haxe.Serializer;
+import haxe.Unserializer;
 import shared.DbDataTools;
 import action.AppAction;
 import redux.Redux.Dispatch;
@@ -149,7 +150,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			offset = Std.int(props.limit * filter.page);
 			Reflect.deleteField(filter,'page');
 		}
-		//if(filter == null)
+
 		filter = Utils.extend(filter, (props.match.params.id!=null?
 			{mandat_id:FindFields.iLike(props.match.params.id), mandator:props.userState.dbUser.mandator}:
 			{mandator:props.userState.dbUser.mandator })
@@ -166,6 +167,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{
 				classPath:'data.DirectDebits',
 				action:'get',
+				//dataSource: dS,
 				filter:filter,//(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
 				table:'booking_requests',
 				limit:props.limit,

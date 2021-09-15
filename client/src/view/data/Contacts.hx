@@ -10,7 +10,7 @@ import react.router.RouterMatch;
 import react.router.ReactRouter;
 import comments.StringTransform;
 import haxe.CallStack;
-import haxe.Serializer;
+
 import haxe.ds.IntMap;
 import haxe.ds.StringMap;
 import haxe.Json;

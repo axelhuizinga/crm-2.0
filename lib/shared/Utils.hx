@@ -5,6 +5,7 @@ package shared;
  * @author axel@cunity.me
  */
 
+import haxe.Serializer;
 import haxe.ds.IntMap;
 import redux.Redux.Dispatch;
 import haxe.Constraints.Function;
@@ -229,8 +230,8 @@ class Utils
 			//Reflect.setField(obj, k, v);
 		return map;
 	}
-	
-	public static function dyn2map(d:Dynamic):Map<String,Dynamic>
+
+	public static function dyn2map1(d:Dynamic):Map<String,Dynamic>
 	{
 		var map:Map<String,Dynamic> = [];
 		for(f in Reflect.fields(d)){
@@ -240,6 +241,25 @@ class Utils
 		}
 			//Reflect.setField(obj, k, v);
 		return map;
+	}	
+
+	/**
+	 * Serialize :Map<String,Map<String,Dynamic>>
+	 * @param map
+	 * @return String
+	 */
+	public static function serializeNestedMap(map:Map<String,Dynamic>):String
+	{
+		return [
+			for(k => v in map.keyValueIterator()){
+				trace(k);
+				Serializer.run([k=>v]);
+				//map[k] = Reflect.field(d,f);
+				// TODO: check4recursion
+			}
+		].join(',');
+			//Reflect.setField(obj, k, v);
+		return 'map';
 	}
 
 	public static function map2dyn(map:Map<String,Dynamic>):Dynamic

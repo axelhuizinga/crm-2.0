@@ -10,7 +10,7 @@ import state.AppState;
 import action.AppAction;
 import action.DataAction;
 import haxe.ds.Either;
-import haxe.Serializer;
+
 import state.DataAccessState;
 
 import js.html.XMLHttpRequest;

@@ -3,7 +3,7 @@ package db;
 import me.cunity.debug.Out;
 
 
-class DbUser// implements hxbit.Serializable
+class DbUser implements hxbit.Serializable
 {
 	
 	

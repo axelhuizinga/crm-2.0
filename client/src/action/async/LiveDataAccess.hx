@@ -12,7 +12,7 @@ import state.AppState;
 import action.AppAction;
 import action.DataAction;
 import haxe.ds.Either;
-import haxe.Serializer;
+
 import haxe.http.HttpJs;
 import state.DataAccessState;
 

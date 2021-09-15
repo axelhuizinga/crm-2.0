@@ -6,8 +6,9 @@ import react.ReactType;
 import react.React;
 import js.html.Plugin;
 import js.Syntax;
-import haxe.Serializer;
 import haxe.ds.StringMap;
+import haxe.Serializer;
+
 import loader.AjaxLoader;
 import react.ReactComponent;
 import react.ReactComponent.ReactFragment;

@@ -13,7 +13,7 @@
 #-lib json2object
 -lib tink_core
 -lib hx3compat
-#-lib hxbit
+-lib hxbit
 -lib uuid 
 #2.3.1 
 
@@ -27,4 +27,5 @@
 --debug
 #--no-traces
 #-D eval-stack
+#-D hxbitmini_nullsafety
 -main Go

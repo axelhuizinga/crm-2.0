@@ -2,7 +2,7 @@ package view.dashboard;
 
 import react.router.RouterMatch;
 import haxe.Json;
-import haxe.Serializer;
+
 import haxe.http.HttpJs;
 import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;

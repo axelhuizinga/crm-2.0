@@ -237,8 +237,9 @@ class DebitReturnStatements extends ReactComponentOf<DataFormProps,FormState>
 						trace(data);
 						if(data.dataErrors != null)
 							trace(data.dataErrors);
-						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))
-							trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
+						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))							
+							trace(data.dataInfo.get('dataSource'));
+							//trace(new Unserializer(data.dataInfo.get('dataSource')).unserialize());
 
 						if(data.dataErrors.exists('lastError'))
 						{

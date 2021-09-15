@@ -1,7 +1,7 @@
 package view.accounting.returndebit;
 
 import db.DbRelation;
-import haxe.Serializer;
+
 import js.html.Event;
 import action.DataAction;
 import action.DataAction.SelectType;
@@ -16,8 +16,9 @@ import js.html.FormData;
 import view.shared.FormInputElement;
 import js.Browser;
 import js.html.FileReader;
-import haxe.Unserializer;
 import js.html.XMLHttpRequest;
+import haxe.Serializer;
+import haxe.Unserializer;
 import shared.DbDataTools;
 import action.AppAction;
 import redux.Redux.Dispatch;
@@ -163,7 +164,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		var dS:db.DataSource = [
 			'debit_return_statements' => [
 				'alias' => 'drs',
-				'fields' => 'id,sepa_code,iban,ba_id,amount,mandator,last_modified,processed,created_at,value_date',
+				'fields' => 'deal_id,sepa_code,iban,ba_id,amount,mandator,last_modified,processed,created_at,value_date',
 				//	TODO: BUILD FILTER FUNCTION
 				//'filter' => (props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),
 			],				

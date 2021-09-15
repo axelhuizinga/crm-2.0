@@ -10,7 +10,7 @@ import action.AppAction;
 import js.html.Blob;
 import state.UserState;
 import state.AppState;
-import haxe.Serializer;
+
 import haxe.http.HttpJs;
 import state.DataAccessState;
 

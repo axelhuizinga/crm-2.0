@@ -2,7 +2,7 @@ package;
 
 import haxe.ds.StringMap;
 //import json2object.JsonWriter;
-//import haxe.Serializer;
+import haxe.Serializer;
 import hxbit.Serializer;
 //import json2object.JsonParser;
 import db.DBAccessProps;
@@ -10,7 +10,7 @@ import comments.CommentString.*;
 import php.Global;
 import php.SuperGlobal;
 import db.DbQuery;
-//import db.DbQueryS;
+import db.DbQueryS;
 import tjson.TJSON;
 import haxe.Json;
 import haxe.PosInfos;
@@ -949,7 +949,7 @@ class Model
 			S.send('got no pData');
 			return null;
 		}
-		var s:Serializer = new Serializer();
+		var s:Serializer = new hxbit.Serializer();
 		return s.unserialize(pData, DbQuery);
 		//return Unserializer.run(pData);
 	}	
@@ -969,7 +969,7 @@ class Model
 		return new DbQuery( dbAP);
 		return null;//s.unserialize(pData, DbQuery);
 	}	
-		
+	
 	public function new(?param:Map<String,String>) 
 	{
 		this.param = param;
@@ -1022,14 +1022,14 @@ class Model
 		{
 			//trace(param);
 			
-			var dM:Dynamic = param.get('dataSource');
-			//var dM:StringMap<StringMap<Dynamic>> = Unserializer.run(param.get('dataSource'));
+			//var dM:Dynamic = param.get('dataSource');
+			var dM:StringMap<StringMap<Dynamic>> = Unserializer.run(param.get('dataSource'));
 			//tableNames = param.get('dataSource').keys().sKeysList();
 			//dataSource = param.get('dataSource');
 			trace(dM);
 			//dataSource = Lib.()
 			trace(Reflect.fields(dM).join('|'));
-			//trace(dM.keys().next());
+			trace(dM.keys().next());
 			//trace(param.get('dataSource'));
 			//trace(dataSource);
 			//dataSource = TJSON.parse(param.get('dataSource'));
@@ -1162,15 +1162,15 @@ class Model
 		return Syntax.code("json_encode({0},{1})", {content:res}, 64);//JSON_UNESCAPED_SLASHES
 	}
 	
-	function serializeRows(rows:NativeArray):Bytes
+	function serializeRows(rows:NativeArray):String
 	{
-		var s:Serializer = new Serializer();
+		//var s = new JsonWriter<DbData>();
 		Syntax.foreach(rows, function(k:Int, v:Dynamic)
 		{
-				dbData.dataRows.push(Lib.hashOfAssociativeArray(v));
+			dbData.dataRows.push(Lib.hashOfAssociativeArray(v));
 		});
-		trace(dbData);
-		return s.serialize(dbData);
+		//trace(dbData);
+		return Serializer.run(dbData);
 	}
 	
 	function sendRows(rows:NativeArray = null):Bool
@@ -1181,7 +1181,7 @@ class Model
 		}
 		else 
 			trace(Global.count(rows));
-		trace(param);
+		
 		if (rows!=null)
 			Syntax.foreach(rows, function(k:Int, v:Dynamic)
 			{
@@ -1191,13 +1191,12 @@ class Model
 		Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 		Web.setHeader("Access-Control-Allow-Credentials", "true");
 		Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');
-		var s:Serializer = new Serializer();
-		var out = File.write("php://output", true);
+		/*var out = File.write("php://output", true);
 		out.bigEndian = true;
-		out.write(s.serialize(dbData));
+		out.write(s.serialize(dbData));*/
 		//Sys.print(s.write(dbData));
-		//trace(Serializer.run(dbData));
-		//Sys.print(Serializer.run(dbData));
+		trace(Serializer.run(dbData));
+		Sys.print(Serializer.run(dbData));
 		Sys.exit(0);
 		return true;
 	}

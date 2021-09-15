@@ -1,5 +1,6 @@
 package view.data.contacts;
 
+
 import haxe.Json;
 import js.Cookie;
 import js.html.HeadersIterator;
@@ -178,12 +179,22 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			Reflect.deleteField(filter,'page');
 			props.parentComponent.setState({page: filter.page});
 		}		
-		//if(filter == null)
+				
+		var dS:DataSource = null;
+		if(filter != null && filter.dataSource!=null)
+		{
+			trace(filter.dataSource);
+			dS = copy(filter.dataSource);
+			Reflect.deleteField(filter,'dataSource');
+			trace(dS);
+			//trace(Utils.serializeNestedMap(dS));
+		}
+
 		filter = Utils.extend(filter, (props.match.params.id!=null?
 			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
 			{mandator:props.userState.dbUser.mandator})
 		);
-		//{mandator:props.userState.dbUser.mandator}
+		//{mandator:props.userState.dbUser.mandator}untyped Serializer.run
 		trace('hi $filter');
 
 		trace(props.match.params);
@@ -191,6 +202,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{
 				classPath:'data.Contacts',
 				action:'get',
+				dataSource: dS,// == null ? null : untyped Utils.serializeNestedMap(dS),
 				filter:filter,
 				limit:props.limit,
 				offset:offset>0?offset:0,
@@ -209,7 +221,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{
 				trace(data.dataRows);
 			}
-			//setState({loading:false, dbTable:data.dataRows});
+			//setState({loading:false, dbTable:data.dataRows}); 
 			setState({
 				loading:false,
 				dbTable:data.dataRows,

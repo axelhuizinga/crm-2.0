@@ -1,5 +1,5 @@
 package;
-import haxe.Serializer;
+import hxbit.Serializer;
 import shared.Utils;
 import haxe.Exception;
 import haxe.CallStack;
@@ -199,9 +199,7 @@ class S
 				trace(S.devIP + ':' + devIP);
 				Upload.go();
 			}
-			//trace(dbQuery.dbUser);
-						
-			//(dbQuery);
+
 			if(dbQuery==null)
 				send("dev end");
 			devIP = params.get('devIP');
@@ -309,6 +307,7 @@ class S
 			}
 
 		}	
+		if(dbQuery.dbUser!=null)
 		User.login(dbQuery.dbUser);		
 		
 		trace(response);
@@ -373,6 +372,7 @@ class S
 	public static function sendData(dbData:DbData, ?data:RData):Bool
 	{
 		//var w = new JsonWriter<DbData>();//hxbit.Serializer
+		var s:Serializer = new Serializer();
 		//trace(data.info);
 		if(data != null){
 			dbData.dataInfo = dbData.dataInfo.copyStringMap(data.info);
@@ -396,7 +396,7 @@ class S
 			trace(dbData.dataRows.length);
 			return true;			 
 		 }		
-		return send(Serializer.run(dbData));
+		return sendbytes(s.serialize(dbData));
 	}
 
 	public static function checkStmt(dbConn:PDO, stmt:PDOStatement, err:String, ?pos:PosInfos):Bool
@@ -435,13 +435,15 @@ class S
 			}
 		}
 		trace(dbData.dataErrors);
-		return send(Serializer.run(dbData));
+		var s:Serializer = new Serializer();
+		return sendbytes(s.serialize(dbData));
+		//return send(Serializer.run(dbData));
 		//return send(writer.write(dbData));
 	}
 	
 	public static function sendInfo(dbData:DbData, ?info:Map<String,Dynamic>):Bool
 	{
-		//var s:Serializer = new Serializer();
+		var s:Serializer = new Serializer();
 		//var writer = new json2object.JsonWriter<DbData>();
 		if (info != null)
 		{
@@ -451,10 +453,12 @@ class S
 			}
 		}
 		//trace('done at ${Sys.time()-ts} ms');
+		//trace(dbData.dataInfo);
+		trace(dbData);
 		//trace(dbData.dataErrors);
-		trace(dbData.dataInfo);
+		return sendbytes(s.serialize(dbData));
 		//return send(writer.write(dbData));
-		return send(Serializer.run(dbData));
+		//return send(Serializer.run(dbData));
 	}
 	
 	public static function sendbytes(b:Bytes, ?loop:Bool):Bool
@@ -463,9 +467,9 @@ class S
 		//trace(new Serializer().unserialize(b, DbData));
 		if(Lib.isCli())
 			return false;		
-		//Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');
-		//Web.setHeader("Access-Control-Allow-Credentials", "true");
+		
 		setHeader('application/octet-stream');		
+
 		var out = File.write("php://output", true);
 		out.bigEndian = true;
 		out.write(b);

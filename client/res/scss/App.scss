@@ -1118,7 +1118,7 @@ form td, form caption
 	display: grid;
 	/*grid-template-columns: 0.6fr 1fr;*/
 	grid-template-columns: minmax(10rem, 0.6fr) auto;
-	border: 1px solid #ccc;
+	border: 1 solid #ccc;
 	border-radius: $tabs-boxed-link-radius;
 }
 .g_row_2_radio{

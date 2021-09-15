@@ -2,6 +2,7 @@ package view.shared;
 
 //import js.lib.Reflect;
 //import model.FormInputElement;
+import db.DataSource;
 import js.html.KeyboardEvent;
 import shared.FindFields;
 import js.html.Window;
@@ -277,9 +278,54 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			if(StringTools.trim(el.value)!='')
 				Reflect.setField(param, el.name,
 					matchFormat(el.name,el.value));
-		}
-		return props.parentComponent.get(BaseForm.filter(props.parentComponent.props,param));
+		}		
+		return props.parentComponent.get(buildDataSource(BaseForm.filter(props.parentComponent.props,param)));
 	}	
+
+	function buildDataSource(param:Dynamic):Dynamic {
+
+		var dS:DataSource = [
+			props.menuBlocks[props.section].dbTableName => [
+					'alias' => props.menuBlocks[props.section].alias,
+					'fields' => ''
+				]
+		];		
+		for(item in props.menuBlocks[props.section].items){
+			if(item.formField !=null){
+				if(item.formField.dbTableName!=null){
+					//USE ITEM TABLE
+					if(dS.exists(item.formField.dbTableName)){
+						dS[item.formField.dbTableName]['fields'] = dS[item.formField.dbTableName]['fields'] + ',' + item.formField.name;
+					}
+					else {
+						//CREATE
+						dS.set(item.formField.dbTableName,[
+							'alias' => item.formField.alias,
+							'fields' => item.formField.name
+						]);
+					}
+				}
+				else{
+					// USE BLOCK TABLE
+					dS[props.menuBlocks[props.section].dbTableName]['fields'] = dS[props.menuBlocks[props.section].dbTableName]['fields'] == ''? item.formField.name: dS[props.menuBlocks[props.section].dbTableName]['fields'] + ',' + item.formField.name;
+				}
+			}
+		}
+		return BaseForm.copy(param,{dataSource:dS});
+	}
+
+	function fieldAlias(name:String):String {
+		//?already aliased
+		if(name.indexOf('.')>-1)
+			return name;
+		for(item in props.menuBlocks[props.section].items){
+			if(item.formField.name==name)
+				return (
+					item.formField.alias==null ? props.menuBlocks[props.section].alias : item.formField.alias
+				) + '.$name';
+		}
+		return props.menuBlocks[props.section].alias + '.$name';
+	}
 
 	function findFormat(name:String, v:String):String {
 		var items:Array<MItem> = props.menuBlocks[props.section].items;//cast props.parentComponent.state.sideMenu.orm.menuItems;

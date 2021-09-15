@@ -9,12 +9,12 @@ import hxbit.Serializer;
  * ...
  * @author axel@cunity.me
  */
-class DbData implements Serializable 
+class DbDataS implementsSerializable 
 {
 
 	@:s public var dataErrors:Map<String,String>;
 	@:s public var dataInfo:Map<String,Dynamic>;
-	public var dataParams:Map<String,Map<String,String>>;//@:s 
+	@:s public var dataParams:Map<String,Map<String,String>>;
 	@:s public var dataInfoRows:Array<Map<String,String>>;
 	@:s public var dataRows:Array<Map<String,String>>;
 	

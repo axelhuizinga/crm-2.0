@@ -82,7 +82,7 @@ class User extends Model
 	{
 		trace(joinSql);
 		trace(filterSql);
-		S.send(serializeRows(doSelect()));
+		S.sendbytes(serializeRows(doSelect()));
 	}
 	
 	public function getPbxUserData():Void
@@ -91,17 +91,17 @@ class User extends Model
 		var sql:String = 'SELECT user, full_name, user_group, user_level FROM ${S.dbViciBoxDB}.vicidial_users';
 		var stmt:PDOStatement = S.syncDbh.query(sql);
 		if(untyped stmt==false)
-			{
-				S.sendErrors(dbData, ['getPbxUserData query:'=>S.syncDbh.errorInfo()]);
-			}
-			if(stmt.errorCode() !='00000')
-			{
-				trace(stmt.errorInfo());
-				S.sendErrors(dbData, ['getPbxUserData query:'=>stmt.errorInfo()]);
-			}
-			var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
+		{
+			S.sendErrors(dbData, ['getPbxUserData query:'=>S.syncDbh.errorInfo()]);
+		}
+		if(stmt.errorCode() !='00000')
+		{
+			trace(stmt.errorInfo());
+			S.sendErrors(dbData, ['getPbxUserData query:'=>stmt.errorInfo()]);
+		}
+		var res:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 
-			sendRows(res);
+		trace(sendRows(res));
 	}
 	
 	static function userEmail(param:Map<String,Dynamic>):String
@@ -296,8 +296,9 @@ class User extends Model
 		}
 		
 		var sql = (param.get('user').id!='undefined'&&param.get('user').id!=null?
-				'UPDATE ${S.dbSchema}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id':
-				'UPDATE ${S.dbSchema}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE user_name=:user_name AND mandator=:mandator');
+			'UPDATE ${S.dbSchema}.users SET phash=crypt(:new_password,gen_salt(\'bf\',8)),change_pass_required=false WHERE id=:id':
+			'UPDATE ${S.dbSchema}.users SET phash=crypt(:new_password,gen_vsalt(\'bf\',8)),change_pass_required=false WHERE user_name=:user_name AND mandator=:mandator'
+		);
 		trace(sql);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		if ( !Model.paramExecute(stmt, Lib.associativeArrayOfObject(
@@ -397,7 +398,7 @@ X-Mailer: HaxeMail
 	{
 		var res = update();
 		trace(res);
-		S.send(serializeRows(doSelect()));
+		S.sendbytes(serializeRows(doSelect()));
 		//S.send('OK');
 		return true;
 	}

@@ -4,9 +4,9 @@ import db.DbUser;
 import db.DbRelation;
 import haxe.ds.Map;
 
-import hxbit.Schema;
-import hxbit.Serializable;
-import hxbit.Serializer;
+import hxbitmini.Schema;
+import hxbitmini.Serializable;
+import hxbitmini.Serializer;
 import state.UserState;
 
 /**
@@ -14,7 +14,7 @@ import state.UserState;
  * @author axel@cunity.me
  */
 
-class DbQuery implements hxbit.Serializable //@:s 
+class DbQueryS implements hxbitmini.Serializable  
 {
 	@:s public var dbUser:DbUser;
 	@:s public var relations:Map<String,DbRelation>;
@@ -29,12 +29,12 @@ class DbQuery implements hxbit.Serializable //@:s
 			for(f in Reflect.fields(dp)){
 				switch (f){
 					//case '__uid'|'getCLID'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':
-					case '__uid'|'dbUser'|'getCLID'|'relations'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':	
+					case '__uid'|'dbUser'|'relations'|'getCLID'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':	
 						//SKIP
 					default:
 						var v = Reflect.field(dp,f);
 						dbParams.set(f, v);
-						trace(f +':'+dbParams.get(f));
+						//trace(f +':'+dbParams.get(f));
 				}
 			}			
 		}

@@ -4,7 +4,7 @@ import react.ReactRef;
 import react.router.RouterMatch;
 import react.router.ReactRouter;
 import comments.StringTransform;
-import haxe.Serializer;
+
 import haxe.ds.StringMap;
 import haxe.Json;
 import js.html.XMLHttpRequest;

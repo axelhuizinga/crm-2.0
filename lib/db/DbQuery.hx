@@ -17,7 +17,7 @@ import state.UserState;
 class DbQuery implements hxbit.Serializable //@:s 
 {
 	@:s public var dbUser:DbUser;
-	@:s public var relations:Map<String,DbRelation>;
+	//@:s public var relations:Map<String,DbRelation>;
 	@:s public var dbParams:Map<String,Dynamic>;
 
 	public function new(?dp:DBAccessProps) 

@@ -8,7 +8,8 @@ module.exports = () =>{
 	console.log(process.env.LANG);
 	console.log('build:'+ process.env.build);	
 	//const buildTarget = process.env.build || 'dev';
-	const localConf = require('./webpack.local')(process.env);
+	const localConf = require(__dirname + '/webpack.local.js')(process.env);
+	//const localConf = require('/webpack.local')(process.env);
 	const devHost = localConf.ip;
 	const devServerHttps = localConf.devServerHttps;
 	const fs = require('fs');
@@ -60,7 +61,7 @@ module.exports = () =>{
 		// Live development server (serves from memory)
 		devServer: (process.env.build == 'development'?
 			{
-				contentBase: dist,
+				//contentBase: dist,
 				compress: true,
 				host: localConf.ip,
 				https:{
@@ -68,11 +69,9 @@ module.exports = () =>{
 					cert: fs.readFileSync(path.resolve(__dirname, localConf.cert)),
 				},
 				port: 9000,
-				overlay: false,
-				lazy: false,
+				//lazy: false,
 				hot:true,
-				disableHostCheck: true,
-				inline: true,
+				//disableHostCheck: true,
 				//useLocalIp: true,
 				headers: {
 					//"Access-Control-Allow-Origin": "https://" + localConf.host,				
@@ -85,34 +84,12 @@ module.exports = () =>{
 				historyApiFallback: {
 					index: '/'
 				},
-				index: 'crm.html',
-				staticOptions:{
-					index:false
-				},
 				//publicPath: __dirname + '../httpdocs/',
-				publicPath: '/',
+				//publicPath: '/'
 					// Accepted values: none, errors-only, minimal, normal, detailed, verbose
 					// Any other falsy value will behave as 'none', truthy values as 'normal'	
-				stats: {
-					children: true,
-
-					// Add chunk information (setting this to `false` allows for a less verbose output)
-					chunks: true,
-				
-					// Add namedChunkGroups information
-					chunkGroups: true,
-				
-					// Add built modules information to chunk information
-					chunkModules: true,
-				
-					// Add the origins of chunks and chunk merging info
-					chunkOrigins: true,
-					errorDetails: true,
-					entrypoints: true,
-					providedExports: true
-				}
 			}:{}),	
-		watch: (isProd ? false: true),
+		//watch: (isProd ? false: true),
 		watchOptions:{
 			//aggregateTimeout:1500,
 			ignored: ['httpdocs']
@@ -193,7 +170,7 @@ module.exports = () =>{
 			// HMR: enable globally
 			//new webpack.HotModuleReplacementPlugin(),
 			// HMR: prints more readable module names in the browser console on updates
-			new webpack.NamedModulesPlugin(),
+			//new webpack.NamedModulesPlugin(),
 			// HMR: do not emit compiled assets that include errors
 			new webpack.NoEmitOnErrorsPlugin(),
 			// Like generating the HTML page with links the generated JS files  template: resolve(__dirname, 'src/public', 'index.html'),

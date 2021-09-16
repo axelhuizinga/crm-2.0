@@ -28,4 +28,5 @@
 #--no-traces
 #-D eval-stack
 #-D hxbitmini_nullsafety
+-D no-deprecation-warnings
 -main Go

@@ -1,12 +1,10 @@
-//
-// Configuration:
-// This configuration is still relatively minimalistic;
-// each section has many more options
-//
+
 module.exports = () =>{
 	// context: __dirname,
 	console.log(process.env.LANG);
-	console.log('build:'+ process.env.build);	
+	//console.log('build:'+ process.env.build);	
+	console.log('process.env:'+ process.env);	
+	console.log('process.env.NODE_ENV:'+ process.env.NODE_ENV);	
 	//const buildTarget = process.env.build || 'dev';
 	const localConf = require(__dirname + '/webpack.local.js')(process.env);
 	//const localConf = require('/webpack.local')(process.env);
@@ -84,7 +82,7 @@ module.exports = () =>{
 				historyApiFallback: {
 					index: '/'
 				},
-				//publicPath: __dirname + '../httpdocs/',
+				publicPath: __dirname + '../httpdocs/',
 				//publicPath: '/'
 					// Accepted values: none, errors-only, minimal, normal, detailed, verbose
 					// Any other falsy value will behave as 'none', truthy values as 'normal'	
@@ -123,13 +121,13 @@ module.exports = () =>{
 							loader: MiniCssExtractPlugin.loader,
 							options: {
 								publicPath: (resourcePath, context) => {
-								// publicPath is the relative path of the resource to the context
-								// e.g. for ./css/admin/main.css the publicPath will be ../../
-								// while for ./css/main.css the publicPath will be ../
-								console.log('resourcePath:' + resourcePath);
-								console.log('context:' + context);
-								console.log('publicPath:' + path.relative(path.dirname(resourcePath), context) + '/');
-								return path.relative(path.dirname(resourcePath), context) + '/';
+									// publicPath is the relative path of the resource to the context
+									// e.g. for ./css/admin/main.css the publicPath will be ../../
+									// while for ./css/main.css the publicPath will be ../
+									console.log('resourcePath:' + resourcePath);
+									console.log('context:' + context);
+									console.log('publicPath:' + path.relative(path.dirname(resourcePath), context) + '/');
+									return path.relative(path.dirname(resourcePath), context) + '/';
 								},
 							}
 						}: 'style-loader',
@@ -183,12 +181,16 @@ module.exports = () =>{
 				__host__:JSON.stringify(localConf.host),
 				__devIP__:"'X'",
 				__user_name__:"'X'",
-				__password__:"'X'"
+				__password__:"'X'",
+				'process.env.NODE_ENV': JSON.stringify('production')
+				//process:{env:{NODE_ENV: 'production'}}
 			}:{
 				__host__:JSON.stringify(localConf.host),
 				__devIP__:JSON.stringify(localConf.ip),
 				__user_name__:JSON.stringify(localConf.user_name),
-				__password__:JSON.stringify(localConf.password)
+				__password__:JSON.stringify(localConf.password),
+				'process.env.NODE_ENV': JSON.stringify('development')
+				//process:{env:{NODE_ENV: 'development'}}
 			}))
 		]
 	}

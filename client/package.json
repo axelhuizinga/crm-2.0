@@ -67,8 +67,8 @@
     "json5": "2.1.3"
   },
   "scripts": {
-    "start": "build=development webpack-dev-server --hot --stats-error-details ",
-    "pstart": "cross-env NODE_ENV=development webpack-dev-server --hot --progress",
+    "start": "cross-env NODE_ENV='\"development\"' webpack-dev-server --hot --stats-error-details ",
+    "pstart": "cross-env NODE_ENV='\"development\"' webpack-dev-server --hot --progress",
     "build": "build=production webpack",
     "postbuild": "sh publish.sh",
     "build_dev": "build=none webpack",

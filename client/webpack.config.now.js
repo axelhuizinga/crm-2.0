@@ -1,14 +1,13 @@
 
-module.exports = function(env, argv){
+module.exports = () =>{
 	// context: __dirname,
 	console.log(process.env.LANG);
-	console.log('build:'+ process.env.build);	
-	console.log('env:'+ env);	
+	//console.log('build:'+ process.env.build);	
 	console.log('process.env:'+ process.env);	
 	console.log('process.env.NODE_ENV:'+ process.env.NODE_ENV);	
 	//const buildTarget = process.env.build || 'dev';
 	const localConf = require(__dirname + '/webpack.local.js')(process.env);
-	//const localConf = require('./webpack.local')(process.env);
+	//const localConf = require('/webpack.local')(process.env);
 	const devHost = localConf.ip;
 	const devServerHttps = localConf.devServerHttps;
 	const fs = require('fs');
@@ -49,7 +48,7 @@ module.exports = function(env, argv){
 		output: {
 			path: dist,
 			filename: 'js/[name].js',
-			publicPath: '/',
+			publicPath: dist,
 		},
 		// Module resolution options (alias, default paths,...)
 		resolve: {
@@ -61,7 +60,7 @@ module.exports = function(env, argv){
 		// Live development server (serves from memory)
 		devServer: (process.env.build == 'development'?
 		{
-			contentBase: dist,
+			static: dist,
 			compress: true,
 			host: localConf.ip,
 			https:{

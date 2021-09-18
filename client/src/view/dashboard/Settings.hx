@@ -45,8 +45,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);	
 		/*childFormProps = ReactUtil.copy(props, 
-			{fullWidth: true, setStateFromChild:setStateFromChild});*/
-		
+			{fullWidth: true, setStateFromChild:setStateFromChild});*/		
 		state = {
 			clean:true,
 			hasError:false,
@@ -81,7 +80,6 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 			trace(props.match.params.section);
 			//state.viewClassPath = state.sideMenu.menuBlocks[props.match.params.section].viewClassPath;
 			//state.sideMenu.menuBlocks[props.match.params.section].isActive=true;
-
 		}
 		trace('${props.match.params.section} ${props.match.params.action}');
 		trace(Reflect.fields(props));
@@ -97,9 +95,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 		//setState{sideMenu:}
 	}
 	
-	/*
-
-		
+	/*		
 	static function mapStateToProps(aState:AppState) {
 		return function(aState:AppState) 
 		{
@@ -109,7 +105,8 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 				userState:uState
 			};
 		};
-	}	*/
+	}	
+	*/
 	
 	override public function render() {
 		

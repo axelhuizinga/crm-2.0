@@ -62,7 +62,7 @@ class User extends Model
 		if(lc==1)
 		{
 			trace(_me.dbData);
-			Out.dumpStack(CallStack.callStack());
+			//Out.dumpStack(CallStack.callStack());
 			S.sendInfo(_me.dbData);
 		}
 		else{
@@ -266,8 +266,9 @@ class User extends Model
 				else{
 					dbData.dataInfo['last_login'] = DateTools.format(Date.now(), "'%Y-%m-%d %H:%M:%S'");
 				}					
+				S.send(Json.stringify(dbData), true);
+				//S.sendInfo(dbData);
 				//trace(dbData);
-				S.sendInfo(dbData);
 				return true;
 			default:
 				return false;

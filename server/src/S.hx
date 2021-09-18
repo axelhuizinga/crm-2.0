@@ -351,7 +351,7 @@ class S
 	{
 		if (!headerSent && !Lib.isCli())
 		{
-			//setHeader((json?'application/json':'text/plain'));		
+			Web.setHeader('Content-Type', (json?'application/json':'text/plain'));		
 			//Web.setHeader('Content-Type', cType);
 			Web.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin");
 			Web.setHeader("Access-Control-Allow-Credentials", "true");
@@ -464,7 +464,7 @@ class S
 	public static function sendbytes(b:Bytes, ?loop:Bool):Bool
 	{		
 		trace('OK ${b.length}');
-		//trace(new Serializer().unserialize(b, DbData));
+		trace(new Serializer().unserialize(b, DbData));
 		if(Lib.isCli())
 			return false;		
 		

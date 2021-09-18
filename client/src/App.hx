@@ -176,7 +176,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	{
 		super(props);
 		//globalState = new Map();
-		untyped flatpickr.localize(German);
+		//flatpickr.localize(German);
 		//ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
 		var ti:Timer = null;

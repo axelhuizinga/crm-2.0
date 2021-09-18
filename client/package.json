@@ -6,7 +6,7 @@
     "acorn": "^6.4.1",
     "bulma": "^0.9.1",
     "bulma-extensions": "^2.2.1",
-    "chokidar": "^3.5.2",
+    "chokidar": "3.x",
     "clean-css": "4.1.11",
     "core-js": "3",
     "css-loader": "2.0.2",
@@ -45,21 +45,20 @@
     "yargs-parser": "^13.1.2"
   },
   "devDependencies": {
-    "@webpack-cli/serve": "^1.5.2",
     "cross-env": "^5.2.0",
     "extract-loader": "^3.1.0",
     "file-loader": "^1.1.11",
     "haxe-loader": "^0.10.0",
-    "html-webpack-plugin": "5.3.2",
+    "html-webpack-plugin": "3.x",
     "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^6.0.1",
-    "sass-loader": "^12.1.0",
+    "sass-loader": "10.x",
     "style-loader": "^0.18.2",
     "svg-inline-loader": "^0.8.0",
-    "webpack": "^5.53.0",
+    "webpack": "4.x",
     "webpack-bundle-analyzer": "^3.1.0",
-    "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.2.1",
+    "webpack-cli": "3.x",
+    "webpack-dev-server": "3.7.2",
     "webpack-node-externals": "^1.7.2"
   },
   "resolutions": {
@@ -67,7 +66,8 @@
     "json5": "2.1.3"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV='\"development\"' webpack-dev-server --hot --stats-error-details ",
+    "start1": "cross-env NODE_ENV='\"development\"' webpack serve --hot --host https://192.168.178.20 --port 9000",
+    "start": "cross-env NODE_ENV.build=development webpack-dev-server --hot ",
     "pstart": "cross-env NODE_ENV='\"development\"' webpack-dev-server --hot --progress",
     "build": "build=production webpack",
     "postbuild": "sh publish.sh",

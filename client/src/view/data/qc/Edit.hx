@@ -343,7 +343,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		{if(_trace) trace(ex);}
 		
 		if(_trace) trace(error);
-		Out.dumpStack(CallStack.callStack());
+		//Out.dumpStack(CallStack.callStack());
 	}		
 		
 	override public function componentDidMount():Void 
@@ -576,6 +576,9 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			trace('stateOrInitialData is null');
 			
 			return null;
+		}
+		if(state.hasError){
+			return jsx('<div>state.hasError</div>');
 		}
 		//trace(state.initialData);
 		//trace('state.loading: ${state.loading}');	

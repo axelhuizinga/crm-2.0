@@ -63,7 +63,7 @@ class QCModel
 					},
 					disabled: true
 				},
-				'comments'=>{label:'Kommentar', type:TextArea},				
+				'comments'=>{className:'big_comment',label:'Kommentar', type:TextArea},				
 				'start_monat'=>{label:'Ab', type:Select,options:[
 					'Januar' => 'Januar',
 					'Februar' => 'Februar',

@@ -1,14 +1,14 @@
-(self["webpackChunkcrm_2_0"] = self["webpackChunkcrm_2_0"] || []).push([[1],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[1],{
 
-/***/ 94:
-/***/ (() => {
+/***/ "./node_modules/flatpickr/dist/flatpickr.min.css":
+/***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
 
-/***/ 90:
-/***/ (() => {
+/***/ "./res/scss/App.scss":
+/***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 

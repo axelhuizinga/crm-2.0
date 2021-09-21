@@ -33,7 +33,8 @@ module.exports = function(env, argv){
 	console.log('Output Directory:' + dist);
 	console.log(`projectDirectory:${dir} isProd:`+ isProd +  ` debugMode:${debugMode}`);
 	console.log('ssl.key:' + localConf.key);
-	console.log('ssl.key:' + (path.resolve(dist, localConf.key)));
+	//console.log('ssl.key:' + (path.resolve(dist, localConf.key)));
+	console.log('template path:' + path.resolve(__dirname, 'res/'+(isProd ? 'crm.php' : 'crm.html')));
 	//console.log('ssl.key:' + (path.resolve(__dirname, localConf.key)));
 	return {
 		//module.exports = {
@@ -53,6 +54,7 @@ module.exports = function(env, argv){
 		},
 		// Module resolution options (alias, default paths,...)
 		resolve: {
+			mainFields: ['browser', 'main', 'module'],
 			modules: [dist, path.resolve(dir, 'res/scss'), 'node_modules'],
 			extensions: ['.js', '.json']
 		},
@@ -74,7 +76,7 @@ module.exports = function(env, argv){
 			//disableHostCheck: true,
 			//useLocalIp: true,
 			headers: {
-				"Access-Control-Allow-Origin": "https://"+localConf.ip+"/server.php",			
+				//"Access-Control-Allow-Origin": "https://"+localConf.ip+"/server.php",			
 				"Access-Control-Allow-Credentials":true,
 				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
 				"Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
@@ -107,12 +109,16 @@ module.exports = function(env, argv){
 						extra: (isProd ? '-D build_mode=' + buildMode : '-D build_mode=' + buildMode + ' -D react_hot'),
 					}
 				},
+				{
+					test: /\.html$/i,
+					loader: "html-loader",
+				},
 				// Static assets loader
 				// - you will need to adjust for webfonts
 				// - you may use 'url-loader' instead which can replace
 				//   small assets with data-urls
 				{
-					test: /\.(s*)css$/,
+					/*test: /\.(s*)css$/,
 					use: [
 						isProd ? 
 						{
@@ -131,6 +137,13 @@ module.exports = function(env, argv){
 						}: 'style-loader',
 						"css-loader",
 						'sass-loader'
+					]*/
+					test: /\.(scss|css)$/,
+					use: [
+					  MiniCssExtractPlugin.loader,
+					  { loader: 'css-loader'},
+					  { loader: 'postcss-loader', options: { plugins: []} },
+					  { loader: 'sass-loader'}
 					]
 				},
 				{
@@ -170,8 +183,9 @@ module.exports = function(env, argv){
 			new webpack.NoEmitOnErrorsPlugin(),
 			// Like generating the HTML page with links the generated JS files  template: resolve(__dirname, 'src/public', 'index.html'),
 			new HtmlWebpackPlugin({
-				filename: (isProd ? 'index.php' : 'crm.html'),
-				template: path.resolve(__dirname, 'res/'+(isProd ? 'crm.php' : 'crm.html')),
+				filename: (isProd ? 'index.php' : 'crm.html'),				
+				//template: path.resolve(__dirname, 'res/'+(isProd ? 'crm.php' : 'crm.html')),
+				template: 'res/'+(isProd ? 'crm.php' : 'crm.html'),
 				title: (localConf.org ? localConf.org + ' ' : '' ) + 'CRM 2.0'
 			}),
 			new webpack.DefinePlugin((isProd ? {

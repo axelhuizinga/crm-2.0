@@ -1125,8 +1125,9 @@ class Model
 		}		
 		//return fields;
 	}
-
-	function getRecordings(lead_id:Dynamic):Array<Map<String,String>>
+	
+	//function getRecordings(lead_id:Dynamic):Array<Map<String,String>>
+	function getRecordings(lead_id:Dynamic):Array<Dynamic>
 	{
 		var m_length = 30;
 		var recMap:Array<Map<String,String>> = new Array();
@@ -1137,8 +1138,9 @@ class Model
 		Syntax.foreach(records, function(ri:Int, row:NativeArray){			
 			trace('$ri => $row'); 
 			//Syntax.foreach(records, function(key:String, row:NativeArray){
+			recMap.push(Lib.objectOfAssociativeArray(row));
+			//recMap.push(Lib.hashOfAssociativeArray(row));
 			//trace('$key => $value'); 
-			recMap.push(Lib.hashOfAssociativeArray(row));
 		});
 		//var rc:Int = records.length;
 		//trace ('$rc == ' + records.length);

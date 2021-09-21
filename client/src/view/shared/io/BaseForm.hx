@@ -35,16 +35,17 @@ class BaseForm
 {
 	//var comp:ReactComponentOf<DataFormProps,FormState>;
 
-	public static function addRecordings(state:FormState, recs:Array<Map<String,String>>){
+	//public static function addRecordings(state:FormState, recs:Array<Map<String,String>>){
+	public static function addRecordings(state:FormState, recs:Array<Dynamic>){
 		//trace(rec);
 		var recItems:Array<MItem> = [];
 		for(rec in recs) recItems.push(
 		{
 			//id:'returnDebitFile',
-			label: rec['start_time'],
+			label: rec.start_time,
 			formField:{				
 				//(rec['location'].contains('85.25.93.167')?
-				src: StringTools.replace(rec['location'],'85.25.93.167','pbx.pitverwaltung.de'),//:rec['location'])
+				src: StringTools.replace(rec.location,'85.25.93.167','pbx.pitverwaltung.de'),//:rec['location'])
 				type:Audio
 			}
 		});

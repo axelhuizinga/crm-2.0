@@ -1,5 +1,7 @@
 package react;
 
+import haxe.Exception;
+import haxe.macro.Expr.Catch;
 import view.shared.io.BaseForm;
 import react.PureComponent.PureComponentOfProps;
 import js.lib.intl.DateTimeFormat;
@@ -24,25 +26,37 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 	var fpRef:ReactRef<InputElement>;
 	var fpInstance:Dynamic;//FlashPicker instance
 	var tip:Tooltip;
+	var hasError:Bool;
 
 	public function new(props:DateTimeProps) 
 	{
 		//trace( props.value );
 		super(props);
+		hasError = false;
+		//trace(props);
 		//this.props = props;
 		//trace(Reflect.fields(props));
 		fpRef = React.createRef();
 	}
 
+	override function componentDidCatch(error, info) {
+		// Display fallback UI
+		hasError = true;
+		trace(error);
+		trace(info);
+	}
+
 	//public function createFlatPicker():Void 
 	override public function componentDidMount():Void 
 	{
-		var fP:Dynamic = App.flatpickr;
-		
+		var fP:Dynamic = App.flatpickr;		
 		//var val = (props.value == null ?'':props.value);
 		var val = (props.value == null ?'':'00.00.0000');
 		//trace('$val =>${props.value}<<');
-		fpInstance = fP(fpRef.current,{
+		trace(hasError);
+		try{
+			if(!hasError)
+			fpInstance = fP(fpRef.current,{
 				allowInput:!props.disabled,
 				altFormat:props.options.dateFormat,
 				clickOpens:!props.disabled,
@@ -55,7 +69,11 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 				onClose:onClose,
 				onOpen:onOpen,
 				onReady:onReady
-		});
+			});
+		}
+		catch(ex:Exception){
+			trace(ex.details());
+		}
 		//trace('fpInstance.input.value:${fpInstance.input.value}');			
 	}
 
@@ -87,7 +105,7 @@ class DateControl extends PureComponentOfProps<DateTimeProps>
 	
 	override public function render():ReactFragment
 	{
-		if(props == null)
+		if(hasError || props == null)
 		{
 			trace(null);
 			return null;

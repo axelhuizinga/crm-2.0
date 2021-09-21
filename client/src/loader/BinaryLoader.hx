@@ -41,7 +41,7 @@ class BinaryLoader {
 		//Out.dumpObject(dbQuery);
 		var b:Bytes = s.serialize(dbQuery);
 		trace(b.length);
-		trace(b.toHex());
+		//trace(b.toHex());
 		//s.serialize(dbQuery);
 		bl.param = b.getData();//s.toString();
 		//trace(bl.param.byteLength);
@@ -80,7 +80,7 @@ class BinaryLoader {
 			cB(data);			
 		}
 		else 
-			trace('got nothing');
+			trace('got nothing'+bytes.length);
 
 	}
 	/**
@@ -107,8 +107,7 @@ class BinaryLoader {
 		//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
 		//xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
 		xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;
-		
-		//xhr.onerror = function(e) onError(xhr.statusText);
+
 		xhr.onerror = function(e) {
 			trace(e);
 			trace(e.type);
@@ -130,22 +129,22 @@ class BinaryLoader {
 				}
 				//onLoaded(haxe.io.Bytes.ofData(xhr.response));
 				else			
-					onLoaded(xhr.response);
+					onLoaded(haxe.io.Bytes.ofData(xhr.response));
+					//onLoaded(xhr.response);
 			}
 			catch(ex:Exception){
 				trace(ex.details());
-			}
-			
+			}			
 		}
 		
-		xhr.onprogress = function(e) {
+		/*xhr.onprogress = function(e) {
 			#if (haxe_ver >= 4)
 			trace('${e.loaded} :: ${e.total}');
 			//onProgress(Std.int(js.Syntax.code("{0}.loaded || {0}.position", e)), Std.int(js.Syntax.code("{0}.total || {0}.totalSize", e)));
 			#else
 			onProgress(Std.int(untyped __js__("{0}.loaded || {0}.position", e)), Std.int(untyped __js__("{0}.total || {0}.totalSize", e)));
 			#end
-		}
+		}*/
 		xhr.send(param);
 	}
 

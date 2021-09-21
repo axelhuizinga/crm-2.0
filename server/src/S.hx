@@ -381,7 +381,7 @@ class S
 					dbData.dataRows.push(Lib.hashOfAssociativeArray(row));		
 		}
 		
-		//trace(Std.string(dbData).substr(0,250));
+		trace(dbData.dataInfo.toString());
 		if(dbData.dataRows.length>0){
 			try{
 				trace(dbData.dataRows[0]);
@@ -464,7 +464,7 @@ class S
 	public static function sendbytes(b:Bytes, ?loop:Bool):Bool
 	{		
 		trace('OK ${b.length}');
-		trace(new Serializer().unserialize(b, DbData));
+		//trace(new Serializer().unserialize(b, DbData));
 		if(Lib.isCli())
 			return false;		
 		

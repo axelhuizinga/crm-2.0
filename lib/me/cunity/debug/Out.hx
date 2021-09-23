@@ -156,12 +156,12 @@ class Out{
 		#elseif (js || html5)
 		switch(traceTarget){
 			case NATIVE:
-				untyped console.log(msg);
+				untyped console.log(DateTools.format(Date.now(), "%T::") + msg);
 			case CONSOLE:
 				#if js_kit
 				logg.trace(msg);
 				#else
-				untyped debug(msg);
+				untyped debug(DateTools.format(Date.now(), "%T::") + msg);
 				#end
 			//Browser.window.console.log(msg);
 			case HAXE:

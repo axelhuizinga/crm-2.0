@@ -416,7 +416,10 @@ class Model
 				data = stmt.fetchAll(fMode);
 			}			
 			//trace(Lib.toHaxeArray(data).join(','));		
-			
+			Global.ob_start();
+			stmt.debugDumpParams();
+			trace(Global.ob_get_clean());
+			trace(Global.print_r(values2bind,true));
 			//trace(data);
 			//trace(stmt.errorInfo());
 			return(data);		
@@ -1198,7 +1201,7 @@ class Model
 		out.bigEndian = true;
 		out.write(s.serialize(dbData));
 		//Sys.print(s.write(dbData));
-		//trace(Serializer.run(dbData));
+		//trace(dbData);
 		//Sys.print(Serializer.run(dbData));
 		Sys.exit(0);
 		return true;

@@ -243,7 +243,7 @@ class FormBuilder {
 					jsx('<div key=${i++} className="g_row_2 g_span_2" role="rowgroup">
 					<div className="g_cell" key=${i+'_l'} role="cell">${field.label}</div>
 						<div className="g_cell_100_r" key=${i+'_r'} role="cell">
-							<textarea className=${field.className} name=${name} value=${value} onChange=${onChange}/>
+							<textarea className=${field.className} name=${name} defaultValue=${value} onChange=${onChange}/>
 						</div>
 					</div>');
 				default:
@@ -268,7 +268,7 @@ class FormBuilder {
 		var sK:Int = 0;
 		
 		return jsx('<form name=${props.model} key=${props.model} className="tabComponentForm formField" ref=${props.formRef}>
-				<div className="grid_box" role="table" aria-label="Destinations" key=${props.model+"_grid_box"} >
+				<div className="grid_box col_gap" role="table" aria-label="Destinations" key=${props.model+"_grid_box"} >
 					<div className="g_caption" key=${props.model+'caption'}>${props.title}</div>			${renderFormInputElements(props.fields, initialState)}					
 				</div>			
 			</form>

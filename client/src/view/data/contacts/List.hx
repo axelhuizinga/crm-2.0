@@ -268,7 +268,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	public function selectionClear() {
 		var match:RouterMatch = copy(props.match);
 		match.params.action = 'get';
-		trace(state.dbTable.length);
+		//trace(state.dbTable.length);
 		props.parentComponent.props.select(null, null,this, UnselectAll);	
 		//this.props.select(this, null,props.parentComponent, UnselectAll);	
 		//trace(formRef !=null);
@@ -331,12 +331,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		//trace(props.match.params.section + ':${props.match.params.action}::' + Std.string(state.dbTable != null));
 		//trace(dataDisplay["userList"]);
 		var pState:FormState = props.parentComponent.state;
+		if(state.dbTable!=null)
 		trace(state.dbTable.length);
 		if(props.dataStore.contactsDbData != null)
 		trace(props.dataStore.contactsDbData.dataRows[0]);
 		else trace(props.dataStore.contactsDbData);
 		//trace(state.loading);
-		if( state.dbTable.length==0)
+		if(state.dbTable!=null && state.dbTable.length==0)
 			return state.formApi.renderWait();
 		//trace('###########loading:' + state.rows[0]);
 		return switch(props.match.params.action)

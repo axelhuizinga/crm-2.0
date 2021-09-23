@@ -266,8 +266,9 @@ class User extends Model
 				else{
 					dbData.dataInfo['last_login'] = DateTools.format(Date.now(), "'%Y-%m-%d %H:%M:%S'");
 				}					
-				S.send(Json.stringify(dbData), true);
 				//S.sendInfo(dbData);
+				//S.send(Json.stringify(dbData), true);
+				S.sendData(dbData);
 				//trace(dbData);
 				return true;
 			default:

@@ -1,4 +1,5 @@
 package model.data;
+import php.NativeArray;
 import haxe.Unserializer;
 import Model;
 
@@ -68,7 +69,10 @@ class DirectDebits extends Model
 		if(offset.int>0)
 			buildOffset(sqlBf);
 		trace(sqlBf.toString());
-		sendRows(execute(sqlBf.toString()));	
+		var rows:NativeArray = execute(sqlBf.toString());
+		sendRows(rows);	
+		//sendRows(execute(sqlBf.toString()));	
+		
 		//return execute(sqlBf.toString());	
 		
 	}

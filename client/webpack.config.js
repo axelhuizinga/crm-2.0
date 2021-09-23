@@ -76,7 +76,7 @@ module.exports = function(env, argv){
 			//disableHostCheck: true,
 			//useLocalIp: true,
 			headers: {
-				//"Access-Control-Allow-Origin": "https://"+localConf.ip+"/server.php",			
+				"Access-Control-Allow-Origin": "https://"+localConf.ip+"/server.php",			
 				"Access-Control-Allow-Credentials":true,
 				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
 				"Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
@@ -112,6 +112,21 @@ module.exports = function(env, argv){
 				{
 					test: /\.html$/i,
 					loader: "html-loader",
+					options: {
+						attributes: {
+						  urlFilter: (attribute, value, resourcePath) => {
+							// The `attribute` argument contains a name of the HTML attribute.
+							// The `value` argument contains a value of the HTML attribute.
+							// The `resourcePath` argument contains a path to the loaded HTML file.
+							console.log(attribute + ':' + value + ':' + resourcePath);
+							if (/.*\.css$/.test(value)) {
+							  return false;
+							}
+			  
+							return true;
+						  }
+						}
+					}
 				},
 				// Static assets loader
 				// - you will need to adjust for webfonts
@@ -142,7 +157,7 @@ module.exports = function(env, argv){
 					use: [
 					  MiniCssExtractPlugin.loader,
 					  { loader: 'css-loader'},
-					  { loader: 'postcss-loader', options: { plugins: []} },
+					  //{ loader: 'postcss-loader', options: { plugins: []} },
 					  { loader: 'sass-loader'}
 					]
 				},

@@ -1,6 +1,7 @@
 package view.accounting.directdebit;
 
 //import view.accounting.returndebit.Files;
+import js.lib.Error;
 import comments.CommentString.*;
 import shared.FindFields;
 import view.shared.Menu.Filter;
@@ -76,11 +77,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	var contact:Contact;
 	var dbData: shared.DbData;
 	var dbMetaData:shared.DBMetaData;	
+	var got:Bool;
 
 	public function new(props) 
 	{
 		super(props);
 		_instance = this;
+		got = false;
 		dataDisplay = DebitModel.dataGridDisplay;
 		
 		trace('...' + Reflect.fields(props));
@@ -128,6 +131,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 
         }
 	}	
+
+	override function componentDidCatch(error:Error, info:Dynamic) {
+		// Display fallback UI
+		setState({action:'error',dbTable: []});
+		trace(error);
+		trace(info);
+	}
 	
 	override public function componentDidMount():Void 
 	{	
@@ -139,10 +149,13 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			get();
 		else if(Reflect.isFunction(Reflect.field(this,state.action)))
 			Reflect.callMethod(this,Reflect.field(this,state.action),[]);
+		got = true;
 	}
 
 	public function get(?filter:Dynamic):Void
 	{
+		if(got)
+			return;
 		var offset:Int = 0;
 		if(filter != null && filter.page!=null)
 		{
@@ -195,6 +208,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	public function getHistory(?filter:Dynamic):Void
 	{
 		var offset:Int = 0;
+		if(got)
+			return;
+		got = true;
 		if(filter != null && filter.page!=null)
 		{
 			trace(filter);
@@ -336,7 +352,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		return switch(state.action)
 		{
 			case 'get' :		
-				if(state.dbTable.length==0)	
+				if(state.dbTable == null || state.dbTable.length==0)	
 					null;
 				else 
 				jsx('				
@@ -345,7 +361,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
 				');		
 			case 'getHistory':	
-				if(state.dbTable.length==0)	
+				if(state.dbTable == null || state.dbTable.length==0)	
 					null;
 				else 			
 				jsx('				

@@ -100,6 +100,8 @@ class Deals extends Model
 			'SELECT $qc_fields FROM ${qcdb}.vicidial_list vl INNER JOIN `custom_${param["filter"].entry_list_id}` cu ON cu.lead_id=vl.lead_id WHERE vl.lead_id=${param["filter"].lead_id}');
 		var qcData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		trace(Global.count(qcData));
+		trace(Global.print_r(qcData, true));
+
 		if(Global.count(qcData)==1){
 			var recordings = getRecordings(param["filter"].lead_id);
 			dbData.dataInfo['recordings'] = recordings;

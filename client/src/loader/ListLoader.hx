@@ -18,7 +18,6 @@ import state.AppState;
 
 class ListLoader 
 {
-	//public static function load(param:DBAccessProps) 
 	public static function load(param:Dynamic) 
 	{
 

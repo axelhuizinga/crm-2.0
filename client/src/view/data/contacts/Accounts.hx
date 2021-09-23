@@ -117,8 +117,10 @@ class Accounts extends ReactComponentOf<DataFormProps,FormState>
 			}
 		);
 		p.then(function(data:DbData){
-			//trace(data.dataRows.length); 
+			trace(data.dataRows.length); 
 			setState({loading:false, dbTable:data.dataRows});
+			//setState({loading:false, dbTable:[]});
+
 		});
 	}
 	

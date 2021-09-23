@@ -30,7 +30,11 @@ class DealsModel
 				'cycle'=>{label:'Turnus',type:Radio,options:[
 					'once'=>'Einmal','monthly'=>'Monatlich','quarterly'=>'Vierteljährlich',
 					'semiannual'=>'Halbjährlich', 'annual'=>'Jährlich']},
-				'amount'=>{label:'Betrag', type:NFormat},
+					
+				//'amount'=>{label:'Betrag', type:NFormat},
+				'amount'=>{label:'Betrag', cellFormat: function(v) {
+					return App.sprintf('%01.2f €',v).replace('.',',');
+				},type:Text},
 				'product'=>{label:'Produkt',type:Select,options:['2'=>'Kinderhilfe','3'=>'Tierhilfe']},
 				//'agent'=>{label:'Agent'},
 				//'sepa_code'=>{label:'Kündigungsgrund',type:DatePicker, displayFormat: "d.m.Y"},

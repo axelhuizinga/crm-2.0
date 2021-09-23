@@ -233,7 +233,7 @@ class S
 			trace('$dbViciBoxUser mysql:host=$dbViciBoxHost;dbname=$dbViciBoxDB');					
 			viciBoxDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxDB',
 				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
-			trace(viciBoxDbh);
+			trace(viciBoxDbh.getAttribute(PDO.ATTR_PERSISTENT));
 		}		
 		//trace(dbh);!=null
 		trace('$devIP connect2syncDB:'+ (params.get('extDB')||params.get('action').indexOf('sync')==0?'Y':'N'));

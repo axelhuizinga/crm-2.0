@@ -55,6 +55,7 @@ typedef FormState =
 	?dataCount:Int,
 	?dbQueryParam:DBAccessProps,
 	?errors:Map<String,String>,
+	?gridCSSClass:String,
 	?ormRefs:Map<String,ORMComps>,
 	?relDataComps:Map<String,ReactComponentOf<DataFormProps,FormState>>,
 	?fields:Map<String,FormField>,//VIEW FORMFIELDS

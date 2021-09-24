@@ -51,12 +51,13 @@ class FormBuilder {
 	public var section:String;
 	var comp:Dynamic;
 	var sM:MenuProps;
+	var col:Int;
 	var i:Int;
 	
 	public function new(rc:Dynamic)
 	{
 		comp = rc;
-		i = 1;
+		col = i = 1;
 		requests = [];
 		if(rc.props != null)
 		{
@@ -268,7 +269,7 @@ class FormBuilder {
 		var sK:Int = 0;
 		
 		return jsx('<form name=${props.model} key=${props.model} className="tabComponentForm formField" ref=${props.formRef}>
-				<div className="grid_box col_gap" role="table" aria-label="Destinations" key=${props.model+"_grid_box"} >
+				<div className=${props.gridCSSClass != null ? props.gridCSSClass : "grid_box col_gap"} role="table" key=${props.model+"_grid_box"} >
 					<div className="g_caption" key=${props.model+'caption'}>${props.title}</div>			${renderFormInputElements(props.fields, initialState)}					
 				</div>			
 			</form>

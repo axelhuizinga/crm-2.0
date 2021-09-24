@@ -38,6 +38,7 @@ typedef DataDisplay = Map<String,FormField>;
  */
 typedef DataRelation =
 {
+	?gridCSSClass:String,
 	source:DataSource,
 	view:DataDisplay	
 }

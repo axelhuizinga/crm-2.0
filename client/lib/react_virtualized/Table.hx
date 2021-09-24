@@ -28,7 +28,7 @@ typedef TableProps = {
 	?className:String,
 	?disableHeader:Bool,
 	?estimatedRowSize:Int,	
-	?gridClassName:String,
+	?gridCSSClass:String,
 	?gridStyle:Dynamic,
 	?headerClassName:String,
 	headerHeight:Int,

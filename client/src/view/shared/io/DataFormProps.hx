@@ -29,6 +29,7 @@ typedef DataFormProps =
     ?formApi:FormApi,
 	?filter:Dynamic,
 	?fullWidth:Bool,	
+	?gridCSSClass:String,
 	?isActive:Bool,		
 	?id:Int,	
 	?loaded:DBAccessProps->Promise<DbData>,

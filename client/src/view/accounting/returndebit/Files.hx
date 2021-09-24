@@ -212,7 +212,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 			{
 				dispatch(LiveDataAccess.storeData(id, action));
 			},
-			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,me:Files, ?selectType:SelectType)
+			/*select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,me:Files, ?selectType:SelectType)
 			{
 				if(true) trace('select:$id selectType:${selectType}');
 				if(id>-1 && BaseForm.ormsModified(me)){
@@ -243,7 +243,7 @@ class Files extends ReactComponentOf<DataFormProps,FormState>
 					}
 				}
 				trace(App.store.getState().dataStore.returnDebitsData.toString());
-			},
+			},*/
 			update: function(param:DBAccessProps) return dispatch(CRUD.update(param)),
         }
 	}	

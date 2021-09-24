@@ -1023,7 +1023,7 @@ form td, form caption
 	/*grid-template-columns: repeat(2 minmax(50% auto));*/
 	grid-template-columns: repeat( auto-fit, minmax(33.33%, 1fr) );
 
-	/*overflow-y: visible;	border-bottom: thin solid #aaa;white-space: nowrap;*/
+	/*overflow-y: visible;	border-bottom: thin solid #aaa;white-space: nowrap;grid-template-columns: subgrid;*/
 	border: thin solid #aaa;	
 	border-radius: 0.2rem 0.2rem 0 0;	
 	
@@ -1032,6 +1032,11 @@ form td, form caption
 	white-space: nowrap;
 	width: min-content;
 	margin: 1rem auto;
+}
+
+.sub_grid_box{
+	@extend .grid_box;
+	grid-template-columns: repeat( auto-fit, minmax(20%, 1fr) );
 }
 .grid_border_box{
 	border: thin solid #aaa;

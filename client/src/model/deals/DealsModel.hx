@@ -17,6 +17,7 @@ class DealsModel
 
 	public static var dataAccess:DataAccess = [
 		'open' => {
+			gridCSSClass:'sub_grid_box',
 			source:[
 				"deals" => [
 					"filter" => 'id',

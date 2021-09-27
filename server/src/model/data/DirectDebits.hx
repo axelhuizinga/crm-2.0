@@ -25,8 +25,8 @@ class DirectDebits extends Model
 		var sqlBf:StringBuf = new StringBuf();
 		//trace(param.get('dataSource'));
 		//parseTable();
-		dataSource = param.get('dataSource');
-		trace(dataSource);
+		//dataSource = param.get('dataSource');
+	 	//trace(dataSource);
   		queryFields = param.get('fields');
 		
 		for (table=>tRel in dataSource.keyValueIterator())

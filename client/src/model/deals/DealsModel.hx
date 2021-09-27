@@ -29,8 +29,8 @@ class DealsModel
 				'start_date'=>{label:'Start',type:DatePicker, displayFormat: "d.m.Y"},
 				'booking_run'=>{label:'Buchungslauf',type: Radio,options: ['start'=>'Monatsanfang','middle'=>'Monatsmitte']},
 				'cycle'=>{label:'Turnus',type:Radio,options:[
-					'once'=>'Einmal','monthly'=>'Monatlich','quarterly'=>'Vierteljährlich',
-					'semiannual'=>'Halbjährlich', 'annual'=>'Jährlich']},
+					'once'=>'Einmal','monthly'=>'Mtl.','quarterly'=>'Vtl.',
+					'semiannual'=>'Halbj.', 'annual'=>'Jährl.']},
 					
 				//'amount'=>{label:'Betrag', type:NFormat},
 				'amount'=>{label:'Betrag', cellFormat: function(v) {

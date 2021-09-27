@@ -1,4 +1,5 @@
 package db;
+import haxe.Unserializer;
 import db.DBAccessProps;
 import db.DbUser;
 import db.DbRelation;
@@ -33,7 +34,9 @@ class DbQuery implements hxbit.Serializable //@:s
 						//SKIP
 					default:
 						var v = Reflect.field(dp,f);
-						dbParams.set(f, v);
+						trace(v);
+						trace('$f:'+Type.typeof(v));
+						dbParams.set(f, f=='dataSource' && v!= null ?haxe.Serializer.run(Std.string(v)):v);
 						trace(f +':'+dbParams.get(f));
 				}
 			}			

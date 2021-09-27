@@ -1,4 +1,5 @@
 package;
+import haxe.Unserializer;
 import hxbit.Serializer;
 import shared.Utils;
 import haxe.Exception;
@@ -162,7 +163,10 @@ class S
 			dbQuery = Model.binary();
 			params = dbQuery.dbParams;
 			trace(dbQuery.dbParams.get('classPath'));
-			trace(params);
+			//trace(params);
+			if(params['dataSource']!=null){
+				trace(Type.typeof(params['dataSource']));
+			}
 			//trace(dbQuery);
 			trace(Util.rels2string(dbQuery.relations));
 			S.devIP = params['devIP'];

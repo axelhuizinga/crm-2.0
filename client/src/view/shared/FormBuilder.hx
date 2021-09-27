@@ -238,7 +238,7 @@ class FormBuilder {
 						</div>
 					</div>');
 				case TextArea:
-					//trace(field);
+					trace(field);
 					if(value==null)
 						value='';
 					jsx('<div key=${i++} className="g_row_2 g_span_2" role="rowgroup">

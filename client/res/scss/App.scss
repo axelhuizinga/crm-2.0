@@ -1185,6 +1185,10 @@ form td, form caption
 	padding: 0.24rem 0.33rem;
 }
 
+.g_cell_100_r textarea, .g_cell_100 textarea{
+	width: 100%;
+}
+
 .uploadBox{
 	text-align: center;
 }

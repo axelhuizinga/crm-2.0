@@ -398,7 +398,8 @@ class Model
 				trace(stmt.errorInfo());
 				S.sendErrors(dbData,['execute' =>S.errorInfo(stmt.errorInfo())]);
 			}
-			dbData.dataInfo['count'] = Std.string(stmt.rowCount());			
+			dbData.dataInfo['count'] = Std.string(stmt.rowCount());		
+			trace(dbData.dataInfo['count']);
 			//trace('>>$action<<');
 			if(action=='update'||action=='delete'||action=='insert')
 			{
@@ -416,11 +417,12 @@ class Model
 				data = stmt.fetchAll(fMode);
 			}			
 			//trace(Lib.toHaxeArray(data).join(','));		
-			Global.ob_start();
+			/*Global.ob_start();
 			stmt.debugDumpParams();
-			trace(Global.ob_get_clean());
+			trace(Global.ob_get_clean());*/
 			trace(Global.print_r(values2bind,true));
-			//trace(data);
+			if(data != null)
+			trace(Global.count(data));
 			//trace(stmt.errorInfo());
 			return(data);		
 		}
@@ -953,8 +955,13 @@ class Model
 			return null;
 		}
 		var s:Serializer = new Serializer();
-		return s.unserialize(pData, DbQuery);
-		//return Unserializer.run(pData);
+		var dbQuery:DbQuery = s.unserialize(pData, DbQuery);
+		trace(dbQuery.dbParams);
+		if(dbQuery.dbParams['dataSource']!=null){
+			dbQuery.dbParams['dataSource'] = Unserializer.run(dbQuery.dbParams['dataSource']);
+			trace('dataSource:' + Type.typeof(dbQuery.dbParams['dataSource']));
+		}
+		return dbQuery;
 	}	
 
 	public static function json(pKV:KeyValueIterator<String,String>):DbQuery
@@ -989,7 +996,7 @@ class Model
 			Syntax.code("ini_set('memory_limit','1G')");			
 			trace(Syntax.code("ini_get('memory_limit')"));
 		}
-	
+		dataSource = cast param['dataSource'];
 		dbData = new DbData();//'param' => dbData.dataInfo.copyStringMap(param),
 		dbData.dataInfo = dbData.dataInfo.copyStringMap(param);
 		dbData.dataInfo['action'] = param.get('action');
@@ -1021,26 +1028,18 @@ class Model
 		else
 			tableNames = [];
 		var fields:Array<String> = [];
-		if(param.get('dataSource') != null)
-		{
-			//trace(param);
-			
-			var dM:Dynamic = param.get('dataSource');
-			//var dM:StringMap<StringMap<Dynamic>> = Unserializer.run(param.get('dataSource'));
-			//tableNames = param.get('dataSource').keys().sKeysList();
-			//dataSource = param.get('dataSource');
-			trace(dM);
-			//dataSource = Lib.()
-			trace(Reflect.fields(dM).join('|'));
-			//trace(dM.keys().next());
-			//trace(param.get('dataSource'));
-			//trace(dataSource);
-			//dataSource = TJSON.parse(param.get('dataSource'));
-		}
+
 		var fields:Array<String> = [];
 		if(dataSource != null)
 		{			
-			//trace(Std.string(dataSource));
+			if(Std.isOfType(String, dataSource)){
+				trace( '>>' + cast(dataSource,String) + '<<' );
+			}
+			else trace(Type.typeof(dataSource));
+			tableNames = untyped dataSource.keyValueIterator().keys;
+			trace(tableNames.join('|'));
+			if(tableNames.length>1)
+				return buildJoin();
 			trace(Type.typeof(dataSource));
 			var tKeys:Iterator<String> = dataSource.keys();
 			while(tKeys.hasNext())
@@ -1089,16 +1088,17 @@ class Model
 			queryFields += fields.length > 0 ? fields.join(','):'';			
 		}
 		trace('${action}:' + tableNames.toString());
+		return '';
 	}
 	
 	function run(){
 		parseTable();
 		trace(queryFields);
 		trace(setSql);
-		if (tableNames.length>1)
+		/*if (tableNames.length>1)
 		{
 			joinSql = buildJoin();
-		}			
+		}	*/		
 		trace('filter:${param.get('filter')}<');
 		if(param.exists('filter')&&param.get('filter')!=''){
 			filterSql += buildCond(param.get('filter'));

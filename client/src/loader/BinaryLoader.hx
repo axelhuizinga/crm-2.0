@@ -1,5 +1,6 @@
 package loader;
 
+import haxe.Unserializer;
 import haxe.Exception;
 import hxbit.Serializer;
 import db.DBAccessProps;
@@ -38,6 +39,10 @@ class BinaryLoader {
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbAP);//.toHex();
 		trace(dbQuery.dbParams);
+		if(dbQuery.dbParams['dataSource'] != null){
+			//dbQuery.dbParams['dataSource'] = haxe.Serializer.run(dbQuery.dbParams['dataSource']);
+			trace(Std.string(Unserializer.run(dbQuery.dbParams['dataSource'])));
+		}
 		//Out.dumpObject(dbQuery);
 		var b:Bytes = s.serialize(dbQuery);
 		trace(b.length);

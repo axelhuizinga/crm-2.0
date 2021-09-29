@@ -1,6 +1,7 @@
 package view.data.contacts;
 
 
+import haxe.ds.StringMap;
 import haxe.Json;
 import js.Cookie;
 import js.html.HeadersIterator;
@@ -180,29 +181,26 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			props.parentComponent.setState({page: filter.page});
 		}		
 				
-		var dS:DataSource = null;
+		var dS:DataSource = filter != null && filter.dataSource!=null? filter.dbJoinParams:null;
 		if(filter != null && filter.dataSource!=null)
 		{
-			trace(filter.dataSource);
-			dS = copy(filter.dataSource);
-			Reflect.deleteField(filter,'dataSource');
-			trace(dS);
+			Reflect.deleteField(filter,'dbJoinParams');
 			//trace(Utils.serializeNestedMap(dS));
+			trace(dS);
 		}
 
 		filter = Utils.extend(filter, (props.match.params.id!=null?
 			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
 			{mandator:props.userState.dbUser.mandator})
 		);
-		//{mandator:props.userState.dbUser.mandator}untyped Serializer.run
+		
 		trace('hi $filter');
-
-		trace(props.match.params);
+		//trace(props.match.params);
 		var p:Promise<DbData> = props.load(
 			{
 				classPath:'data.Contacts',
 				action:'get',
-				dataSource: dS,// == null ? null : untyped Utils.serializeNestedMap(dS),
+				dbJoinParams: dS,// == null ? null : untyped Utils.serializeNestedMap(dS),
 				filter:filter,
 				limit:props.limit,
 				offset:offset>0?offset:0,

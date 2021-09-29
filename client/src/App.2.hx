@@ -1,13 +1,12 @@
 import action.async.CRUD;
-import db.DBAccessProps;
+//import db.DBAccessProps;
 import js.Lib;
 import jwt.JWT;
 import js.html.FormData;
 import haxe.ds.StringMap;
-import shared.DbData;
 import js.lib.Promise;
 import react.ReactUtil;
-import state.DataAccessState;
+//import state.DataAccessState;
 import haxe.macro.Expr.Catch; 
 import store.DataStore;
 import haxe.Constraints.Function;
@@ -55,15 +54,15 @@ import redux.StoreBuilder.*;
 import redux.thunk.Thunk;
 import redux.thunk.ThunkMiddleware;
 import uuid.Uuid;
-import view.shared.io.FormApi;
-import view.shared.FormBuilder;
+//import view.shared.io.FormApi;
+//import view.shared.FormBuilder;
 
 using Lambda;
 using StringTools;
  
 typedef AppProps =
 {
-	?load:DBAccessProps->Promise<DbData>,
+	?load:Dynamic->Promise<Dynamic>,
 	?waiting:Bool
 }
 
@@ -215,56 +214,6 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//trace(store);
 		//Out.dumpObject(state.userState);
 		//CState.init(store);		
-		
-		if (!(state.userState.dbUser.id == null || state.userState.dbUser.jwt == ''))
-		{			
-			//import ConfigData;
-			var jVal:JWTResult<Dynamic> = JWT.verify(state.userState.dbUser.jwt, ConfigData.secret);
-			trace(jVal);
-			
-			switch(jVal){
-				case Valid(jwt):
-					trace(untyped jwt.validUntil - Date.now().getTime());
-					if(untyped jwt.validUntil - Date.now().getTime() > 600000){
-						// AT LEAST 10 min valid
-						state.userState.dbUser.online = true;
-						state.userState.waiting = false;
-						store.dispatch(LoginComplete({waiting:false}));							
-					}else {
-						trace('dispatch LoginExpired');
-						state.userState.dbUser.jwt = '';
-						store.dispatch(LoginExpired({waiting: false, loginTask: Login, dbUser: state.userState.dbUser}));
-					}
-					//trace(untyped jwt.validUntil);
-					//trace(Date.now().getTime());
-				case Invalid(jwt):
-					trace(jwt);
-				default:
-					trace(jVal);
-			}
-
-		}
-		else
-		{// WE HAVE EITHER NO VALID JWT OR id
-			trace('LOGIN required');
-			store.dispatch(
-				User(
-					UserAction.LoginRequired(
-						ReactUtil.copy( state.userState, {waiting:false}))));
-		}
-		//trace(Reflect.fields(state));
-		/*var fd:FormData = new FormData();
-		fd.append('action','userData');
-		fd.append('classPath','auth.User');
-		fd.append('devIP',devIP);
-		var xhr = new js.html.XMLHttpRequest();
-		xhr.open('POST',config.api,false);
-		xhr.onreadystatechange = function () {
-			if(xhr.readyState==4 && xhr.status==200){
-				trace(xhr.responseText);
-			}
-		}
-		xhr.send();		*/
 
 	}
 	
@@ -288,27 +237,8 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	{
 		//trace(state.history);
 		//trace(state.userState.dbUser);
-		store.dispatch(
-			action.async.UserAccess.verify());
 		trace('yeah');
-		var p:Promise<DbData> = cast( store.dispatch(CRUD.read({//props.load({		
-			classPath:'auth.User',
-			action:'getPbxUserData',
-			dbUser: state.userState.dbUser,
-			extDB:true,	
-			viciBoxDB:true,			
-			devIP:App.devIP
-		})));//untyped UserAccess.userList();
-		p.then(function(dbData:DbData){
-				trace(dbData.dataRows[0]);
-				pbxUserData =  [
-					for(row in dbData.dataRows) row.get('user') => row
-				];
-			}
-			,function(dbData:DbData){
-				trace(dbData);
-			}
-		);
+
 	}
 
 	override function   componentDidCatch(error, info) 

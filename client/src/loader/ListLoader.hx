@@ -26,6 +26,8 @@ class ListLoader
 			if(param.page==null)
 				param.page=0;
 			trace('Loading ${param.page+1}');
+			
+			trace(Type.typeof(param.dataSource));
 			trace(param.dataSource);
 			return new Promise(function(resolve, reject){
 				if (!param.dbUser.online)

@@ -16,7 +16,7 @@ typedef DBAccessJsonResponse = {
 	?message:DBAccessResolveMessage
 }
 
-typedef  DBAccessProps = {	
+typedef DBAccessProps = {	
 	?action:String,	
 	?classPath:String,
 	?componentPath:String,
@@ -28,8 +28,9 @@ typedef  DBAccessProps = {
 	?maxImport:Int,
 	?totalRecords:Int,
 	?relations:Map<String,DbRelation>,
-	?dataSource:DataSource,//Map<String,Map<String,Dynamic>>,	
 	?dbUser:DbUser,
+	?dbJoinParams:DataSource,//Map<String,Map<String,Dynamic>>,	
+	?dataSource:DataSource,//Map<String,Map<String,Dynamic>>,	
 	?devIP:String,	
 	?extDB:Bool,	
 	?viciBoxDB:Bool,

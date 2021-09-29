@@ -1,12 +1,16 @@
 package loader;
 
-import haxe.Unserializer;
-import haxe.Exception;
-import hxbit.Serializer;
 import db.DBAccessProps;
 import db.DbQuery;
-import haxe.Json;
 import haxe.CallStack;
+import haxe.Exception;
+import haxe.Json;
+import haxe.Unserializer;
+import haxe.io.Bytes;
+import hxbit.Serializer;
+import js.html.FileReader;
+import js.html.FormData;
+import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
 import shared.DbData;
 /**
@@ -14,10 +18,6 @@ import shared.DbData;
  * @author axel@cunity.me
  */
 
-import haxe.io.Bytes;
-import js.html.FileReader;
-import js.html.FormData;
-import js.html.XMLHttpRequest; 
 
 
 class BinaryLoader {
@@ -39,16 +39,21 @@ class BinaryLoader {
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbAP);//.toHex();
 		trace(dbQuery.dbParams);
-		if(dbQuery.dbParams['dataSource'] != null){
+		if(dbQuery.dbParams != null && dbQuery.dbParams['dataSource'] != null){
 			//dbQuery.dbParams['dataSource'] = haxe.Serializer.run(dbQuery.dbParams['dataSource']);
-			trace(Std.string(Unserializer.run(dbQuery.dbParams['dataSource'])));
+			trace(Std.string(dbQuery.dbParams['dataSource']));
 		}
 		//Out.dumpObject(dbQuery);
-		var b:Bytes = s.serialize(dbQuery);
+		try{
+			var b:Bytes = s.serialize(dbQuery);
 		trace(b.length);
 		//trace(b.toHex());
 		//s.serialize(dbQuery);
 		bl.param = b.getData();//s.toString();
+		}
+		catch(ex:Exception){
+			trace(ex.message);
+		}
 		//trace(bl.param.byteLength);
 		//trace(Unserializer.run(bl.param));
 		bl.cB = onLoaded;

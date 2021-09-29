@@ -2,6 +2,8 @@ package view.shared;
 
 //import js.lib.Reflect;
 //import model.FormInputElement;
+import haxe.Serializer;
+import haxe.Unserializer;
 import db.DataSource;
 import js.html.KeyboardEvent;
 import shared.FindFields;
@@ -245,7 +247,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		//trace(Reflect.fields(props.menuBlocks[props.section].items[0]).join('|'));
 		//trace(Reflect.fields(props.menuBlocks[props.section]).join('|'));
 		trace(props.menuBlocks[props.section].dataClassPath);
-		trace(props.menuBlocks[props.section]);
+		//trace(props.menuBlocks[props.section]);
 		//return;
 		//trace(Reflect.fields(props.parentComponent.props).join('|'));
 		//trace(Reflect.fields(props.parentComponent.state.sideMenu).join('|'));
@@ -253,7 +255,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		//trace(props.parentComponent.state.sideMenu.orm._meta_fields);
 		var form:FormElement = untyped evt.target.form;
 		
-		trace(form.dataset);
+		//trace(form.dataset);
 		trace(Reflect.fields(form.dataset).join('|'));
 		var fD:FormData = new FormData(form);
 		if(Reflect.isFunction(Reflect.field(props.parentComponent, 'find'))){
@@ -262,7 +264,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		//var fDe:FormDataIterator = fD.entries();
 		//while(e:Dynamic = fDe.next())
 		fD.forEach(function(d:Dynamic) {
-			trace(d);
+			//trace(d);
 		});
 		//trace(fD.getAll('*'));
 		var inputs:NodeList = Browser.document.querySelectorAll('.formRow input');
@@ -272,14 +274,16 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		var param:Dynamic = {};
 		for(i in 0...inputs.length){
 			el = cast( inputs[i], InputElement);
-			trace(i+':'+ el.name + '::' + el.value);
+			//trace(i+':'+ el.name + '::' + el.value);
 			if(el.value!='')
 			el.value = findFormat(el.name, el.value);
 			if(StringTools.trim(el.value)!='')
 				Reflect.setField(param, el.name,
 					matchFormat(el.name,el.value));
 		}		
-		return props.parentComponent.get(buildDataSource(BaseForm.filter(props.parentComponent.props,param)));
+		
+		//return props.parentComponent.get(buildDataSource(BaseForm.filter(props.parentComponent.props,param)));
+		return props.parentComponent.get(buildDataSource(param));
 	}	
 
 	function buildDataSource(param:Dynamic):Dynamic {
@@ -311,7 +315,21 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				}
 			}
 		}
-		return BaseForm.copy(param,{dataSource:dS});
+		trace(Type.typeof(dS));
+		trace(dS);
+		var nM:Map<String,Map<String,Dynamic>> = [
+			'a' => ['ab'=>1,'ac'=>'zwei'],
+			'b' => ['bb'=>'eins', 'bc' => 2]
+		];
+		trace(nM);
+		trace(haxe.Json.stringify(nM));
+		trace(Serializer.run(nM));
+		trace(Unserializer.run(Serializer.run(nM)));          
+		nM = Unserializer.run(Serializer.run(nM));
+		trace(Type.typeof(nM));
+		param.dbJoinParams = dS;//.copy();
+		return param;
+		//return BaseForm.copy(param,{dataSource:dS});
 	}
 
 	function fieldAlias(name:String):String {

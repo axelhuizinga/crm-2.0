@@ -1,5 +1,6 @@
 package;
 
+import haxe.Exception;
 import haxe.ds.StringMap;
 //import json2object.JsonWriter;
 //import haxe.Serializer;
@@ -197,7 +198,7 @@ class Model
 	{
 		if (joinSql != null)
 			return joinSql;
-		var sqlBf:StringBuf = new StringBuf();				
+		var sqlBf:StringBuf = new StringBuf();
 		for (table in tableNames)
 		{
 			var tRel:Map<String,Dynamic> = dataSource.get(table);
@@ -958,7 +959,24 @@ class Model
 		var dbQuery:DbQuery = s.unserialize(pData, DbQuery);
 		trace(dbQuery.dbParams);
 		if(dbQuery.dbParams['dataSource']!=null){
-			dbQuery.dbParams['dataSource'] = Unserializer.run(dbQuery.dbParams['dataSource']);
+			var dS: Map<String,Map<String,Dynamic>> = new Map();
+			var u:Unserializer = new Unserializer(dbQuery.dbParams['dataSource']);
+			var loopCond:Bool = true;
+			while(loopCond){
+				try{
+					var val:Dynamic = u.unserialize();
+					if(val!=null){
+						trace(Type.typeof(val));
+						trace(val);
+					}
+					
+				}
+				catch(ex:Exception){
+					loopCond = false;
+					trace(ex.message);
+				}				
+			}
+			//dbQuery.dbParams['dataSource'] = cast(Unserializer.run(dbQuery.dbParams['dataSource']), Map<String,Map<String,Dynamic>>;
 			trace('dataSource:' + Type.typeof(dbQuery.dbParams['dataSource']));
 		}
 		return dbQuery;
@@ -1032,6 +1050,7 @@ class Model
 		var fields:Array<String> = [];
 		if(dataSource != null)
 		{			
+			trace(Type.typeof(dataSource));
 			if(Std.isOfType(String, dataSource)){
 				trace( '>>' + cast(dataSource,String) + '<<' );
 			}

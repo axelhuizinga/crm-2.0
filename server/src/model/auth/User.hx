@@ -427,7 +427,7 @@ X-Mailer: HaxeMail
 
 	public static function getViciDialPassword(jwt:String, user:String,?params:Map<String,String>):String
 	{
-		return '';
+		return 'xxx';
 	}
 	
 	//public static function verify(dbQuery:DbQuery):Bool

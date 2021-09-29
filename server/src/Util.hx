@@ -383,7 +383,8 @@ class Util
 				for (k=>v in Lib.hashOfAssociativeArray(val).keyValueIterator()){
 					sLog += k.indexOf('pass') == -1 ? '$k:${Std.string(v)} ' : '$k:xxx';
 				};
-				sLog += '\n';
+sLog += '
+';
 				continue;
 			}
 			//Util.safeLog(Std.string(Type.typeof(val)) + ':' + Std.isOfType(val, Array),pos);

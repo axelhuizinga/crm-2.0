@@ -173,7 +173,8 @@ class S
 			//if(dbQuery!=null)trace(dbQuery.dbUser);
 			var ipost = Lib.hashOfAssociativeArray(SuperGlobal._POST);
 			trace(ipost.get('id') +':'+ipost.get('jwt'));
-			//trace(ipost.keys());
+			trace(ipost.keys());
+			trace(Global.print_r(SuperGlobal._POST,true));
 			if(Lib.toHaxeArray(SuperGlobal._FILES).length>0&&Global.isset(SuperGlobal._POST['id'])&&
 				User.verify(SuperGlobal._POST['jwt'], Std.parseInt(SuperGlobal._POST['id'])))
 			{
@@ -219,6 +220,14 @@ class S
 				safeLog(dbQuery);
 			//devIP = params.get('devIP');
 			//trace(params);
+			if(dbQuery.relations != null){
+				/*if(dbQuery.relations.exists('data')){
+					trace(Std.string(dbQuery.relations.get('data')));
+				}*/
+				//Out.dumpObject(Util.map2dyn(dbQuery.relations).contacts);
+				trace(Std.string(Reflect.fields(Util.map2dyn(dbQuery.relations).contacts).join('|')));
+				trace(dbQuery.relations.toString());
+			}
 
 		}
 		action = params.get('action');

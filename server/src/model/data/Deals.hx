@@ -54,8 +54,8 @@ class Deals extends Model
 			case 'qc_ok'|'qc_bad':
 				//SAVE STATE AND MOVE TO LIST
 				var sql:String = action == 'qc_ok' ?				
-					'UPDATE dev.vicidial_list SET status="QCOK", list_id=10000 WHERE lead_id=${param["id"]}':
-					'UPDATE dev.vicidial_list SET status="QCBAD", list_id=1800 WHERE lead_id=${param["id"]}';
+					'UPDATE ${qcdb}.vicidial_list SET status="QCOK", list_id=10000 WHERE lead_id=${param["id"]}':
+					'UPDATE ${qcdb}.vicidial_list SET status="QCBAD", list_id=1800 WHERE lead_id=${param["id"]}';
 				trace(sql);
 			default:
 				trace(action);// qc_save*/
@@ -72,7 +72,7 @@ class Deals extends Model
 		var vl_fields:String = vicdial_list_fields.map(function(f:String) {
 			return 'vl.${f}';
 		}).join(',');		
-		var sql:String = 'SELECT $vl_fields,full_name FROM ${qcdb}.vicidial_list vl INNER JOIN vicidial_users vu ON vu.user=vl.owner WHERE list_id=1900 AND status="NEW" ORDER BY last_local_call_time';
+		var sql:String = 'SELECT $vl_fields,full_name FROM ${qcdb}.vicidial_list vl INNER JOIN ${qcdb}.vicidial_users vu ON vu.user=vl.owner WHERE list_id=1900 AND status="NEW" ORDER BY last_local_call_time';
 		trace(sql);
 		trace(S.viciBoxDbh.getAttribute(PDO.ATTR_SERVER_INFO));
 		
@@ -95,9 +95,9 @@ class Deals extends Model
 		qc_fields += ',' + c_fields.map(function(f:String) {
 			return 'cu.${f}';
 		}).join(',');
-		trace('SELECT $qc_fields FROM ${qcdb}.vicidial_list vl INNER JOIN `custom_${param["filter"].entry_list_id}` cu ON cu.lead_id=vl.lead_id WHERE vl.lead_id=${param["filter"].lead_id}');
+		trace('SELECT $qc_fields FROM ${qcdb}.vicidial_list vl INNER JOIN ${qcdb}.`custom_${param["filter"].entry_list_id}` cu ON cu.lead_id=vl.lead_id WHERE vl.lead_id=${param["filter"].lead_id}');
 		var stmt:PDOStatement = S.viciBoxDbh.query(
-			'SELECT $qc_fields FROM ${qcdb}.vicidial_list vl INNER JOIN `custom_${param["filter"].entry_list_id}` cu ON cu.lead_id=vl.lead_id WHERE vl.lead_id=${param["filter"].lead_id}');
+			'SELECT $qc_fields FROM ${qcdb}.vicidial_list vl INNER JOIN ${qcdb}.`custom_${param["filter"].entry_list_id}` cu ON cu.lead_id=vl.lead_id WHERE vl.lead_id=${param["filter"].lead_id}');
 		var qcData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		trace(Global.count(qcData));
 		trace(Global.print_r(qcData, true));
@@ -153,7 +153,7 @@ class Deals extends Model
 			//trace(qcJoin?'Y':'N');
 			if(qcJoin){
 				sqlBf.add(
-					'UPDATE ${S.dbViciBoxDB}.vicidial_list vl INNER JOIN ${S.dbViciBoxDB}.custom_${param["filter"].entry_list_id} cu 
+					'UPDATE ${qcdb}..vicidial_list vl INNER JOIN ${qcdb}.custom_${param["filter"].entry_list_id} cu 
 					ON vl.lead_id=cu.lead_id '
 				);
 
@@ -221,8 +221,8 @@ class Deals extends Model
 			case 'qc_ok'|'qc_bad':
 				//SAVE STATE AND MOVE TO LIST
 				var sql:String = action == 'qc_ok' ?				
-					'UPDATE dev.vicidial_list SET status="QCOK", list_id=10000 WHERE lead_id=${param["filter"].id}':
-					'UPDATE dev.vicidial_list SET status="QCBAD", list_id=1800 WHERE lead_id=${param["filter"].id}';
+					'UPDATE ${qcdb}.vicidial_list SET status="QCOK", list_id=10000 WHERE lead_id=${param["filter"].id}':
+					'UPDATE ${qcdb}.vicidial_list SET status="QCBAD", list_id=1800 WHERE lead_id=${param["filter"].id}';
 				trace(sql);
 				endQC(sql);
 			default:

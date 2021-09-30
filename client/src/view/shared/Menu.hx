@@ -4,7 +4,9 @@ package view.shared;
 //import model.FormInputElement;
 import haxe.Serializer;
 import haxe.Unserializer;
+import db.DBAccessProps;
 import db.DataSource;
+import db.DbRelation;
 import js.html.KeyboardEvent;
 import shared.FindFields;
 import js.html.Window;
@@ -282,11 +284,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					matchFormat(el.name,el.value));
 		}		
 		
-		//return props.parentComponent.get(buildDataSource(BaseForm.filter(props.parentComponent.props,param)));
+		//return props.parentComponent.get(buildDataSource();
 		return props.parentComponent.get(buildDataSource(param));
 	}	
 
-	function buildDataSource(param:Dynamic):Dynamic {
+	function buildDataSource(param:DBAccessProps):DBAccessProps {
 
 		var dS:DataSource = [
 			props.menuBlocks[props.section].dbTableName => [
@@ -317,17 +319,17 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		}
 		trace(Type.typeof(dS));
 		trace(dS);
-		var nM:Map<String,Map<String,Dynamic>> = [
-			'a' => ['ab'=>1,'ac'=>'zwei'],
-			'b' => ['bb'=>'eins', 'bc' => 2]
-		];
-		trace(nM);
-		trace(haxe.Json.stringify(nM));
-		trace(Serializer.run(nM));
-		trace(Unserializer.run(Serializer.run(nM)));          
-		nM = Unserializer.run(Serializer.run(nM));
-		trace(Type.typeof(nM));
-		param.dbJoinParams = dS;//.copy();
+		var dsk:Int = 0;
+		var ki:Iterator<String> = dS.keys();
+		while(ki.hasNext()){
+			ki.next();
+			dsk++;
+		}
+		param.filter = BaseForm.filter(props.parentComponent.props,param);
+		if(dsk>1)
+			param.dbRelations = DbRelation.fromMap(cast dS).tables;//.copy();
+		else
+			param.dataSource = dS;//ONE TABLE
 		return param;
 		//return BaseForm.copy(param,{dataSource:dS});
 	}

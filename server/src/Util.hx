@@ -9,7 +9,7 @@ import me.cunity.php.Debug;
 import haxe.PosInfos;
 
 import haxe.io.Bytes;
-import db.DbQuery;
+import db.DbRelationProps;
 import db.DBAccessProps;
 import php.Const;
 import php.Global;
@@ -420,7 +420,7 @@ sLog += '
 		return null;
 	}
 
-	public static function rels2string(rels:StringMap<DbRelation>):String {
+	public static function rels2string(rels:StringMap<DbRelationProps>):String {
 		var s:String = '';
 		if(rels==null)
 			return s;

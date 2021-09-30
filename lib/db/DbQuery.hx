@@ -19,7 +19,7 @@ import state.UserState;
 class DbQuery implements hxbit.Serializable //@:s (default, set)
 {
 	@:s public var dbUser:DbUser;
-	@:s public var relations:Map<String,DbRelation>;
+	@:s public var dbRelations:Array<DbRelationProps>;
 	@:s public var dbJoins:Array<String>;
 	@:s public var dbJoinParams:Map<String,Dynamic>;
 
@@ -33,11 +33,11 @@ class DbQuery implements hxbit.Serializable //@:s (default, set)
 		if(dp!=null){
 			trace(dp);
 			dbUser = dp.dbUser;		
-			relations = dp.relations;
+			dbRelations = dp.dbRelations;
 			for(f in Reflect.fields(dp)){
 				switch (f){
 					//case '__uid'|'getCLID'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':
-					case '__uid'|'dbUser'|'getCLID'|'relations'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':	
+					case '__uid'|'dbUser'|'getCLID'|'dbRelations'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':	
 						//SKIP
 					case 'dbJoinParams':
 						setJoinParams(f, Reflect.field(dp,f));

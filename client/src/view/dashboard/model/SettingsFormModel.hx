@@ -28,7 +28,7 @@ class SettingsFormModel
 		'user_id' => {'type':FormInputElement.Hidden}
 	];
 	
-	public static var relations:StringMap<FormRelation> = [
+	public static var dbRelations:StringMap<FormRelation> = [
 		'user' => {
 			props:{elements:accountDataElements,userState:App._app.state.user.id},
 			state:null

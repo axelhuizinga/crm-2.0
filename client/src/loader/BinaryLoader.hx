@@ -29,7 +29,7 @@ class BinaryLoader {
 
 	public static function dbQuery(url:String,dbAP:DBAccessProps, onLoaded:DbData->Void):XMLHttpRequest {
 		trace(url);
-		//trace(dbAP.relations);
+		//trace(dbAP.dbRelations);
 		//trace(dbAP);
 		if(s==null)
 			s = new Serializer();
@@ -46,10 +46,10 @@ class BinaryLoader {
 		//Out.dumpObject(dbQuery);
 		try{
 			var b:Bytes = s.serialize(dbQuery);
-		trace(b.length);
-		//trace(b.toHex());
-		//s.serialize(dbQuery);
-		bl.param = b.getData();//s.toString();
+			trace(b.length);
+			//trace(b.toHex());
+			//s.serialize(dbQuery);
+			bl.param = b.getData();//s.toString();
 		}
 		catch(ex:Exception){
 			trace(ex.message);
@@ -84,10 +84,14 @@ class BinaryLoader {
 			//var u:Serializer = new Serializer();
 			//if(u==null)
 				u = new Serializer();
-
+			try{
 			var data:DbData = u.unserialize(bytes, DbData);//Unserializer.run(bytes);
 			trace(data);
 			cB(data);			
+			}
+			catch(ex:Exception){
+				trace(ex.message);
+			}
 		}
 		else 
 			trace('got nothing'+bytes.length);
@@ -106,7 +110,7 @@ class BinaryLoader {
 	public dynamic function onError( msg : String ) {
 		Out.dumpStack(CallStack.callStack());
 		trace(msg);
-		throw msg;
+		//throw msg;
 	}
 
 	public function load() {

@@ -197,7 +197,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			dbUser:props.userState.dbUser,
 			devIP:App.devIP,
 			//maxImport:4000,
-			//relations:new Map()
+			//dbRelations:new Map()
 		});
 		p.then(function(data:DbData){
 			if(data.dataInfo['offset']==null)
@@ -257,7 +257,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			dbUser:props.userState.dbUser,
 			devIP:App.devIP,
 			//maxImport:4000,
-			//relations:new Map()
+			//dbRelations:new Map()
 		});
 		p.then(function(data:DbData){
 			if(data.dataInfo['SyncExternalDebitReturnBookings']==null)
@@ -296,7 +296,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			dbUser:props.userState.dbUser,
 			devIP:App.devIP,
 			maxImport:4000,
-			//relations:new Map()
+			//dbRelations:new Map()
 		});
 	}
 
@@ -357,7 +357,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			dbUser:props.userState.dbUser,
 			devIP:App.devIP,
 			//maxImport:4000,
-			//relations:new Map()
+			//dbRelations:new Map()
 		}
 		var p:Promise<DbData> = LivePBXSync.query(dbQueryParam);
 		p.then(function(data:DbData){

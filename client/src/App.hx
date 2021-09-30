@@ -288,8 +288,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 	{
 		//trace(state.history);
 		//trace(state.userState.dbUser);
-		store.dispatch(
-			action.async.UserAccess.verify());
+		//store.dispatch(action.async.UserAccess.verify());
 		trace('yeah');
 		var p:Promise<DbData> = cast( store.dispatch(CRUD.read({//props.load({		
 			classPath:'auth.User',

@@ -98,8 +98,8 @@ class BaseForm
 
 	public static function filter(props:DataFormProps,?param:Dynamic):Dynamic {
 		//TODO: Get mandator from user
-		var filter:Dynamic = copy({mandator:'1'},param);		
-		if(props.match.params.id!=null){
+		var filter:Dynamic = copy({mandator:props.userState.dbUser.mandator},param);		
+		if(props.match.params.id!=null && filter.id==null){
 			filter.id = props.match.params.id;
 		}
 		return filter;

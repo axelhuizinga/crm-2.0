@@ -1,0 +1,20 @@
+-lib CommentString
+-lib hxbit
+-lib jwt
+-lib random
+-lib tjson
+#-lib smtpmailer
+
+
+-cp ../lib
+-cp lib
+-cp src
+-php ../httpdocs
+#-D analyzer-optimize
+-D no-deprecation-warnings
+#-D hxbitmini_nullsafety
+-debug
+-dce std
+-main S
+
+-cmd ./publish.sh

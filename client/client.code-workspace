@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "res"
+		},
+		{
+			"path": "../lib"
 		}
 	],
 	"settings": {

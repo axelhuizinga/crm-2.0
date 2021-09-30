@@ -27,7 +27,7 @@ typedef DBAccessProps = {
 	?limit:Int,	
 	?maxImport:Int,
 	?totalRecords:Int,
-	?relations:Map<String,DbRelation>,
+	?dbRelations:Array<DbRelationProps>,
 	?dbUser:DbUser,
 	?dbJoinParams:DataSource,//Map<String,Map<String,Dynamic>>,	
 	?dataSource:DataSource,//Map<String,Map<String,Dynamic>>,	

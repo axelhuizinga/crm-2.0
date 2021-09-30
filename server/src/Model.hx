@@ -108,7 +108,7 @@ class Model
 	var dbData:DbData;
 	var dParam:DbData;
 	var dataSource:Map<String,Map<String,Dynamic>>;// EACH KEY IS A TABLE NAME
-	var relations:Map<String,DbQuery>;// EACH KEY IS A TABLE NAME
+	var dbRelations:Map<String,DbQuery>;// EACH KEY IS A TABLE NAME
 	var dataSourceSql:String;
 	var param:Map<String, Dynamic>;
 	/**

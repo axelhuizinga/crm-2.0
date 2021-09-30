@@ -465,7 +465,7 @@ App.mapDispatchToProps = function(dispatch) {
 	}};
 };
 App.edump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 328, className : "App", methodName : "edump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 330, className : "App", methodName : "edump"});
 	return "OK";
 };
 App.await = function(delay,check,cb) {
@@ -497,16 +497,16 @@ App.initEState = function(init,comp) {
 		}
 	}
 	if(init.sideMenu != null && init.sideMenu.items != null) {
-		haxe_Log.trace(init.sideMenu.items[0],{ fileName : "App.hx", lineNumber : 381, className : "App", methodName : "initEState"});
+		haxe_Log.trace(init.sideMenu.items[0],{ fileName : "App.hx", lineNumber : 383, className : "App", methodName : "initEState"});
 	}
 	if(comp.props.sideMenu != null && comp.props.sideMenu.items != null) {
-		haxe_Log.trace(comp.props.sideMenu.items[0],{ fileName : "App.hx", lineNumber : 383, className : "App", methodName : "initEState"});
+		haxe_Log.trace(comp.props.sideMenu.items[0],{ fileName : "App.hx", lineNumber : 385, className : "App", methodName : "initEState"});
 	}
 	if(fS2.formApi.sM != null && fS2.formApi.sM.items != null) {
-		haxe_Log.trace(fS2.formApi.sM.items[0],{ fileName : "App.hx", lineNumber : 385, className : "App", methodName : "initEState"});
+		haxe_Log.trace(fS2.formApi.sM.items[0],{ fileName : "App.hx", lineNumber : 387, className : "App", methodName : "initEState"});
 	}
 	if(comp.props.match != null && comp.props.match.params.section != null && fS2.formApi.sM != null && fS2.formApi.sM.menuBlocks != null && Object.prototype.hasOwnProperty.call(fS2.formApi.sM.menuBlocks.h,comp.props.match.params.section)) {
-		haxe_Log.trace(fS2.formApi.sM.menuBlocks.h[comp.props.match.params.section].items[0],{ fileName : "App.hx", lineNumber : 388, className : "App", methodName : "initEState"});
+		haxe_Log.trace(fS2.formApi.sM.menuBlocks.h[comp.props.match.params.section].items[0],{ fileName : "App.hx", lineNumber : 390, className : "App", methodName : "initEState"});
 	}
 	if(comp != null) {
 		fS2.uid = uuid_Uuid.nanoId();
@@ -530,7 +530,7 @@ App.initSectionState = function(init,comp) {
 	return fS;
 };
 App.jsxDump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 421, className : "App", methodName : "jsxDump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 423, className : "App", methodName : "jsxDump"});
 	return "OK";
 };
 App.queryString2 = function(params) {
@@ -557,7 +557,7 @@ App.queryString2 = function(params) {
 		result[i] = query;
 	}
 	var query = result.join("&");
-	haxe_Log.trace(query,{ fileName : "App.hx", lineNumber : 440, className : "App", methodName : "queryString2"});
+	haxe_Log.trace(query,{ fileName : "App.hx", lineNumber : 442, className : "App", methodName : "queryString2"});
 	return query;
 };
 App.__super__ = React_Component;
@@ -603,11 +603,12 @@ App.prototype = $extend(React_Component.prototype,{
 		this.globalState.h[key] = val;
 	}
 	,componentDidMount: function() {
-		haxe_Log.trace("yeah",{ fileName : "App.hx", lineNumber : 291, className : "App", methodName : "componentDidMount"});
+		App.store.dispatch(redux_Action.map(action_async_UserAccess.verify()));
+		haxe_Log.trace("yeah",{ fileName : "App.hx", lineNumber : 293, className : "App", methodName : "componentDidMount"});
 		var p = App.store.dispatch(redux_Action.map(action_async_CRUD.read({ classPath : "auth.User", action : "getPbxUserData", dbUser : this.state.userState.dbUser, extDB : true, viciBoxDB : true, devIP : App.devIP})));
 		p.then(function(dbData) {
 			var tmp = dbData.dataRows[0];
-			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "App.hx", lineNumber : 301, className : "App", methodName : "componentDidMount"});
+			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "App.hx", lineNumber : 303, className : "App", methodName : "componentDidMount"});
 			var _g = new haxe_ds_StringMap();
 			var _g1 = 0;
 			var _g2 = dbData.dataRows;
@@ -618,14 +619,14 @@ App.prototype = $extend(React_Component.prototype,{
 			}
 			App.pbxUserData = _g;
 		},function(dbData) {
-			haxe_Log.trace(dbData,{ fileName : "App.hx", lineNumber : 307, className : "App", methodName : "componentDidMount"});
+			haxe_Log.trace(dbData,{ fileName : "App.hx", lineNumber : 309, className : "App", methodName : "componentDidMount"});
 		});
 	}
 	,componentDidCatch: function(error,info) {
-		haxe_Log.trace(error,{ fileName : "App.hx", lineNumber : 314, className : "App", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "App.hx", lineNumber : 316, className : "App", methodName : "componentDidCatch"});
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace("...",{ fileName : "App.hx", lineNumber : 319, className : "App", methodName : "componentDidUpdate"});
+		haxe_Log.trace("...",{ fileName : "App.hx", lineNumber : 321, className : "App", methodName : "componentDidUpdate"});
 	}
 	,componentWillUnmount: function() {
 		this.tul();
@@ -5476,8 +5477,11 @@ hxbit_Serializer.prototype = {
 };
 var db_DbQuery = function(dp) {
 	this.__uid = hxbit_Serializer.SEQ << 24 | ++hxbit_Serializer.UID;
-	this.set_dbParams(new haxe_ds_StringMap());
+	this.dbParams = new haxe_ds_StringMap();
+	this.dbJoins = [];
+	this.dbJoinParams = new haxe_ds_StringMap();
 	if(dp != null) {
+		haxe_Log.trace(dp,{ fileName : "db/DbQuery.hx", lineNumber : 34, className : "db.DbQuery", methodName : "new"});
 		this.dbUser = dp.dbUser;
 		this.relations = dp.relations;
 		var _g = 0;
@@ -5488,12 +5492,14 @@ var db_DbQuery = function(dp) {
 			switch(f) {
 			case "__uid":case "dbUser":case "getCLID":case "getSerializeSchema":case "relations":case "serialize":case "unserialize":case "unserializeInit":
 				break;
+			case "dbJoinParams":
+				this.setJoinParams(f,Reflect.field(dp,f));
+				break;
 			default:
 				var v = Reflect.field(dp,f);
-				haxe_Log.trace(v,{ fileName : "db/DbQuery.hx", lineNumber : 37, className : "db.DbQuery", methodName : "new"});
-				haxe_Log.trace("" + f + ":" + Std.string(Type.typeof(v)),{ fileName : "db/DbQuery.hx", lineNumber : 38, className : "db.DbQuery", methodName : "new"});
+				haxe_Log.trace("" + f + ":" + Std.string(Type.typeof(v)),{ fileName : "db/DbQuery.hx", lineNumber : 47, className : "db.DbQuery", methodName : "new"});
 				this.dbParams.h[f] = v;
-				haxe_Log.trace(f + ":" + Std.string(this.dbParams.h[f]),{ fileName : "db/DbQuery.hx", lineNumber : 41, className : "db.DbQuery", methodName : "new"});
+				haxe_Log.trace(f + ":" + Std.string(this.dbParams.h[f]),{ fileName : "db/DbQuery.hx", lineNumber : 50, className : "db.DbQuery", methodName : "new"});
 			}
 		}
 	}
@@ -5504,52 +5510,22 @@ db_DbQuery.__interfaces__ = [hxbit_Serializable];
 db_DbQuery.prototype = {
 	dbUser: null
 	,relations: null
+	,dbJoins: null
+	,dbJoinParams: null
 	,dbParams: null
-	,set_dbParams: function(p) {
-		var _dbParams = new haxe_ds_StringMap();
-		var h = p.h;
-		var _g_h = h;
-		var _g_keys = Object.keys(h);
-		var _g_length = _g_keys.length;
-		var _g_current = 0;
-		while(_g_current < _g_length) {
-			var key = _g_keys[_g_current++];
-			var _g1_key = key;
-			var _g1_value = _g_h[key];
-			var k = _g1_key;
-			var v = _g1_value;
-			if(k == "dataSource") {
-				var oM = js_Boot.__cast(v , haxe_ds_StringMap);
-				var _g = [];
-				var h = oM.h;
-				var _g3_h = h;
-				var _g3_keys = Object.keys(h);
-				var _g3_length = _g3_keys.length;
-				var _g3_current = 0;
-				while(_g3_current < _g3_length) {
-					var key1 = _g3_keys[_g3_current++];
-					var _g4_key = key1;
-					var _g4_value = _g3_h[key1];
-					var kd = _g4_key;
-					var vd = _g4_value;
-					_g.push(kd);
-				}
-				var fds = _g;
-				haxe_Log.trace(fds.join("|"),{ fileName : "db/DbQuery.hx", lineNumber : 54, className : "db.DbQuery", methodName : "set_dbParams"});
-				var dS_h = Object.create(null);
-				var _g1 = 0;
-				while(_g1 < fds.length) {
-					var f = fds[_g1];
-					++_g1;
-					var v1 = oM.h[f];
-					dS_h[f] = v1;
-				}
-			} else {
-				var v2 = v;
-				_dbParams.h[k] = v2;
+	,setJoinParams: function(k,p) {
+		haxe_Log.trace(p == null ? "null" : haxe_ds_StringMap.stringify(p.h),{ fileName : "db/DbQuery.hx", lineNumber : 57, className : "db.DbQuery", methodName : "setJoinParams"});
+		if(p != null) {
+			var _g = 0;
+			var _g1 = Reflect.fields(p);
+			while(_g < _g1.length) {
+				var f = _g1[_g];
+				++_g;
+				this.dbJoinParams.h[f] = p;
 			}
+			this.dbJoinParams = haxe_ds_StringMap.createCopy(p.h);
 		}
-		return _dbParams;
+		return this.dbJoinParams;
 	}
 	,__uid: null
 	,getCLID: function() {
@@ -5597,6 +5573,78 @@ db_DbQuery.prototype = {
 					__ctx.out.add(b);
 				}
 				__ctx.addKnownRef(a.h[k]);
+			}
+		}
+		var a = this.dbJoins;
+		if(a == null) {
+			__ctx.out.addByte(0);
+		} else {
+			var v = a.length + 1;
+			if(v >= 0 && v < 128) {
+				__ctx.out.addByte(v);
+			} else {
+				__ctx.out.addByte(128);
+				__ctx.out.addInt32(v);
+			}
+			var _g = 0;
+			while(_g < a.length) {
+				var v = a[_g];
+				++_g;
+				if(v == null) {
+					__ctx.out.addByte(0);
+				} else {
+					var b = haxe_io_Bytes.ofString(v);
+					var v1 = b.length + 1;
+					if(v1 >= 0 && v1 < 128) {
+						__ctx.out.addByte(v1);
+					} else {
+						__ctx.out.addByte(128);
+						__ctx.out.addInt32(v1);
+					}
+					__ctx.out.add(b);
+				}
+			}
+		}
+		var a = this.dbJoinParams;
+		if(a == null) {
+			__ctx.out.addByte(0);
+		} else {
+			var _g = [];
+			var h = a.h;
+			var k_h = h;
+			var k_keys = Object.keys(h);
+			var k_length = k_keys.length;
+			var k_current = 0;
+			while(k_current < k_length) {
+				var k = k_keys[k_current++];
+				_g.push(k);
+			}
+			var keys = _g;
+			var v = keys.length + 1;
+			if(v >= 0 && v < 128) {
+				__ctx.out.addByte(v);
+			} else {
+				__ctx.out.addByte(128);
+				__ctx.out.addInt32(v);
+			}
+			var _g = 0;
+			while(_g < keys.length) {
+				var k = keys[_g];
+				++_g;
+				if(k == null) {
+					__ctx.out.addByte(0);
+				} else {
+					var b = haxe_io_Bytes.ofString(k);
+					var v = b.length + 1;
+					if(v >= 0 && v < 128) {
+						__ctx.out.addByte(v);
+					} else {
+						__ctx.out.addByte(128);
+						__ctx.out.addInt32(v);
+					}
+					__ctx.out.add(b);
+				}
+				__ctx.addDynamic(a.h[k]);
 			}
 		}
 		var a = this.dbParams;
@@ -5648,6 +5696,10 @@ db_DbQuery.prototype = {
 		schema.fieldsTypes.push(hxbit_PropTypeDesc.PSerializable("db.DbUser"));
 		schema.fieldsNames.push("relations");
 		schema.fieldsTypes.push(hxbit_PropTypeDesc.PMap(hxbit_PropTypeDesc.PString,hxbit_PropTypeDesc.PSerializable("db.DbRelation")));
+		schema.fieldsNames.push("dbJoins");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PArray(hxbit_PropTypeDesc.PString));
+		schema.fieldsNames.push("dbJoinParams");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PMap(hxbit_PropTypeDesc.PString,hxbit_PropTypeDesc.PDynamic));
 		schema.fieldsNames.push("dbParams");
 		schema.fieldsTypes.push(hxbit_PropTypeDesc.PMap(hxbit_PropTypeDesc.PString,hxbit_PropTypeDesc.PDynamic));
 		schema.isFinal = hxbit_Serializer.isClassFinal(db_DbQuery.__clid);
@@ -5693,6 +5745,42 @@ db_DbQuery.prototype = {
 			tmp = m;
 		}
 		this.relations = tmp;
+		var e0;
+		var v = __ctx.input.b[__ctx.inPos++];
+		if(v == 128) {
+			v = __ctx.input.getInt32(__ctx.inPos);
+			__ctx.inPos += 4;
+		}
+		var len = v;
+		var tmp;
+		if(len == 0) {
+			tmp = null;
+		} else {
+			--len;
+			var a = [];
+			var _g = 0;
+			var _g1 = len;
+			while(_g < _g1) {
+				var i = _g++;
+				var v = __ctx.input.b[__ctx.inPos++];
+				if(v == 128) {
+					v = __ctx.input.getInt32(__ctx.inPos);
+					__ctx.inPos += 4;
+				}
+				var len = v;
+				if(len == 0) {
+					e0 = null;
+				} else {
+					--len;
+					var s = __ctx.input.getString(__ctx.inPos,len);
+					__ctx.inPos += len;
+					e0 = s;
+				}
+				a[i] = e0;
+			}
+			tmp = a;
+		}
+		this.dbJoins = tmp;
 		var k0;
 		var v0;
 		var v = __ctx.input.b[__ctx.inPos++];
@@ -5728,10 +5816,45 @@ db_DbQuery.prototype = {
 			}
 			tmp = m;
 		}
-		this.set_dbParams(tmp);
+		this.dbJoinParams = tmp;
+		var k0;
+		var v0;
+		var v = __ctx.input.b[__ctx.inPos++];
+		if(v == 128) {
+			v = __ctx.input.getInt32(__ctx.inPos);
+			__ctx.inPos += 4;
+		}
+		var len = v;
+		var tmp;
+		if(len == 0) {
+			tmp = null;
+		} else {
+			var m = new haxe_ds_StringMap();
+			while(--len > 0) {
+				var v = __ctx.input.b[__ctx.inPos++];
+				if(v == 128) {
+					v = __ctx.input.getInt32(__ctx.inPos);
+					__ctx.inPos += 4;
+				}
+				var len1 = v;
+				if(len1 == 0) {
+					k0 = null;
+				} else {
+					--len1;
+					var s = __ctx.input.getString(__ctx.inPos,len1);
+					__ctx.inPos += len1;
+					k0 = s;
+				}
+				var k = k0;
+				v0 = __ctx.getDynamic();
+				var v1 = v0;
+				m.h[k] = v1;
+			}
+			tmp = m;
+		}
+		this.dbParams = tmp;
 	}
 	,__class__: db_DbQuery
-	,__properties__: {set_dbParams:"set_dbParams"}
 };
 var db_DbRelation = function(p) {
 	this.__uid = hxbit_Serializer.SEQ << 24 | ++hxbit_Serializer.UID;
@@ -5743,6 +5866,11 @@ var db_DbRelation = function(p) {
 		switch(f) {
 		case "__uid":case "getCLID":case "getSerializeSchema":case "serialize":case "unserialize":
 			break;
+		case "filter":
+			if(p.filter != null) {
+				this.filter = JSON.stringify(p.filter);
+			}
+			break;
 		default:
 			if(Object.prototype.hasOwnProperty.call(p,f)) {
 				this[f] = Reflect.field(p,f);
@@ -5753,11 +5881,57 @@ var db_DbRelation = function(p) {
 $hxClasses["db.DbRelation"] = db_DbRelation;
 db_DbRelation.__name__ = "db.DbRelation";
 db_DbRelation.__interfaces__ = [hxbit_Serializable];
+db_DbRelation.create = function(t) {
+	if(t.length < 2) {
+		return false;
+	}
+	var _inst = new db_DbRelation({ fields : t[0].fields, filter : t[0].filter, version : t[0].version});
+	_inst.tables = [];
+	var _g = 0;
+	while(_g < t.length) {
+		var ti = t[_g];
+		++_g;
+		_inst.tables.push(ti);
+	}
+	return true;
+};
 db_DbRelation.prototype = {
 	alias: null
 	,fields: null
-	,filter: null
 	,jCond: null
+	,version: null
+	,filter: null
+	,tables: null
+	,toString: function() {
+		var sqlBf_b = "";
+		var _g = 0;
+		var _g1 = Type.getInstanceFields(db_DbRelation);
+		while(_g < _g1.length) {
+			var f = _g1[_g];
+			++_g;
+			switch(f) {
+			case "__uid":case "getCLID":case "getSerializeSchema":case "serialize":case "unserialize":
+				break;
+			case "tables":
+				if(this.tables == null || this.tables.length < 2) {
+					return "Wir brauchen hier mindestens 2 Tabellen statt:" + (this.tables != null ? this.tables.length : 0);
+				}
+				var _g2 = 0;
+				var _g3 = this.tables;
+				while(_g2 < _g3.length) {
+					var t = _g3[_g2];
+					++_g2;
+					sqlBf_b += Std.string(new db_DbRelation(t).toString());
+				}
+				break;
+			default:
+				if(Object.prototype.hasOwnProperty.call(this,f)) {
+					sqlBf_b += Std.string(f + ":" + Std.string(Reflect.field(this,f)));
+				}
+			}
+		}
+		return sqlBf_b;
+	}
 	,__uid: null
 	,getCLID: function() {
 		return db_DbRelation.__clid;
@@ -5807,36 +5981,6 @@ db_DbRelation.prototype = {
 				}
 			}
 		}
-		var a = this.filter;
-		if(a == null) {
-			__ctx.out.addByte(0);
-		} else {
-			var v = a.length + 1;
-			if(v >= 0 && v < 128) {
-				__ctx.out.addByte(v);
-			} else {
-				__ctx.out.addByte(128);
-				__ctx.out.addInt32(v);
-			}
-			var _g = 0;
-			while(_g < a.length) {
-				var v = a[_g];
-				++_g;
-				if(v == null) {
-					__ctx.out.addByte(0);
-				} else {
-					var b = haxe_io_Bytes.ofString(v);
-					var v1 = b.length + 1;
-					if(v1 >= 0 && v1 < 128) {
-						__ctx.out.addByte(v1);
-					} else {
-						__ctx.out.addByte(128);
-						__ctx.out.addInt32(v1);
-					}
-					__ctx.out.add(b);
-				}
-			}
-		}
 		var s = this.jCond;
 		if(s == null) {
 			__ctx.out.addByte(0);
@@ -5851,6 +5995,162 @@ db_DbRelation.prototype = {
 			}
 			__ctx.out.add(b);
 		}
+		var s = this.version;
+		if(s == null) {
+			__ctx.out.addByte(0);
+		} else {
+			var b = haxe_io_Bytes.ofString(s);
+			var v = b.length + 1;
+			if(v >= 0 && v < 128) {
+				__ctx.out.addByte(v);
+			} else {
+				__ctx.out.addByte(128);
+				__ctx.out.addInt32(v);
+			}
+			__ctx.out.add(b);
+		}
+		var s = this.filter;
+		if(s == null) {
+			__ctx.out.addByte(0);
+		} else {
+			var b = haxe_io_Bytes.ofString(s);
+			var v = b.length + 1;
+			if(v >= 0 && v < 128) {
+				__ctx.out.addByte(v);
+			} else {
+				__ctx.out.addByte(128);
+				__ctx.out.addInt32(v);
+			}
+			__ctx.out.add(b);
+		}
+		var a = this.tables;
+		if(a == null) {
+			__ctx.out.addByte(0);
+		} else {
+			var v = a.length + 1;
+			if(v >= 0 && v < 128) {
+				__ctx.out.addByte(v);
+			} else {
+				__ctx.out.addByte(128);
+				__ctx.out.addInt32(v);
+			}
+			var _g = 0;
+			while(_g < a.length) {
+				var v = a[_g];
+				++_g;
+				var v1 = v;
+				if(v1 == null) {
+					__ctx.out.addByte(0);
+				} else {
+					var fbits = 0;
+					if(v1.alias != null) {
+						fbits |= 1;
+					}
+					if(v1.fields != null) {
+						fbits |= 2;
+					}
+					if(v1.filter != null) {
+						fbits |= 4;
+					}
+					if(v1.jCond != null) {
+						fbits |= 8;
+					}
+					if(v1.version != null) {
+						fbits |= 16;
+					}
+					var v2 = fbits + 1;
+					if(v2 >= 0 && v2 < 128) {
+						__ctx.out.addByte(v2);
+					} else {
+						__ctx.out.addByte(128);
+						__ctx.out.addInt32(v2);
+					}
+					if((fbits & 1) != 0) {
+						var s = v1.alias;
+						if(s == null) {
+							__ctx.out.addByte(0);
+						} else {
+							var b = haxe_io_Bytes.ofString(s);
+							var v3 = b.length + 1;
+							if(v3 >= 0 && v3 < 128) {
+								__ctx.out.addByte(v3);
+							} else {
+								__ctx.out.addByte(128);
+								__ctx.out.addInt32(v3);
+							}
+							__ctx.out.add(b);
+						}
+					}
+					if((fbits & 2) != 0) {
+						var a1 = v1.fields;
+						if(a1 == null) {
+							__ctx.out.addByte(0);
+						} else {
+							var v4 = a1.length + 1;
+							if(v4 >= 0 && v4 < 128) {
+								__ctx.out.addByte(v4);
+							} else {
+								__ctx.out.addByte(128);
+								__ctx.out.addInt32(v4);
+							}
+							var _g1 = 0;
+							while(_g1 < a1.length) {
+								var v5 = a1[_g1];
+								++_g1;
+								if(v5 == null) {
+									__ctx.out.addByte(0);
+								} else {
+									var b1 = haxe_io_Bytes.ofString(v5);
+									var v6 = b1.length + 1;
+									if(v6 >= 0 && v6 < 128) {
+										__ctx.out.addByte(v6);
+									} else {
+										__ctx.out.addByte(128);
+										__ctx.out.addInt32(v6);
+									}
+									__ctx.out.add(b1);
+								}
+							}
+						}
+					}
+					if((fbits & 4) != 0) {
+						__ctx.addDynamic(v1.filter);
+					}
+					if((fbits & 8) != 0) {
+						var s1 = v1.jCond;
+						if(s1 == null) {
+							__ctx.out.addByte(0);
+						} else {
+							var b2 = haxe_io_Bytes.ofString(s1);
+							var v7 = b2.length + 1;
+							if(v7 >= 0 && v7 < 128) {
+								__ctx.out.addByte(v7);
+							} else {
+								__ctx.out.addByte(128);
+								__ctx.out.addInt32(v7);
+							}
+							__ctx.out.add(b2);
+						}
+					}
+					if((fbits & 16) != 0) {
+						var s2 = v1.version;
+						if(s2 == null) {
+							__ctx.out.addByte(0);
+						} else {
+							var b3 = haxe_io_Bytes.ofString(s2);
+							var v8 = b3.length + 1;
+							if(v8 >= 0 && v8 < 128) {
+								__ctx.out.addByte(v8);
+							} else {
+								__ctx.out.addByte(128);
+								__ctx.out.addInt32(v8);
+							}
+							__ctx.out.add(b3);
+						}
+					}
+				}
+			}
+		}
 	}
 	,getSerializeSchema: function() {
 		var schema = new hxbit_Schema();
@@ -5858,10 +6158,14 @@ db_DbRelation.prototype = {
 		schema.fieldsTypes.push(hxbit_PropTypeDesc.PString);
 		schema.fieldsNames.push("fields");
 		schema.fieldsTypes.push(hxbit_PropTypeDesc.PArray(hxbit_PropTypeDesc.PString));
-		schema.fieldsNames.push("filter");
-		schema.fieldsTypes.push(hxbit_PropTypeDesc.PArray(hxbit_PropTypeDesc.PString));
 		schema.fieldsNames.push("jCond");
 		schema.fieldsTypes.push(hxbit_PropTypeDesc.PString);
+		schema.fieldsNames.push("version");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PString);
+		schema.fieldsNames.push("filter");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PString);
+		schema.fieldsNames.push("tables");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PArray(hxbit_PropTypeDesc.PObj([{ name : "alias", opt : true, type : hxbit_PropTypeDesc.PString},{ name : "fields", opt : true, type : hxbit_PropTypeDesc.PArray(hxbit_PropTypeDesc.PString)},{ name : "filter", opt : true, type : hxbit_PropTypeDesc.PDynamic},{ name : "jCond", opt : true, type : hxbit_PropTypeDesc.PString},{ name : "version", opt : true, type : hxbit_PropTypeDesc.PString}])));
 		schema.isFinal = hxbit_Serializer.isClassFinal(db_DbRelation.__clid);
 		return schema;
 	}
@@ -5920,6 +6224,54 @@ db_DbRelation.prototype = {
 			tmp = a;
 		}
 		this.fields = tmp;
+		var v = __ctx.input.b[__ctx.inPos++];
+		if(v == 128) {
+			v = __ctx.input.getInt32(__ctx.inPos);
+			__ctx.inPos += 4;
+		}
+		var len = v;
+		var tmp;
+		if(len == 0) {
+			tmp = null;
+		} else {
+			--len;
+			var s = __ctx.input.getString(__ctx.inPos,len);
+			__ctx.inPos += len;
+			tmp = s;
+		}
+		this.jCond = tmp;
+		var v = __ctx.input.b[__ctx.inPos++];
+		if(v == 128) {
+			v = __ctx.input.getInt32(__ctx.inPos);
+			__ctx.inPos += 4;
+		}
+		var len = v;
+		var tmp;
+		if(len == 0) {
+			tmp = null;
+		} else {
+			--len;
+			var s = __ctx.input.getString(__ctx.inPos,len);
+			__ctx.inPos += len;
+			tmp = s;
+		}
+		this.version = tmp;
+		var v = __ctx.input.b[__ctx.inPos++];
+		if(v == 128) {
+			v = __ctx.input.getInt32(__ctx.inPos);
+			__ctx.inPos += 4;
+		}
+		var len = v;
+		var tmp;
+		if(len == 0) {
+			tmp = null;
+		} else {
+			--len;
+			var s = __ctx.input.getString(__ctx.inPos,len);
+			__ctx.inPos += len;
+			tmp = s;
+		}
+		this.filter = tmp;
 		var e0;
 		var v = __ctx.input.b[__ctx.inPos++];
 		if(v == 128) {
@@ -5942,36 +6294,110 @@ db_DbRelation.prototype = {
 					v = __ctx.input.getInt32(__ctx.inPos);
 					__ctx.inPos += 4;
 				}
-				var len = v;
-				if(len == 0) {
+				var fbits = v;
+				if(fbits == 0) {
 					e0 = null;
 				} else {
-					--len;
-					var s = __ctx.input.getString(__ctx.inPos,len);
-					__ctx.inPos += len;
-					e0 = s;
+					--fbits;
+					var version = null;
+					var jCond = null;
+					var filter = null;
+					var fields = null;
+					var alias = null;
+					if((fbits & 1) != 0) {
+						var v1 = __ctx.input.b[__ctx.inPos++];
+						if(v1 == 128) {
+							v1 = __ctx.input.getInt32(__ctx.inPos);
+							__ctx.inPos += 4;
+						}
+						var len = v1;
+						if(len == 0) {
+							alias = null;
+						} else {
+							--len;
+							var s = __ctx.input.getString(__ctx.inPos,len);
+							__ctx.inPos += len;
+							alias = s;
+						}
+					}
+					if((fbits & 2) != 0) {
+						var e2;
+						var v2 = __ctx.input.b[__ctx.inPos++];
+						if(v2 == 128) {
+							v2 = __ctx.input.getInt32(__ctx.inPos);
+							__ctx.inPos += 4;
+						}
+						var len1 = v2;
+						if(len1 == 0) {
+							fields = null;
+						} else {
+							--len1;
+							var a1 = [];
+							var _g2 = 0;
+							var _g3 = len1;
+							while(_g2 < _g3) {
+								var i1 = _g2++;
+								var v3 = __ctx.input.b[__ctx.inPos++];
+								if(v3 == 128) {
+									v3 = __ctx.input.getInt32(__ctx.inPos);
+									__ctx.inPos += 4;
+								}
+								var len2 = v3;
+								if(len2 == 0) {
+									e2 = null;
+								} else {
+									--len2;
+									var s1 = __ctx.input.getString(__ctx.inPos,len2);
+									__ctx.inPos += len2;
+									e2 = s1;
+								}
+								a1[i1] = e2;
+							}
+							fields = a1;
+						}
+					}
+					if((fbits & 4) != 0) {
+						filter = __ctx.getDynamic();
+					}
+					if((fbits & 8) != 0) {
+						var v4 = __ctx.input.b[__ctx.inPos++];
+						if(v4 == 128) {
+							v4 = __ctx.input.getInt32(__ctx.inPos);
+							__ctx.inPos += 4;
+						}
+						var len3 = v4;
+						if(len3 == 0) {
+							jCond = null;
+						} else {
+							--len3;
+							var s2 = __ctx.input.getString(__ctx.inPos,len3);
+							__ctx.inPos += len3;
+							jCond = s2;
+						}
+					}
+					if((fbits & 16) != 0) {
+						var v5 = __ctx.input.b[__ctx.inPos++];
+						if(v5 == 128) {
+							v5 = __ctx.input.getInt32(__ctx.inPos);
+							__ctx.inPos += 4;
+						}
+						var len4 = v5;
+						if(len4 == 0) {
+							version = null;
+						} else {
+							--len4;
+							var s3 = __ctx.input.getString(__ctx.inPos,len4);
+							__ctx.inPos += len4;
+							version = s3;
+						}
+					}
+					e0 = { alias : alias, fields : fields, filter : filter, jCond : jCond, version : version};
 				}
 				a[i] = e0;
 			}
 			tmp = a;
 		}
-		this.filter = tmp;
-		var v = __ctx.input.b[__ctx.inPos++];
-		if(v == 128) {
-			v = __ctx.input.getInt32(__ctx.inPos);
-			__ctx.inPos += 4;
-		}
-		var len = v;
-		var tmp;
-		if(len == 0) {
-			tmp = null;
-		} else {
-			--len;
-			var s = __ctx.input.getString(__ctx.inPos,len);
-			__ctx.inPos += len;
-			tmp = s;
-		}
-		this.jCond = tmp;
+		this.tables = tmp;
 	}
 	,__class__: db_DbRelation
 };
@@ -17578,12 +18004,17 @@ loader_BinaryLoader.dbQuery = function(url,dbAP,onLoaded) {
 	var bl = new loader_BinaryLoader(url);
 	var dbQuery = new db_DbQuery(dbAP);
 	haxe_Log.trace(dbQuery.dbParams == null ? "null" : haxe_ds_StringMap.stringify(dbQuery.dbParams.h),{ fileName : "loader/BinaryLoader.hx", lineNumber : 41, className : "loader.BinaryLoader", methodName : "dbQuery"});
-	if(dbQuery.dbParams.h["dataSource"] != null) {
-		haxe_Log.trace(Std.string(haxe_Unserializer.run(dbQuery.dbParams.h["dataSource"])),{ fileName : "loader/BinaryLoader.hx", lineNumber : 44, className : "loader.BinaryLoader", methodName : "dbQuery"});
+	if(dbQuery.dbParams != null && dbQuery.dbParams.h["dataSource"] != null) {
+		haxe_Log.trace(Std.string(dbQuery.dbParams.h["dataSource"]),{ fileName : "loader/BinaryLoader.hx", lineNumber : 44, className : "loader.BinaryLoader", methodName : "dbQuery"});
 	}
-	var b = loader_BinaryLoader.s.serialize(dbQuery);
-	haxe_Log.trace(b.length,{ fileName : "loader/BinaryLoader.hx", lineNumber : 48, className : "loader.BinaryLoader", methodName : "dbQuery"});
-	bl.param = b.b.bufferValue;
+	try {
+		var b = loader_BinaryLoader.s.serialize(dbQuery);
+		haxe_Log.trace(b.length,{ fileName : "loader/BinaryLoader.hx", lineNumber : 49, className : "loader.BinaryLoader", methodName : "dbQuery"});
+		bl.param = b.b.bufferValue;
+	} catch( _g ) {
+		var ex = haxe_Exception.caught(_g);
+		haxe_Log.trace(ex.get_message(),{ fileName : "loader/BinaryLoader.hx", lineNumber : 55, className : "loader.BinaryLoader", methodName : "dbQuery"});
+	}
 	bl.cB = onLoaded;
 	bl.load();
 	return bl.xhr;
@@ -17598,41 +18029,45 @@ loader_BinaryLoader.prototype = {
 	,url: null
 	,onLoaded: function(bytes) {
 		if(bytes != null && bytes.length > 0) {
-			haxe_Log.trace(bytes.toString(),{ fileName : "loader/BinaryLoader.hx", lineNumber : 75, className : "loader.BinaryLoader", methodName : "onLoaded"});
+			haxe_Log.trace(bytes.toString(),{ fileName : "loader/BinaryLoader.hx", lineNumber : 80, className : "loader.BinaryLoader", methodName : "onLoaded"});
 			loader_BinaryLoader.u = new hxbit_Serializer();
-			var data = loader_BinaryLoader.u.unserialize(bytes,shared_DbData);
-			haxe_Log.trace(data,{ fileName : "loader/BinaryLoader.hx", lineNumber : 84, className : "loader.BinaryLoader", methodName : "onLoaded"});
-			this.cB(data);
+			try {
+				var data = loader_BinaryLoader.u.unserialize(bytes,shared_DbData);
+				haxe_Log.trace(data,{ fileName : "loader/BinaryLoader.hx", lineNumber : 89, className : "loader.BinaryLoader", methodName : "onLoaded"});
+				this.cB(data);
+			} catch( _g ) {
+				var ex = haxe_Exception.caught(_g);
+				haxe_Log.trace(ex.get_message(),{ fileName : "loader/BinaryLoader.hx", lineNumber : 93, className : "loader.BinaryLoader", methodName : "onLoaded"});
+			}
 		} else {
-			haxe_Log.trace("got nothing" + bytes.length,{ fileName : "loader/BinaryLoader.hx", lineNumber : 88, className : "loader.BinaryLoader", methodName : "onLoaded"});
+			haxe_Log.trace("got nothing" + bytes.length,{ fileName : "loader/BinaryLoader.hx", lineNumber : 97, className : "loader.BinaryLoader", methodName : "onLoaded"});
 		}
 	}
 	,onProgress: function(cur,max) {
-		haxe_Log.trace("" + cur + " of " + max,{ fileName : "loader/BinaryLoader.hx", lineNumber : 98, className : "loader.BinaryLoader", methodName : "onProgress"});
+		haxe_Log.trace("" + cur + " of " + max,{ fileName : "loader/BinaryLoader.hx", lineNumber : 107, className : "loader.BinaryLoader", methodName : "onProgress"});
 	}
 	,onError: function(msg) {
-		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "loader/BinaryLoader.hx", lineNumber : 102, className : "loader.BinaryLoader", methodName : "onError"});
-		haxe_Log.trace(msg,{ fileName : "loader/BinaryLoader.hx", lineNumber : 103, className : "loader.BinaryLoader", methodName : "onError"});
-		throw haxe_Exception.thrown(msg);
+		me_cunity_debug_Out.dumpStack(haxe_CallStack.callStack(),{ fileName : "loader/BinaryLoader.hx", lineNumber : 111, className : "loader.BinaryLoader", methodName : "onError"});
+		haxe_Log.trace(msg,{ fileName : "loader/BinaryLoader.hx", lineNumber : 112, className : "loader.BinaryLoader", methodName : "onError"});
 	}
 	,load: function() {
 		var _gthis = this;
 		this.xhr.open("POST",this.url,true);
 		this.xhr.responseType = "arraybuffer";
 		this.xhr.onerror = function(e) {
-			haxe_Log.trace(e,{ fileName : "loader/BinaryLoader.hx", lineNumber : 117, className : "loader.BinaryLoader", methodName : "load"});
-			haxe_Log.trace(e.type,{ fileName : "loader/BinaryLoader.hx", lineNumber : 118, className : "loader.BinaryLoader", methodName : "load"});
+			haxe_Log.trace(e,{ fileName : "loader/BinaryLoader.hx", lineNumber : 126, className : "loader.BinaryLoader", methodName : "load"});
+			haxe_Log.trace(e.type,{ fileName : "loader/BinaryLoader.hx", lineNumber : 127, className : "loader.BinaryLoader", methodName : "load"});
 		};
 		this.xhr.withCredentials = true;
 		this.xhr.onload = function(e) {
-			haxe_Log.trace(_gthis.xhr.status,{ fileName : "loader/BinaryLoader.hx", lineNumber : 123, className : "loader.BinaryLoader", methodName : "load"});
+			haxe_Log.trace(_gthis.xhr.status,{ fileName : "loader/BinaryLoader.hx", lineNumber : 132, className : "loader.BinaryLoader", methodName : "load"});
 			if(_gthis.xhr.status != 200) {
 				_gthis.onError(_gthis.xhr.statusText);
 				return;
 			}
 			try {
-				haxe_Log.trace(Type.typeof(_gthis.xhr.response),{ fileName : "loader/BinaryLoader.hx", lineNumber : 130, className : "loader.BinaryLoader", methodName : "load"});
-				haxe_Log.trace(typeof(_gthis.xhr.response) == "string",{ fileName : "loader/BinaryLoader.hx", lineNumber : 131, className : "loader.BinaryLoader", methodName : "load"});
+				haxe_Log.trace(Type.typeof(_gthis.xhr.response),{ fileName : "loader/BinaryLoader.hx", lineNumber : 139, className : "loader.BinaryLoader", methodName : "load"});
+				haxe_Log.trace(typeof(_gthis.xhr.response) == "string",{ fileName : "loader/BinaryLoader.hx", lineNumber : 140, className : "loader.BinaryLoader", methodName : "load"});
 				if(typeof(_gthis.xhr.response) == "string") {
 					_gthis.onLoaded(haxe_io_Bytes.ofString(_gthis.xhr.response));
 				} else {
@@ -17640,7 +18075,7 @@ loader_BinaryLoader.prototype = {
 				}
 			} catch( _g ) {
 				var ex = haxe_Exception.caught(_g);
-				haxe_Log.trace(ex.details(),{ fileName : "loader/BinaryLoader.hx", lineNumber : 141, className : "loader.BinaryLoader", methodName : "load"});
+				haxe_Log.trace(ex.details(),{ fileName : "loader/BinaryLoader.hx", lineNumber : 150, className : "loader.BinaryLoader", methodName : "load"});
 			}
 		};
 		this.xhr.send(this.param);
@@ -17650,8 +18085,8 @@ loader_BinaryLoader.prototype = {
 		this.xhr.open("POST",this.url,true);
 		this.xhr.responseType = "json";
 		this.xhr.onerror = function(e) {
-			haxe_Log.trace(e,{ fileName : "loader/BinaryLoader.hx", lineNumber : 163, className : "loader.BinaryLoader", methodName : "loadJson"});
-			haxe_Log.trace(e.type,{ fileName : "loader/BinaryLoader.hx", lineNumber : 164, className : "loader.BinaryLoader", methodName : "loadJson"});
+			haxe_Log.trace(e,{ fileName : "loader/BinaryLoader.hx", lineNumber : 172, className : "loader.BinaryLoader", methodName : "loadJson"});
+			haxe_Log.trace(e.type,{ fileName : "loader/BinaryLoader.hx", lineNumber : 173, className : "loader.BinaryLoader", methodName : "loadJson"});
 		};
 		this.xhr.withCredentials = false;
 		this.xhr.onload = function(e) {
@@ -17659,7 +18094,7 @@ loader_BinaryLoader.prototype = {
 				_gthis.onError(_gthis.xhr.statusText);
 				return;
 			}
-			haxe_Log.trace(_gthis.xhr.response,{ fileName : "loader/BinaryLoader.hx", lineNumber : 174, className : "loader.BinaryLoader", methodName : "loadJson"});
+			haxe_Log.trace(_gthis.xhr.response,{ fileName : "loader/BinaryLoader.hx", lineNumber : 183, className : "loader.BinaryLoader", methodName : "loadJson"});
 		};
 		this.xhr.send(this.param);
 	}
@@ -29644,37 +30079,37 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 			Reflect.deleteField(filter,"page");
 			this.props.parentComponent.setState({ page : filter.page});
 		}
-		var dS = null;
+		var dS = filter != null && filter.dataSource != null ? filter.dbJoinParams : null;
 		if(filter != null && filter.dataSource != null) {
-			haxe_Log.trace(Type.typeof(filter.dataSource),{ fileName : "view/data/contacts/List.hx", lineNumber : 187, className : "view.data.contacts.List", methodName : "get"});
-			haxe_Log.trace(filter.dataSource,{ fileName : "view/data/contacts/List.hx", lineNumber : 188, className : "view.data.contacts.List", methodName : "get"});
-			dS = haxe_ds_StringMap.createCopy(filter.dataSource);
-			haxe_Log.trace(Type.typeof(dS),{ fileName : "view/data/contacts/List.hx", lineNumber : 193, className : "view.data.contacts.List", methodName : "get"});
 			Reflect.deleteField(filter,"dataSource");
-			haxe_Log.trace(dS == null ? "null" : haxe_ds_StringMap.stringify(dS.h),{ fileName : "view/data/contacts/List.hx", lineNumber : 196, className : "view.data.contacts.List", methodName : "get"});
+			haxe_Log.trace(dS == null ? "null" : haxe_ds_StringMap.stringify(dS.h),{ fileName : "view/data/contacts/List.hx", lineNumber : 189, className : "view.data.contacts.List", methodName : "get"});
+		}
+		var dS = filter != null && filter.dataSource != null ? filter.dbJoinParams : null;
+		if(filter != null && filter.dataSource != null) {
+			Reflect.deleteField(filter,"dbJoinParams");
+			haxe_Log.trace(dS == null ? "null" : haxe_ds_StringMap.stringify(dS.h),{ fileName : "view/data/contacts/List.hx", lineNumber : 197, className : "view.data.contacts.List", methodName : "get"});
 		}
 		filter = shared_Utils.extend(filter,this.props.match.params.id != null ? { id : this.props.match.params.id, mandator : this.props.userState.dbUser.mandator} : { mandator : this.props.userState.dbUser.mandator});
-		haxe_Log.trace("hi " + Std.string(filter),{ fileName : "view/data/contacts/List.hx", lineNumber : 204, className : "view.data.contacts.List", methodName : "get"});
-		haxe_Log.trace(this.props.match.params,{ fileName : "view/data/contacts/List.hx", lineNumber : 206, className : "view.data.contacts.List", methodName : "get"});
-		var p = this.props.load({ classPath : "data.Contacts", action : "get", dataSource : dS, filter : filter, limit : this.props.limit, offset : offset > 0 ? offset : 0, table : "contacts", resolveMessage : { success : "Kontaktliste wurde geladen", failure : "Kontaktliste konnte nicht geladen werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
+		haxe_Log.trace("hi " + Std.string(filter),{ fileName : "view/data/contacts/List.hx", lineNumber : 206, className : "view.data.contacts.List", methodName : "get"});
+		var p = this.props.load({ classPath : "data.Contacts", action : "get", dbJoinParams : dS, filter : filter, limit : this.props.limit, offset : offset > 0 ? offset : 0, table : "contacts", resolveMessage : { success : "Kontaktliste wurde geladen", failure : "Kontaktliste konnte nicht geladen werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
 		p.then(function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 225, className : "view.data.contacts.List", methodName : "get"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 226, className : "view.data.contacts.List", methodName : "get"});
 			if(data.dataRows.length < 5 && data.dataRows.length > 0) {
-				haxe_Log.trace(data.dataRows,{ fileName : "view/data/contacts/List.hx", lineNumber : 228, className : "view.data.contacts.List", methodName : "get"});
+				haxe_Log.trace(data.dataRows,{ fileName : "view/data/contacts/List.hx", lineNumber : 229, className : "view.data.contacts.List", methodName : "get"});
 			}
 			_gthis.setState({ loading : false, dbTable : data.dataRows, dataCount : Std.parseInt(data.dataInfo.h["count"]), pageCount : Math.ceil(Std.parseInt(data.dataInfo.h["count"]) / _gthis.props.limit)});
 		});
 	}
 	,edit: function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 243, className : "view.data.contacts.List", methodName : "edit"});
-		haxe_Log.trace(Reflect.fields(ev),{ fileName : "view/data/contacts/List.hx", lineNumber : 244, className : "view.data.contacts.List", methodName : "edit"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 244, className : "view.data.contacts.List", methodName : "edit"});
+		haxe_Log.trace(Reflect.fields(ev),{ fileName : "view/data/contacts/List.hx", lineNumber : 245, className : "view.data.contacts.List", methodName : "edit"});
 	}
 	,restore: function() {
 		var _gthis = this;
-		haxe_Log.trace(Reflect.fields(this.props.dataStore),{ fileName : "view/data/contacts/List.hx", lineNumber : 248, className : "view.data.contacts.List", methodName : "restore"});
+		haxe_Log.trace(Reflect.fields(this.props.dataStore),{ fileName : "view/data/contacts/List.hx", lineNumber : 249, className : "view.data.contacts.List", methodName : "restore"});
 		if(this.props.dataStore != null && this.props.dataStore.contactsDbData != null) {
 			this.setState({ dbTable : this.props.dataStore.contactsDbData.dataRows, dataCount : Std.parseInt(this.props.dataStore.contactsDbData.dataInfo.h["count"]), pageCount : Math.ceil(Std.parseInt(this.props.dataStore.contactsDbData.dataInfo.h["count"]) / this.props.limit)},function() {
-				haxe_Log.trace(_gthis.state.dbTable,{ fileName : "view/data/contacts/List.hx", lineNumber : 258, className : "view.data.contacts.List", methodName : "restore"});
+				haxe_Log.trace(_gthis.state.dbTable,{ fileName : "view/data/contacts/List.hx", lineNumber : 259, className : "view.data.contacts.List", methodName : "restore"});
 				_gthis.props.history.push("" + _gthis.props.match.path.split(":section")[0] + "List/get/" + (_gthis.props.match.params.id != null ? _gthis.props.match.params.id : ""));
 			});
 		} else {
@@ -29687,7 +30122,7 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 		match.params.action = "get";
 		this.props.parentComponent.props.select(null,null,this,"UnselectAll");
 		var trs = window.document.querySelectorAll("#contactList .gridItem.selected");
-		haxe_Log.trace(trs.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 283, className : "view.data.contacts.List", methodName : "selectionClear"});
+		haxe_Log.trace(trs.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 284, className : "view.data.contacts.List", methodName : "selectionClear"});
 		var _g = 0;
 		var _g1 = trs.length;
 		while(_g < _g1) {
@@ -29707,21 +30142,21 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 		_g.h["get"] = value;
 		this.dataAccess = _g;
 		if(this.props.userState != null) {
-			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/data/contacts/List.hx", lineNumber : 329, className : "view.data.contacts.List", methodName : "componentDidMount"});
+			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/data/contacts/List.hx", lineNumber : 330, className : "view.data.contacts.List", methodName : "componentDidMount"});
 		}
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/List.hx", lineNumber : 330, className : "view.data.contacts.List", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/List.hx", lineNumber : 331, className : "view.data.contacts.List", methodName : "componentDidMount"});
 		this.state.formApi.doAction();
 	}
 	,renderResults: function() {
 		var pState = this.props.parentComponent.state;
 		if(this.state.dbTable != null) {
-			haxe_Log.trace(this.state.dbTable.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 341, className : "view.data.contacts.List", methodName : "renderResults"});
+			haxe_Log.trace(this.state.dbTable.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 342, className : "view.data.contacts.List", methodName : "renderResults"});
 		}
 		if(this.props.dataStore.contactsDbData != null) {
 			var tmp = this.props.dataStore.contactsDbData.dataRows[0];
-			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/data/contacts/List.hx", lineNumber : 343, className : "view.data.contacts.List", methodName : "renderResults"});
+			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "view/data/contacts/List.hx", lineNumber : 344, className : "view.data.contacts.List", methodName : "renderResults"});
 		} else {
-			haxe_Log.trace(this.props.dataStore.contactsDbData,{ fileName : "view/data/contacts/List.hx", lineNumber : 344, className : "view.data.contacts.List", methodName : "renderResults"});
+			haxe_Log.trace(this.props.dataStore.contactsDbData,{ fileName : "view/data/contacts/List.hx", lineNumber : 345, className : "view.data.contacts.List", methodName : "renderResults"});
 		}
 		if(this.state.dbTable != null && this.state.dbTable.length == 0) {
 			return this.state.formApi.renderWait();
@@ -29733,7 +30168,7 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 366, className : "view.data.contacts.List", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 367, className : "view.data.contacts.List", methodName : "render"});
 		var tmp = this.state.formApi;
 		var tmp1 = react_ReactType.fromComp(React_Fragment);
 		var tmp2 = react_ReactType.fromString("form");
@@ -29743,7 +30178,7 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 	}
 	,printList: function() {
 		var inputs = window.document.querySelectorAll("#printList");
-		haxe_Log.trace(inputs.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 379, className : "view.data.contacts.List", methodName : "printList"});
+		haxe_Log.trace(inputs.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 380, className : "view.data.contacts.List", methodName : "printList"});
 		var inp = js_Boot.__cast(inputs.item(0) , HTMLInputElement);
 		var prods = window.document.querySelectorAll("[name=product]:checked");
 		if(prods.length == 0) {
@@ -29751,29 +30186,29 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 			return;
 		}
 		var productOpt = js_Boot.__cast(prods.item(0) , HTMLInputElement);
-		haxe_Log.trace(productOpt.value,{ fileName : "view/data/contacts/List.hx", lineNumber : 390, className : "view.data.contacts.List", methodName : "printList"});
-		haxe_Log.trace(App.config.api,{ fileName : "view/data/contacts/List.hx", lineNumber : 391, className : "view.data.contacts.List", methodName : "printList"});
+		haxe_Log.trace(productOpt.value,{ fileName : "view/data/contacts/List.hx", lineNumber : 391, className : "view.data.contacts.List", methodName : "printList"});
+		haxe_Log.trace(App.config.api,{ fileName : "view/data/contacts/List.hx", lineNumber : 392, className : "view.data.contacts.List", methodName : "printList"});
 		if(inp.value == "") {
 			return;
 		}
 		var list = inp.value;
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ text : "Erzeugung der Daten zum Download gestarted"}))));
 		var api = Std.string(App.config.baseUrl) + "/mailing.pl?action=PRINTLIST&list=" + encodeURIComponent(list) + ("&product=" + productOpt.value);
-		haxe_Log.trace(api,{ fileName : "view/data/contacts/List.hx", lineNumber : 404, className : "view.data.contacts.List", methodName : "printList"});
+		haxe_Log.trace(api,{ fileName : "view/data/contacts/List.hx", lineNumber : 405, className : "view.data.contacts.List", methodName : "printList"});
 		var reqInit = { credentials : "include", mode : "cors"};
 		var p = window.fetch(api,reqInit);
 		p.then(function(res) {
-			haxe_Log.trace(Std.string(res.headers.keys()),{ fileName : "view/data/contacts/List.hx", lineNumber : 414, className : "view.data.contacts.List", methodName : "printList"});
+			haxe_Log.trace(Std.string(res.headers.keys()),{ fileName : "view/data/contacts/List.hx", lineNumber : 415, className : "view.data.contacts.List", methodName : "printList"});
 			var entry;
 			var headers = res.headers.keys();
 			var hLoop = true;
 			while(hLoop) {
 				entry = headers.next();
 				if(entry.done) {
-					haxe_Log.trace("done",{ fileName : "view/data/contacts/List.hx", lineNumber : 422, className : "view.data.contacts.List", methodName : "printList"});
+					haxe_Log.trace("done",{ fileName : "view/data/contacts/List.hx", lineNumber : 423, className : "view.data.contacts.List", methodName : "printList"});
 					break;
 				}
-				haxe_Log.trace(Std.string(entry),{ fileName : "view/data/contacts/List.hx", lineNumber : 425, className : "view.data.contacts.List", methodName : "printList"});
+				haxe_Log.trace(Std.string(entry),{ fileName : "view/data/contacts/List.hx", lineNumber : 426, className : "view.data.contacts.List", methodName : "printList"});
 			}
 			res.blob().then(function(bl) {
 				var url = URL.createObjectURL(bl);
@@ -29785,7 +30220,7 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 				} else {
 					a.download = "Liste-Anschreiben-" + HxOverrides.substr(StringTools.replace(productOpt.value," ","_"),50,null) + ".pdf";
 				}
-				haxe_Log.trace(js_Cookie.get("fileDownload"),{ fileName : "view/data/contacts/List.hx", lineNumber : 437, className : "view.data.contacts.List", methodName : "printList"});
+				haxe_Log.trace(js_Cookie.get("fileDownload"),{ fileName : "view/data/contacts/List.hx", lineNumber : 438, className : "view.data.contacts.List", methodName : "printList"});
 				a.click();
 				App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ text : "Download abgeschlossen"}))));
 			});
@@ -29798,19 +30233,19 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 			return;
 		}
 		var productOpt = js_Boot.__cast(prods.item(0) , HTMLInputElement);
-		haxe_Log.trace(productOpt.value,{ fileName : "view/data/contacts/List.hx", lineNumber : 459, className : "view.data.contacts.List", methodName : "printNew"});
+		haxe_Log.trace(productOpt.value,{ fileName : "view/data/contacts/List.hx", lineNumber : 460, className : "view.data.contacts.List", methodName : "printNew"});
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ text : "Erzeugung der Daten zum Download gestarted"}))));
 		var api = Std.string(App.config.baseUrl) + "/mailing.pl?action=PRINTNEW" + ("&product=" + productOpt.value);
-		haxe_Log.trace(api,{ fileName : "view/data/contacts/List.hx", lineNumber : 467, className : "view.data.contacts.List", methodName : "printNew"});
+		haxe_Log.trace(api,{ fileName : "view/data/contacts/List.hx", lineNumber : 468, className : "view.data.contacts.List", methodName : "printNew"});
 		var reqInit = { credentials : "include", mode : "cors"};
 		var p = window.fetch(api,reqInit);
 		p.then(function(res) {
-			haxe_Log.trace(res.status,{ fileName : "view/data/contacts/List.hx", lineNumber : 474, className : "view.data.contacts.List", methodName : "printNew"});
+			haxe_Log.trace(res.status,{ fileName : "view/data/contacts/List.hx", lineNumber : 475, className : "view.data.contacts.List", methodName : "printNew"});
 			if(res.status == 206) {
-				haxe_Log.trace(res.statusText,{ fileName : "view/data/contacts/List.hx", lineNumber : 476, className : "view.data.contacts.List", methodName : "printNew"});
+				haxe_Log.trace(res.statusText,{ fileName : "view/data/contacts/List.hx", lineNumber : 477, className : "view.data.contacts.List", methodName : "printNew"});
 				res.text().then(function(t) {
-					haxe_Log.trace(Reflect.fields(JSON.parse(t)).join("|"),{ fileName : "view/data/contacts/List.hx", lineNumber : 478, className : "view.data.contacts.List", methodName : "printNew"});
-					haxe_Log.trace(JSON.parse(t),{ fileName : "view/data/contacts/List.hx", lineNumber : 479, className : "view.data.contacts.List", methodName : "printNew"});
+					haxe_Log.trace(Reflect.fields(JSON.parse(t)).join("|"),{ fileName : "view/data/contacts/List.hx", lineNumber : 479, className : "view.data.contacts.List", methodName : "printNew"});
+					haxe_Log.trace(JSON.parse(t),{ fileName : "view/data/contacts/List.hx", lineNumber : 480, className : "view.data.contacts.List", methodName : "printNew"});
 				});
 				App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ text : "Keine Neuen Anschreiben!"}))));
 			} else {
@@ -29824,19 +30259,19 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 					} else {
 						a.download = "Neue-Anschreiben-" + StringTools.replace(StringTools.replace(HxOverrides.dateStr(new Date())," ","_"),":","-") + ".pdf";
 					}
-					haxe_Log.trace(js_Cookie.get("fileDownload"),{ fileName : "view/data/contacts/List.hx", lineNumber : 497, className : "view.data.contacts.List", methodName : "printNew"});
+					haxe_Log.trace(js_Cookie.get("fileDownload"),{ fileName : "view/data/contacts/List.hx", lineNumber : 498, className : "view.data.contacts.List", methodName : "printNew"});
 					a.click();
 					App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ text : "Download abgeschlossen"}))));
 				});
 			}
 		},function(error) {
-			haxe_Log.trace(error,{ fileName : "view/data/contacts/List.hx", lineNumber : 506, className : "view.data.contacts.List", methodName : "printNew"});
+			haxe_Log.trace(error,{ fileName : "view/data/contacts/List.hx", lineNumber : 507, className : "view.data.contacts.List", methodName : "printNew"});
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ text : "..."}))));
 		});
 	}
 	,updateMenu: function(viewClassPath) {
 		var sideMenu = this.state.sideMenu;
-		haxe_Log.trace(sideMenu.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 517, className : "view.data.contacts.List", methodName : "updateMenu"});
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/data/contacts/List.hx", lineNumber : 518, className : "view.data.contacts.List", methodName : "updateMenu"});
 		var _g = 0;
 		var _g1 = sideMenu.menuBlocks.h["List"].items;
 		while(_g < _g1.length) {
@@ -31564,23 +31999,23 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 		}
 		haxe_Log.trace(Type.typeof(dS),{ fileName : "view/shared/Menu.hx", lineNumber : 318, className : "view.shared.Menu", methodName : "buildDataSource"});
 		haxe_Log.trace(dS == null ? "null" : haxe_ds_StringMap.stringify(dS.h),{ fileName : "view/shared/Menu.hx", lineNumber : 319, className : "view.shared.Menu", methodName : "buildDataSource"});
-		var _g = new haxe_ds_StringMap();
-		var _g1 = new haxe_ds_StringMap();
-		_g1.h["ab"] = 1;
-		_g1.h["ac"] = "zwei";
-		_g.h["a"] = _g1;
-		var _g1 = new haxe_ds_StringMap();
-		_g1.h["bb"] = "eins";
-		_g1.h["bc"] = 2;
-		_g.h["b"] = _g1;
-		var nM = _g;
-		haxe_Log.trace(nM == null ? "null" : haxe_ds_StringMap.stringify(nM.h),{ fileName : "view/shared/Menu.hx", lineNumber : 324, className : "view.shared.Menu", methodName : "buildDataSource"});
-		haxe_Log.trace(JSON.stringify(nM),{ fileName : "view/shared/Menu.hx", lineNumber : 325, className : "view.shared.Menu", methodName : "buildDataSource"});
-		haxe_Log.trace(haxe_Serializer.run(nM),{ fileName : "view/shared/Menu.hx", lineNumber : 326, className : "view.shared.Menu", methodName : "buildDataSource"});
-		haxe_Log.trace(haxe_Unserializer.run(haxe_Serializer.run(nM)),{ fileName : "view/shared/Menu.hx", lineNumber : 327, className : "view.shared.Menu", methodName : "buildDataSource"});
-		nM = haxe_Unserializer.run(haxe_Serializer.run(nM));
-		haxe_Log.trace(Type.typeof(nM),{ fileName : "view/shared/Menu.hx", lineNumber : 329, className : "view.shared.Menu", methodName : "buildDataSource"});
-		param.dataSource = dS;
+		var dsk = 0;
+		while(true) {
+			var h = dS.h;
+			var inlStringMapKeyIterator_h = h;
+			var inlStringMapKeyIterator_keys = Object.keys(h);
+			var inlStringMapKeyIterator_length = inlStringMapKeyIterator_keys.length;
+			var inlStringMapKeyIterator_current = 0;
+			if(!(inlStringMapKeyIterator_current < inlStringMapKeyIterator_length)) {
+				break;
+			}
+			++dsk;
+		}
+		if(dsk > 1) {
+			param.dbJoinParams = dS;
+		} else {
+			param.dataSource = dS;
+		}
 		return param;
 	}
 	,fieldAlias: function(name) {
@@ -31601,7 +32036,7 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 	,findFormat: function(name,v) {
 		var items = this.props.menuBlocks.h[this.props.section].items;
 		if(items == null) {
-			haxe_Log.trace(name,{ fileName : "view/shared/Menu.hx", lineNumber : 351, className : "view.shared.Menu", methodName : "findFormat"});
+			haxe_Log.trace(name,{ fileName : "view/shared/Menu.hx", lineNumber : 347, className : "view.shared.Menu", methodName : "findFormat"});
 			return v;
 		}
 		var _g = 0;
@@ -31609,7 +32044,7 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 			var item = items[_g];
 			++_g;
 			if(item.formField != null && item.formField.findFormat != null && item.formField.name == name) {
-				haxe_Log.trace("" + name + ".findFormat returned:" + Std.string(item.formField.findFormat(v)),{ fileName : "view/shared/Menu.hx", lineNumber : 357, className : "view.shared.Menu", methodName : "findFormat"});
+				haxe_Log.trace("" + name + ".findFormat returned:" + Std.string(item.formField.findFormat(v)),{ fileName : "view/shared/Menu.hx", lineNumber : 353, className : "view.shared.Menu", methodName : "findFormat"});
 				return item.formField.findFormat(v);
 			}
 		}
@@ -31618,7 +32053,7 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 	,matchFormat: function(name,v) {
 		var items = this.props.menuBlocks.h[this.props.section].items;
 		if(items == null) {
-			haxe_Log.trace(name,{ fileName : "view/shared/Menu.hx", lineNumber : 369, className : "view.shared.Menu", methodName : "matchFormat"});
+			haxe_Log.trace(name,{ fileName : "view/shared/Menu.hx", lineNumber : 365, className : "view.shared.Menu", methodName : "matchFormat"});
 			return v;
 		}
 		var _g = 0;
@@ -31626,7 +32061,7 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 			var item = items[_g];
 			++_g;
 			if(item.formField != null && item.formField.matchFormat != null && item.formField.name == name) {
-				haxe_Log.trace("" + name + ".matchFormat returned:" + Std.string(item.formField.matchFormat(v)),{ fileName : "view/shared/Menu.hx", lineNumber : 375, className : "view.shared.Menu", methodName : "matchFormat"});
+				haxe_Log.trace("" + name + ".matchFormat returned:" + Std.string(item.formField.matchFormat(v)),{ fileName : "view/shared/Menu.hx", lineNumber : 371, className : "view.shared.Menu", methodName : "matchFormat"});
 				return item.formField.matchFormat(v);
 			}
 		}
@@ -31639,7 +32074,7 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 		}
 		var header = [];
 		var i = 1;
-		haxe_Log.trace(this.props.section,{ fileName : "view/shared/Menu.hx", lineNumber : 390, className : "view.shared.Menu", methodName : "renderHeader"});
+		haxe_Log.trace(this.props.section,{ fileName : "view/shared/Menu.hx", lineNumber : 386, className : "view.shared.Menu", methodName : "renderHeader"});
 		Lambda.iter(this.props.menuBlocks,function(block) {
 			var header1 = header;
 			var tmp = react_ReactType.fromString("input");
@@ -31692,7 +32127,7 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 		while(_g < formFields.length) {
 			var fF = formFields[_g];
 			++_g;
-			haxe_Log.trace(fF.type,{ fileName : "view/shared/Menu.hx", lineNumber : 455, className : "view.shared.Menu", methodName : "renderItemForm"});
+			haxe_Log.trace(fF.type,{ fileName : "view/shared/Menu.hx", lineNumber : 451, className : "view.shared.Menu", methodName : "renderItemForm"});
 			var _g1 = fF.type;
 			var tmp;
 			if(_g1 == null) {
@@ -31762,7 +32197,7 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 				var itemFormField = item.formField;
 				if(itemFormField != null && itemFormField.dbTableName != null) {
 					itemData = "data-tableName=" + itemFormField.dbTableName + " data-alias=" + itemFormField.alias;
-					haxe_Log.trace(itemFormField,{ fileName : "view/shared/Menu.hx", lineNumber : 511, className : "view.shared.Menu", methodName : "renderItems"});
+					haxe_Log.trace(itemFormField,{ fileName : "view/shared/Menu.hx", lineNumber : 507, className : "view.shared.Menu", methodName : "renderItems"});
 				}
 				switch(type) {
 				case "Audio":
@@ -31810,7 +32245,7 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 					}, className : "input"}));
 					break;
 				case "Upload":
-					haxe_Log.trace(item.handler,{ fileName : "view/shared/Menu.hx", lineNumber : 553, className : "view.shared.Menu", methodName : "renderItems"});
+					haxe_Log.trace(item.handler,{ fileName : "view/shared/Menu.hx", lineNumber : 549, className : "view.shared.Menu", methodName : "renderItems"});
 					if(item.options != null && item.options.length == 1 && item.options[0].multiple) {
 						var tmp12 = react_ReactType.fromString("div");
 						var tmp13 = React.createElement(react_ReactType.fromString("input"),{ id : item.formField.name, type : "file", name : item.formField.name, onChange : item.formField.handleChange, className : "fileinput", multiple : true});
@@ -31866,8 +32301,8 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 			var tmp = haxe_Log.trace;
 			var this1 = mP.menuBlocks;
 			var key = sPat.matched(0);
-			tmp(this1.h[key].isActive,{ fileName : "view/shared/Menu.hx", lineNumber : 654, className : "view.shared.Menu", methodName : "switchContent"});
-			haxe_Log.trace(sPat.matched(0),{ fileName : "view/shared/Menu.hx", lineNumber : 656, className : "view.shared.Menu", methodName : "switchContent"});
+			tmp(this1.h[key].isActive,{ fileName : "view/shared/Menu.hx", lineNumber : 650, className : "view.shared.Menu", methodName : "switchContent"});
+			haxe_Log.trace(sPat.matched(0),{ fileName : "view/shared/Menu.hx", lineNumber : 652, className : "view.shared.Menu", methodName : "switchContent"});
 			var this1 = mP.menuBlocks;
 			var key = sPat.matched(0);
 			this1.h[key].isActive = true;
@@ -31878,7 +32313,7 @@ view_shared_Menu.prototype = $extend(React_Component.prototype,{
 		var i = 0;
 		var activePanel = null;
 		this.aW = react_ReactRef.get_current(this.menuRef).getElementsByClassName("panel").item(0).offsetWidth;
-		haxe_Log.trace(this.aW,{ fileName : "view/shared/Menu.hx", lineNumber : 671, className : "view.shared.Menu", methodName : "layout"});
+		haxe_Log.trace(this.aW,{ fileName : "view/shared/Menu.hx", lineNumber : 667, className : "view.shared.Menu", methodName : "layout"});
 	}
 	,componentDidMount: function() {
 		if(this.props.parentComponent.state.sideMenu == null) {

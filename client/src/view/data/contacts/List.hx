@@ -20,7 +20,8 @@ import shared.Utils;
 import js.html.DivElement;
 import action.AppAction.*;
 import data.DataState;
-import db.DBAccessProps;
+import db.DbRelationProps;
+import db.DbRelation;
 import redux.Redux.Dispatch;
 import js.lib.Promise;
 import db.DBAccessProps;
@@ -169,39 +170,31 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.selectedRows.length);
 		var data = state.formApi.selectedRowsMap(state);
 	}
-
-	public function get(filter:Dynamic=null):Void
+	
+	//public function get(filter:Dynamic=null):Void
+	public function get(dpa:DBAccessProps=null):Void
 	{
 		var offset:Int = 0;
-		if(filter != null && filter.page!=null)
+		if(dpa != null && dpa.page!=null)
 		{
-			trace(filter);
-			offset = Std.int(props.limit * filter.page);
-			Reflect.deleteField(filter,'page');
-			props.parentComponent.setState({page: filter.page});
+			trace(dpa);
+			offset = Std.int(props.limit * dpa.page);
+			Reflect.deleteField(dpa,'page');
+			props.parentComponent.setState({page: dpa.page});
 		}		
-				
-		var dS:DataSource = filter != null && filter.dataSource!=null? filter.dbJoinParams:null;
-		if(filter != null && filter.dataSource!=null)
-		{
-			Reflect.deleteField(filter,'dbJoinParams');
-			//trace(Utils.serializeNestedMap(dS));
-			trace(dS);
-		}
-
-		filter = Utils.extend(filter, (props.match.params.id!=null?
+		
+		/*filter = Utils.extend(filter, (props.match.params.id!=null?
 			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
 			{mandator:props.userState.dbUser.mandator})
-		);
-		
-		trace('hi $filter');
+		);*/
 		//trace(props.match.params);
+
 		var p:Promise<DbData> = props.load(
 			{
 				classPath:'data.Contacts',
 				action:'get',
-				dbJoinParams: dS,// == null ? null : untyped Utils.serializeNestedMap(dS),
-				filter:filter,
+				dbRelations:dpa == null ? null : dpa.dbRelations,
+				filter:dpa == null ? null :dpa.filter,
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				table:'contacts',

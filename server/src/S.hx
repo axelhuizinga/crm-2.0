@@ -168,7 +168,7 @@ class S
 				trace(Type.typeof(params['dataSource']));
 			}
 			//trace(dbQuery);
-			trace(Util.rels2string(dbQuery.relations));
+			//trace(Util.rels2string(dbQuery.dbRelations));
 			S.devIP = params['devIP'];
 			//if(dbQuery!=null)trace(dbQuery.dbUser);
 			var ipost = Lib.hashOfAssociativeArray(SuperGlobal._POST);
@@ -216,17 +216,20 @@ class S
 			trace(params.get('classPath') + ':' + params.get('action'));
 			if(Lib.isCli())
 				safeLog(params);
-			else 
-				safeLog(dbQuery);
+			/*else 
+				safeLog(dbQuery);*/
 			//devIP = params.get('devIP');
 			//trace(params);
-			if(dbQuery.relations != null){
-				/*if(dbQuery.relations.exists('data')){
-					trace(Std.string(dbQuery.relations.get('data')));
+			if(dbQuery.dbRelations != null){
+				/*if(dbQuery.dbRelations.exists('data')){
+					trace(Std.string(dbQuery.dbRelations.get('data')));
 				}*/
-				//Out.dumpObject(Util.map2dyn(dbQuery.relations).contacts);
-				trace(Std.string(Reflect.fields(Util.map2dyn(dbQuery.relations).contacts).join('|')));
-				trace(dbQuery.relations.toString());
+				//Out.dumpObject(Util.map2dyn(dbQuery.dbRelations).contacts);
+				//trace(Std.string(Reflect.fields(Util.map2dyn(dbQuery.dbRelations).contacts).join('|')));
+				for(dbr in dbQuery.dbRelations){
+					trace(dbr);
+				}
+				//trace(Std.string(dbQuery.dbRelations));
 			}
 
 		}
@@ -235,6 +238,7 @@ class S
 		devIP = params.get('devIP');
 		if (params.get('action') == null || params.get('classPath') == null)
 		{
+			trace(params);
 			exit( { error:"required params action and/or classPath missing" } );
 		}
 			//host=$dbHost;
@@ -862,7 +866,7 @@ class S
 		//
 		new DbData();
 		new DbUser(null);
-		new DbRelation(null);
+		new DbRelation({});
 		new DbQuery();
 	}
 }

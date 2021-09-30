@@ -173,18 +173,20 @@ class UserAccess {
 				dbUser:userState.dbUser,
 				classPath:'auth.User',
 				action: (userState.dbUser.new_pass != null?'changePassword':'login'),
-				relations:[
-					"users" => new DbRelation({
+				dbRelations:DbRelation.create([//new DbRelation(
+					{
 						alias:'us',
 						fields: ['id','last_login','mandator'],
-						filter: {mandator:1}
-					}),
-					"contacts" => new DbRelation({
+						filter: {mandator:1},
+						table: 'users'
+					},
+					{						
 						alias: 'co',
 						fields: ['first_name','last_name','email'],
-						jCond: 'contact=co.id'
-					}) 
-				],
+						jCond: 'contact=co.id',
+						table: 'contacts"'
+					}
+				]).tables,
 				devIP:App.devIP
 			},
 			function(data:DbData)
@@ -275,7 +277,7 @@ class UserAccess {
 				classPath:'auth.User',
 				action:'logout',
 				dbUser: userState.dbUser,
-				/*relations: ["users" => new DbRelation({
+				/*dbRelations: ["users" => new DbRelation({
 					filter:{id:userState.dbUser.id}
 					}),
 				],*/
@@ -315,7 +317,18 @@ class UserAccess {
 					dbUser:state.userState.dbUser,
 					classPath:'auth.User', 
 					action:'verify',								
-					relations:[
+					dbRelations:[
+						{
+							alias:  'us',
+							fields: ['last_login','mandator'],
+							filter:{id:state.userState.dbUser.id}
+						},
+						{
+							alias: 'co',
+							fields: ['first_name','last_name','email'],
+							jCond: 'contact=co.id'
+						}
+					],/*[
 						"users" => new DbRelation({
 							alias:  'us',
 							fields: ['last_login','mandator'],
@@ -326,7 +339,7 @@ class UserAccess {
 							fields: ['first_name','last_name','email'],
 							jCond: 'contact=co.id'
 						}) 
-					],
+					],*/
 					devIP:App.devIP
 				},			
 				function(data:DbData)

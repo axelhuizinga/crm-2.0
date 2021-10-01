@@ -31,7 +31,7 @@ class DbQuery implements hxbit.Serializable //@:s (default, set)
 		dbJoins = new Array();
 		dbJoinParams = new Map();
 		if(dp!=null){
-			trace(dp);
+			trace(dp.classPath);
 			dbUser = dp.dbUser;		
 			dbRelations = dp.dbRelations;
 			for(f in Reflect.fields(dp)){
@@ -41,10 +41,12 @@ class DbQuery implements hxbit.Serializable //@:s (default, set)
 						//SKIP
 					case 'dbJoinParams':
 						setJoinParams(f, Reflect.field(dp,f));
+					case 'dataSource':
+						dbParams['dataSource'] = haxe.Serializer.run(dp.dataSource);
 					default:
 						var v = Reflect.field(dp,f);
 						//trace(v);
-						trace('$f:'+Type.typeof(v));						
+					//	trace('$f:'+Type.typeof(v));						
 						dbParams.set(f, v);
 						//dbParams.set(f,v);
 						trace(f +':'+dbParams.get(f));

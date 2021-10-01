@@ -176,13 +176,13 @@ class UserAccess {
 				dbRelations:DbRelation.create([//new DbRelation(
 					{
 						alias:'us',
-						fields: ['id','last_login','mandator'],
+						fields: 'id,last_login,mandator',
 						filter: {mandator:1},
 						table: 'users'
 					},
 					{						
 						alias: 'co',
-						fields: ['first_name','last_name','email'],
+						fields: 'first_name,last_name,email',
 						jCond: 'contact=co.id',
 						table: 'contacts"'
 					}
@@ -320,13 +320,15 @@ class UserAccess {
 					dbRelations:[
 						{
 							alias:  'us',
-							fields: ['last_login','mandator'],
-							filter:{id:state.userState.dbUser.id}
+							fields: 'last_login,mandator',
+							filter:{id:state.userState.dbUser.id},
+							table:'users'
 						},
 						{
 							alias: 'co',
-							fields: ['first_name','last_name','email'],
-							jCond: 'contact=co.id'
+							fields: 'first_name,ast_name,email',
+							jCond: 'contact=co.id',
+							table:'contacts'
 						}
 					],/*[
 						"users" => new DbRelation({

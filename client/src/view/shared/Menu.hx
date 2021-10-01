@@ -7,6 +7,7 @@ import haxe.Unserializer;
 import db.DBAccessProps;
 import db.DataSource;
 import db.DbRelation;
+import db.DbRelationProps;
 import js.html.KeyboardEvent;
 import shared.FindFields;
 import js.html.Window;
@@ -290,30 +291,30 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 
 	function buildDataSource(param:DBAccessProps):DBAccessProps {
 
-		var dS:DataSource = [
-			props.menuBlocks[props.section].dbTableName => [
-					'alias' => props.menuBlocks[props.section].alias,
-					'fields' => ''
-				]
+		var dS:Map<String,DbRelationProps> = [
+			props.menuBlocks[props.section].dbTableName => {
+				'alias' : props.menuBlocks[props.section].alias,
+				'fields': ''
+			}
 		];		
 		for(item in props.menuBlocks[props.section].items){
 			if(item.formField !=null){
 				if(item.formField.dbTableName!=null){
 					//USE ITEM TABLE
 					if(dS.exists(item.formField.dbTableName)){
-						dS[item.formField.dbTableName]['fields'] = dS[item.formField.dbTableName]['fields'] + ',' + item.formField.name;
+						dS.get(item.formField.dbTableName).fields = dS.get(item.formField.dbTableName).fields + ',' + item.formField.name;
 					}
 					else {
 						//CREATE
-						dS.set(item.formField.dbTableName,[
-							'alias' => item.formField.alias,
-							'fields' => item.formField.name
-						]);
+						dS.set(item.formField.dbTableName,{
+							'alias':  item.formField.alias,
+							'fields': item.formField.name
+						});
 					}
 				}
 				else{
 					// USE BLOCK TABLE
-					dS[props.menuBlocks[props.section].dbTableName]['fields'] = dS[props.menuBlocks[props.section].dbTableName]['fields'] == ''? item.formField.name: dS[props.menuBlocks[props.section].dbTableName]['fields'] + ',' + item.formField.name;
+					dS.get(props.menuBlocks[props.section].dbTableName).fields = dS.get(props.menuBlocks[props.section].dbTableName).fields == ''? item.formField.name: dS.get(props.menuBlocks[props.section].dbTableName).fields + ',' + item.formField.name;
 				}
 			}
 		}
@@ -326,10 +327,11 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			dsk++;
 		}
 		param.filter = BaseForm.filter(props.parentComponent.props,param);
+		trace(dsk);
 		if(dsk>1)
 			param.dbRelations = DbRelation.fromMap(cast dS).tables;//.copy();
 		else
-			param.dataSource = dS;//ONE TABLE
+			param.dataSource = cast dS;//ONE TABLE
 		return param;
 		//return BaseForm.copy(param,{dataSource:dS});
 	}

@@ -420,12 +420,12 @@ sLog += '
 		return null;
 	}
 
-	public static function rels2string(rels:StringMap<DbRelationProps>):String {
+	public static function rels2string(rels:Array<DbRelationProps>):String {
 		var s:String = '';
 		if(rels==null)
 			return s;
-		for(k=>v in rels.keyValueIterator()){
-			s += '$k:' + Reflect.fields(v).join('|') + "\n";
+		for(v in rels){
+			s += '{alias:${v.alias}, fields:${v.fields}, filter:${v.filter}, table:${v.table}}' + "\n";
 			//s += '$k:' + Type.typeof(v) + "\n";
 			//s += '$k:' + Std.string(v) + "\n";
 		}

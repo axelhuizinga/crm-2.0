@@ -44,12 +44,12 @@ class CRUD
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			//trace(getState());
-			trace(param.offset);
-			trace(param.page);
+			//trace(param.offset);
+			//trace(param.page);
 			//Out.dumpObject(param);
-			trace(param.classPath);
+			//trace(param.classPath);
 			trace(param.filter);
-			trace(Reflect.fields(param).join('|'));
+			//trace(Reflect.fields(param).join('|'));
 			return new Promise(function(resolve, reject){
 				if (!param.dbUser.online)
 				{

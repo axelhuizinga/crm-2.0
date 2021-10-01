@@ -168,7 +168,7 @@ class S
 				trace(Type.typeof(params['dataSource']));
 			}
 			//trace(dbQuery);
-			//trace(Util.rels2string(dbQuery.dbRelations));
+			trace(Util.rels2string(dbQuery.dbRelations));
 			S.devIP = params['devIP'];
 			//if(dbQuery!=null)trace(dbQuery.dbUser);
 			var ipost = Lib.hashOfAssociativeArray(SuperGlobal._POST);
@@ -238,7 +238,14 @@ class S
 		devIP = params.get('devIP');
 		if (params.get('action') == null || params.get('classPath') == null)
 		{
-			trace(params);
+			try{
+				trace(params);
+			}
+			catch(ex:Exception){
+				trace(ex.message);
+				trace(Type.typeof(params));
+			}
+			
 			exit( { error:"required params action and/or classPath missing" } );
 		}
 			//host=$dbHost;

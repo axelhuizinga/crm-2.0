@@ -43,7 +43,7 @@ class BinaryLoader {
 			//dbQuery.dbParams['dataSource'] = haxe.Serializer.run(dbQuery.dbParams['dataSource']);
 			trace(Std.string(dbQuery.dbParams['dataSource']));
 		}
-		//Out.dumpObject(dbQuery);
+		trace(dbQuery.dbRelations);
 		try{
 			var b:Bytes = s.serialize(dbQuery);
 			trace(b.length);

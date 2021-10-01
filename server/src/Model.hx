@@ -1,12 +1,15 @@
 package;
 
+import db.DbRelationProps;
 import haxe.Exception;
 import haxe.ds.StringMap;
 //import json2object.JsonWriter;
 //import haxe.Serializer;
 import hxbit.Serializer;
-//import json2object.JsonParser;
 import db.DBAccessProps;
+import db.JoinType;
+//import json2object.JsonParser;
+
 import comments.CommentString.*;
 import php.Global;
 import php.SuperGlobal;
@@ -108,7 +111,7 @@ class Model
 	var dbData:DbData;
 	var dParam:DbData;
 	var dataSource:Map<String,Map<String,Dynamic>>;// EACH KEY IS A TABLE NAME
-	var dbRelations:Map<String,DbQuery>;// EACH KEY IS A TABLE NAME
+	var dbRelations:Array<DbRelationProps>;// EACH KEY IS A TABLE NAME
 	var dataSourceSql:String;
 	var param:Map<String, Dynamic>;
 	/**
@@ -125,7 +128,7 @@ class Model
 		var param:Map<String,Dynamic> = dbQuery.dbParams;
 		//param.set('dbUser',dbQuery.dbUser);
 		trace(param);
-		
+		trace(dbQuery.dbRelations);
 		var cl:Class<Dynamic> = Type.resolveClass('model.' + param.get('classPath'));
 		//trace(cl);
 		if (cl == null)
@@ -145,8 +148,13 @@ class Model
 		//trace('$iFields ${param['action']}');
 		if (iFields.has(param['action']))
 		{
-			trace('creating instance of ${param.get('classPath')}');
+			//trace('creating instance of ${param.get('classPath')}');
 			var cInst:Model = Type.createInstance(cl,[param]);
+			if(dbQuery.dbRelations!=null){
+				cInst.dbRelations = dbQuery.dbRelations;
+				trace(cInst.dbRelations);
+			}
+
 			Reflect.callMethod(cInst, Reflect.field(cInst, param['action']),[]);
 		}
 		else 
@@ -180,7 +188,7 @@ class Model
 		}		
 		else
 		{
-			trace(tableNames);
+			//trace(tableNames);
 			trace('${tableNames[0]} ');
 			sqlBf.add('${tableNames[0]} ');
 		}
@@ -188,12 +196,69 @@ class Model
 		{
 			sqlBf.add(filterSql);
 		}
-		trace(sqlBf.toString());
+		//trace(sqlBf.toString());
 		var res:NativeArray = execute(sqlBf.toString());
 		//trace(Lib.hashOfAssociativeArray(res[0]).get('count'));
 		return Lib.hashOfAssociativeArray(res[0]).get('count');
 	}
-	
+
+	public function buildRelation():String
+	{
+		var sqlBf:StringBuf = new StringBuf();
+		for (dbRel in dbRelations)
+		{
+			var alias:String = dbRel.alias != null ? quoteIdent(dbRel.alias):'';
+			var jCond:String = dbRel.jCond != null ? dbRel.jCond:null;
+			if (jCond != null)
+			{
+				if(~/\./.match(jCond))
+				{
+					var jParts = jCond.split('=');					
+					trace(jParts.join('='));
+					//trace(jParts[0]);
+					//trace(jParts[1]);
+					if(jParts[0].indexOf('.')>-1)
+					{
+						var keys = jParts[0].split('.');
+						if(keys.length>2)
+						{
+							S.sendErrors(dbData,['invalidJoinCond'=>jCond]);
+						}
+						if(keys.length==2){
+							jCond = '${quoteIdent(keys[0])}.${keys[1]}=${jParts[1]}';
+						}
+					}
+					else {
+						var keys = jParts[1].split('.');
+						//trace(keys);
+						if(keys.length>2)
+						{
+							S.sendErrors(dbData,['invalidJoinCond'=>jCond]);
+						}
+						if(keys.length==2){
+							jCond = '${jParts[0]}=${quoteIdent(keys[0])}.${keys[1]}';
+						}						
+					}
+				}
+				var jType:String = switch(dbRel.jType)
+				{
+					case LEFT:
+						'LEFT';
+					case RIGHT:
+						'RIGHT';
+					default:
+						'INNER';
+				}
+				sqlBf.add('$jType JOIN ${quoteIdent(table)} $alias ON $jCond ');		
+			}
+			else
+			{// FIRST TABLE
+				sqlBf.add('${quoteIdent(table)} $alias ');
+			}
+		}
+		return sqlBf.toString();
+	}	
+
 	public function buildJoin():String
 	{
 		if (joinSql != null)
@@ -210,8 +275,8 @@ class Model
 				{
 					var jParts = jCond.split('=');					
 					trace(jParts.join('='));
-					trace(jParts[0]);
-					trace(jParts[1]);
+					//trace(jParts[0]);
+					//trace(jParts[1]);
 					if(jParts[0].indexOf('.')>-1)
 					{
 						var keys = jParts[0].split('.');
@@ -288,7 +353,7 @@ class Model
 			buildLimit(sqlBf);
 		if(offset.int>0)
 			buildOffset(sqlBf);
-		trace(sqlBf.toString());
+		//trace(sqlBf.toString());
 		return execute(sqlBf.toString());
 		//return execute(sqlBf.toString(), q,filterValuess);
 	}
@@ -400,7 +465,7 @@ class Model
 				S.sendErrors(dbData,['execute' =>S.errorInfo(stmt.errorInfo())]);
 			}
 			dbData.dataInfo['count'] = Std.string(stmt.rowCount());		
-			trace(dbData.dataInfo['count']);
+			//trace(dbData.dataInfo['count']);
 			//trace('>>$action<<');
 			if(action=='update'||action=='delete'||action=='insert')
 			{
@@ -421,9 +486,10 @@ class Model
 			/*Global.ob_start();
 			stmt.debugDumpParams();
 			trace(Global.ob_get_clean());*/
-			trace(Global.print_r(values2bind,true));
+			//trace(Global.print_r(values2bind,true));
 			if(data != null)
-			trace(Global.count(data));
+			
+				trace(Global.count(data));
 			//trace(stmt.errorInfo());
 			return(data);		
 		}
@@ -726,7 +792,7 @@ class Model
 
 			var values:Array<String> = val.split('|');			
 			var how:String = values.shift();
-			trace(how);
+			//trace(how);
 			if (first)
 				fBuf.add(' WHERE ' );
 			else
@@ -777,7 +843,7 @@ class Model
 						fBuf.add(" IS NULL");
 					else {
 						fBuf.add(" = ?");
-						trace(how +':$val:' + values[0]);
+						//trace(how +':$val:' + values[0]);
 						filterValues.push([keys[0],val]);	
 						//trace(filterValues);
 					}			
@@ -1041,14 +1107,17 @@ class Model
 				S.tableFields(table).map(function (f)return quoteIdent(f));
 			tableNames = [table];
 			queryFields = fieldNames.join(',');
-			trace(tableNames);
+			trace(tableNames.join('|'));
 		}
 		else
 			tableNames = [];
 		var fields:Array<String> = [];
 
 		var fields:Array<String> = [];
-		if(dataSource != null)
+		if(dbRelations != null){
+			buildRelation();
+		}
+		else if(dataSource != null)
 		{			
 			trace(Type.typeof(dataSource));
 			if(Std.isOfType(String, dataSource)){

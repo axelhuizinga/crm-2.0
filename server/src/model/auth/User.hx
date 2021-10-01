@@ -441,10 +441,10 @@ X-Mailer: HaxeMail
 		try{
 			var userInfo:UserInfo = JWT.extract(jwt);			
 			//S.safeLog(userInfo);		
-			trace(userInfo);			
-			trace('>$id:${userInfo.id}<'+(id == userInfo.id) + ' ${userInfo.validUntil} - ${Date.now().getTime()} > 0)' + (userInfo.validUntil - Date.now().getTime() > 0));
-			trace(Type.typeof(userInfo.id) +' == ' + SuperGlobal._SERVER['REMOTE_ADDR']);
-			trace('$id == ${userInfo.id}@${userInfo.ip} == ${SuperGlobal._SERVER["REMOTE_ADDR"]}:'+(id == userInfo.id && userInfo.ip == SuperGlobal._SERVER['REMOTE_ADDR'] && (userInfo.validUntil - Date.now().getTime()) > 0));
+			//trace(userInfo);			
+			//trace('>$id:${userInfo.id}<'+(id == userInfo.id) + ' ${userInfo.validUntil} - ${Date.now().getTime()} > 0)' + (userInfo.validUntil - Date.now().getTime() > 0));
+			//trace(Type.typeof(userInfo.id) +' == ' + SuperGlobal._SERVER['REMOTE_ADDR']);
+			//trace('$id == ${userInfo.id}@${userInfo.ip} == ${SuperGlobal._SERVER["REMOTE_ADDR"]}:'+(id == userInfo.id && userInfo.ip == SuperGlobal._SERVER['REMOTE_ADDR'] && (userInfo.validUntil - Date.now().getTime()) > 0));
 			if (Lib.isCli() || id == userInfo.id && userInfo.ip == SuperGlobal._SERVER['REMOTE_ADDR'] && (userInfo.validUntil - Date.now().getTime()) > 0)
 			{
 				trace('${S.action} calling JWT.verify now...');

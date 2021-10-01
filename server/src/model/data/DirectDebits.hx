@@ -25,27 +25,23 @@ class DirectDebits extends Model
 		var sqlBf:StringBuf = new StringBuf();
 		//trace(param.get('dataSource'));
 		//parseTable();
-		//dataSource = param.get('dataSource');
-	 	//trace(dataSource);
+
+	 	trace(dbRelations);
   		queryFields = param.get('fields');
-		
-		for (table=>tRel in dataSource.keyValueIterator())
+		if(dbRelations!=null)
+		for (tRel in dbRelations)
 		{
 			//var tRel:Map<String,Dynamic> = dataSource.get(table);
-			queryFields = tRel['fields'].split(',').map(function(f:String) {
-				return '${tRel["alias"]}.$f';
+			queryFields = tRel.fields.split(',').map(function(f:String) {
+				return '${tRel.alias}.$f';
 			}).join(',');
-		}
-		for (table=>tRel in dataSource.keyValueIterator())
-		{		
-			queryFields = tRel['fields'];
 			if(sqlBf.length==0){
 				sqlBf.add('
 				SELECT * FROM
-				(SELECT $queryFields FROM ${table}  ');
+				(SELECT $queryFields FROM ${tRel.table}  ');
 			}
 			else{
-				sqlBf.add('UNION SELECT $queryFields FROM ${table} )hun ');
+				sqlBf.add('UNION SELECT $queryFields FROM ${tRel.table} )hun ');
 			}
 		}
 

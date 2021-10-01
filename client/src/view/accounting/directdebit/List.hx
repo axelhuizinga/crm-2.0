@@ -225,7 +225,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		trace('hi $filter');
 		/*trace('hi $ev');mandat_id:FindFields.iLike(props.match.params.id)*///'join'=>'INNER JOIN debit_return_statements drs ON  bor.mandat_id = drs.deal_id' 
 		trace(props.match.params);
-		var dS:DataSource = [					
+		/*var dS:DataSource = [					
 			'booking_requests'=> [
 				'alias' => 'bor',
 				'fields'=>'termin,id,mandat_id deal_id,betrag amount,info'				
@@ -234,12 +234,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				'alias'=>'drs',
 				'fields'=>'value_date termin,deal_id,kid id,amount,sepa_code info',
 			] 
-		];
+		];*/
 		var p:Promise<DbData> = cast App.store.dispatch(CRUD.read(
 			{
 				classPath:'data.DirectDebits',
 				action:'getHistory',
-				dataSource: [					
+				/*dataSource: [					
 					'booking_requests'=> [
 						'alias' => 'bor',
 						'fields'=>'termin,id,mandat_id deal_id,betrag amount,sequenz info,mandator'				
@@ -248,6 +248,18 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 						'alias'=>'drs',
 						'fields'=>'value_date termin,kid id,deal_id,amount,sepa_code info,mandator',
 					]
+				],*/
+				dbRelations:[
+					{
+						table:'booking_requests',
+						alias: 'bor',
+						fields:'termin,id,mandat_id deal_id,betrag amount,sequenz info,mandator'
+					},
+					{
+						table:'debit_return_statements',
+						alias: 'drs',
+						fields:'value_date termin,kid id,deal_id,amount,sepa_code info'		
+					},
 				],
 				//fields:'',
 				filter:filter,//(props.match.params.id!=null?{id:props.match.params.id, mandator:'1'}:{mandator:'1'}),				

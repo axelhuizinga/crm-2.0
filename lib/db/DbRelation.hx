@@ -7,9 +7,8 @@ class DbRelation implements hxbit.Serializable
 {
 
 	@:s public var alias:String;
-	@:s public var fields:String;
-	
-	@:s public var jCond:String;
+	@:s public var fields:String;	
+	//@:s public var jCond:String;
 	@:s public var version:String;
 	@:s public var filter:String;
 	@:s public var tables:Array<DbRelationProps>;	
@@ -33,11 +32,12 @@ class DbRelation implements hxbit.Serializable
 		}
 		var _inst:DbRelation = null;
 		for(k=>v in rMap.keyValueIterator()){
+			trace(v);
 			if(_inst==null){
-				_inst = new DbRelation({fields:v.fields,filter:v.filter, version:v.version});
+				_inst = new DbRelation({alias:v.alias,fields:v.fields,filter:v.filter,table:k,version:v.version});
 				_inst.tables = new Array();
 			}
-			_inst.tables.push(v);
+			_inst.tables.push({alias:v.alias,fields:v.fields,filter:v.filter,table:k,version:v.version});
 		}
 		return _inst;
 	}
@@ -45,12 +45,11 @@ class DbRelation implements hxbit.Serializable
 	public function new(p:DbRelationProps){
 		for(f in Type.getInstanceFields(DbRelation)){
 			switch (f){
-				case '__uid'|'getCLID'|'serialize'|'unserialize'|'getSerializeSchema':
+				case '__uid'|'getCLID'|'serialize'|'unserialize'|'getSerializeSchema'|'JoinType':
 					//SKIP					
 				case 'filter':
 					if(p.filter!=null)
 						filter = Json.stringify(p.filter);
-
 				default:
 					if(Reflect.hasField(p, f))
 						Reflect.setField(this, f, Reflect.field(p,f));

@@ -7,7 +7,7 @@ import haxe.ds.StringMap;
 //import haxe.Serializer;
 import hxbit.Serializer;
 import db.DBAccessProps;
-import db.JoinType;
+import db.RelationType;
 //import json2object.JsonParser;
 
 import comments.CommentString.*;
@@ -129,6 +129,8 @@ class Model
 		//param.set('dbUser',dbQuery.dbUser);
 		trace(param);
 		trace(dbQuery.dbRelations);
+		param['dbRelations'] = dbQuery.dbRelations;
+
 		var cl:Class<Dynamic> = Type.resolveClass('model.' + param.get('classPath'));
 		//trace(cl);
 		if (cl == null)
@@ -145,16 +147,13 @@ class Model
 		}
 
 		var iFields:Array<String> = Type.getInstanceFields(cl);
-		//trace('$iFields ${param['action']}');
+		trace(
+			'${iFields.has(param["action"])?"Y":"N"} ${param["action"]}');
 		if (iFields.has(param['action']))
 		{
 			//trace('creating instance of ${param.get('classPath')}');
 			var cInst:Model = Type.createInstance(cl,[param]);
-			if(dbQuery.dbRelations!=null){
-				cInst.dbRelations = dbQuery.dbRelations;
-				trace(cInst.dbRelations);
-			}
-
+			trace('created instance of ${param.get('classPath')} ${(dbQuery.dbRelations!=null?"Y":"N")}');
 			Reflect.callMethod(cInst, Reflect.field(cInst, param['action']),[]);
 		}
 		else 
@@ -246,14 +245,21 @@ class Model
 						'LEFT';
 					case RIGHT:
 						'RIGHT';
+					case UNION:
+						'UNION';
 					default:
 						'INNER';
 				}
-				sqlBf.add('$jType JOIN ${quoteIdent(table)} $alias ON $jCond ');		
+
+				sqlBf.add(
+					jType == 'UNION' ?
+					'$jType ${quoteIdent(table)}$alias ':
+					'$jType JOIN ${quoteIdent(table)}$alias ON $jCond '
+				);		
 			}
 			else
 			{// FIRST TABLE
-				sqlBf.add('${quoteIdent(table)} $alias ');
+				sqlBf.add('${quoteIdent(table)}$alias ');
 			}
 		}
 		return sqlBf.toString();
@@ -458,6 +464,7 @@ class Model
 		//trace(values2bind);
 		if(i>0)
 		{
+			trace(Global.implode('|',values2bind));
 			success = stmt.execute(values2bind);
 			if (!success)
 			{
@@ -1064,7 +1071,7 @@ class Model
 		return null;//s.unserialize(pData, DbQuery);
 	}	
 		
-	public function new(?param:Map<String,String>) 
+	public function new(?param:Map<String,Dynamic>) 
 	{
 		this.param = param;
 		//trace(param);
@@ -1081,6 +1088,7 @@ class Model
 			trace(Syntax.code("ini_get('memory_limit')"));
 		}
 		dataSource = cast param['dataSource'];
+		dbRelations = param['dbRelations'];
 		dbData = new DbData();//'param' => dbData.dataInfo.copyStringMap(param),
 		dbData.dataInfo = dbData.dataInfo.copyStringMap(param);
 		dbData.dataInfo['action'] = param.get('action');
@@ -1091,7 +1099,7 @@ class Model
 		setValues = new Array();
 		queryFields = setSql = '';
 		tableNames = new Array();
-		trace(offset);
+		//trace(offset);
 		//Sys.exit(333);
 		//trace('exists dbData:' + (param.exists('dbData')?'Y':'N'));
 	}
@@ -1115,7 +1123,7 @@ class Model
 
 		var fields:Array<String> = [];
 		if(dbRelations != null){
-			buildRelation();
+			//buildRelation();
 		}
 		else if(dataSource != null)
 		{			

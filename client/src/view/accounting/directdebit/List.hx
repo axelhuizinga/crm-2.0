@@ -242,7 +242,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				/*dataSource: [					
 					'booking_requests'=> [
 						'alias' => 'bor',
-						'fields'=>'termin,id,mandat_id deal_id,betrag amount,sequenz info,mandator'				
+						'fields'=>'termin,id,mandat_id deal_id,betrag amount,cast(id as text) info,mandator'				
 					],
 					'debit_return_statements' =>[
 						'alias'=>'drs',
@@ -252,13 +252,12 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				dbRelations:[
 					{
 						table:'booking_requests',
-						alias: 'bor',
-						fields:'termin,id,mandat_id deal_id,betrag amount,sequenz info,mandator'
+						jType: UNION,
+						fields:'termin,id,mandat_id deal_id,betrag amount,cast(id as text) info,mandator' 
 					},
 					{
 						table:'debit_return_statements',
-						alias: 'drs',
-						fields:'value_date termin,kid id,deal_id,amount,sepa_code info'		
+						fields:'value_date termin,kid id,deal_id,amount,sepa_code info,mandator'
 					},
 				],
 				//fields:'',

@@ -8,6 +8,7 @@ class DirectDebits extends Model
 	public function new(?param:Map<String,String>) 
 	{
 		super(param);
+		trace(param);
 		go();
 	}
 
@@ -32,9 +33,9 @@ class DirectDebits extends Model
 		for (tRel in dbRelations)
 		{
 			//var tRel:Map<String,Dynamic> = dataSource.get(table);
-			queryFields = tRel.fields.split(',').map(function(f:String) {
+			queryFields = tRel.fields;/*.split(',');.map(function(f:String) {
 				return '${tRel.alias}.$f';
-			}).join(',');
+			}).join(',');*/
 			if(sqlBf.length==0){
 				sqlBf.add('
 				SELECT * FROM
@@ -43,6 +44,7 @@ class DirectDebits extends Model
 			else{
 				sqlBf.add('UNION SELECT $queryFields FROM ${tRel.table} )hun ');
 			}
+			//trace(sqlBf.toString());
 		}
 
 		if(param.exists('filter')&&param.get('filter')!=''){

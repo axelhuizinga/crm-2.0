@@ -45,7 +45,7 @@ class DbRelation implements hxbit.Serializable
 	public function new(p:DbRelationProps){
 		for(f in Type.getInstanceFields(DbRelation)){
 			switch (f){
-				case '__uid'|'getCLID'|'serialize'|'unserialize'|'getSerializeSchema'|'JoinType':
+				case '__uid'|'getCLID'|'serialize'|'unserialize'|'getSerializeSchema'|'RelationType':
 					//SKIP					
 				case 'filter':
 					if(p.filter!=null)

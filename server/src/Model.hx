@@ -180,8 +180,9 @@ class Model
 	{
 		var sqlBf:StringBuf = new StringBuf();
 		sqlBf.add('SELECT COUNT(*) AS count FROM ');
+		//if(dbTableJoins)
 
-		if (tableNames.length>1)
+		if(tableNames.length>1)
 		{
 			sqlBf.add(buildJoin());
 		}		
@@ -1031,7 +1032,7 @@ class Model
 		var s:Serializer = new Serializer();
 		var dbQuery:DbQuery = s.unserialize(pData, DbQuery);
 		trace(dbQuery.dbParams);
-		if(dbQuery.dbParams['dataSource']!=null){
+		if(dbQuery.dbParams['dataSource']!=null){ 
 			var dS: Map<String,Map<String,Dynamic>> = new Map();
 			var u:Unserializer = new Unserializer(dbQuery.dbParams['dataSource']);
 			var loopCond:Bool = true;
@@ -1041,8 +1042,7 @@ class Model
 					if(val!=null){
 						trace(Type.typeof(val));
 						trace(val);
-					}
-					
+					}					
 				}
 				catch(ex:Exception){
 					loopCond = false;
@@ -1124,6 +1124,10 @@ class Model
 		var fields:Array<String> = [];
 		if(dbRelations != null){
 			//buildRelation();
+			for(k=>v in dbRelations.keyValueIterator()){
+				if(!tableNames.contains(v.table))
+				tableNames.push(v.table);
+			}
 		}
 		else if(dataSource != null)
 		{			

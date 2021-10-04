@@ -8,7 +8,7 @@ class DbRelation implements hxbit.Serializable
 
 	@:s public var alias:String;
 	@:s public var fields:String;	
-	//@:s public var jCond:String;
+	@:s public var jCond:String;
 	@:s public var version:String;
 	@:s public var filter:String;
 	@:s public var tables:Array<DbRelationProps>;	
@@ -16,6 +16,7 @@ class DbRelation implements hxbit.Serializable
 	public static function create(t:Array<DbRelationProps>):DbRelation {
 		if(t.length<2)
 		{
+			//TODO:WARN ABOUT 2 TABLES MINIMUM
 			return null;
 		}
 		var _inst:DbRelation = new DbRelation({fields:t[0].fields,filter:t[0].filter, version:t[0].version});
@@ -32,12 +33,13 @@ class DbRelation implements hxbit.Serializable
 		}
 		var _inst:DbRelation = null;
 		for(k=>v in rMap.keyValueIterator()){
-			trace(v);
+			//trace(v);
 			if(_inst==null){
 				_inst = new DbRelation({alias:v.alias,fields:v.fields,filter:v.filter,table:k,version:v.version});
 				_inst.tables = new Array();
 			}
-			_inst.tables.push({alias:v.alias,fields:v.fields,filter:v.filter,table:k,version:v.version});
+			_inst.tables.push({alias:v.alias,fields:v.fields,filter:v.filter,jCond:v.jCond,table:k,version:v.version});
+			trace(_inst.tables);
 		}
 		return _inst;
 	}

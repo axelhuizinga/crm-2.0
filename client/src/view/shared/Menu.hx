@@ -250,7 +250,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		//trace(Reflect.fields(props.menuBlocks[props.section].items[0]).join('|'));
 		//trace(Reflect.fields(props.menuBlocks[props.section]).join('|'));
 		trace(props.menuBlocks[props.section].dataClassPath);
-		//trace(props.menuBlocks[props.section]);
+		trace(props.section);
 		//return;
 		//trace(Reflect.fields(props.parentComponent.props).join('|'));
 		//trace(Reflect.fields(props.parentComponent.state.sideMenu).join('|'));
@@ -291,16 +291,30 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 
 	function buildDataSource(param:DBAccessProps):DBAccessProps {
 
+		/**
+		 * Assign menu item props to temporary map of tableName => DbRelationProps
+		 */
 		var dS:Map<String,DbRelationProps> = [
-			props.menuBlocks[props.section].dbTableName => {
+			props.menuBlocks[props.section].dbTableName => (props.menuBlocks[props.section].dbTableJoins !=null?
+			{
 				'alias' : props.menuBlocks[props.section].alias,
-				'fields': ''
+				'jCond': props.menuBlocks[props.section].dbTableJoins[props.menuBlocks[props.section].alias],
+				'fields':''
 			}
-		];		
+			:{
+				'alias' : props.menuBlocks[props.section].alias,
+				'fields': '',				
+			})
+		];		//,		dbTableJoins:['ac'=>'ac.contact=co.id']		
+		trace(dS);
+		//trace(props.section + ':' + props.menuBlocks[props.section]);
+		trace(props.menuBlocks[props.section].alias + ':' + props.menuBlocks[props.section].dbTableJoins[props.menuBlocks[props.section].alias]);
+		trace((props.menuBlocks[props.section].dbTableJoins !=null?props.menuBlocks[props.section].dbTableJoins:'null'));
 		for(item in props.menuBlocks[props.section].items){
 			if(item.formField !=null){
+				//USE ITEM FormField 
 				if(item.formField.dbTableName!=null){
-					//USE ITEM TABLE
+					//USE ITEM  TABLE 
 					if(dS.exists(item.formField.dbTableName)){
 						dS.get(item.formField.dbTableName).fields = dS.get(item.formField.dbTableName).fields + ',' + item.formField.name;
 					}
@@ -315,6 +329,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 				else{
 					// USE BLOCK TABLE
 					dS.get(props.menuBlocks[props.section].dbTableName).fields = dS.get(props.menuBlocks[props.section].dbTableName).fields == ''? item.formField.name: dS.get(props.menuBlocks[props.section].dbTableName).fields + ',' + item.formField.name;
+					//dS.get(props.menuBlocks[props.section].dbTableName).alias = props.menuBlocks[props.section].dbTableJoins !=null?
 				}
 			}
 		}

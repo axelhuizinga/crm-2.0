@@ -122,8 +122,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 					//items: Utils.copyObjectArray(menuItems)
 					items: [for(v in menuItems) js.lib.Object.assign({},v)],
 					dbTableName:'contacts',
-					dbTableJoins:['ac'=>'ac.contact=co.id']
-
+					dbTableJoins:['co'=>'ac.contact=co.id'],
+					//dbJoinParams:['co'=>'ac.contact=co.id']
 				},
 				{
 					hasFindForm:false,
@@ -182,7 +182,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			Reflect.deleteField(dpa,'page');
 			props.parentComponent.setState({page: dpa.page});
 		}		
-		
+		trace(dpa);
 		/*filter = Utils.extend(filter, (props.match.params.id!=null?
 			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
 			{mandator:props.userState.dbUser.mandator})

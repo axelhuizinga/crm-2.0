@@ -12,7 +12,7 @@ typedef MenuProps =
 	>RouteRenderProps,
 	?instance:Menu,
 	?className:String,
-	?basePath:String,	
+	?basePath:String,
 	?hidden:Bool,
 	?mBshowActive:Bool,
 	?menuBlocks:Map<String,MenuBlock>,

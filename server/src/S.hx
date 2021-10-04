@@ -167,7 +167,7 @@ class S
 			if(params['dataSource']!=null){
 				trace(Type.typeof(params['dataSource']));
 			}
-			//trace(dbQuery);
+			trace(dbQuery);
 			trace(Util.rels2string(dbQuery.dbRelations));
 			S.devIP = params['devIP'];
 			//if(dbQuery!=null)trace(dbQuery.dbUser);

@@ -1,7 +1,7 @@
 package shared;
 
 import haxe.ds.Map;
-import hxbit.Schema;
+//import hxbit.Schema;
 import hxbit.Serializable;
 import hxbit.Serializer;
 

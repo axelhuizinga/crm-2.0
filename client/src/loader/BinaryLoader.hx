@@ -18,8 +18,6 @@ import shared.DbData;
  * @author axel@cunity.me
  */
 
-
-
 class BinaryLoader {
 
 	public static function create(url:String, p:Dynamic, onLoaded:DbData->Void):XMLHttpRequest

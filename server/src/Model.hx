@@ -128,7 +128,9 @@ class Model
 		var param:Map<String,Dynamic> = dbQuery.dbParams;
 		//param.set('dbUser',dbQuery.dbUser);
 		trace(param);
-		trace(dbQuery.dbRelations);
+		
+		if(dbQuery.dbRelations!=null && dbQuery.dbRelations.length>0)
+			trace(dbQuery.dbRelations[0].table);
 		param['dbRelations'] = dbQuery.dbRelations;
 
 		var cl:Class<Dynamic> = Type.resolveClass('model.' + param.get('classPath'));
@@ -178,26 +180,30 @@ class Model
 	
 	public function count():Int
 	{
-		var sqlBf:StringBuf = new StringBuf();
-		sqlBf.add('SELECT COUNT(*) AS count FROM ');
-		//if(dbTableJoins)
-
-		if(tableNames.length>1)
+		var cBf:StringBuf = new StringBuf();
+		cBf.add('SELECT COUNT(*) AS count FROM ');
+		
+		trace(param['dbRelations'] !=null && param['dbRelations'].iterator().hasNext() );//&& filterSql == null)
+		if(param['dbRelations'] !=null && param['dbRelations'].iterator().hasNext() )//&& filterSql == null)
 		{
-			sqlBf.add(buildJoin());
+			cBf.add(buildRelation());
+		}
+		else if(tableNames.length>1)
+		{
+			cBf.add(buildJoin());
 		}		
 		else
 		{
 			//trace(tableNames);
 			trace('${tableNames[0]} ');
-			sqlBf.add('${tableNames[0]} ');
+			cBf.add('${tableNames[0]} ');
 		}
 		if (filterSql != null)
 		{
-			sqlBf.add(filterSql);
+			cBf.add(filterSql);
 		}
-		//trace(sqlBf.toString());
-		var res:NativeArray = execute(sqlBf.toString());
+		//trace(cBf.toString());
+		var res:NativeArray = execute(cBf.toString());
 		//trace(Lib.hashOfAssociativeArray(res[0]).get('count'));
 		return Lib.hashOfAssociativeArray(res[0]).get('count');
 	}
@@ -205,10 +211,14 @@ class Model
 	public function buildRelation():String
 	{
 		var sqlBf:StringBuf = new StringBuf();
+		sqlBf.add('${dbRelations[0].table} ${dbRelations[0].alias}');
+		trace(sqlBf.toString());
+		var ri:Int = 0;
 		for (dbRel in dbRelations)
 		{
 			var alias:String = dbRel.alias != null ? quoteIdent(dbRel.alias):'';
 			var jCond:String = dbRel.jCond != null ? dbRel.jCond:null;
+			ri++;
 			if (jCond != null)
 			{
 				if(~/\./.match(jCond))
@@ -225,7 +235,8 @@ class Model
 							S.sendErrors(dbData,['invalidJoinCond'=>jCond]);
 						}
 						if(keys.length==2){
-							jCond = '${quoteIdent(keys[0])}.${keys[1]}=${jParts[1]}';
+							//TODO: add quoteIdent around right side identifiers
+							jCond = '${quoteIdent(keys[0])}.${quoteIdent(keys[1])}=${jParts[1]}';
 						}
 					}
 					else {
@@ -251,18 +262,16 @@ class Model
 					default:
 						'INNER';
 				}
-
+				var nextTable:DbRelationProps = dbRelations[ri];
 				sqlBf.add(
 					jType == 'UNION' ?
-					'$jType ${quoteIdent(table)}$alias ':
-					'$jType JOIN ${quoteIdent(table)}$alias ON $jCond '
-				);		
+					' ${quoteIdent(table)} $alias UNION ${quoteIdent(table)} $alias ${nextTable.table} ${nextTable.alias}':
+					' $jType JOIN  ${nextTable.table} ${nextTable.alias} ON $jCond '
+				);	
+				//${quoteIdent(table)} $alias 	
 			}
-			else
-			{// FIRST TABLE
-				sqlBf.add('${quoteIdent(table)}$alias ');
-			}
-		}
+		}		
+		trace(sqlBf.toString());
 		return sqlBf.toString();
 	}	
 
@@ -327,12 +336,27 @@ class Model
 		return joinSql;
 	}
 
-		
-	public function  doSelect():NativeArray
-	{	
+	public function  doRelationSelect():NativeArray{
 		var sqlBf:StringBuf = new StringBuf();
+		queryFields = buildRelFields();
+		sqlBf.add('SELECT $queryFields FROM ');				
+		sqlBf.add(buildRelation());
+		if(param.exists('filter'))
+			filterSql = buildCondRel(param.get('filter'));
+		sqlBf.add(filterSql);
+		trace(sqlBf.toString());
+		return execute(sqlBf.toString());
+	}
 
+	public function doSelect():NativeArray		
+	{	
+		if(param['dbRelations'] !=null && param['dbRelations'].iterator().hasNext() )//&& filterSql == null)
+		{
+			return doRelationSelect();
+		}
+		var sqlBf:StringBuf = new StringBuf();
 		sqlBf.add('SELECT $queryFields FROM ');
+
 		if (tableNames.length>1)
 		{
 			sqlBf.add(joinSql);
@@ -341,6 +365,9 @@ class Model
 		{
 			sqlBf.add('${tableNames[0]} ');
 		}
+		if(param.exists('filter'))
+			filterSql = buildCond(param.get('filter'));		
+		trace('filter:' + filterSql );
 		if (filterSql != null)
 		{
 			sqlBf.add(filterSql);
@@ -360,7 +387,7 @@ class Model
 			buildLimit(sqlBf);
 		if(offset.int>0)
 			buildOffset(sqlBf);
-		//trace(sqlBf.toString());
+		trace(sqlBf.toString());
 		return execute(sqlBf.toString());
 		//return execute(sqlBf.toString(), q,filterValuess);
 	}
@@ -495,8 +522,7 @@ class Model
 			stmt.debugDumpParams();
 			trace(Global.ob_get_clean());*/
 			//trace(Global.print_r(values2bind,true));
-			if(data != null)
-			
+			if(data != null)			
 				trace(Global.count(data));
 			//trace(stmt.errorInfo());
 			return(data);		
@@ -701,87 +727,12 @@ class Model
 		return execute(sqlBf.toString());
 	}
 	
-	/*public function buildCond1(filter:String):String
-	{
-		if (filter == null)		
-		{
-			return filterSql;			
-		}
-		var filters:Array<Dynamic> = filter.split(',');
-		var	fBuf:StringBuf = new StringBuf();
-		var first:Bool = true;
-		filterValues = new Array();
-		for (w in filters)
-		{			
-			//if(alias!=null)
-				//fBuf.add(quoteIdent(alias))+'.';
-			var wData:Array<String> = w.split('|');
-			var dots = wData[0].split('.');
-			if(dots.length>2)
-			{
-				S.sendErrors(dbData,['invalidFilter'=>S.errorInfo(wData[0])]);
-			}
-
-			var values:Array<String> = wData.slice(2);			
-			
-			if (first)
-				fBuf.add(' WHERE ' );
-			else
-				fBuf.add(' AND ');
-			first = false;			
-
-			if(dots.length==2)
-			{
-				fBuf.add('${quoteIdent(dots[0])}.${quoteIdent(dots[1])}');
-			}			
-			else //no alias
-				fBuf.add(quoteIdent(wData[0]));
-			switch(wData[1].toUpperCase())
-			{
-				case 'BETWEEN':
-					if (!(values.length == 2) && values.foreach(function(s:String) return s.any2bool()))
-						S.exit( {error:'BETWEEN needs 2 values - got only:' + values.join(',')});
-					
-					fBuf.add(' BETWEEN ? AND ?');
-					filterValues.push([dots[0], values[0]]);
-					filterValues.push([dots[0], values[1]]);
-				case 'IN':					
-					fBuf.add(' IN(');
-					fBuf.add( values.map(function(s:String) { 
-						filterValues.push([dots[0], values.shift()]);
-						return '?'; 
-						} ).join(','));							
-					fBuf.add(')');
-				case 'LIKE':					
-					fBuf.add(' LIKE ?');
-					filterValues.push([dots[0], wData[2]]);
-				case _:
-					if (~/^(<|>)/.match(wData[1]))
-					{
-						var eR:EReg = ~/^(<|>)/;
-						eR.match(wData[1]);
-						var val = Std.parseFloat(eR.matchedRight());
-						fBuf.add(eR.matched(0) + '?');
-						filterValues.push([dots[0],val]);
-						continue;
-					}
-					//PLAIN VALUES
-					if( wData[1] == 'NULL' )
-						fBuf.add(" IS NULL");
-					else {
-						fBuf.add(" = ?");
-						filterValues.push([dots[0],wData[1]]);	
-					}			
-			}			
-		}
-		filterSql = fBuf.toString();
-		return filterSql;
-	}*/
 
 	public function buildCond(filters:Dynamic):String
 	{
 		if (filters == null)		
 		{
+			trace('???');
 			return filterSql;			
 		}
 		//trace(filters);
@@ -858,6 +809,113 @@ class Model
 			}			
 		}
 		filterSql = fBuf.toString();
+		return filterSql;
+	}
+
+	public function buildRelFields():String{
+		var relFieldMap:Map<String,Array<String>> = Util.mapFields2Alias(dbRelations);
+		//var tableAlias = Util.getTableAlias();
+		var fieldNamesAliased = Util.getAliasedFields(fieldNames, tableNames, dbRelations);
+		/*for(f in fieldNames){
+			if(relFieldMap[tableNames[0]].contains(f) && relFieldMap[tableNames[1]].contains(f) || f=='id'){
+				//ambigious fieldname
+				fieldNamesAliased.push(quoteIdent(Util.getAlias4Field(f,dbRelations)) + '.' + quoteIdent(f));				
+			}
+			else 
+				fieldNamesAliased.push(quoteIdent(f));				
+		}*/
+		trace(fieldNamesAliased);
+		return fieldNamesAliased;
+	}
+
+	public function buildCondRel(filters:Dynamic):String
+	{
+		trace('>'+filterSql + ':' + filters);
+		if (filters == null || filterSql!= '')		
+		{
+			return filterSql;			
+		}
+		//trace(filters);
+		var filters:Map<String,String> = Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(filters));
+		trace(filters);
+		var	fBuf:StringBuf = new StringBuf();
+		var first:Bool = true;
+		var relFieldMap:Map<String,Array<String>> = Util.mapFields2Alias(dbRelations);
+		for (key => val in filters)
+		{			
+			var keys = key.split('.');
+			if(keys.length>2)
+			{
+				S.sendErrors(dbData,['invalidFilter'=>S.errorInfo(key)]);
+			}
+
+			var values:Array<String> = val.split('|');			
+			var how:String = values.shift();
+
+			if (first)
+				fBuf.add(' WHERE ' );
+			else
+				fBuf.add(' AND ');
+			first = false;			
+
+			if(keys.length==2)
+			{
+				fBuf.add('${quoteIdent(keys[0])}.${quoteIdent(keys[1])}');
+			}			
+			else if(keys.length==1)
+			{
+				//field name only - get matching alias
+				var fAlias:String = (relFieldMap[tableNames[0]].contains(key)?dbRelations[0].alias:
+					(relFieldMap[tableNames[1]].contains(key)?dbRelations[1].alias:null));				
+				trace(key);
+				fBuf.add('${quoteIdent(fAlias)}.${quoteIdent(key)}');
+			}
+			//fBuf.add(quoteIdent(key));
+			switch(how.toUpperCase())
+			{
+				case 'BETWEEN':
+					if (!(values.length == 2) && values.foreach(function(s:String) return s.any2bool()))
+						S.exit( {error:'BETWEEN needs 2 values - got only:' + values.join(',')});					
+					fBuf.add(' BETWEEN ? AND ?');
+					filterValues.push([keys[0], values[0]]);
+					filterValues.push([keys[0], values[1]]);
+				case 'IN':					
+					fBuf.add(' IN(');
+					fBuf.add( values.map(function(s:String) { 
+						filterValues.push([keys[0], values.shift()]);
+						return '?'; 
+						} ).join(','));							
+					fBuf.add(')');
+				case 'LIKE':					
+					fBuf.add(' LIKE ?');
+					filterValues.push([keys[0], values[0]]);
+				case 'ILIKE':			
+					//trace(keys[0] + ':' + values.join('|'))	;
+					fBuf.add(' ILIKE ?');
+					filterValues.push([keys[0], values[0]]);
+				case _:
+					if (~/^(<|>)/.match(values[0]))
+					{
+						var eR:EReg = ~/^(<|>)/;
+						eR.match(values[0]);
+						var val = Std.parseFloat(eR.matchedRight());
+						fBuf.add(eR.matched(0) + '?');
+						filterValues.push([keys[0],val]);
+						continue;
+					}
+					//PLAIN VALUES
+					if( values[0] == 'NULL' )
+						fBuf.add(" IS NULL");
+					else {
+						fBuf.add(" = ?");
+						filterValues.push([keys[0],val]);
+						//trace(how +':$val:' + values[0]);
+						//trace(filterValues);
+					}			
+			}			
+		}
+		filterSql = fBuf.toString();
+		trace(filterSql);
 		return filterSql;
 	}
 			
@@ -1079,7 +1137,7 @@ class Model
 		trace(id);
 		action = param.get('action');
 		data = {};
-		limit = Util.limit();
+		limit = Util.limit(100);
 		offset = Util.offset();
 		if(limit.int>10000)
 		{
@@ -1122,12 +1180,18 @@ class Model
 		var fields:Array<String> = [];
 
 		var fields:Array<String> = [];
+		
+		trace(dbRelations != null);
 		if(dbRelations != null){
 			//buildRelation();
 			for(k=>v in dbRelations.keyValueIterator()){
 				if(!tableNames.contains(v.table))
 				tableNames.push(v.table);
-			}
+			}			
+			trace(param.exists('filter'));
+			if(param.exists('filter'))
+				filterSql = buildCondRel(param.get('filter'));
+			trace(filterSql);
 		}
 		else if(dataSource != null)
 		{			
@@ -1199,11 +1263,11 @@ class Model
 		{
 			joinSql = buildJoin();
 		}	*/		
-		trace('filter:${param.get('filter')}<');
+		/*trace('filter:${param.get('filter')}<');
 		if(param.exists('filter')&&param.get('filter')!=''){
 			filterSql += buildCond(param.get('filter'));
 			//buildValues
-		}
+		}*/
 		Reflect.callMethod(this, Reflect.field(this,action), [param]);
 	}
 	

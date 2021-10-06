@@ -30,6 +30,7 @@ typedef DBAccessProps = {
 	?dbRelations:Array<DbRelationProps>,
 	?dbUser:DbUser,
 	?dbJoinParams:DataSource,//Map<String,Map<String,Dynamic>>,	
+	?dbQuery:DbQuery,
 	?dataSource:DataSource,
 	?devIP:String,	
 	?extDB:Bool,	

@@ -80,6 +80,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		}}},		
 		{label: 'Ort',formField: { name: 'city', matchFormat: FindFields.iLike}},
 		{label: 'Straße',formField: { name: 'address1', matchFormat: FindFields.iLike}},
+		{formField:{name:'mandator', type:Hidden}},
 		{label: 'IBAN',formField: { name: 'iban', matchFormat: FindFields.iLike, dbTableName: 'accounts', alias:'ac'}},
 	];
 	static var printItems:Array<MItem> = [
@@ -194,6 +195,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 				classPath:'data.Contacts',
 				action:'get',
 				dbRelations:dpa == null ? null : dpa.dbRelations,
+				//dbQuery:dpa.dbQuery,
 				filter:dpa == null ? null :dpa.filter,
 				limit:props.limit,
 				offset:offset>0?offset:0,

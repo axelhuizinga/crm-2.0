@@ -261,6 +261,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 		//trace(form.dataset);
 		trace(Reflect.fields(form.dataset).join('|'));
 		var fD:FormData = new FormData(form);
+		//IF PARENT COMPONENT HAS METHOD FIND USE IT
 		if(Reflect.isFunction(Reflect.field(props.parentComponent, 'find'))){
 			return props.parentComponent.find(fD);
 		}
@@ -285,11 +286,10 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					matchFormat(el.name,el.value));
 		}		
 		
-		//return props.parentComponent.get(buildDataSource();
-		return props.parentComponent.get(buildDataSource(param));
+		return props.parentComponent.get(buildRelationProps(param));
 	}	
 
-	function buildDataSource(param:DBAccessProps):DBAccessProps {
+	function buildRelationProps(param:DBAccessProps):DBAccessProps {
 
 		/**
 		 * Assign menu item props to temporary map of tableName => DbRelationProps
@@ -331,6 +331,7 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 					dS.get(props.menuBlocks[props.section].dbTableName).fields = dS.get(props.menuBlocks[props.section].dbTableName).fields == ''? item.formField.name: dS.get(props.menuBlocks[props.section].dbTableName).fields + ',' + item.formField.name;
 					//dS.get(props.menuBlocks[props.section].dbTableName).alias = props.menuBlocks[props.section].dbTableJoins !=null?
 				}
+				trace(item.formField.name + ':' + item.formField.alias);
 			}
 		}
 		trace(Type.typeof(dS));
@@ -531,6 +532,8 @@ class Menu extends ReactComponentOf<MenuProps,MenuState>
 			}
 			return switch(type)
 			{
+				case Hidden:
+					null;
 				case Radio: 
 					var o:Int = 0;
 					var options:ReactFragment = [

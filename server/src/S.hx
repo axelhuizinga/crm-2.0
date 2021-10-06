@@ -163,32 +163,32 @@ class S
 			dbQuery = Model.binary();
 			params = dbQuery.dbParams;
 			trace(dbQuery.dbParams.get('classPath'));
-			//trace(params);
+			trace(params);
 			if(params['dataSource']!=null){
 				trace(Type.typeof(params['dataSource']));
 			}
-			trace(dbQuery);
+			//trace(dbQuery.dbRelations);
 			trace(Util.rels2string(dbQuery.dbRelations));
 			S.devIP = params['devIP'];
 			//if(dbQuery!=null)trace(dbQuery.dbUser);
 			var ipost = Lib.hashOfAssociativeArray(SuperGlobal._POST);
-			trace(ipost.get('id') +':'+ipost.get('jwt'));
-			trace(ipost.keys());
-			trace(Global.print_r(SuperGlobal._POST,true));
+			//trace(ipost.get('id') +':'+ipost.get('jwt'));
+			//trace(ipost.keys());
+			//trace(Global.print_r(SuperGlobal._POST,true));
 			if(Lib.toHaxeArray(SuperGlobal._FILES).length>0&&Global.isset(SuperGlobal._POST['id'])&&
 				User.verify(SuperGlobal._POST['jwt'], Std.parseInt(SuperGlobal._POST['id'])))
 			{
 				dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
 				Syntax.array([PDO.ATTR_PERSISTENT,true]));
 			
-				trace(dbh);
+				//trace(dbh);
 				//params = Lib.hashOfAssociativeArray(SuperGlobal._POST);
 				//trace(params);
 				action = params.get('action');		
 				if(params.get('extDB'))
 				{
 					//CONNECT DIALER CRM DB	
-					trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM');
+					//trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM');
 					syncDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM',
 						dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
 					//trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
@@ -201,7 +201,7 @@ class S
 					syncDbh.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION);
 				#end	
 				devIP = params.get('devIP');	
-				trace(S.devIP + ':' + devIP);
+				//trace(S.devIP + ':' + devIP);
 				Upload.go();
 			}
 
@@ -220,18 +220,6 @@ class S
 				safeLog(dbQuery);*/
 			//devIP = params.get('devIP');
 			//trace(params);
-			if(dbQuery.dbRelations != null){
-				/*if(dbQuery.dbRelations.exists('data')){
-					trace(Std.string(dbQuery.dbRelations.get('data')));
-				}*/
-				//Out.dumpObject(Util.map2dyn(dbQuery.dbRelations).contacts);
-				//trace(Std.string(Reflect.fields(Util.map2dyn(dbQuery.dbRelations).contacts).join('|')));
-				for(dbr in dbQuery.dbRelations){
-					trace(dbr);
-				}
-				//trace(Std.string(dbQuery.dbRelations));
-			}
-
 		}
 		action = params.get('action');
 
@@ -254,18 +242,18 @@ class S
 		
 		if(params.get('viciBoxDB')){
 			//CONNECT DIALER DB	
-			trace('$dbViciBoxUser mysql:host=$dbViciBoxHost;dbname=$dbViciBoxDB');					
+			//trace('$dbViciBoxUser mysql:host=$dbViciBoxHost;dbname=$dbViciBoxDB');					
 			viciBoxDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxDB',
 				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
-			trace(viciBoxDbh.getAttribute(PDO.ATTR_PERSISTENT));
+			//trace(viciBoxDbh.getAttribute(PDO.ATTR_PERSISTENT));
 		}		
 		//trace(dbh);!=null
-		trace('$devIP connect2syncDB:'+ (params.get('extDB')||params.get('action').indexOf('sync')==0?'Y':'N'));
-		trace('$devIP connect2viciBoxDB:'+ (params.get('viciBoxDB')?'Y':'N'));
+		//trace('$devIP connect2syncDB:'+ (params.get('extDB')||params.get('action').indexOf('sync')==0?'Y':'N'));
+		//trace('$devIP connect2viciBoxDB:'+ (params.get('viciBoxDB')?'Y':'N'));
 		if(params.get('extDB')||params.get('action').indexOf('sync')==0)
 		{
 			//CONNECT dialer crm DB	
-			trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM');
+			//trace('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM');
 			syncDbh = new PDO('mysql:host=$dbViciBoxHost;dbname=$dbViciBoxCRM',
 				dbViciBoxUser,dbViciBoxPass,Syntax.array([PDO.ATTR_PERSISTENT,true]));
 			trace(syncDbh.getAttribute(PDO.ATTR_PERSISTENT)); 
@@ -306,7 +294,7 @@ class S
 		}
 	
 		if(jwt != null)
-		trace('$action::jwt.length:' +jwt.length);
+			trace('$action::jwt.length:' +jwt.length);
 		if (jwt.length > 0)
 		{
 			if(User.verify(jwt, id))
@@ -333,8 +321,7 @@ class S
 		}	
 		if(dbQuery.dbUser!=null)
 		User.login(dbQuery.dbUser);		
-		
-		trace(response);
+		//trace(response);
 		exit(response);
 	}
 	
@@ -360,12 +347,12 @@ class S
 			}			
 			//var exitValue =  
 			//trace( Syntax.code("json_encode({0})",r.data));
-			trace(Json.stringify(r));
+			//trace(Json.stringify(r));
 			//trace( Syntax.code("json_encode({0})",r));
 			//Sys.print(Syntax.code("json_encode({0})",r));
 			Sys.print(Json.stringify(r));			
 		}
-		trace('done at ${Sys.time()-ts} ms');
+		trace('req ${params.get('classPath')}.${params.get('action')} done at ${Sys.time()-ts} ms');
 		trace(r);
 		Out.dumpStack(CallStack.callStack());
 		Sys.exit(untyped Std.string(r));		
@@ -381,14 +368,14 @@ class S
 			Web.setHeader("Access-Control-Allow-Credentials", "true");
 			if(S.devIP!=null&&S.devIP!=''){
 				Web.setHeader("Access-Control-Allow-Origin", 'https://${S.devIP}:9000');	
-				trace('https://${S.devIP}:9000');
+				trace('Access-Control-Allow-Origin => https://${S.devIP}:9000');
 			}
 			else {
-				trace('no devIP? ${S.devIP}<<<');
+				//trace('no devIP? ${S.devIP}<<<');
 			}	
 		}			
 		Sys.print(r);
-		trace('client req from ${params.get('devIP')} done at ${Sys.time()-ts} ms');
+		trace('client req ${params.get('classPath')}.${params.get('action')} from ${params.get('devIP')} done at ${Sys.time()-ts} ms');
 		Sys.exit(0);
 		return true;
 	}
@@ -497,7 +484,7 @@ class S
 		var out = File.write("php://output", true);
 		out.bigEndian = true;
 		out.write(b);
-		trace('done at ${Sys.time()-ts} ms');
+		trace('req ${params.get('classPath')}.${params.get('action')} done at ${Sys.time()-ts} ms');
 		Sys.exit(0);
 		return true;
 	}
@@ -590,41 +577,6 @@ class S
 		// TODO: ADD Const.FILE_APPEND  2 haxe.git
 		//trace(pos);
 		Util.safeLog(what,false,pos);
-		/*
-		var fields:Array<String> = Reflect.fields(what);
-		trace(fields.join('|'), pos);
-		for (f in fields)
-		{
-			if(f.indexOf('pass') > -1 || f.indexOf('__hx')>-1)
-			{
-				continue;
-			}
-			var val:Dynamic = Reflect.field(what,f);
-			if(Type.typeof(val)==TUnknown){
-				Util.safeLog([for (k in Lib.hashOfAssociativeArray(val).keys())k].join('|'),pos);
-			}
-			Util.safeLog(Std.string(Type.typeof(val)) + ':' + Std.isOfType(val, Array),pos);
-			var cName:String = Type.getClassName(Type.getClass(val));
-			//trace(cName + ':' + val + ':' + Std.isOfType(val, Array),pos);
-			//if(cName=='Array'){
-			if(Std.isOfType(val, Array)){
-			//Util.safeLog(cName, pos);
-				Util.safeLog(cast(val,Array<Dynamic>).filter(function (f:Dynamic) {
-					return cast(f, String).indexOf('pass') == -1;
-				}).join(','), pos);
-				continue;
-			}
-			if(cName.indexOf('.')>-1)
-			{
-				Util.safeLog('recurse4 $cName', pos);
-				Util.safeLog(val, pos);
-				continue;
-			}
-			Util.safeLog(val, pos);
-		}
-		//trace(what);
-		return;
-		dumpNativeArray(what, pos);*/
 	}
 
 	public static function columnDefaults(table:String, schema:String = 'crm'):Array<ColDef>

@@ -437,4 +437,81 @@ sLog += '
 		//return s.unserialize(Bytes.ofString(serialized));
 		return Unserializer.run(serialized);
 	}
+
+	public static function mapFields2Alias(rels:Array<DbRelationProps>):Map<String,Array<String>> {
+		var relFieldMap:Map<String,Array<String>> = new Map();
+		for(r in rels){
+			relFieldMap.set(r.table, r.fields.split(','));
+				//if(f==rk)		relFieldMap[rk].push(f);
+		}
+		/*for(fk=>fv in filt.keyValueIterator()){
+			if(relFieldMap[fk].contains(fv))
+
+		}*/
+		return relFieldMap;
+	}
+
+	public static function matchKey(k2m:String,rels:Map<String,Dynamic>, unique:Bool=true):String {
+		var match:String = '';
+		for(k=>v in rels.keyValueIterator()){
+			if(v.fields.split(',').contains(k2m))
+				match = k;
+		}
+		return match;
+	}
+
+	public static function getAlias4Field(field:String, rels:Array<DbRelationProps>):String {
+		for(r in rels){
+			if(r.fields.split(',').contains(field))
+				return r.alias;
+		}
+		return null;
+	}
+	
+	public static function getAliasedFields(fields:Array<String>, tableNames:Array<String>, rels:Array<DbRelationProps>):String {
+	//public static function getAliasedFields(fields:Array<String>, tableNames:Array<String>, rels:Array<DbRelationProps>):Map<String,String> {
+
+		//var aliased:Array<String> = [];
+		var aliased:Map<String,String> = new Map();
+
+		for(f in fields){
+			for(t in 0...tableNames.length){
+				var ta:String = tableNames[t];
+				if(S.tableFields(ta).contains(f))
+				for (table in tableNames){
+					if(table == ta)
+						continue;
+					if(S.tableFields(table).contains(f)){
+						//Ambiguous column
+						if(!aliased.exists(f))
+							aliased[f] = getTableAlias(ta,rels) + '.' + S.quoteIdent(f);
+						//aliased.push(getTableAlias(ta,rels) + '.' + S.quoteIdent(f));
+					}
+					else
+						//aliased.push(f);
+						aliased[f] = f;
+				}				
+			}
+		}		
+		//return aliased.join(',');
+		var aliasedFields:Array<String> = [];
+		for (k=>v in aliased.keyValueIterator()){
+			aliasedFields.push(v);
+		}
+		return aliasedFields.join(',');
+	}
+
+	/**
+	 * Return first matching tableName alias from DbRelationProps Array
+	 * @param table 
+	 * @param rels 
+	 * @return String
+	 */
+	public static function getTableAlias(table:String, rels:Array<DbRelationProps>):String  {
+		for(r in rels){
+			if(r.table==table)
+				return S.quoteIdent(r.alias);
+		}
+		return null;
+	}
 }

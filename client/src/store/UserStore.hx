@@ -45,7 +45,7 @@ class UserStore implements IReducer<UserAction, UserState>
 				jwt:(Cookie.get('userState.dbUser.jwt')==null?'':Cookie.get('userState.dbUser.jwt'))
 			})
 		};
-		//trace(initState.dbUser);
+		trace(initState.dbUser);
 		//Out.dumpObject(store);
 	}
 	
@@ -75,6 +75,8 @@ class UserStore implements IReducer<UserAction, UserState>
 			case LogOutComplete(uState):
 				uState.dbUser = new DbUser({
 				});
+				Cookie.remove('userState.dbUser.jwt');				
+				trace(Cookie.get('userState.dbUser.jwt'));
 				trace(uState.dbUser);
 				copy(state, uState);   					
 			case LogOut(uState):

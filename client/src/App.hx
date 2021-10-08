@@ -29,6 +29,7 @@ import view.UiView;
 import action.AppAction;
 import action.ConfigAction;
 import action.DataAction;
+import action.async.LocationAccess;
 import action.LocationAction;
 import action.StatusAction;
 import action.UserAction;
@@ -190,7 +191,15 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//trace(Reflect.fields(state));
 		//trace(config);
 		//trace(state);
-		trace(state.userState.dbUser.id);
+		trace(state.userState.dbUser.id +' jwt:' + state.userState.dbUser.jwt);
+		trace(state.userState.dbUser.jwt == null?'Y':'N');
+		if(state.userState.dbUser.jwt == 'null'){		
+			trace('redirect to login...');
+			
+			store.dispatch(LoginExpired({waiting: false, loginTask: Login, dbUser: state.userState.dbUser}));
+			//store.dispatch(LocationAccess.redirect([], 'login'));
+			return;
+		}
 		//trace(devIP);
 		tul = historyListener(store, state.locationStore.history);
 		//store.subscribe(saveToLocalStorage);
@@ -216,7 +225,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//Out.dumpObject(state.userState);
 		//CState.init(store);		
 		
-		if (!(state.userState.dbUser.id == null || state.userState.dbUser.jwt == ''))
+		if (!(state.userState.dbUser.id == null || state.userState.dbUser.jwt == null))
 		{			
 			//import ConfigData;
 			var jVal:JWTResult<Dynamic> = JWT.verify(state.userState.dbUser.jwt, ConfigData.secret);

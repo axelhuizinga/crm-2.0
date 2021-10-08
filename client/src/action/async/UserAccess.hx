@@ -293,8 +293,9 @@ class UserAccess {
 				} else {
 					userState.dbUser.online = false; 
 					//var d:Date = Date.now().delta(31556926000);//ADD one year				
-					//Cookie.set('userState.dbUser.jwt', '', 31556926);
 					//Cookie.set('userState.dbUser.id', null, null, '/');					
+					//Cookie.set('userState.dbUser.jwt', '', 31556926);
+					Cookie.set('userState.dbUser.jwt', null, null, '/');
 					trace(Cookie.get('userState.dbUserState.dbUser.jwt'));
 					return dispatch(User(LogOutComplete({dbUser: userState.dbUser, waiting: false})));
 				}

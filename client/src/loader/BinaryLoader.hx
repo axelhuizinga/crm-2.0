@@ -84,7 +84,7 @@ class BinaryLoader {
 				u = new Serializer();
 			try{
 			var data:DbData = u.unserialize(bytes, DbData);//Unserializer.run(bytes);
-			trace(data);
+			//trace(data);
 			cB(data);			
 			}
 			catch(ex:Exception){

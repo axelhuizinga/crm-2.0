@@ -54,7 +54,7 @@ class ContactsModel
 						'F'=>'Weiblich'
 					]
 				},
-				'comments'=>{className:'w100',label:'Kommentar', type:TextArea},
+				'comments'=>{className:'big_comment',label:'Kommentar', type:TextArea},
 				'use_email'=>{label:'Post per Email',type: Checkbox},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},				

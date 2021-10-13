@@ -241,7 +241,14 @@ class FormBuilder {
 					trace(field);
 					if(value==null)
 						value='';
-					jsx('<div key=${i++} className="g_row_2 g_span_2" role="rowgroup">
+					if(field.className=='big_comment')
+						jsx('<><div key=${i++} className="g_row_2 g_span_2" role="rowgroup">${field.label}</div>
+					<div key=${i++} className="g_row_2 g_span_2" role="rowgroup">
+					<textarea className=${field.className} name=${name} defaultValue=${value} onChange=${onChange}/>
+					</div>
+				</>');
+					else
+						jsx('<div key=${i++} className="g_row_2 g_span_2" role="rowgroup">
 					<div className="g_cell" key=${i+'_l'} role="cell">${field.label}</div>
 						<div className="g_cell_100_r" key=${i+'_r'} role="cell">
 							<textarea className=${field.className} name=${name} defaultValue=${value} onChange=${onChange}/>

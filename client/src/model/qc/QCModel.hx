@@ -26,33 +26,34 @@ class QCModel
 						'Frau'=>'Frau',
 						'Familie'=>'Familie',
 						'Firma'=>'Firma'
-					]},
-				'title'=>{label:'Titel'},
-				'first_name'=>{label:'Vorname'},
-				'last_name'=>{label:'Name'},
-				'email'=>{label:'Email'},
-				'use_email'=>{label:'Post per Email',type: Checkbox},
-				//'phone_code'=>{label:'Landesvorwahl'},
-				'phone_number'=>{label:'Telefon'},		
-				'mobile'=>{label:'Mobil'},
+					]},'phone_number'=>{label:'Telefon'},
+				
+				'title'=>{label:'Titel'},'mobile'=>{label:'Mobil'},
+				
+				'first_name'=>{label:'Vorname'},'company_name'=>{label:'Firmenname'},				
+
+				'last_name'=>{label:'Name'},'co_field'=>{label: 'C/O'},
+				'address1'=>{label:'Straße'},'email'=>{label:'Email'},
+				'address2'=>{label:'Hausnummer'},'geburts_datum'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: "d.m.Y"},
+				'postal_code'=>{label:'PLZ'},'city'=>{label:'Ort'},
+
+				//'use_email'=>{label:'Post per Email',type: Checkbox},'Adresszusatz'
+				//'phone_code'=>{label:'Landesvorwahl'},		
+				
 				//'fax'=>{label:'Fax'},
-				'company_name'=>{label:'Firmenname'},	
-				'address1'=>{label:'Straße'},
-				'address2'=>{label:'Hausnummer'},
-				'postal_code'=>{label:'PLZ'},
-				'city'=>{label:'Ort'},
-				//'state'=>{label:'Status',type:Select,options:['active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
-				'co_field'=>{label: 'Adresszusatz'},
-				'country_code'=>{label:'Land'},
+				
+				
+				//'state'=>{label:'Status',type:Select,options:['active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},				
+				'country_code'=>{type:Hidden, disabled: true, label:'Land'},
 				'creation_date'=>{label: 'Hinzugefügt', type:Hidden, disabled: true, 
 					displayFormat: "d.m.Y H:i:S"}, 
-				'geburts_datum'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: "d.m.Y"},
-				'gender'=>{label:'Geschlecht',type:Select,options:[
+				
+				/*'gender'=>{label:'Geschlecht',type:Select,options:[
 						''=>'?',
 						'M'=>'Männlich',
 						'F'=>'Weiblich'
 					]
-				},
+				},*/
 				'owner' =>{label:'Agent', cellFormat: function(v):String {
 						trace('App.pbxUserData ${App.pbxUserData!=null}');
 						if(App.pbxUserData!=null)
@@ -96,10 +97,10 @@ class QCModel
 				'blz'=>{label:'Bankleitzahl (BLZ)'},
 				'iban'=>{label:'IBAN'},
 				'bank_name'=>{label:'Bankinstitut'},
-				'mailing'=>{label:'InfoBrief',type: Radio,options: [
-					'info_brief' => 'InfoBrief schicken',
-					'info_mail' => 'InfoMail senden',
-					'no_info' => 'Keine Info gewünscht'
+				'mailing'=>{label:'Info',type: Radio,options: [
+					'info_brief' => 'Brief',
+					'info_mail' => 'EMail',
+					'no_info' => 'Keine'
 				]},
 				'entry_date'=>{label: 'Verkauf', type:DatePicker, displayFormat: "d.m.Y"/*cellFormat: function(v:String) {
 					//trace(v);

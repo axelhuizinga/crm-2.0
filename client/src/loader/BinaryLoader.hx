@@ -75,7 +75,7 @@ class BinaryLoader {
 
 	public function onLoaded( bytes : Bytes ) {
 		if(bytes!=null && bytes.length>0){
-			trace(bytes.toString());
+			trace(bytes.toString().substr(0,80));
 			//var u = new Unserializer();
 			/*var something = Unserializer.run(bytes);
 			trace(something);*/

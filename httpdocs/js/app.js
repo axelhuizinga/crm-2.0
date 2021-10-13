@@ -18273,7 +18273,7 @@ loader_BinaryLoader.prototype = {
 	,url: null
 	,onLoaded: function(bytes) {
 		if(bytes != null && bytes.length > 0) {
-			haxe_Log.trace(bytes.toString(),{ fileName : "loader/BinaryLoader.hx", lineNumber : 78, className : "loader.BinaryLoader", methodName : "onLoaded"});
+			haxe_Log.trace(HxOverrides.substr(bytes.toString(),0,80),{ fileName : "loader/BinaryLoader.hx", lineNumber : 78, className : "loader.BinaryLoader", methodName : "onLoaded"});
 			loader_BinaryLoader.u = new hxbit_Serializer();
 			try {
 				var data = loader_BinaryLoader.u.unserialize(bytes,shared_DbData);
@@ -31925,10 +31925,17 @@ view_shared_FormBuilder.prototype = {
 					if(value == null) {
 						value = "";
 					}
-					var tmp13 = react_ReactType.fromString("div");
-					var tmp14 = { key : this.i++, className : "g_row_2 g_span_2", role : "rowgroup"};
-					var tmp15 = this.i + "_l";
-					tmp = React.createElement(tmp13,tmp14,React.createElement(react_ReactType.fromString("div"),{ key : tmp15, className : "g_cell", role : "cell"},field.label),React.createElement(react_ReactType.fromString("div"),{ key : this.i + "_r", className : "g_cell_100_r", role : "cell"},React.createElement(react_ReactType.fromString("textarea"),{ className : field.className, name : name, defaultValue : value, onChange : $bind(this,this.onChange)})));
+					if(field.className == "big_comment") {
+						var tmp13 = react_ReactType.fromComp(React_Fragment);
+						var tmp14 = React.createElement(react_ReactType.fromString("div"),{ key : this.i++, className : "g_row_2 g_span_2", role : "rowgroup"},field.label);
+						var tmp15 = React.createElement(react_ReactType.fromString("div"),{ key : this.i++, className : "g_row_2 g_span_2", role : "rowgroup"},React.createElement(react_ReactType.fromString("textarea"),{ className : field.className, name : name, defaultValue : value, onChange : $bind(this,this.onChange)}));
+						tmp = React.createElement(tmp13,{ },tmp14,tmp15);
+					} else {
+						var tmp16 = react_ReactType.fromString("div");
+						var tmp17 = { key : this.i++, className : "g_row_2 g_span_2", role : "rowgroup"};
+						var tmp18 = this.i + "_l";
+						tmp = React.createElement(tmp16,tmp17,React.createElement(react_ReactType.fromString("div"),{ key : tmp18, className : "g_cell", role : "cell"},field.label),React.createElement(react_ReactType.fromString("div"),{ key : this.i + "_r", className : "g_cell_100_r", role : "cell"},React.createElement(react_ReactType.fromString("textarea"),{ className : field.className, name : name, defaultValue : value, onChange : $bind(this,this.onChange)})));
+					}
 					break;
 				case "Upload":
 					tmp = React.createElement(react_ReactType.fromString("div"),{ key : this.i++, className : "g_row_2", role : "rowgroup"},React.createElement(react_ReactType.fromString("div"),{ className : "g_cell", role : "cell"},field.label),React.createElement(react_ReactType.fromString("div"),{ className : "g_cell_r", role : "cell"},"Dummy"));
@@ -31942,7 +31949,7 @@ view_shared_FormBuilder.prototype = {
 		return _g;
 	}
 	,renderForm: function(props,initialState) {
-		haxe_Log.trace(props.model,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 263, className : "view.shared.FormBuilder", methodName : "renderForm"});
+		haxe_Log.trace(props.model,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 270, className : "view.shared.FormBuilder", methodName : "renderForm"});
 		var sK = 0;
 		var tmp = react_ReactType.fromString("form");
 		var tmp1 = { key : props.model, ref : props.formRef, name : props.model, className : "tabComponentForm formField"};
@@ -31957,13 +31964,13 @@ view_shared_FormBuilder.prototype = {
 		if(mItem.separator) {
 			return React.createElement(react_ReactType.fromString("hr"),{ className : "menuSeparator"});
 		}
-		haxe_Log.trace(mItem.handler,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 284, className : "view.shared.FormBuilder", methodName : "renderButton"});
+		haxe_Log.trace(mItem.handler,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 291, className : "view.shared.FormBuilder", methodName : "renderButton"});
 		return React.createElement(react_ReactType.fromComp(bulma_$components_Button),{ key : i++, onClick : mItem.handler, 'data-section' : mItem.section, disabled : mItem.disabled, type : "button"},mItem.label);
 	}
 	,itemHandler: function(e) {
 		e.preventDefault();
 		var action = (js_Boot.__cast(e.target , HTMLElement)).getAttribute("data-action");
-		haxe_Log.trace(action,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 295, className : "view.shared.FormBuilder", methodName : "itemHandler"});
+		haxe_Log.trace(action,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 302, className : "view.shared.FormBuilder", methodName : "itemHandler"});
 		var mP = Reflect.field(this.comp.state.formApi,"callMethod");
 		mP.apply(this.comp.state.formApi,[action,e]);
 	}
@@ -31973,7 +31980,7 @@ view_shared_FormBuilder.prototype = {
 	,onChange: function(ev) {
 		switch(ev.target.type) {
 		case "checkbox":
-			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 312, className : "view.shared.FormBuilder", methodName : "onChange"});
+			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 319, className : "view.shared.FormBuilder", methodName : "onChange"});
 			var tmp;
 			switch(ev.target.checked) {
 			case "1":case "TRUE":case "on":case true:
@@ -31983,7 +31990,7 @@ view_shared_FormBuilder.prototype = {
 				tmp = 0;
 			}
 			view_shared_io_BaseForm.doChange(this.comp,ev.target.name,tmp);
-			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 322, className : "view.shared.FormBuilder", methodName : "onChange"});
+			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 329, className : "view.shared.FormBuilder", methodName : "onChange"});
 			break;
 		case "select-multiple":case "select-one":
 			view_shared_io_BaseForm.doChange(this.comp,ev.target.name,ev.target.value);
@@ -34993,31 +35000,25 @@ model_qc_QCModel.dataAccess = (function($this) {
 		_g3.h["Familie"] = "Familie";
 		_g3.h["Firma"] = "Firma";
 		_g2.h["anrede"] = { label : "Anrede", type : "Select", options : _g3};
-		_g2.h["title"] = { label : "Titel"};
-		_g2.h["first_name"] = { label : "Vorname"};
-		_g2.h["last_name"] = { label : "Name"};
-		_g2.h["email"] = { label : "Email"};
-		_g2.h["use_email"] = { label : "Post per Email", type : "Checkbox"};
 		_g2.h["phone_number"] = { label : "Telefon"};
+		_g2.h["title"] = { label : "Titel"};
 		_g2.h["mobile"] = { label : "Mobil"};
+		_g2.h["first_name"] = { label : "Vorname"};
 		_g2.h["company_name"] = { label : "Firmenname"};
+		_g2.h["last_name"] = { label : "Name"};
+		_g2.h["co_field"] = { label : "C/O"};
 		_g2.h["address1"] = { label : "Straße"};
+		_g2.h["email"] = { label : "Email"};
 		_g2.h["address2"] = { label : "Hausnummer"};
+		_g2.h["geburts_datum"] = { label : "Geburtsdatum", type : "DatePicker", displayFormat : "d.m.Y"};
 		_g2.h["postal_code"] = { label : "PLZ"};
 		_g2.h["city"] = { label : "Ort"};
-		_g2.h["co_field"] = { label : "Adresszusatz"};
-		_g2.h["country_code"] = { label : "Land"};
+		_g2.h["country_code"] = { type : "Hidden", disabled : true, label : "Land"};
 		_g2.h["creation_date"] = { label : "Hinzugefügt", type : "Hidden", disabled : true, displayFormat : "d.m.Y H:i:S"};
-		_g2.h["geburts_datum"] = { label : "Geburtsdatum", type : "DatePicker", displayFormat : "d.m.Y"};
-		var _g3 = new haxe_ds_StringMap();
-		_g3.h[""] = "?";
-		_g3.h["M"] = "Männlich";
-		_g3.h["F"] = "Weiblich";
-		_g2.h["gender"] = { label : "Geschlecht", type : "Select", options : _g3};
 		_g2.h["owner"] = { label : "Agent", cellFormat : function(v) {
-			haxe_Log.trace("App.pbxUserData " + Std.string(App.pbxUserData != null),{ fileName : "model/qc/QCModel.hx", lineNumber : 57, className : "model.qc.QCModel", methodName : "dataAccess"});
+			haxe_Log.trace("App.pbxUserData " + Std.string(App.pbxUserData != null),{ fileName : "model/qc/QCModel.hx", lineNumber : 58, className : "model.qc.QCModel", methodName : "dataAccess"});
 			if(App.pbxUserData != null) {
-				haxe_Log.trace(" && exists(" + v + "): " + Std.string(Object.prototype.hasOwnProperty.call(App.pbxUserData.h,v)),{ fileName : "model/qc/QCModel.hx", lineNumber : 59, className : "model.qc.QCModel", methodName : "dataAccess"});
+				haxe_Log.trace(" && exists(" + v + "): " + Std.string(Object.prototype.hasOwnProperty.call(App.pbxUserData.h,v)),{ fileName : "model/qc/QCModel.hx", lineNumber : 60, className : "model.qc.QCModel", methodName : "dataAccess"});
 			}
 			if(App.pbxUserData != null && Object.prototype.hasOwnProperty.call(App.pbxUserData.h,v)) {
 				return App.pbxUserData.h[v].h["full_name"];
@@ -35057,10 +35058,10 @@ model_qc_QCModel.dataAccess = (function($this) {
 		_g2.h["iban"] = { label : "IBAN"};
 		_g2.h["bank_name"] = { label : "Bankinstitut"};
 		var _g3 = new haxe_ds_StringMap();
-		_g3.h["info_brief"] = "InfoBrief schicken";
-		_g3.h["info_mail"] = "InfoMail senden";
-		_g3.h["no_info"] = "Keine Info gewünscht";
-		_g2.h["mailing"] = { label : "InfoBrief", type : "Radio", options : _g3};
+		_g3.h["info_brief"] = "Brief";
+		_g3.h["info_mail"] = "EMail";
+		_g3.h["no_info"] = "Keine";
+		_g2.h["mailing"] = { label : "Info", type : "Radio", options : _g3};
 		_g2.h["entry_date"] = { label : "Verkauf", type : "DatePicker", displayFormat : "d.m.Y"};
 		_g2.h["edited_by"] = { type : "Hidden"};
 		_g2.h["id"] = { type : "Hidden"};
@@ -35086,7 +35087,7 @@ model_qc_QCModel.qcColumns = (function($this) {
 	_g.h["entry_list_id"] = { show : false};
 	_g.h["lead_id"] = { show : false};
 	_g.h["last_local_call_time"] = { label : "Datum", cellFormat : function(v) {
-		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 133, className : "model.qc.QCModel", methodName : "qcColumns"});
+		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 134, className : "model.qc.QCModel", methodName : "qcColumns"});
 		if(v != null) {
 			return DateTools.format(HxOverrides.strDate(v),"%d.%m.%Y");
 		} else {
@@ -35128,7 +35129,7 @@ model_qc_QCModel.listColumns = (function($this) {
 	_g.h["city"] = { label : "Ort"};
 	_g.h["state"] = { label : "Status", className : "tCenter", cellFormat : function(v) {
 		var uState = v == "active" ? "user" : "user-slash";
-		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 173, className : "model.qc.QCModel", methodName : "listColumns"});
+		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 174, className : "model.qc.QCModel", methodName : "listColumns"});
 		return React.createElement(react_ReactType.fromString("span"),{ className : "fa fa-" + uState});
 	}};
 	_g.h["id"] = { show : false};

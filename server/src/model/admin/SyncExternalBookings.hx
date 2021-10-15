@@ -156,7 +156,7 @@ class SyncExternalBookings extends Model{
 		INSERT INTO ${table} (${dNames.join(',')})
 		VALUES (${dPlaceholders.join(',')}) ON CONFLICT DO NOTHING;				
 		*/;
-		trace(sql);		
+		//trace(sql);		
 		//while(synced<totalCount){
 			//	LOAD LIVE PBX DATA
 			bookings = getCrmData(ids);

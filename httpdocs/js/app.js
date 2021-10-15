@@ -399,8 +399,8 @@ var App = function(props) {
 	}
 	this.state = App.store.getState();
 	haxe_Log.trace(this.state.userState.dbUser.id + " jwt:" + this.state.userState.dbUser.jwt,{ fileName : "App.hx", lineNumber : 194, className : "App", methodName : "new"});
-	haxe_Log.trace(this.state.userState.dbUser.jwt == null ? "Y" : "N",{ fileName : "App.hx", lineNumber : 195, className : "App", methodName : "new"});
-	if(this.state.userState.dbUser.jwt == "null") {
+	haxe_Log.trace(this.state.userState.dbUser.jwt == null || this.state.userState.dbUser.jwt == "" ? "Y" : "N",{ fileName : "App.hx", lineNumber : 195, className : "App", methodName : "new"});
+	if(this.state.userState.dbUser.jwt == "null" || this.state.userState.dbUser.jwt == "") {
 		haxe_Log.trace("redirect to login...",{ fileName : "App.hx", lineNumber : 197, className : "App", methodName : "new"});
 		App.store.dispatch(redux_Action.map(action_UserAction.LoginExpired({ waiting : false, loginTask : "Login", dbUser : this.state.userState.dbUser})));
 		return;

@@ -192,8 +192,8 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//trace(config);
 		//trace(state);
 		trace(state.userState.dbUser.id +' jwt:' + state.userState.dbUser.jwt);
-		trace(state.userState.dbUser.jwt == null?'Y':'N');
-		if(state.userState.dbUser.jwt == 'null'){		
+		trace(state.userState.dbUser.jwt == null||state.userState.dbUser.jwt == ''?'Y':'N');
+		if(state.userState.dbUser.jwt == 'null'||state.userState.dbUser.jwt == ''){		
 			trace('redirect to login...');
 			
 			store.dispatch(LoginExpired({waiting: false, loginTask: Login, dbUser: state.userState.dbUser}));

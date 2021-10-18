@@ -46,7 +46,9 @@ import store.UserStore;
 import react.React;
 import react.ReactComponent.ReactComponentOf;
 import react.ReactMacro.jsx;
+
 import react.ReactRef;
+import react.ReactUtil.copy;
 import react.intl.ReactIntl;
 import react.intl.comp.IntlProvider;
 import redux.react.Provider;
@@ -68,7 +70,7 @@ typedef AppProps =
 	?waiting:Bool
 }
 
-class App  extends ReactComponentOf<AppProps, AppState>
+class App extends ReactComponentOf<AppProps, AppState>
 {
 	//static var fa = require('./node_modules/font-awesome/css/font-awesome.min.css');
 	public static var _app:App;
@@ -190,12 +192,13 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		state = store.getState();
 		//trace(Reflect.fields(state));
 		//trace(config);
-		//trace(state);
 		trace(state.userState.dbUser.id +' jwt:' + state.userState.dbUser.jwt);
+		trace(' waiting:' + state.userState.waiting);
+		//trace(state);
+
 		trace(state.userState.dbUser.jwt == null||state.userState.dbUser.jwt == ''?'Y':'N');
 		if(state.userState.dbUser.jwt == 'null'||state.userState.dbUser.jwt == ''){		
-			trace('redirect to login...');
-			
+			trace('redirect to login...');			
 			store.dispatch(LoginExpired({waiting: false, loginTask: Login, dbUser: state.userState.dbUser}));
 			//store.dispatch(LocationAccess.redirect([], 'login'));
 			return;
@@ -262,25 +265,8 @@ class App  extends ReactComponentOf<AppProps, AppState>
 						ReactUtil.copy( state.userState, {waiting:false}))));
 		}
 		//trace(Reflect.fields(state));
-		/*var fd:FormData = new FormData();
-		fd.append('action','userData');
-		fd.append('classPath','auth.User');
-		fd.append('devIP',devIP);
-		var xhr = new js.html.XMLHttpRequest();
-		xhr.open('POST',config.api,false);
-		xhr.onreadystatechange = function () {
-			if(xhr.readyState==4 && xhr.status==200){
-				trace(xhr.responseText);
-			}
-		}
-		xhr.send();		*/
 
 	}
-	
-	/*function load():Promise<DbData> {
-		return cast store.dispatch(
-			action.async.UserAccess.verify());
-	}*/
 
 	public function gGet(key:String):Dynamic
 	{
@@ -299,6 +285,7 @@ class App  extends ReactComponentOf<AppProps, AppState>
 		//trace(state.userState.dbUser);
 		//store.dispatch(action.async.UserAccess.verify());
 		trace('yeah');
+		trace(' waiting:' + state.userState.waiting);
 		var p:Promise<DbData> = cast( store.dispatch(CRUD.read({//props.load({		
 			classPath:'auth.User',
 			action:'getPbxUserData',
@@ -312,6 +299,9 @@ class App  extends ReactComponentOf<AppProps, AppState>
 				pbxUserData =  [
 					for(row in dbData.dataRows) row.get('user') => row
 				];
+				trace(pbxUserData);
+				//var uState:UserState = state.userState.dbUser;
+				setState({userState:copy({waiting:false})});
 			}
 			,function(dbData:DbData){
 				trace(dbData);
@@ -340,13 +330,28 @@ class App  extends ReactComponentOf<AppProps, AppState>
   	override function render() {
 		//Out.dumpObject(state.userState);
 		//trace(state.history.location.pathname);	store={store}	<UiView/>	<div>more soon...</div>
-        return jsx('
+		if(pbxUserData!=null){
+			var uD:Map<String,String> = pbxUserData[pbxUserData.keys().next()];
+			trace((uD));
+			if(uD != null)
+			trace((uD['user']));
+		}
+		trace('pbxUserData==null ? ' + (pbxUserData==null?'':''));
+		trace('!pbxUserData.keys().hasNext()'+(!pbxUserData.keys().hasNext()?'Y':'N'));
+		//trace(pbxUserData==null||!pbxUserData.keys().hasNext()?'':'');
+        return (pbxUserData==null||!pbxUserData.keys().hasNext()?jsx('
+		<section className="hero is-alt is-fullheight">
+		  <div className="hero-body">
+		  <div className="loader"  style=${{width:'7rem', height:'7rem', margin:'auto', borderWidth:'0.58rem'}}/>
+		  </div>
+		</section>
+		'): jsx('
 			<$Provider store={store}>
 				<$IntlProvider locale="de">
 					<$UiView/>
 				</$IntlProvider>
 			</$Provider>
-        ');
+        '));
   	}
 
 	public static function 	await(delay:Int, check:Void->Dynamic, cb:Function):Timer

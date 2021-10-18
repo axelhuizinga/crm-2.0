@@ -112,9 +112,10 @@ class AppStore
 				next();
 			*/	
 			case Status(action):
-				trace(action);
-				store.dispatch(action);
-			/*	next();
+				//trace(action);
+				//store.dispatch(action);
+				next();
+			/*	
 				
 			case Status(status):
 				trace(status);
@@ -135,7 +136,7 @@ class AppStore
 				//next();
 			//default: next();
 			default: 
-				trace(action);
+				//trace(action);
 				//store.dispatch(action);
 				next();
 				//store.dispatch(action);

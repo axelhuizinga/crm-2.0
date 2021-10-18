@@ -88,7 +88,7 @@ class User extends Model
 	public function getPbxUserData():Void
 	{
 		var dbData:DbData = new DbData();
-		var sql:String = 'SELECT user, full_name, user_group, user_level FROM ${S.dbViciBoxDB}.vicidial_users';
+		var sql:String = 'SELECT user, full_name, user_group, user_level FROM ${S.dbViciBoxDB}.vicidial_users WHERE user_group IN("AGENTS_A")';
 		var stmt:PDOStatement = S.syncDbh.query(sql);
 		if(untyped stmt==false)
 		{

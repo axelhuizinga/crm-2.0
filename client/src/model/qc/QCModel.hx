@@ -35,7 +35,7 @@ class QCModel
 				'last_name'=>{label:'Name'},'co_field'=>{label: 'C/O'},
 				'address1'=>{label:'Straße'},'email'=>{label:'Email'},
 				'address2'=>{label:'Hausnummer'},'geburts_datum'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: "d.m.Y"},
-				'postal_code'=>{label:'PLZ'},'city'=>{label:'Ort'},
+				'postal_code'=>{label:'PLZ'},
 
 				//'use_email'=>{label:'Post per Email',type: Checkbox},'Adresszusatz'
 				//'phone_code'=>{label:'Landesvorwahl'},		
@@ -62,8 +62,9 @@ class QCModel
 							return App.pbxUserData.get(v)['full_name'];
 						return v;
 					},
-					disabled: true
+					disabled: false, type:Select,options:[]
 				},
+				'city'=>{label:'Ort'},
 				'comments'=>{className:'big_comment',label:'Kommentar', type:TextArea},				
 				'start_monat'=>{label:'Ab', type:Select,options:[
 					'Januar' => 'Januar',

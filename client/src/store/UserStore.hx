@@ -66,6 +66,8 @@ class UserStore implements IReducer<UserAction, UserState>
 				copy(state, err);   
 			case LoginExpired(uState):
 				Out.dumpObject(uState);
+				if(uState.dbUser != null)
+					trace(uState.dbUser.id + ':' + uState.dbUser.online);
 				copy(state, uState);  
 	                    
 			case LoginComplete(uState):

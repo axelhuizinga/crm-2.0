@@ -336,22 +336,27 @@ class App extends ReactComponentOf<AppProps, AppState>
 			if(uD != null)
 			trace((uD['user']));
 		}
-		trace('pbxUserData==null ? ' + (pbxUserData==null?'':''));
-		trace('!pbxUserData.keys().hasNext()'+(!pbxUserData.keys().hasNext()?'Y':'N'));
+		trace('pbxUserData==null ? ' + (pbxUserData==null?'Y':'N'));
 		//trace(pbxUserData==null||!pbxUserData.keys().hasNext()?'':'');
-        return (pbxUserData==null||!pbxUserData.keys().hasNext()?jsx('
+		//return (pbxUserData==null||!pbxUserData.keys().hasNext()?jsx('
+		//trace('!pbxUserData.keys().hasNext()'+(!pbxUserData.keys().hasNext()?'Y':'N'));
+		var hProps:Dynamic = Reflect.getProperty(pbxUserData, 'h');
+		trace('hProps!=null? '+(hProps!=null?hProps:'null'));
+		var hFields:Array<String> = Reflect.fields(pbxUserData);
+		trace(hFields.join('|'));
+        return pbxUserData==null?jsx('
 		<section className="hero is-alt is-fullheight">
 		  <div className="hero-body">
 		  <div className="loader"  style=${{width:'7rem', height:'7rem', margin:'auto', borderWidth:'0.58rem'}}/>
 		  </div>
 		</section>
-		'): jsx('
+		'):jsx('
 			<$Provider store={store}>
 				<$IntlProvider locale="de">
 					<$UiView/>
 				</$IntlProvider>
 			</$Provider>
-        '));
+        ');
   	}
 
 	public static function 	await(delay:Int, check:Void->Dynamic, cb:Function):Timer

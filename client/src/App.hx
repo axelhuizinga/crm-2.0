@@ -196,7 +196,7 @@ class App extends ReactComponentOf<AppProps, AppState>
 		trace(' waiting:' + state.userState.waiting);
 		//trace(state);
 
-		trace(state.userState.dbUser.jwt == null||state.userState.dbUser.jwt == ''?'Y':'N');
+		trace(state.userState.dbUser.jwt == 'null'||state.userState.dbUser.jwt == ''?'Y':'N');
 		if(state.userState.dbUser.jwt == 'null'||state.userState.dbUser.jwt == ''){		
 			trace('redirect to login...');			
 			store.dispatch(LoginExpired({waiting: false, loginTask: Login, dbUser: state.userState.dbUser}));
@@ -305,6 +305,9 @@ class App extends ReactComponentOf<AppProps, AppState>
 			}
 			,function(dbData:DbData){
 				trace(dbData);
+				if(dbData.dataErrors.exists('LoginError')){
+					trace(dbData.dataErrors['LoginError']);
+				}
 			}
 		);
 	}
@@ -336,7 +339,9 @@ class App extends ReactComponentOf<AppProps, AppState>
 			if(uD != null)
 			trace((uD['user']));
 		}
-		trace('pbxUserData==null ? ' + (pbxUserData==null?'Y':'N'));
+		trace('pbxUserData!=null ? ' + (pbxUserData!=null?'Y':'N'));
+		trace(state.userState);
+		//trace('props.userState.dbUser.jwt ${props.userState.dbUser.jwt == null} ${props.userState.dbUser.online}');
 		//trace(pbxUserData==null||!pbxUserData.keys().hasNext()?'':'');
 		//return (pbxUserData==null||!pbxUserData.keys().hasNext()?jsx('
 		//trace('!pbxUserData.keys().hasNext()'+(!pbxUserData.keys().hasNext()?'Y':'N'));

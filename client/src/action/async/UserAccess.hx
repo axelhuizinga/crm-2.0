@@ -396,7 +396,7 @@ class UserAccess {
 	/**
 	 * 
 	 */
-	public static function userList()
+	public static function userList2()
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			var userState:UserState = getState().userState;

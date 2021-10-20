@@ -47,8 +47,9 @@ class CRUD
 			//trace(param.offset);
 			//trace(param.page);
 			//Out.dumpObject(param);
+			//trace(param.filter);
+			trace(param);
 			//trace(param.classPath);
-			trace(param.filter);
 			//trace(Reflect.fields(param).join('|'));
 			return new Promise(function(resolve, reject){
 				if (!param.dbUser.online)

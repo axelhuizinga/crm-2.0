@@ -28,7 +28,7 @@ class BinaryLoader {
 	public static function dbQuery(url:String,dbAP:DBAccessProps, onLoaded:DbData->Void):XMLHttpRequest {
 		trace(url);
 		//trace(dbAP.dbRelations);
-		//trace(dbAP);
+		trace(dbAP);
 		if(s==null)
 			s = new Serializer();
 		//var s = new Serializer();

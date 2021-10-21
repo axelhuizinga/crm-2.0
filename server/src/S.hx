@@ -163,7 +163,9 @@ class S
 			dbQuery = Model.binary();
 			params = dbQuery.dbParams;
 			trace(dbQuery.dbParams.get('classPath'));
+			
 			trace(params);
+			trace(dbQuery.dbUser);
 			if(params['dataSource']!=null){
 				trace(Type.typeof(params['dataSource']));
 			}

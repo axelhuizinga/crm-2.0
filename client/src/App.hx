@@ -244,7 +244,7 @@ class App extends ReactComponentOf<AppProps, AppState>
 						store.dispatch(LoginComplete({waiting:false}));							
 					}else {
 						trace('dispatch LoginExpired');
-						state.userState.dbUser.jwt = '';
+						state.userState.dbUser.jwt = state.userState.dbUser.jwt;//'';
 						store.dispatch(LoginExpired({waiting: false, loginTask: Login, dbUser: state.userState.dbUser}));
 					}
 					//trace(untyped jwt.validUntil);
@@ -305,6 +305,8 @@ class App extends ReactComponentOf<AppProps, AppState>
 			}
 			,function(dbData:DbData){
 				trace(dbData);
+				setState({userState:copy(state.userState,{waiting:false})});
+				trace(' waiting:' + state.userState.waiting);
 				if(dbData.dataErrors.exists('LoginError')){
 					trace(dbData.dataErrors['LoginError']);
 				}
@@ -340,16 +342,20 @@ class App extends ReactComponentOf<AppProps, AppState>
 			trace((uD['user']));
 		}
 		trace('pbxUserData!=null ? ' + (pbxUserData!=null?'Y':'N'));
-		trace(state.userState);
 		//trace('props.userState.dbUser.jwt ${props.userState.dbUser.jwt == null} ${props.userState.dbUser.online}');
+		trace(state.status);
+		trace(state.userState);
+		//trace(state.userState.dbUser.jwt);
 		//trace(pbxUserData==null||!pbxUserData.keys().hasNext()?'':'');
 		//return (pbxUserData==null||!pbxUserData.keys().hasNext()?jsx('
 		//trace('!pbxUserData.keys().hasNext()'+(!pbxUserData.keys().hasNext()?'Y':'N'));
-		var hProps:Dynamic = Reflect.getProperty(pbxUserData, 'h');
-		trace('hProps!=null? '+(hProps!=null?hProps:'null'));
-		var hFields:Array<String> = Reflect.fields(pbxUserData);
-		trace(hFields.join('|'));
-        return pbxUserData==null?jsx('
+		//var hProps:Dynamic = Reflect.getProperty(pbxUserData, 'h');
+		//trace('hProps!=null? '+(hProps!=null?hProps:'null'));
+		//var hFields:Array<String> = Reflect.fields(pbxUserData);
+		//trace(hFields.join('|'));
+		//return pbxUserData==null?jsx('
+		return state.userState.waiting?jsx('
+        
 		<section className="hero is-alt is-fullheight">
 		  <div className="hero-body">
 		  <div className="loader"  style=${{width:'7rem', height:'7rem', margin:'auto', borderWidth:'0.58rem'}}/>

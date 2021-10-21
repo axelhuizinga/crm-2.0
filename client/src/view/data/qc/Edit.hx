@@ -288,7 +288,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					BaseForm.addRecordings(state,data.dataInfo.get('recordings'));
 				}
 				var qc:model.QC = new model.QC(qcd);
-				trace(qcd);
+				//trace(qcd);
 				trace(qc.period);
 				if(mounted)
 					setState({loading:false, actualState:qc, initialData:copy(qc)});

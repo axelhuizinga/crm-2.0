@@ -1,11 +1,7 @@
 package db;
 
-import me.cunity.debug.Out;
-
-
 class DbUser implements hxbit.Serializable
-{
-	
+{	
 	
 	@:s public var active:Bool;
 	@:s public var change_pass_required:Bool;
@@ -32,7 +28,6 @@ class DbUser implements hxbit.Serializable
 		
 	public function new(p:Dynamic){		
 		//trace(p);
-		//Out.dumpVar(p);
 		for(f in Type.getInstanceFields(Type.getClass(this))){
 			switch (f){
 				case '__uid'|'getCLID'|'serialize'|'unserialize'|'unserializeInit'|'getSerializeSchema':

@@ -157,6 +157,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			return;
 		}		
 		dataAccess = QCModel.dataAccess;
+		trace(App.pbxUserData.keys().next());
 		fieldNames = BaseForm.initFieldNames(dataAccess['open'].view.keys());
 		trace(fieldNames.join('|'));
 		dataDisplay = QCModel.dataDisplay;

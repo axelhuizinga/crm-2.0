@@ -109,6 +109,77 @@ class CRUD
 			});
 		});
 	}
+
+	
+	/**
+	 * 
+	 * @param dbh:PDO DB handle
+	 * @param table:DB table name
+	 * @param sql:String query to get option label=>value map
+	 * 
+	 */
+	 public static function initOptions(param:DBAccessProps) 
+	{
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+			//dbh:PDO, table:String, sql:String) {
+			return new Promise(function(resolve, reject){
+				if (!param.dbUser.online)
+				{
+					trace('LoginError');
+					param.dbUser.last_error = 'Du musst dich neu anmelden!';
+					dispatch(User(LoginError(
+					{
+						dbUser:param.dbUser,
+						lastError:'Du musst dich neu anmelden!'
+					})));
+					var dbData:DbData = DbDataTools.create(['LoginError'=>'Du musst dich neu anmelden!']);
+					reject(dbData);
+				}
+				var bl:XMLHttpRequest = BinaryLoader.dbQuery(
+					'${App.config.api}', 
+					param,
+					function(data:DbData)
+					{			
+						//trace(data.dataInfo);
+						trace(data.dataRows.length);
+						if(data.dataRows.length>0) 
+						{
+							if(!data.dataErrors.keys().hasNext())
+							{
+								//trace(data.dataRows[0]);
+								dispatch(Status(Update( 
+									{	className:'',
+										text:(param.resolveMessage==null?'':param.resolveMessage.success)
+									}
+								)));								
+								resolve(data);
+							}
+							else 
+							{
+								//TODO: IMPLEMENT GENERIC FAILURE FEEDBACK
+								dispatch(Status(Update(
+									{
+										className:'error',
+										text:Json.stringify(data.dataErrors),
+									})));
+								reject(data);
+							}				
+						}
+						else{
+							//NO ROWS FOUND
+							trace(data);
+							dispatch(Status(Update(
+							{
+								className: param.resolveMessage!=null && param.resolveMessage.failureClass != null?param.resolveMessage.failureClass:'warn',
+								text: param.resolveMessage==null?'Keine Daten für ${Json.stringify(param.filter)} gefunden':param.resolveMessage.failure
+							}))); 
+							resolve(data);
+						}
+					}
+				);
+			});
+		});
+	}
 	
 	public static function update(param:DBAccessProps) 
 	{	

@@ -23,6 +23,7 @@ import history.BrowserHistory;
 import history.History;
 import history.Location;
 import history.TransitionManager;
+import model.qc.QCModel;
 import js.Browser;
 import me.cunity.debug.Out;
 import view.UiView;
@@ -282,7 +283,24 @@ class App extends ReactComponentOf<AppProps, AppState>
 	override function componentDidMount()
 	{
 		//trace(state.history);
-		//trace(state.userState.dbUser);
+		//trace(state.userState.dbUser);		
+		/*var p:Promise<DbData> = props.load(
+			{
+				classPath:'data.Deals',
+				action:'loadQC',
+				filter:{lead_id:qcData["lead_id"],entry_list_id:qcData["entry_list_id"],mandator:1},
+				resolveMessage:{
+					success:'QC ${qcData["lead_id"]} wurde geladen',
+					failure:'QC ${qcData["lead_id"]} konnte nicht geladen werden'
+				},				
+				table:'contacts',
+				//table:'vicidial_list',viciBoxDB
+				viciBoxDB:true,
+				dbUser:props.userState.dbUser,
+				devIP:App.devIP
+			}
+		);
+		p.then(function(data:DbData){*/
 		//store.dispatch(action.async.UserAccess.verify());
 		trace('yeah');
 		trace(' waiting:' + state.userState.waiting);
@@ -301,7 +319,13 @@ class App extends ReactComponentOf<AppProps, AppState>
 				];
 				trace(pbxUserData);
 				//var uState:UserState = state.userState.dbUser;
+				var owners:Map<String,String> = QCModel.dataAccess['open'].view['owner'].options;
+				for(k=>u in pbxUserData.keyValueIterator()){
+					owners.set(k, u.get('full_name'));
+				}
+				QCModel.dataAccess['open'].view['owner'].options = owners;
 				setState({userState:copy({waiting:false})});
+				
 			}
 			,function(dbData:DbData){
 				trace(dbData);

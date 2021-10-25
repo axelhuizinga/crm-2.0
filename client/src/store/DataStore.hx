@@ -51,9 +51,9 @@ class DataStore
 				if(data.dataRows != null)
 				{
 					trace(data.dataRows.length);
-					trace(copy(state, {
+					/*trace(copy(state, {
 						contactsDbData:data,
-					}).contactsDbData.dataRows.length);
+					}).contactsDbData.dataRows.length);*/
 				}			
 				copy(state, {
 					contactsDbData:data,

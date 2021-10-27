@@ -20,22 +20,6 @@ class ContactsModel
 					]
 				],
 			view:[
-				'status'=>{label:'Status',type:Select,options:[
-					'active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
-				
-				'title_pro'=>{label:'Titel'},
-				'first_name'=>{label:'Vorname'},
-				'last_name'=>{label:'Name'},
-				'email'=>{label:'Email'},
-				'phone_code'=>{label:'Landesvorwahl'},
-				'phone_number'=>{label:'Telefon'},		
-				'mobile'=>{label:'Mobil'},
-				'fax'=>{label:'Fax'},
-				'company_name'=>{label:'Firmenname'},	
-				'address1'=>{label:'Straße'},
-				'address2'=>{label:'Hausnummer'},
-				'postal_code'=>{label:'PLZ'},
-				'city'=>{label:'Ort'},
 				'title'=>{label:'Anrede',type:Select,options:[
 					''=>'?',
 					'Herr'=>'Herr',
@@ -43,19 +27,36 @@ class ContactsModel
 					'Familie'=>'Familie',
 					'Firma'=>'Firma'
 				]},
-				'country_code'=>{label:'Land'},
-				'care_of'=>{label: 'Adresszusatz'},
+				'status'=>{label:'Status',type:Select,options:[
+					'active'=>'Aktiv','passive'=>'Passiv','blocked'=>'Gesperrt']},
+				
+				'title_pro'=>{label:'Titel'},
+				'phone_number'=>{label:'Telefon'},		
+				'first_name'=>{label:'Vorname'},
+				'mobile'=>{label:'Mobil'},
+				'last_name'=>{label:'Name'},
+				'company_name'=>{label:'Firmenname'},	
+				'address1'=>{label:'Straße'},
+				'care_of'=>{label: 'C/O'},
+				'address2'=>{label:'Hausnummer'},
+				'email'=>{label:'Email'},
+				//'phone_code'=>{label:'Landesvorwahl', type:Hidden},
+				//'fax'=>{label:'Fax', type:Hidden},
+				'postal_code'=>{label:'PLZ'},
+				'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: "d.m.Y"},
+				'city'=>{label:'Ort'},
+				//'country_code'=>{label:'Land'},
 				'creation_date'=>{label: 'Hinzugefügt', type:DateTimePicker, disabled: true, 
 					displayFormat: "d.m.Y H:i:S"}, 
-				'date_of_birth'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: "d.m.Y"},
-				'gender'=>{label:'Geschlecht',type:Select,options:[
+				/*'gender'=>{label:'Geschlecht',type:Select,options:[
 						''=>'?',
 						'M'=>'Männlich',
 						'F'=>'Weiblich'
 					]
-				},
-				'comments'=>{className:'big_comment',label:'Kommentar', type:TextArea},
+				},*/
 				'use_email'=>{label:'Post per Email',type: Checkbox},
+				'11r'=>{type:Box},
+				'comments'=>{className:'big_comment',label:'Kommentar', type:TextArea},
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},				
 				'mandator'=>{type:Hidden},

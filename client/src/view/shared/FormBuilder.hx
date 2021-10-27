@@ -118,9 +118,13 @@ class FormBuilder {
 		{
 			var value:Dynamic = Reflect.field(initialData,name);
 			if(name=='entry_date')trace (field.type +' $name:' + value);
-			//trace('$i::$name');
+			trace(field.type + ':$i::$name $value');
 			switch (field.type)
 			{
+				case FormInputElement.Box:
+					trace(field);
+					renderElement(jsx('<div/>'),'');
+						
 				case FormInputElement.Hidden:
 					jsx('<input key=${i++} type="hidden" name=${name} defaultValue=${value}/>');
 				case FormInputElement.Button: 
@@ -205,9 +209,10 @@ class FormBuilder {
 						decimalScale:2,
 						decimalSeparator:",",						
 						fixedDecimalScale:true,
-						/*format:function(nV:String) {
+						format:function(nV:String) {
+							trace(nV);
 							return nV.replace('.',',');
-						},*/
+						},
 						isNumericString: true,
 						name:name,
 						onChange: onChange,
@@ -256,9 +261,9 @@ class FormBuilder {
 					</div>');
 				default:
 					renderElement((field.cellFormat != null?
-						jsx('<input name=${name} onChange=${onChange} type="text" value=${field.cellFormat(value)} disabled=${field.disabled}  key=${i++} required=${field.required}/>')
+						jsx('<input name=${name} className=${field.className}  onChange=${onChange} type="text" value=${field.cellFormat(value)} disabled=${field.disabled}  key=${i++} required=${field.required}/>')
 						:
-						jsx('<input name=${name} onChange=${onChange} type="text" defaultValue=${value} disabled=${field.disabled}  key=${i++} required=${field.required}/>')),
+						jsx('<input name=${name} className=${field.className} onChange=${onChange} type="text" defaultValue=${value} disabled=${field.disabled}  key=${i++} required=${field.required}/>')),
 						field.label
 					);
 			}
@@ -312,7 +317,7 @@ class FormBuilder {
 	}
 	
 	function onChange(ev:Dynamic) {
-		//trace(ev.target.type);
+		trace(ev.target.type);
 		switch (ev.target.type)
 		{
 			case 'checkbox':

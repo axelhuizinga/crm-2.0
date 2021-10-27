@@ -368,7 +368,7 @@ class App extends ReactComponentOf<AppProps, AppState>
 		trace('pbxUserData!=null ? ' + (pbxUserData!=null?'Y':'N'));
 		//trace('props.userState.dbUser.jwt ${props.userState.dbUser.jwt == null} ${props.userState.dbUser.online}');
 		trace(state.status);
-		trace(state.userState);
+		//trace(state.userState);
 		//trace(state.userState.dbUser.jwt);
 		//trace(pbxUserData==null||!pbxUserData.keys().hasNext()?'':'');
 		//return (pbxUserData==null||!pbxUserData.keys().hasNext()?jsx('

@@ -443,7 +443,7 @@ input::-moz-focus-inner {
 {
 	/*width: min-content;flex-direction: column;*/
 	display:flex;	
-	
+	column-gap: 0.8rem;
 	flex-grow:1;
 	margin:0.3rem auto;	
 	min-width: 100%;
@@ -564,11 +564,13 @@ button::-moz-focus-inner {padding:0; border:0}
 	color:$darkSun;
 }
 .euro{
-	text-align: end;
+	padding-right: 1rem;
 }
-.euro:after{
-	content: ' €';
-}
+/*.euro:after{
+	content: " €";
+	position: absolute;
+	top: 0;
+}*/
 .passive
 {
 	color:$passive;
@@ -1082,10 +1084,10 @@ form td, form caption
 }
 .grid_scroll_box{
 	display: grid;
-	height: 24rem;
+	max-height: 100%;
 	border: none;
 	margin-top: 0.22rem;
-	padding: 0 1rem 0 0;
+	padding: 0.2rem 1rem;
 	overflow: hidden auto;
 }
 .g_block, .g_caption

@@ -1,4 +1,5 @@
 package model.data;
+import haxe.Exception;
 import shared.DbData;
 import php.Global;
 import db.DataSource;
@@ -68,36 +69,52 @@ class DebitReturnStatements extends Model
 		var fields:Array<String> = [];
 		if(dataSource != null)
 		{
-			trace(Std.string(dataSource));
-			var tKeys:Iterator<String> = dataSource.keys();
-			while(tKeys.hasNext())
-			{
-				var tableName = tKeys.next();
-				tableNames.push(tableName);
-				var tableProps:Map<String,Dynamic> = dataSource.get(tableName);
-				trace(Std.string(tableProps));
-
-				fields = fields.concat(buildFieldsSql(tableName, tableProps));
-				/*if(action == 'create')
+			try{				
+				trace(Reflect.hasField(dataSource,'keys')?'Y':'N');
+				if(Std.isOfType(dataSource,String)){
+					trace(cast(dataSource, String));
+					//trace(Unserializer.run(cast(dataSource, String)));
+					dataSource = Unserializer.run(param.get('dataSource'));
+					trace(Reflect.hasField(dataSource,'keys')?'Y':'N');
+					//return;
+				}
+				//trace(Std.isOfType(dataSource,String));
+				//trace(dataSource);
+				var tKeys:Iterator<String> = dataSource.keys();
+				while(tKeys.hasNext())
 				{
-					fields.remove('id');
-					fieldNames = fields;
-					buildValues(tableProps.get('data'));
-					setSql = fields.map(function (_)return '?').join(',');
-					setSql = '($setSql)';
-				}*/
-				if(tableProps.exists('filter'))
-					filterSql += buildCond(tableProps.get('filter'));
-				trace('filterSql:$filterSql::${1}');
-			}			
-			queryFields += fields.length > 0 ? fields.join(','):'';
+					var tableName = tKeys.next();
+					tableNames.push(tableName);
+					var tableProps:Map<String,Dynamic> = dataSource.get(tableName);
+					trace(Std.string(tableProps));
+
+					fields = fields.concat(buildFieldsSql(tableName, tableProps));
+					/*if(action == 'create')
+					{
+						fields.remove('id');
+						fieldNames = fields;
+						buildValues(tableProps.get('data'));
+						setSql = fields.map(function (_)return '?').join(',');
+						setSql = '($setSql)';
+					}*/
+					if(tableProps.exists('filter'))
+						filterSql += buildCond(tableProps.get('filter'));
+					trace('filterSql:$filterSql::${1}');
+				}			
+				queryFields += fields.length > 0 ? fields.join(','):'';
+			}catch(ex:Exception){
+				trace(ex.details());
+				trace(cast(dataSource, String));
+				//trace(Type.typeof(dataSource));
+				
+			}
 
 		}				
 		if (tableNames.length>1)
 		{
 			joinSql = buildJoin();
 		}			
-		trace('${action}:' + tableNames.toString());
+		trace('${action}:' + tableNames.join('|'));
 		trace(queryFields);		
 		trace(setSql);	
 		super.get();

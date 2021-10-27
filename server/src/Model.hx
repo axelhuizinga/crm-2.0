@@ -959,15 +959,16 @@ class Model
 		trace(defaults[0]);		
 		var set:Array<String> = new Array();		
 		trace(Reflect.fields(data).join(','));
+		trace(data);
 		for(col in defaults)
 		{
-			if(col.column_name == 'creation_date')
-				continue ;
+			//if(col.column_name == 'creation_date')
+				//continue ;
 			var val:String = Reflect.field(data,col.column_name);
 			if(val == null)
 				continue;
 			set.push('${alias}${quoteIdent(col.column_name)}=?');
-			trace('${col.column_name} $val / default:${col.column_default}');
+			trace('${col.column_name} |$val| / default:${col.column_default}');
 			setValues.push(val==null?col.column_default:val);
 		}
 		trace( 'SET ${set.join(',')} ');
@@ -1090,7 +1091,7 @@ class Model
 		var s:Serializer = new Serializer();
 		var dbQuery:DbQuery = s.unserialize(pData, DbQuery);
 		trace(dbQuery.dbParams);
-		if(dbQuery.dbParams['dataSource']!=null){ 
+		/*if(dbQuery.dbParams['dataSource']!=null){ 
 			var dS: Map<String,Map<String,Dynamic>> = new Map();
 			var u:Unserializer = new Unserializer(dbQuery.dbParams['dataSource']);
 			var loopCond:Bool = true;
@@ -1109,7 +1110,7 @@ class Model
 			}
 			//dbQuery.dbParams['dataSource'] = cast(Unserializer.run(dbQuery.dbParams['dataSource']), Map<String,Map<String,Dynamic>>;
 			trace('dataSource:' + Type.typeof(dbQuery.dbParams['dataSource']));
-		}
+		}*/
 		return dbQuery;
 	}	
 
@@ -1145,7 +1146,9 @@ class Model
 			Syntax.code("ini_set('memory_limit','1G')");			
 			trace(Syntax.code("ini_get('memory_limit')"));
 		}
+		//dataSource = new Map();//cast param['dataSource'];
 		dataSource = cast param['dataSource'];
+
 		dbRelations = param['dbRelations'];
 		dbData = new DbData();//'param' => dbData.dataInfo.copyStringMap(param),
 		dbData.dataInfo = dbData.dataInfo.copyStringMap(param);
@@ -1237,6 +1240,7 @@ class Model
 		 */
 		 	if(action == 'update')
 			{
+				trace(param);
 				setSql += buildSet(param.get('table'), param.get('data'));
 			}
 			if(action == 'create')

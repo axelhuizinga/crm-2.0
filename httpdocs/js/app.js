@@ -676,7 +676,6 @@ App.prototype = $extend(React_Component.prototype,{
 		}
 		haxe_Log.trace("pbxUserData!=null ? " + (App.pbxUserData != null ? "Y" : "N"),{ fileName : "App.hx", lineNumber : 368, className : "App", methodName : "render"});
 		haxe_Log.trace(this.state.status,{ fileName : "App.hx", lineNumber : 370, className : "App", methodName : "render"});
-		haxe_Log.trace(this.state.userState,{ fileName : "App.hx", lineNumber : 371, className : "App", methodName : "render"});
 		if(this.state.userState.waiting) {
 			var tmp = react_ReactType.fromString("section");
 			var tmp1 = react_ReactType.fromString("div");
@@ -27007,7 +27006,7 @@ view_shared_io_FormApi.mHandlers = function(e) {
 };
 view_shared_io_FormApi.renderSelectOptions = function(fel) {
 	var sel = fel;
-	var _this = ["Audio","Button","Hidden","DatePicker","DateTimePicker","Text","Password","Checkbox","Radio","Select","None","NFormat","TextArea","File","Upload"];
+	var _this = ["Audio","Box","Button","Hidden","DatePicker","DateTimePicker","Text","Password","Checkbox","Radio","Select","None","NFormat","TextArea","File","Upload"];
 	var result = new Array(_this.length);
 	var _g = 0;
 	var _g1 = _this.length;
@@ -28751,19 +28750,19 @@ view_data_Contacts.mapDispatchToProps = function(dispatch) {
 	if(view_data_Contacts._strace) {
 		haxe_Log.trace("ok",{ fileName : "view/data/Contacts.hx", lineNumber : 112, className : "view.data.Contacts", methodName : "mapDispatchToProps"});
 	}
-	return { select : function(id,data,component,selectType) {
+	return { model : "contacts", select : function(id,data,component,selectType) {
 		if(id == null) {
 			id = -1;
 		}
 		if(view_data_Contacts._strace) {
-			haxe_Log.trace("select:" + id + " selectType:" + selectType,{ fileName : "view/data/Contacts.hx", lineNumber : 118, className : "view.data.Contacts", methodName : "mapDispatchToProps"});
+			haxe_Log.trace("select:" + id + " selectType:" + selectType,{ fileName : "view/data/Contacts.hx", lineNumber : 119, className : "view.data.Contacts", methodName : "mapDispatchToProps"});
 		}
 		dispatch(redux_Action.map(action_async_LiveDataAccess.select({ component : component, id : id, data : data, match : component.props.match, selectType : selectType})));
 	}};
 };
 view_data_Contacts.mapStateToProps = function(aState) {
 	if(view_data_Contacts._strace) {
-		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/data/Contacts.hx", lineNumber : 131, className : "view.data.Contacts", methodName : "mapStateToProps"});
+		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/data/Contacts.hx", lineNumber : 132, className : "view.data.Contacts", methodName : "mapStateToProps"});
 	}
 	var bState = { dataStore : aState.dataStore, userState : aState.userState};
 	return bState;
@@ -28792,7 +28791,7 @@ view_data_Contacts.prototype = $extend(React_Component.prototype,{
 	}
 	,componentDidMount: function() {
 		if(this._trace) {
-			haxe_Log.trace(this.props.location.pathname,{ fileName : "view/data/Contacts.hx", lineNumber : 149, className : "view.data.Contacts", methodName : "componentDidMount"});
+			haxe_Log.trace(this.props.location.pathname,{ fileName : "view/data/Contacts.hx", lineNumber : 150, className : "view.data.Contacts", methodName : "componentDidMount"});
 		}
 	}
 	,render: function() {
@@ -28809,7 +28808,7 @@ view_data_Contacts.prototype = $extend(React_Component.prototype,{
 		this.setState(cState);
 	}
 	,importClientList: function(_) {
-		haxe_Log.trace("setState loading true => " + Std.string(this.state.loading),{ fileName : "view/data/Contacts.hx", lineNumber : 208, className : "view.data.Contacts", methodName : "importClientList"});
+		haxe_Log.trace("setState loading true => " + Std.string(this.state.loading),{ fileName : "view/data/Contacts.hx", lineNumber : 209, className : "view.data.Contacts", methodName : "importClientList"});
 		this.setState({ loading : true});
 	}
 	,__class__: view_data_Contacts
@@ -29805,7 +29804,7 @@ view_data_contacts_Deals.prototype = $extend(React_Component.prototype,{
 					var k = k_keys[k_current++];
 					_g.h[k] = this.dataAccess.h["open"].view.h[k];
 				}
-				return tmp.renderForm({ mHandlers : tmp1, fields : _g, model : "deal", title : "Bearbeite Spende"},this.state.actualState);
+				return tmp.renderForm({ mHandlers : tmp1, fields : _g, model : "deal"},this.state.actualState);
 			}
 			break;
 		default:
@@ -29919,7 +29918,7 @@ var view_data_contacts_Edit = function(props) {
 $hxClasses["view.data.contacts.Edit"] = view_data_contacts_Edit;
 view_data_contacts_Edit.__name__ = "view.data.contacts.Edit";
 view_data_contacts_Edit.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace("here we should be ready to load",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 617, className : "view.data.contacts.Edit", methodName : "mapDispatchToProps"});
+	haxe_Log.trace("here we should be ready to load",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 623, className : "view.data.contacts.Edit", methodName : "mapDispatchToProps"});
 	return { load : function(param) {
 		return dispatch(redux_Action.map(action_async_CRUD.read(param)));
 	}};
@@ -30128,11 +30127,17 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		}
 		var data2save = this.state.actualState.allModified();
 		var doc = window.document;
-		var formElement = js_Boot.__cast(doc.querySelector("form[name=\"contact\"]") , HTMLFormElement);
+		var formElement = js_Boot.__cast(doc.querySelector("form[name=\"contacts\"]") , HTMLFormElement);
+		if(formElement != null) {
+			haxe_Log.trace(formElement.name,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 425, className : "view.data.contacts.Edit", methodName : "update"});
+		} else {
+			haxe_Log.trace("oooops...",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 427, className : "view.data.contacts.Edit", methodName : "update"});
+			return;
+		}
 		var elements = formElement.elements;
 		var aState = react_ReactUtil.copy(this.state.actualState);
 		var dbQ = { classPath : "data.Contacts", action : "update", data : data2save, filter : { id : this.state.actualState.id, mandator : 1}, resolveMessage : { success : "Kontakt " + this.state.actualState.id + " wurde aktualisiert", failure : "Kontakt " + this.state.actualState.id + " konnte nicht aktualisiert werden"}, table : "contacts", dbUser : this.props.userState.dbUser, devIP : App.devIP};
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 439, className : "view.data.contacts.Edit", methodName : "update"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 445, className : "view.data.contacts.Edit", methodName : "update"});
 		switch(this.props.match.params.action) {
 		case "delete":case "get":
 			var _g = new haxe_ds_StringMap();
@@ -30147,28 +30152,28 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 			while(_g < _g1.length) {
 				var f = _g1[_g];
 				++_g;
-				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 445, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 451, className : "view.data.contacts.Edit", methodName : "update"});
 				if(Reflect.field(aState,f) == "") {
 					Reflect.deleteField(aState,f);
 				}
 			}
 			break;
 		case "update":
-			haxe_Log.trace("" + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 457, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace("" + Std.string(this.state.initialData.id) + " :: creation_date: " + Std.string(aState.creation_date) + " " + Std.string(this.state.initialData.creation_date),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 463, className : "view.data.contacts.Edit", methodName : "update"});
 			if(this.state.actualState != null) {
-				haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 461, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace(Std.string(this.state.actualState.modified()) + (":" + Std.string(this.state.actualState.fieldsModified)),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 467, className : "view.data.contacts.Edit", methodName : "update"});
 			}
-			haxe_Log.trace(this.state.actualState.id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 463, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace(this.state.actualState.id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 469, className : "view.data.contacts.Edit", methodName : "update"});
 			if(!this.state.actualState.modified()) {
-				haxe_Log.trace("nothing modified",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 467, className : "view.data.contacts.Edit", methodName : "update"});
+				haxe_Log.trace("nothing modified",{ fileName : "view/data/contacts/Edit.hx", lineNumber : 473, className : "view.data.contacts.Edit", methodName : "update"});
 				return;
 			}
-			haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 470, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace(this.state.actualState.allModified(),{ fileName : "view/data/contacts/Edit.hx", lineNumber : 476, className : "view.data.contacts.Edit", methodName : "update"});
 			break;
 		}
 		var p = App.store.dispatch(redux_Action.map(action_async_CRUD.update(dbQ)));
 		p.then(function(d) {
-			haxe_Log.trace(d,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 483, className : "view.data.contacts.Edit", methodName : "update"});
+			haxe_Log.trace(d,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 489, className : "view.data.contacts.Edit", methodName : "update"});
 			_gthis.loadContactData(_gthis.state.actualState.id);
 		});
 	}
@@ -30304,7 +30309,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		return React.createElement(tmp,{ },tmp1,tmp2);
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 584, className : "view.data.contacts.Edit", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 590, className : "view.data.contacts.Edit", methodName : "render"});
 		if(this.state == null || this.state.initialData == null) {
 			return null;
 		}
@@ -30318,7 +30323,7 @@ view_data_contacts_Edit.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,select: function(id,data,match) {
-		haxe_Log.trace(id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 613, className : "view.data.contacts.Edit", methodName : "select"});
+		haxe_Log.trace(id,{ fileName : "view/data/contacts/Edit.hx", lineNumber : 619, className : "view.data.contacts.Edit", methodName : "select"});
 	}
 	,__class__: view_data_contacts_Edit
 });
@@ -31957,6 +31962,10 @@ view_shared_FormBuilder.prototype = {
 				tmp = this.renderElement(field.cellFormat != null ? React.createElement(react_ReactType.fromString("input"),{ key : this.i++, name : name, onChange : $bind(this,this.onChange), type : "text", value : field.cellFormat(value), disabled : field.disabled, required : field.required}) : React.createElement(react_ReactType.fromString("input"),{ key : this.i++, name : name, onChange : $bind(this,this.onChange), type : "text", defaultValue : value, disabled : field.disabled, required : field.required}),field.label);
 			} else {
 				switch(_g1) {
+				case "Box":
+					haxe_Log.trace(field,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 125, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
+					tmp = this.renderElement(React.createElement(react_ReactType.fromString("div"),{ }),"");
+					break;
 				case "Button":
 					tmp = React.createElement(react_ReactType.fromString("button"),{ key : this.i++, type : "submit"},value);
 					break;
@@ -31990,15 +31999,15 @@ view_shared_FormBuilder.prototype = {
 					break;
 				case "NFormat":
 					var nfP = { decimalScale : 2, decimalSeparator : ",", fixedDecimalScale : true, isNumericString : true, name : name, onChange : $bind(this,this.onChange), onValueChange : function(values) {
-						haxe_Log.trace(values,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 215, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
+						haxe_Log.trace(values,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 219, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
 					}, removeFormatting : function(fV) {
-						haxe_Log.trace(Std.string(parseFloat(fV)),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 219, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
+						haxe_Log.trace(Std.string(parseFloat(fV)),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 223, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
 						return Std.string(parseFloat(fV));
 					}, suffix : " €", value : value};
 					tmp = React.createElement(react_ReactType.fromString("div"),{ key : this.i++, className : "g_row_2", role : "rowgroup"},React.createElement(react_ReactType.fromString("div"),{ className : "g_cell", role : "cell"},field.label),React.createElement(react_ReactType.fromString("div"),{ className : "g_cell_r", role : "cell"},React.createElement(react_ReactType.fromComp(react_NumberFormat),nfP)));
 					break;
 				case "Radio":
-					haxe_Log.trace(field.type + (" " + name + ":") + Std.string(value),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 146, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
+					haxe_Log.trace(field.type + (" " + name + ":") + Std.string(value),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 150, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
 					var tmp7 = react_ReactType.fromString("div");
 					var tmp8 = { key : this.i++, className : "g_row_2_radio", role : "rowgroup"};
 					var tmp9 = name + "_" + this.i;
@@ -32008,11 +32017,11 @@ view_shared_FormBuilder.prototype = {
 					tmp = React.createElement(tmp7,tmp8,tmp10,React.createElement(tmp11,{ key : name + "_opt", className : "g_cell_r optLabel", role : "cell"},tmp12));
 					break;
 				case "Select":
-					haxe_Log.trace("" + this.i + ":: " + name + ": " + Std.string(value),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 154, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
+					haxe_Log.trace("" + this.i + ":: " + name + ": " + Std.string(value),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 158, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
 					tmp = this.renderElement(React.createElement(react_ReactType.fromString("select"),{ key : this.i++, name : name, onChange : $bind(this,this.onChange), className : field.className, defaultValue : value, multiple : field.multiple},this.renderSelect(field.options)),field.label);
 					break;
 				case "TextArea":
-					haxe_Log.trace(field,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 241, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
+					haxe_Log.trace(field,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 245, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
 					if(value == null) {
 						value = "";
 					}
@@ -32040,7 +32049,7 @@ view_shared_FormBuilder.prototype = {
 		return _g;
 	}
 	,renderForm: function(props,initialState) {
-		haxe_Log.trace(props.model,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 270, className : "view.shared.FormBuilder", methodName : "renderForm"});
+		haxe_Log.trace(props.model,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 274, className : "view.shared.FormBuilder", methodName : "renderForm"});
 		var sK = 0;
 		var tmp = react_ReactType.fromString("form");
 		var tmp1 = { key : props.model, ref : props.formRef, name : props.model, className : "tabComponentForm formField"};
@@ -32055,13 +32064,13 @@ view_shared_FormBuilder.prototype = {
 		if(mItem.separator) {
 			return React.createElement(react_ReactType.fromString("hr"),{ className : "menuSeparator"});
 		}
-		haxe_Log.trace(mItem.handler,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 291, className : "view.shared.FormBuilder", methodName : "renderButton"});
+		haxe_Log.trace(mItem.handler,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 295, className : "view.shared.FormBuilder", methodName : "renderButton"});
 		return React.createElement(react_ReactType.fromComp(bulma_$components_Button),{ key : i++, onClick : mItem.handler, 'data-section' : mItem.section, disabled : mItem.disabled, type : "button"},mItem.label);
 	}
 	,itemHandler: function(e) {
 		e.preventDefault();
 		var action = (js_Boot.__cast(e.target , HTMLElement)).getAttribute("data-action");
-		haxe_Log.trace(action,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 302, className : "view.shared.FormBuilder", methodName : "itemHandler"});
+		haxe_Log.trace(action,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 306, className : "view.shared.FormBuilder", methodName : "itemHandler"});
 		var mP = Reflect.field(this.comp.state.formApi,"callMethod");
 		mP.apply(this.comp.state.formApi,[action,e]);
 	}
@@ -32071,7 +32080,7 @@ view_shared_FormBuilder.prototype = {
 	,onChange: function(ev) {
 		switch(ev.target.type) {
 		case "checkbox":
-			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 319, className : "view.shared.FormBuilder", methodName : "onChange"});
+			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 323, className : "view.shared.FormBuilder", methodName : "onChange"});
 			var tmp;
 			switch(ev.target.checked) {
 			case "1":case "TRUE":case "on":case true:
@@ -32081,7 +32090,7 @@ view_shared_FormBuilder.prototype = {
 				tmp = 0;
 			}
 			view_shared_io_BaseForm.doChange(this.comp,ev.target.name,tmp);
-			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 329, className : "view.shared.FormBuilder", methodName : "onChange"});
+			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 333, className : "view.shared.FormBuilder", methodName : "onChange"});
 			break;
 		case "select-multiple":case "select-one":
 			view_shared_io_BaseForm.doChange(this.comp,ev.target.name,ev.target.value);
@@ -34811,41 +34820,34 @@ model_contacts_ContactsModel.dataAccess = (function($this) {
 		_g1.h["contacts"] = _g2;
 		var _g2 = new haxe_ds_StringMap();
 		var _g3 = new haxe_ds_StringMap();
-		_g3.h["active"] = "Aktiv";
-		_g3.h["passive"] = "Passiv";
-		_g3.h["blocked"] = "Gesperrt";
-		_g2.h["status"] = { label : "Status", type : "Select", options : _g3};
-		_g2.h["title_pro"] = { label : "Titel"};
-		_g2.h["first_name"] = { label : "Vorname"};
-		_g2.h["last_name"] = { label : "Name"};
-		_g2.h["email"] = { label : "Email"};
-		_g2.h["phone_code"] = { label : "Landesvorwahl"};
-		_g2.h["phone_number"] = { label : "Telefon"};
-		_g2.h["mobile"] = { label : "Mobil"};
-		_g2.h["fax"] = { label : "Fax"};
-		_g2.h["company_name"] = { label : "Firmenname"};
-		_g2.h["address1"] = { label : "Straße"};
-		_g2.h["address2"] = { label : "Hausnummer"};
-		_g2.h["postal_code"] = { label : "PLZ"};
-		_g2.h["city"] = { label : "Ort"};
-		var _g3 = new haxe_ds_StringMap();
 		_g3.h[""] = "?";
 		_g3.h["Herr"] = "Herr";
 		_g3.h["Frau"] = "Frau";
 		_g3.h["Familie"] = "Familie";
 		_g3.h["Firma"] = "Firma";
 		_g2.h["title"] = { label : "Anrede", type : "Select", options : _g3};
-		_g2.h["country_code"] = { label : "Land"};
-		_g2.h["care_of"] = { label : "Adresszusatz"};
-		_g2.h["creation_date"] = { label : "Hinzugefügt", type : "DateTimePicker", disabled : true, displayFormat : "d.m.Y H:i:S"};
-		_g2.h["date_of_birth"] = { label : "Geburtsdatum", type : "DatePicker", displayFormat : "d.m.Y"};
 		var _g3 = new haxe_ds_StringMap();
-		_g3.h[""] = "?";
-		_g3.h["M"] = "Männlich";
-		_g3.h["F"] = "Weiblich";
-		_g2.h["gender"] = { label : "Geschlecht", type : "Select", options : _g3};
-		_g2.h["comments"] = { className : "big_comment", label : "Kommentar", type : "TextArea"};
+		_g3.h["active"] = "Aktiv";
+		_g3.h["passive"] = "Passiv";
+		_g3.h["blocked"] = "Gesperrt";
+		_g2.h["status"] = { label : "Status", type : "Select", options : _g3};
+		_g2.h["title_pro"] = { label : "Titel"};
+		_g2.h["phone_number"] = { label : "Telefon"};
+		_g2.h["first_name"] = { label : "Vorname"};
+		_g2.h["mobile"] = { label : "Mobil"};
+		_g2.h["last_name"] = { label : "Name"};
+		_g2.h["company_name"] = { label : "Firmenname"};
+		_g2.h["address1"] = { label : "Straße"};
+		_g2.h["care_of"] = { label : "C/O"};
+		_g2.h["address2"] = { label : "Hausnummer"};
+		_g2.h["email"] = { label : "Email"};
+		_g2.h["postal_code"] = { label : "PLZ"};
+		_g2.h["date_of_birth"] = { label : "Geburtsdatum", type : "DatePicker", displayFormat : "d.m.Y"};
+		_g2.h["city"] = { label : "Ort"};
+		_g2.h["creation_date"] = { label : "Hinzugefügt", type : "DateTimePicker", disabled : true, displayFormat : "d.m.Y H:i:S"};
 		_g2.h["use_email"] = { label : "Post per Email", type : "Checkbox"};
+		_g2.h["11r"] = { type : "Box"};
+		_g2.h["comments"] = { className : "big_comment", label : "Kommentar", type : "TextArea"};
 		_g2.h["id"] = { type : "Hidden"};
 		_g2.h["edited_by"] = { type : "Hidden"};
 		_g2.h["mandator"] = { type : "Hidden"};
@@ -34962,9 +34964,7 @@ model_deals_DealsModel.dataAccess = (function($this) {
 		_g3.h["semiannual"] = "Halbj.";
 		_g3.h["annual"] = "Jährl.";
 		_g2.h["cycle"] = { label : "Turnus", type : "Radio", options : _g3};
-		_g2.h["amount"] = { label : "Betrag", cellFormat : function(v) {
-			return App.sprintf("%01.2f €",v).replace(".",",");
-		}, type : "Text"};
+		_g2.h["amount"] = { label : "Betrag", type : "Text"};
 		var _g3 = new haxe_ds_StringMap();
 		_g3.h["2"] = "Kinderhilfe";
 		_g3.h["3"] = "Tierhilfe";
@@ -35103,7 +35103,6 @@ model_qc_QCModel.dataAccess = (function($this) {
 		_g2.h["address2"] = { label : "Hausnummer"};
 		_g2.h["geburts_datum"] = { label : "Geburtsdatum", type : "DatePicker", displayFormat : "d.m.Y"};
 		_g2.h["postal_code"] = { label : "PLZ"};
-		_g2.h["city"] = { label : "Ort"};
 		_g2.h["country_code"] = { type : "Hidden", disabled : true, label : "Land"};
 		_g2.h["creation_date"] = { label : "Hinzugefügt", type : "Hidden", disabled : true, displayFormat : "d.m.Y H:i:S"};
 		var _g3 = new haxe_ds_StringMap();
@@ -35119,7 +35118,20 @@ model_qc_QCModel.dataAccess = (function($this) {
 			return v;
 		}, disabled : false, type : "Select", options : _g3};
 		_g2.h["owner"] = value;
+		_g2.h["city"] = { label : "Ort"};
 		_g2.h["comments"] = { className : "big_comment", label : "Kommentar", type : "TextArea"};
+		var _g3 = new haxe_ds_StringMap();
+		_g3.h["Monatlich"] = "Mtl.";
+		_g3.h["Vierteljährlich"] = "Vtl.";
+		_g3.h["Halbjährlich"] = "Halbj.";
+		_g3.h["Jährlich"] = "Jährl.";
+		_g3.h["Einmalspende"] = "1x";
+		_g2.h["period"] = { label : "Zahlweise", type : "Radio", options : _g3};
+		var _g3 = new haxe_ds_StringMap();
+		_g3.h["info_brief"] = "Brief";
+		_g3.h["info_mail"] = "EMail";
+		_g3.h["no_info"] = "Keine";
+		_g2.h["mailing"] = { label : "Info", type : "Radio", options : _g3};
 		var _g3 = new haxe_ds_StringMap();
 		_g3.h["Januar"] = "Januar";
 		_g3.h["Februar"] = "Februar";
@@ -35134,29 +35146,18 @@ model_qc_QCModel.dataAccess = (function($this) {
 		_g3.h["November"] = "November";
 		_g3.h["Dezember"] = "Dezember";
 		_g2.h["start_monat"] = { label : "Ab", type : "Select", options : _g3};
-		var _g3 = new haxe_ds_StringMap();
-		_g3.h["Monatlich"] = "Mtl.";
-		_g3.h["Vierteljährlich"] = "Vtl.";
-		_g3.h["Halbjährlich"] = "Halbj.";
-		_g3.h["Jährlich"] = "Jährl.";
-		_g3.h["Einmalspende"] = "1x";
-		_g2.h["period"] = { label : "Zahlweise", type : "Radio", options : _g3};
-		_g2.h["spenden_hoehe"] = { label : "Betrag"};
 		_g2.h["buchungs_tag"] = { label : "Buchungstag"};
 		var _g3 = new haxe_ds_StringMap();
 		_g3.h["1"] = "Monatsanfang";
 		_g3.h["15"] = "Monatsmitte";
 		_g2.h["buchungs_zeitpunkt"] = { label : "Buchung zum 1. oder 15. ", type : "Radio", options : _g3};
 		_g2.h["account"] = { label : "Kontonummer"};
+		_g2.h["spenden_hoehe"] = { label : "Betrag"};
 		_g2.h["blz"] = { label : "Bankleitzahl (BLZ)"};
-		_g2.h["iban"] = { label : "IBAN"};
-		_g2.h["bank_name"] = { label : "Bankinstitut"};
-		var _g3 = new haxe_ds_StringMap();
-		_g3.h["info_brief"] = "Brief";
-		_g3.h["info_mail"] = "EMail";
-		_g3.h["no_info"] = "Keine";
-		_g2.h["mailing"] = { label : "Info", type : "Radio", options : _g3};
 		_g2.h["entry_date"] = { label : "Verkauf", type : "DatePicker", displayFormat : "d.m.Y"};
+		_g2.h["iban"] = { label : "IBAN"};
+		_g2.h["18_l"] = { type : "Box"};
+		_g2.h["bank_name"] = { label : "Bankinstitut"};
 		_g2.h["edited_by"] = { type : "Hidden"};
 		_g2.h["id"] = { type : "Hidden"};
 		_g2.h["mandator"] = { type : "Hidden"};
@@ -35181,7 +35182,7 @@ model_qc_QCModel.qcColumns = (function($this) {
 	_g.h["entry_list_id"] = { show : false};
 	_g.h["lead_id"] = { show : false};
 	_g.h["last_local_call_time"] = { label : "Datum", cellFormat : function(v) {
-		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 137, className : "model.qc.QCModel", methodName : "qcColumns"});
+		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 140, className : "model.qc.QCModel", methodName : "qcColumns"});
 		if(v != null) {
 			return DateTools.format(HxOverrides.strDate(v),"%d.%m.%Y");
 		} else {
@@ -35223,7 +35224,7 @@ model_qc_QCModel.listColumns = (function($this) {
 	_g.h["city"] = { label : "Ort"};
 	_g.h["state"] = { label : "Status", className : "tCenter", cellFormat : function(v) {
 		var uState = v == "active" ? "user" : "user-slash";
-		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 177, className : "model.qc.QCModel", methodName : "listColumns"});
+		haxe_Log.trace(v,{ fileName : "model/qc/QCModel.hx", lineNumber : 180, className : "model.qc.QCModel", methodName : "listColumns"});
 		return React.createElement(react_ReactType.fromString("span"),{ className : "fa fa-" + uState});
 	}};
 	_g.h["id"] = { show : false};

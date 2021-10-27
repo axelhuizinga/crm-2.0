@@ -36,7 +36,7 @@ class QCModel
 				'address1'=>{label:'Straße'},'email'=>{label:'Email'},
 				'address2'=>{label:'Hausnummer'},'geburts_datum'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: "d.m.Y"},
 				'postal_code'=>{label:'PLZ'},
-				'city'=>{label:'Ort'},
+				
 				//'use_email'=>{label:'Post per Email',type: Checkbox},'Adresszusatz'
 				//'phone_code'=>{label:'Landesvorwahl'},		
 				
@@ -67,7 +67,20 @@ class QCModel
 						''=>'?'
 					],
 				},
-				'comments'=>{className:'big_comment',label:'Kommentar', type:TextArea},				
+				'city'=>{label:'Ort'},
+				'comments'=>{className:'big_comment',label:'Kommentar', type:TextArea},
+				'period'=>{label:'Zahlweise',type:Radio,options:[
+					'Monatlich' => 'Mtl.', 
+					'Vierteljährlich' => 'Vtl.',
+					'Halbjährlich' => 'Halbj.', 
+					'Jährlich' => 'Jährl.',
+					'Einmalspende' => '1x'
+				]},	
+				'mailing'=>{label:'Info',type: Radio,options: [
+					'info_brief' => 'Brief',
+					'info_mail' => 'EMail',
+					'no_info' => 'Keine'
+				]},
 				'start_monat'=>{label:'Ab', type:Select,options:[
 					'Januar' => 'Januar',
 					'Februar' => 'Februar',
@@ -83,34 +96,24 @@ class QCModel
 					'November' => 'November',
 					'Dezember' => 'Dezember'
 				]},
-				'period'=>{label:'Zahlweise',type:Radio,options:[
-					'Monatlich' => 'Mtl.', 
-					'Vierteljährlich' => 'Vtl.',
-					'Halbjährlich' => 'Halbj.', 
-					'Jährlich' => 'Jährl.',
-					'Einmalspende' => '1x'
-				]},
-				'spenden_hoehe'=>{label:'Betrag'},
 				'buchungs_tag'=>{label:'Buchungstag'},
 				'buchungs_zeitpunkt'=>{label:'Buchung zum 1. oder 15. ',type:Radio,options:[
 					'1'=>'Monatsanfang',
 					'15'=>'Monatsmitte'
 				]},
 				'account'=>{label:'Kontonummer'},
+				'spenden_hoehe'=>{label:'Betrag'},
 				'blz'=>{label:'Bankleitzahl (BLZ)'},
-				'iban'=>{label:'IBAN'},
-				'bank_name'=>{label:'Bankinstitut'},
-				'mailing'=>{label:'Info',type: Radio,options: [
-					'info_brief' => 'Brief',
-					'info_mail' => 'EMail',
-					'no_info' => 'Keine'
-				]},
 				'entry_date'=>{label: 'Verkauf', type:DatePicker, displayFormat: "d.m.Y"/*cellFormat: function(v:String) {
 					//trace(v);
 					return v!=null? DateTools.format(Date.fromString(v), "%d.%m.%Y"):'';
 					//return v;
 					}*/
-				},
+				},				
+				'iban'=>{label:'IBAN'},
+				'18_l'=>{type:Box},
+				'bank_name'=>{label:'Bankinstitut'},
+
 				'edited_by' => {type:Hidden},				
 				'id' => {type:Hidden},
 				'mandator'=>{type:Hidden},

@@ -1,9 +1,11 @@
 package view.shared;
 
 @:enum
+@:keep
 abstract FormInputElement(String)
 {	
 	var Audio;
+	var Box;
 	var Button;
 	var Hidden;
 	var DatePicker;

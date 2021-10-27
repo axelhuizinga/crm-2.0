@@ -277,7 +277,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 					],
 					model:'deal',
 					//ref:formRef,
-					title: 'Bearbeite Spende' 
+					//title: 'Bearbeite Spende' 
 				},state.actualState));
 			default:
 				trace('>>>${props.parentComponent.props.match.params.action}<<<');

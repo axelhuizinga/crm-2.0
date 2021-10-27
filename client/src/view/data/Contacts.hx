@@ -111,6 +111,7 @@ class Contacts extends ReactComponentOf<DataFormProps,FormState>
     {
 		if(_strace) trace('ok');
         return {			
+			model:'contacts',
 			//select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,match:RouterMatch, ?selectType:SelectType)
 			select:function(id:Int = -1,data:IntMap<Map<String,Dynamic>>,component:Contacts, 
 				?selectType:SelectType)			

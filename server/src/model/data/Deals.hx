@@ -153,7 +153,7 @@ class Deals extends Model
 			//trace(qcJoin?'Y':'N');
 			if(qcJoin){
 				sqlBf.add(
-					'UPDATE ${qcdb}..vicidial_list vl INNER JOIN ${qcdb}.custom_${param["filter"].entry_list_id} cu 
+					'UPDATE ${qcdb}.vicidial_list vl INNER JOIN ${qcdb}.custom_${param["filter"].entry_list_id} cu 
 					ON vl.lead_id=cu.lead_id '
 				);
 

@@ -30,12 +30,15 @@ class DealsModel
 				'booking_run'=>{label:'Buchungslauf',type: Radio,options: ['start'=>'Monatsanfang','middle'=>'Monatsmitte']},
 				'cycle'=>{label:'Turnus',type:Radio,options:[
 					'once'=>'Einmal','monthly'=>'Mtl.','quarterly'=>'Vtl.',
-					'semiannual'=>'Halbj.', 'annual'=>'Jährl.']},
-					
-				//'amount'=>{label:'Betrag', type:NFormat},
-				'amount'=>{label:'Betrag', cellFormat: function(v) {
+					'semiannual'=>'Halbj.', 'annual'=>'Jährl.'
+				]},					
+				'amount'=>{label:'Betrag', type:NFormat},
+				//'amount'=>{label:'Betrag', className:'euro',
+				/*cellFormat: function(v) {
+					trace(v);
 					return App.sprintf('%01.2f €',v).replace('.',',');
-				},type:Text},
+				},*/
+				//type:Text},
 				'product'=>{label:'Produkt',type:Select,options:['2'=>'Kinderhilfe','3'=>'Tierhilfe']},
 				//'agent'=>{label:'Agent'},
 				//'sepa_code'=>{label:'Kündigungsgrund',type:DatePicker, displayFormat: "d.m.Y"},

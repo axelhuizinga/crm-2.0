@@ -338,7 +338,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 					className="is-striped is-hoverable" fullWidth=${true}/>
 				');*/
 			case 'open'|'update':
-				trace(state.actualState);
+				//trace(state.actualState);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 				];*/

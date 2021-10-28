@@ -165,7 +165,7 @@ var scrollbarWidth;
 let config =
 {
 	//api:'https://'+__host__ + '/graphql',
-	api:'https://'+"pitverwaltung.de" + '/server.php',
+	api:'https://'+"dev.pitverwaltung.de" + '/server.php',
 	fieldProps:{
 		user:{
 			className:'cRight'
@@ -30750,7 +30750,6 @@ view_data_deals_Edit.prototype = $extend(React_Component.prototype,{
 			haxe_Log.trace(Std.string(this.state.dbTable[29].h["id"]) + "<<<",{ fileName : "view/data/deals/Edit.hx", lineNumber : 358, className : "view.data.deals.Edit", methodName : "renderResults"});
 			return React.createElement(react_ReactType.fromComp(view_table_Table),Object.assign({ },this.props,{ id : "fieldsList", data : this.state.dbTable, dataState : this.dataDisplay.h["fieldsList"], className : "is-striped is-hoverable", fullWidth : true}));
 		case "open":case "update":
-			haxe_Log.trace(this.state.actualState,{ fileName : "view/data/deals/Edit.hx", lineNumber : 341, className : "view.data.deals.Edit", methodName : "renderResults"});
 			if(this.state.actualState == null) {
 				return this.state.formApi.renderWait();
 			} else {
@@ -31956,10 +31955,11 @@ view_shared_FormBuilder.prototype = {
 			if(name == "entry_date") {
 				haxe_Log.trace(field.type + (" " + name + ":") + Std.string(value),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 120, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
 			}
+			haxe_Log.trace(field.type + (":" + this.i + "::" + name + " " + Std.string(value)),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 121, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
 			var _g1 = field.type;
 			var tmp;
 			if(_g1 == null) {
-				tmp = this.renderElement(field.cellFormat != null ? React.createElement(react_ReactType.fromString("input"),{ key : this.i++, name : name, onChange : $bind(this,this.onChange), type : "text", value : field.cellFormat(value), disabled : field.disabled, required : field.required}) : React.createElement(react_ReactType.fromString("input"),{ key : this.i++, name : name, onChange : $bind(this,this.onChange), type : "text", defaultValue : value, disabled : field.disabled, required : field.required}),field.label);
+				tmp = this.renderElement(field.cellFormat != null ? React.createElement(react_ReactType.fromString("input"),{ key : this.i++, name : name, className : field.className, onChange : $bind(this,this.onChange), type : "text", value : field.cellFormat(value), disabled : field.disabled, required : field.required}) : React.createElement(react_ReactType.fromString("input"),{ key : this.i++, name : name, className : field.className, onChange : $bind(this,this.onChange), type : "text", defaultValue : value, disabled : field.disabled, required : field.required}),field.label);
 			} else {
 				switch(_g1) {
 				case "Box":
@@ -31998,10 +31998,13 @@ view_shared_FormBuilder.prototype = {
 					tmp = React.createElement(react_ReactType.fromString("input"),{ key : this.i++, type : "hidden", name : name, defaultValue : value});
 					break;
 				case "NFormat":
-					var nfP = { decimalScale : 2, decimalSeparator : ",", fixedDecimalScale : true, isNumericString : true, name : name, onChange : $bind(this,this.onChange), onValueChange : function(values) {
-						haxe_Log.trace(values,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 219, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
+					var nfP = { decimalScale : 2, decimalSeparator : ",", fixedDecimalScale : true, format : function(nV) {
+						haxe_Log.trace(nV,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 213, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
+						return StringTools.replace(nV,".",",");
+					}, isNumericString : true, name : name, onChange : $bind(this,this.onChange), onValueChange : function(values) {
+						haxe_Log.trace(values,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 220, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
 					}, removeFormatting : function(fV) {
-						haxe_Log.trace(Std.string(parseFloat(fV)),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 223, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
+						haxe_Log.trace(Std.string(parseFloat(fV)),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 224, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
 						return Std.string(parseFloat(fV));
 					}, suffix : " €", value : value};
 					tmp = React.createElement(react_ReactType.fromString("div"),{ key : this.i++, className : "g_row_2", role : "rowgroup"},React.createElement(react_ReactType.fromString("div"),{ className : "g_cell", role : "cell"},field.label),React.createElement(react_ReactType.fromString("div"),{ className : "g_cell_r", role : "cell"},React.createElement(react_ReactType.fromComp(react_NumberFormat),nfP)));
@@ -32021,7 +32024,7 @@ view_shared_FormBuilder.prototype = {
 					tmp = this.renderElement(React.createElement(react_ReactType.fromString("select"),{ key : this.i++, name : name, onChange : $bind(this,this.onChange), className : field.className, defaultValue : value, multiple : field.multiple},this.renderSelect(field.options)),field.label);
 					break;
 				case "TextArea":
-					haxe_Log.trace(field,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 245, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
+					haxe_Log.trace(field,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 246, className : "view.shared.FormBuilder", methodName : "renderFormInputElements"});
 					if(value == null) {
 						value = "";
 					}
@@ -32041,7 +32044,7 @@ view_shared_FormBuilder.prototype = {
 					tmp = React.createElement(react_ReactType.fromString("div"),{ key : this.i++, className : "g_row_2", role : "rowgroup"},React.createElement(react_ReactType.fromString("div"),{ className : "g_cell", role : "cell"},field.label),React.createElement(react_ReactType.fromString("div"),{ className : "g_cell_r", role : "cell"},"Dummy"));
 					break;
 				default:
-					tmp = this.renderElement(field.cellFormat != null ? React.createElement(react_ReactType.fromString("input"),{ key : this.i++, name : name, onChange : $bind(this,this.onChange), type : "text", value : field.cellFormat(value), disabled : field.disabled, required : field.required}) : React.createElement(react_ReactType.fromString("input"),{ key : this.i++, name : name, onChange : $bind(this,this.onChange), type : "text", defaultValue : value, disabled : field.disabled, required : field.required}),field.label);
+					tmp = this.renderElement(field.cellFormat != null ? React.createElement(react_ReactType.fromString("input"),{ key : this.i++, name : name, className : field.className, onChange : $bind(this,this.onChange), type : "text", value : field.cellFormat(value), disabled : field.disabled, required : field.required}) : React.createElement(react_ReactType.fromString("input"),{ key : this.i++, name : name, className : field.className, onChange : $bind(this,this.onChange), type : "text", defaultValue : value, disabled : field.disabled, required : field.required}),field.label);
 				}
 			}
 			_g.push(tmp);
@@ -32049,7 +32052,7 @@ view_shared_FormBuilder.prototype = {
 		return _g;
 	}
 	,renderForm: function(props,initialState) {
-		haxe_Log.trace(props.model,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 274, className : "view.shared.FormBuilder", methodName : "renderForm"});
+		haxe_Log.trace(props.model,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 275, className : "view.shared.FormBuilder", methodName : "renderForm"});
 		var sK = 0;
 		var tmp = react_ReactType.fromString("form");
 		var tmp1 = { key : props.model, ref : props.formRef, name : props.model, className : "tabComponentForm formField"};
@@ -32064,13 +32067,13 @@ view_shared_FormBuilder.prototype = {
 		if(mItem.separator) {
 			return React.createElement(react_ReactType.fromString("hr"),{ className : "menuSeparator"});
 		}
-		haxe_Log.trace(mItem.handler,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 295, className : "view.shared.FormBuilder", methodName : "renderButton"});
+		haxe_Log.trace(mItem.handler,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 296, className : "view.shared.FormBuilder", methodName : "renderButton"});
 		return React.createElement(react_ReactType.fromComp(bulma_$components_Button),{ key : i++, onClick : mItem.handler, 'data-section' : mItem.section, disabled : mItem.disabled, type : "button"},mItem.label);
 	}
 	,itemHandler: function(e) {
 		e.preventDefault();
 		var action = (js_Boot.__cast(e.target , HTMLElement)).getAttribute("data-action");
-		haxe_Log.trace(action,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 306, className : "view.shared.FormBuilder", methodName : "itemHandler"});
+		haxe_Log.trace(action,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 307, className : "view.shared.FormBuilder", methodName : "itemHandler"});
 		var mP = Reflect.field(this.comp.state.formApi,"callMethod");
 		mP.apply(this.comp.state.formApi,[action,e]);
 	}
@@ -32078,9 +32081,10 @@ view_shared_FormBuilder.prototype = {
 		return React.createElement(react_ReactType.fromString("input"),{ type : "hidden", name : cm});
 	}
 	,onChange: function(ev) {
+		haxe_Log.trace(ev.target.type,{ fileName : "view/shared/FormBuilder.hx", lineNumber : 320, className : "view.shared.FormBuilder", methodName : "onChange"});
 		switch(ev.target.type) {
 		case "checkbox":
-			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 323, className : "view.shared.FormBuilder", methodName : "onChange"});
+			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 324, className : "view.shared.FormBuilder", methodName : "onChange"});
 			var tmp;
 			switch(ev.target.checked) {
 			case "1":case "TRUE":case "on":case true:
@@ -32090,7 +32094,7 @@ view_shared_FormBuilder.prototype = {
 				tmp = 0;
 			}
 			view_shared_io_BaseForm.doChange(this.comp,ev.target.name,tmp);
-			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 333, className : "view.shared.FormBuilder", methodName : "onChange"});
+			haxe_Log.trace("" + Std.string(ev.target.name) + ":" + Std.string(ev.target.value) + ":" + Std.string(ev.target.checked),{ fileName : "view/shared/FormBuilder.hx", lineNumber : 334, className : "view.shared.FormBuilder", methodName : "onChange"});
 			break;
 		case "select-multiple":case "select-one":
 			view_shared_io_BaseForm.doChange(this.comp,ev.target.name,ev.target.value);
@@ -34964,7 +34968,7 @@ model_deals_DealsModel.dataAccess = (function($this) {
 		_g3.h["semiannual"] = "Halbj.";
 		_g3.h["annual"] = "Jährl.";
 		_g2.h["cycle"] = { label : "Turnus", type : "Radio", options : _g3};
-		_g2.h["amount"] = { label : "Betrag", type : "Text"};
+		_g2.h["amount"] = { label : "Betrag", type : "NFormat"};
 		var _g3 = new haxe_ds_StringMap();
 		_g3.h["2"] = "Kinderhilfe";
 		_g3.h["3"] = "Tierhilfe";
@@ -44129,721 +44133,25 @@ module.exports = ReactPropTypesSecret;
 
 /***/ }),
 
-/***/ "./node_modules/react-data-grid/lib/index.js":
+/***/ "./node_modules/react-data-grid/lib/Cell.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "default", function() { return /* reexport */ lib_DataGrid; });
-__webpack_require__.d(__webpack_exports__, "Cell", function() { return /* reexport */ lib_Cell; });
-__webpack_require__.d(__webpack_exports__, "Row", function() { return /* reexport */ lib_Row; });
-__webpack_require__.d(__webpack_exports__, "SELECT_COLUMN_KEY", function() { return /* reexport */ SELECT_COLUMN_KEY; });
-__webpack_require__.d(__webpack_exports__, "SelectColumn", function() { return /* reexport */ SelectColumn; });
-__webpack_require__.d(__webpack_exports__, "SelectCellFormatter", function() { return /* reexport */ SelectCellFormatter; });
-__webpack_require__.d(__webpack_exports__, "ValueFormatter", function() { return /* reexport */ ValueFormatter; });
-__webpack_require__.d(__webpack_exports__, "ToggleGroupFormatter", function() { return /* reexport */ ToggleGroupFormatter; });
-__webpack_require__.d(__webpack_exports__, "TextEditor", function() { return /* reexport */ TextEditor; });
-__webpack_require__.d(__webpack_exports__, "SortableHeaderCell", function() { return /* reexport */ SortableHeaderCell; });
-
-// EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__("./node_modules/react/index.js");
-var react_default = /*#__PURE__*/__webpack_require__.n(react);
-
-// EXTERNAL MODULE: ./node_modules/clsx/dist/clsx.js
-var clsx = __webpack_require__("./node_modules/clsx/dist/clsx.js");
-var clsx_default = /*#__PURE__*/__webpack_require__.n(clsx);
-
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/hooks/useGridDimensions.js
-
-function useGridDimensions() {
-    const gridRef = Object(react["useRef"])(null);
-    const [gridWidth, setGridWidth] = Object(react["useState"])(1);
-    const [gridHeight, setGridHeight] = Object(react["useState"])(1);
-    Object(react["useLayoutEffect"])(() => {
-        const { ResizeObserver } = window;
-        // don't break in jest/jsdom and browsers that don't support ResizeObserver
-        if (ResizeObserver == null)
-            return;
-        const resizeObserver = new ResizeObserver(entries => {
-            const { width, height } = entries[0].contentRect;
-            setGridWidth(width);
-            setGridHeight(height);
-        });
-        resizeObserver.observe(gridRef.current);
-        return () => {
-            resizeObserver.disconnect();
-        };
-    }, []);
-    return [gridRef, gridWidth, gridHeight];
-}
-//# sourceMappingURL=useGridDimensions.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/hooks/useFocusRef.js
-
-function useFocusRef(isCellSelected) {
-    const ref = Object(react["useRef"])(null);
-    Object(react["useLayoutEffect"])(() => {
-        var _a;
-        if (!isCellSelected)
-            return;
-        (_a = ref.current) === null || _a === void 0 ? void 0 : _a.focus({ preventScroll: true });
-    }, [isCellSelected]);
-    return ref;
-}
-//# sourceMappingURL=useFocusRef.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/formatters/ToggleGroupFormatter.js
-
-
-function ToggleGroupFormatter({ groupKey, isExpanded, isCellSelected, toggleGroup }) {
-    const cellRef = useFocusRef(isCellSelected);
-    function handleKeyDown({ key }) {
-        if (key === 'Enter') {
-            toggleGroup();
-        }
-    }
-    const d = isExpanded ? 'M1 1 L 7 7 L 13 1' : 'M1 7 L 7 1 L 13 7';
-    return (react_default.a.createElement("span", { ref: cellRef, className: "rdg-group-cell-content", tabIndex: -1, onKeyDown: handleKeyDown },
-        groupKey,
-        react_default.a.createElement("svg", { viewBox: "0 0 14 8", width: "14", height: "8", className: "rdg-caret" },
-            react_default.a.createElement("path", { d: d }))));
-}
-//# sourceMappingURL=ToggleGroupFormatter.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/formatters/SelectCellFormatter.js
-
-
-
-function SelectCellFormatter({ value, tabIndex, isCellSelected, disabled, onClick, onChange, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledBy }) {
-    const inputRef = useFocusRef(isCellSelected);
-    function handleChange(e) {
-        onChange(e.target.checked, e.nativeEvent.shiftKey);
-    }
-    return (react_default.a.createElement("label", { className: clsx_default()('rdg-checkbox-label', { 'rdg-checkbox-label-disabled': disabled }) },
-        react_default.a.createElement("input", { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, tabIndex: tabIndex, ref: inputRef, type: "checkbox", className: "rdg-checkbox-input", disabled: disabled, checked: value, onChange: handleChange, onClick: onClick }),
-        react_default.a.createElement("div", { className: "rdg-checkbox" })));
-}
-//# sourceMappingURL=SelectCellFormatter.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/utils/domUtils.js
-function preventDefault(event) {
-    event.preventDefault();
-}
-function stopPropagation(event) {
-    event.stopPropagation();
-}
-function wrapEvent(ourHandler, theirHandler) {
-    if (theirHandler === undefined)
-        return ourHandler;
-    return function (event) {
-        ourHandler(event);
-        theirHandler(event);
-    };
-}
-//# sourceMappingURL=domUtils.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/Columns.js
-
-
-
-const SELECT_COLUMN_KEY = 'select-row';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const SelectColumn = {
-    key: SELECT_COLUMN_KEY,
-    name: '',
-    width: 35,
-    maxWidth: 35,
-    resizable: false,
-    sortable: false,
-    frozen: true,
-    headerRenderer(props) {
-        return (react_default.a.createElement(SelectCellFormatter, { "aria-label": "Select All", value: props.allRowsSelected, onChange: props.onAllRowsSelectionChange }));
-    },
-    formatter(props) {
-        return (react_default.a.createElement(SelectCellFormatter, { "aria-label": "Select", tabIndex: -1, isCellSelected: props.isCellSelected, value: props.isRowSelected, onClick: stopPropagation, onChange: props.onRowSelectionChange }));
-    },
-    groupFormatter(props) {
-        return (react_default.a.createElement(SelectCellFormatter, { "aria-label": "Select Group", tabIndex: -1, isCellSelected: props.isCellSelected, value: props.isRowSelected, onChange: props.onRowSelectionChange, 
-            // Stop propagation to prevent row selection
-            onClick: stopPropagation }));
-    }
-};
-//# sourceMappingURL=Columns.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/utils/columnUtils.js
-
-
-function getColumnMetrics(metrics) {
-    let left = 0;
-    let totalWidth = 0;
-    let allocatedWidths = 0;
-    let unassignedColumnsCount = 0;
-    let lastFrozenColumnIndex = -1;
-    let totalFrozenColumnWidth = 0;
-    const { rawGroupBy } = metrics;
-    const columns = metrics.rawColumns.map(metricsColumn => {
-        let width = getSpecifiedWidth(metricsColumn, metrics.columnWidths, metrics.viewportWidth);
-        if (width === undefined) {
-            unassignedColumnsCount++;
-        }
-        else {
-            width = clampColumnWidth(width, metricsColumn, metrics.minColumnWidth);
-            allocatedWidths += width;
-        }
-        const column = { ...metricsColumn, width };
-        if (rawGroupBy === null || rawGroupBy === void 0 ? void 0 : rawGroupBy.includes(column.key)) {
-            column.frozen = true;
-            column.rowGroup = true;
-        }
-        if (column.frozen) {
-            lastFrozenColumnIndex++;
-        }
-        return column;
-    });
-    columns.sort(({ key: aKey, frozen: frozenA }, { key: bKey, frozen: frozenB }) => {
-        // Sort select column first:
-        if (aKey === SELECT_COLUMN_KEY)
-            return -1;
-        if (bKey === SELECT_COLUMN_KEY)
-            return 1;
-        // Sort grouped columns second, following the groupBy order:
-        if (rawGroupBy === null || rawGroupBy === void 0 ? void 0 : rawGroupBy.includes(aKey)) {
-            if (rawGroupBy.includes(bKey)) {
-                return rawGroupBy.indexOf(aKey) - rawGroupBy.indexOf(bKey);
-            }
-            return -1;
-        }
-        if (rawGroupBy === null || rawGroupBy === void 0 ? void 0 : rawGroupBy.includes(bKey))
-            return 1;
-        // Sort frozen columns third:
-        if (frozenA) {
-            if (frozenB)
-                return 0;
-            return -1;
-        }
-        if (frozenB)
-            return 1;
-        // Sort other columns last:
-        return 0;
-    });
-    const unallocatedWidth = metrics.viewportWidth - allocatedWidths;
-    const unallocatedColumnWidth = Math.max(Math.floor(unallocatedWidth / unassignedColumnsCount), metrics.minColumnWidth);
-    // Filter rawGroupBy and ignore keys that do not match the columns prop
-    const groupBy = [];
-    const calculatedColumns = columns.map((column, idx) => {
-        var _a, _b, _c, _d, _e;
-        // Every column should have a valid width as this stage
-        const width = (_a = column.width) !== null && _a !== void 0 ? _a : clampColumnWidth(unallocatedColumnWidth, column, metrics.minColumnWidth);
-        const newColumn = {
-            ...column,
-            idx,
-            width,
-            left,
-            sortable: (_b = column.sortable) !== null && _b !== void 0 ? _b : metrics.defaultSortable,
-            resizable: (_c = column.resizable) !== null && _c !== void 0 ? _c : metrics.defaultResizable,
-            formatter: (_d = column.formatter) !== null && _d !== void 0 ? _d : metrics.defaultFormatter
-        };
-        if (newColumn.rowGroup) {
-            groupBy.push(column.key);
-            newColumn.groupFormatter = (_e = column.groupFormatter) !== null && _e !== void 0 ? _e : ToggleGroupFormatter;
-        }
-        totalWidth += width;
-        left += width;
-        return newColumn;
-    });
-    if (lastFrozenColumnIndex !== -1) {
-        const lastFrozenColumn = calculatedColumns[lastFrozenColumnIndex];
-        lastFrozenColumn.isLastFrozenColumn = true;
-        totalFrozenColumnWidth = lastFrozenColumn.left + lastFrozenColumn.width;
-    }
-    return {
-        columns: calculatedColumns,
-        lastFrozenColumnIndex,
-        totalFrozenColumnWidth,
-        totalColumnWidth: totalWidth,
-        groupBy
-    };
-}
-function getSpecifiedWidth({ key, width }, columnWidths, viewportWidth) {
-    if (columnWidths.has(key)) {
-        // Use the resized width if available
-        return columnWidths.get(key);
-    }
-    if (typeof width === 'number') {
-        return width;
-    }
-    if (typeof width === 'string' && /^\d+%$/.test(width)) {
-        return Math.floor(viewportWidth * parseInt(width, 10) / 100);
-    }
-    return undefined;
-}
-function clampColumnWidth(width, { minWidth, maxWidth }, minColumnWidth) {
-    width = Math.max(width, minWidth !== null && minWidth !== void 0 ? minWidth : minColumnWidth);
-    if (typeof maxWidth === 'number') {
-        return Math.min(width, maxWidth);
-    }
-    return width;
-}
-function getColumnScrollPosition(columns, idx, currentScrollLeft, currentClientWidth) {
-    let left = 0;
-    let frozen = 0;
-    for (let i = 0; i < idx; i++) {
-        const column = columns[i];
-        if (column) {
-            if (column.width) {
-                left += column.width;
-            }
-            if (column.frozen) {
-                frozen += column.width;
-            }
-        }
-    }
-    const selectedColumn = columns[idx];
-    if (selectedColumn) {
-        const scrollLeft = left - frozen - currentScrollLeft;
-        const scrollRight = left + selectedColumn.width - currentScrollLeft;
-        if (scrollLeft < 0) {
-            return scrollLeft;
-        }
-        if (scrollRight > currentClientWidth) {
-            return scrollRight - currentClientWidth;
-        }
-    }
-    return 0;
-}
-/**
- * By default, the following navigation keys are enabled while an editor is open, under specific conditions:
- * - Tab:
- *   - The editor must be an <input>, a <textarea>, or a <select> element.
- *   - The editor element must be the only immediate child of the editor container/a label.
- */
-function onEditorNavigation({ key, target }) {
-    if (key === 'Tab' && (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement)) {
-        return target.matches('.rdg-editor-container > :only-child, .rdg-editor-container > label:only-child > :only-child');
-    }
-    return false;
-}
-//# sourceMappingURL=columnUtils.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/formatters/ValueFormatter.js
-
-function ValueFormatter(props) {
-    try {
-        return react_default.a.createElement(react_default.a.Fragment, null, props.row[props.column.key]);
-    }
-    catch {
-        return null;
-    }
-}
-//# sourceMappingURL=ValueFormatter.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/hooks/useViewportColumns.js
-
-
-
-function useViewportColumns({ rawColumns, columnWidths, viewportWidth, scrollLeft, defaultColumnOptions, rawGroupBy, rowGrouper }) {
-    var _a, _b, _c, _d;
-    const minColumnWidth = (_a = defaultColumnOptions === null || defaultColumnOptions === void 0 ? void 0 : defaultColumnOptions.minWidth) !== null && _a !== void 0 ? _a : 80;
-    const defaultFormatter = (_b = defaultColumnOptions === null || defaultColumnOptions === void 0 ? void 0 : defaultColumnOptions.formatter) !== null && _b !== void 0 ? _b : ValueFormatter;
-    const defaultSortable = (_c = defaultColumnOptions === null || defaultColumnOptions === void 0 ? void 0 : defaultColumnOptions.sortable) !== null && _c !== void 0 ? _c : false;
-    const defaultResizable = (_d = defaultColumnOptions === null || defaultColumnOptions === void 0 ? void 0 : defaultColumnOptions.resizable) !== null && _d !== void 0 ? _d : false;
-    const { columns, lastFrozenColumnIndex, totalColumnWidth, totalFrozenColumnWidth, groupBy } = Object(react["useMemo"])(() => {
-        return getColumnMetrics({
-            rawColumns,
-            minColumnWidth,
-            viewportWidth,
-            columnWidths,
-            defaultSortable,
-            defaultResizable,
-            defaultFormatter,
-            rawGroupBy: rowGrouper ? rawGroupBy : undefined
-        });
-    }, [columnWidths, defaultFormatter, defaultResizable, defaultSortable, minColumnWidth, rawColumns, rawGroupBy, rowGrouper, viewportWidth]);
-    const [colOverscanStartIdx, colOverscanEndIdx] = Object(react["useMemo"])(() => {
-        // get the viewport's left side and right side positions for non-frozen columns
-        const viewportLeft = scrollLeft + totalFrozenColumnWidth;
-        const viewportRight = scrollLeft + viewportWidth;
-        // get first and last non-frozen column indexes
-        const lastColIdx = columns.length - 1;
-        const firstUnfrozenColumnIdx = Math.min(lastFrozenColumnIndex + 1, lastColIdx);
-        // skip rendering non-frozen columns if the frozen columns cover the entire viewport
-        if (viewportLeft >= viewportRight) {
-            return [firstUnfrozenColumnIdx, firstUnfrozenColumnIdx];
-        }
-        // get the first visible non-frozen column index
-        let colVisibleStartIdx = firstUnfrozenColumnIdx;
-        while (colVisibleStartIdx < lastColIdx) {
-            const { left, width } = columns[colVisibleStartIdx];
-            // if the right side of the columnn is beyond the left side of the available viewport,
-            // then it is the first column that's at least partially visible
-            if (left + width > viewportLeft) {
-                break;
-            }
-            colVisibleStartIdx++;
-        }
-        // get the last visible non-frozen column index
-        let colVisibleEndIdx = colVisibleStartIdx;
-        while (colVisibleEndIdx < lastColIdx) {
-            const { left, width } = columns[colVisibleEndIdx];
-            // if the right side of the column is beyond or equal to the right side of the available viewport,
-            // then it the last column that's at least partially visible, as the previous column's right side is not beyond the viewport.
-            if (left + width >= viewportRight) {
-                break;
-            }
-            colVisibleEndIdx++;
-        }
-        const colOverscanStartIdx = Math.max(firstUnfrozenColumnIdx, colVisibleStartIdx - 1);
-        const colOverscanEndIdx = Math.min(lastColIdx, colVisibleEndIdx + 1);
-        return [colOverscanStartIdx, colOverscanEndIdx];
-    }, [columns, lastFrozenColumnIndex, scrollLeft, totalFrozenColumnWidth, viewportWidth]);
-    const viewportColumns = Object(react["useMemo"])(() => {
-        const viewportColumns = [];
-        for (let colIdx = 0; colIdx <= colOverscanEndIdx; colIdx++) {
-            const column = columns[colIdx];
-            if (colIdx < colOverscanStartIdx && !column.frozen)
-                continue;
-            viewportColumns.push(column);
-        }
-        return viewportColumns;
-    }, [colOverscanEndIdx, colOverscanStartIdx, columns]);
-    return { columns, viewportColumns, totalColumnWidth, lastFrozenColumnIndex, totalFrozenColumnWidth, groupBy };
-}
-//# sourceMappingURL=useViewportColumns.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/hooks/useViewportRows.js
-
-const RENDER_BACTCH_SIZE = 8;
-function useViewportRows({ rawRows, rowHeight, clientHeight, scrollTop, groupBy, rowGrouper, expandedGroupIds }) {
-    const [groupedRows, rowsCount] = Object(react["useMemo"])(() => {
-        if (groupBy.length === 0 || !rowGrouper)
-            return [undefined, rawRows.length];
-        const groupRows = (rows, [groupByKey, ...remainingGroupByKeys], startRowIndex) => {
-            let groupRowsCount = 0;
-            const groups = {};
-            for (const [key, childRows] of Object.entries(rowGrouper(rows, groupByKey))) {
-                // Recursively group each parent group
-                const [childGroups, childRowsCount] = remainingGroupByKeys.length === 0
-                    ? [childRows, childRows.length]
-                    : groupRows(childRows, remainingGroupByKeys, startRowIndex + groupRowsCount + 1); // 1 for parent row
-                groups[key] = { childRows, childGroups, startRowIndex: startRowIndex + groupRowsCount };
-                groupRowsCount += childRowsCount + 1; // 1 for parent row
-            }
-            return [groups, groupRowsCount];
-        };
-        return groupRows(rawRows, groupBy, 0);
-    }, [groupBy, rowGrouper, rawRows]);
-    const [rows, allGroupRows] = Object(react["useMemo"])(() => {
-        const allGroupRows = new Set();
-        if (!groupedRows)
-            return [rawRows, allGroupRows];
-        const flattenedRows = [];
-        const expandGroup = (rows, parentId, level) => {
-            if (Array.isArray(rows)) {
-                flattenedRows.push(...rows);
-                return;
-            }
-            Object.keys(rows).forEach((groupKey, posInSet, keys) => {
-                var _a;
-                // TODO: should users have control over the generated key?
-                const id = parentId !== undefined ? `${parentId}__${groupKey}` : groupKey;
-                const isExpanded = (_a = expandedGroupIds === null || expandedGroupIds === void 0 ? void 0 : expandedGroupIds.has(id)) !== null && _a !== void 0 ? _a : false;
-                const { childRows, childGroups, startRowIndex } = rows[groupKey]; // https://github.com/microsoft/TypeScript/issues/17002
-                const groupRow = {
-                    id,
-                    parentId,
-                    groupKey,
-                    isExpanded,
-                    childRows,
-                    level,
-                    posInSet,
-                    startRowIndex,
-                    setSize: keys.length
-                };
-                flattenedRows.push(groupRow);
-                allGroupRows.add(groupRow);
-                if (isExpanded) {
-                    expandGroup(childGroups, id, level + 1);
-                }
-            });
-        };
-        expandGroup(groupedRows, undefined, 0);
-        return [flattenedRows, allGroupRows];
-    }, [expandedGroupIds, groupedRows, rawRows]);
-    const isGroupRow = (row) => allGroupRows.has(row);
-    const overscanThreshold = 4;
-    const rowVisibleStartIdx = Math.floor(scrollTop / rowHeight);
-    const rowVisibleEndIdx = Math.min(rows.length - 1, Math.floor((scrollTop + clientHeight) / rowHeight));
-    const rowOverscanStartIdx = Math.max(0, Math.floor((rowVisibleStartIdx - overscanThreshold) / RENDER_BACTCH_SIZE) * RENDER_BACTCH_SIZE);
-    const rowOverscanEndIdx = Math.min(rows.length - 1, Math.ceil((rowVisibleEndIdx + overscanThreshold) / RENDER_BACTCH_SIZE) * RENDER_BACTCH_SIZE);
-    return {
-        rowOverscanStartIdx,
-        rowOverscanEndIdx,
-        rows,
-        rowsCount,
-        isGroupRow
-    };
-}
-//# sourceMappingURL=useViewportRows.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/EventBus.js
-class EventBus {
-    constructor() {
-        this.subscribers = new Map();
-    }
-    subscribe(type, handler) {
-        if (!this.subscribers.has(type)) {
-            this.subscribers.set(type, new Set());
-        }
-        const handlers = this.subscribers.get(type);
-        handlers.add(handler);
-        return () => {
-            handlers.delete(handler);
-        };
-    }
-    dispatch(type, ...args) {
-        const handlers = this.subscribers.get(type);
-        if (handlers) {
-            // handler needed a type assertion to fix type bug
-            handlers.forEach(handler => {
-                handler(...args);
-            });
-        }
-    }
-}
-//# sourceMappingURL=EventBus.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/headerCells/SortableHeaderCell.js
-
-const SORT_TEXT = {
-    ASC: '\u25B2',
-    DESC: '\u25BC',
-    NONE: ''
-};
-function SortableHeaderCell({ column, onSort, sortColumn, sortDirection, children }) {
-    sortDirection = sortColumn === column.key && sortDirection || 'NONE';
-    function onClick() {
-        if (!onSort)
-            return;
-        const { sortDescendingFirst } = column;
-        let direction;
-        switch (sortDirection) {
-            case 'ASC':
-                direction = sortDescendingFirst ? 'NONE' : 'DESC';
-                break;
-            case 'DESC':
-                direction = sortDescendingFirst ? 'ASC' : 'NONE';
-                break;
-            default:
-                direction = sortDescendingFirst ? 'DESC' : 'ASC';
-                break;
-        }
-        onSort(column.key, direction);
-    }
-    return (react_default.a.createElement("span", { className: "rdg-header-sort-cell", onClick: onClick },
-        react_default.a.createElement("span", { className: "rdg-header-sort-name" }, children),
-        react_default.a.createElement("span", null, SORT_TEXT[sortDirection])));
-}
-//# sourceMappingURL=SortableHeaderCell.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/headerCells/ResizableHeaderCell.js
-
-function ResizableHeaderCell({ children, column, onResize }) {
-    function onMouseDown(event) {
-        if (event.button !== 0) {
-            return;
-        }
-        const { currentTarget } = event;
-        const { right } = currentTarget.getBoundingClientRect();
-        const offset = right - event.clientX;
-        if (offset > 11) { // +1px to account for the border size
-            return;
-        }
-        const onMouseMove = (event) => {
-            handleResize(event.clientX + offset, currentTarget);
-        };
-        const onMouseUp = () => {
-            window.removeEventListener('mousemove', onMouseMove);
-            window.removeEventListener('mouseup', onMouseUp);
-        };
-        event.preventDefault();
-        window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('mouseup', onMouseUp);
-    }
-    function onTouchStart(event) {
-        const touch = event.changedTouches[0];
-        const { identifier } = touch;
-        const { currentTarget } = event;
-        const { right } = currentTarget.getBoundingClientRect();
-        const offset = right - touch.clientX;
-        if (offset > 11) { // +1px to account for the border size
-            return;
-        }
-        function getTouch(event) {
-            for (const touch of event.changedTouches) {
-                if (touch.identifier === identifier)
-                    return touch;
-            }
-            return null;
-        }
-        const onTouchMove = (event) => {
-            const touch = getTouch(event);
-            if (touch) {
-                handleResize(touch.clientX + offset, currentTarget);
-            }
-        };
-        const onTouchEnd = (event) => {
-            const touch = getTouch(event);
-            if (!touch)
-                return;
-            window.removeEventListener('touchmove', onTouchMove);
-            window.removeEventListener('touchend', onTouchEnd);
-        };
-        window.addEventListener('touchmove', onTouchMove);
-        window.addEventListener('touchend', onTouchEnd);
-    }
-    function handleResize(x, target) {
-        const width = x - target.getBoundingClientRect().left;
-        if (width > 0) {
-            onResize(column, width);
-        }
-    }
-    return Object(react["cloneElement"])(children, {
-        onMouseDown,
-        onTouchStart,
-        children: (react_default.a.createElement(react_default.a.Fragment, null,
-            children.props.children,
-            react_default.a.createElement("div", { className: "rdg-header-cell-resizer" })))
-    });
-}
-//# sourceMappingURL=ResizableHeaderCell.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/HeaderCell.js
-
-
-
-
-function getAriaSort(sortDirection) {
-    switch (sortDirection) {
-        case 'ASC':
-            return 'ascending';
-        case 'DESC':
-            return 'descending';
-        default:
-            return 'none';
-    }
-}
-function HeaderCell({ column, onResize, allRowsSelected, onAllRowsSelectionChange, sortColumn, sortDirection, onSort }) {
-    function getCell() {
-        if (column.headerRenderer) {
-            return Object(react["createElement"])(column.headerRenderer, {
-                column,
-                sortColumn,
-                sortDirection,
-                onSort,
-                allRowsSelected,
-                onAllRowsSelectionChange
-            });
-        }
-        if (column.sortable) {
-            return (react_default.a.createElement(SortableHeaderCell, { column: column, onSort: onSort, sortColumn: sortColumn, sortDirection: sortDirection }, column.name));
-        }
-        return column.name;
-    }
-    let cell = getCell();
-    const className = clsx_default()('rdg-cell', column.headerCellClass, {
-        'rdg-cell-frozen': column.frozen,
-        'rdg-cell-frozen-last': column.isLastFrozenColumn
-    });
-    const style = {
-        width: column.width,
-        left: column.left
-    };
-    cell = (react_default.a.createElement("div", { role: "columnheader", "aria-colindex": column.idx + 1, "aria-sort": sortColumn === column.key ? getAriaSort(sortDirection) : undefined, className: className, style: style }, cell));
-    if (column.resizable) {
-        cell = (react_default.a.createElement(ResizableHeaderCell, { column: column, onResize: onResize }, cell));
-    }
-    return cell;
-}
-//# sourceMappingURL=HeaderCell.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/utils/index.js
-
-
-
-
-function assertIsValidKeyGetter(keyGetter) {
-    if (typeof keyGetter !== 'function') {
-        throw new Error('Please specify the rowKeyGetter prop to use selection');
-    }
-}
-//# sourceMappingURL=index.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/HeaderRow.js
-
-
-
-function HeaderRow({ columns, rows, rowKeyGetter, onSelectedRowsChange, allRowsSelected, onColumnResize, sortColumn, sortDirection, onSort }) {
-    const handleAllRowsSelectionChange = Object(react["useCallback"])((checked) => {
-        if (!onSelectedRowsChange)
-            return;
-        assertIsValidKeyGetter(rowKeyGetter);
-        const newSelectedRows = new Set();
-        if (checked) {
-            for (const row of rows) {
-                newSelectedRows.add(rowKeyGetter(row));
-            }
-        }
-        onSelectedRowsChange(newSelectedRows);
-    }, [onSelectedRowsChange, rows, rowKeyGetter]);
-    return (react_default.a.createElement("div", { role: "row", "aria-rowindex": 1, className: "rdg-header-row" }, columns.map(column => {
-        return (react_default.a.createElement(HeaderCell, { key: column.key, column: column, onResize: onColumnResize, allRowsSelected: allRowsSelected, onAllRowsSelectionChange: handleAllRowsSelectionChange, onSort: onSort, sortColumn: sortColumn, sortDirection: sortDirection }));
-    })));
-}
-/* harmony default export */ var lib_HeaderRow = (Object(react["memo"])(HeaderRow));
-//# sourceMappingURL=HeaderRow.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/FilterRow.js
-
-
-function FilterRow({ columns, filters, onFiltersChange }) {
-    function onChange(key, value) {
-        const newFilters = { ...filters };
-        newFilters[key] = value;
-        onFiltersChange === null || onFiltersChange === void 0 ? void 0 : onFiltersChange(newFilters);
-    }
-    return (react_default.a.createElement("div", { role: "row", "aria-rowindex": 2, className: "rdg-filter-row" }, columns.map(column => {
-        const { key } = column;
-        const className = clsx_default()('rdg-cell', {
-            'rdg-cell-frozen': column.frozen,
-            'rdg-cell-frozen-last': column.isLastFrozenColumn
-        });
-        const style = {
-            width: column.width,
-            left: column.left
-        };
-        return (react_default.a.createElement("div", { key: key, style: style, className: className }, column.filterRenderer && Object(react["createElement"])(column.filterRenderer, {
-            column,
-            value: filters === null || filters === void 0 ? void 0 : filters[column.key],
-            onChange: value => onChange(key, value)
-        })));
-    })));
-}
-/* harmony default export */ var lib_FilterRow = (Object(react["memo"])(FilterRow));
-//# sourceMappingURL=FilterRow.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/hooks/useCombinedRefs.js
-
-function useCombinedRefs(...refs) {
-    return Object(react["useCallback"])((handle) => {
-        for (const ref of refs) {
-            if (typeof ref === 'function') {
-                ref(handle);
-            }
-            else if (ref !== null) {
-                // @ts-expect-error: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065
-                ref.current = handle;
-            }
-        }
-    }, 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    refs);
-}
-//# sourceMappingURL=useCombinedRefs.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/Cell.js
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/clsx/dist/clsx.js");
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clsx__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/utils/index.js");
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/react-data-grid/lib/hooks/index.js");
 
 
 
 
 function Cell({ className, column, isCellSelected, isCopied, isDraggedOver, isRowSelected, row, rowIdx, eventBus, dragHandleProps, onRowClick, onClick, onDoubleClick, onContextMenu, ...props }, ref) {
-    const cellRef = Object(react["useRef"])(null);
+    const cellRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(null);
     const { cellClass } = column;
-    className = clsx_default()('rdg-cell', {
+    className = clsx__WEBPACK_IMPORTED_MODULE_1___default()('rdg-cell', {
         'rdg-cell-frozen': column.frozen,
         'rdg-cell-frozen-last': column.isLastFrozenColumn,
         'rdg-cell-selected': isCellSelected,
@@ -44867,322 +44175,75 @@ function Cell({ className, column, isCellSelected, isCopied, isDraggedOver, isRo
     function onRowSelectionChange(checked, isShiftClick) {
         eventBus.dispatch('SelectRow', { rowIdx, checked, isShiftClick });
     }
-    return (react_default.a.createElement("div", Object.assign({ role: "gridcell", "aria-colindex": column.idx + 1, "aria-selected": isCellSelected, ref: useCombinedRefs(cellRef, ref), className: className, style: {
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", Object.assign({ role: "gridcell", "aria-colindex": column.idx + 1, "aria-selected": isCellSelected, ref: Object(_hooks__WEBPACK_IMPORTED_MODULE_3__["useCombinedRefs"])(cellRef, ref), className: className, style: {
             width: column.width,
             left: column.left
-        }, onClick: wrapEvent(handleClick, onClick), onDoubleClick: wrapEvent(handleDoubleClick, onDoubleClick), onContextMenu: wrapEvent(handleContextMenu, onContextMenu) }, props), !column.rowGroup && (react_default.a.createElement(react_default.a.Fragment, null,
-        react_default.a.createElement(column.formatter, { column: column, rowIdx: rowIdx, row: row, isCellSelected: isCellSelected, isRowSelected: isRowSelected, onRowSelectionChange: onRowSelectionChange }),
-        dragHandleProps && (react_default.a.createElement("div", Object.assign({ className: "rdg-cell-drag-handle" }, dragHandleProps)))))));
+        }, onClick: Object(_utils__WEBPACK_IMPORTED_MODULE_2__["wrapEvent"])(handleClick, onClick), onDoubleClick: Object(_utils__WEBPACK_IMPORTED_MODULE_2__["wrapEvent"])(handleDoubleClick, onDoubleClick), onContextMenu: Object(_utils__WEBPACK_IMPORTED_MODULE_2__["wrapEvent"])(handleContextMenu, onContextMenu) }, props), !column.rowGroup && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(column.formatter, { column: column, rowIdx: rowIdx, row: row, isCellSelected: isCellSelected, isRowSelected: isRowSelected, onRowSelectionChange: onRowSelectionChange }),
+        dragHandleProps && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", Object.assign({ className: "rdg-cell-drag-handle" }, dragHandleProps)))))));
 }
-/* harmony default export */ var lib_Cell = (Object(react["memo"])(Object(react["forwardRef"])(Cell)));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react__WEBPACK_IMPORTED_MODULE_0__["memo"])(Object(react__WEBPACK_IMPORTED_MODULE_0__["forwardRef"])(Cell)));
 //# sourceMappingURL=Cell.js.map
-// EXTERNAL MODULE: ./node_modules/react-dom/index.js
-var react_dom = __webpack_require__("./node_modules/react-dom/index.js");
 
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/hooks/useClickOutside.js
+/***/ }),
 
-/**
- * Detecting outside click on a react component is surprisingly hard.
- * A general approach is to have a global click handler on the document
- * which checks if the click target is inside the editor container or
- * not using editorContainer.contains(e.target). This approach works well
- * until portals are used for editors. Portals render children into a DOM
- * node that exists outside the DOM hierarchy of the parent component so
- * editorContainer.contains(e.target) does not work. Here are some examples
- * of the DOM structure with different types of editors
- *
- *
- * SimpleEditor for example Texbox (No Portals)
- *   <div data-grid>..</div>
- *   <div portal-created-by-the-grid-for-editors>
- *      <div editor-container>
- *        <div simple-editor>..</div>
- *      </div>
- *   </div>
- *
- * ComplexEditor for example Modals (using Portals)
- *   <div data-grid>..</div>
- *   <div portal-created-by-the-grid-for-editors>
- *      <div editor-container>
- *        // Nothing here
- *      </div>
- *   </div>
- *   <div portal-created-by-the-editor>
- *     <div complex-editor>..</div>
- *   </div>
- *
- *
- * One approach to detect outside click is to use synthetic event bubbling through
- * portals. An event fired from inside a portal will propagate to ancestors
- * in the containing React tree, even if those elements are not ancestors
- * in the DOM tree. This means a click handler can be attached on the window
- * and on the editor container. The editor container can set a flag to notify
- * that the click was inside the editor and the window click handler can use
- * this flag to call onClickOutside. This approach however has a few caveats
- * - Click handler on the window is set using window.addEventListener
- * - Click handler on the editor container is set using onClick prop
- *
- * This means if a child component inside the editor calls e.stopPropagation
- * then the click handler on the editor container will not be called whereas
- * the document click handler will be called.
- * https://github.com/facebook/react/issues/12518
- *
- * To solve this issue onClickCapture event is used.
- */
-function useClickOutside(onClick) {
-    const frameRequestRef = Object(react["useRef"])();
-    function cancelAnimationFrameRequest() {
-        if (typeof frameRequestRef.current === 'number') {
-            cancelAnimationFrame(frameRequestRef.current);
-            frameRequestRef.current = undefined;
-        }
+/***/ "./node_modules/react-data-grid/lib/Columns.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SELECT_COLUMN_KEY", function() { return SELECT_COLUMN_KEY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SelectColumn", function() { return SelectColumn; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _formatters__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react-data-grid/lib/formatters/index.js");
+/* harmony import */ var _utils_domUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/utils/domUtils.js");
+
+
+
+const SELECT_COLUMN_KEY = 'select-row';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const SelectColumn = {
+    key: SELECT_COLUMN_KEY,
+    name: '',
+    width: 35,
+    maxWidth: 35,
+    resizable: false,
+    sortable: false,
+    frozen: true,
+    headerRenderer(props) {
+        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_formatters__WEBPACK_IMPORTED_MODULE_1__["SelectCellFormatter"], { "aria-label": "Select All", value: props.allRowsSelected, onChange: props.onAllRowsSelectionChange }));
+    },
+    formatter(props) {
+        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_formatters__WEBPACK_IMPORTED_MODULE_1__["SelectCellFormatter"], { "aria-label": "Select", tabIndex: -1, isCellSelected: props.isCellSelected, value: props.isRowSelected, onClick: _utils_domUtils__WEBPACK_IMPORTED_MODULE_2__["stopPropagation"], onChange: props.onRowSelectionChange }));
+    },
+    groupFormatter(props) {
+        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_formatters__WEBPACK_IMPORTED_MODULE_1__["SelectCellFormatter"], { "aria-label": "Select Group", tabIndex: -1, isCellSelected: props.isCellSelected, value: props.isRowSelected, onChange: props.onRowSelectionChange, 
+            // Stop propagation to prevent row selection
+            onClick: _utils_domUtils__WEBPACK_IMPORTED_MODULE_2__["stopPropagation"] }));
     }
-    // We need to prevent the `useEffect` from cleaning up between re-renders,
-    // as `handleDocumentClick` might otherwise miss valid click events.
-    // To that end we instead access the latest `onClick` prop via a ref.
-    const onClickRef = Object(react["useRef"])(() => {
-        throw new Error('Cannot call an event handler while rendering.');
-    });
-    Object(react["useEffect"])(() => {
-        onClickRef.current = onClick;
-    });
-    Object(react["useEffect"])(() => {
-        function onOutsideClick() {
-            frameRequestRef.current = undefined;
-            onClickRef.current();
-        }
-        function onWindowCaptureClick() {
-            cancelAnimationFrameRequest();
-            frameRequestRef.current = requestAnimationFrame(onOutsideClick);
-        }
-        window.addEventListener('click', onWindowCaptureClick, { capture: true });
-        return () => {
-            window.removeEventListener('click', onWindowCaptureClick, { capture: true });
-            cancelAnimationFrameRequest();
-        };
-    }, []);
-    return cancelAnimationFrameRequest;
-}
-//# sourceMappingURL=useClickOutside.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/editors/EditorContainer.js
+};
+//# sourceMappingURL=Columns.js.map
 
+/***/ }),
 
+/***/ "./node_modules/react-data-grid/lib/DataGrid.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-function EditorContainer({ row, column, onRowChange, ...props }) {
-    var _a;
-    const onClickCapture = useClickOutside(() => onRowChange(row, true));
-    if (column.editor === undefined)
-        return null;
-    const editor = (react_default.a.createElement("div", { className: "rdg-editor-container", onClickCapture: onClickCapture },
-        react_default.a.createElement(column.editor, Object.assign({ row: row, column: column, onRowChange: onRowChange }, props))));
-    if ((_a = column.editorOptions) === null || _a === void 0 ? void 0 : _a.createPortal) {
-        return Object(react_dom["createPortal"])(editor, props.editorPortalTarget);
-    }
-    return editor;
-}
-//# sourceMappingURL=EditorContainer.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/EditCell.js
-
-
-
-function EditCell({ className, column, row, rowIdx, editorProps, ...props }) {
-    const [dimensions, setDimensions] = Object(react["useState"])(null);
-    const cellRef = Object(react["useCallback"])(node => {
-        if (node !== null) {
-            const { left, top } = node.getBoundingClientRect();
-            setDimensions({ left, top });
-        }
-    }, []);
-    const { cellClass } = column;
-    className = clsx_default()('rdg-cell', {
-        'rdg-cell-frozen': column.frozen,
-        'rdg-cell-frozen-last': column.isLastFrozenColumn
-    }, 'rdg-cell-selected', 'rdg-cell-editing', typeof cellClass === 'function' ? cellClass(row) : cellClass, className);
-    function getCellContent() {
-        var _a;
-        if (dimensions === null)
-            return;
-        const { scrollTop: docTop, scrollLeft: docLeft } = (_a = document.scrollingElement) !== null && _a !== void 0 ? _a : document.documentElement;
-        const { left, top } = dimensions;
-        const gridLeft = left + docLeft;
-        const gridTop = top + docTop;
-        return (react_default.a.createElement(EditorContainer, Object.assign({}, editorProps, { rowIdx: rowIdx, column: column, left: gridLeft, top: gridTop })));
-    }
-    return (react_default.a.createElement("div", Object.assign({ role: "gridcell", "aria-colindex": column.idx + 1, "aria-selected": true, ref: cellRef, className: className, style: {
-            width: column.width,
-            left: column.left
-        } }, props), getCellContent()));
-}
-//# sourceMappingURL=EditCell.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/Row.js
-
-
-
-
-
-function Row({ cellRenderer: CellRenderer = lib_Cell, className, eventBus, rowIdx, isRowSelected, copiedCellIdx, draggedOverCellIdx, row, viewportColumns, selectedCellProps, onRowClick, rowClass, setDraggedOverRowIdx, onMouseEnter, top, 'aria-rowindex': ariaRowIndex, 'aria-selected': ariaSelected, ...props }, ref) {
-    function handleDragEnter() {
-        setDraggedOverRowIdx === null || setDraggedOverRowIdx === void 0 ? void 0 : setDraggedOverRowIdx(rowIdx);
-    }
-    className = clsx_default()('rdg-row', `rdg-row-${rowIdx % 2 === 0 ? 'even' : 'odd'}`, {
-        'rdg-row-selected': isRowSelected,
-        'rdg-group-row-selected': (selectedCellProps === null || selectedCellProps === void 0 ? void 0 : selectedCellProps.idx) === -1
-    }, rowClass === null || rowClass === void 0 ? void 0 : rowClass(row), className);
-    return (react_default.a.createElement("div", Object.assign({ role: "row", "aria-rowindex": ariaRowIndex, "aria-selected": ariaSelected, ref: ref, className: className, onMouseEnter: wrapEvent(handleDragEnter, onMouseEnter), style: { top } }, props), viewportColumns.map(column => {
-        const isCellSelected = (selectedCellProps === null || selectedCellProps === void 0 ? void 0 : selectedCellProps.idx) === column.idx;
-        if ((selectedCellProps === null || selectedCellProps === void 0 ? void 0 : selectedCellProps.mode) === 'EDIT' && isCellSelected) {
-            return (react_default.a.createElement(EditCell, { key: column.key, rowIdx: rowIdx, column: column, row: row, onKeyDown: selectedCellProps.onKeyDown, editorProps: selectedCellProps.editorProps }));
-        }
-        return (react_default.a.createElement(CellRenderer, { key: column.key, rowIdx: rowIdx, column: column, row: row, isCopied: copiedCellIdx === column.idx, isDraggedOver: draggedOverCellIdx === column.idx, isCellSelected: isCellSelected, isRowSelected: isRowSelected, eventBus: eventBus, dragHandleProps: isCellSelected ? selectedCellProps.dragHandleProps : undefined, onFocus: isCellSelected ? selectedCellProps.onFocus : undefined, onKeyDown: isCellSelected ? selectedCellProps.onKeyDown : undefined, onRowClick: onRowClick }));
-    })));
-}
-/* harmony default export */ var lib_Row = (Object(react["memo"])(Object(react["forwardRef"])(Row)));
-//# sourceMappingURL=Row.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/GroupCell.js
-
-
-function GroupCell({ id, rowIdx, groupKey, childRows, isExpanded, isCellSelected, isRowSelected, eventBus, column, groupColumnIndex }) {
-    function toggleGroup() {
-        eventBus.dispatch('ToggleGroup', id);
-    }
-    function onRowSelectionChange(checked) {
-        eventBus.dispatch('SelectRow', { rowIdx, checked, isShiftClick: false });
-    }
-    // Only make the cell clickable if the group level matches
-    const isLevelMatching = column.rowGroup && groupColumnIndex === column.idx;
-    return (react_default.a.createElement("div", { role: "gridcell", "aria-colindex": column.idx + 1, key: column.key, className: clsx_default()('rdg-cell', {
-            'rdg-cell-frozen': column.frozen,
-            'rdg-cell-frozen-last': column.isLastFrozenColumn,
-            'rdg-cell-selected': isCellSelected
-        }), style: {
-            width: column.width,
-            left: column.left,
-            cursor: isLevelMatching ? 'pointer' : 'default'
-        }, onClick: isLevelMatching ? toggleGroup : undefined }, column.groupFormatter && (!column.rowGroup || groupColumnIndex === column.idx) && (react_default.a.createElement(column.groupFormatter, { groupKey: groupKey, childRows: childRows, column: column, isExpanded: isExpanded, isCellSelected: isCellSelected, isRowSelected: isRowSelected, onRowSelectionChange: onRowSelectionChange, toggleGroup: toggleGroup }))));
-}
-/* harmony default export */ var lib_GroupCell = (Object(react["memo"])(GroupCell));
-//# sourceMappingURL=GroupCell.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/GroupRow.js
-
-
-
-
-function GroupedRow({ id, groupKey, viewportColumns, childRows, rowIdx, top, level, isExpanded, selectedCellIdx, isRowSelected, eventBus, ...props }) {
-    // Select is always the first column
-    const idx = viewportColumns[0].key === SELECT_COLUMN_KEY ? level + 1 : level;
-    function selectGroup() {
-        eventBus.dispatch('SelectCell', { rowIdx, idx: -1 });
-    }
-    return (react_default.a.createElement("div", Object.assign({ role: "row", "aria-level": level, "aria-expanded": isExpanded, className: clsx_default()('rdg-row', 'rdg-group-row', `rdg-row-${rowIdx % 2 === 0 ? 'even' : 'odd'}`, {
-            'rdg-row-selected': isRowSelected,
-            'rdg-group-row-selected': selectedCellIdx === -1 // Select row if there is no selected cell
-        }), onClick: selectGroup, style: { top } }, props), viewportColumns.map(column => (react_default.a.createElement(lib_GroupCell, { key: column.key, id: id, rowIdx: rowIdx, groupKey: groupKey, childRows: childRows, isExpanded: isExpanded, isRowSelected: isRowSelected, isCellSelected: selectedCellIdx === column.idx, eventBus: eventBus, column: column, groupColumnIndex: idx })))));
-}
-/* harmony default export */ var GroupRow = (Object(react["memo"])(GroupedRow));
-//# sourceMappingURL=GroupRow.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/SummaryCell.js
-
-
-function SummaryCell({ column, row }) {
-    const { summaryFormatter: SummaryFormatter, width, left, summaryCellClass } = column;
-    const className = clsx_default()('rdg-cell', {
-        'rdg-cell-frozen': column.frozen,
-        'rdg-cell-frozen-last': column.isLastFrozenColumn
-    }, typeof summaryCellClass === 'function' ? summaryCellClass(row) : summaryCellClass);
-    return (react_default.a.createElement("div", { role: "gridcell", "aria-colindex": column.idx + 1, className: className, style: { width, left } }, SummaryFormatter && react_default.a.createElement(SummaryFormatter, { column: column, row: row })));
-}
-/* harmony default export */ var lib_SummaryCell = (Object(react["memo"])(SummaryCell));
-//# sourceMappingURL=SummaryCell.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/SummaryRow.js
-
-
-function SummaryRow({ rowIdx, row, viewportColumns, bottom, 'aria-rowindex': ariaRowIndex }) {
-    return (react_default.a.createElement("div", { role: "row", "aria-rowindex": ariaRowIndex, className: `rdg-row rdg-row-${rowIdx % 2 === 0 ? 'even' : 'odd'} rdg-summary-row`, style: { bottom } }, viewportColumns.map(column => (react_default.a.createElement(lib_SummaryCell, { key: column.key, column: column, row: row })))));
-}
-/* harmony default export */ var lib_SummaryRow = (Object(react["memo"])(SummaryRow));
-//# sourceMappingURL=SummaryRow.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/utils/keyboardUtils.js
-function isKeyPrintable(keycode) {
-    return (keycode > 47 && keycode < 58) // number keys
-        || keycode === 32 || keycode === 13 // spacebar & return key(s) (if you want to allow carriage returns)
-        || (keycode > 64 && keycode < 91) // letter keys
-        || (keycode > 95 && keycode < 112) // numpad keys
-        || (keycode > 185 && keycode < 193) // ;=,-./` (in order)
-        || (keycode > 218 && keycode < 223); // [\]' (in order)
-}
-function isCtrlKeyHeldDown(e) {
-    return (e.ctrlKey || e.metaKey) && e.key !== 'Control';
-}
-function isDefaultCellInput(event) {
-    return isKeyPrintable(event.keyCode) || ['Enter', 'F2', 'Backspace', 'Delete'].includes(event.key);
-}
-//# sourceMappingURL=keyboardUtils.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/utils/selectedCellUtils.js
-function isSelectedCellEditable({ selectedPosition, columns, rows, isGroupRow }) {
-    const column = columns[selectedPosition.idx];
-    const row = rows[selectedPosition.rowIdx];
-    return column.editor != null
-        && !column.rowGroup
-        && !isGroupRow(row)
-        && (typeof column.editable === 'function' ? column.editable(row) : column.editable) !== false;
-}
-function getNextSelectedCellPosition({ cellNavigationMode, columns, rowsCount, nextPosition }) {
-    if (cellNavigationMode !== 'NONE') {
-        const { idx, rowIdx } = nextPosition;
-        const columnsCount = columns.length;
-        const isAfterLastColumn = idx === columnsCount;
-        const isBeforeFirstColumn = idx === -1;
-        if (isAfterLastColumn) {
-            if (cellNavigationMode === 'CHANGE_ROW') {
-                const isLastRow = rowIdx === rowsCount - 1;
-                if (!isLastRow) {
-                    return {
-                        idx: 0,
-                        rowIdx: rowIdx + 1
-                    };
-                }
-            }
-            else if (cellNavigationMode === 'LOOP_OVER_ROW') {
-                return {
-                    rowIdx,
-                    idx: 0
-                };
-            }
-        }
-        else if (isBeforeFirstColumn) {
-            if (cellNavigationMode === 'CHANGE_ROW') {
-                const isFirstRow = rowIdx === 0;
-                if (!isFirstRow) {
-                    return {
-                        rowIdx: rowIdx - 1,
-                        idx: columnsCount - 1
-                    };
-                }
-            }
-            else if (cellNavigationMode === 'LOOP_OVER_ROW') {
-                return {
-                    rowIdx,
-                    idx: columnsCount - 1
-                };
-            }
-        }
-    }
-    return nextPosition;
-}
-function canExitGrid({ cellNavigationMode, columns, rowsCount, selectedPosition: { rowIdx, idx }, shiftKey }) {
-    // When the cellNavigationMode is 'none' or 'changeRow', you can exit the grid if you're at the first or last cell of the grid
-    // When the cellNavigationMode is 'loopOverRow', there is no logical exit point so you can't exit the grid
-    if (cellNavigationMode === 'NONE' || cellNavigationMode === 'CHANGE_ROW') {
-        const atLastCellInRow = idx === columns.length - 1;
-        const atFirstCellInRow = idx === 0;
-        const atLastRow = rowIdx === rowsCount - 1;
-        const atFirstRow = rowIdx === 0;
-        return shiftKey ? atFirstCellInRow && atFirstRow : atLastCellInRow && atLastRow;
-    }
-    return false;
-}
-//# sourceMappingURL=selectedCellUtils.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/DataGrid.js
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/clsx/dist/clsx.js");
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clsx__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/hooks/index.js");
+/* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/react-data-grid/lib/EventBus.js");
+/* harmony import */ var _HeaderRow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./node_modules/react-data-grid/lib/HeaderRow.js");
+/* harmony import */ var _FilterRow__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./node_modules/react-data-grid/lib/FilterRow.js");
+/* harmony import */ var _Row__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./node_modules/react-data-grid/lib/Row.js");
+/* harmony import */ var _GroupRow__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("./node_modules/react-data-grid/lib/GroupRow.js");
+/* harmony import */ var _SummaryRow__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./node_modules/react-data-grid/lib/SummaryRow.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("./node_modules/react-data-grid/lib/utils/index.js");
 
 
 
@@ -45208,7 +44269,7 @@ rowHeight = 35, headerRowHeight = rowHeight, headerFiltersHeight = 45,
 // Feature props
 selectedRows, onSelectedRowsChange, sortColumn, sortDirection, onSort, filters, onFiltersChange, defaultColumnOptions, groupBy: rawGroupBy, rowGrouper, expandedGroupIds, onExpandedGroupIdsChange, 
 // Custom renderers
-rowRenderer: RowRenderer = lib_Row, emptyRowsRenderer, 
+rowRenderer: RowRenderer = _Row__WEBPACK_IMPORTED_MODULE_6__["default"], emptyRowsRenderer, 
 // Event props
 onRowClick, onScroll, onColumnResize, onSelectedCellChange, onFill, onPaste, 
 // Toggles and modes
@@ -45221,32 +44282,32 @@ editorPortalTarget = document.body, className, style, rowClass,
     /**
      * states
      */
-    const [eventBus] = Object(react["useState"])(() => new EventBus());
-    const [scrollTop, setScrollTop] = Object(react["useState"])(0);
-    const [scrollLeft, setScrollLeft] = Object(react["useState"])(0);
-    const [columnWidths, setColumnWidths] = Object(react["useState"])(() => new Map());
-    const [selectedPosition, setSelectedPosition] = Object(react["useState"])({ idx: -1, rowIdx: -1, mode: 'SELECT' });
-    const [copiedCell, setCopiedCell] = Object(react["useState"])(null);
-    const [isDragging, setDragging] = Object(react["useState"])(false);
-    const [draggedOverRowIdx, setOverRowIdx] = Object(react["useState"])(undefined);
+    const [eventBus] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(() => new _EventBus__WEBPACK_IMPORTED_MODULE_3__["default"]());
+    const [scrollTop, setScrollTop] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(0);
+    const [scrollLeft, setScrollLeft] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(0);
+    const [columnWidths, setColumnWidths] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(() => new Map());
+    const [selectedPosition, setSelectedPosition] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({ idx: -1, rowIdx: -1, mode: 'SELECT' });
+    const [copiedCell, setCopiedCell] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null);
+    const [isDragging, setDragging] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
+    const [draggedOverRowIdx, setOverRowIdx] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(undefined);
     /**
      * refs
      */
-    const focusSinkRef = Object(react["useRef"])(null);
-    const prevSelectedPosition = Object(react["useRef"])(selectedPosition);
-    const latestDraggedOverRowIdx = Object(react["useRef"])(draggedOverRowIdx);
-    const lastSelectedRowIdx = Object(react["useRef"])(-1);
-    const isCellFocusable = Object(react["useRef"])(false);
+    const focusSinkRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(null);
+    const prevSelectedPosition = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(selectedPosition);
+    const latestDraggedOverRowIdx = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(draggedOverRowIdx);
+    const lastSelectedRowIdx = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(-1);
+    const isCellFocusable = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(false);
     /**
      * computed values
      */
-    const [gridRef, gridWidth, gridHeight] = useGridDimensions();
+    const [gridRef, gridWidth, gridHeight] = Object(_hooks__WEBPACK_IMPORTED_MODULE_2__["useGridDimensions"])();
     const headerRowsCount = enableFilterRow ? 2 : 1;
     const summaryRowsCount = (_a = summaryRows === null || summaryRows === void 0 ? void 0 : summaryRows.length) !== null && _a !== void 0 ? _a : 0;
     const totalHeaderHeight = headerRowHeight + (enableFilterRow ? headerFiltersHeight : 0);
     const clientHeight = gridHeight - totalHeaderHeight - summaryRowsCount * rowHeight;
     const isSelectable = selectedRows !== undefined && onSelectedRowsChange !== undefined;
-    const { columns, viewportColumns, totalColumnWidth, lastFrozenColumnIndex, totalFrozenColumnWidth, groupBy } = useViewportColumns({
+    const { columns, viewportColumns, totalColumnWidth, lastFrozenColumnIndex, totalFrozenColumnWidth, groupBy } = Object(_hooks__WEBPACK_IMPORTED_MODULE_2__["useViewportColumns"])({
         rawColumns,
         columnWidths,
         scrollLeft,
@@ -45255,7 +44316,7 @@ editorPortalTarget = document.body, className, style, rowClass,
         rawGroupBy,
         rowGrouper
     });
-    const { rowOverscanStartIdx, rowOverscanEndIdx, rows, rowsCount, isGroupRow } = useViewportRows({
+    const { rowOverscanStartIdx, rowOverscanEndIdx, rows, rowsCount, isGroupRow } = Object(_hooks__WEBPACK_IMPORTED_MODULE_2__["useViewportRows"])({
         rawRows,
         groupBy,
         rowGrouper,
@@ -45271,7 +44332,7 @@ editorPortalTarget = document.body, className, style, rowClass,
     /**
      * effects
      */
-    Object(react["useLayoutEffect"])(() => {
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useLayoutEffect"])(() => {
         if (selectedPosition === prevSelectedPosition.current || selectedPosition.mode === 'EDIT' || !isCellWithinBounds(selectedPosition))
             return;
         prevSelectedPosition.current = selectedPosition;
@@ -45282,11 +44343,11 @@ editorPortalTarget = document.body, className, style, rowClass,
         }
         focusSinkRef.current.focus({ preventScroll: true });
     });
-    Object(react["useEffect"])(() => {
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         if (!onSelectedRowsChange)
             return;
         const handleRowSelectionChange = ({ rowIdx, checked, isShiftClick }) => {
-            assertIsValidKeyGetter(rowKeyGetter);
+            Object(_utils__WEBPACK_IMPORTED_MODULE_9__["assertIsValidKeyGetter"])(rowKeyGetter);
             const newSelectedRows = new Set(selectedRows);
             const row = rows[rowIdx];
             if (isGroupRow(row)) {
@@ -45325,10 +44386,10 @@ editorPortalTarget = document.body, className, style, rowClass,
         };
         return eventBus.subscribe('SelectRow', handleRowSelectionChange);
     });
-    Object(react["useEffect"])(() => {
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         return eventBus.subscribe('SelectCell', selectCell);
     });
-    Object(react["useEffect"])(() => {
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         if (!onExpandedGroupIdsChange)
             return;
         const toggleGroup = (expandedGroupId) => {
@@ -45343,7 +44404,7 @@ editorPortalTarget = document.body, className, style, rowClass,
         };
         return eventBus.subscribe('ToggleGroup', toggleGroup);
     }, [eventBus, expandedGroupIds, onExpandedGroupIdsChange]);
-    Object(react["useImperativeHandle"])(ref, () => ({
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useImperativeHandle"])(ref, () => ({
         scrollToColumn(idx) {
             scrollToCell({ idx });
         },
@@ -45361,13 +44422,13 @@ editorPortalTarget = document.body, className, style, rowClass,
     /**
     * callbacks
     */
-    const handleColumnResize = Object(react["useCallback"])((column, width) => {
+    const handleColumnResize = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((column, width) => {
         const newColumnWidths = new Map(columnWidths);
         newColumnWidths.set(column.key, width);
         setColumnWidths(newColumnWidths);
         onColumnResize === null || onColumnResize === void 0 ? void 0 : onColumnResize(column.idx, width);
     }, [columnWidths, onColumnResize]);
-    const setDraggedOverRowIdx = Object(react["useCallback"])((rowIdx) => {
+    const setDraggedOverRowIdx = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((rowIdx) => {
         setOverRowIdx(rowIdx);
         latestDraggedOverRowIdx.current = rowIdx;
     }, []);
@@ -45378,7 +44439,7 @@ editorPortalTarget = document.body, className, style, rowClass,
         const { key, keyCode } = event;
         const row = rows[selectedPosition.rowIdx];
         if (onPaste
-            && isCtrlKeyHeldDown(event)
+            && Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isCtrlKeyHeldDown"])(event)
             && isCellWithinBounds(selectedPosition)
             && !isGroupRow(row)
             && selectedPosition.idx !== -1
@@ -45495,7 +44556,7 @@ editorPortalTarget = document.body, className, style, rowClass,
         (_b = (_a = column.editorOptions) === null || _a === void 0 ? void 0 : _a.onCellKeyDown) === null || _b === void 0 ? void 0 : _b.call(_a, event);
         if (event.isDefaultPrevented())
             return;
-        if (isCellEditable(selectedPosition) && isDefaultCellInput(event)) {
+        if (isCellEditable(selectedPosition) && Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isDefaultCellInput"])(event)) {
             setSelectedPosition(({ idx, rowIdx }) => ({
                 idx,
                 rowIdx,
@@ -45584,7 +44645,7 @@ editorPortalTarget = document.body, className, style, rowClass,
     }
     function isCellEditable(position) {
         return isCellWithinBounds(position)
-            && isSelectedCellEditable({ columns, rows, selectedPosition: position, isGroupRow });
+            && Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isSelectedCellEditable"])({ columns, rows, selectedPosition: position, isGroupRow });
     }
     function selectCell(position, enableEditor = false) {
         if (!isCellWithinBounds(position))
@@ -45614,7 +44675,7 @@ editorPortalTarget = document.body, className, style, rowClass,
             const isCellAtLeftBoundary = left < scrollLeft + width + totalFrozenColumnWidth;
             const isCellAtRightBoundary = left + width > clientWidth + scrollLeft;
             if (isCellAtLeftBoundary || isCellAtRightBoundary) {
-                const newScrollLeft = getColumnScrollPosition(columns, idx, scrollLeft, clientWidth);
+                const newScrollLeft = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["getColumnScrollPosition"])(columns, idx, scrollLeft, clientWidth);
                 current.scrollLeft = scrollLeft + newScrollLeft;
             }
         }
@@ -45686,17 +44747,17 @@ editorPortalTarget = document.body, className, style, rowClass,
     function navigate(event) {
         var _a, _b;
         if (selectedPosition.mode === 'EDIT') {
-            const onNavigation = (_b = (_a = columns[selectedPosition.idx].editorOptions) === null || _a === void 0 ? void 0 : _a.onNavigation) !== null && _b !== void 0 ? _b : onEditorNavigation;
+            const onNavigation = (_b = (_a = columns[selectedPosition.idx].editorOptions) === null || _a === void 0 ? void 0 : _a.onNavigation) !== null && _b !== void 0 ? _b : _utils__WEBPACK_IMPORTED_MODULE_9__["onEditorNavigation"];
             if (!onNavigation(event))
                 return;
         }
         const { key, shiftKey } = event;
-        const ctrlKey = isCtrlKeyHeldDown(event);
+        const ctrlKey = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isCtrlKeyHeldDown"])(event);
         let nextPosition = getNextPosition(key, ctrlKey, shiftKey);
         let mode = cellNavigationMode;
         if (key === 'Tab') {
             // If we are in a position to leave the grid, stop editing but stay in that cell
-            if (canExitGrid({ shiftKey, cellNavigationMode, columns, rowsCount: rows.length, selectedPosition })) {
+            if (Object(_utils__WEBPACK_IMPORTED_MODULE_9__["canExitGrid"])({ shiftKey, cellNavigationMode, columns, rowsCount: rows.length, selectedPosition })) {
                 // Allow focus to leave the grid so the next control in the tab order can be focused
                 return;
             }
@@ -45706,7 +44767,7 @@ editorPortalTarget = document.body, className, style, rowClass,
         }
         // Do not allow focus to leave
         event.preventDefault();
-        nextPosition = getNextSelectedCellPosition({
+        nextPosition = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["getNextSelectedCellPosition"])({
             columns,
             rowsCount: rows.length,
             cellNavigationMode: mode,
@@ -45759,7 +44820,7 @@ editorPortalTarget = document.body, className, style, rowClass,
             const top = rowIdx * rowHeight + totalHeaderHeight;
             if (isGroupRow(row)) {
                 ({ startRowIndex } = row);
-                rowElements.push(react_default.a.createElement(GroupRow, { "aria-level": row.level + 1, "aria-setsize": row.setSize, "aria-posinset": row.posInSet + 1, "aria-rowindex": headerRowsCount + startRowIndex + 1, key: row.id, id: row.id, groupKey: row.groupKey, viewportColumns: viewportColumns, childRows: row.childRows, rowIdx: rowIdx, top: top, level: row.level, isExpanded: row.isExpanded, selectedCellIdx: selectedPosition.rowIdx === rowIdx ? selectedPosition.idx : undefined, isRowSelected: isSelectable && row.childRows.every(cr => selectedRows === null || selectedRows === void 0 ? void 0 : selectedRows.has(rowKeyGetter(cr))), eventBus: eventBus, onFocus: selectedPosition.rowIdx === rowIdx ? handleFocus : undefined, onKeyDown: selectedPosition.rowIdx === rowIdx ? handleKeyDown : undefined }));
+                rowElements.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GroupRow__WEBPACK_IMPORTED_MODULE_7__["default"], { "aria-level": row.level + 1, "aria-setsize": row.setSize, "aria-posinset": row.posInSet + 1, "aria-rowindex": headerRowsCount + startRowIndex + 1, key: row.id, id: row.id, groupKey: row.groupKey, viewportColumns: viewportColumns, childRows: row.childRows, rowIdx: rowIdx, top: top, level: row.level, isExpanded: row.isExpanded, selectedCellIdx: selectedPosition.rowIdx === rowIdx ? selectedPosition.idx : undefined, isRowSelected: isSelectable && row.childRows.every(cr => selectedRows === null || selectedRows === void 0 ? void 0 : selectedRows.has(rowKeyGetter(cr))), eventBus: eventBus, onFocus: selectedPosition.rowIdx === rowIdx ? handleFocus : undefined, onKeyDown: selectedPosition.rowIdx === rowIdx ? handleKeyDown : undefined }));
                 continue;
             }
             startRowIndex++;
@@ -45769,7 +44830,7 @@ editorPortalTarget = document.body, className, style, rowClass,
                 key = rowKeyGetter(row);
                 isRowSelected = (_a = selectedRows === null || selectedRows === void 0 ? void 0 : selectedRows.has(key)) !== null && _a !== void 0 ? _a : false;
             }
-            rowElements.push(react_default.a.createElement(RowRenderer, { "aria-rowindex": headerRowsCount + (hasGroups ? startRowIndex : rowIdx) + 1, "aria-selected": isSelectable ? isRowSelected : undefined, key: key, rowIdx: rowIdx, row: row, viewportColumns: viewportColumns, eventBus: eventBus, isRowSelected: isRowSelected, onRowClick: onRowClick, rowClass: rowClass, top: top, copiedCellIdx: copiedCell !== null && copiedCell.row === row ? columns.findIndex(c => c.key === copiedCell.columnKey) : undefined, draggedOverCellIdx: getDraggedOverCellIdx(rowIdx), setDraggedOverRowIdx: isDragging ? setDraggedOverRowIdx : undefined, selectedCellProps: getSelectedCellProps(rowIdx) }));
+            rowElements.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(RowRenderer, { "aria-rowindex": headerRowsCount + (hasGroups ? startRowIndex : rowIdx) + 1, "aria-selected": isSelectable ? isRowSelected : undefined, key: key, rowIdx: rowIdx, row: row, viewportColumns: viewportColumns, eventBus: eventBus, isRowSelected: isRowSelected, onRowClick: onRowClick, rowClass: rowClass, top: top, copiedCellIdx: copiedCell !== null && copiedCell.row === row ? columns.findIndex(c => c.key === copiedCell.columnKey) : undefined, draggedOverCellIdx: getDraggedOverCellIdx(rowIdx), setDraggedOverRowIdx: isDragging ? setDraggedOverRowIdx : undefined, selectedCellProps: getSelectedCellProps(rowIdx) }));
         }
         return rowElements;
     }
@@ -45782,40 +44843,1083 @@ editorPortalTarget = document.body, className, style, rowClass,
         // Discard changes if rows are updated from outside
         closeEditor();
     }
-    return (react_default.a.createElement("div", { role: hasGroups ? 'treegrid' : 'grid', "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, "aria-describedby": ariaDescribedBy, "aria-multiselectable": isSelectable ? true : undefined, "aria-colcount": columns.length, "aria-rowcount": headerRowsCount + rowsCount + summaryRowsCount, className: clsx_default()('rdg', { 'rdg-viewport-dragging': isDragging }, className), style: {
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { role: hasGroups ? 'treegrid' : 'grid', "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, "aria-describedby": ariaDescribedBy, "aria-multiselectable": isSelectable ? true : undefined, "aria-colcount": columns.length, "aria-rowcount": headerRowsCount + rowsCount + summaryRowsCount, className: clsx__WEBPACK_IMPORTED_MODULE_1___default()('rdg', { 'rdg-viewport-dragging': isDragging }, className), style: {
             ...style,
             '--header-row-height': `${headerRowHeight}px`,
             '--filter-row-height': `${headerFiltersHeight}px`,
             '--row-width': `${totalColumnWidth}px`,
             '--row-height': `${rowHeight}px`
         }, ref: gridRef, onScroll: handleScroll },
-        react_default.a.createElement(lib_HeaderRow, { rowKeyGetter: rowKeyGetter, rows: rawRows, columns: viewportColumns, onColumnResize: handleColumnResize, allRowsSelected: (selectedRows === null || selectedRows === void 0 ? void 0 : selectedRows.size) === rawRows.length, onSelectedRowsChange: onSelectedRowsChange, sortColumn: sortColumn, sortDirection: sortDirection, onSort: onSort }),
-        enableFilterRow && (react_default.a.createElement(lib_FilterRow, { columns: viewportColumns, filters: filters, onFiltersChange: onFiltersChange })),
-        rows.length === 0 && emptyRowsRenderer ? Object(react["createElement"])(emptyRowsRenderer) : (react_default.a.createElement(react_default.a.Fragment, null,
-            react_default.a.createElement("div", { ref: focusSinkRef, tabIndex: 0, className: "rdg-focus-sink", onKeyDown: handleKeyDown }),
-            react_default.a.createElement("div", { style: { height: Math.max(rows.length * rowHeight, clientHeight) } }),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_HeaderRow__WEBPACK_IMPORTED_MODULE_4__["default"], { rowKeyGetter: rowKeyGetter, rows: rawRows, columns: viewportColumns, onColumnResize: handleColumnResize, allRowsSelected: (selectedRows === null || selectedRows === void 0 ? void 0 : selectedRows.size) === rawRows.length, onSelectedRowsChange: onSelectedRowsChange, sortColumn: sortColumn, sortDirection: sortDirection, onSort: onSort }),
+        enableFilterRow && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_FilterRow__WEBPACK_IMPORTED_MODULE_5__["default"], { columns: viewportColumns, filters: filters, onFiltersChange: onFiltersChange })),
+        rows.length === 0 && emptyRowsRenderer ? Object(react__WEBPACK_IMPORTED_MODULE_0__["createElement"])(emptyRowsRenderer) : (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { ref: focusSinkRef, tabIndex: 0, className: "rdg-focus-sink", onKeyDown: handleKeyDown }),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { style: { height: Math.max(rows.length * rowHeight, clientHeight) } }),
             getViewportRows(), summaryRows === null || summaryRows === void 0 ? void 0 :
-            summaryRows.map((row, rowIdx) => (react_default.a.createElement(lib_SummaryRow, { "aria-rowindex": headerRowsCount + rowsCount + rowIdx + 1, key: rowIdx, rowIdx: rowIdx, row: row, bottom: rowHeight * (summaryRows.length - 1 - rowIdx), viewportColumns: viewportColumns })))))));
+            summaryRows.map((row, rowIdx) => (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SummaryRow__WEBPACK_IMPORTED_MODULE_8__["default"], { "aria-rowindex": headerRowsCount + rowsCount + rowIdx + 1, key: rowIdx, rowIdx: rowIdx, row: row, bottom: rowHeight * (summaryRows.length - 1 - rowIdx), viewportColumns: viewportColumns })))))));
 }
-/* harmony default export */ var lib_DataGrid = (Object(react["forwardRef"])(DataGrid));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react__WEBPACK_IMPORTED_MODULE_0__["forwardRef"])(DataGrid));
 //# sourceMappingURL=DataGrid.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/formatters/index.js
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/EditCell.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return EditCell; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/clsx/dist/clsx.js");
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clsx__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _editors_EditorContainer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/editors/EditorContainer.js");
 
 
 
-//# sourceMappingURL=index.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/editors/TextEditor.js
+function EditCell({ className, column, row, rowIdx, editorProps, ...props }) {
+    const [dimensions, setDimensions] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null);
+    const cellRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(node => {
+        if (node !== null) {
+            const { left, top } = node.getBoundingClientRect();
+            setDimensions({ left, top });
+        }
+    }, []);
+    const { cellClass } = column;
+    className = clsx__WEBPACK_IMPORTED_MODULE_1___default()('rdg-cell', {
+        'rdg-cell-frozen': column.frozen,
+        'rdg-cell-frozen-last': column.isLastFrozenColumn
+    }, 'rdg-cell-selected', 'rdg-cell-editing', typeof cellClass === 'function' ? cellClass(row) : cellClass, className);
+    function getCellContent() {
+        var _a;
+        if (dimensions === null)
+            return;
+        const { scrollTop: docTop, scrollLeft: docLeft } = (_a = document.scrollingElement) !== null && _a !== void 0 ? _a : document.documentElement;
+        const { left, top } = dimensions;
+        const gridLeft = left + docLeft;
+        const gridTop = top + docTop;
+        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_editors_EditorContainer__WEBPACK_IMPORTED_MODULE_2__["default"], Object.assign({}, editorProps, { rowIdx: rowIdx, column: column, left: gridLeft, top: gridTop })));
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", Object.assign({ role: "gridcell", "aria-colindex": column.idx + 1, "aria-selected": true, ref: cellRef, className: className, style: {
+            width: column.width,
+            left: column.left
+        } }, props), getCellContent()));
+}
+//# sourceMappingURL=EditCell.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/EventBus.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return EventBus; });
+class EventBus {
+    constructor() {
+        this.subscribers = new Map();
+    }
+    subscribe(type, handler) {
+        if (!this.subscribers.has(type)) {
+            this.subscribers.set(type, new Set());
+        }
+        const handlers = this.subscribers.get(type);
+        handlers.add(handler);
+        return () => {
+            handlers.delete(handler);
+        };
+    }
+    dispatch(type, ...args) {
+        const handlers = this.subscribers.get(type);
+        if (handlers) {
+            // handler needed a type assertion to fix type bug
+            handlers.forEach(handler => {
+                handler(...args);
+            });
+        }
+    }
+}
+//# sourceMappingURL=EventBus.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/FilterRow.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/clsx/dist/clsx.js");
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clsx__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function FilterRow({ columns, filters, onFiltersChange }) {
+    function onChange(key, value) {
+        const newFilters = { ...filters };
+        newFilters[key] = value;
+        onFiltersChange === null || onFiltersChange === void 0 ? void 0 : onFiltersChange(newFilters);
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { role: "row", "aria-rowindex": 2, className: "rdg-filter-row" }, columns.map(column => {
+        const { key } = column;
+        const className = clsx__WEBPACK_IMPORTED_MODULE_1___default()('rdg-cell', {
+            'rdg-cell-frozen': column.frozen,
+            'rdg-cell-frozen-last': column.isLastFrozenColumn
+        });
+        const style = {
+            width: column.width,
+            left: column.left
+        };
+        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { key: key, style: style, className: className }, column.filterRenderer && Object(react__WEBPACK_IMPORTED_MODULE_0__["createElement"])(column.filterRenderer, {
+            column,
+            value: filters === null || filters === void 0 ? void 0 : filters[column.key],
+            onChange: value => onChange(key, value)
+        })));
+    })));
+}
+/* harmony default export */ __webpack_exports__["default"] = (Object(react__WEBPACK_IMPORTED_MODULE_0__["memo"])(FilterRow));
+//# sourceMappingURL=FilterRow.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/GroupCell.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/clsx/dist/clsx.js");
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clsx__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function GroupCell({ id, rowIdx, groupKey, childRows, isExpanded, isCellSelected, isRowSelected, eventBus, column, groupColumnIndex }) {
+    function toggleGroup() {
+        eventBus.dispatch('ToggleGroup', id);
+    }
+    function onRowSelectionChange(checked) {
+        eventBus.dispatch('SelectRow', { rowIdx, checked, isShiftClick: false });
+    }
+    // Only make the cell clickable if the group level matches
+    const isLevelMatching = column.rowGroup && groupColumnIndex === column.idx;
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { role: "gridcell", "aria-colindex": column.idx + 1, key: column.key, className: clsx__WEBPACK_IMPORTED_MODULE_1___default()('rdg-cell', {
+            'rdg-cell-frozen': column.frozen,
+            'rdg-cell-frozen-last': column.isLastFrozenColumn,
+            'rdg-cell-selected': isCellSelected
+        }), style: {
+            width: column.width,
+            left: column.left,
+            cursor: isLevelMatching ? 'pointer' : 'default'
+        }, onClick: isLevelMatching ? toggleGroup : undefined }, column.groupFormatter && (!column.rowGroup || groupColumnIndex === column.idx) && (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(column.groupFormatter, { groupKey: groupKey, childRows: childRows, column: column, isExpanded: isExpanded, isCellSelected: isCellSelected, isRowSelected: isRowSelected, onRowSelectionChange: onRowSelectionChange, toggleGroup: toggleGroup }))));
+}
+/* harmony default export */ __webpack_exports__["default"] = (Object(react__WEBPACK_IMPORTED_MODULE_0__["memo"])(GroupCell));
+//# sourceMappingURL=GroupCell.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/GroupRow.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/clsx/dist/clsx.js");
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clsx__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Columns__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/Columns.js");
+/* harmony import */ var _GroupCell__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/react-data-grid/lib/GroupCell.js");
+
+
+
+
+function GroupedRow({ id, groupKey, viewportColumns, childRows, rowIdx, top, level, isExpanded, selectedCellIdx, isRowSelected, eventBus, ...props }) {
+    // Select is always the first column
+    const idx = viewportColumns[0].key === _Columns__WEBPACK_IMPORTED_MODULE_2__["SELECT_COLUMN_KEY"] ? level + 1 : level;
+    function selectGroup() {
+        eventBus.dispatch('SelectCell', { rowIdx, idx: -1 });
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", Object.assign({ role: "row", "aria-level": level, "aria-expanded": isExpanded, className: clsx__WEBPACK_IMPORTED_MODULE_1___default()('rdg-row', 'rdg-group-row', `rdg-row-${rowIdx % 2 === 0 ? 'even' : 'odd'}`, {
+            'rdg-row-selected': isRowSelected,
+            'rdg-group-row-selected': selectedCellIdx === -1 // Select row if there is no selected cell
+        }), onClick: selectGroup, style: { top } }, props), viewportColumns.map(column => (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GroupCell__WEBPACK_IMPORTED_MODULE_3__["default"], { key: column.key, id: id, rowIdx: rowIdx, groupKey: groupKey, childRows: childRows, isExpanded: isExpanded, isRowSelected: isRowSelected, isCellSelected: selectedCellIdx === column.idx, eventBus: eventBus, column: column, groupColumnIndex: idx })))));
+}
+/* harmony default export */ __webpack_exports__["default"] = (Object(react__WEBPACK_IMPORTED_MODULE_0__["memo"])(GroupedRow));
+//# sourceMappingURL=GroupRow.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/HeaderCell.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return HeaderCell; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/clsx/dist/clsx.js");
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clsx__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _headerCells_SortableHeaderCell__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/headerCells/SortableHeaderCell.js");
+/* harmony import */ var _headerCells_ResizableHeaderCell__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/react-data-grid/lib/headerCells/ResizableHeaderCell.js");
+
+
+
+
+function getAriaSort(sortDirection) {
+    switch (sortDirection) {
+        case 'ASC':
+            return 'ascending';
+        case 'DESC':
+            return 'descending';
+        default:
+            return 'none';
+    }
+}
+function HeaderCell({ column, onResize, allRowsSelected, onAllRowsSelectionChange, sortColumn, sortDirection, onSort }) {
+    function getCell() {
+        if (column.headerRenderer) {
+            return Object(react__WEBPACK_IMPORTED_MODULE_0__["createElement"])(column.headerRenderer, {
+                column,
+                sortColumn,
+                sortDirection,
+                onSort,
+                allRowsSelected,
+                onAllRowsSelectionChange
+            });
+        }
+        if (column.sortable) {
+            return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_headerCells_SortableHeaderCell__WEBPACK_IMPORTED_MODULE_2__["default"], { column: column, onSort: onSort, sortColumn: sortColumn, sortDirection: sortDirection }, column.name));
+        }
+        return column.name;
+    }
+    let cell = getCell();
+    const className = clsx__WEBPACK_IMPORTED_MODULE_1___default()('rdg-cell', column.headerCellClass, {
+        'rdg-cell-frozen': column.frozen,
+        'rdg-cell-frozen-last': column.isLastFrozenColumn
+    });
+    const style = {
+        width: column.width,
+        left: column.left
+    };
+    cell = (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { role: "columnheader", "aria-colindex": column.idx + 1, "aria-sort": sortColumn === column.key ? getAriaSort(sortDirection) : undefined, className: className, style: style }, cell));
+    if (column.resizable) {
+        cell = (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_headerCells_ResizableHeaderCell__WEBPACK_IMPORTED_MODULE_3__["default"], { column: column, onResize: onResize }, cell));
+    }
+    return cell;
+}
+//# sourceMappingURL=HeaderCell.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/HeaderRow.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _HeaderCell__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react-data-grid/lib/HeaderCell.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/utils/index.js");
+
+
+
+function HeaderRow({ columns, rows, rowKeyGetter, onSelectedRowsChange, allRowsSelected, onColumnResize, sortColumn, sortDirection, onSort }) {
+    const handleAllRowsSelectionChange = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((checked) => {
+        if (!onSelectedRowsChange)
+            return;
+        Object(_utils__WEBPACK_IMPORTED_MODULE_2__["assertIsValidKeyGetter"])(rowKeyGetter);
+        const newSelectedRows = new Set();
+        if (checked) {
+            for (const row of rows) {
+                newSelectedRows.add(rowKeyGetter(row));
+            }
+        }
+        onSelectedRowsChange(newSelectedRows);
+    }, [onSelectedRowsChange, rows, rowKeyGetter]);
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { role: "row", "aria-rowindex": 1, className: "rdg-header-row" }, columns.map(column => {
+        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_HeaderCell__WEBPACK_IMPORTED_MODULE_1__["default"], { key: column.key, column: column, onResize: onColumnResize, allRowsSelected: allRowsSelected, onAllRowsSelectionChange: handleAllRowsSelectionChange, onSort: onSort, sortColumn: sortColumn, sortDirection: sortDirection }));
+    })));
+}
+/* harmony default export */ __webpack_exports__["default"] = (Object(react__WEBPACK_IMPORTED_MODULE_0__["memo"])(HeaderRow));
+//# sourceMappingURL=HeaderRow.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/Row.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/clsx/dist/clsx.js");
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clsx__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Cell__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/Cell.js");
+/* harmony import */ var _EditCell__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/react-data-grid/lib/EditCell.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./node_modules/react-data-grid/lib/utils/index.js");
+
+
+
+
+
+function Row({ cellRenderer: CellRenderer = _Cell__WEBPACK_IMPORTED_MODULE_2__["default"], className, eventBus, rowIdx, isRowSelected, copiedCellIdx, draggedOverCellIdx, row, viewportColumns, selectedCellProps, onRowClick, rowClass, setDraggedOverRowIdx, onMouseEnter, top, 'aria-rowindex': ariaRowIndex, 'aria-selected': ariaSelected, ...props }, ref) {
+    function handleDragEnter() {
+        setDraggedOverRowIdx === null || setDraggedOverRowIdx === void 0 ? void 0 : setDraggedOverRowIdx(rowIdx);
+    }
+    className = clsx__WEBPACK_IMPORTED_MODULE_1___default()('rdg-row', `rdg-row-${rowIdx % 2 === 0 ? 'even' : 'odd'}`, {
+        'rdg-row-selected': isRowSelected,
+        'rdg-group-row-selected': (selectedCellProps === null || selectedCellProps === void 0 ? void 0 : selectedCellProps.idx) === -1
+    }, rowClass === null || rowClass === void 0 ? void 0 : rowClass(row), className);
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", Object.assign({ role: "row", "aria-rowindex": ariaRowIndex, "aria-selected": ariaSelected, ref: ref, className: className, onMouseEnter: Object(_utils__WEBPACK_IMPORTED_MODULE_4__["wrapEvent"])(handleDragEnter, onMouseEnter), style: { top } }, props), viewportColumns.map(column => {
+        const isCellSelected = (selectedCellProps === null || selectedCellProps === void 0 ? void 0 : selectedCellProps.idx) === column.idx;
+        if ((selectedCellProps === null || selectedCellProps === void 0 ? void 0 : selectedCellProps.mode) === 'EDIT' && isCellSelected) {
+            return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_EditCell__WEBPACK_IMPORTED_MODULE_3__["default"], { key: column.key, rowIdx: rowIdx, column: column, row: row, onKeyDown: selectedCellProps.onKeyDown, editorProps: selectedCellProps.editorProps }));
+        }
+        return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CellRenderer, { key: column.key, rowIdx: rowIdx, column: column, row: row, isCopied: copiedCellIdx === column.idx, isDraggedOver: draggedOverCellIdx === column.idx, isCellSelected: isCellSelected, isRowSelected: isRowSelected, eventBus: eventBus, dragHandleProps: isCellSelected ? selectedCellProps.dragHandleProps : undefined, onFocus: isCellSelected ? selectedCellProps.onFocus : undefined, onKeyDown: isCellSelected ? selectedCellProps.onKeyDown : undefined, onRowClick: onRowClick }));
+    })));
+}
+/* harmony default export */ __webpack_exports__["default"] = (Object(react__WEBPACK_IMPORTED_MODULE_0__["memo"])(Object(react__WEBPACK_IMPORTED_MODULE_0__["forwardRef"])(Row)));
+//# sourceMappingURL=Row.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/SummaryCell.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/clsx/dist/clsx.js");
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clsx__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function SummaryCell({ column, row }) {
+    const { summaryFormatter: SummaryFormatter, width, left, summaryCellClass } = column;
+    const className = clsx__WEBPACK_IMPORTED_MODULE_1___default()('rdg-cell', {
+        'rdg-cell-frozen': column.frozen,
+        'rdg-cell-frozen-last': column.isLastFrozenColumn
+    }, typeof summaryCellClass === 'function' ? summaryCellClass(row) : summaryCellClass);
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { role: "gridcell", "aria-colindex": column.idx + 1, className: className, style: { width, left } }, SummaryFormatter && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SummaryFormatter, { column: column, row: row })));
+}
+/* harmony default export */ __webpack_exports__["default"] = (Object(react__WEBPACK_IMPORTED_MODULE_0__["memo"])(SummaryCell));
+//# sourceMappingURL=SummaryCell.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/SummaryRow.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _SummaryCell__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react-data-grid/lib/SummaryCell.js");
+
+
+function SummaryRow({ rowIdx, row, viewportColumns, bottom, 'aria-rowindex': ariaRowIndex }) {
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { role: "row", "aria-rowindex": ariaRowIndex, className: `rdg-row rdg-row-${rowIdx % 2 === 0 ? 'even' : 'odd'} rdg-summary-row`, style: { bottom } }, viewportColumns.map(column => (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SummaryCell__WEBPACK_IMPORTED_MODULE_1__["default"], { key: column.key, column: column, row: row })))));
+}
+/* harmony default export */ __webpack_exports__["default"] = (Object(react__WEBPACK_IMPORTED_MODULE_0__["memo"])(SummaryRow));
+//# sourceMappingURL=SummaryRow.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/editors/EditorContainer.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return EditorContainer; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/hooks/index.js");
+
+
+
+function EditorContainer({ row, column, onRowChange, ...props }) {
+    var _a;
+    const onClickCapture = Object(_hooks__WEBPACK_IMPORTED_MODULE_2__["useClickOutside"])(() => onRowChange(row, true));
+    if (column.editor === undefined)
+        return null;
+    const editor = (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "rdg-editor-container", onClickCapture: onClickCapture },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(column.editor, Object.assign({ row: row, column: column, onRowChange: onRowChange }, props))));
+    if ((_a = column.editorOptions) === null || _a === void 0 ? void 0 : _a.createPortal) {
+        return Object(react_dom__WEBPACK_IMPORTED_MODULE_1__["createPortal"])(editor, props.editorPortalTarget);
+    }
+    return editor;
+}
+//# sourceMappingURL=EditorContainer.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/editors/TextEditor.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TextEditor; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 function autoFocusAndSelect(input) {
     input === null || input === void 0 ? void 0 : input.focus();
     input === null || input === void 0 ? void 0 : input.select();
 }
 function TextEditor({ row, column, onRowChange, onClose }) {
-    return (react_default.a.createElement("input", { className: "rdg-text-editor", ref: autoFocusAndSelect, value: row[column.key], onChange: event => onRowChange({ ...row, [column.key]: event.target.value }), onBlur: () => onClose(true) }));
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { className: "rdg-text-editor", ref: autoFocusAndSelect, value: row[column.key], onChange: event => onRowChange({ ...row, [column.key]: event.target.value }), onBlur: () => onClose(true) }));
 }
 //# sourceMappingURL=TextEditor.js.map
-// CONCATENATED MODULE: ./node_modules/react-data-grid/lib/index.js
 
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/enums.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+//# sourceMappingURL=enums.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/formatters/SelectCellFormatter.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SelectCellFormatter", function() { return SelectCellFormatter; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/clsx/dist/clsx.js");
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clsx__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _hooks_useFocusRef__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/hooks/useFocusRef.js");
+
+
+
+function SelectCellFormatter({ value, tabIndex, isCellSelected, disabled, onClick, onChange, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledBy }) {
+    const inputRef = Object(_hooks_useFocusRef__WEBPACK_IMPORTED_MODULE_2__["useFocusRef"])(isCellSelected);
+    function handleChange(e) {
+        onChange(e.target.checked, e.nativeEvent.shiftKey);
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", { className: clsx__WEBPACK_IMPORTED_MODULE_1___default()('rdg-checkbox-label', { 'rdg-checkbox-label-disabled': disabled }) },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, tabIndex: tabIndex, ref: inputRef, type: "checkbox", className: "rdg-checkbox-input", disabled: disabled, checked: value, onChange: handleChange, onClick: onClick }),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "rdg-checkbox" })));
+}
+//# sourceMappingURL=SelectCellFormatter.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/formatters/ToggleGroupFormatter.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToggleGroupFormatter", function() { return ToggleGroupFormatter; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _hooks_useFocusRef__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react-data-grid/lib/hooks/useFocusRef.js");
+
+
+function ToggleGroupFormatter({ groupKey, isExpanded, isCellSelected, toggleGroup }) {
+    const cellRef = Object(_hooks_useFocusRef__WEBPACK_IMPORTED_MODULE_1__["useFocusRef"])(isCellSelected);
+    function handleKeyDown({ key }) {
+        if (key === 'Enter') {
+            toggleGroup();
+        }
+    }
+    const d = isExpanded ? 'M1 1 L 7 7 L 13 1' : 'M1 7 L 7 1 L 13 7';
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { ref: cellRef, className: "rdg-group-cell-content", tabIndex: -1, onKeyDown: handleKeyDown },
+        groupKey,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", { viewBox: "0 0 14 8", width: "14", height: "8", className: "rdg-caret" },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", { d: d }))));
+}
+//# sourceMappingURL=ToggleGroupFormatter.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/formatters/ValueFormatter.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ValueFormatter", function() { return ValueFormatter; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function ValueFormatter(props) {
+    try {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, props.row[props.column.key]);
+    }
+    catch {
+        return null;
+    }
+}
+//# sourceMappingURL=ValueFormatter.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/formatters/index.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SelectCellFormatter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react-data-grid/lib/formatters/SelectCellFormatter.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SelectCellFormatter", function() { return _SelectCellFormatter__WEBPACK_IMPORTED_MODULE_0__["SelectCellFormatter"]; });
+
+/* harmony import */ var _ValueFormatter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react-data-grid/lib/formatters/ValueFormatter.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ValueFormatter", function() { return _ValueFormatter__WEBPACK_IMPORTED_MODULE_1__["ValueFormatter"]; });
+
+/* harmony import */ var _ToggleGroupFormatter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/formatters/ToggleGroupFormatter.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ToggleGroupFormatter", function() { return _ToggleGroupFormatter__WEBPACK_IMPORTED_MODULE_2__["ToggleGroupFormatter"]; });
+
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/headerCells/ResizableHeaderCell.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ResizableHeaderCell; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function ResizableHeaderCell({ children, column, onResize }) {
+    function onMouseDown(event) {
+        if (event.button !== 0) {
+            return;
+        }
+        const { currentTarget } = event;
+        const { right } = currentTarget.getBoundingClientRect();
+        const offset = right - event.clientX;
+        if (offset > 11) { // +1px to account for the border size
+            return;
+        }
+        const onMouseMove = (event) => {
+            handleResize(event.clientX + offset, currentTarget);
+        };
+        const onMouseUp = () => {
+            window.removeEventListener('mousemove', onMouseMove);
+            window.removeEventListener('mouseup', onMouseUp);
+        };
+        event.preventDefault();
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
+    }
+    function onTouchStart(event) {
+        const touch = event.changedTouches[0];
+        const { identifier } = touch;
+        const { currentTarget } = event;
+        const { right } = currentTarget.getBoundingClientRect();
+        const offset = right - touch.clientX;
+        if (offset > 11) { // +1px to account for the border size
+            return;
+        }
+        function getTouch(event) {
+            for (const touch of event.changedTouches) {
+                if (touch.identifier === identifier)
+                    return touch;
+            }
+            return null;
+        }
+        const onTouchMove = (event) => {
+            const touch = getTouch(event);
+            if (touch) {
+                handleResize(touch.clientX + offset, currentTarget);
+            }
+        };
+        const onTouchEnd = (event) => {
+            const touch = getTouch(event);
+            if (!touch)
+                return;
+            window.removeEventListener('touchmove', onTouchMove);
+            window.removeEventListener('touchend', onTouchEnd);
+        };
+        window.addEventListener('touchmove', onTouchMove);
+        window.addEventListener('touchend', onTouchEnd);
+    }
+    function handleResize(x, target) {
+        const width = x - target.getBoundingClientRect().left;
+        if (width > 0) {
+            onResize(column, width);
+        }
+    }
+    return Object(react__WEBPACK_IMPORTED_MODULE_0__["cloneElement"])(children, {
+        onMouseDown,
+        onTouchStart,
+        children: (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+            children.props.children,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", { className: "rdg-header-cell-resizer" })))
+    });
+}
+//# sourceMappingURL=ResizableHeaderCell.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/headerCells/SortableHeaderCell.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SortableHeaderCell; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+const SORT_TEXT = {
+    ASC: '\u25B2',
+    DESC: '\u25BC',
+    NONE: ''
+};
+function SortableHeaderCell({ column, onSort, sortColumn, sortDirection, children }) {
+    sortDirection = sortColumn === column.key && sortDirection || 'NONE';
+    function onClick() {
+        if (!onSort)
+            return;
+        const { sortDescendingFirst } = column;
+        let direction;
+        switch (sortDirection) {
+            case 'ASC':
+                direction = sortDescendingFirst ? 'NONE' : 'DESC';
+                break;
+            case 'DESC':
+                direction = sortDescendingFirst ? 'ASC' : 'NONE';
+                break;
+            default:
+                direction = sortDescendingFirst ? 'DESC' : 'ASC';
+                break;
+        }
+        onSort(column.key, direction);
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { className: "rdg-header-sort-cell", onClick: onClick },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", { className: "rdg-header-sort-name" }, children),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, SORT_TEXT[sortDirection])));
+}
+//# sourceMappingURL=SortableHeaderCell.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/hooks/index.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _useCombinedRefs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react-data-grid/lib/hooks/useCombinedRefs.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "useCombinedRefs", function() { return _useCombinedRefs__WEBPACK_IMPORTED_MODULE_0__["useCombinedRefs"]; });
+
+/* harmony import */ var _useClickOutside__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react-data-grid/lib/hooks/useClickOutside.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "useClickOutside", function() { return _useClickOutside__WEBPACK_IMPORTED_MODULE_1__["useClickOutside"]; });
+
+/* harmony import */ var _useGridDimensions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/hooks/useGridDimensions.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "useGridDimensions", function() { return _useGridDimensions__WEBPACK_IMPORTED_MODULE_2__["useGridDimensions"]; });
+
+/* harmony import */ var _useViewportColumns__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/react-data-grid/lib/hooks/useViewportColumns.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "useViewportColumns", function() { return _useViewportColumns__WEBPACK_IMPORTED_MODULE_3__["useViewportColumns"]; });
+
+/* harmony import */ var _useViewportRows__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./node_modules/react-data-grid/lib/hooks/useViewportRows.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "useViewportRows", function() { return _useViewportRows__WEBPACK_IMPORTED_MODULE_4__["useViewportRows"]; });
+
+/* harmony import */ var _useFocusRef__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./node_modules/react-data-grid/lib/hooks/useFocusRef.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "useFocusRef", function() { return _useFocusRef__WEBPACK_IMPORTED_MODULE_5__["useFocusRef"]; });
+
+
+
+
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/hooks/useClickOutside.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useClickOutside", function() { return useClickOutside; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+/**
+ * Detecting outside click on a react component is surprisingly hard.
+ * A general approach is to have a global click handler on the document
+ * which checks if the click target is inside the editor container or
+ * not using editorContainer.contains(e.target). This approach works well
+ * until portals are used for editors. Portals render children into a DOM
+ * node that exists outside the DOM hierarchy of the parent component so
+ * editorContainer.contains(e.target) does not work. Here are some examples
+ * of the DOM structure with different types of editors
+ *
+ *
+ * SimpleEditor for example Texbox (No Portals)
+ *   <div data-grid>..</div>
+ *   <div portal-created-by-the-grid-for-editors>
+ *      <div editor-container>
+ *        <div simple-editor>..</div>
+ *      </div>
+ *   </div>
+ *
+ * ComplexEditor for example Modals (using Portals)
+ *   <div data-grid>..</div>
+ *   <div portal-created-by-the-grid-for-editors>
+ *      <div editor-container>
+ *        // Nothing here
+ *      </div>
+ *   </div>
+ *   <div portal-created-by-the-editor>
+ *     <div complex-editor>..</div>
+ *   </div>
+ *
+ *
+ * One approach to detect outside click is to use synthetic event bubbling through
+ * portals. An event fired from inside a portal will propagate to ancestors
+ * in the containing React tree, even if those elements are not ancestors
+ * in the DOM tree. This means a click handler can be attached on the window
+ * and on the editor container. The editor container can set a flag to notify
+ * that the click was inside the editor and the window click handler can use
+ * this flag to call onClickOutside. This approach however has a few caveats
+ * - Click handler on the window is set using window.addEventListener
+ * - Click handler on the editor container is set using onClick prop
+ *
+ * This means if a child component inside the editor calls e.stopPropagation
+ * then the click handler on the editor container will not be called whereas
+ * the document click handler will be called.
+ * https://github.com/facebook/react/issues/12518
+ *
+ * To solve this issue onClickCapture event is used.
+ */
+function useClickOutside(onClick) {
+    const frameRequestRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])();
+    function cancelAnimationFrameRequest() {
+        if (typeof frameRequestRef.current === 'number') {
+            cancelAnimationFrame(frameRequestRef.current);
+            frameRequestRef.current = undefined;
+        }
+    }
+    // We need to prevent the `useEffect` from cleaning up between re-renders,
+    // as `handleDocumentClick` might otherwise miss valid click events.
+    // To that end we instead access the latest `onClick` prop via a ref.
+    const onClickRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(() => {
+        throw new Error('Cannot call an event handler while rendering.');
+    });
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+        onClickRef.current = onClick;
+    });
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+        function onOutsideClick() {
+            frameRequestRef.current = undefined;
+            onClickRef.current();
+        }
+        function onWindowCaptureClick() {
+            cancelAnimationFrameRequest();
+            frameRequestRef.current = requestAnimationFrame(onOutsideClick);
+        }
+        window.addEventListener('click', onWindowCaptureClick, { capture: true });
+        return () => {
+            window.removeEventListener('click', onWindowCaptureClick, { capture: true });
+            cancelAnimationFrameRequest();
+        };
+    }, []);
+    return cancelAnimationFrameRequest;
+}
+//# sourceMappingURL=useClickOutside.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/hooks/useCombinedRefs.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useCombinedRefs", function() { return useCombinedRefs; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function useCombinedRefs(...refs) {
+    return Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((handle) => {
+        for (const ref of refs) {
+            if (typeof ref === 'function') {
+                ref(handle);
+            }
+            else if (ref !== null) {
+                // @ts-expect-error: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065
+                ref.current = handle;
+            }
+        }
+    }, 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    refs);
+}
+//# sourceMappingURL=useCombinedRefs.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/hooks/useFocusRef.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useFocusRef", function() { return useFocusRef; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function useFocusRef(isCellSelected) {
+    const ref = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(null);
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useLayoutEffect"])(() => {
+        var _a;
+        if (!isCellSelected)
+            return;
+        (_a = ref.current) === null || _a === void 0 ? void 0 : _a.focus({ preventScroll: true });
+    }, [isCellSelected]);
+    return ref;
+}
+//# sourceMappingURL=useFocusRef.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/hooks/useGridDimensions.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useGridDimensions", function() { return useGridDimensions; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function useGridDimensions() {
+    const gridRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(null);
+    const [gridWidth, setGridWidth] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(1);
+    const [gridHeight, setGridHeight] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(1);
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useLayoutEffect"])(() => {
+        const { ResizeObserver } = window;
+        // don't break in jest/jsdom and browsers that don't support ResizeObserver
+        if (ResizeObserver == null)
+            return;
+        const resizeObserver = new ResizeObserver(entries => {
+            const { width, height } = entries[0].contentRect;
+            setGridWidth(width);
+            setGridHeight(height);
+        });
+        resizeObserver.observe(gridRef.current);
+        return () => {
+            resizeObserver.disconnect();
+        };
+    }, []);
+    return [gridRef, gridWidth, gridHeight];
+}
+//# sourceMappingURL=useGridDimensions.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/hooks/useViewportColumns.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useViewportColumns", function() { return useViewportColumns; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react-data-grid/lib/utils/index.js");
+/* harmony import */ var _formatters__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/formatters/index.js");
+
+
+
+function useViewportColumns({ rawColumns, columnWidths, viewportWidth, scrollLeft, defaultColumnOptions, rawGroupBy, rowGrouper }) {
+    var _a, _b, _c, _d;
+    const minColumnWidth = (_a = defaultColumnOptions === null || defaultColumnOptions === void 0 ? void 0 : defaultColumnOptions.minWidth) !== null && _a !== void 0 ? _a : 80;
+    const defaultFormatter = (_b = defaultColumnOptions === null || defaultColumnOptions === void 0 ? void 0 : defaultColumnOptions.formatter) !== null && _b !== void 0 ? _b : _formatters__WEBPACK_IMPORTED_MODULE_2__["ValueFormatter"];
+    const defaultSortable = (_c = defaultColumnOptions === null || defaultColumnOptions === void 0 ? void 0 : defaultColumnOptions.sortable) !== null && _c !== void 0 ? _c : false;
+    const defaultResizable = (_d = defaultColumnOptions === null || defaultColumnOptions === void 0 ? void 0 : defaultColumnOptions.resizable) !== null && _d !== void 0 ? _d : false;
+    const { columns, lastFrozenColumnIndex, totalColumnWidth, totalFrozenColumnWidth, groupBy } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useMemo"])(() => {
+        return Object(_utils__WEBPACK_IMPORTED_MODULE_1__["getColumnMetrics"])({
+            rawColumns,
+            minColumnWidth,
+            viewportWidth,
+            columnWidths,
+            defaultSortable,
+            defaultResizable,
+            defaultFormatter,
+            rawGroupBy: rowGrouper ? rawGroupBy : undefined
+        });
+    }, [columnWidths, defaultFormatter, defaultResizable, defaultSortable, minColumnWidth, rawColumns, rawGroupBy, rowGrouper, viewportWidth]);
+    const [colOverscanStartIdx, colOverscanEndIdx] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useMemo"])(() => {
+        // get the viewport's left side and right side positions for non-frozen columns
+        const viewportLeft = scrollLeft + totalFrozenColumnWidth;
+        const viewportRight = scrollLeft + viewportWidth;
+        // get first and last non-frozen column indexes
+        const lastColIdx = columns.length - 1;
+        const firstUnfrozenColumnIdx = Math.min(lastFrozenColumnIndex + 1, lastColIdx);
+        // skip rendering non-frozen columns if the frozen columns cover the entire viewport
+        if (viewportLeft >= viewportRight) {
+            return [firstUnfrozenColumnIdx, firstUnfrozenColumnIdx];
+        }
+        // get the first visible non-frozen column index
+        let colVisibleStartIdx = firstUnfrozenColumnIdx;
+        while (colVisibleStartIdx < lastColIdx) {
+            const { left, width } = columns[colVisibleStartIdx];
+            // if the right side of the columnn is beyond the left side of the available viewport,
+            // then it is the first column that's at least partially visible
+            if (left + width > viewportLeft) {
+                break;
+            }
+            colVisibleStartIdx++;
+        }
+        // get the last visible non-frozen column index
+        let colVisibleEndIdx = colVisibleStartIdx;
+        while (colVisibleEndIdx < lastColIdx) {
+            const { left, width } = columns[colVisibleEndIdx];
+            // if the right side of the column is beyond or equal to the right side of the available viewport,
+            // then it the last column that's at least partially visible, as the previous column's right side is not beyond the viewport.
+            if (left + width >= viewportRight) {
+                break;
+            }
+            colVisibleEndIdx++;
+        }
+        const colOverscanStartIdx = Math.max(firstUnfrozenColumnIdx, colVisibleStartIdx - 1);
+        const colOverscanEndIdx = Math.min(lastColIdx, colVisibleEndIdx + 1);
+        return [colOverscanStartIdx, colOverscanEndIdx];
+    }, [columns, lastFrozenColumnIndex, scrollLeft, totalFrozenColumnWidth, viewportWidth]);
+    const viewportColumns = Object(react__WEBPACK_IMPORTED_MODULE_0__["useMemo"])(() => {
+        const viewportColumns = [];
+        for (let colIdx = 0; colIdx <= colOverscanEndIdx; colIdx++) {
+            const column = columns[colIdx];
+            if (colIdx < colOverscanStartIdx && !column.frozen)
+                continue;
+            viewportColumns.push(column);
+        }
+        return viewportColumns;
+    }, [colOverscanEndIdx, colOverscanStartIdx, columns]);
+    return { columns, viewportColumns, totalColumnWidth, lastFrozenColumnIndex, totalFrozenColumnWidth, groupBy };
+}
+//# sourceMappingURL=useViewportColumns.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/hooks/useViewportRows.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useViewportRows", function() { return useViewportRows; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+const RENDER_BACTCH_SIZE = 8;
+function useViewportRows({ rawRows, rowHeight, clientHeight, scrollTop, groupBy, rowGrouper, expandedGroupIds }) {
+    const [groupedRows, rowsCount] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useMemo"])(() => {
+        if (groupBy.length === 0 || !rowGrouper)
+            return [undefined, rawRows.length];
+        const groupRows = (rows, [groupByKey, ...remainingGroupByKeys], startRowIndex) => {
+            let groupRowsCount = 0;
+            const groups = {};
+            for (const [key, childRows] of Object.entries(rowGrouper(rows, groupByKey))) {
+                // Recursively group each parent group
+                const [childGroups, childRowsCount] = remainingGroupByKeys.length === 0
+                    ? [childRows, childRows.length]
+                    : groupRows(childRows, remainingGroupByKeys, startRowIndex + groupRowsCount + 1); // 1 for parent row
+                groups[key] = { childRows, childGroups, startRowIndex: startRowIndex + groupRowsCount };
+                groupRowsCount += childRowsCount + 1; // 1 for parent row
+            }
+            return [groups, groupRowsCount];
+        };
+        return groupRows(rawRows, groupBy, 0);
+    }, [groupBy, rowGrouper, rawRows]);
+    const [rows, allGroupRows] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useMemo"])(() => {
+        const allGroupRows = new Set();
+        if (!groupedRows)
+            return [rawRows, allGroupRows];
+        const flattenedRows = [];
+        const expandGroup = (rows, parentId, level) => {
+            if (Array.isArray(rows)) {
+                flattenedRows.push(...rows);
+                return;
+            }
+            Object.keys(rows).forEach((groupKey, posInSet, keys) => {
+                var _a;
+                // TODO: should users have control over the generated key?
+                const id = parentId !== undefined ? `${parentId}__${groupKey}` : groupKey;
+                const isExpanded = (_a = expandedGroupIds === null || expandedGroupIds === void 0 ? void 0 : expandedGroupIds.has(id)) !== null && _a !== void 0 ? _a : false;
+                const { childRows, childGroups, startRowIndex } = rows[groupKey]; // https://github.com/microsoft/TypeScript/issues/17002
+                const groupRow = {
+                    id,
+                    parentId,
+                    groupKey,
+                    isExpanded,
+                    childRows,
+                    level,
+                    posInSet,
+                    startRowIndex,
+                    setSize: keys.length
+                };
+                flattenedRows.push(groupRow);
+                allGroupRows.add(groupRow);
+                if (isExpanded) {
+                    expandGroup(childGroups, id, level + 1);
+                }
+            });
+        };
+        expandGroup(groupedRows, undefined, 0);
+        return [flattenedRows, allGroupRows];
+    }, [expandedGroupIds, groupedRows, rawRows]);
+    const isGroupRow = (row) => allGroupRows.has(row);
+    const overscanThreshold = 4;
+    const rowVisibleStartIdx = Math.floor(scrollTop / rowHeight);
+    const rowVisibleEndIdx = Math.min(rows.length - 1, Math.floor((scrollTop + clientHeight) / rowHeight));
+    const rowOverscanStartIdx = Math.max(0, Math.floor((rowVisibleStartIdx - overscanThreshold) / RENDER_BACTCH_SIZE) * RENDER_BACTCH_SIZE);
+    const rowOverscanEndIdx = Math.min(rows.length - 1, Math.ceil((rowVisibleEndIdx + overscanThreshold) / RENDER_BACTCH_SIZE) * RENDER_BACTCH_SIZE);
+    return {
+        rowOverscanStartIdx,
+        rowOverscanEndIdx,
+        rows,
+        rowsCount,
+        isGroupRow
+    };
+}
+//# sourceMappingURL=useViewportRows.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/index.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DataGrid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react-data-grid/lib/DataGrid.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _DataGrid__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+/* harmony import */ var _Cell__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react-data-grid/lib/Cell.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Cell", function() { return _Cell__WEBPACK_IMPORTED_MODULE_1__["default"]; });
+
+/* harmony import */ var _Row__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/Row.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Row", function() { return _Row__WEBPACK_IMPORTED_MODULE_2__["default"]; });
+
+/* harmony import */ var _Columns__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/react-data-grid/lib/Columns.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SELECT_COLUMN_KEY", function() { return _Columns__WEBPACK_IMPORTED_MODULE_3__["SELECT_COLUMN_KEY"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SelectColumn", function() { return _Columns__WEBPACK_IMPORTED_MODULE_3__["SelectColumn"]; });
+
+/* harmony import */ var _formatters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./node_modules/react-data-grid/lib/formatters/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SelectCellFormatter", function() { return _formatters__WEBPACK_IMPORTED_MODULE_4__["SelectCellFormatter"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ValueFormatter", function() { return _formatters__WEBPACK_IMPORTED_MODULE_4__["ValueFormatter"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ToggleGroupFormatter", function() { return _formatters__WEBPACK_IMPORTED_MODULE_4__["ToggleGroupFormatter"]; });
+
+/* harmony import */ var _editors_TextEditor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./node_modules/react-data-grid/lib/editors/TextEditor.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TextEditor", function() { return _editors_TextEditor__WEBPACK_IMPORTED_MODULE_5__["default"]; });
+
+/* harmony import */ var _headerCells_SortableHeaderCell__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./node_modules/react-data-grid/lib/headerCells/SortableHeaderCell.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SortableHeaderCell", function() { return _headerCells_SortableHeaderCell__WEBPACK_IMPORTED_MODULE_6__["default"]; });
+
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("./node_modules/react-data-grid/lib/enums.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./node_modules/react-data-grid/lib/types.js");
+/* empty/unused harmony star reexport */
 
 
 
@@ -45825,6 +45929,356 @@ function TextEditor({ row, column, onRowChange, onClose }) {
 
 
 //# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/types.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+//# sourceMappingURL=types.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/utils/columnUtils.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getColumnMetrics", function() { return getColumnMetrics; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getColumnScrollPosition", function() { return getColumnScrollPosition; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "onEditorNavigation", function() { return onEditorNavigation; });
+/* harmony import */ var _formatters__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react-data-grid/lib/formatters/index.js");
+/* harmony import */ var _Columns__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react-data-grid/lib/Columns.js");
+
+
+function getColumnMetrics(metrics) {
+    let left = 0;
+    let totalWidth = 0;
+    let allocatedWidths = 0;
+    let unassignedColumnsCount = 0;
+    let lastFrozenColumnIndex = -1;
+    let totalFrozenColumnWidth = 0;
+    const { rawGroupBy } = metrics;
+    const columns = metrics.rawColumns.map(metricsColumn => {
+        let width = getSpecifiedWidth(metricsColumn, metrics.columnWidths, metrics.viewportWidth);
+        if (width === undefined) {
+            unassignedColumnsCount++;
+        }
+        else {
+            width = clampColumnWidth(width, metricsColumn, metrics.minColumnWidth);
+            allocatedWidths += width;
+        }
+        const column = { ...metricsColumn, width };
+        if (rawGroupBy === null || rawGroupBy === void 0 ? void 0 : rawGroupBy.includes(column.key)) {
+            column.frozen = true;
+            column.rowGroup = true;
+        }
+        if (column.frozen) {
+            lastFrozenColumnIndex++;
+        }
+        return column;
+    });
+    columns.sort(({ key: aKey, frozen: frozenA }, { key: bKey, frozen: frozenB }) => {
+        // Sort select column first:
+        if (aKey === _Columns__WEBPACK_IMPORTED_MODULE_1__["SELECT_COLUMN_KEY"])
+            return -1;
+        if (bKey === _Columns__WEBPACK_IMPORTED_MODULE_1__["SELECT_COLUMN_KEY"])
+            return 1;
+        // Sort grouped columns second, following the groupBy order:
+        if (rawGroupBy === null || rawGroupBy === void 0 ? void 0 : rawGroupBy.includes(aKey)) {
+            if (rawGroupBy.includes(bKey)) {
+                return rawGroupBy.indexOf(aKey) - rawGroupBy.indexOf(bKey);
+            }
+            return -1;
+        }
+        if (rawGroupBy === null || rawGroupBy === void 0 ? void 0 : rawGroupBy.includes(bKey))
+            return 1;
+        // Sort frozen columns third:
+        if (frozenA) {
+            if (frozenB)
+                return 0;
+            return -1;
+        }
+        if (frozenB)
+            return 1;
+        // Sort other columns last:
+        return 0;
+    });
+    const unallocatedWidth = metrics.viewportWidth - allocatedWidths;
+    const unallocatedColumnWidth = Math.max(Math.floor(unallocatedWidth / unassignedColumnsCount), metrics.minColumnWidth);
+    // Filter rawGroupBy and ignore keys that do not match the columns prop
+    const groupBy = [];
+    const calculatedColumns = columns.map((column, idx) => {
+        var _a, _b, _c, _d, _e;
+        // Every column should have a valid width as this stage
+        const width = (_a = column.width) !== null && _a !== void 0 ? _a : clampColumnWidth(unallocatedColumnWidth, column, metrics.minColumnWidth);
+        const newColumn = {
+            ...column,
+            idx,
+            width,
+            left,
+            sortable: (_b = column.sortable) !== null && _b !== void 0 ? _b : metrics.defaultSortable,
+            resizable: (_c = column.resizable) !== null && _c !== void 0 ? _c : metrics.defaultResizable,
+            formatter: (_d = column.formatter) !== null && _d !== void 0 ? _d : metrics.defaultFormatter
+        };
+        if (newColumn.rowGroup) {
+            groupBy.push(column.key);
+            newColumn.groupFormatter = (_e = column.groupFormatter) !== null && _e !== void 0 ? _e : _formatters__WEBPACK_IMPORTED_MODULE_0__["ToggleGroupFormatter"];
+        }
+        totalWidth += width;
+        left += width;
+        return newColumn;
+    });
+    if (lastFrozenColumnIndex !== -1) {
+        const lastFrozenColumn = calculatedColumns[lastFrozenColumnIndex];
+        lastFrozenColumn.isLastFrozenColumn = true;
+        totalFrozenColumnWidth = lastFrozenColumn.left + lastFrozenColumn.width;
+    }
+    return {
+        columns: calculatedColumns,
+        lastFrozenColumnIndex,
+        totalFrozenColumnWidth,
+        totalColumnWidth: totalWidth,
+        groupBy
+    };
+}
+function getSpecifiedWidth({ key, width }, columnWidths, viewportWidth) {
+    if (columnWidths.has(key)) {
+        // Use the resized width if available
+        return columnWidths.get(key);
+    }
+    if (typeof width === 'number') {
+        return width;
+    }
+    if (typeof width === 'string' && /^\d+%$/.test(width)) {
+        return Math.floor(viewportWidth * parseInt(width, 10) / 100);
+    }
+    return undefined;
+}
+function clampColumnWidth(width, { minWidth, maxWidth }, minColumnWidth) {
+    width = Math.max(width, minWidth !== null && minWidth !== void 0 ? minWidth : minColumnWidth);
+    if (typeof maxWidth === 'number') {
+        return Math.min(width, maxWidth);
+    }
+    return width;
+}
+function getColumnScrollPosition(columns, idx, currentScrollLeft, currentClientWidth) {
+    let left = 0;
+    let frozen = 0;
+    for (let i = 0; i < idx; i++) {
+        const column = columns[i];
+        if (column) {
+            if (column.width) {
+                left += column.width;
+            }
+            if (column.frozen) {
+                frozen += column.width;
+            }
+        }
+    }
+    const selectedColumn = columns[idx];
+    if (selectedColumn) {
+        const scrollLeft = left - frozen - currentScrollLeft;
+        const scrollRight = left + selectedColumn.width - currentScrollLeft;
+        if (scrollLeft < 0) {
+            return scrollLeft;
+        }
+        if (scrollRight > currentClientWidth) {
+            return scrollRight - currentClientWidth;
+        }
+    }
+    return 0;
+}
+/**
+ * By default, the following navigation keys are enabled while an editor is open, under specific conditions:
+ * - Tab:
+ *   - The editor must be an <input>, a <textarea>, or a <select> element.
+ *   - The editor element must be the only immediate child of the editor container/a label.
+ */
+function onEditorNavigation({ key, target }) {
+    if (key === 'Tab' && (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement)) {
+        return target.matches('.rdg-editor-container > :only-child, .rdg-editor-container > label:only-child > :only-child');
+    }
+    return false;
+}
+//# sourceMappingURL=columnUtils.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/utils/domUtils.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "preventDefault", function() { return preventDefault; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stopPropagation", function() { return stopPropagation; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "wrapEvent", function() { return wrapEvent; });
+function preventDefault(event) {
+    event.preventDefault();
+}
+function stopPropagation(event) {
+    event.stopPropagation();
+}
+function wrapEvent(ourHandler, theirHandler) {
+    if (theirHandler === undefined)
+        return ourHandler;
+    return function (event) {
+        ourHandler(event);
+        theirHandler(event);
+    };
+}
+//# sourceMappingURL=domUtils.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/utils/index.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "assertIsValidKeyGetter", function() { return assertIsValidKeyGetter; });
+/* harmony import */ var _domUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/react-data-grid/lib/utils/domUtils.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "preventDefault", function() { return _domUtils__WEBPACK_IMPORTED_MODULE_0__["preventDefault"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stopPropagation", function() { return _domUtils__WEBPACK_IMPORTED_MODULE_0__["stopPropagation"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "wrapEvent", function() { return _domUtils__WEBPACK_IMPORTED_MODULE_0__["wrapEvent"]; });
+
+/* harmony import */ var _columnUtils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/react-data-grid/lib/utils/columnUtils.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getColumnMetrics", function() { return _columnUtils__WEBPACK_IMPORTED_MODULE_1__["getColumnMetrics"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getColumnScrollPosition", function() { return _columnUtils__WEBPACK_IMPORTED_MODULE_1__["getColumnScrollPosition"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "onEditorNavigation", function() { return _columnUtils__WEBPACK_IMPORTED_MODULE_1__["onEditorNavigation"]; });
+
+/* harmony import */ var _keyboardUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/react-data-grid/lib/utils/keyboardUtils.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isKeyPrintable", function() { return _keyboardUtils__WEBPACK_IMPORTED_MODULE_2__["isKeyPrintable"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isCtrlKeyHeldDown", function() { return _keyboardUtils__WEBPACK_IMPORTED_MODULE_2__["isCtrlKeyHeldDown"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isDefaultCellInput", function() { return _keyboardUtils__WEBPACK_IMPORTED_MODULE_2__["isDefaultCellInput"]; });
+
+/* harmony import */ var _selectedCellUtils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/react-data-grid/lib/utils/selectedCellUtils.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isSelectedCellEditable", function() { return _selectedCellUtils__WEBPACK_IMPORTED_MODULE_3__["isSelectedCellEditable"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getNextSelectedCellPosition", function() { return _selectedCellUtils__WEBPACK_IMPORTED_MODULE_3__["getNextSelectedCellPosition"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "canExitGrid", function() { return _selectedCellUtils__WEBPACK_IMPORTED_MODULE_3__["canExitGrid"]; });
+
+
+
+
+
+function assertIsValidKeyGetter(keyGetter) {
+    if (typeof keyGetter !== 'function') {
+        throw new Error('Please specify the rowKeyGetter prop to use selection');
+    }
+}
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/utils/keyboardUtils.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isKeyPrintable", function() { return isKeyPrintable; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isCtrlKeyHeldDown", function() { return isCtrlKeyHeldDown; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isDefaultCellInput", function() { return isDefaultCellInput; });
+function isKeyPrintable(keycode) {
+    return (keycode > 47 && keycode < 58) // number keys
+        || keycode === 32 || keycode === 13 // spacebar & return key(s) (if you want to allow carriage returns)
+        || (keycode > 64 && keycode < 91) // letter keys
+        || (keycode > 95 && keycode < 112) // numpad keys
+        || (keycode > 185 && keycode < 193) // ;=,-./` (in order)
+        || (keycode > 218 && keycode < 223); // [\]' (in order)
+}
+function isCtrlKeyHeldDown(e) {
+    return (e.ctrlKey || e.metaKey) && e.key !== 'Control';
+}
+function isDefaultCellInput(event) {
+    return isKeyPrintable(event.keyCode) || ['Enter', 'F2', 'Backspace', 'Delete'].includes(event.key);
+}
+//# sourceMappingURL=keyboardUtils.js.map
+
+/***/ }),
+
+/***/ "./node_modules/react-data-grid/lib/utils/selectedCellUtils.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSelectedCellEditable", function() { return isSelectedCellEditable; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getNextSelectedCellPosition", function() { return getNextSelectedCellPosition; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "canExitGrid", function() { return canExitGrid; });
+function isSelectedCellEditable({ selectedPosition, columns, rows, isGroupRow }) {
+    const column = columns[selectedPosition.idx];
+    const row = rows[selectedPosition.rowIdx];
+    return column.editor != null
+        && !column.rowGroup
+        && !isGroupRow(row)
+        && (typeof column.editable === 'function' ? column.editable(row) : column.editable) !== false;
+}
+function getNextSelectedCellPosition({ cellNavigationMode, columns, rowsCount, nextPosition }) {
+    if (cellNavigationMode !== 'NONE') {
+        const { idx, rowIdx } = nextPosition;
+        const columnsCount = columns.length;
+        const isAfterLastColumn = idx === columnsCount;
+        const isBeforeFirstColumn = idx === -1;
+        if (isAfterLastColumn) {
+            if (cellNavigationMode === 'CHANGE_ROW') {
+                const isLastRow = rowIdx === rowsCount - 1;
+                if (!isLastRow) {
+                    return {
+                        idx: 0,
+                        rowIdx: rowIdx + 1
+                    };
+                }
+            }
+            else if (cellNavigationMode === 'LOOP_OVER_ROW') {
+                return {
+                    rowIdx,
+                    idx: 0
+                };
+            }
+        }
+        else if (isBeforeFirstColumn) {
+            if (cellNavigationMode === 'CHANGE_ROW') {
+                const isFirstRow = rowIdx === 0;
+                if (!isFirstRow) {
+                    return {
+                        rowIdx: rowIdx - 1,
+                        idx: columnsCount - 1
+                    };
+                }
+            }
+            else if (cellNavigationMode === 'LOOP_OVER_ROW') {
+                return {
+                    rowIdx,
+                    idx: columnsCount - 1
+                };
+            }
+        }
+    }
+    return nextPosition;
+}
+function canExitGrid({ cellNavigationMode, columns, rowsCount, selectedPosition: { rowIdx, idx }, shiftKey }) {
+    // When the cellNavigationMode is 'none' or 'changeRow', you can exit the grid if you're at the first or last cell of the grid
+    // When the cellNavigationMode is 'loopOverRow', there is no logical exit point so you can't exit the grid
+    if (cellNavigationMode === 'NONE' || cellNavigationMode === 'CHANGE_ROW') {
+        const atLastCellInRow = idx === columns.length - 1;
+        const atFirstCellInRow = idx === 0;
+        const atLastRow = rowIdx === rowsCount - 1;
+        const atFirstRow = rowIdx === 0;
+        return shiftKey ? atFirstCellInRow && atFirstRow : atLastCellInRow && atLastRow;
+    }
+    return false;
+}
+//# sourceMappingURL=selectedCellUtils.js.map
 
 /***/ }),
 
@@ -48120,6 +48574,7 @@ var defaultProps = {
 };
 var NumberFormat = /*@__PURE__*/(function (superclass) {
   function NumberFormat(props        ) {
+	  console.log(props);
     superclass.call(this, props);
     var defaultValue = props.defaultValue;
 
@@ -49127,6 +49582,7 @@ var NumberFormat = /*@__PURE__*/(function (superclass) {
 
   NumberFormat.prototype.render = function render () {
     var ref = this.props;
+	   console.log(ref);
     var type = ref.type;
     var displayType = ref.displayType;
     var customInput = ref.customInput;

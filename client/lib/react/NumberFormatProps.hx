@@ -30,7 +30,6 @@ enum abstract NFInputType(String) {
 	var text;
 }
 
-@:keep
 typedef NumberFormatProps = {
 	>InputProps,
 	?thousandSeparator: Either<String,Bool>,	

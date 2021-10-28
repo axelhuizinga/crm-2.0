@@ -32,6 +32,7 @@ import state.FormState;
 import view.shared.io.DataAccess;
 import react.DateControl;
 import react.DateTimeControl;
+import react.CurrencyInputFactory;
 
 using Lambda;
 using StringTools;
@@ -226,12 +227,33 @@ class FormBuilder {
 						},
 						suffix: ' €',
 						value:value
-					};
+					};//	<$NumberFormat ${...nfP}/>
+					/**
+					 * name=${name,
+		className=${p.className, onChange=${onChange} onBlur: handleOnBlur, onFocus: handleOnFocus, onKeyDown: handleOnKeyDown, onKeyUp: handleOnKeyUp, placeholder: placeholder,
+		disabled: disabled, value: getRenderValue()name=')*/
+					 
 					jsx('
 					<div key=${i++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r" role="cell">
-							<$NumberFormat ${...nfP}/>
+						<div className="g_cell_r" role="cell">${CurrencyInputFactory.render(
+						{
+							locale:'en-US',
+							decimalSeparator:',',
+							groupSeparator:'.',
+							name:name,
+							onChange: onChange,
+						/*onValueChange: function(values:Dynamic){
+							trace(values);
+						},
+						removeFormatting: function(fV:String){
+							
+							trace(Std.string(Std.parseFloat(fV)));
+							return Std.string(Std.parseFloat(fV));
+						},*/
+						suffix: ' €',
+						value:value
+						})}
 						</div>
 					</div>');			
 				case FormInputElement.Upload:
@@ -317,7 +339,10 @@ class FormBuilder {
 	}
 	
 	function onChange(ev:Dynamic) {
-		trace(ev.target.type);
+		
+		trace(Reflect.fields(ev.target).join('|'));
+		trace(ev.target.value + ':' + ev.target._wrapperState);
+		trace(ev.target.value + ':' + ev.target._valueTracker);
 		switch (ev.target.type)
 		{
 			case 'checkbox':

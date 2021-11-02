@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "/opt/src/crm-2.0/client"
+		},
+		{
+			"path": "res"
+		},
+		{
+			"path": "../lib"
+		}
+	],
+	"settings": {
+		"window.zoomLevel": 0,
+		"sshfs.configs": [
+			{
+				"root": "/tmp",
+				"host": "localhost",
+				"port": 22,
+				"username": "root",
+				"password": "CorrectHorseBatteryStaple",
+				"name": "unnamed"
+			}
+		],
+		"npm.packageManager": "yarn",
+		"yarn.packageJson": "",
+	}
+}

@@ -3,7 +3,7 @@ package view.shared;
 import react.Fragment;
 import view.data.contacts.Deals;
 import view.shared.io.BaseForm;
-import react.NumberFormatProps;
+import react.IntlNumberFormatProps;
 import react.ReactUtil;
 import js.html.AbortController;
 import js.html.Element;
@@ -11,7 +11,8 @@ import js.html.Event;
 import bulma_components.Button;
 import js.html.InputElement;
 import react.DateControlTypes.DateTimeProps;
-import react.NumberFormat;
+//import react.NumberFormat;
+import react.IntlNumberInput;
 import shared.Utils;
 import haxe.ds.StringMap;
 
@@ -32,13 +33,14 @@ import state.FormState;
 import view.shared.io.DataAccess;
 import react.DateControl;
 import react.DateTimeControl;
+//import react.CurrencyInputFactory;
 
 using Lambda;
 using StringTools;
 
 typedef BButton = bulma_components.Button;
 
-class FormBuilder {
+class FormBuilderC {
     public var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
 	public var dataAccess:DataAccess;
 	public var dbData:DbData;
@@ -51,12 +53,13 @@ class FormBuilder {
 	public var section:String;
 	var comp:Dynamic;
 	var sM:MenuProps;
+	var col:Int;
 	var i:Int;
 	
 	public function new(rc:Dynamic)
 	{
 		comp = rc;
-		i = 1;
+		col = i = 1;
 		requests = [];
 		if(rc.props != null)
 		{
@@ -111,15 +114,19 @@ class FormBuilder {
 		}];
 	}
 
-	function renderFormInputElements(fields:Map<String, FormField>, initialData:Dynamic, ?compOnChange:Function):ReactFragment
+	public function renderFormInputElements(fields:Map<String, FormField>, initialData:Dynamic, ?compOnChange:Function):ReactFragment
 	{
 		return [for(name => field in fields)
 		{
 			var value:Dynamic = Reflect.field(initialData,name);
 			if(name=='entry_date')trace (field.type +' $name:' + value);
-			//trace('$i::$name');
+			trace(field.type + ':$i::$name $value');
 			switch (field.type)
 			{
+				case FormInputElement.Box:
+					trace(field);
+					renderElement(jsx('<div/>'),'');
+						
 				case FormInputElement.Hidden:
 					jsx('<input key=${i++} type="hidden" name=${name} defaultValue=${value}/>');
 				case FormInputElement.Button: 
@@ -199,33 +206,21 @@ class FormBuilder {
 						</div>
 					</div>');
 				case FormInputElement.NFormat:
-					var nfP:NumberFormatProps = {
+					var nfP:IntlNumberFormatProps = {
 						//getInputRef:React.createRef(),
-						decimalScale:2,
-						decimalSeparator:",",						
-						fixedDecimalScale:true,
-						/*format:function(nV:String) {
-							return nV.replace('.',',');
-						},*/
-						isNumericString: true,
-						name:name,
+						precision:2,
+						locale: 'de-DE',
+						//name:name,
 						onChange: onChange,
-						onValueChange: function(values:Dynamic){
-							trace(values);
-						},
-						removeFormatting: function(fV:String){
-							
-							trace(Std.string(Std.parseFloat(fV)));
-							return Std.string(Std.parseFloat(fV));
-						},
 						suffix: ' €',
 						value:value
-					};
+					};//	<$NumberFormat ${...nfP}/>
+					trace(nfP);			
+					trace(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(11.11));		 
 					jsx('
 					<div key=${i++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r" role="cell">
-							<$NumberFormat ${...nfP}/>
+						<div className="g_cell_r" role="cell"><$IntlNumberInput ${...nfP}/>
 						</div>
 					</div>');			
 				case FormInputElement.Upload:
@@ -237,19 +232,27 @@ class FormBuilder {
 						</div>
 					</div>');
 				case TextArea:
+					trace(field);
 					if(value==null)
 						value='';
-					jsx('<div key=${i++} className="g_row_2 g_span_2" role="rowgroup">
+					if(field.className=='big_comment')
+						jsx('<><div key=${i++} className="g_row_2 g_span_2" role="rowgroup">${field.label}</div>
+					<div key=${i++} className="g_row_2 g_span_2" role="rowgroup">
+					<textarea className=${field.className} name=${name} defaultValue=${value} onChange=${onChange}/>
+					</div>
+				</>');
+					else
+						jsx('<div key=${i++} className="g_row_2 g_span_2" role="rowgroup">
 					<div className="g_cell" key=${i+'_l'} role="cell">${field.label}</div>
-						<div className="g_cell" key=${i+'_r'}role="cell">
-							<textarea name=${name} value=${value} onChange=${onChange}/>
+						<div className="g_cell_100_r" key=${i+'_r'} role="cell">
+							<textarea className=${field.className} name=${name} defaultValue=${value} onChange=${onChange}/>
 						</div>
 					</div>');
 				default:
 					renderElement((field.cellFormat != null?
-						jsx('<input name=${name} onChange=${onChange} type="text" value=${field.cellFormat(value)} disabled=${field.disabled}  key=${i++} required=${field.required}/>')
+						jsx('<input name=${name} className=${field.className}  onChange=${onChange} type="text" value=${field.cellFormat(value)} disabled=${field.disabled}  key=${i++} required=${field.required}/>')
 						:
-						jsx('<input name=${name} onChange=${onChange} type="text" defaultValue=${value} disabled=${field.disabled}  key=${i++} required=${field.required}/>')),
+						jsx('<input name=${name} className=${field.className} onChange=${onChange} type="text" defaultValue=${value} disabled=${field.disabled}  key=${i++} required=${field.required}/>')),
 						field.label
 					);
 			}
@@ -262,12 +265,12 @@ class FormBuilder {
 		//return null;formField<div className="g_block" ></div>${renderForms(props.modals)}
 		//trace(Std.string(props.fields));
 		//trace(Reflect.fields(initialState).join('|'));
-		//trace(Std.string(initialState.fields));
+		trace(Std.string(initialState));
 		//trace(props); ref=${props.ref} <div className="g_footer" ></div>	
 		var sK:Int = 0;
 		
 		return jsx('<form name=${props.model} key=${props.model} className="tabComponentForm formField" ref=${props.formRef}>
-				<div className="grid_box" role="table" aria-label="Destinations" key=${props.model+"_grid_box"} >
+				<div className=${props.gridCSSClass != null ? props.gridCSSClass : "grid_box col_gap"} role="table" key=${props.model+"_grid_box"} >
 					<div className="g_caption" key=${props.model+'caption'}>${props.title}</div>			${renderFormInputElements(props.fields, initialState)}					
 				</div>			
 			</form>
@@ -302,8 +305,11 @@ class FormBuilder {
 		return jsx('<input type="hidden" name=${cm} />');
 	}
 	
-	function onChange(ev:Dynamic) {
-		//trace(ev.target.type);
+	function onChange(ev:Dynamic,?value:Dynamic,?maskedValue:Dynamic) {
+		
+		trace(Reflect.fields(ev.target).join('|'));
+		trace(ev.target.value + ':' + value);
+		trace(ev.target.type + ':' + maskedValue);
 		switch (ev.target.type)
 		{
 			case 'checkbox':

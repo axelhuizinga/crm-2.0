@@ -13,6 +13,7 @@
 -lib tink_core
 -lib hx3compat
 -lib hxbit
+-lib react-intl
 -lib uuid 
 #2.3.1 
 

@@ -1623,6 +1623,11 @@ classnames@2.2.6:
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
 
+classnames@^2.1.2:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
+  integrity sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==
+
 clean-css@4.1.11:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.1.11.tgz#2ecdf145aba38f54740f26cefd0ff3e03e125d6a"
@@ -5319,7 +5324,7 @@ prop-types@15.6.2:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
-prop-types@^15.5.10, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -5501,6 +5506,11 @@ react-flatpickr@3.9.1:
     flatpickr "^4.5.7"
     prop-types "^15.5.10"
 
+react-intl-number-input@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/react-intl-number-input/-/react-intl-number-input-0.4.0.tgz#5317b99749b8f4dd503e253289242f4ea5bbe569"
+  integrity sha512-qzhromIENxmIH034gRr+xciYt7Oj0RpmDCKfuzwXTizG3/LYxkVmp7A/fUHq/Mdmvj3KKLbc421KFgVZeI7BoQ==
+
 react-intl@^5.21.0:
   version "5.21.0"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-5.21.0.tgz#efd3be096baf806b7488927176b9bae9bf913df8"
@@ -5606,6 +5616,14 @@ react-router@5.2.1, react-router@^5.2.0:
     react-is "^16.6.0"
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
+
+react-simple-currency@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/react-simple-currency/-/react-simple-currency-1.0.16.tgz#165ea8f34fe258c008d93225af551284ce6ad240"
+  integrity sha1-Fl6o80/iWMAI2TIlr1UShM5q0kA=
+  dependencies:
+    classnames "^2.1.2"
+    prop-types "^15.6.0"
 
 react-uid@^2.3.1:
   version "2.3.1"

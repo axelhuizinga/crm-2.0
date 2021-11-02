@@ -3,7 +3,7 @@ package view.shared;
 import react.Fragment;
 import view.data.contacts.Deals;
 import view.shared.io.BaseForm;
-import react.NumberFormatProps;
+import react.IntlNumberFormatProps;
 import react.ReactUtil;
 import js.html.AbortController;
 import js.html.Element;
@@ -11,7 +11,8 @@ import js.html.Event;
 import bulma_components.Button;
 import js.html.InputElement;
 import react.DateControlTypes.DateTimeProps;
-import react.NumberFormat;
+//import react.NumberFormat;
+import react.IntlNumberInput;
 import shared.Utils;
 import haxe.ds.StringMap;
 
@@ -32,7 +33,7 @@ import state.FormState;
 import view.shared.io.DataAccess;
 import react.DateControl;
 import react.DateTimeControl;
-import react.CurrencyInputFactory;
+//import react.CurrencyInputFactory;
 
 using Lambda;
 using StringTools;
@@ -205,55 +206,22 @@ class FormBuilder {
 						</div>
 					</div>');
 				case FormInputElement.NFormat:
-					var nfP:NumberFormatProps = {
+					var nfP:IntlNumberFormatProps = {
 						//getInputRef:React.createRef(),
-						decimalScale:2,
-						decimalSeparator:",",						
-						fixedDecimalScale:true,
-						format:function(nV:String) {
-							trace(nV);
-							return nV.replace('.',',');
-						},
-						isNumericString: true,
-						name:name,
+						precision:2,
+						locale: 'de-DE',
+						//name:name,
 						onChange: onChange,
-						onValueChange: function(values:Dynamic){
-							trace(values);
-						},
-						removeFormatting: function(fV:String){
-							
-							trace(Std.string(Std.parseFloat(fV)));
-							return Std.string(Std.parseFloat(fV));
-						},
 						suffix: ' €',
 						value:value
 					};//	<$NumberFormat ${...nfP}/>
-					/**
-					 * name=${name,
-		className=${p.className, onChange=${onChange} onBlur: handleOnBlur, onFocus: handleOnFocus, onKeyDown: handleOnKeyDown, onKeyUp: handleOnKeyUp, placeholder: placeholder,
-		disabled: disabled, value: getRenderValue()name=')*/
-					 
+					trace(nfP);	
+					//trace(react.intl.IntlFormat.formatNumber(666.78));
+					//trace(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(11.11));		 
 					jsx('
 					<div key=${i++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r" role="cell">${CurrencyInputFactory.render(
-						{
-							locale:'en-US',
-							decimalSeparator:',',
-							groupSeparator:'.',
-							name:name,
-							onChange: onChange,
-						/*onValueChange: function(values:Dynamic){
-							trace(values);
-						},
-						removeFormatting: function(fV:String){
-							
-							trace(Std.string(Std.parseFloat(fV)));
-							return Std.string(Std.parseFloat(fV));
-						},*/
-						suffix: ' €',
-						value:value
-						})}
+						<div className="g_cell_r" role="cell"><$IntlNumberInput ${...nfP}/>
 						</div>
 					</div>');			
 				case FormInputElement.Upload:
@@ -298,7 +266,7 @@ class FormBuilder {
 		//return null;formField<div className="g_block" ></div>${renderForms(props.modals)}
 		//trace(Std.string(props.fields));
 		//trace(Reflect.fields(initialState).join('|'));
-		//trace(Std.string(initialState.fields));
+		trace(Std.string(initialState));
 		//trace(props); ref=${props.ref} <div className="g_footer" ></div>	
 		var sK:Int = 0;
 		
@@ -338,11 +306,11 @@ class FormBuilder {
 		return jsx('<input type="hidden" name=${cm} />');
 	}
 	
-	function onChange(ev:Dynamic) {
+	function onChange(ev:Dynamic,?value:Dynamic,?maskedValue:Dynamic) {
 		
 		trace(Reflect.fields(ev.target).join('|'));
-		trace(ev.target.value + ':' + ev.target._wrapperState);
-		trace(ev.target.value + ':' + ev.target._valueTracker);
+		trace(ev.target.value + ':' + value);
+		trace(ev.target.type + ':' + maskedValue);
 		switch (ev.target.type)
 		{
 			case 'checkbox':

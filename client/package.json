@@ -30,6 +30,7 @@
     "react-dom": "16.9",
     "react-flatpickr": "3.9.1",
     "react-intl": "^5.21.0",
+    "react-intl-number-input": "^0.4.0",
     "react-modal": "^3.12.1",
     "react-number-format": "^4.4.1",
     "react-paginate": "^6.3.2",
@@ -37,6 +38,7 @@
     "react-router": "^5.2.0",
     "react-router-cache-route": "^1.10.1",
     "react-router-dom": "^5.2.0",
+    "react-simple-currency": "^1.0.16",
     "react-uid": "^2.3.1",
     "react-window-communication-hook": "^1.4.1",
     "redux": "^4.1.1",
@@ -79,5 +81,7 @@
     "postbuild": "sh publish.sh",
     "build_dev": "build=none webpack",
     "postbuild_dev": "sh dev.sh"
-  }
+  },
+  "description": "yarn init",
+  "main": "index.js"
 }

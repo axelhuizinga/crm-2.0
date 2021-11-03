@@ -34,10 +34,10 @@ class DealsModel
 				]},					
 				'amount'=>{label:'Betrag', type:NFormat,
 					className:'euro',
-					cellFormat: function(v) {
+					/*cellFormat: function(v) {
 						trace(v);
 						return App.sprintf('%01.2f €',v).replace('.',',');
-					}
+					}*/
 				},
 				//'amount'=>{label:'Betrag', className:'euro',
 				/*cellFormat: function(v) {

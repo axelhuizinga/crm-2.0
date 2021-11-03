@@ -1,5 +1,8 @@
 package view.shared;
 
+import react.intl.NumberFormatOptions.CurrencyDisplay;
+import react.intl.NumberFormatOptions.NumberStyle;
+import react.intl.comp.FormattedNumber;
 import react.Fragment;
 import view.data.contacts.Deals;
 import view.shared.io.BaseForm;
@@ -206,7 +209,11 @@ class FormBuilder {
 						</div>
 					</div>');
 				case FormInputElement.NFormat:
-					var nfP:IntlNumberFormatProps = {
+					jsx('<$FormattedNumber value={100.66} style=${NumberStyle.Currency} currency=${"EUR"}/>');
+					//jsx('<$FormattedNumber value={100.66} style=${Currency} currencyDisplay=${Symbol}/>');
+					
+					//renderElement(jsx('<$FormattedNumber value={100.66} />',${field.label}));
+					/*var nfP:IntlNumberFormatProps = {
 						//getInputRef:React.createRef(),
 						precision:2,
 						locale: 'de-DE',
@@ -215,15 +222,15 @@ class FormBuilder {
 						suffix: ' €',
 						value:value
 					};//	<$NumberFormat ${...nfP}/>
-					trace(nfP);	
-					//trace(react.intl.IntlFormat.formatNumber(666.78));
+					trace(nfP);	*/
+	 
+					/*renderElement((field.cellFormat != null?
 					//trace(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(11.11));
-					renderElement((field.cellFormat != null?
 						jsx('<input name=${name} className=${field.className}  onChange=${onChange} type="text" value=${field.cellFormat(value)} disabled=${field.disabled}  key=${i++} required=${field.required}/>')
 						:
 						jsx('<input name=${name} className=${field.className} onChange=${onChange} type="text" defaultValue=${value} disabled=${field.disabled}  key=${i++} required=${field.required}/>')),
 						field.label
-					);		 
+					);		 */
 					/*jsx('
 					<div key=${i++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>

@@ -32,7 +32,13 @@ class DealsModel
 					'once'=>'Einmal','monthly'=>'Mtl.','quarterly'=>'Vtl.',
 					'semiannual'=>'Halbj.', 'annual'=>'Jährl.'
 				]},					
-				'amount'=>{label:'Betrag', type:NFormat},
+				'amount'=>{label:'Betrag', type:NFormat,
+					className:'euro',
+					cellFormat: function(v) {
+						trace(v);
+						return App.sprintf('%01.2f €',v).replace('.',',');
+					}
+				},
 				//'amount'=>{label:'Betrag', className:'euro',
 				/*cellFormat: function(v) {
 					trace(v);

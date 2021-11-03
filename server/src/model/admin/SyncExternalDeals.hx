@@ -114,14 +114,15 @@ class SyncExternalDeals extends Model
 		trace('missing deals took:' + (Sys.time()-start));
 	}
 	
-	function getMissing1():Void {
+	function getDeals4Client():Void {
 		var start = Sys.time();
+		var client:String = param['client'];
 		var stmt:PDOStatement = S.dbh.query('SELECT MAX(contact) FROM "crm"."deals";');
 		S.checkStmt(S.dbh, stmt, 'get max contacts id query:'+Std.string(S.dbh.errorInfo()));
 		
 		var maxCid:Int = (stmt.execute()?stmt.fetch(PDO.FETCH_COLUMN):null);
 		trace('maxCid:$maxCid');
-		importExtDeals('WHERE client_id>$maxCid ');
+		importExtDeals('WHERE pay_plan.client_id=$client ');
 		
 		trace('missing deals took:' + (Sys.time()-start));
 	}	
@@ -133,11 +134,11 @@ class SyncExternalDeals extends Model
 		var ext_ids = getAllExtIds();
 		var max_import = param['totalRecords'] != null?param['totalRecords']:Global.max(ext_ids);
 		
-	//	while(synced<max_import){
+		while(synced<max_import){
 			importExtDeals();
 			//trace('offset:'+ offset.int);
 			//trace(param);
-	//	}
+		}
 		trace('done:' + Std.string(Sys.time()-start));
 		Sys.exit(S.sendInfo(dbData, ['importContacts'=>'OK'])?1:0);
 		
@@ -159,7 +160,7 @@ class SyncExternalDeals extends Model
 		S.checkStmt(S.syncDbh,stmt,'importExtDeals deals');
 		var dData:NativeArray = (stmt.execute()?stmt.fetchAll(PDO.FETCH_ASSOC):null);
 		var cnt:Int = Global.count(dData);
-		trace('all:' + Syntax.code('count({0})',dData));
+		trace('all:$cnt::' + Syntax.code('count({0})',dData));
 		if(cnt>0){
 			var start = Sys.time();
 			var cD:Map<String,Dynamic> = Util.map2fields(dData[0], keys);
@@ -168,7 +169,7 @@ class SyncExternalDeals extends Model
 			var cNames:Array<String> = [for(k in cD.keys()) k];		
 			/* STORE fetched data in new crm */
 			for(row in dData)
-			{			
+			{
 				var stmt:PDOStatement = upsertDeal(row, cD, cNames);
 				try{
 					var res:NativeArray = stmt.fetchAll(PDO.FETCH_ASSOC);	
@@ -188,12 +189,12 @@ class SyncExternalDeals extends Model
 			}		
 			if(Lib.isCli()){
 				trace('${offset.int} + ${synced} limit:${limit.int} all:${param['totalRecords']}');
-				//offset = Util.offset(synced);
+				offset = Util.offset(synced);
 				if(offset.int+limit.int>param['totalRecords'])
 				{
 					limit = Util.limit(param['totalRecords'] - offset.int);
 				}			
-				return;
+				//return;
 			}
 
 			trace('done took:' + (Sys.time()-start));
@@ -269,7 +270,7 @@ class SyncExternalDeals extends Model
 				SET $cSet returning id;
 			*/;
 		//trace(sql);
-		//trace(untyped rD['id'] + ' lead_id:'+ untyped rD['lead_id']);
+		//trace(untyped rD['id'] + ' lead_id:'+ untyped rD['lead_id'] + ' amount:' + untyped rD['amount']);
 		//Out.dumpObject(DebugOutput.CONSOLE);
 		var stmt:PDOStatement = S.dbh.prepare(sql,Syntax.array(null));
 		Util.bindClientData('deals',stmt,rD,dbData);

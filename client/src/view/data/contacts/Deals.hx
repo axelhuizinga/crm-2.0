@@ -265,7 +265,8 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.parentComponent.props.match.params.action)
 		{
 			case 'open2'|'update2':
-				trace(state.actualState);
+				trace(Reflect.fields(state.actualState).join('|'));
+				//trace(state.actualState);
 				/*var fields:Map<String,FormField> = [
 					for(k in dataAccess['open'].view.keys()) k => dataAccess['open'].view[k]
 				];*/
@@ -341,7 +342,9 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 				if(deal.fieldsModified.length>0){
 					changed++;
 					var data2save = deal.allModified();
-					trace(data2save[0]);
+					//trace(data2save[0]);
+					trace(data2save);
+
 					var dbQ:DBAccessProps = {
 						classPath:'data.Deals',
 						action:'update',

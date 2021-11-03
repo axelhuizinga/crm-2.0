@@ -217,13 +217,19 @@ class FormBuilder {
 					};//	<$NumberFormat ${...nfP}/>
 					trace(nfP);	
 					//trace(react.intl.IntlFormat.formatNumber(666.78));
-					//trace(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(11.11));		 
-					jsx('
+					//trace(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(11.11));
+					renderElement((field.cellFormat != null?
+						jsx('<input name=${name} className=${field.className}  onChange=${onChange} type="text" value=${field.cellFormat(value)} disabled=${field.disabled}  key=${i++} required=${field.required}/>')
+						:
+						jsx('<input name=${name} className=${field.className} onChange=${onChange} type="text" defaultValue=${value} disabled=${field.disabled}  key=${i++} required=${field.required}/>')),
+						field.label
+					);		 
+					/*jsx('
 					<div key=${i++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r" role="cell"><$IntlNumberInput ${...nfP}/>
+						<div className="g_cell_r" role="cell">$IntlNumberInput ${...nfP}/>
 						</div>
-					</div>');			
+					</div>');			*/
 				case FormInputElement.Upload:
 					jsx('
 					<div key=${i++} className="g_row_2" role="rowgroup">
@@ -265,9 +271,10 @@ class FormBuilder {
 		trace(props.model);
 		//return null;formField<div className="g_block" ></div>${renderForms(props.modals)}
 		//trace(Std.string(props.fields));
-		//trace(Reflect.fields(initialState).join('|'));
-		trace(Std.string(initialState));
+		trace(Reflect.fields(initialState).join('|'));
 		//trace(props); ref=${props.ref} <div className="g_footer" ></div>	
+		//trace(Std.string(initialState));
+		//trace(Std.string(initialState.state));
 		var sK:Int = 0;
 		
 		return jsx('<form name=${props.model} key=${props.model} className="tabComponentForm formField" ref=${props.formRef}>

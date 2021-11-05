@@ -83,7 +83,7 @@ class BaseForm
 	}
 
 	public static function doChange(comp:Dynamic,name:String,value:Dynamic) {		
-		//trace(comp.state.actualState);
+		//trace(comp.state);
 		//trace(Type.getClassName(Type.getClass(comp)));
 		//trace('$name: $value ');
 		//if(comp.state.actual)

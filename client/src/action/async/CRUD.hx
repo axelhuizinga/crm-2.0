@@ -48,8 +48,8 @@ class CRUD
 			//trace(param.page);
 			//Out.dumpObject(param);
 			//trace(param.filter);
-			trace(param);
-			//trace(param.classPath);
+			//trace(param);
+			trace(param.classPath);
 			//trace(Reflect.fields(param).join('|'));
 			return new Promise(function(resolve, reject){
 				if (!param.dbUser.online)
@@ -210,7 +210,7 @@ class CRUD
 					function(data:DbData)
 					//function(sData:Dynamic)
 					{				
-						trace(data);
+						//trace(data);
 						if(data.dataErrors != null && data.dataErrors.keys().hasNext())
 							trace(data.dataErrors);
 						if(data.dataInfo != null && data.dataInfo.exists('dataSource'))							

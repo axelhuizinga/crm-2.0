@@ -28,7 +28,7 @@ class BinaryLoader {
 	public static function dbQuery(url:String,dbAP:DBAccessProps, onLoaded:DbData->Void):XMLHttpRequest {
 		trace(url);
 		//trace(dbAP.dbRelations);
-		trace(dbAP);
+		//trace(dbAP);
 		if(s==null)
 			s = new Serializer();
 		//var s = new Serializer();
@@ -36,7 +36,7 @@ class BinaryLoader {
 		//var s = new json2object.JsonWriter<DbQuery>();
 		var bl:BinaryLoader = new BinaryLoader(url);
 		var dbQuery = new DbQuery(dbAP);//.toHex();
-		trace(dbQuery.dbParams);
+		//trace(dbQuery.dbParams);
 		if(dbQuery.dbParams != null && dbQuery.dbParams['dataSource'] != null){
 			//dbQuery.dbParams['dataSource'] = haxe.Serializer.run(dbQuery.dbParams['dataSource']);
 			trace(Std.string(dbQuery.dbParams['dataSource']));

@@ -178,7 +178,7 @@ class FormApi
 	
 	public function itemHandler(e:Event)
 	{
-		trace(Reflect.fields(e));
+		//trace(Reflect.fields(e));
 		e.preventDefault();
 		var action:String = cast(e.target, ButtonElement).getAttribute('data-action');
 		trace(action);
@@ -191,7 +191,7 @@ class FormApi
 		var eTarget:Element = cast(e.target, Element);
 		//trace(Type.typeof(eTarget));
 		var targetSection = eTarget.dataset.section;
-		trace('>>$targetSection<< ${comp.props.match.params.section}');
+		//trace('>>$targetSection<< ${comp.props.match.params.section}');
 		if(targetSection=='Edit' && comp.state.dataGrid != null){
 			//checkSelection
 			if(!comp.state.dataGrid.state.selectedRows.keys().hasNext())
@@ -204,7 +204,9 @@ class FormApi
 		}
 		if(eTarget.dataset.then != null)
 			comp.props.location.state.extend({then:eTarget.dataset.then});
-		trace(comp.props.location.state);		
+		if(comp.props.location.state != null)	
+			trace(comp.props.location.state);
+		
 		if(targetSection !=null && targetSection != comp.props.match.params.section)
 		{
 			trace('$targetSection.$method');
@@ -224,7 +226,7 @@ class FormApi
 			trace(Type.getClassName(Type.getClass(comp)));
 		}
 		var formEl:FormElement = untyped e.target.form;
-		trace(formEl);
+		if (formEl != null)	trace(formEl);
 		return executeMethod(method,  (formEl != null? new FormData(formEl):null));
 	}
 

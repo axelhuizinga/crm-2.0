@@ -75,8 +75,9 @@
   },
   "scripts": {
     "start1": "cross-env NODE_ENV='\"development\"' webpack serve --hot --host https://192.168.178.20 --port 9000",
-    "start": "cross-env NODE_ENV.build=development webpack-dev-server --hot ",
     "pstart": "cross-env NODE_ENV='\"development\"' webpack-dev-server --hot --progress",
+    "dev": "cross-env NODE_ENV.build=development NODE_ENV.haxe=dev  webpack-dev-server --hot ",
+    "start": "cross-env NODE_ENV.build=development webpack-dev-server --hot ",
     "build": "build=production webpack",
     "postbuild": "sh publish.sh",
     "build_dev": "build=none webpack",

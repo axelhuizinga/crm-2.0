@@ -2,8 +2,9 @@
 module.exports = function(env, argv){
 	// context: __dirname,
 	console.log(process.env.LANG);
-	console.log('build:'+ process.env.build);	
 	console.log('env:'+ env);	
+	console.log('build:'+ process.env.build);	
+	console.log('haxe:'+ process.env.haxe);	
 	console.log('process.env:'+ process.env);	
 	console.log('process.env.NODE_ENV:'+ process.env.NODE_ENV);	
 	//const buildTarget = process.env.build || 'dev';
@@ -41,7 +42,7 @@ module.exports = function(env, argv){
 		// List all the JS modules to create
 		// They will all be linked in the HTML page
 		entry: {
-			app: './build.hxml'
+			app: process.env.haxe !=null? './build.' + process.env.haxe + '.hxml':'./build.hxml'
 		},
 		externals:localConf.externals,
 	//"info-verbosity":'verbose',

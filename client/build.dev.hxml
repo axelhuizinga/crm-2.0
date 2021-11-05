@@ -1,0 +1,31 @@
+-lib haxe-loader
+-lib history
+-lib react-next
+-lib react-types
+-lib react-router-4
+-lib redux
+-lib d3-extern
+-lib CommentString
+-lib reselect
+-lib event-types 
+-lib js-object
+-lib jwt
+-lib tink_core
+-lib hx3compat
+-lib hxbit
+-lib uuid 
+#2.3.1 
+
+-cp /opt/src/lib
+-cp ../lib
+-cp lib
+-cp src
+
+-js ../httpdocs/js/app.js
+-dce no
+--debug
+#--no-traces
+#-D eval-stack
+#-D hxbitmini_nullsafety
+-D no-deprecation-warnings
+-main ReactHooksExample

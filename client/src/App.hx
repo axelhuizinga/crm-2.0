@@ -94,7 +94,7 @@ class App extends ReactComponentOf<AppProps, AppState>
 	//static var flat = js.Lib.require('flatpickr/dist/themes/light.css');	
 	public static var sprintf:Function = Webpack.require('sprintf-js').sprintf;
 	//public static var useBrowserContextCommunication:Dynamic = Webpack.require('react-window-communication-hook');
-	//public static var useState:Dynamic = Webpack.require('react').useState;
+	public static var useState:Dynamic = Webpack.require('react').useState;
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
 	public static var onResizeComponents:List<Dynamic> = new List();
 	public static var defaultUrl = '/Data/Contacts/List/get';
@@ -266,7 +266,7 @@ class App extends ReactComponentOf<AppProps, AppState>
 						ReactUtil.copy( state.userState, {waiting:false}))));
 		}
 		//trace(Reflect.fields(state));
-
+		//trace(useState);
 	}
 
 	public function gGet(key:String):Dynamic

@@ -116,17 +116,16 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		</div>');
 		else 
 			return jsx('		
-		<div className="grid_container">
-			
-				<div className="grid_box grid${visibleColumns}c" ref=${gridRef} id=${props.id} key=${"grid_list"+props.id}>		
+		<div className="grid_container">			
+				<div className="grid_box grid${visibleColumns}c" ref=${gridRef} id=${props.id} key=${"grid_list"+props.id}>	
 					${renderTitle(visibleColumns)}
 					${headerRows}				
 					${renderRows()}					
 				</div>				
-			${renderPager(props.parentComponent)}
+			
 		</div>');		
 	}
-
+//${renderPager(props.parentComponent)}
 	public function renderPager(comp:Dynamic):ReactFragment
 	{
 		//trace('pageCount=${comp.state.pageCount}');		

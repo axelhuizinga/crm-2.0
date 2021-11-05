@@ -215,18 +215,19 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//trace('---' + props.children);
 		var sRows:IntMap<Bool> = ormRefs['deals'].compRef.state.dataGrid.state.selectedRows;
 		for(k in sRows.keys()){
-			//trace(k);
+			trace(Type.typeof(ormRefs['deals'].compRef));
 			ormRefs['deals'].compRef.props.loadData(k,ormRefs['deals'].compRef);
 			//ormRefs['deals'].compRef.props.loadData(k);
 		}
 		//dealsFormRef.current.scrollIntoView();
-		trace(dealsFormRef.current);
-		trace(dealsFormRef.current.querySelectorAll('.selected').length);
+		trace(dealsFormRef.current.innerHTML);
+		//trace(dealsFormRef.current.querySelectorAll('.selected').length);
 		if(ev != null){
 			var targetEl:Element = cast(ev.target, Element);
 			trace(Std.string(targetEl.dataset.id));
 		}
 	}
+
 	function loadBookingHistory(id:Int):Void
 	{		
 		//
@@ -333,6 +334,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 
 	override public function componentWillUnmount() {
 		//state.storeListener();
+		trace(state.initialData.id);
 		return;
 		var actData:IntMap<Map<String,Dynamic>> = [state.initialData.id => [
 		for(f in Reflect.fields(state.actualState))

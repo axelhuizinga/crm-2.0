@@ -21,11 +21,11 @@
 -cp lib
 -cp src
 
--js ../httpdocs/js/app.js
+-js ../httpdocs/js/dev.js
 -dce no
 --debug
 #--no-traces
 #-D eval-stack
-#-D hxbitmini_nullsafety
+-D js-es=6
 -D no-deprecation-warnings
 -main ReactHooksExample

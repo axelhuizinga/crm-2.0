@@ -7,8 +7,9 @@ package react;
 @:jsRequire('react')
 extern class ReactHooks {
 	static function useRef<T>(?value:T):{current:T};
-	static function useState<T>(init:T):HookState<T>;
-	static function useEffect(fx:() -> Dynamic, ?dependencies:Array<Dynamic>):Dynamic;
+	static function useState<T>(init:T):HookState<T>;	
+	//static function useEffect(fx:() -> Dynamic, ?dependencies:Array<Dynamic>):Dynamic;
+	static function useEffect(fx:Void->Void, ?dependencies:Array<Dynamic>):Dynamic;
 }
 
 // Abstract to replace react js useState destructured array...

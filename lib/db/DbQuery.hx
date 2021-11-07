@@ -49,7 +49,7 @@ class DbQuery implements hxbit.Serializable //@:s (default, set)
 					//	trace('$f:'+Type.typeof(v));						
 						dbParams.set(f, v);
 						//dbParams.set(f,v);
-						trace(f +':'+dbParams.get(f));
+						//trace(f +':'+dbParams.get(f));
 				}
 			}			
 		}

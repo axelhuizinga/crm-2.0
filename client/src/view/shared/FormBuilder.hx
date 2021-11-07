@@ -322,8 +322,8 @@ class FormBuilder {
 			Reflect.callMethod(this.comp.state.formApi,mP,[action, e]);
 		}
 
-	//static public function TestHooks(props:{defaultText:String}):react.ReactComponent.ReactElement {
-	static public function TestHooks(props:{defaultText:String}):ReactFragment {
+	static public function TestHooks(props:{defaultText:String}):react.ReactComponent.ReactElement {
+	//static public function TestHooks(props:{defaultText:String}):ReactFragment {
 			//----------------------------------------------
 		// State hooks
 		var text = ReactHooks.useState(props.defaultText);
@@ -343,16 +343,16 @@ class FormBuilder {
 		//---------------------------------------
 		// Effect hooks
 
-	/*	ReactHooks.useEffect(() -> {
+		ReactHooks.useEffect(function() {
 			trace('run on each render');
 			renderCountRef.current++; // increase counter on each render
-			return;
+			//return;
 			//return {};
 		});
-*/
-		/*ReactHooks.useEffect(() -> {
+
+		ReactHooks.useEffect(function(){
 			trace('run when num is changed, but not when text is changed');
-		}, [num.value]);*/
+		}, [num.value]);
 
 		//------------------------------------------------
 		// Render
@@ -371,7 +371,12 @@ class FormBuilder {
 		trace(Reflect.fields(comp).join('|'));//return;
 		
 		trace(Reflect.fields(ev.target).join('|'));
-		trace(untyped ev.target._valueTracker);
+		var rvt:Dynamic = untyped ev.target._valueTracker;
+		//trace(untyped ev.target._valueTracker);
+		if(untyped rvt != null){
+			trace(ev.target.value);
+			rvt.setValue(ev.target.value);
+		}
 		if(comp.state.actualState!=null){
 			trace(comp.state.actualState.amount);
 			trace(comp.state.actualState.allModified());

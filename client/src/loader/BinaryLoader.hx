@@ -127,14 +127,14 @@ class BinaryLoader {
 		xhr.withCredentials = true;
 		//xhr.withCredentials = false;
 		xhr.onload = function(e) {
-			trace(xhr.status);
+			//trace(xhr.status);
 			if (xhr.status != 200) {
 				onError(xhr.statusText);
 				return;
 			}
 			//onLoaded(haxe.io.Bytes.ofString(xhr.response));
 			try{
-				trace(Type.typeof(xhr.response));
+				//trace(Type.typeof(xhr.response));
 				trace(Std.isOfType(xhr.response, String));
 				if(Std.isOfType(xhr.response, String)){
 					onLoaded(haxe.io.Bytes.ofString(xhr.response));
@@ -148,15 +148,7 @@ class BinaryLoader {
 				trace(ex.details());
 			}			
 		}
-		
-		/*xhr.onprogress = function(e) {
-			#if (haxe_ver >= 4)
-			trace('${e.loaded} :: ${e.total}');
-			//onProgress(Std.int(js.Syntax.code("{0}.loaded || {0}.position", e)), Std.int(js.Syntax.code("{0}.total || {0}.totalSize", e)));
-			#else
-			onProgress(Std.int(untyped __js__("{0}.loaded || {0}.position", e)), Std.int(untyped __js__("{0}.total || {0}.totalSize", e)));
-			#end
-		}*/
+
 		xhr.send(param);
 	}
 

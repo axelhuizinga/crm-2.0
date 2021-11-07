@@ -209,13 +209,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 		//trace(Reflect.fields(dealsRef.current));
 		//dealsRef.scrollIntoView();
 		//trace(ormRefs);
-		trace('---' + Type.typeof(state.relDataComps));
+		//trace('---' + Type.typeof(state.relDataComps));
 		//trace('---' + ormRefs['deals'].compRef.state.dataGrid.state.selectedRows);
 		trace('---' + state.relDataComps.keys().hasNext());
 		//trace('---' + props.children);
 		var sRows:IntMap<Bool> = ormRefs['deals'].compRef.state.dataGrid.state.selectedRows;
 		for(k in sRows.keys()){
-			trace(Type.typeof(ormRefs['deals'].compRef));
+			//trace(Type.typeof(ormRefs['deals'].compRef));
 			ormRefs['deals'].compRef.props.loadData(k,ormRefs['deals'].compRef);
 			//ormRefs['deals'].compRef.props.loadData(k);
 		}

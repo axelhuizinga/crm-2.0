@@ -229,7 +229,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			}
 		);
 		p.then(function(data:DbData){
-			trace(data.dataRows.length); 
+			//trace(data.dataRows.length); 
 			if(data.dataRows.length==1)
 			{
 				var data = data.dataRows[0];

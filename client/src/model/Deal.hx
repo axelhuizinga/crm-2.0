@@ -85,7 +85,7 @@ class Deal extends ORM
 	@:isVar public var amount(default,set):String;
 
 	function set_amount(amount:String):String{
-		trace(this.amount + ' => ' + amount);
+		trace(this.amount + ' => ' + Std.parseFloat(amount));
 		if(initialized('amount'))
 			modified('amount');
 		this.amount = amount ;

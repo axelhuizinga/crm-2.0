@@ -165,6 +165,7 @@ class S
 			trace(dbQuery.dbParams.get('classPath'));
 			
 			trace(params);
+
 			trace(dbQuery.dbUser);
 			if(params['dataSource']!=null){
 				trace(Type.typeof(params['dataSource']));
@@ -239,6 +240,7 @@ class S
 			exit( { error:"required params action and/or classPath missing" } );
 		}
 			//host=$dbHost;
+		trace(params.toString());
 		dbh = new PDO('pgsql:dbname=$db;client_encoding=UTF8',dbUser,dbPass,
 			Syntax.array([PDO.ATTR_PERSISTENT,true]));			
 		
@@ -636,6 +638,7 @@ class S
 		var sql:String = comment(unindent, format) /*
 			SELECT string_agg(COLUMN_NAME,',') FROM information_schema.columns WHERE table_schema = '$db' AND table_name = '$table'
 			*/;
+		//trace(sql);
 
 		var stmt:PDOStatement = S.dbh.query(sql);
 		if (S.dbh.errorCode() != '00000')

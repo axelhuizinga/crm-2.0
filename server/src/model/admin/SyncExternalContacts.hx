@@ -52,7 +52,7 @@ class SyncExternalContacts extends Model
 		else synced = 0;
 		keys = S.tableFields('contacts');
         trace('calling ${action}');
-		//trace(action);
+		trace(keys.join('|'));
 		//SWITCH Call either an instance method directly or use the shared Model query execution
 		switch(action ){
 			case 'importContacts':
@@ -296,7 +296,7 @@ class SyncExternalContacts extends Model
 			Sys.exit(0);
 		}
 		var cD:Map<String,Dynamic> = Util.map2fields(cData[0], keys);
-			//trace(cD);
+		trace(cD);
 		var cNames:Array<String> = [for(k in cD.keys()) k];
 		//var rows:KeyValueIterator<Int,NativeAssocArray<Dynamic>> = result.keyValueIterator();
 		for(row in cData)
@@ -446,7 +446,7 @@ ORDER BY client_id
 ${limit.sql} ${offset.sql}
 */;
 		sql = comment(unindent,format)/*
-SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(YEAR(FROM_DAYS(DATEDIFF(CURDATE(),cl.birth_date)))>$min_age ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,1 mandator,vl.modify_date,cl.state status,vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
+SELECT cl.client_id id,cl.lead_id,cl.creation_date,cl.state,cl.use_email,cl.register_on,cl.register_off,cl.register_off_to,cl.teilnahme_beginn,cl.title title_pro,cl.anrede title,cl.namenszusatz,cl.co_field,cl.storno_grund,IF(YEAR(FROM_DAYS(DATEDIFF(CURDATE(),cl.birth_date)))>$min_age ,cl.birth_date,null) date_of_birth,IF(cl.old_active=1,'true','false')old_active,1 mandator,vl.modify_date,cl.state 'status',vl.user,vl.source_id,vl.list_id,vl.phone_code,vl.phone_number,'' fax,vl.first_name,vl.last_name,vl.address1 address,vl.address2 address_2,vl.city,vl.postal_code,vl.country_code,IF(vl.gender='U','',vl.gender) gender,
 IF( vl.alt_phone LIKE '1%',vl.alt_phone,'')mobile,vl.email,vl.comments,vl.last_local_call_time,vl.owner
 FROM fly_crm.clients cl 
 INNER JOIN asterisk.vicidial_list vl

@@ -337,7 +337,7 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{//  ${...props}
 			case 'get':
 				jsx('				
-				<Grid id="contactList" data=${state.dbTable} doubleClickAction="update" 
+				<Grid id="contactList" data=${state.dbTable} doubleClickAction="update" scrollHeight=${props.limit}
 				${...props} dataState = ${dataDisplay["contactList"]} 
 				parentComponent=${this} className="is-striped is-hoverable" fullWidth=${true}/>			
 				');			

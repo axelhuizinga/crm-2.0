@@ -367,7 +367,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				//trace(func);
 				var cL:Dynamic = Type.getClass(ref);
 				if(cL!=null){
-					//trace(Type.getClassName(cL));
+					trace(Type.getClassName(cL));
 					try{
 						//trace(Reflect.fields(ref.props));
 						//trace(Reflect.fields(ref.state));
@@ -394,9 +394,13 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 			trace(refModel);
 			setState({ormRefs:ormRefs});
 			//setState(copy(state,{ormRefs:ormRefs}));
-			//state.ormRefs = ormRefs;
 			trace(Reflect.fields(state));
-			//setState({ormRefs:ormRefs});
+			//state.ormRefs = ormRefs;
+			var rOrm:ORM  = ormRefs.get(refModel).orms.get(orm.id);
+			//trace(Reflect.fields(ormRefs.get(refModel).orms.get(orm.id)));
+			if(Reflect.hasField(rOrm,'amount'))
+				trace(untyped rOrm.amount);
+			//trace(Reflect.fields(ormRefs.get(refModel).orms.get(orm.id)));
 		}
 		else{
 			trace('OrmRef $refModel not found!');
@@ -411,8 +415,6 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 				v.props.save(v);
 			}
 			//
-
-			
 			//trace('$k=>$v');
 		}
 		if(state.actualState != null)
@@ -567,8 +569,7 @@ class Edit extends ReactComponentOf<DataFormProps,FormState>
 						ref:null,					
 						title: (model=='deals'?'Spenden':'Konten')
 					},orm)}
-				}
-				
+				}				
 			}
 		];
 	}//'Kontakt - Bearbeite ' + 

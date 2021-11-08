@@ -96,10 +96,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 		}		
 	
 		var headerRows:ReactFragment = renderHeaderDisplay();
-		/**
-		 * style=${{margin: "1rem auto",padding:"0.5rem",border: "thin solid #aaa",
-			borderRadius: "0.2rem 0.2rem 0 0"}}
-		 */
+		trace('props.scrollHeight:${props.scrollHeight}');
 		if(true&&props.scrollHeight>0)
 			return jsx('
 		<div className="grid_container">			
@@ -128,7 +125,7 @@ class Grid extends ReactComponentOf<GridProps, GridState>
 //${renderPager(props.parentComponent)}
 	public function renderPager(comp:Dynamic):ReactFragment
 	{
-		//trace('pageCount=${comp.state.pageCount}');		
+		trace('pageCount=${comp.state.pageCount}');		
 		if(Math.isNaN(comp.state.pageCount) || comp.state.pageCount<2)
 			return null;
 		return jsx('

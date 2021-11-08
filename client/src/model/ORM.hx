@@ -91,11 +91,11 @@ class ORM {
 				case('date'):
 					trace(nv == ''?'null':'notnull');
 					nv == ''? 'date_null': nv;
-				case _.indexOf('numeric') => 0:
+				/*case _.indexOf('numeric') => 0:
 					nv = nv.split(' ')[0];
 					var dvals:Array<String> = nv.split(dsep);
 					trace(dvals);
-					'${dvals[0]}.${dvals[1]}';
+					'${dvals[0]}.${dvals[1]}';*/
 				default:
 					nv;
 			});

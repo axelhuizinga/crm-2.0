@@ -338,12 +338,13 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			var it:Iterator<ORM> = state.actualStates.iterator();
 			while(it.hasNext()){
 				deal = cast(it.next(),Deal);
-				trace(deal.id + ':' + deal.contact);
+				trace(deal.id + ':' + deal.contact +' fieldsModified.length:' + deal.fieldsModified.length);
 				if(deal.fieldsModified.length>0){
 					changed++;
+					trace(changed);
 					var data2save = deal.allModified();
 					//trace(data2save[0]);
-					trace(data2save);
+					trace(Type.typeof(data2save));
 
 					var dbQ:DBAccessProps = {
 						classPath:'data.Deals',
@@ -367,7 +368,7 @@ class Deals extends ReactComponentOf<DataFormProps,FormState>
 			}
 		}
 		catch(ex:Exception){
-			trace(ex.details);
+			trace(ex.details());
 		}
 		if(changed==0)
 			trace('nothing to save');

@@ -1,5 +1,6 @@
 package model.deals;
 
+import js.html.InputElement;
 import react.ReactMacro.jsx;
 import view.shared.io.DataAccess;
 import data.DataState.DataColumn;
@@ -33,11 +34,11 @@ class DealsModel
 					'semiannual'=>'Halbj.', 'annual'=>'Jährl.'
 				]},					
 				'amount'=>{label:'Betrag', type:NFormat,
-					className:'euro',
-					cellFormat: function(v) {
+					//className:'euro',
+					/*cellFormat: function(v) {
 						trace(v);
 						return App.sprintf('%01.2f €',v).replace('.',',');
-					}
+					}*/
 				},
 				//'amount'=>{label:'Betrag', className:'euro',
 				/*cellFormat: function(v) {
@@ -77,7 +78,7 @@ class DealsModel
 					'51'=>'Wiederholungsbuchung',
 					'52'=>'Negativliste',
 					'53'=>'Konto aufgelöst'
-				]},
+				]},				
 				'id' => {type:Hidden},
 				'edited_by' => {type:Hidden},				
 				'mandator' => {type:Hidden}				

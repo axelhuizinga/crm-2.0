@@ -22,6 +22,7 @@ abstract HookState<T>(Array<Dynamic>) from Array<Dynamic> {
 	function set_value(param:T):T {
 		this[0] = param; // may not be necessary, but in concurrent mode this should lead to more consistent state - that's why JS react users are compelled to use setState(prev => prev + 1)
 		this[1](param);
+		trace(param);
 		return param;
 	}
 }

@@ -38,10 +38,10 @@ import state.FormState;
 import view.shared.io.DataAccess;
 import react.DateControl;
 import react.DateTimeControl;
-//import react.CurrencyInputFactory;
 
 using Lambda;
 using StringTools;
+using Std;
 
 typedef BButton = bulma_components.Button;
 
@@ -190,7 +190,7 @@ class FormBuilder {
 						</div>
 					</div>');								
 				case FormInputElement.DatePicker:
-					//trace(field.disabled);
+					trace(field.displayFormat);
 					var dC:DateTimeProps = {
 						comp:comp,
 						disabled:field.disabled,
@@ -215,7 +215,7 @@ class FormBuilder {
 					//jsx('<$FormattedNumber value={100.66} style=${Currency} currencyDisplay=${Symbol}/>');
 					//jsx('<$FormattedNumber value={100.66} style=${NumberStyle.Currency} currency=${"EUR"}/>')
 					//renderElement(jsx('<$FormattedNumber value={100.66} />',${field.label}));
-					/*var nfP:IntlNumberFormatProps = {
+					var nfP:IntlNumberFormatProps = {
 						//getInputRef:React.createRef(),
 						precision:2,
 						locale: 'de-DE',
@@ -224,24 +224,22 @@ class FormBuilder {
 						suffix: ' €',
 						value:value
 					};//	<$NumberFormat ${...nfP}/>
-					trace(nfP);	*/
-					trace(field.cellFormat);
+					//trace(nfP);	
+					trace(value);
 					
 					renderElement((field.cellFormat != null?
 					//trace(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(11.11));
-						//if()
-						jsx('<input name=${name} className=${field.className}  onChange=${onChange} type="text" value=${field.cellFormat(value)} disabled=${field.disabled}  key=${i++} required=${field.required}/>')
+						//if()ref=${inputRef} 
+						jsx('<input onChange=${onChange} type="text" value=${field.cellFormat(value)} disabled=${field.disabled}  key=${i++} required=${field.required}/>')
 						:
-						jsx('<$TestHooks defaultText=${field.value} />')
-						),
-						field.label
-					);		 
+						jsx('<$CurrencyInput defaultValue=${value} name=${name} className=${field.className} />')
+					),field.label);		 
 					/*jsx('
 					<div key=${i++} className="g_row_2" role="rowgroup">
 						<div className="g_cell" role="cell">${field.label}</div>
-						<div className="g_cell_r" role="cell">$IntlNumberInput ${...nfP}/>
+						<div className="g_cell_r" role="cell"><$IntlNumberInput ${...nfP}/>
 						</div>
-					</div>');			*/
+					</div>');	jsx('<$TestHooks defaultText=${App.sprintf('%01.2f €',value).replace('.',',')} />')		*/
 				case FormInputElement.Upload:
 					jsx('
 					<div key=${i++} className="g_row_2" role="rowgroup">
@@ -278,6 +276,48 @@ class FormBuilder {
 		}];
 	}	
 
+	public function CurrencyInput(props:{defaultValue:Float, name:String, ?className:String}):react.ReactComponent.ReactElement {
+		// State hook
+		var amount = ReactHooks.useState(props.defaultValue);
+		//trace(Type.typeof(amount));
+		//trace(untyped amount.join('|'));
+		trace(amount.value);		
+		trace(amount);		
+
+		var iChange:Function = function(ev:Dynamic) {
+			trace(ev.target.value);
+			var valStr:String = ev.target.value.string();
+			//trace(e.target.data);
+			valStr = valStr.replace(',','.');
+			valStr = valStr.replace(' ','');
+			valStr = valStr.replace('€','');
+			var nVal:Float = valStr.parseFloat();
+			trace (nVal);
+			amount.value = nVal;
+			BaseForm.doChange(comp, ev.target.name, nVal);
+		}
+		//----------------------------------------------
+		// Ref hooks
+
+		// We must use ref for render counter - it can't be held in state, because updating a state counter
+		// would cause another render, causing an inifite loop
+		var renderCountRef = ReactHooks.useRef(1);
+
+		//var inputRef = ReactHooks.useRef(); ref=${inputRef} 
+
+		//---------------------------------------
+
+		// Render
+		return jsx('
+			<input key="input" name=${props.name} className=${props.className} value=${App.sprintf('%01.2f €',amount.value).replace('.',',')} onChange=${iChange} />	
+		');
+	}
+	
+	/*function iChange(e:Dynamic) {
+		trace(e.target.value);
+		trace(e.target.data);
+	}*/
+
     public function renderForm(props:FormState, initialState:Dynamic):ReactFragment
     {
 		trace(props.model);
@@ -287,7 +327,7 @@ class FormBuilder {
 		//trace(props); ref=${props.ref} <div className="g_footer" ></div>	
 		//trace(initialState.amount);
 		//trace(comp.state.actualState.amount);
-		//trace(Std.string(initialState));
+		trace(Std.string(initialState.fieldsInitalized));
 		var sK:Int = 0;
 		
 		return jsx('<form name=${props.model} key=${props.model} className="tabComponentForm formField" ref=${props.formRef}>
@@ -324,13 +364,22 @@ class FormBuilder {
 
 	static public function TestHooks(props:{defaultText:String}):react.ReactComponent.ReactElement {
 	//static public function TestHooks(props:{defaultText:String}):ReactFragment {
-			//----------------------------------------------
+			//----------------------------------------------App.sprintf('%01.2f €',v).replace('.',',')
 		// State hooks
+		
+		//var text = ReactHooks.useState(props.defaultText);
 		var text = ReactHooks.useState(props.defaultText);
-	
+		trace(Type.typeof(text));
+		trace(untyped text.join('|'));
+		trace(text.value);
+		
+		trace(text);
 		var num = ReactHooks.useState(222);
 
-
+		var iChange:Function = function(e:Dynamic) {
+			trace(e.target.value);
+			untyped text[1](e.target.value);
+		}
 		//----------------------------------------------
 		// Ref hooks
 
@@ -357,9 +406,9 @@ class FormBuilder {
 		//------------------------------------------------
 		// Render
 		return jsx('
-			<div>${renderCountRef.current} : <input key="input" ref=${inputRef} value=${text.value} onChange=${e -> text.value = e.target.value} />	
+			<div>${renderCountRef.current} : <input key="input" ref=${inputRef} value=${text.value} onChange=${e->iChange(e)} />	
 			</div>');
-	}
+	}//e -> text.value = e.target.value
 
 	public function  hidden(cm:String):ReactFragment
 	{
@@ -368,20 +417,20 @@ class FormBuilder {
 	
 	function onChange(ev:Dynamic,?value:Dynamic,?maskedValue:Dynamic) {
 		//trace(Type.typeof(comp));return;
-		trace(Reflect.fields(comp).join('|'));//return;
-		
-		trace(Reflect.fields(ev.target).join('|'));
-		var rvt:Dynamic = untyped ev.target._valueTracker;
+		//trace(Reflect.fields(comp).join('|'));//return;
+		trace(ev.target.value);return
+		//trace(Reflect.fields(ev.target).join('|'));
+		/*var rvt:Dynamic = untyped ev.target._valueTracker;
 		//trace(untyped ev.target._valueTracker);
 		if(untyped rvt != null){
 			trace(ev.target.value);
-			rvt.setValue(ev.target.value);
+			//rvt.setValue(ev.target.value);
 		}
 		if(comp.state.actualState!=null){
 			trace(comp.state.actualState.amount);
 			trace(comp.state.actualState.allModified());
 			//trace(Reflect.fields(comp.state.actualState).join('|'));
-		}
+		}*/
 		/*comp.setState(ReactUtil.copy(comp.state,{actualState:ReactUtil.copy(comp.state.actualState, {amount:666})}),
 			function(?a:Dynamic,?b:Dynamic){				
 				trace(a);
@@ -389,7 +438,7 @@ class FormBuilder {
 			});*/
 		//trace(comp.state);
 		//trace(ev.target.type + ':' + maskedValue);
-		trace(ev.target.value + ':' + value);
+		//trace(ev.target.value + ':' + value);
 		switch (ev.target.type)
 		{
 			case 'checkbox':

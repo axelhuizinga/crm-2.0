@@ -809,6 +809,7 @@ class Model
 			}			
 		}
 		filterSql = fBuf.toString();
+		trace(filterSql);
 		return filterSql;
 	}
 
@@ -1241,7 +1242,10 @@ class Model
 		 	if(action == 'update')
 			{
 				trace(param);
+				if(param.exists('filter'))
+					filterSql = buildCond(param.get('filter'));
 				setSql += buildSet(param.get('table'), param.get('data'));
+				
 			}
 			if(action == 'create')
 			{

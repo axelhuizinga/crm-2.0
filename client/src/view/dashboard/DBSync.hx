@@ -1,4 +1,5 @@
 package view.dashboard;
+import react.router.ReactRouter;
 import js.html.InputEvent;
 import js.html.FormElement;
 import js.html.InputElement;
@@ -92,6 +93,13 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		dataAccess = DBSyncModel.dataAccess(props.match.params.action);
 		formFields = DBSyncModel.formFields(props.match.params.action);
 		trace('...' + Reflect.fields(props));
+
+		var baseUrl:String = props.match.path.split(':section')[0];
+		trace(ReactRouter.matchPath(Browser.location.pathname,{
+				path:'$baseUrl:section?/:action?/:id?',
+				exact:true,
+				strict:false
+			}));
 		state =  App.initEState({
 			loading:false,
 			dbTable:[],
@@ -104,6 +112,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				edited_by: props.userState.dbUser.id,
 				mandator: props.userState.dbUser.mandator
 			},values:new Map<String,Dynamic>()},this);
+//		trace(props.match);
 	}
 
 	static function mapStateToProps(aState:AppState) 
@@ -376,7 +385,19 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		});		
 	}
 
-	
+	public function importContact():Void
+	{
+		trace(props.userState.dbUser.first_name);
+		App.store.dispatch(action.async.LivePBXSync.importContacts({
+			devIP:App.devIP,
+			id:Std.parseInt(props.match.params.id),
+			userState:props.userState,
+			offset:0,
+			classPath:'admin.SyncExternalContacts',
+			action:'importContact'
+		}));
+	}
+		
 	public function importContacts():Void
 	{
 		trace(props.userState.dbUser.first_name);
@@ -714,14 +735,20 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	
 	override public function componentDidMount():Void 
 	{				
-		//
+		trace(props.match);
 		if(props.userState != null)
 		trace('yeah: ${props.userState.dbUser.first_name}');
+		switch (props.match.params.action){
+			case 'importContact':
+				importContact();
+		}
+		//go({});
 	}
 
 	function go(aState:Dynamic)
 	{
 		trace(Reflect.fields(aState));
+		trace(state.data);
 		var dbaProps:DBAccessProps = 
 		{
 			action:props.match.params.action,

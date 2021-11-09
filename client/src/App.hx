@@ -1,3 +1,7 @@
+import react.router.ReactRouter;
+import react.router.Route;
+import react.router.Router;
+import react.router.RouterMatch;
 import action.async.CRUD;
 import db.DBAccessProps;
 import js.Lib;
@@ -212,6 +216,7 @@ class App extends ReactComponentOf<AppProps, AppState>
 
 		Browser.window.onresize = function()
 		{
+			trace(onResizeComponents);
 			if(ti!=null)
 				ti.stop();
 			ti = Timer.delay(function ()
@@ -301,6 +306,7 @@ class App extends ReactComponentOf<AppProps, AppState>
 			}
 		);
 		p.then(function(data:DbData){*/
+
 		//store.dispatch(action.async.UserAccess.verify());
 		trace('yeah');
 		trace(' waiting:' + state.userState.waiting);

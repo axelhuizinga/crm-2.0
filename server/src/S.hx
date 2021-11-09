@@ -157,7 +157,7 @@ class S
 				Reflect.setField(dbAccProps, k, v);
 			}
 			dbQuery = new DbQuery(dbAccProps);
-			trace(dbQuery.dbUser);
+			safeLog(dbQuery.dbUser);
 		}
 		else{
 			dbQuery = Model.binary();
@@ -166,7 +166,7 @@ class S
 			
 			trace(params);
 
-			trace(dbQuery.dbUser);
+			safeLog(dbQuery.dbUser);
 			if(params['dataSource']!=null){
 				trace(Type.typeof(params['dataSource']));
 			}

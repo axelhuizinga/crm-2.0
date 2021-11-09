@@ -392,22 +392,23 @@ var App = function(props) {
 	App._app = this;
 	var ti = null;
 	App.config.baseUrl = App.config.api.replace("/server.php","");
-	haxe_Log.trace(props.load,{ fileName : "App.hx", lineNumber : 188, className : "App", methodName : "new"});
-	haxe_Log.trace(App.store,{ fileName : "App.hx", lineNumber : 189, className : "App", methodName : "new"});
+	haxe_Log.trace(props.load,{ fileName : "App.hx", lineNumber : 192, className : "App", methodName : "new"});
+	haxe_Log.trace(App.store,{ fileName : "App.hx", lineNumber : 193, className : "App", methodName : "new"});
 	if(App.store == null) {
 		App.store = this.initStore(history_BrowserHistory.createBrowserHistory({ basename : "/", getUserConfirmation : state_CState.confirmTransition}));
 	}
 	this.state = App.store.getState();
-	haxe_Log.trace(this.state.userState.dbUser.id + " jwt:" + this.state.userState.dbUser.jwt,{ fileName : "App.hx", lineNumber : 196, className : "App", methodName : "new"});
-	haxe_Log.trace(" waiting:" + Std.string(this.state.userState.waiting),{ fileName : "App.hx", lineNumber : 197, className : "App", methodName : "new"});
-	haxe_Log.trace(this.state.userState.dbUser.jwt == "null" || this.state.userState.dbUser.jwt == "" ? "Y" : "N",{ fileName : "App.hx", lineNumber : 200, className : "App", methodName : "new"});
+	haxe_Log.trace(this.state.userState.dbUser.id + " jwt:" + this.state.userState.dbUser.jwt,{ fileName : "App.hx", lineNumber : 200, className : "App", methodName : "new"});
+	haxe_Log.trace(" waiting:" + Std.string(this.state.userState.waiting),{ fileName : "App.hx", lineNumber : 201, className : "App", methodName : "new"});
+	haxe_Log.trace(this.state.userState.dbUser.jwt == "null" || this.state.userState.dbUser.jwt == "" ? "Y" : "N",{ fileName : "App.hx", lineNumber : 204, className : "App", methodName : "new"});
 	if(this.state.userState.dbUser.jwt == "null" || this.state.userState.dbUser.jwt == "") {
-		haxe_Log.trace("redirect to login...",{ fileName : "App.hx", lineNumber : 202, className : "App", methodName : "new"});
+		haxe_Log.trace("redirect to login...",{ fileName : "App.hx", lineNumber : 206, className : "App", methodName : "new"});
 		App.store.dispatch(redux_Action.map(action_UserAction.LoginExpired({ waiting : false, loginTask : "Login", dbUser : this.state.userState.dbUser})));
 		return;
 	}
 	this.tul = App.historyListener(App.store,this.state.locationStore.history);
 	window.onresize = function() {
+		haxe_Log.trace(App.onResizeComponents,{ fileName : "App.hx", lineNumber : 219, className : "App", methodName : "new"});
 		if(ti != null) {
 			ti.stop();
 		}
@@ -425,30 +426,30 @@ var App = function(props) {
 	};
 	if(!(this.state.userState.dbUser.id == null || this.state.userState.dbUser.jwt == null)) {
 		var jVal = jwt_JWT.verify(this.state.userState.dbUser.jwt,App.ConfigData.secret);
-		haxe_Log.trace(jVal,{ fileName : "App.hx", lineNumber : 236, className : "App", methodName : "new"});
+		haxe_Log.trace(jVal,{ fileName : "App.hx", lineNumber : 241, className : "App", methodName : "new"});
 		switch(jVal._hx_index) {
 		case 0:
 			var jwt = jVal.payload;
-			haxe_Log.trace(jwt.validUntil - new Date().getTime(),{ fileName : "App.hx", lineNumber : 240, className : "App", methodName : "new"});
+			haxe_Log.trace(jwt.validUntil - new Date().getTime(),{ fileName : "App.hx", lineNumber : 245, className : "App", methodName : "new"});
 			if(jwt.validUntil - new Date().getTime() > 600000) {
 				this.state.userState.dbUser.online = true;
 				this.state.userState.waiting = false;
 				App.store.dispatch(redux_Action.map(action_UserAction.LoginComplete({ waiting : false})));
 			} else {
-				haxe_Log.trace("dispatch LoginExpired",{ fileName : "App.hx", lineNumber : 247, className : "App", methodName : "new"});
+				haxe_Log.trace("dispatch LoginExpired",{ fileName : "App.hx", lineNumber : 252, className : "App", methodName : "new"});
 				this.state.userState.dbUser.jwt = this.state.userState.dbUser.jwt;
 				App.store.dispatch(redux_Action.map(action_UserAction.LoginExpired({ waiting : false, loginTask : "Login", dbUser : this.state.userState.dbUser})));
 			}
 			break;
 		case 1:
 			var jwt = jVal.payload;
-			haxe_Log.trace(jwt,{ fileName : "App.hx", lineNumber : 254, className : "App", methodName : "new"});
+			haxe_Log.trace(jwt,{ fileName : "App.hx", lineNumber : 259, className : "App", methodName : "new"});
 			break;
 		default:
-			haxe_Log.trace(jVal,{ fileName : "App.hx", lineNumber : 256, className : "App", methodName : "new"});
+			haxe_Log.trace(jVal,{ fileName : "App.hx", lineNumber : 261, className : "App", methodName : "new"});
 		}
 	} else {
-		haxe_Log.trace("LOGIN required",{ fileName : "App.hx", lineNumber : 262, className : "App", methodName : "new"});
+		haxe_Log.trace("LOGIN required",{ fileName : "App.hx", lineNumber : 267, className : "App", methodName : "new"});
 		App.store.dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginRequired(react_ReactUtil.copy(this.state.userState,{ waiting : false})))));
 	}
 };
@@ -461,18 +462,18 @@ App.pbxUserData = null;
 App.historyListener = function(store,history) {
 	store.dispatch(redux_Action.map(action_AppAction.Location(action_LocationAction.InitHistory(history))));
 	return history.listen(function(location,action) {
-		haxe_Log.trace(location.pathname,{ fileName : "App.hx", lineNumber : 166, className : "App", methodName : "historyListener"});
+		haxe_Log.trace(location.pathname,{ fileName : "App.hx", lineNumber : 170, className : "App", methodName : "historyListener"});
 		store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ path : location.pathname, text : ""}))));
 	});
 };
 App.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace("here we should be ready to load",{ fileName : "App.hx", lineNumber : 173, className : "App", methodName : "mapDispatchToProps"});
+	haxe_Log.trace("here we should be ready to load",{ fileName : "App.hx", lineNumber : 177, className : "App", methodName : "mapDispatchToProps"});
 	return { load : function(param) {
 		return dispatch(redux_Action.map(action_async_CRUD.read(param)));
 	}};
 };
 App.edump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 357, className : "App", methodName : "edump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 363, className : "App", methodName : "edump"});
 	return "OK";
 };
 App.await = function(delay,check,cb) {
@@ -504,16 +505,16 @@ App.initEState = function(init,comp) {
 		}
 	}
 	if(init.sideMenu != null && init.sideMenu.items != null) {
-		haxe_Log.trace(init.sideMenu.items[0],{ fileName : "App.hx", lineNumber : 436, className : "App", methodName : "initEState"});
+		haxe_Log.trace(init.sideMenu.items[0],{ fileName : "App.hx", lineNumber : 442, className : "App", methodName : "initEState"});
 	}
 	if(comp.props.sideMenu != null && comp.props.sideMenu.items != null) {
-		haxe_Log.trace(comp.props.sideMenu.items[0],{ fileName : "App.hx", lineNumber : 438, className : "App", methodName : "initEState"});
+		haxe_Log.trace(comp.props.sideMenu.items[0],{ fileName : "App.hx", lineNumber : 444, className : "App", methodName : "initEState"});
 	}
 	if(fS2.formApi.sM != null && fS2.formApi.sM.items != null) {
-		haxe_Log.trace(fS2.formApi.sM.items[0],{ fileName : "App.hx", lineNumber : 440, className : "App", methodName : "initEState"});
+		haxe_Log.trace(fS2.formApi.sM.items[0],{ fileName : "App.hx", lineNumber : 446, className : "App", methodName : "initEState"});
 	}
 	if(comp.props.match != null && comp.props.match.params.section != null && fS2.formApi.sM != null && fS2.formApi.sM.menuBlocks != null && Object.prototype.hasOwnProperty.call(fS2.formApi.sM.menuBlocks.h,comp.props.match.params.section)) {
-		haxe_Log.trace(fS2.formApi.sM.menuBlocks.h[comp.props.match.params.section].items[0],{ fileName : "App.hx", lineNumber : 443, className : "App", methodName : "initEState"});
+		haxe_Log.trace(fS2.formApi.sM.menuBlocks.h[comp.props.match.params.section].items[0],{ fileName : "App.hx", lineNumber : 449, className : "App", methodName : "initEState"});
 	}
 	if(comp != null) {
 		fS2.uid = uuid_Uuid.nanoId();
@@ -537,7 +538,7 @@ App.initSectionState = function(init,comp) {
 	return fS;
 };
 App.jsxDump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 476, className : "App", methodName : "jsxDump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 482, className : "App", methodName : "jsxDump"});
 	return "OK";
 };
 App.queryString2 = function(params) {
@@ -564,7 +565,7 @@ App.queryString2 = function(params) {
 		result[i] = query;
 	}
 	var query = result.join("&");
-	haxe_Log.trace(query,{ fileName : "App.hx", lineNumber : 495, className : "App", methodName : "queryString2"});
+	haxe_Log.trace(query,{ fileName : "App.hx", lineNumber : 501, className : "App", methodName : "queryString2"});
 	return query;
 };
 App.__super__ = React_Component;
@@ -573,7 +574,7 @@ App.prototype = $extend(React_Component.prototype,{
 	,tul: null
 	,initStore: function(history) {
 		var userStore = new store_UserStore();
-		haxe_Log.trace(Reflect.fields(userStore),{ fileName : "App.hx", lineNumber : 110, className : "App", methodName : "initStore"});
+		haxe_Log.trace(Reflect.fields(userStore),{ fileName : "App.hx", lineNumber : 114, className : "App", methodName : "initStore"});
 		var appWare = new store_AppStore();
 		var locationStore = new store_LocationStore(history);
 		var rootReducer = redux_Redux.combineReducers({ config : redux_StoreBuilder.mapReducer(action_ConfigAction,new store_ConfigStore(App.config)), dataStore : redux_StoreBuilder.mapReducer(action_DataAction,new store_DataStore()), locationStore : redux_StoreBuilder.mapReducer(action_LocationAction,locationStore), status : redux_StoreBuilder.mapReducer(action_StatusAction,new store_StatusStore()), userState : redux_StoreBuilder.mapReducer(action_UserAction,userStore)});
@@ -589,7 +590,7 @@ App.prototype = $extend(React_Component.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var e = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(e,{ fileName : "App.hx", lineNumber : 144, className : "App", methodName : "loadFromLocalStorage"});
+			haxe_Log.trace(e,{ fileName : "App.hx", lineNumber : 148, className : "App", methodName : "loadFromLocalStorage"});
 			return { };
 		}
 	}
@@ -599,11 +600,11 @@ App.prototype = $extend(React_Component.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var e = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(e,{ fileName : "App.hx", lineNumber : 156, className : "App", methodName : "saveToLocalStorage"});
+			haxe_Log.trace(e,{ fileName : "App.hx", lineNumber : 160, className : "App", methodName : "saveToLocalStorage"});
 		}
 	}
 	,gGet: function(key) {
-		haxe_Log.trace(key,{ fileName : "App.hx", lineNumber : 274, className : "App", methodName : "gGet"});
+		haxe_Log.trace(key,{ fileName : "App.hx", lineNumber : 279, className : "App", methodName : "gGet"});
 		return this.globalState.h[key];
 	}
 	,gSet: function(key,val) {
@@ -611,12 +612,12 @@ App.prototype = $extend(React_Component.prototype,{
 	}
 	,componentDidMount: function() {
 		var _gthis = this;
-		haxe_Log.trace("yeah",{ fileName : "App.hx", lineNumber : 305, className : "App", methodName : "componentDidMount"});
-		haxe_Log.trace(" waiting:" + Std.string(this.state.userState.waiting),{ fileName : "App.hx", lineNumber : 306, className : "App", methodName : "componentDidMount"});
+		haxe_Log.trace("yeah",{ fileName : "App.hx", lineNumber : 311, className : "App", methodName : "componentDidMount"});
+		haxe_Log.trace(" waiting:" + Std.string(this.state.userState.waiting),{ fileName : "App.hx", lineNumber : 312, className : "App", methodName : "componentDidMount"});
 		var p = App.store.dispatch(redux_Action.map(action_async_CRUD.read({ classPath : "auth.User", action : "getPbxUserData", dbUser : this.state.userState.dbUser, extDB : true, viciBoxDB : true, devIP : App.devIP})));
 		p.then(function(dbData) {
 			var tmp = dbData.dataRows[0];
-			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "App.hx", lineNumber : 316, className : "App", methodName : "componentDidMount"});
+			haxe_Log.trace(tmp == null ? "null" : haxe_ds_StringMap.stringify(tmp.h),{ fileName : "App.hx", lineNumber : 322, className : "App", methodName : "componentDidMount"});
 			var _g = new haxe_ds_StringMap();
 			var _g1 = 0;
 			var _g2 = dbData.dataRows;
@@ -626,7 +627,7 @@ App.prototype = $extend(React_Component.prototype,{
 				_g.h[row.h["user"]] = row;
 			}
 			App.pbxUserData = _g;
-			haxe_Log.trace(App.pbxUserData == null ? "null" : haxe_ds_StringMap.stringify(App.pbxUserData.h),{ fileName : "App.hx", lineNumber : 320, className : "App", methodName : "componentDidMount"});
+			haxe_Log.trace(App.pbxUserData == null ? "null" : haxe_ds_StringMap.stringify(App.pbxUserData.h),{ fileName : "App.hx", lineNumber : 326, className : "App", methodName : "componentDidMount"});
 			var owners = model_qc_QCModel.dataAccess.h["open"].view.h["owner"].options;
 			var h = App.pbxUserData.h;
 			var _g3_h = h;
@@ -644,19 +645,19 @@ App.prototype = $extend(React_Component.prototype,{
 			model_qc_QCModel.dataAccess.h["open"].view.h["owner"].options = owners;
 			_gthis.setState({ userState : react_ReactUtil.copy({ waiting : false})});
 		},function(dbData) {
-			haxe_Log.trace(dbData,{ fileName : "App.hx", lineNumber : 331, className : "App", methodName : "componentDidMount"});
+			haxe_Log.trace(dbData,{ fileName : "App.hx", lineNumber : 337, className : "App", methodName : "componentDidMount"});
 			_gthis.setState({ userState : react_ReactUtil.copy(_gthis.state.userState,{ waiting : false})});
-			haxe_Log.trace(" waiting:" + Std.string(_gthis.state.userState.waiting),{ fileName : "App.hx", lineNumber : 333, className : "App", methodName : "componentDidMount"});
+			haxe_Log.trace(" waiting:" + Std.string(_gthis.state.userState.waiting),{ fileName : "App.hx", lineNumber : 339, className : "App", methodName : "componentDidMount"});
 			if(Object.prototype.hasOwnProperty.call(dbData.dataErrors.h,"LoginError")) {
-				haxe_Log.trace(dbData.dataErrors.h["LoginError"],{ fileName : "App.hx", lineNumber : 335, className : "App", methodName : "componentDidMount"});
+				haxe_Log.trace(dbData.dataErrors.h["LoginError"],{ fileName : "App.hx", lineNumber : 341, className : "App", methodName : "componentDidMount"});
 			}
 		});
 	}
 	,componentDidCatch: function(error,info) {
-		haxe_Log.trace(error,{ fileName : "App.hx", lineNumber : 343, className : "App", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "App.hx", lineNumber : 349, className : "App", methodName : "componentDidCatch"});
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace("...",{ fileName : "App.hx", lineNumber : 348, className : "App", methodName : "componentDidUpdate"});
+		haxe_Log.trace("...",{ fileName : "App.hx", lineNumber : 354, className : "App", methodName : "componentDidUpdate"});
 	}
 	,componentWillUnmount: function() {
 		this.tul();
@@ -669,13 +670,13 @@ App.prototype = $extend(React_Component.prototype,{
 			var inlStringMapKeyIterator_length = inlStringMapKeyIterator_keys.length;
 			var inlStringMapKeyIterator_current = 0;
 			var uD = App.pbxUserData.h[inlStringMapKeyIterator_keys[inlStringMapKeyIterator_current++]];
-			haxe_Log.trace(uD == null ? "null" : haxe_ds_StringMap.stringify(uD.h),{ fileName : "App.hx", lineNumber : 364, className : "App", methodName : "render"});
+			haxe_Log.trace(uD == null ? "null" : haxe_ds_StringMap.stringify(uD.h),{ fileName : "App.hx", lineNumber : 370, className : "App", methodName : "render"});
 			if(uD != null) {
-				haxe_Log.trace(uD.h["user"],{ fileName : "App.hx", lineNumber : 366, className : "App", methodName : "render"});
+				haxe_Log.trace(uD.h["user"],{ fileName : "App.hx", lineNumber : 372, className : "App", methodName : "render"});
 			}
 		}
-		haxe_Log.trace("pbxUserData!=null ? " + (App.pbxUserData != null ? "Y" : "N"),{ fileName : "App.hx", lineNumber : 368, className : "App", methodName : "render"});
-		haxe_Log.trace(this.state.status,{ fileName : "App.hx", lineNumber : 370, className : "App", methodName : "render"});
+		haxe_Log.trace("pbxUserData!=null ? " + (App.pbxUserData != null ? "Y" : "N"),{ fileName : "App.hx", lineNumber : 374, className : "App", methodName : "render"});
+		haxe_Log.trace(this.state.status,{ fileName : "App.hx", lineNumber : 376, className : "App", methodName : "render"});
 		if(this.state.userState.waiting) {
 			var tmp = react_ReactType.fromString("section");
 			var tmp1 = react_ReactType.fromString("div");
@@ -14589,6 +14590,8 @@ haxe_macro_TypeTools.nullable = function(complexType) {
 haxe_macro_TypeTools.toField = function(cf) {
 	var varAccessToString = function(va,getOrSet) {
 		switch(va._hx_index) {
+		case 0:case 7:
+			return "default";
 		case 1:
 			return "null";
 		case 2:
@@ -14602,8 +14605,6 @@ haxe_macro_TypeTools.toField = function(cf) {
 		case 6:
 			var _g = va.r;
 			var _g = va.msg;
-			return "default";
-		case 0:case 7:
 			return "default";
 		}
 	};
@@ -24919,7 +24920,7 @@ view_DashBoard.prototype = $extend(React_Component.prototype,{
 		var tmp2 = React.createElement(react_ReactType.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/DashBoard/Roles/:section?/:action?/:id?", component : react_ReactType.fromComp(view_dashboard_Roles)}));
 		var tmp3 = React.createElement(react_ReactType.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/DashBoard/Settings/:section?/:action?/:id?", component : react_ReactType.fromComp(view_dashboard_Settings)}));
 		var tmp4 = react_ReactType.fromComp(react_router_Route);
-		var tmp5 = Object.assign({ },this.props,{ path : "/DashBoard/Setup/:section?/:action?", component : react_ReactType.fromComp(view_dashboard_Setup)});
+		var tmp5 = Object.assign({ },this.props,{ path : "/DashBoard/Setup/:section?/:action?/:id?", component : react_ReactType.fromComp(view_dashboard_Setup)});
 		var tmp7 = React.createElement(tmp1,{ className : "tabContent2"},tmp2,tmp3,React.createElement(tmp4,tmp5));
 		var tmp1 = React.createElement(view_StatusBar._renderWrapper,this.props);
 		return React.createElement(tmp,{ },tmp6,tmp7,tmp1);
@@ -27872,7 +27873,9 @@ var view_dashboard_DBSync = function(props) {
 	this.dataDisplay = view_dashboard_model_DBSyncModel.dataDisplay;
 	this.dataAccess = view_dashboard_model_DBSyncModel.dataAccess(props.match.params.action);
 	this.formFields = view_dashboard_model_DBSyncModel.formFields(props.match.params.action);
-	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 94, className : "view.dashboard.DBSync", methodName : "new"});
+	haxe_Log.trace("..." + Std.string(Reflect.fields(props)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 95, className : "view.dashboard.DBSync", methodName : "new"});
+	var baseUrl = props.match.path.split(":section")[0];
+	haxe_Log.trace(react_router_ReactRouter.matchPath($global.location.pathname,{ path : "" + baseUrl + ":section?/:action?/:id?", exact : true, strict : false}),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 98, className : "view.dashboard.DBSync", methodName : "new"});
 	this.state = App.initEState({ loading : false, dbTable : [], actualState : { edited_by : props.userState.dbUser.id, mandator : props.userState.dbUser.mandator}, initialState : { edited_by : props.userState.dbUser.id, mandator : props.userState.dbUser.mandator}, values : new haxe_ds_StringMap()},this);
 };
 $hxClasses["view.dashboard.DBSync"] = view_dashboard_DBSync;
@@ -27899,10 +27902,10 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	,dbData: null
 	,dbMetaData: null
 	,createFieldList: function(ev) {
-		haxe_Log.trace("hi :)",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 123, className : "view.dashboard.DBSync", methodName : "createFieldList"});
+		haxe_Log.trace("hi :)",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 132, className : "view.dashboard.DBSync", methodName : "createFieldList"});
 	}
 	,editTableFields: function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 132, className : "view.dashboard.DBSync", methodName : "editTableFields"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 141, className : "view.dashboard.DBSync", methodName : "editTableFields"});
 	}
 	,initStateFromDataTable: function(dt) {
 		var iS = { };
@@ -27918,7 +27921,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			var k_current = 0;
 			while(k_current < k_length) {
 				var k = k_keys[k_current++];
-				haxe_Log.trace(k,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 143, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
+				haxe_Log.trace(k,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 152, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
 				if(this.dataDisplay.h["fieldsList"].columns.h[k].cellFormat == view_dashboard_model_DBSyncModel.formatBool) {
 					rS[k] = dR.h[k] == "Y";
 				} else {
@@ -27927,11 +27930,11 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			}
 			iS[dR.h["id"]] = rS;
 		}
-		haxe_Log.trace(iS,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 153, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
+		haxe_Log.trace(iS,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 162, className : "view.dashboard.DBSync", methodName : "initStateFromDataTable"});
 		return iS;
 	}
 	,saveTableFields: function(vA) {
-		haxe_Log.trace(vA,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 159, className : "view.dashboard.DBSync", methodName : "saveTableFields"});
+		haxe_Log.trace(vA,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 168, className : "view.dashboard.DBSync", methodName : "saveTableFields"});
 	}
 	,getMissingExternalBookings: function(cB) {
 		var _gthis = this;
@@ -27943,9 +27946,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			}
 			var offset = Std.parseInt(data.dataInfo.h["offset"]);
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "" + offset + " von " + Std.string(data.dataInfo.h["maxImport"]) + " aktualisiert"}))));
-			haxe_Log.trace("" + offset + " < " + Std.string(data.dataInfo.h["maxImport"]),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 219, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
+			haxe_Log.trace("" + offset + " < " + Std.string(data.dataInfo.h["maxImport"]),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 228, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
 			if(offset < Std.parseInt(data.dataInfo.h["maxImport"])) {
-				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 222, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
+				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 231, className : "view.dashboard.DBSync", methodName : "getMissingExternalBookings"});
 				return _gthis.doSyncAll2(data.dataInfo);
 			} else {
 				_gthis.setState({ loading : false});
@@ -27977,7 +27980,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		});
 	}
 	,importAccounts2: function(_) {
-		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 285, className : "view.dashboard.DBSync", methodName : "importAccounts2"});
+		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 294, className : "view.dashboard.DBSync", methodName : "importAccounts2"});
 		this.setState({ loading : true});
 		this.doSyncAll2({ classPath : "admin.SyncExternalAccounts", action : "importContacts", extDB : true, filter : { mandator : "1"}, limit : 1000, offset : 0, table : "accounts", dbUser : this.props.userState.dbUser, devIP : App.devIP, maxImport : 4000});
 	}
@@ -27990,9 +27993,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			}
 			var offset = Std.parseInt(data.dataInfo.h["offset"]);
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "" + offset + " von " + Std.string(data.dataInfo.h["maxImport"]) + " aktualisiert"}))));
-			haxe_Log.trace("" + offset + " < " + Std.string(data.dataInfo.h["maxImport"]),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 323, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
+			haxe_Log.trace("" + offset + " < " + Std.string(data.dataInfo.h["maxImport"]),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 332, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
 			if(offset < Std.parseInt(data.dataInfo.h["maxImport"])) {
-				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 326, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
+				haxe_Log.trace("next loop:" + (data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h)),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 335, className : "view.dashboard.DBSync", methodName : "doSyncAll2"});
 				return _gthis.doSyncAll2(data.dataInfo);
 			} else {
 				_gthis.setState({ loading : false});
@@ -28006,20 +28009,24 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		var dbQueryParam = { classPath : "data.SyncExternal", action : "sync2dev", extDB : true, filter : { mandator : "1"}, dbUser : this.props.userState.dbUser, devIP : App.devIP};
 		var p = action_async_LivePBXSync.query(dbQueryParam);
 		p.then(function(data) {
-			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 364, className : "view.dashboard.DBSync", methodName : "syncQC"});
-			haxe_Log.trace(new haxe_ds__$StringMap_StringMapKeyIterator(data.dataInfo.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 365, className : "view.dashboard.DBSync", methodName : "syncQC"});
+			haxe_Log.trace(data.dataInfo == null ? "null" : haxe_ds_StringMap.stringify(data.dataInfo.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 373, className : "view.dashboard.DBSync", methodName : "syncQC"});
+			haxe_Log.trace(new haxe_ds__$StringMap_StringMapKeyIterator(data.dataInfo.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 374, className : "view.dashboard.DBSync", methodName : "syncQC"});
 			var offset = Std.parseInt(data.dataInfo.h["qc_leads"]);
 			App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "" + Std.string(data.dataInfo.h["qc_leads"]) + " QC Test leads aktualisiert"}))));
-			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 374, className : "view.dashboard.DBSync", methodName : "syncQC"});
+			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 383, className : "view.dashboard.DBSync", methodName : "syncQC"});
 			return p;
 		});
 	}
+	,importContact: function() {
+		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 390, className : "view.dashboard.DBSync", methodName : "importContact"});
+		App.store.dispatch(action_async_LivePBXSync.importContacts({ devIP : App.devIP, id : Std.parseInt(this.props.match.params.id), userState : this.props.userState, offset : 0, classPath : "admin.SyncExternalContacts", action : "importContact"}));
+	}
 	,importContacts: function() {
-		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 382, className : "view.dashboard.DBSync", methodName : "importContacts"});
+		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 403, className : "view.dashboard.DBSync", methodName : "importContacts"});
 		App.store.dispatch(action_async_LivePBXSync.importContacts({ devIP : App.devIP, limit : 4000, maxImport : 4000, userState : this.props.userState, offset : 0, classPath : "admin.SyncExternalContacts", action : "importContacts"}));
 	}
 	,importAllBookingRequests2: function(_) {
-		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 396, className : "view.dashboard.DBSync", methodName : "importAllBookingRequests2"});
+		haxe_Log.trace(this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 417, className : "view.dashboard.DBSync", methodName : "importAllBookingRequests2"});
 		App.store.dispatch(action_async_LivePBXSync.importContacts({ limit : 50000, maxImport : 50000, userState : this.props.userState, offset : 100000, table : "booking_requests", classPath : "admin.SyncExternalBookings", action : "importContacts"}));
 	}
 	,importBookingRequests2: function() {
@@ -28028,14 +28035,14 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	,checkBookingRequests: function(fD) {
 		var _gthis = this;
 		if(fD != null) {
-			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 423, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
-			haxe_Log.trace(fD.get("sync_now"),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 428, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 444, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+			haxe_Log.trace(fD.get("sync_now"),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 449, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
 			if(fD.get("sync_now") == "on") {
 				App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Buchungsanforderungen"}))));
 				this.getMissingExternalBookings(function() {
 					_gthis.loadBookingRequestsCount();
 					window.document.querySelector("[name=\"sync_now\"]").checked = false;
-					haxe_Log.trace((js_Boot.__cast(window.document.querySelector("[name=\"sync_now\"]") , HTMLInputElement)).checked ? "Yes" : "No",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 439, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
+					haxe_Log.trace((js_Boot.__cast(window.document.querySelector("[name=\"sync_now\"]") , HTMLInputElement)).checked ? "Yes" : "No",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 460, className : "view.dashboard.DBSync", methodName : "checkBookingRequests"});
 				});
 			} else {
 				this.loadBookingRequestsCount();
@@ -28050,28 +28057,28 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Lade Anzahl Buchungsanforderungen"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "bookingRequestsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 468, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
-			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 469, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 489, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
+			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 490, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "bookingRequestsCount";
 			_g.h["buchungsAnforderungenCount"] = props.dataInfo.h["buchungsAnforderungenCount"];
 			_g.h["bookingRequestsCount"] = props.dataInfo.h["bookingRequestsCount"];
 			_gthis1.setState({ data : _g});
-			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 480, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
+			haxe_Log.trace(_gthis.state.data == null ? "null" : haxe_ds_StringMap.stringify(_gthis.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 501, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 482, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 503, className : "view.dashboard.DBSync", methodName : "loadBookingRequestsCount"});
 		});
 	}
 	,checkAccounts: function(fD) {
 		var _gthis = this;
 		if(fD != null) {
-			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 489, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
+			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 510, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
 		}
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Konten"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "accountsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 507, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 528, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "accountsCount";
@@ -28079,24 +28086,24 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["accountsCount"] = props.dataInfo.h["accountsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 514, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 535, className : "view.dashboard.DBSync", methodName : "checkAccounts"});
 		});
 	}
 	,checkContacts: function(fD) {
 		var _gthis = this;
 		if(fD != null) {
-			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 522, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+			haxe_Log.trace(fD,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 543, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 		}
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Kontakte"}))));
 		var sync_now = { checked : false};
-		haxe_Log.trace(sync_now.checked,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 532, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+		haxe_Log.trace(sync_now.checked,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 553, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 		if(sync_now.checked) {
 			this.importContacts();
 			return;
 		}
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "clientsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 546, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 567, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "contactsCount";
@@ -28104,7 +28111,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["contactsCount"] = props.dataInfo.h["contactsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 553, className : "view.dashboard.DBSync", methodName : "checkContacts"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 574, className : "view.dashboard.DBSync", methodName : "checkContacts"});
 		});
 	}
 	,checkDeals: function() {
@@ -28112,7 +28119,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : "", text : "Aktualisiere Spenden"}))));
 		var pro = action_async_LivePBXSync.check({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "data.SyncExternal", action : "dealsCount"});
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 573, className : "view.dashboard.DBSync", methodName : "checkDeals"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 594, className : "view.dashboard.DBSync", methodName : "checkDeals"});
 			var _gthis1 = _gthis;
 			var _g = new haxe_ds_StringMap();
 			_g.h["action"] = "dealsCount";
@@ -28120,7 +28127,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			_g.h["dealsCount"] = props.dataInfo.h["dealsCount"];
 			_gthis1.setState({ data : _g});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 580, className : "view.dashboard.DBSync", methodName : "checkDeals"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 601, className : "view.dashboard.DBSync", methodName : "checkDeals"});
 			App.store.dispatch(redux_Action.map(action_AppAction.User(action_UserAction.LoginError({ dbUser : _gthis.props.userState.dbUser, lastError : "Du musst dich neu anmelden!"}))));
 		});
 	}
@@ -28128,9 +28135,9 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		App.store.dispatch(redux_Action.map(action_AppAction.Status(action_StatusAction.Update({ className : " ", text : "Synchronisiere Kontakte, Spenden + Konten"}))));
 		var pro = App.store.dispatch(action_async_LivePBXSync.checkAll({ limit : 1000, userState : this.props.userState, offset : 0, classPath : "admin.SyncExternal", action : "checkAll"}));
 		pro.then(function(props) {
-			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 607, className : "view.dashboard.DBSync", methodName : "checkAll"});
+			haxe_Log.trace(props,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 628, className : "view.dashboard.DBSync", methodName : "checkAll"});
 		},function(whatever) {
-			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 609, className : "view.dashboard.DBSync", methodName : "checkAll"});
+			haxe_Log.trace(whatever,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 630, className : "view.dashboard.DBSync", methodName : "checkAll"});
 		});
 	}
 	,displaySummary: function() {
@@ -28145,11 +28152,11 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,syncUserDetails2: function(_) {
 		var _gthis = this;
-		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 650, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
-		haxe_Log.trace(this.props.userState.dbUser,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 651, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 671, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+		haxe_Log.trace(this.props.userState.dbUser,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 672, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
 		loader_BinaryLoader.create("" + Std.string(App.config.api),{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, fields : "id,table_name,field_name,disabled,element,required,use_as_index", classPath : "admin.SyncExternal", action : "syncUserDetails", devIP : App.devIP, dbUser : this.props.userState.dbUser},function(data) {
-			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 667, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 669, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+			haxe_Log.trace(data,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 688, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 690, className : "view.dashboard.DBSync", methodName : "syncUserDetails2"});
 			if(data.dataRows.length > 0) {
 				_gthis.setState({ dbTable : data.dataRows});
 			}
@@ -28158,21 +28165,26 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,proxy_showUserList: function(_) {
 		var _gthis = this;
-		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 684, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
+		haxe_Log.trace(App.config.api,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 705, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
 		loader_BinaryLoader.create("https://pitverwaltung.de/sync/proxy.php",{ id : this.props.userState.dbUser.id, jwt : this.props.userState.dbUser.jwt, fields : "id,table_name,field_name,disabled,element,required,use_as_index", classPath : "admin.SyncExternal", action : "syncUserDetails", target : "syncUsers.php", devIP : App.devIP},function(data) {
-			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 702, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
+			haxe_Log.trace(data.dataRows.length,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 723, className : "view.dashboard.DBSync", methodName : "proxy_showUserList"});
 			if(data.dataRows.length > 0) {
 				_gthis.setState({ dbTable : data.dataRows});
 			}
 		});
 	}
 	,componentDidMount: function() {
+		haxe_Log.trace(this.props.match,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 738, className : "view.dashboard.DBSync", methodName : "componentDidMount"});
 		if(this.props.userState != null) {
-			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 719, className : "view.dashboard.DBSync", methodName : "componentDidMount"});
+			haxe_Log.trace("yeah: " + this.props.userState.dbUser.first_name,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 740, className : "view.dashboard.DBSync", methodName : "componentDidMount"});
+		}
+		if(this.props.match.params.action == "importContact") {
+			this.importContact();
 		}
 	}
 	,go: function(aState) {
-		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 724, className : "view.dashboard.DBSync", methodName : "go"});
+		haxe_Log.trace(Reflect.fields(aState),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 750, className : "view.dashboard.DBSync", methodName : "go"});
+		haxe_Log.trace(this.state.data == null ? "null" : haxe_ds_StringMap.stringify(this.state.data.h),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 751, className : "view.dashboard.DBSync", methodName : "go"});
 		var dbaProps_action = this.props.match.params.action;
 		var dbaProps_classPath = "data.Contacts";
 		var dbaProps_dataSource = null;
@@ -28187,7 +28199,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 			while(_g < _g1.length) {
 				var f = _g1[_g];
 				++_g;
-				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 738, className : "view.dashboard.DBSync", methodName : "go"});
+				haxe_Log.trace("" + f + " =>" + Std.string(Reflect.field(aState,f)) + "<=",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 765, className : "view.dashboard.DBSync", methodName : "go"});
 				if(Reflect.field(aState,f) == "") {
 					Reflect.deleteField(aState,f);
 				}
@@ -28205,7 +28217,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 758, className : "view.dashboard.DBSync", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 785, className : "view.dashboard.DBSync", methodName : "render"});
 		var tmp = this.state.formApi;
 		var tmp1 = react_ReactType.fromComp(React_Fragment);
 		var tmp2 = react_ReactType.fromString("form");
@@ -28215,13 +28227,13 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,renderResults: function() {
 		if(this.state.data != null) {
-			haxe_Log.trace(Std.string(this.state.data.h["action"]) + ":",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 770, className : "view.dashboard.DBSync", methodName : "renderResults"});
+			haxe_Log.trace(Std.string(this.state.data.h["action"]) + ":",{ fileName : "view/dashboard/DBSync.hx", lineNumber : 797, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		}
-		haxe_Log.trace(this.state.loading,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 771, className : "view.dashboard.DBSync", methodName : "renderResults"});
+		haxe_Log.trace(this.state.loading,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 798, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		if(this.state.data == null) {
 			return React.createElement(react_ReactType.fromString("div"),{ className : "flex0 cCenter"},this.state.formApi.renderWait());
 		}
-		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 774, className : "view.dashboard.DBSync", methodName : "renderResults"});
+		haxe_Log.trace("###########loading:" + Std.string(this.state.loading),{ fileName : "view/dashboard/DBSync.hx", lineNumber : 801, className : "view.dashboard.DBSync", methodName : "renderResults"});
 		var _g = this.state.data.h["action"];
 		if(_g == null) {
 			return null;
@@ -28296,7 +28308,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 				}
 				break;
 			case "importClientList":
-				haxe_Log.trace(this.state.actualState,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 778, className : "view.dashboard.DBSync", methodName : "renderResults"});
+				haxe_Log.trace(this.state.actualState,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 805, className : "view.dashboard.DBSync", methodName : "renderResults"});
 				if(this.state.actualState == null) {
 					return this.state.formApi.renderWait();
 				} else {
@@ -28310,7 +28322,7 @@ view_dashboard_DBSync.prototype = $extend(React_Component.prototype,{
 	}
 	,updateMenu: function(viewClassPath) {
 		var sideMenu = this.state.sideMenu;
-		haxe_Log.trace(sideMenu.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 836, className : "view.dashboard.DBSync", methodName : "updateMenu"});
+		haxe_Log.trace(sideMenu.section,{ fileName : "view/dashboard/DBSync.hx", lineNumber : 863, className : "view.dashboard.DBSync", methodName : "updateMenu"});
 		var _g = 0;
 		var _g1 = sideMenu.menuBlocks.h["DBSync"].items;
 		while(_g < _g1.length) {
@@ -34950,7 +34962,7 @@ model_contacts_ContactsModel.gridColumns = (function($this) {
 	_g.h["phone_number"] = { label : "Telefon"};
 	_g.h["address1"] = { label : "Straße", showSearch : false};
 	_g.h["address2"] = { label : "Nr.", showSearch : false};
-	_g.h["care_of"] = { label : "Adresszusatz", flexGrow : 1, showSearch : false};
+	_g.h["care_of"] = { label : "c/o", flexGrow : 1, showSearch : false};
 	_g.h["postal_code"] = { label : "PLZ"};
 	_g.h["city"] = { label : "Ort"};
 	_g.h["status"] = { label : "Status", className : "tCenter", cellFormat : function(v) {
@@ -34967,9 +34979,9 @@ model_contacts_ContactsModel.listColumns = (function($this) {
 	_g.h["first_name"] = { label : "Vorname", flexGrow : 0};
 	_g.h["last_name"] = { label : "Name", flexGrow : 0};
 	_g.h["phone_number"] = { label : "Telefon"};
-	_g.h["address"] = { label : "Straße"};
-	_g.h["address_2"] = { label : "Hausnummer"};
-	_g.h["care_of"] = { label : "Adresszusatz", flexGrow : 1};
+	_g.h["address1"] = { label : "Straße"};
+	_g.h["address2"] = { label : "Hausnummer"};
+	_g.h["care_of"] = { label : "c/o", flexGrow : 1};
 	_g.h["postal_code"] = { label : "PLZ"};
 	_g.h["city"] = { label : "Ort"};
 	_g.h["state"] = { label : "Status", className : "tCenter", cellFormat : function(v) {
@@ -35261,7 +35273,7 @@ model_qc_QCModel.gridColumns = (function($this) {
 	_g.h["phone_number"] = { label : "Telefon"};
 	_g.h["address"] = { label : "Straße", showSearch : false};
 	_g.h["address_2"] = { label : "Nr.", showSearch : false};
-	_g.h["care_of"] = { label : "Adresszusatz", flexGrow : 1, showSearch : false};
+	_g.h["care_of"] = { label : "c/o", flexGrow : 1, showSearch : false};
 	_g.h["postal_code"] = { label : "PLZ"};
 	_g.h["city"] = { label : "Ort"};
 	_g.h["status"] = { label : "Status", className : "tCenter", cellFormat : function(v) {
@@ -35280,7 +35292,7 @@ model_qc_QCModel.listColumns = (function($this) {
 	_g.h["phone_number"] = { label : "Telefon"};
 	_g.h["address"] = { label : "Straße"};
 	_g.h["address_2"] = { label : "Hausnummer"};
-	_g.h["care_of"] = { label : "Adresszusatz", flexGrow : 1};
+	_g.h["care_of"] = { label : "c/o", flexGrow : 1};
 	_g.h["postal_code"] = { label : "PLZ"};
 	_g.h["city"] = { label : "Ort"};
 	_g.h["state"] = { label : "Status", className : "tCenter", cellFormat : function(v) {
@@ -35348,7 +35360,7 @@ model_stats_HistoryModel.dataAccess = (function($this) {
 		_g3.h["blocked"] = "Gesperrt";
 		_g2.h["state"] = { label : "Status", type : "Select", options : _g3};
 		_g2.h["country_code"] = { label : "Land"};
-		_g2.h["care_of"] = { label : "Adresszusatz"};
+		_g2.h["care_of"] = { label : "c/o"};
 		_g2.h["creation_date"] = { label : "Hinzugefügt", type : "DateTimePicker", disabled : true, displayFormat : "d.m.Y H:i:S"};
 		_g2.h["date_of_birth"] = { label : "Geburtsdatum", type : "DatePicker", displayFormat : "d.m.Y"};
 		var _g3 = new haxe_ds_StringMap();
@@ -35375,7 +35387,7 @@ model_stats_HistoryModel.listColumns = (function($this) {
 	_g.h["phone_number"] = { label : "Telefon"};
 	_g.h["address"] = { label : "Straße"};
 	_g.h["address_2"] = { label : "Hausnummer"};
-	_g.h["care_of"] = { label : "Adresszusatz", flexGrow : 1};
+	_g.h["care_of"] = { label : "c/o", flexGrow : 1};
 	_g.h["postal_code"] = { label : "PLZ"};
 	_g.h["city"] = { label : "Ort"};
 	_g.h["state"] = { label : "Status", className : "tCenter", cellFormat : function(v) {

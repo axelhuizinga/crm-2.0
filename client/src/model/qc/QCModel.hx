@@ -37,7 +37,7 @@ class QCModel
 				'address2'=>{label:'Hausnummer'},'geburts_datum'=>{label: 'Geburtsdatum', type:DatePicker, displayFormat: "d.m.Y"},
 				'postal_code'=>{label:'PLZ'},
 				
-				//'use_email'=>{label:'Post per Email',type: Checkbox},'Adresszusatz'
+				//'use_email'=>{label:'Post per Email',type: Checkbox},'c/o'
 				//'phone_code'=>{label:'Landesvorwahl'},		
 				
 				//'fax'=>{label:'Fax'},
@@ -129,7 +129,7 @@ class QCModel
 		'phone_number'=>{label:'Telefon'},				
 		'address1'=>{label: 'Straße', showSearch:false},		
 		'address2'=>{label: 'Nr.', showSearch:false},		
-		//'care_of'=>{label: 'Adresszusatz', flexGrow:1, showSearch:false},
+		//'care_of'=>{label: 'c/o', flexGrow:1, showSearch:false},
 		'postal_code'=>{label: 'PLZ'},
 		'city'=>{label: 'Ort'},
 		'id' => {label:'Kontakt ID',show:false},
@@ -150,7 +150,7 @@ class QCModel
 		'phone_number'=>{label:'Telefon'},				
 		'address'=>{label: 'Straße', showSearch:false},		
 		'address_2'=>{label: 'Nr.', showSearch:false},		
-		'care_of'=>{label: 'Adresszusatz', flexGrow:1, showSearch:false},
+		'care_of'=>{label: 'c/o', flexGrow:1, showSearch:false},
 		'postal_code'=>{label: 'PLZ'},
 		'city'=>{label: 'Ort'},
 		'status' => {label:'Status', className: 'tCenter',
@@ -170,7 +170,7 @@ class QCModel
 		'phone_number'=>{label:'Telefon'},				
 		'address'=>{label: 'Straße'},		
 		'address_2'=>{label: 'Hausnummer'},		
-		'care_of'=>{label: 'Adresszusatz', flexGrow:1},
+		'care_of'=>{label: 'c/o', flexGrow:1},
 		'postal_code'=>{label: 'PLZ'},
 		'city'=>{label: 'Ort'},
 		'state' => {label:'Status', className: 'tCenter',

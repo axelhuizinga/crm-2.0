@@ -76,6 +76,8 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{label: 'Telefon',formField: { name: 'phone_number', findFormat: function(v:String) {
 			v =  ~/^0+/.replace(v, '');
 			trace(v);
+			//TODO: UI select match type and anchor			
+			return FindFields.iLike(v);
 			return v;
 		}}},		
 		{label: 'Ort',formField: { name: 'city', matchFormat: FindFields.iLike}},
@@ -173,17 +175,17 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 	//public function get(filter:Dynamic=null):Void
-	public function get(dpa:DBAccessProps=null):Void
+	public function get(dba:DBAccessProps=null):Void
 	{
 		var offset:Int = 0;
-		if(dpa != null && dpa.page!=null)
+		if(dba != null && dba.page!=null)
 		{
-			trace(dpa);
-			offset = Std.int(props.limit * dpa.page);
-			Reflect.deleteField(dpa,'page');
-			props.parentComponent.setState({page: dpa.page});
+			trace(dba);
+			offset = Std.int(props.limit * dba.page);
+			Reflect.deleteField(dba,'page');
+			props.parentComponent.setState({page: dba.page});
 		}		
-		trace(dpa);
+		trace(dba);
 		/*filter = Utils.extend(filter, (props.match.params.id!=null?
 			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
 			{mandator:props.userState.dbUser.mandator})
@@ -194,9 +196,9 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 			{
 				classPath:'data.Contacts',
 				action:'get',
-				dbRelations:dpa == null ? null : dpa.dbRelations,
-				//dbQuery:dpa.dbQuery,
-				filter:dpa == null ? null :dpa.filter,
+				dbRelations:dba == null ? null : dba.dbRelations,
+				//dbQuery:dba.dbQuery,
+				filter:dba == null ? null :dba.filter,
 				limit:props.limit,
 				offset:offset>0?offset:0,
 				table:'contacts',

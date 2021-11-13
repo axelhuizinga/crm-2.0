@@ -202,7 +202,8 @@ class Model
 		{
 			cBf.add(filterSql);
 		}
-		//trace(cBf.toString());
+		trace(cBf.toString());
+		return 33;
 		var res:NativeArray = execute(cBf.toString());
 		//trace(Lib.hashOfAssociativeArray(res[0]).get('count'));
 		return Lib.hashOfAssociativeArray(res[0]).get('count');
@@ -247,7 +248,10 @@ class Model
 							S.sendErrors(dbData,['invalidJoinCond'=>jCond]);
 						}
 						if(keys.length==2){
-							jCond = '${jParts[0]}=${quoteIdent(keys[0])}.${keys[1]}';
+							/*if(dbRel.jType == 'INTLIKE')
+								jCond = '${quoteIdent(keys[0])}.${quoteIdent(keys[1])}::text');
+							else*/
+								jCond = '${jParts[0]}=${quoteIdent(keys[0])}.${keys[1]}';
 						}						
 					}
 				}
@@ -341,7 +345,7 @@ class Model
 		queryFields = buildRelFields();
 		sqlBf.add('SELECT $queryFields FROM ');				
 		sqlBf.add(buildRelation());
-		if(param.exists('filter'))
+		if(param.exists('filter') && filterSql == '')
 			filterSql = buildCondRel(param.get('filter'));
 		sqlBf.add(filterSql);
 		trace(sqlBf.toString());
@@ -473,23 +477,24 @@ class Model
 					Sys.exit(0);
 				}
 			}	
-		}
-		//trace(filterValues.length);
+		}		
+		trace(filterValues.length);
+		trace(filterValues.toString());
 		if(filterValues.length>0)		
 		{
 			for (fV in filterValues)
 			{
 				var type:Int = PDO.PARAM_STR; //dbFieldTypes.get(fV[0]);
 				values2bind[i++] = fV[1];
-				//trace(i+':'+Std.string(fV));
-				if (!stmt.bindValue(i, fV[1], type))//TODO: CHECK POSTGRES DRIVER OPTIONS
+				trace(i+':'+Std.string(fV.toString()));
+			/*	if (!stmt.bindValue(i, fV[1], type))//TODO: CHECK POSTGRES DRIVER OPTIONS
 				{
 					trace('ooops:' + stmt.errorInfo());
 					Sys.exit(0);
-				}
+				}*/
 			}	
 		}		
-		//trace(values2bind);
+		trace(values2bind);
 		if(i>0)
 		{
 			trace(Global.implode('|',values2bind));
@@ -787,6 +792,10 @@ class Model
 					//trace(keys[0] + ':' + values.join('|'))	;
 					fBuf.add(' ILIKE ?');
 					filterValues.push([keys[0], values[0]]);
+				case 'INTLIKE':			
+					//trace(keys[0] + ':' + values.join('|'))	;
+					fBuf.add(' LIKE ?');
+					filterValues.push([keys[0], Std.string(values[0])]);					
 				case _:
 					if (~/^(<|>)/.match(values[0]))
 					{
@@ -831,10 +840,11 @@ class Model
 
 	public function buildCondRel(filters:Dynamic):String
 	{
-		trace('>'+filterSql + ':' + filters);
+		trace('>'+filterSql + ' filters:' + filters);
 		if (filters == null || filterSql!= '')		
 		{
-			return filterSql;			
+			filterSql = '';
+			//return filterSql;			
 		}
 		//trace(filters);
 		var filters:Map<String,String> = Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(filters));
@@ -842,10 +852,12 @@ class Model
 		var	fBuf:StringBuf = new StringBuf();
 		var first:Bool = true;
 		var relFieldMap:Map<String,Array<String>> = Util.mapFields2Alias(dbRelations);
+		trace(relFieldMap.toString());
 		for (key => val in filters)
 		{			
 			var keys = key.split('.');
-			if(keys.length>2)
+			trace(keys.length + ':' + key);
+			if(keys.length>2)			
 			{
 				S.sendErrors(dbData,['invalidFilter'=>S.errorInfo(key)]);
 			}
@@ -861,17 +873,25 @@ class Model
 
 			if(keys.length==2)
 			{
-				fBuf.add('${quoteIdent(keys[0])}.${quoteIdent(keys[1])}');
+				if(how == 'INTLIKE')
+					fBuf.add('${quoteIdent(keys[0])}.${quoteIdent(keys[1])}::text');
+				else					
+					fBuf.add('${quoteIdent(keys[0])}.${quoteIdent(keys[1])}');
 			}			
 			else if(keys.length==1)
 			{
 				//field name only - get matching alias
 				var fAlias:String = (relFieldMap[tableNames[0]].contains(key)?dbRelations[0].alias:
 					(relFieldMap[tableNames[1]].contains(key)?dbRelations[1].alias:null));				
-				trace(key);
-				fBuf.add('${quoteIdent(fAlias)}.${quoteIdent(key)}');
+				trace('${key} => ${fAlias} ');
+				if(how == 'INTLIKE')
+					fBuf.add(' ${quoteIdent(fAlias)}.${quoteIdent(key)}::text');
+				else				
+					fBuf.add('${quoteIdent(fAlias)}.${quoteIdent(key)}');
 			}
 			//fBuf.add(quoteIdent(key));
+			trace(keys.join('|') + ' how:' + how + ': values' + values.join('|'));
+			
 			switch(how.toUpperCase())
 			{
 				case 'BETWEEN':
@@ -894,6 +914,10 @@ class Model
 					//trace(keys[0] + ':' + values.join('|'))	;
 					fBuf.add(' ILIKE ?');
 					filterValues.push([keys[0], values[0]]);
+				case 'INTLIKE':			
+					trace(keys[0] + ':' + values.join('|'))	;
+					fBuf.add(' LIKE ?');
+					filterValues.push([keys[0] + '::text', values[0]]);	
 				case _:
 					if (~/^(<|>)/.match(values[0]))
 					{
@@ -915,7 +939,10 @@ class Model
 					}			
 			}			
 		}
+		trace(filterValues[1].length);
+		trace(filterValues[1]);
 		filterSql = fBuf.toString();
+
 		trace(filterSql);
 		return filterSql;
 	}

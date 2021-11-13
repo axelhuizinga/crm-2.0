@@ -25,6 +25,9 @@ class FindFields{
 			
 		}
 	];*/
+	
+	public static function idLike(v:Int) return 'INTLIKE|%$v%';
+	//public static function idLike(v:Int) return 'INTLIKE|\'%$v%\'';
 	public static function iLike(v:String) return 'ILIKE|%$v%';
 	public static function enterSubmit(e:KeyboardEvent<InputElement>){
 		trace(e.charCode);

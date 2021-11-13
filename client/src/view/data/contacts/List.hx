@@ -67,13 +67,15 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Löschen',action:'delete',disabled:true},
 		{label:'Auswahl aufheben',action:'selectionClear',disabled:true},
 		{separator: true},		
-		{label: 'ID',formField: { name: 'id',findFormat:function(v:String):String {
+		{label: 'ID',formField: { name: 'id',matchFormat: FindFields.idLike /*findFormat:function(v:String):String {
 			trace(v);
 			return v;
-		}}},
+		}*/}},
 		{label: 'Vorname',formField: { name: 'first_name', matchFormat: FindFields.iLike}},
 		{label: 'Nachname',formField: { name: 'last_name', matchFormat: FindFields.iLike}},
-		{label: 'Telefon',formField: { name: 'phone_number', findFormat: function(v:String) {
+		
+		//{label: 'Telefon',formField: { name: 'phone_number', findFormat: function(v:String) {
+		{label: 'Telefon',formField: { name: 'phone_number', matchFormat: function(v:String) {
 			v =  ~/^0+/.replace(v, '');
 			trace(v);
 			//TODO: UI select match type and anchor			

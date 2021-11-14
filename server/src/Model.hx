@@ -195,7 +195,7 @@ class Model
 		else
 		{
 			//trace(tableNames);
-			trace('${tableNames[0]} ');
+			//trace('${tableNames[0]} ');
 			cBf.add('${tableNames[0]} ');
 		}
 		if (filterSql != null)
@@ -203,7 +203,7 @@ class Model
 			cBf.add(filterSql);
 		}
 		trace(cBf.toString());
-		return 33;
+		//return 33;
 		var res:NativeArray = execute(cBf.toString());
 		//trace(Lib.hashOfAssociativeArray(res[0]).get('count'));
 		return Lib.hashOfAssociativeArray(res[0]).get('count');
@@ -345,6 +345,7 @@ class Model
 		queryFields = buildRelFields();
 		sqlBf.add('SELECT $queryFields FROM ');				
 		sqlBf.add(buildRelation());
+		// call buildCondRel only if filterSql not yet set
 		if(param.exists('filter') && filterSql == '')
 			filterSql = buildCondRel(param.get('filter'));
 		sqlBf.add(filterSql);
@@ -763,12 +764,22 @@ class Model
 				fBuf.add(' AND ');
 			first = false;			
 
-			if(keys.length==2)
-			{
-				fBuf.add('${quoteIdent(keys[0])}.${quoteIdent(keys[1])}');
-			}			
-			else //field name only //?(no alias)
-				fBuf.add(quoteIdent(key));
+			if(how != 'INTLIKE'){
+				if(keys.length==2)
+				{
+					if(how == 'INTLIKE')
+						fBuf.add('${quoteIdent(keys[0])}.${quoteIdent(keys[1])}::text');
+					else						
+						fBuf.add('${quoteIdent(keys[0])}.${quoteIdent(keys[1])}');
+				}			
+				else {//field name only //?(no alias)
+					if(how == 'INTLIKE')
+						fBuf.add(' ${quoteIdent(key)}::text');
+					else				
+						fBuf.add(quoteIdent(key));	
+				}			
+			}
+
 			switch(how.toUpperCase())
 			{
 				case 'BETWEEN':
@@ -793,9 +804,9 @@ class Model
 					fBuf.add(' ILIKE ?');
 					filterValues.push([keys[0], values[0]]);
 				case 'INTLIKE':			
-					//trace(keys[0] + ':' + values.join('|'))	;
+					trace(keys[0] + ':' + values.join('|'))	;
 					fBuf.add(' LIKE ?');
-					filterValues.push([keys[0], Std.string(values[0])]);					
+					filterValues.push([keys[0] + '::text', values[0]]);												
 				case _:
 					if (~/^(<|>)/.match(values[0]))
 					{
@@ -846,6 +857,8 @@ class Model
 			filterSql = '';
 			//return filterSql;			
 		}
+				
+		filterValues = new Array();
 		//trace(filters);
 		var filters:Map<String,String> = Lib.hashOfAssociativeArray(Lib.associativeArrayOfObject(filters));
 		trace(filters);
@@ -1175,7 +1188,12 @@ class Model
 			trace(Syntax.code("ini_get('memory_limit')"));
 		}
 		//dataSource = new Map();//cast param['dataSource'];
-		dataSource = cast param['dataSource'];
+		if(param.get('dataSource') != null)
+		{
+			dataSource = Unserializer.run(param.get('dataSource'));
+			trace(dataSource);
+		}		
+		//dataSource = cast param['dataSource'];
 
 		dbRelations = param['dbRelations'];
 		dbData = new DbData();//'param' => dbData.dataInfo.copyStringMap(param),

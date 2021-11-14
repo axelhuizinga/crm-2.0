@@ -21226,11 +21226,14 @@ shared_FieldFormat.display = function(v,dv) {
 var shared_FindFields = function() { };
 $hxClasses["shared.FindFields"] = shared_FindFields;
 shared_FindFields.__name__ = "shared.FindFields";
+shared_FindFields.idLike = function(v) {
+	return "INTLIKE|%" + v + "%";
+};
 shared_FindFields.iLike = function(v) {
 	return "ILIKE|%" + v + "%";
 };
 shared_FindFields.enterSubmit = function(e) {
-	haxe_Log.trace(e.charCode,{ fileName : "shared/FindFields.hx", lineNumber : 30, className : "shared.FindFields", methodName : "enterSubmit"});
+	haxe_Log.trace(e.charCode,{ fileName : "shared/FindFields.hx", lineNumber : 33, className : "shared.FindFields", methodName : "enterSubmit"});
 	if(e.charCode == 13) {
 		(js_Boot.__cast(e.target , HTMLInputElement)).form.submit();
 	}
@@ -30371,16 +30374,16 @@ var view_data_contacts_List = function(props) {
 		_g.push(Object.assign({ },v));
 	}
 	this.state = App.initEState({ dbTable : [], loading : true, contactData : tmp, selectedRows : [], sideMenu : view_shared_io_FormApi.initSideMenuMulti(this,[tmp1,{ hasFindForm : false, label : "Anschreiben", section : "List_", items : _g}],{ orm : model_Contact, section : props.match.params.section == null ? "List" : props.match.params.section, mBshowActive : true, sameWidth : true}), values : new haxe_ds_StringMap()},this);
-	haxe_Log.trace(shared_Utils.sKeysList(new haxe_ds__$StringMap_StringMapKeyIterator(this.state.relDataComps.h)),{ fileName : "view/data/contacts/List.hx", lineNumber : 145, className : "view.data.contacts.List", methodName : "new"});
+	haxe_Log.trace(shared_Utils.sKeysList(new haxe_ds__$StringMap_StringMapKeyIterator(this.state.relDataComps.h)),{ fileName : "view/data/contacts/List.hx", lineNumber : 149, className : "view.data.contacts.List", methodName : "new"});
 	if(props.match.params.section == null || props.match.params.action == null) {
 		var baseUrl = props.match.path.split(":section")[0];
-		haxe_Log.trace("redirecting to " + baseUrl + "List/get",{ fileName : "view/data/contacts/List.hx", lineNumber : 150, className : "view.data.contacts.List", methodName : "new"});
+		haxe_Log.trace("redirecting to " + baseUrl + "List/get",{ fileName : "view/data/contacts/List.hx", lineNumber : 154, className : "view.data.contacts.List", methodName : "new"});
 		props.history.push("" + baseUrl + "List/get");
 		this.get(null);
 	} else {
-		haxe_Log.trace(props.match.params,{ fileName : "view/data/contacts/List.hx", lineNumber : 157, className : "view.data.contacts.List", methodName : "new"});
+		haxe_Log.trace(props.match.params,{ fileName : "view/data/contacts/List.hx", lineNumber : 161, className : "view.data.contacts.List", methodName : "new"});
 	}
-	haxe_Log.trace(this.state.loading,{ fileName : "view/data/contacts/List.hx", lineNumber : 159, className : "view.data.contacts.List", methodName : "new"});
+	haxe_Log.trace(this.state.loading,{ fileName : "view/data/contacts/List.hx", lineNumber : 163, className : "view.data.contacts.List", methodName : "new"});
 };
 $hxClasses["view.data.contacts.List"] = view_data_contacts_List;
 view_data_contacts_List.__name__ = "view.data.contacts.List";
@@ -30405,20 +30408,20 @@ view_data_contacts_List.prototype = $extend(React_Component.prototype,{
 	,dbData: null
 	,dbMetaData: null
 	,'delete': function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 171, className : "view.data.contacts.List", methodName : "delete"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 175, className : "view.data.contacts.List", methodName : "delete"});
 		var data = this.state.formApi.selectedRowsMap(this.state);
 	}
-	,get: function(dpa) {
+	,get: function(dba) {
 		var _gthis = this;
+		this.setState(react_ReactUtil.copy(this.state,{ dbTable : []}));
 		var offset = 0;
-		if(dpa != null && dpa.page != null) {
-			haxe_Log.trace(dpa,{ fileName : "view/data/contacts/List.hx", lineNumber : 181, className : "view.data.contacts.List", methodName : "get"});
-			offset = this.props.limit * dpa.page | 0;
-			Reflect.deleteField(dpa,"page");
-			this.props.parentComponent.setState({ page : dpa.page});
+		if(dba != null && dba.page != null) {
+			offset = this.props.limit * dba.page | 0;
+			Reflect.deleteField(dba,"page");
+			this.props.parentComponent.setState({ page : dba.page});
 		}
-		haxe_Log.trace(dpa,{ fileName : "view/data/contacts/List.hx", lineNumber : 186, className : "view.data.contacts.List", methodName : "get"});
-		var p = this.props.load({ classPath : "data.Contacts", action : "get", dbRelations : dpa == null ? null : dpa.dbRelations, filter : dpa == null ? null : dpa.filter, limit : this.props.limit, offset : offset > 0 ? offset : 0, table : "contacts", resolveMessage : { success : "Kontaktliste wurde geladen", failure : "Kontaktliste konnte nicht geladen werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
+		haxe_Log.trace(dba,{ fileName : "view/data/contacts/List.hx", lineNumber : 191, className : "view.data.contacts.List", methodName : "get"});
+		var p = this.props.load({ classPath : "data.Contacts", action : "get", dbRelations : dba == null ? null : dba.dbRelations, filter : dba == null ? null : dba.filter, limit : this.props.limit, offset : offset > 0 ? offset : 0, table : "contacts", resolveMessage : { success : "Kontaktliste wurde geladen", failure : "Kontaktliste konnte nicht geladen werden"}, dbUser : this.props.userState.dbUser, devIP : App.devIP});
 		p.then(function(data) {
 			haxe_Log.trace(data.dataRows.length,{ fileName : "view/data/contacts/List.hx", lineNumber : 212, className : "view.data.contacts.List", methodName : "get"});
 			if(data.dataRows.length < 5 && data.dataRows.length > 0) {
@@ -35042,6 +35045,33 @@ model_deals_DealsModel.dataAccess = (function($this) {
 		_g3.h["2"] = "Kinderhilfe";
 		_g3.h["3"] = "Tierhilfe";
 		_g2.h["product"] = { label : "Produkt", type : "Select", options : _g3};
+		var _g3 = new haxe_ds_StringMap();
+		_g3.h["0"] = "";
+		_g3.h["3"] = "Finanzen";
+		_g3.h["5"] = "Widerruf";
+		_g3.h["10"] = "VF/Verkaufsfehler";
+		_g3.h["13"] = "NIXI-Pool/BB";
+		_g3.h["14"] = "kein Interesse";
+		_g3.h["15"] = "unzufrieden";
+		_g3.h["18"] = "Rüla/Rücklastschr.";
+		_g3.h["26"] = "Sonstiges";
+		_g3.h["27"] = "bereits Mitglied";
+		_g3.h["31"] = "Aufleger";
+		_g3.h["32"] = "endgül. NE";
+		_g3.h["36"] = "BV falsch";
+		_g3.h["40"] = "Einmalspende";
+		_g3.h["42"] = "Künd. Verwandschaft";
+		_g3.h["43"] = "Senil, zu alt, etc.";
+		_g3.h["44"] = "ohne Grundangabe";
+		_g3.h["45"] = "Verstorben";
+		_g3.h["46"] = "Künd. Betreuer";
+		_g3.h["47"] = "Voice unbrauchbar";
+		_g3.h["49"] = "Lastschriftwiderspruch";
+		_g3.h["50"] = "Wiederholung gescheitert";
+		_g3.h["51"] = "Wiederholungsbuchung";
+		_g3.h["52"] = "Negativliste";
+		_g3.h["53"] = "Konto aufgelöst";
+		_g2.h["sepa_code"] = { label : "Kündigungsgrund", type : "Select", options : _g3};
 		_g2.h["end_date"] = { label : "Beendet zum", type : "DatePicker", displayFormat : "d.m.Y"};
 		_g2.h["cycle_start_date"] = { label : "Turnus Startdatum", type : "DatePicker", displayFormat : "d.m.Y"};
 		var _g3 = new haxe_ds_StringMap();
@@ -35658,14 +35688,11 @@ view_data_contacts_Edit.classPath = view_data_contacts_Edit.__name__;
 view_data_contacts_Edit.displayName = "Edit";
 view_data_contacts_Edit._renderWrapper = (redux_react_ReactRedux.connect(view_data_contacts_Edit.mapStateToProps,view_data_contacts_Edit.mapDispatchToProps))(react_ReactTypeOf.fromComp(view_data_contacts_Edit));
 view_data_contacts_Edit.__jsxStatic = view_data_contacts_Edit._renderWrapper;
-view_data_contacts_List.menuItems = [{ label : "Bearbeiten", action : "update", disabled : true, id : "edit", section : "Edit"},{ label : "Neu", action : "insert", section : "Edit"},{ label : "Löschen", action : "delete", disabled : true},{ label : "Auswahl aufheben", action : "selectionClear", disabled : true},{ separator : true},{ label : "ID", formField : { name : "id", findFormat : function(v) {
-	haxe_Log.trace(v,{ fileName : "view/data/contacts/List.hx", lineNumber : 71, className : "view.data.contacts.List", methodName : "menuItems"});
-	return v;
-}}},{ label : "Vorname", formField : { name : "first_name", matchFormat : shared_FindFields.iLike}},{ label : "Nachname", formField : { name : "last_name", matchFormat : shared_FindFields.iLike}},{ label : "Telefon", formField : { name : "phone_number", findFormat : function(v) {
+view_data_contacts_List.menuItems = [{ label : "Bearbeiten", action : "update", disabled : true, id : "edit", section : "Edit"},{ label : "Neu", action : "insert", section : "Edit"},{ label : "Löschen", action : "delete", disabled : true},{ label : "Auswahl aufheben", action : "selectionClear", disabled : true},{ separator : true},{ label : "ID", formField : { name : "id", matchFormat : shared_FindFields.idLike}},{ label : "Vorname", formField : { name : "first_name", matchFormat : shared_FindFields.iLike}},{ label : "Nachname", formField : { name : "last_name", matchFormat : shared_FindFields.iLike}},{ label : "Telefon", formField : { name : "phone_number", matchFormat : function(v) {
 	var _this_r = new RegExp("^0+","".split("u").join(""));
 	v = v.replace(_this_r,"");
-	haxe_Log.trace(v,{ fileName : "view/data/contacts/List.hx", lineNumber : 78, className : "view.data.contacts.List", methodName : "menuItems"});
-	return v;
+	haxe_Log.trace(v,{ fileName : "view/data/contacts/List.hx", lineNumber : 80, className : "view.data.contacts.List", methodName : "menuItems"});
+	return shared_FindFields.iLike(v);
 }}},{ label : "Ort", formField : { name : "city", matchFormat : shared_FindFields.iLike}},{ label : "Straße", formField : { name : "address1", matchFormat : shared_FindFields.iLike}},{ formField : { name : "mandator", type : "Hidden"}},{ label : "IBAN", formField : { name : "iban", matchFormat : shared_FindFields.iLike, dbTableName : "accounts", alias : "ac"}}];
 view_data_contacts_List.printItems = (function($this) {
 	var $r;

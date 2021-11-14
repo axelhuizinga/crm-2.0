@@ -179,20 +179,16 @@ class List extends ReactComponentOf<DataFormProps,FormState>
 	//public function get(filter:Dynamic=null):Void
 	public function get(dba:DBAccessProps=null):Void
 	{
+		setState(copy(state,{dbTable: []}));
 		var offset:Int = 0;
 		if(dba != null && dba.page!=null)
 		{
-			trace(dba);
+			//trace(dba);
 			offset = Std.int(props.limit * dba.page);
 			Reflect.deleteField(dba,'page');
 			props.parentComponent.setState({page: dba.page});
 		}		
 		trace(dba);
-		/*filter = Utils.extend(filter, (props.match.params.id!=null?
-			{id:props.match.params.id, mandator:props.userState.dbUser.mandator}:
-			{mandator:props.userState.dbUser.mandator})
-		);*/
-		//trace(props.match.params);
 
 		var p:Promise<DbData> = props.load(
 			{

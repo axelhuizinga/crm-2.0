@@ -62,10 +62,10 @@ class DebitReturnStatements extends Model
 	override function get() {
 		var fields:Array<String> = [];
 		trace(param.toString());
-		if(param.get('dataSource') != null)
+		/*if(param.get('dataSource') != null)
 		{
 			dataSource = Unserializer.run(param.get('dataSource'));
-		}
+		}*/
 		var fields:Array<String> = [];
 		if(dataSource != null)
 		{
@@ -79,7 +79,7 @@ class DebitReturnStatements extends Model
 					//return;
 				}
 				//trace(Std.isOfType(dataSource,String));
-				//trace(dataSource);
+				trace(dataSource);
 				var tKeys:Iterator<String> = dataSource.keys();
 				while(tKeys.hasNext())
 				{
